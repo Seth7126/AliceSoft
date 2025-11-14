@@ -1,0 +1,7 @@
+// 函数: sub_5690fe
+// 地址: 0x5690fe
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+sub_410440(*(arg1 - 0x18))
+sub_69df2b(nullptr, nullptr)
+noreturn

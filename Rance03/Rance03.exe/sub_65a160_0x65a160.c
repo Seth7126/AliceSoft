@@ -1,0 +1,33 @@
+// 函数: sub_65a160
+// 地址: 0x65a160
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+void* var_4 = arg1
+sub_6541d0(arg1 + 0x450, arg2)
+sub_671350(arg1 + 0x348, arg1 + 0x38, *(arg2 + 4))
+sub_671350(arg1 + 0x348, arg1 + 0x50, *(arg2 + 5))
+sub_671350(arg1 + 0x348, arg1 + 0x68, *(arg2 + 6))
+sub_671350(arg1 + 0x348, arg1 + 0x80, *(arg2 + 6))
+sub_671350(arg1 + 0x348, arg1 + 0x98, *(arg2 + 7))
+sub_671350(arg1 + 0x348, arg1 + 0xb0, *(arg2 + 7))
+sub_671350(arg1 + 0x348, arg1 + 0xc8, *(arg2 + 7))
+sub_671350(arg1 + 0x348, arg1 + 0xe0, *(arg2 + 8))
+sub_671350(arg1 + 0x348, arg1 + 0xf8, *(arg2 + 9))
+sub_671350(arg1 + 0x348, arg1 + 0x110, *(arg2 + 0xa))
+sub_671350(arg1 + 0x348, arg1 + 0x128, *(arg2 + 0xb))
+sub_671350(arg1 + 0x348, arg1 + 0x140, *(arg2 + 0xc))
+sub_671350(arg1 + 0x348, arg1 + 0x158, *(arg2 + 0xd))
+sub_671350(arg1 + 0x348, arg1 + 0x170, *(arg2 + 0xe))
+sub_671350(arg1 + 0x348, arg1 + 0x188, *(arg2 + 0xf))
+sub_671350(arg1 + 0x348, arg1 + 0x1a0, *(arg2 + 0x10))
+sub_671350(arg1 + 0x348, arg1 + 0x1b8, *(arg2 + 0x11))
+sub_671350(arg1 + 0x348, arg1 + 0x1d0, *(arg2 + 0x12))
+sub_671350(arg1 + 0x348, arg1 + 0x1e8, *(arg2 + 0x13))
+sub_671350(arg1 + 0x348, arg1 + 0x200, *(arg2 + 0x14))
+sub_671350(arg1 + 0x348, arg1 + 0x218, *(arg2 + 0x15))
+sub_671350(arg1 + 0x348, arg1 + 0x230, *(arg2 + 0x16))
+sub_671350(arg1 + 0x348, arg1 + 0x248, *(arg2 + 0x16))
+sub_671350(arg1 + 0x348, arg1 + 0x260, *(arg2 + 0x17))
+sub_671350(arg1 + 0x348, arg1 + 0x278, *(arg2 + 0x17))
+sub_671350(arg1 + 0x348, arg1 + 0x290, *(arg2 + 0x17))
+return sub_671350(arg1 + 0x348, arg1 + 0x2a8, *(arg2 + 0x18))

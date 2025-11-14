@@ -1,0 +1,29 @@
+// 函数: sub_533ef0
+// 地址: 0x533ef0
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*(arg1 + 4) = *(arg2 + 4)
+*(arg1 + 0xc) = *(arg2 + 0xc)
+*(arg1 + 0x10) = *(arg2 + 0x10)
+*(arg1 + 0x18) = *(arg2 + 0x18)
+*(arg1 + 0x1c) = *(arg2 + 0x1c)
+*(arg1 + 0x24) = *(arg2 + 0x24)
+*(arg1 + 0x28) = *(arg2 + 0x28)
+*(arg1 + 0x2c) = *(arg2 + 0x2c)
+*(arg1 + 0x30) = *(arg2 + 0x30)
+*(arg1 + 0x34) = *(arg2 + 0x34)
+*(arg1 + 0x3c) = *(arg2 + 0x3c)
+*(arg1 + 0x40) = *(arg2 + 0x40)
+*(arg1 + 0x48) = *(arg2 + 0x48)
+*(arg1 + 0x4c) = *(arg2 + 0x4c)
+*(arg1 + 0x54) = *(arg2 + 0x54)
+*(arg1 + 0x58) = *(arg2 + 0x58)
+*(arg1 + 0x68) = *(arg2 + 0x68)
+*(arg1 + 0x70) = *(arg2 + 0x70)
+*(arg1 + 0x74) = *(arg2 + 0x74)
+*(arg1 + 0x78) = *(arg2 + 0x78)
+*(arg1 + 0x7c) = *(arg2 + 0x7c)
+int32_t eax_12
+eax_12.b = *(arg2 + 0x80)
+*(arg1 + 0x80) = eax_12.b
+return arg1

@@ -1,0 +1,14 @@
+// 函数: sub_49def0
+// 地址: 0x49def0
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+bool cond:0 = *(arg1 + 0x291) == 0
+*(arg1 + 0x290) = 0
+
+if (cond:0)
+    return 
+
+int32_t* ecx = *(arg1 + 0x260)
+
+if (ecx != 0)
+    jump(**ecx)

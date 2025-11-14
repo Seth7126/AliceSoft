@@ -1,0 +1,41 @@
+// 函数: sub_46ba90
+// 地址: 0x46ba90
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+int32_t* eax_1 = (*(*arg1 + 8))(arg2, arg3)
+char* esi = (*(*arg4 + 8))(arg5, arg6 + arg8 - 1)
+int32_t edi_1 = arg7 << 2
+int32_t eax_6 = (*(*arg1 + 0x1c))()
+int32_t result = (*(*arg4 + 0x1c))()
+int32_t i_1 = arg8
+int32_t ebp_2 = neg.d(edi_1 + result)
+
+if (i_1 s> 0)
+    int32_t* ecx_6 = eax_1
+    result = arg7
+    int32_t i
+    
+    do
+        if (result s> 0)
+            int32_t edx_2 = result
+            int32_t j
+            
+            do
+                *ecx_6 = *esi
+                *(ecx_6 + 1) = esi[1]
+                char eax_10 = esi[2]
+                esi = &esi[4]
+                *(ecx_6 + 2) = eax_10
+                ecx_6 = &ecx_6[1]
+                j = edx_2
+                edx_2 -= 1
+            while (j != 1)
+            result = arg7
+        
+        ecx_6 += eax_6 - edi_1
+        esi = &esi[ebp_2]
+        i = i_1
+        i_1 -= 1
+    while (i != 1)
+
+return result

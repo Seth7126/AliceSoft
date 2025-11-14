@@ -1,0 +1,7 @@
+// 函数: sub_6ba3e8
+// 地址: 0x6ba3e8
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+sub_69a5bc(*(arg1 - 0x60) ^ (arg1 - 0x5c))
+sub_69a5bc(*(arg1 - 4) ^ (arg1 - 0x58))
+return sub_69e38e(0x72edb8) __tailcall

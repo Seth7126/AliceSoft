@@ -1,0 +1,10 @@
+// 函数: sub_412d40
+// 地址: 0x412d40
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+void* esi = arg1[1]
+*arg1 = &dpanalysis::CBalloonHelp::`vftable'
+
+if (esi != 0)
+    sub_412e40(esi)
+    j__free(esi)

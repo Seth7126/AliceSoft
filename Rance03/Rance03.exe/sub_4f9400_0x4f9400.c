@@ -1,0 +1,10 @@
+// 函数: sub_4f9400
+// 地址: 0x4f9400
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+int32_t* result = sub_4a8b80(data_75d4fc + 0x174, arg3)
+
+if (result == 0)
+    return result
+
+return sub_4d1f50(result, arg2, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11)

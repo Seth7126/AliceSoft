@@ -1,0 +1,36 @@
+// 函数: sub_510540
+// 地址: 0x510540
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+int32_t var_4_1 = 0xffffffff
+int32_t (* var_8)(void* arg1) = sub_6c1ebb
+TEB* fsbase
+struct _EXCEPTION_REGISTRATION_RECORD* ExceptionList = fsbase->NtTib.ExceptionList
+fsbase->NtTib.ExceptionList = &ExceptionList
+struct partsengine::CSprite::partsengine::CConstructionSprite::VTable** edi = arg2
+int32_t eax_3 = *(arg1 + 0x28)
+
+if (edi u<= 3)
+    int32_t __saved_edi
+    bool cond:0_1 = (*(**(eax_3 + (edi << 2)) + 8))(__security_cookie ^ &__saved_edi) == 0x12
+    eax_3 = *(arg1 + 0x28)
+    
+    if (not(cond:0_1))
+        (*(**(eax_3 + (edi << 2)) + 4))()
+        struct partsengine::CSprite::partsengine::CConstructionSprite::VTable** eax_7 =
+            sub_69adc6(0x50)
+        arg2 = eax_7
+        int32_t var_4 = 6
+        struct partsengine::CSprite::partsengine::CConstructionSprite::VTable** eax_8
+        
+        if (eax_7 == 0)
+            eax_8 = nullptr
+        else
+            eax_8 = sub_4ff5c0(eax_7, *(arg1 + 0x3c))
+        
+        *(*(arg1 + 0x28) + (edi << 2)) = eax_8
+        eax_3 = *(arg1 + 0x28)
+        *(arg1 + 0x14) = 1
+
+fsbase->NtTib.ExceptionList = ExceptionList
+return *(eax_3 + (edi << 2))

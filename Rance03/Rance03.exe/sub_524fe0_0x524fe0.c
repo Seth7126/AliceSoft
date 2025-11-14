@@ -1,0 +1,12 @@
+// 函数: sub_524fe0
+// 地址: 0x524fe0
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = &sealengine::CAARData::`vftable'
+
+if (arg1[9] u>= 0x10)
+    j__free(arg1[4])
+
+arg1[9] = 0xf
+arg1[8] = 0
+arg1[4].b = 0

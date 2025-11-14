@@ -1,0 +1,27 @@
+// 函数: sub_653e50
+// 地址: 0x653e50
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+arg1[0x5a] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x56] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x52] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x4e] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x4a] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x46] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x42] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x3e] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x3a] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x36] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x32] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x2e] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x2a] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x26] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x22] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x1e] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x1a] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x16] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0x12] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0xe] = &dpparts::CGuiCheckBox::`vftable'
+arg1[0xa] = &dpparts::CGuiCheckBox::`vftable'
+arg1[3] = &dpparts::CListItem::`vftable'
+*arg1 = &win32only::CDialog::`vftable'

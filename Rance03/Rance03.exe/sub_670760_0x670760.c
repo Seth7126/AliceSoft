@@ -1,0 +1,20 @@
+// 函数: sub_670760
+// 地址: 0x670760
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = &dpparts::CGuiStatusBar::`vftable'
+void* ecx = arg1[1]
+
+if (ecx != 0)
+    int32_t var_8_1 = arg2.d
+    void* var_c_1 = ecx
+    sub_5b9610(ecx, arg1[2])
+    j__free(arg1[1])
+    arg1[1] = 0
+    arg1[2] = 0
+    arg1[3] = 0
+
+if ((arg2 & 1) != 0)
+    j__free(arg1)
+
+return arg1

@@ -1,0 +1,27 @@
+// 函数: sub_592160
+// 地址: 0x592160
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*(arg1 + 4) = *(arg2 + 4)
+*(arg1 + 8) = *(arg2 + 8)
+*(arg1 + 0xc) = *(arg2 + 0xc)
+*(arg1 + 0x10) = *(arg2 + 0x10)
+*(arg1 + 0x14) = *(arg2 + 0x14)
+*(arg1 + 0x15) = *(arg2 + 0x15)
+*(arg1 + 0x16) = *(arg2 + 0x16)
+*(arg1 + 0x17) = *(arg2 + 0x17)
+*(arg1 + 0x18) = *(arg2 + 0x18)
+*(arg1 + 0x1c) = *(arg2 + 0x1c)
+*(arg1 + 0x20) = *(arg2 + 0x20)
+*(arg1 + 0x24) = *(arg2 + 0x24)
+*(arg1 + 0x28) = *(arg2 + 0x28)
+*(arg1 + 0x29) = *(arg2 + 0x29)
+*(arg1 + 0x2a) = *(arg2 + 0x2a)
+*(arg1 + 0x2b) = *(arg2 + 0x2b)
+*(arg1 + 0x2c) = *(arg2 + 0x2c)
+*(arg1 + 0x2d) = *(arg2 + 0x2d)
+*(arg1 + 0x2e) = *(arg2 + 0x2e)
+*(arg1 + 0x2f) = *(arg2 + 0x2f)
+*(arg1 + 0x30) = *(arg2 + 0x30)
+*(arg1 + 0x34) = *(arg2 + 0x34)
+return arg1

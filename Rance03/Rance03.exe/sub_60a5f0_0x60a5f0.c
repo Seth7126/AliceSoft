@@ -1,0 +1,18 @@
+// 函数: sub_60a5f0
+// 地址: 0x60a5f0
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+if (arg2 == 0)
+    return 
+
+int32_t i
+
+do
+    if (arg1 != 0)
+        *arg1 = &graphengined3d11::CBlendState::`vftable'
+        arg1[1] = 0
+    
+    arg1 = &arg1[2]
+    i = arg2
+    arg2 -= 1
+while (i != 1)

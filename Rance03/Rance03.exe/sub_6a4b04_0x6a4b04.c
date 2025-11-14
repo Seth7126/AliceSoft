@@ -1,0 +1,5 @@
+// 函数: sub_6a4b04
+// 地址: 0x6a4b04
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+return sub_6a3e23(arg1)

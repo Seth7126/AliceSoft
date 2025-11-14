@@ -1,0 +1,14 @@
+// 函数: sub_604900
+// 地址: 0x604900
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+HANDLE hObject = arg1[1]
+*arg1 = &filesystem::CFile::`vftable'
+
+if (hObject != 0xffffffff && CloseHandle(hObject) != 0)
+    arg1[1] = 0xffffffff
+
+if ((arg2 & 1) != 0)
+    j__free(arg1)
+
+return arg1

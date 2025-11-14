@@ -1,0 +1,7 @@
+// 函数: sub_4130a0
+// 地址: 0x4130a0
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = &dpanalysis::CBPWnd::`vftable'{for `dpanalysis::CTextChildWnd'}
+sub_413be0(&arg1[0x18])
+return sub_41a7f0(arg1) __tailcall

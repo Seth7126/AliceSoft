@@ -1,0 +1,27 @@
+// 函数: sub_528030
+// 地址: 0x528030
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+int32_t ebp = arg1[1]
+int32_t esi_1 = ebp - *arg1
+int32_t eax
+int32_t edx
+edx:eax = muls.dp.d(0x92492493, esi_1)
+int32_t ecx_2 = esi_1 s/ 0x38
+
+if (ecx_2 u> arg2)
+    int32_t* esi_3 = (arg2 - ecx_2) * 0x38 + ebp
+    int32_t eax_3 = sub_528160(esi_3, ebp)
+    arg1[1] = esi_3
+    return eax_3
+
+if (ecx_2 u< arg2)
+    sub_5280f0(arg1, arg2 - ecx_2)
+    void* ecx_4 = arg1[1]
+    int32_t var_14_3 = arg2
+    sub_5282f0(ecx_4, arg2 - (ecx_4 - *arg1) s/ 0x38)
+    int32_t esi_9 = arg1[1]
+    eax = esi_9 + (arg2 - (esi_9 - *arg1) s/ 0x38) * 0x38
+    arg1[1] = eax
+
+return eax

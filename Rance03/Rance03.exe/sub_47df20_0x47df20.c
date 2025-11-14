@@ -1,0 +1,7 @@
+// 函数: sub_47df20
+// 地址: 0x47df20
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+int32_t result
+result.b = 1
+return result

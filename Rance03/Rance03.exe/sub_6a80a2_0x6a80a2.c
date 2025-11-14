@@ -1,0 +1,6 @@
+// 函数: sub_6a80a2
+// 地址: 0x6a80a2
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = &std::bad_exception::`vftable'{for `std::exception'}
+return sub_69e4af(arg1) __tailcall

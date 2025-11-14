@@ -1,0 +1,16 @@
+// 函数: sub_50b7b0
+// 地址: 0x50b7b0
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+if (&arg1[2] != arg2)
+    sub_401ff0(&arg1[2], arg2, 0, 0xffffffff)
+
+*arg1 = arg3
+arg1[1] = arg4
+int32_t* result = arg5
+
+if (&arg1[8] != result)
+    result = sub_401ff0(&arg1[8], result, 0, 0xffffffff)
+
+arg1[0xe].b = 0
+return result

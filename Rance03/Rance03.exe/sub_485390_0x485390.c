@@ -1,0 +1,6 @@
+// 函数: sub_485390
+// 地址: 0x485390
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+void* var_4 = arg1
+return sub_485700(arg1 + 4, arg2, arg3)

@@ -1,0 +1,45 @@
+// 函数: sub_65dc20
+// 地址: 0x65dc20
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = *arg2
+arg1[1] = arg2[1]
+arg1[2] = arg2[2]
+arg1[3] = arg2[3]
+arg1[4] = arg2[4]
+arg1[5] = arg2[5]
+arg1[6] = arg2[6]
+arg1[7] = arg2[7]
+arg1[8] = arg2[8]
+arg1[9] = arg2[9]
+arg1[0xa] = arg2[0xa]
+arg1[0xb] = arg2[0xb]
+arg1[0xc] = arg2[0xc]
+arg1[0xd] = arg2[0xd]
+arg1[0xe] = arg2[0xe]
+arg1[0xf] = arg2[0xf]
+arg1[0x10] = arg2[0x10]
+arg1[0x11].b = arg2[0x11].b
+*(arg1 + 0x45) = *(arg2 + 0x45)
+arg1[0x12] = arg2[0x12]
+arg1[0x13] = arg2[0x13]
+arg1[0x14].b = arg2[0x14].b
+
+if (&arg1[0x15] != &arg2[0x15])
+    sub_401ff0(&arg1[0x15], &arg2[0x15], 0, 0xffffffff)
+
+if (&arg1[0x1b] != &arg2[0x1b])
+    sub_401ff0(&arg1[0x1b], &arg2[0x1b], 0, 0xffffffff)
+
+arg1[0x21] = arg2[0x21]
+int32_t eax_24
+eax_24.b = arg2[0x22].b
+arg1[0x22].b = eax_24.b
+arg1[0x23] = arg2[0x23]
+arg1[0x24] = arg2[0x24]
+arg1[0x25] = arg2[0x25]
+arg1[0x26] = arg2[0x26]
+arg1[0x27] = arg2[0x27]
+arg1[0x28] = arg2[0x28]
+sub_6541d0(&arg1[0x29], &arg2[0x29])
+return arg1

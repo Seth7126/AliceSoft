@@ -1,0 +1,7 @@
+// 函数: sub_43e860
+// 地址: 0x43e860
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = &anteater::CADVLogList::`vftable'
+sub_43f340(&arg1[1])
+return j__free(arg1[1])

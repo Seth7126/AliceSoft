@@ -1,0 +1,49 @@
+// 函数: sub_4aa570
+// 地址: 0x4aa570
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 = &partsengine::CGUIScrollbarModel::`vftable'
+arg1[6] = 0xf
+arg1[5] = 0
+arg1[1].b = 0
+__builtin_memcpy(&arg1[0xc], 
+    "\x0f\x00\x00\x00\x00\x01\x00\x00\x18\x00\x00\x00\x18\x00\x00\x00\x18\x00\x00\x00\x64\x00\x00\x00\x"
+"01\x00\x00\x00", 
+    0x1c)
+arg1[0xb] = 0
+arg1[7].b = 0
+arg1[0x13] = 0
+arg1[0x14] = 0
+arg1[0x15] = 1
+arg1[0x1b] = 0xf
+arg1[0x1a] = 0
+arg1[0x16].b = 0
+arg1[0x21] = 0xf
+arg1[0x20] = 0
+arg1[0x1c].b = 0
+arg1[0x27] = 0xf
+arg1[0x26] = 0
+arg1[0x22].b = 0
+arg1[0x2d] = 0xf
+arg1[0x2c] = 0
+arg1[0x28].b = 0
+arg1[0x33] = 0xf
+arg1[0x32] = 0
+arg1[0x2e].b = 0
+arg1[0x39] = 0xf
+arg1[0x38] = 0
+arg1[0x34].b = 0
+arg1[0x3f] = 0xf
+arg1[0x3e] = 0
+arg1[0x3a].b = 0
+arg1[0x45] = 0xf
+arg1[0x44] = 0
+arg1[0x40].b = 0
+arg1[0x4b] = 0xf
+arg1[0x4a] = 0
+arg1[0x46].b = 0
+arg1[0x51] = 0xf
+arg1[0x50] = 0
+arg1[0x4c].b = 0
+arg1[0x52] = 0
+return arg1

@@ -1,0 +1,103 @@
+// 函数: sub_40119a
+// 地址: 0x40119a
+// 来自: E:/torrent/AliceSoft/ランス03/Rance03.exe.bndb
+
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*(arg6 * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+int32_t eflags
+int32_t eflags_1
+char temp0
+char temp1
+temp0, temp1, eflags_1 = __aas(arg1.b, arg1:1.b, eflags)
+arg1.b = temp0
+arg1:1.b = temp1
+*arg1 += arg1.b
+*(arg6 * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg6 * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*((arg6 + 1) * 9) += arg3 + 1
+*(arg1 + 1) += 1
+*(arg1 + 1) += (arg1 + 1).b
+*(arg1 + 1) += (arg1 + 1).b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3 + 1
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*((arg6 + 1) * 9) += arg3
+*arg1 += 1
+*arg1 += arg1.b
+*arg1 += arg1.b
+*arg1 += arg1.b
+*(arg6 * 9) += arg3
+*arg1 += 1
+return _atexit(sub_6d1bc0)

@@ -1,0 +1,168 @@
+void Dungeon::reload()
+/* 00091306 */{
+/* 00091306 */	this.loadValue();
+/* 0009130e */}
+
+void Dungeon::loadValue()
+/* 00091316 */{
+/* 00091316 */	this.setName(EX_SA2String("ダンジョンデータ", this.id_, "name", ""));
+/* 0009133c */	this.setBgImageName(EX_SA2String("ダンジョンデータ", this.id_, "bgImageName", ""));
+/* 00091362 */	this.setPlateImageName(EX_SA2String("ダンジョンデータ", this.id_, "nameImageName", ""));
+/* 00091388 */	this.setBattleBgImageName(EX_SA2String("ダンジョンデータ", this.id_, "battleBgImageName", ""));
+/* 000913ae */	this.setView(EX_SA2Int("ダンジョンデータ", this.id_, "view", 0));
+/* 000913d4 */	this.setMusicNumber(EX_SA2Int("ダンジョンデータ", this.id_, "music", 0));
+/* 000913fa */	this.setReturnMapEnable(EX_SA2Int("ダンジョンデータ", this.id_, "isReturnMapEnable", 1) != 0);
+/* 0009142a */	int i;
+/* 00091434 */	for (i = 0; i < this.randomCardId_.Numof(); ++i)
+/* 00091464 */	{
+/* 00091464 */		this.setRandomCardId(i, EX_SA2String("ダンジョンデータ", this.id_, "randomCardId%d" % (i + 1), ""));
+/* 000914a6 */	}
+/* 000914ac */	this.loadLine();
+/* 000914b4 */}
+
+void Dungeon::loadLine()
+/* 000914bc */{
+/* 000914bc */	this.lines_.Free();
+/* 000914c6 */	string key = "ダンジョン_%s" % this.id_;
+/* 000914e4 */	int count = EX_Height(key);
+/* 000914fc */	if (count == 0)
+/* 0009150a */	{
+/* 0009150a */		return;
+/* 0009150c */	}
+/* 00091512 */	this.lines_.Alloc(count);
+/* 00091528 */	int i;
+/* 00091532 */	for (i = 0; i < this.lines_.Numof(); ++i)
+/* 00091562 */	{
+/* 00091562 */		this.lines_[count - i - 1].loadValue(key, i);
+/* 00091592 */	}
+/* 00091598 */}
+
+void Dungeon::setRandomCard()
+/* 000915a0 */{
+/* 000915a2 */}
+
+string Dungeon::getId()
+/* 000915a8 */{
+/* 000915a8 */	return this.id_;
+/* 000915b0 */}
+
+string Dungeon::getName()
+/* 000915be */{
+/* 000915be */	return this.name_;
+/* 000915c6 */}
+
+string Dungeon::getBgImageName()
+/* 000915d4 */{
+/* 000915d4 */	return this.bgImageName_;
+/* 000915dc */}
+
+int Dungeon::getView()
+/* 000915ea */{
+/* 000915ea */	return this.view_;
+/* 000915f2 */}
+
+int Dungeon::getLineCount()
+/* 00091600 */{
+/* 00091600 */	return this.lines_.Numof();
+/* 00091608 */}
+
+void Dungeon::setId(string val)
+/* 00091616 */{
+/* 00091616 */	this.id_ = val;
+/* 00091620 */	this.loadValue();
+/* 00091628 */}
+
+void Dungeon::setName(string val)
+/* 00091630 */{
+/* 00091630 */	this.name_ = val;
+/* 0009163a */}
+
+void Dungeon::setBgImageName(string val)
+/* 00091642 */{
+/* 00091642 */	this.bgImageName_ = val;
+/* 0009164c */}
+
+void Dungeon::setView(int val)
+/* 00091654 */{
+/* 00091654 */	this.view_ = val;
+/* 0009165e */}
+
+void Dungeon::setRandomCardId(int index, string val)
+/* 00091666 */{
+/* 00091666 */	if (index >= 0 && index < this.randomCardId_.Numof())
+/* 000916a0 */	{
+/* 000916a0 */		this.randomCardId_[index] = val;
+/* 000916b4 */	}
+/* 000916ba */}
+
+string Dungeon::getCardId(int line, int xPos)
+/* 000916c2 */{
+/* 000916c2 */	if (line >= 0 && line < this.lines_.Numof())
+/* 000916fc */	{
+/* 000916fc */		return this.lines_[line].getCardId(xPos);
+/* 00091718 */	}
+/* 0009171e */	return "";
+/* 00091726 */}
+
+int Dungeon::getCardOpenType(int line, int xPos)
+/* 00091734 */{
+/* 00091734 */	if (line >= 0 && line < this.lines_.Numof())
+/* 0009176e */	{
+/* 0009176e */		return this.lines_[line].getCardOpenType(xPos);
+/* 0009178a */	}
+/* 00091790 */	return 1;
+/* 00091798 */}
+
+string Dungeon::getBattleBgImageName()
+/* 000917a6 */{
+/* 000917a6 */	return this.battleBgImageName_;
+/* 000917ae */}
+
+void Dungeon::setBattleBgImageName(string val)
+/* 000917bc */{
+/* 000917bc */	this.battleBgImageName_ = val;
+/* 000917c6 */}
+
+void Dungeon::resetRandomCard()
+/* 000917ce */{
+/* 000917ce */	int i;
+/* 000917d8 */	for (i = 0; i < this.lines_.Numof(); ++i)
+/* 00091808 */	{
+/* 00091808 */		int j;
+/* 00091812 */		for (j = 0; j < 5; ++j)
+/* 0009183c */		{
+/* 0009183c */			this.lines_[i].setRandomCardId(j, this.randomCardId_[RAND(this.randomCardId_.Numof()) - 1]);
+/* 00091872 */		}
+/* 00091878 */	}
+/* 0009187e */}
+
+string Dungeon::getPlateImageName()
+/* 00091886 */{
+/* 00091886 */	return this.plateImageName_;
+/* 0009188e */}
+
+void Dungeon::setPlateImageName(string val)
+/* 0009189c */{
+/* 0009189c */	this.plateImageName_ = val;
+/* 000918a6 */}
+
+void Dungeon::setMusicNumber(int val)
+/* 000918ae */{
+/* 000918ae */	this.musicNumber_ = val;
+/* 000918b8 */}
+
+int Dungeon::getMusicNumber()
+/* 000918c0 */{
+/* 000918c0 */	return this.musicNumber_;
+/* 000918c8 */}
+
+void Dungeon::setReturnMapEnable(bool val)
+/* 000918d6 */{
+/* 000918d6 */	this.isReturnMapEnable_ = val;
+/* 000918e0 */}
+
+bool Dungeon::isReturnMapEnable()
+/* 000918e8 */{
+/* 000918e8 */	return this.isReturnMapEnable_;
+/* 000918f0 */}
+

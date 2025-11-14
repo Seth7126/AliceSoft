@@ -1,0 +1,216 @@
+CConfigUIMessageSpeedTab::CConfigUIMessageSpeedTab()
+/* 0002d256 */{
+/* 0002d260 */}
+
+CConfigUIMessageSpeedTab::~CConfigUIMessageSpeedTab()
+/* 0002d266 */{
+/* 0002d268 */}
+
+void CConfigUIMessageSpeedTab::Create()
+/* 0002d26e */{
+/* 0002d26e */	this.CreateUI();
+/* 0002d276 */	PARTS_AddUpdateEvent(this.UpdateSampleMessage);
+/* 0002d286 */}
+
+void CConfigUIMessageSpeedTab::Release()
+/* 0002d28e */{
+/* 0002d28e */	AFL_Parts_EraseChangedEvent(this.m_SampleCheckBox, this.ChangedCheckSample);
+/* 0002d2a4 */	AFL_Parts_EraseChangedEvent(this.m_FrameSkipCheckBox, this.ChangedCheckFrameSkip);
+/* 0002d2ba */	PARTS_EraseUpdateEvent(this.UpdateSampleMessage);
+/* 0002d2ca */	this.m_ReadTextWaitTimeSlider.Release();
+/* 0002d2d6 */	this.m_AutoModeWaitTimeSlider.Release();
+/* 0002d2e2 */	this.m_MessageSpeedSlider.Release();
+/* 0002d2ee */	PARTS_Release(this.m_SampleLabel);
+/* 0002d2fa */	PARTS_Release(this.m_SampleCheckBox);
+/* 0002d306 */	PARTS_Release(this.m_FrameSkipCheckBox);
+/* 0002d312 */	PARTS_Release(this.m_ReadTextWaitTimeLabel);
+/* 0002d31e */	PARTS_Release(this.m_AutoModeWaitTimeLabel);
+/* 0002d32a */	PARTS_Release(this.m_MessageSpeedLabel);
+/* 0002d336 */	PARTS_Release(this.m_BG);
+/* 0002d342 */	this.m_SampleLabel = 0;
+/* 0002d34c */	this.m_SampleCheckBox = 0;
+/* 0002d356 */	this.m_FrameSkipCheckBox = 0;
+/* 0002d360 */	this.m_ReadTextWaitTimeLabel = 0;
+/* 0002d36a */	this.m_AutoModeWaitTimeLabel = 0;
+/* 0002d374 */	this.m_MessageSpeedLabel = 0;
+/* 0002d37e */	this.m_BG = 0;
+/* 0002d388 */}
+
+void CConfigUIMessageSpeedTab::CreateUI()
+/* 0002d390 */{
+/* 0002d390 */	this.Release();
+/* 0002d398 */	this.CreateBG();
+/* 0002d3a0 */	this.CreateMessageSpeed();
+/* 0002d3a8 */	this.CreateAutoModeWaitTime();
+/* 0002d3b0 */	this.CreateReadTextWaitTime();
+/* 0002d3b8 */	this.CreateFrameSkip();
+/* 0002d3c0 */	this.CreateSample();
+/* 0002d3c8 */}
+
+void CConfigUIMessageSpeedTab::CreateBG()
+/* 0002d3d0 */{
+/* 0002d3d0 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002d3e2 */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002d3f4 */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002d40c */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002d42a */}
+
+void CConfigUIMessageSpeedTab::CreateMessageSpeed()
+/* 0002d432 */{
+/* 0002d432 */	this.m_MessageSpeedLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002d444 */	Ｐ＿ラベル＿座標設定(this.m_MessageSpeedLabel, 50, 105);
+/* 0002d45c */	Ｐ＿ラベル＿Ｚ座標設定(this.m_MessageSpeedLabel, 100);
+/* 0002d46e */	Ｐ＿ラベル＿テキスト設定(this.m_MessageSpeedLabel, "メッセージ速度");
+/* 0002d480 */	Ｐ＿ラベル＿フォント設定(this.m_MessageSpeedLabel, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002d4c8 */	this.m_MessageSpeedSlider.Create();
+/* 0002d4d4 */	this.m_MessageSpeedSlider.SetButtonPos(800, 105);
+/* 0002d4ec */	this.m_MessageSpeedSlider.SetButtonZ(100);
+/* 0002d4fe */	this.m_MessageSpeedSlider.SetButtonSize(100, 30);
+/* 0002d516 */	this.m_MessageSpeedSlider.SetButtonColor(150, 150, 150);
+/* 0002d534 */	this.m_MessageSpeedSlider.SetButtonText("初期化");
+/* 0002d546 */	this.m_MessageSpeedSlider.SetHScrollbarPos(380, 105);
+/* 0002d55e */	this.m_MessageSpeedSlider.SetHScrollbarZ(100);
+/* 0002d570 */	this.m_MessageSpeedSlider.SetHScrollbarWidth(400);
+/* 0002d582 */	this.m_MessageSpeedSlider.SetHScrollbarHeight(30);
+/* 0002d594 */	this.m_MessageSpeedSlider.SetHScrollbarLeftWidth(0);
+/* 0002d5a6 */	this.m_MessageSpeedSlider.SetHScrollbarRightWidth(0);
+/* 0002d5b8 */	this.m_MessageSpeedSlider.SetHScrollbarTotalSize(100);
+/* 0002d5ca */	this.m_MessageSpeedSlider.SetHScrollbarViewSize(0);
+/* 0002d5dc */	this.m_MessageSpeedSlider.SetRate(AFL_Config_GetMessageSpeedRate());
+/* 0002d5ee */	this.m_MessageSpeedSlider.AddInitializeButtonClickEvent(this.ResetRateMessageSpeed);
+/* 0002d604 */	this.m_MessageSpeedSlider.AddChangeRateEvent(this.ChangedRateMessageSpeed);
+/* 0002d61a */}
+
+void CConfigUIMessageSpeedTab::CreateAutoModeWaitTime()
+/* 0002d622 */{
+/* 0002d622 */	this.m_AutoModeWaitTimeLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002d634 */	Ｐ＿ラベル＿座標設定(this.m_AutoModeWaitTimeLabel, 50, 180);
+/* 0002d64c */	Ｐ＿ラベル＿Ｚ座標設定(this.m_AutoModeWaitTimeLabel, 100);
+/* 0002d65e */	Ｐ＿ラベル＿テキスト設定(this.m_AutoModeWaitTimeLabel, "オートモード速度");
+/* 0002d670 */	Ｐ＿ラベル＿フォント設定(this.m_AutoModeWaitTimeLabel, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002d6b8 */	this.m_AutoModeWaitTimeSlider.Create();
+/* 0002d6c4 */	this.m_AutoModeWaitTimeSlider.SetButtonPos(800, 180);
+/* 0002d6dc */	this.m_AutoModeWaitTimeSlider.SetButtonZ(100);
+/* 0002d6ee */	this.m_AutoModeWaitTimeSlider.SetButtonSize(100, 30);
+/* 0002d706 */	this.m_AutoModeWaitTimeSlider.SetButtonColor(150, 150, 150);
+/* 0002d724 */	this.m_AutoModeWaitTimeSlider.SetButtonText("初期化");
+/* 0002d736 */	this.m_AutoModeWaitTimeSlider.SetHScrollbarPos(380, 180);
+/* 0002d74e */	this.m_AutoModeWaitTimeSlider.SetHScrollbarZ(100);
+/* 0002d760 */	this.m_AutoModeWaitTimeSlider.SetHScrollbarWidth(400);
+/* 0002d772 */	this.m_AutoModeWaitTimeSlider.SetHScrollbarHeight(30);
+/* 0002d784 */	this.m_AutoModeWaitTimeSlider.SetHScrollbarLeftWidth(0);
+/* 0002d796 */	this.m_AutoModeWaitTimeSlider.SetHScrollbarRightWidth(0);
+/* 0002d7a8 */	this.m_AutoModeWaitTimeSlider.SetHScrollbarTotalSize(100);
+/* 0002d7ba */	this.m_AutoModeWaitTimeSlider.SetHScrollbarViewSize(0);
+/* 0002d7cc */	this.m_AutoModeWaitTimeSlider.SetRate(AFL_Config_GetAutoModeWaitTimeRate());
+/* 0002d7de */	this.m_AutoModeWaitTimeSlider.AddInitializeButtonClickEvent(this.ResetRateAutoModeWaitTime);
+/* 0002d7f4 */	this.m_AutoModeWaitTimeSlider.AddChangeRateEvent(this.ChangedRateAutoModeWaitTime);
+/* 0002d80a */}
+
+void CConfigUIMessageSpeedTab::CreateReadTextWaitTime()
+/* 0002d812 */{
+/* 0002d812 */	this.m_ReadTextWaitTimeLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002d824 */	Ｐ＿ラベル＿座標設定(this.m_ReadTextWaitTimeLabel, 50, 255);
+/* 0002d83c */	Ｐ＿ラベル＿Ｚ座標設定(this.m_ReadTextWaitTimeLabel, 100);
+/* 0002d84e */	Ｐ＿ラベル＿テキスト設定(this.m_ReadTextWaitTimeLabel, "スキップモード速度");
+/* 0002d860 */	Ｐ＿ラベル＿フォント設定(this.m_ReadTextWaitTimeLabel, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002d8a8 */	this.m_ReadTextWaitTimeSlider.Create();
+/* 0002d8b4 */	this.m_ReadTextWaitTimeSlider.SetButtonPos(800, 255);
+/* 0002d8cc */	this.m_ReadTextWaitTimeSlider.SetButtonZ(100);
+/* 0002d8de */	this.m_ReadTextWaitTimeSlider.SetButtonSize(100, 30);
+/* 0002d8f6 */	this.m_ReadTextWaitTimeSlider.SetButtonColor(150, 150, 150);
+/* 0002d914 */	this.m_ReadTextWaitTimeSlider.SetButtonText("初期化");
+/* 0002d926 */	this.m_ReadTextWaitTimeSlider.SetHScrollbarPos(380, 255);
+/* 0002d93e */	this.m_ReadTextWaitTimeSlider.SetHScrollbarZ(100);
+/* 0002d950 */	this.m_ReadTextWaitTimeSlider.SetHScrollbarWidth(400);
+/* 0002d962 */	this.m_ReadTextWaitTimeSlider.SetHScrollbarHeight(30);
+/* 0002d974 */	this.m_ReadTextWaitTimeSlider.SetHScrollbarLeftWidth(0);
+/* 0002d986 */	this.m_ReadTextWaitTimeSlider.SetHScrollbarRightWidth(0);
+/* 0002d998 */	this.m_ReadTextWaitTimeSlider.SetHScrollbarTotalSize(100);
+/* 0002d9aa */	this.m_ReadTextWaitTimeSlider.SetHScrollbarViewSize(0);
+/* 0002d9bc */	this.m_ReadTextWaitTimeSlider.SetRate(AFL_Config_GetReadMessageSkipWaitTimeRate());
+/* 0002d9ce */	this.m_ReadTextWaitTimeSlider.SetEnable(!AFL_Config_GetFrameSkipWhileMessageSkip());
+/* 0002d9e4 */	this.m_ReadTextWaitTimeSlider.AddInitializeButtonClickEvent(this.ResetRateReadTextWaitTime);
+/* 0002d9fa */	this.m_ReadTextWaitTimeSlider.AddChangeRateEvent(this.ChangedRateReadTextWaitTime);
+/* 0002da10 */}
+
+void CConfigUIMessageSpeedTab::CreateFrameSkip()
+/* 0002da18 */{
+/* 0002da18 */	string Text = "メッセージスキップ中にフレームスキップして高速化する";
+/* 0002da24 */	this.m_FrameSkipCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002da36 */	Ｐ＿チェックボックス＿座標設定(this.m_FrameSkipCheckBox, 50, 400);
+/* 0002da4e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_FrameSkipCheckBox, 100);
+/* 0002da60 */	Ｐ＿チェックボックス＿サイズ設定(this.m_FrameSkipCheckBox, 24, 24);
+/* 0002da78 */	Ｐ＿チェックボックス＿フォント設定(this.m_FrameSkipCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002dac0 */	Ｐ＿チェックボックス＿テキスト設定(this.m_FrameSkipCheckBox, Text);
+/* 0002dad2 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_FrameSkipCheckBox, AFL_Config_GetFrameSkipWhileMessageSkip());
+/* 0002dae4 */	AFL_Parts_AddChangedEvent(this.m_FrameSkipCheckBox, this.ChangedCheckFrameSkip);
+/* 0002dafa */}
+
+void CConfigUIMessageSpeedTab::CreateSample()
+/* 0002db02 */{
+/* 0002db02 */	this.m_SampleCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002db14 */	Ｐ＿チェックボックス＿座標設定(this.m_SampleCheckBox, 50, 540);
+/* 0002db2c */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_SampleCheckBox, 100);
+/* 0002db3e */	Ｐ＿チェックボックス＿サイズ設定(this.m_SampleCheckBox, 24, 24);
+/* 0002db56 */	Ｐ＿チェックボックス＿フォント設定(this.m_SampleCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002db9e */	Ｐ＿チェックボックス＿テキスト設定(this.m_SampleCheckBox, "サンプルメッセージを表示する");
+/* 0002dbb0 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_SampleCheckBox, AFL_Config_GetShowSampleMessage());
+/* 0002dbc2 */	AFL_Parts_AddChangedEvent(this.m_SampleCheckBox, this.ChangedCheckSample);
+/* 0002dbd8 */	this.m_SampleLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002dbea */	Ｐ＿ラベル＿座標設定(this.m_SampleLabel, 120, 570);
+/* 0002dc02 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_SampleLabel, 100);
+/* 0002dc14 */	Ｐ＿ラベル＿フォント設定(this.m_SampleLabel, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002dc5c */	this.m_SampleTimer = 0;
+/* 0002dc66 */}
+
+void CConfigUIMessageSpeedTab::UpdateSampleMessage(int PassedTime)
+/* 0002dc6e */{
+/* 0002dc6e */	Ｐ＿ラベル＿表示設定(this.m_SampleLabel, AFL_Config_GetShowSampleMessage());
+/* 0002dc80 */	this.m_SampleTimer += PassedTime;
+/* 0002dc92 */	Ｐ＿ラベル＿テキスト設定(this.m_SampleLabel, AFL_Config_GetSampleMessageTextByElapsedTime(this.m_SampleTimer));
+/* 0002dcaa */}
+
+void CConfigUIMessageSpeedTab::ResetRateMessageSpeed(int Number, int MouseX, int MouseY)
+/* 0002dcb2 */{
+/* 0002dcb2 */	AFL_Config_ResetMessageSpeedRate();
+/* 0002dcb8 */	this.m_MessageSpeedSlider.SetRate(AFL_Config_GetMessageSpeedRate());
+/* 0002dcca */}
+
+void CConfigUIMessageSpeedTab::ResetRateAutoModeWaitTime(int Number, int MouseX, int MouseY)
+/* 0002dcd2 */{
+/* 0002dcd2 */	AFL_Config_ResetAutoModeWaitTimeRate();
+/* 0002dcd8 */	this.m_AutoModeWaitTimeSlider.SetRate(AFL_Config_GetAutoModeWaitTimeRate());
+/* 0002dcea */}
+
+void CConfigUIMessageSpeedTab::ResetRateReadTextWaitTime(int Number, int MouseX, int MouseY)
+/* 0002dcf2 */{
+/* 0002dcf2 */	AFL_Config_ResetReadMessageSkipWaitTimeRate();
+/* 0002dcf8 */	this.m_ReadTextWaitTimeSlider.SetRate(AFL_Config_GetReadMessageSkipWaitTimeRate());
+/* 0002dd0a */}
+
+void CConfigUIMessageSpeedTab::ChangedRateMessageSpeed(int Number)
+/* 0002dd12 */{
+/* 0002dd12 */	AFL_Config_SetMessageSpeedRate(this.m_MessageSpeedSlider.GetRate());
+/* 0002dd24 */}
+
+void CConfigUIMessageSpeedTab::ChangedRateAutoModeWaitTime(int Number)
+/* 0002dd2c */{
+/* 0002dd2c */	AFL_Config_SetAutoModeWaitTimeRate(this.m_AutoModeWaitTimeSlider.GetRate());
+/* 0002dd3e */}
+
+void CConfigUIMessageSpeedTab::ChangedRateReadTextWaitTime(int Number)
+/* 0002dd46 */{
+/* 0002dd46 */	AFL_Config_SetReadMessageSkipWaitTimeRate(this.m_ReadTextWaitTimeSlider.GetRate());
+/* 0002dd58 */}
+
+void CConfigUIMessageSpeedTab::ChangedCheckFrameSkip(int Number)
+/* 0002dd60 */{
+/* 0002dd60 */	AFL_Config_SetFrameSkipWhileMessageSkip(Ｐ＿チェックボックス＿チェック状態取得(this.m_FrameSkipCheckBox));
+/* 0002dd72 */}
+
+void CConfigUIMessageSpeedTab::ChangedCheckSample(int Number)
+/* 0002dd7a */{
+/* 0002dd7a */	AFL_Config_SetShowSampleMessage(Ｐ＿チェックボックス＿チェック状態取得(this.m_SampleCheckBox));
+/* 0002dd8c */}
+

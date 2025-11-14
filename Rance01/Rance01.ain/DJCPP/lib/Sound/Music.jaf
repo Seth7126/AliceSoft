@@ -1,0 +1,98 @@
+Music::Music()
+/* 00060662 */{
+/* 0006066a */	this.nowPlay_ = this.lastPlay_ = 0;
+/* 00060686 */	this.forcePlayMusic_ = -1;
+/* 00060698 */}
+
+void Music::play(int musicNumber, int fadeTime)
+/* 000606a0 */{
+/* 000606a0 */	if (this.nowPlay_ == musicNumber)
+/* 000606ae */	{
+/* 000606ae */		return;
+/* 000606b0 */	}
+/* 000606b6 */	this.lastPlay_ = this.nowPlay_;
+/* 000606c8 */	this.nowPlay_ = musicNumber;
+/* 000606d2 */	if (this.forcePlayMusic_ != -1)
+/* 000606e6 */	{
+/* 000606e6 */		musicNumber = this.forcePlayMusic_;
+/* 000606f0 */	}
+/* 000606f6 */	if (this.lastPlay_ != 0)
+/* 00060704 */	{
+/* 00060704 */		this.innerPlay(musicNumber, 1, fadeTime == -2147483648 ? 2000 : fadeTime);
+/* 00060738 */	}
+/* 0006073e */	else
+/* 0006073e */	{
+/* 0006073e */		this.innerPlay(musicNumber, 1, fadeTime == -2147483648 ? 0 : fadeTime);
+/* 00060772 */	}
+/* 00060772 */}
+
+void Music::fadeOut(int fadeTime)
+/* 0006077a */{
+/* 0006077a */	if (this.nowPlay_ == 0)
+/* 00060788 */	{
+/* 00060788 */		return;
+/* 0006078a */	}
+/* 00060790 */	if (this.forcePlayMusic_ != -1)
+/* 000607a4 */	{
+/* 000607a4 */		this.innerPlay(this.forcePlayMusic_, 1, fadeTime);
+/* 000607be */	}
+/* 000607c4 */	else
+/* 000607c4 */	{
+/* 000607c4 */		this.innerPlay(0, 1, fadeTime);
+/* 000607de */	}
+/* 000607de */	this.lastPlay_ = this.nowPlay_;
+/* 000607f0 */	this.nowPlay_ = 0;
+/* 000607fa */}
+
+void Music::playLastPlayedMusic()
+/* 00060802 */{
+/* 00060802 */	this.play(this.lastPlay_, -2147483648);
+/* 00060816 */}
+
+int Music::getPlayingMusicNumber()
+/* 0006081e */{
+/* 0006081e */	return 音楽再生中番号取得();
+/* 00060826 */}
+
+int Music::getLastPlayedMusicNumber()
+/* 00060834 */{
+/* 00060834 */	return this.lastPlay_;
+/* 0006083c */}
+
+int Music::getLength()
+/* 0006084a */{
+/* 0006084a */	return AFL_BGM_GetPlayLength();
+/* 00060852 */}
+
+int Music::getPlayingPosition()
+/* 00060860 */{
+/* 00060860 */	return AFL_BGM_GetPlayPos();
+/* 00060868 */}
+
+void Music::forcePlay(int number)
+/* 00060876 */{
+/* 00060876 */	this.forcePlayMusic_ = number;
+/* 00060880 */	if (number == -1)
+/* 00060894 */	{
+/* 00060894 */		this.innerPlay(this.nowPlay_, 1, 2000);
+/* 000608ae */	}
+/* 000608b4 */	else
+/* 000608b4 */	{
+/* 000608b4 */		this.innerPlay(this.forcePlayMusic_, 1, 2000);
+/* 000608ce */	}
+/* 000608ce */}
+
+void Music::innerPlay(int number, int type, int time)
+/* 000608d6 */{
+/* 000608d6 */	音楽(number, type, time);
+/* 000608ee */	if (this.handler_ != NULL)
+/* 000608fc */	{
+/* 000608fc */		this.handler_(number);
+/* 00060912 */	}
+/* 00060918 */}
+
+void Music::addHandlerFunc(string funcName)
+/* 00060920 */{
+/* 00060920 */	this.handler_ = funcName;
+/* 00060938 */}
+

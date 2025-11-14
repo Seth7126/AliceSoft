@@ -1,0 +1,299 @@
+Player::Player()
+/* 0008e5be */{
+/* 0008e5c6 */	this.level_ = 1;
+/* 0008e5d0 */	this.maxLevel_ = 100;
+/* 0008e5da */	this.exp_ = 0;
+/* 0008e5e4 */	this.hp_ = 1;
+/* 0008e5ee */	this.maxHp_ = 1;
+/* 0008e5f8 */	this.sp_ = 1;
+/* 0008e602 */	this.maxSp_ = 1;
+/* 0008e60c */	this.atk_ = 1;
+/* 0008e616 */	this.def_ = 1;
+/* 0008e620 */	this.luck_ = 1;
+/* 0008e62a */	this.gold_ = 100;
+/* 0008e634 */}
+
+int Player::getLevel()
+/* 0008e63c */{
+/* 0008e63c */	return this.level_;
+/* 0008e644 */}
+
+int Player::getMaxLevel()
+/* 0008e652 */{
+/* 0008e652 */	return this.maxLevel_;
+/* 0008e65a */}
+
+int Player::getExp()
+/* 0008e668 */{
+/* 0008e668 */	return this.exp_;
+/* 0008e670 */}
+
+int Player::getHp()
+/* 0008e67e */{
+/* 0008e67e */	return this.hp_;
+/* 0008e686 */}
+
+int Player::getMaxHp()
+/* 0008e694 */{
+/* 0008e694 */	return this.maxHp_;
+/* 0008e69c */}
+
+int Player::getLuck()
+/* 0008e6aa */{
+/* 0008e6aa */	return this.luck_;
+/* 0008e6b2 */}
+
+int Player::getMaxChipCount()
+/* 0008e6c0 */{
+/* 0008e6c0 */	return g_chipDepository[0].getSize();
+/* 0008e6d6 */}
+
+int Player::getMaxChipCountDepository()
+/* 0008e6e4 */{
+/* 0008e6e4 */	return g_chipDepository[1].getSize();
+/* 0008e6fa */}
+
+int Player::getGold()
+/* 0008e708 */{
+/* 0008e708 */	return this.gold_;
+/* 0008e710 */}
+
+int Player::getBadCondition(string id)
+/* 0008e71e */{
+/* 0008e71e */	int i;
+/* 0008e728 */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 0008e758 */	{
+/* 0008e758 */		if (this.badCondition_[i].id == id)
+/* 0008e77c */		{
+/* 0008e77c */			return this.badCondition_[i].time;
+/* 0008e794 */		}
+/* 0008e79a */	}
+/* 0008e7a0 */	return 0;
+/* 0008e7a8 */}
+
+void Player::setLevel(int val)
+/* 0008e7b6 */{
+/* 0008e7b6 */	this.level_ = val;
+/* 0008e7c0 */	this.level_ = Math.Max(this.level_, 0);
+/* 0008e7e2 */	this.level_ = Math.Min(this.level_, this.getMaxLevel());
+/* 0008e806 */	int maxLevel = Math.Max(g_globalGameFlag.getInt("最大レベル"), this.level_);
+/* 0008e834 */	g_globalGameFlag.setInt("最大レベル", maxLevel);
+/* 0008e84c */}
+
+void Player::setMaxLevel(int val)
+/* 0008e854 */{
+/* 0008e854 */	this.maxLevel_ = val;
+/* 0008e85e */	this.maxLevel_ = Math.Max(this.maxLevel_, 0);
+/* 0008e880 */}
+
+void Player::setExp(int val)
+/* 0008e888 */{
+/* 0008e888 */	this.exp_ = Math.Max(val, 0);
+/* 0008e8aa */	if (this.handler_.Numof() != 0)
+/* 0008e8c2 */	{
+/* 0008e8c2 */		this.handler_(3, this.exp_);
+/* 0008e8ea */	}
+/* 0008e8f0 */}
+
+void Player::setHp(int val)
+/* 0008e8f8 */{
+/* 0008e8f8 */	this.hp_ = val;
+/* 0008e902 */	this.hp_ = Math.Max(this.hp_, 0);
+/* 0008e924 */	this.hp_ = Math.Min(this.hp_, this.getMaxHp());
+/* 0008e948 */	if (this.handler_.Numof() != 0)
+/* 0008e960 */	{
+/* 0008e960 */		this.handler_(0, this.hp_);
+/* 0008e988 */	}
+/* 0008e98e */}
+
+void Player::setMaxHp(int val)
+/* 0008e996 */{
+/* 0008e996 */	this.maxHp_ = val;
+/* 0008e9a0 */	this.maxHp_ = Math.Max(this.maxHp_, 0);
+/* 0008e9c2 */}
+
+void Player::setLuck(int val)
+/* 0008e9ca */{
+/* 0008e9ca */	this.luck_ = val;
+/* 0008e9d4 */	this.luck_ = Math.Max(this.luck_, 0);
+/* 0008e9f6 */}
+
+void Player::setMaxChipCount(int val)
+/* 0008e9fe */{
+/* 0008e9fe */	g_chipDepository[0].setSize(val);
+/* 0008ea18 */}
+
+void Player::setMaxChipCountDepository(int val)
+/* 0008ea20 */{
+/* 0008ea20 */	g_chipDepository[1].setSize(val);
+/* 0008ea3a */}
+
+void Player::setGold(int val)
+/* 0008ea42 */{
+/* 0008ea42 */	this.gold_ = val;
+/* 0008ea4c */	this.gold_ = Math.Max(this.gold_, 0);
+/* 0008ea6e */	int maxGold = Math.Max(g_globalGameFlag.getInt("最大ゴールド"), this.gold_);
+/* 0008ea9c */	g_globalGameFlag.setInt("最大ゴールド", maxGold);
+/* 0008eab4 */	if (this.handler_.Numof() != 0)
+/* 0008eacc */	{
+/* 0008eacc */		this.handler_(2, this.gold_);
+/* 0008eaf4 */	}
+/* 0008eafa */}
+
+void Player::setBadCondition(string id, int val)
+/* 0008eb02 */{
+/* 0008eb02 */	if (val > 0)
+/* 0008eb16 */	{
+/* 0008eb16 */		g_globalGameFlag.addValue("状態異常[%s]" % getBadConditionObject(id).getName(), 1);
+/* 0008eb52 */		if (this.getBadCondition(id) == 0)
+/* 0008eb6e */		{
+/* 0008eb6e */			AvailableBadCondition b;
+/* 0008eb7e */			b.id = this.badConditionLastAdded_ = id;
+/* 0008eb9e */			b.time = val;
+/* 0008ebb4 */			this.badCondition_.PushBack(b);
+/* 0008ebbe */			this.handler_(5, 0);
+/* 0008ebe6 */		}
+/* 0008ebf2 */		else
+/* 0008ebf2 */		{
+/* 0008ebf2 */			int i;
+/* 0008ebfc */			for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 0008ec2c */			{
+/* 0008ec2c */				if (this.badCondition_[i].id == id)
+/* 0008ec50 */				{
+/* 0008ec50 */					this.badCondition_[i].time = val;
+/* 0008ec6e */				}
+/* 0008ec74 */			}
+/* 0008ec7a */		}
+/* 0008ec7a */	}
+/* 0008ec86 */}
+
+void Player::clearBadCondition(string id)
+/* 0008ec8e */{
+/* 0008ec8e */	int i;
+/* 0008ec98 */	while (i < this.badCondition_.Numof())
+/* 0008ecac */	{
+/* 0008ecac */		dlogF("%s %s" % this.badCondition_[i].id % id);
+/* 0008ece4 */		if (this.badCondition_[i].id == id)
+/* 0008ed08 */		{
+/* 0008ed08 */			this.badCondition_.Erase(i);
+/* 0008ed1a */			this.badConditionLastErased_ = id;
+/* 0008ed24 */			this.handler_(6, 0);
+/* 0008ed4c */			dlogF("asdfa");
+/* 0008ed58 */			break;
+/* 0008ed5e */		}
+/* 0008ed64 */		++i;
+/* 0008ed6a */	}
+/* 0008ed70 */}
+
+void Player::decBadCondition()
+/* 0008ed78 */{
+/* 0008ed78 */	int i;
+/* 0008ed82 */	while (i < this.badCondition_.Numof())
+/* 0008ed96 */	{
+/* 0008ed96 */		--this.badCondition_[i].time;
+/* 0008edb2 */		if (this.badCondition_[i].time == 0)
+/* 0008edd6 */		{
+/* 0008edd6 */			this.badConditionLastErased_ = this.badCondition_[i].id;
+/* 0008edf2 */			this.badCondition_.Erase(i);
+/* 0008ee04 */			this.handler_(6, 0);
+/* 0008ee2c */		}
+/* 0008ee32 */		else
+/* 0008ee32 */		{
+/* 0008ee32 */			++i;
+/* 0008ee38 */		}
+/* 0008ee38 */	}
+/* 0008ee3e */}
+
+void Player::addLevel(int val)
+/* 0008ee46 */{
+/* 0008ee46 */	this.setLevel(this.getLevel() + val);
+/* 0008ee5e */}
+
+void Player::addExp(int val)
+/* 0008ee66 */{
+/* 0008ee66 */	this.setExp(this.getExp() + val);
+/* 0008ee7e */}
+
+void Player::addHp(int val)
+/* 0008ee86 */{
+/* 0008ee86 */	this.setHp(this.getHp() + val);
+/* 0008ee9e */}
+
+void Player::addMaxHp(int val)
+/* 0008eea6 */{
+/* 0008eea6 */	this.setMaxHp(this.getMaxHp() + val);
+/* 0008eebe */}
+
+void Player::addLuck(int val)
+/* 0008eec6 */{
+/* 0008eec6 */	this.setLuck(this.getLuck() + val);
+/* 0008eede */}
+
+void Player::addGold(int val)
+/* 0008eee6 */{
+/* 0008eee6 */	this.setGold(this.getGold() + val);
+/* 0008eefe */}
+
+void Player::addEventHandler(DG_PlayerEventHandler handler)
+/* 0008ef06 */{
+/* 0008ef06 */	this.handler_ += handler;
+/* 0008ef18 */}
+
+int Player::getViewAlternation()
+/* 0008ef20 */{
+/* 0008ef20 */	return this.viewAlt_;
+/* 0008ef28 */}
+
+void Player::setViewAlternation(int val)
+/* 0008ef36 */{
+/* 0008ef36 */	this.viewAlt_ = val;
+/* 0008ef40 */	if (this.handler_.Numof() != 0)
+/* 0008ef58 */	{
+/* 0008ef58 */		this.handler_(4, this.viewAlt_);
+/* 0008ef80 */	}
+/* 0008ef86 */}
+
+void Player::addSkill(string skillId)
+/* 0008ef8e */{
+/* 0008ef8e */	if (this.isHaveSkill(skillId))
+/* 0008efa2 */	{
+/* 0008efa2 */		return;
+/* 0008efa4 */	}
+/* 0008efaa */	if (getSkill(skillId) === NULL)
+/* 0008efce */	{
+/* 0008efce */		return;
+/* 0008efd0 */	}
+/* 0008efd6 */	this.skill_.PushBack(skillId);
+/* 0008efe0 */}
+
+void Player::getSkillList(ref array@string result)
+/* 0008efe8 */{
+/* 0008efe8 */	result.Alloc(this.skill_.Numof());
+/* 0008effe */	result.Copy(0, this.skill_, 0, this.skill_.Numof());
+/* 0008f022 */}
+
+void Player::getBadConditionList(ref array@string result)
+/* 0008f02a */{
+/* 0008f02a */	result.Free();
+/* 0008f034 */	int i;
+/* 0008f03e */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 0008f06e */	{
+/* 0008f06e */		result.PushBack(this.badCondition_[i].id);
+/* 0008f08e */	}
+/* 0008f094 */}
+
+bool Player::isHaveSkill(string id)
+/* 0008f09c */{
+/* 0008f09c */	return this.skill_.Find(0, this.skill_.Numof(), id) != -1;
+/* 0008f0ca */}
+
+string Player::getLastAddedBadCondition()
+/* 0008f0d8 */{
+/* 0008f0d8 */	return this.badConditionLastAdded_;
+/* 0008f0e0 */}
+
+string Player::getLastErasedBadCondition()
+/* 0008f0ee */{
+/* 0008f0ee */	return this.badConditionLastErased_;
+/* 0008f0f6 */}
+

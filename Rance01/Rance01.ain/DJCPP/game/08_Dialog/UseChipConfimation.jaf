@@ -1,0 +1,130 @@
+UseChipConfimation::UseChipConfimation()
+/* 0007e144 */{
+/* 0007e14c */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0007e16e */	this.selected_ = -1;
+/* 0007e180 */	this.background_.initAsPlaneImage(1024, 768, 0, 0, 0, 160);
+/* 0007e1b0 */	this.background_.setPos(0, 0, 7999);
+/* 0007e1ce */}
+
+void UseChipConfimation::run()
+/* 0007e1d6 */{
+/* 0007e1d6 */	this.fadeObject(true);
+/* 0007e1e4 */	g_sysSound.play(2201, false);
+/* 0007e1fc */}
+
+void UseChipConfimation::update()
+/* 0007e204 */{
+/* 0007e204 */	switch (this.state_)
+/* 0007e216 */	{
+/* 0007e216 */	case 1:
+/* 0007e216 */		if (!this.chipInfo_.isMotion())
+/* 0007e22a */		{
+/* 0007e22a */			this.state_ = 2;
+/* 0007e234 */		}
+/* 0007e23a */		break;
+/* 0007e240 */	case 2:
+/* 0007e240 */		this.selected_ = this.getButtonClicked();
+/* 0007e254 */		if (this.selected_ != -1)
+/* 0007e268 */		{
+/* 0007e268 */			this.fadeObject(false);
+/* 0007e276 */		}
+/* 0007e27c */		if (g_mouse.isClick(1))
+/* 0007e294 */		{
+/* 0007e294 */			g_sysSound.play(2003, false);
+/* 0007e2ac */			this.selected_ = 1;
+/* 0007e2b6 */			this.fadeObject(false);
+/* 0007e2c4 */		}
+/* 0007e2ca */		break;
+/* 0007e2d0 */	case 3:
+/* 0007e2d0 */		if (!this.chipInfo_.isMotion())
+/* 0007e2e4 */		{
+/* 0007e2e4 */			this.state_ = 0;
+/* 0007e2ee */		}
+/* 0007e2f4 */		break;
+/* 0007e2fa */	case 0:
+/* 0007e2fa */		break;
+/* 0007e300 */	}
+/* 0007e300 */}
+
+void UseChipConfimation::init(string id)
+/* 0007e308 */{
+/* 0007e308 */	this.id_ = id;
+/* 0007e312 */	g_chipDepository[0].addEventHandler(this.onEvent);
+/* 0007e330 */	this.chipInfo_.init(id, true);
+/* 0007e348 */	this.initButton();
+/* 0007e350 */	this.setButtonPos();
+/* 0007e358 */	this.updateButtonState();
+/* 0007e360 */}
+
+void UseChipConfimation::initButton()
+/* 0007e368 */{
+/* 0007e368 */	this.btn_[0].init("システム／ボタン／幅１２８", "使う", -1);
+/* 0007e38e */	this.btn_[1].init("システム／ボタン／幅１２８", "キャンセル", -1);
+/* 0007e3b4 */}
+
+void UseChipConfimation::setButtonPos()
+/* 0007e3bc */{
+/* 0007e3bc */	int i;
+/* 0007e3c6 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007e3f6 */	{
+/* 0007e3f6 */		this.btn_[i].setPos(390 + i * 144, 264, 8100);
+/* 0007e42c */	}
+/* 0007e432 */}
+
+void UseChipConfimation::fadeObject(bool val)
+/* 0007e43a */{
+/* 0007e43a */	this.fadeButton(val);
+/* 0007e448 */	this.chipInfo_.fadeIn(val);
+/* 0007e45a */	this.background_.setShow(true);
+/* 0007e46c */	this.background_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0007e49c */	this.state_ = val ? 1 : 3;
+/* 0007e4c6 */}
+
+void UseChipConfimation::fadeButton(bool val)
+/* 0007e4ce */{
+/* 0007e4ce */	int i;
+/* 0007e4d8 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007e508 */	{
+/* 0007e508 */		this.btn_[i].fadeIn(val);
+/* 0007e522 */	}
+/* 0007e528 */}
+
+void UseChipConfimation::onEvent(int event, int info)
+/* 0007e530 */{
+/* 0007e530 */	this.updateButtonState();
+/* 0007e538 */}
+
+void UseChipConfimation::updateButtonState()
+/* 0007e540 */{
+/* 0007e540 */	this.btn_[0].setEnable(true);
+/* 0007e55a */	this.btn_[1].setEnable(true);
+/* 0007e574 */}
+
+int UseChipConfimation::getButtonClicked()
+/* 0007e57c */{
+/* 0007e57c */	int i;
+/* 0007e586 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007e5b6 */	{
+/* 0007e5b6 */		if (this.btn_[i].isClick())
+/* 0007e5d0 */		{
+/* 0007e5d0 */			return i;
+/* 0007e5d8 */		}
+/* 0007e5de */	}
+/* 0007e5e4 */	return -1;
+/* 0007e5ec */}
+
+int UseChipConfimation::getSelection()
+/* 0007e5fa */{
+/* 0007e5fa */	return this.selected_;
+/* 0007e602 */}
+
+bool UseChipConfimation::isMotion()
+/* 0007e610 */{
+/* 0007e610 */	return this.chipInfo_.isMotion();
+/* 0007e61e */}
+
+bool UseChipConfimation::isConfirmed()
+/* 0007e62c */{
+/* 0007e62c */	return this.selected_ != -1;
+/* 0007e63e */}
+

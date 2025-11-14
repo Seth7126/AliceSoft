@@ -1,0 +1,175 @@
+SceneLoad::SceneLoad()
+/* 00082968 */{
+/* 00082972 */}
+
+int SceneLoad::update()
+/* 00082978 */{
+/* 00082978 */	switch (this.state_)
+/* 0008298a */	{
+/* 0008298a */	case 0:
+/* 0008298a */		if (!this.parent_.isMotion())
+/* 0008299e */		{
+/* 0008299e */			this.state_ = 1;
+/* 000829a8 */			this.ss_.jumpPage(g_common_latestSaveIndex / 10);
+/* 000829c2 */		}
+/* 000829c8 */		break;
+/* 000829ce */	case 1:
+/* 000829ce */		this.checkClick();
+/* 000829d6 */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 00082a18 */		{
+/* 00082a18 */			if (g_mouse.isClick(1))
+/* 00082a30 */			{
+/* 00082a30 */				g_sysSound.play(2003, false);
+/* 00082a48 */			}
+/* 00082a4e */			this.fadeIn(false);
+/* 00082a5c */		}
+/* 00082a62 */		this.checkJumpButton();
+/* 00082a6a */		this.jumpButton_.setSelectedButton(roundOff(this.ss_.getFloatingPage()));
+/* 00082a88 */		break;
+/* 00082a8e */	case 2:
+/* 00082a8e */		if (!this.parent_.isMotion())
+/* 00082aa2 */		{
+/* 00082aa2 */			if (this.clicked_ != -1)
+/* 00082ab6 */			{
+/* 00082ab6 */				g_saveManager.load(this.clicked_);
+/* 00082ac8 */			}
+/* 00082ace */			this.state_ = 3;
+/* 00082ad8 */		}
+/* 00082ade */		break;
+/* 00082ae4 */	case 3:
+/* 00082ae4 */		return 1;
+/* 00082aec */	}
+/* 00082aec */	return 0;
+/* 00082af4 */}
+
+void SceneLoad::run()
+/* 00082b02 */{
+/* 00082b02 */	this.init();
+/* 00082b0a */	this.setButtonEnable();
+/* 00082b12 */	this.fadeIn(true);
+/* 00082b20 */}
+
+void SceneLoad::init()
+/* 00082b28 */{
+/* 00082b28 */	this.parts_[0].init("システム／ロード／下地", 0);
+/* 00082b48 */	this.parts_[0].setShow(true);
+/* 00082b62 */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 00082b7a */	this.ss_.init(768, 932, 0, 6);
+/* 00082b9e */	this.newMark_.setParent(this.ss_.getParentPartsNumber());
+/* 00082bb6 */	this.updatePartsNewPos();
+/* 00082bbe */	this.initButton();
+/* 00082bc6 */}
+
+void SceneLoad::initButton()
+/* 00082bce */{
+/* 00082bce */	int i;
+/* 00082bd8 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00082c08 */	{
+/* 00082c08 */		string com = g_saveManager.getSaveComment(i);
+/* 00082c24 */		this.btn_[i].init("システム／ボタン／幅８４０", com, -1);
+/* 00082c4a */		int x;
+/* 00082c54 */		int y;
+/* 00082c5e */		getSaveLoadButtonPos(x, y, i);
+/* 00082c7a */		if (com != "データがありません")
+/* 00082c8a */		{
+/* 00082c8a */			this.btn_[i].setTextLeftAlign(50);
+/* 00082ca4 */		}
+/* 00082caa */		this.btn_[i].setPos(x, y, 5000);
+/* 00082cd0 */		this.btn_[i].setParent(this.ss_.getParentPartsNumber());
+/* 00082cf0 */	}
+/* 00082cf6 */	this.jumpButton_.init(6);
+/* 00082d08 */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 00082d26 */	this.btnExit_.setPos(868, 688, -2147483648);
+/* 00082d44 */}
+
+void SceneLoad::setButtonEnable()
+/* 00082d4c */{
+/* 00082d4c */	int i;
+/* 00082d56 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00082d86 */	{
+/* 00082d86 */		this.btn_[i].setEnable(g_saveManager.isEnable(i));
+/* 00082dac */	}
+/* 00082db2 */}
+
+void SceneLoad::fadeIn(bool val)
+/* 00082dba */{
+/* 00082dba */	this.fadeButton(val);
+/* 00082dc8 */	this.jumpButton_.fadeIn(val);
+/* 00082dda */	this.newMark_.fadeIn(val);
+/* 00082dec */	this.ss_.fadeIn(val);
+/* 00082dfe */	this.parent_.setShow(true);
+/* 00082e10 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 00082e40 */	this.state_ = val ? 0 : 2;
+/* 00082e6a */}
+
+void SceneLoad::fadeButton(bool val)
+/* 00082e72 */{
+/* 00082e72 */	int i;
+/* 00082e7c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00082eac */	{
+/* 00082eac */		this.btn_[i].fadeIn(val);
+/* 00082ec6 */	}
+/* 00082ecc */	this.btnExit_.fadeIn(val);
+/* 00082ede */}
+
+int SceneLoad::getClickedButton()
+/* 00082ee6 */{
+/* 00082ee6 */	int i;
+/* 00082ef0 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00082f20 */	{
+/* 00082f20 */		if (this.btn_[i].isClick())
+/* 00082f3a */		{
+/* 00082f3a */			return i;
+/* 00082f42 */		}
+/* 00082f48 */	}
+/* 00082f4e */	return -1;
+/* 00082f56 */}
+
+void SceneLoad::checkClick()
+/* 00082f64 */{
+/* 00082f64 */	this.clicked_ = this.getClickedButton();
+/* 00082f78 */	if (this.clicked_ != -1)
+/* 00082f8c */	{
+/* 00082f8c */		int r;
+/* 00082f96 */		if (AFL_Config_GetLoadConfirm())
+/* 00082fa2 */		{
+/* 00082fa2 */			DialogInfomation info;
+/* 00082fb2 */			info.answerType = 1;
+/* 00082fc8 */			info.type = 1;
+/* 00082fde */			info.imageName = "システム／ダイアログ／ロード";
+/* 00082ff2 */			info.caption = "ロード確認";
+/* 00083006 */			info.desc[0] = "ロードします。よろしいですか？";
+/* 00083022 */			r = OpenDialog(info);
+/* 0008303a */		}
+/* 00083046 */		if (r == 0)
+/* 00083054 */		{
+/* 00083054 */			g_sysSound.play(2101, false);
+/* 0008306c */			this.fadeIn(false);
+/* 0008307a */		}
+/* 00083080 */	}
+/* 00083086 */}
+
+void SceneLoad::checkJumpButton()
+/* 0008308e */{
+/* 0008308e */	int n = this.jumpButton_.getClickedButton();
+/* 000830a6 */	if (n != -1)
+/* 000830ba */	{
+/* 000830ba */		this.ss_.jumpPage(n);
+/* 000830cc */	}
+/* 000830d2 */}
+
+void SceneLoad::updatePartsNewPos()
+/* 000830da */{
+/* 000830da */	if (g_common_latestSaveIndex != -1)
+/* 000830ee */	{
+/* 000830ee */		int x;
+/* 000830f8 */		int y;
+/* 00083102 */		getSaveLoadButtonPos(x, y, g_common_latestSaveIndex);
+/* 0008311e */		this.newMark_.setPos(x, y);
+/* 00083136 */	}
+/* 0008313c */	else
+/* 0008313c */	{
+/* 0008313c */		this.newMark_.setShow(false);
+/* 0008314e */	}
+/* 0008314e */}
+

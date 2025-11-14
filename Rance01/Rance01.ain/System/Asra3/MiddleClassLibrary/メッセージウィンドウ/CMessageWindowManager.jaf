@@ -1,0 +1,239 @@
+CMessageWindowManager::CMessageWindowManager()
+/* 0001ecaa */{
+/* 0001ecb2 */	this.m_HideAll = false;
+/* 0001ecbc */	this.m_PrevShowSystemButton = false;
+/* 0001ecc6 */	this.m_PrevShowKeyWaitAnime = false;
+/* 0001ecd0 */}
+
+CMessageWindowManager::~CMessageWindowManager()
+/* 0001ecd8 */{
+/* 0001ecda */}
+
+void CMessageWindowManager::Update(ref CMessageWindowStatusManager StatusManager)
+/* 0001ece0 */{
+/* 0001ece0 */	array@int ShowingMessageWindowList;
+/* 0001ecea */	StatusManager.GetShowingMessageWindowList(ShowingMessageWindowList);
+/* 0001ecfc */	this.ClearByShowingList(ShowingMessageWindowList);
+/* 0001ed0a */	this.GC();
+/* 0001ed12 */	this.CreateByShowingList(ShowingMessageWindowList);
+/* 0001ed20 */}
+
+int CMessageWindowManager::FindMessageWindow(int MessageWindowNumber)
+/* 0001ed28 */{
+/* 0001ed28 */	int Index;
+/* 0001ed32 */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001ed62 */	{
+/* 0001ed62 */		if (this.m_MessageWindowList[Index].GetMessageWindowNumber() == MessageWindowNumber)
+/* 0001ed84 */		{
+/* 0001ed84 */			return Index;
+/* 0001ed8c */		}
+/* 0001ed92 */	}
+/* 0001ed98 */	return -1;
+/* 0001eda0 */}
+
+void CMessageWindowManager::CreateByShowingList(ref array@int ShowingList)
+/* 0001edae */{
+/* 0001edae */	int OffsetZ;
+/* 0001edb8 */	int Index;
+/* 0001edc2 */	for (Index = 0; Index < ShowingList.Numof(); ++Index)
+/* 0001edfc */	{
+/* 0001edfc */		int MessageWindowNumber = ShowingList[Index];
+/* 0001ee16 */		bool ActiveState = Index == ShowingList.Numof() - 1;
+/* 0001ee44 */		this.Create(MessageWindowNumber, OffsetZ, ActiveState);
+/* 0001ee5e */		OffsetZ += 2;
+/* 0001ee70 */	}
+/* 0001ee76 */}
+
+void CMessageWindowManager::Create(int MessageWindowNumber, int OffsetZ, bool ActiveState)
+/* 0001ee7e */{
+/* 0001ee7e */	ref CMessageWindow MessageWindow;
+/* 0001ee96 */	int FindIndex = this.FindMessageWindow(MessageWindowNumber);
+/* 0001eeb0 */	if (FindIndex != -1)
+/* 0001eec4 */	{
+/* 0001eec4 */		MessageWindow <- this.m_MessageWindowList[FindIndex];
+/* 0001eee8 */		if (!MessageWindow.IsExist())
+/* 0001eefc */		{
+/* 0001eefc */			MessageWindow.Create(MessageWindowNumber);
+/* 0001ef10 */		}
+/* 0001ef16 */		else if (!MessageWindow.IsShow() && MessageWindow.IsFlat())
+/* 0001ef54 */		{
+/* 0001ef54 */			MessageWindow.BackFlatBeginFrame();
+/* 0001ef60 */		}
+/* 0001ef66 */	}
+/* 0001ef6c */	else
+/* 0001ef6c */	{
+/* 0001ef6c */		this.m_MessageWindowList.Realloc(this.m_MessageWindowList.Numof() + 1);
+/* 0001ef8a */		MessageWindow <- this.m_MessageWindowList[this.m_MessageWindowList.Numof() - 1];
+/* 0001efb6 */		MessageWindow.Create(MessageWindowNumber);
+/* 0001efca */	}
+/* 0001efca */	MessageWindow.UpdatePos();
+/* 0001efd6 */	MessageWindow.SetOffsetZ(OffsetZ);
+/* 0001efe8 */	MessageWindow.UpdateZ();
+/* 0001eff4 */	MessageWindow.SetShow(true);
+/* 0001f006 */	MessageWindow.UpdateActiveState(ActiveState);
+/* 0001f018 */}
+
+void CMessageWindowManager::HideAll()
+/* 0001f020 */{
+/* 0001f020 */	if (this.m_HideAll)
+/* 0001f02a */	{
+/* 0001f02a */		return;
+/* 0001f02c */	}
+/* 0001f032 */	g_MessageTextView.SetShow(false);
+/* 0001f044 */	this.m_PrevShowSystemButton = g_SystemButtonViewList.IsShow();
+/* 0001f05c */	g_SystemButtonViewList.Hide();
+/* 0001f068 */	this.m_PrevShowKeyWaitAnime = _g_MsgKeyWaitAnime.IsShow();
+/* 0001f080 */	SYS_キー待ちマーク表示設定(false);
+/* 0001f08c */	SYS_オートモードマーク非表示();
+/* 0001f092 */	SYS_スキップモードマーク非表示();
+/* 0001f098 */	SYS_CallShowMessageWindowCallbackFuncList(false);
+/* 0001f0a4 */	this.m_HideAll = true;
+/* 0001f0ae */}
+
+void CMessageWindowManager::ShowAll()
+/* 0001f0b6 */{
+/* 0001f0b6 */	if (!this.m_HideAll)
+/* 0001f0c4 */	{
+/* 0001f0c4 */		return;
+/* 0001f0c6 */	}
+/* 0001f0cc */	SYS_CallShowMessageWindowCallbackFuncList(true);
+/* 0001f0d8 */	g_MessageTextView.SetShow(true);
+/* 0001f0ea */	if (this.m_PrevShowKeyWaitAnime)
+/* 0001f0f4 */	{
+/* 0001f0f4 */		SYS_キー待ちマーク表示設定(true);
+/* 0001f100 */	}
+/* 0001f106 */	if (this.m_PrevShowSystemButton)
+/* 0001f110 */	{
+/* 0001f110 */		g_SystemButtonViewList.Show();
+/* 0001f11c */	}
+/* 0001f122 */	this.m_PrevShowSystemButton = false;
+/* 0001f12c */	this.m_PrevShowKeyWaitAnime = false;
+/* 0001f136 */	this.m_HideAll = false;
+/* 0001f140 */}
+
+bool CMessageWindowManager::IsShowAll()
+/* 0001f148 */{
+/* 0001f148 */	return !this.m_HideAll;
+/* 0001f154 */}
+
+void CMessageWindowManager::ClearByShowingList(ref array@int ShowingList)
+/* 0001f162 */{
+/* 0001f162 */	int Index;
+/* 0001f16c */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f19c */	{
+/* 0001f19c */		int MessageWindowNumber = this.m_MessageWindowList[Index].GetMessageWindowNumber();
+/* 0001f1bc */		if (ShowingList.Find(0, ShowingList.Numof(), MessageWindowNumber) == -1)
+/* 0001f1f6 */		{
+/* 0001f1f6 */			g_MessageTextView.ClearMessageTextAndSetHome(MessageWindowNumber);
+/* 0001f208 */			this.m_MessageWindowList[Index].SetShow(false);
+/* 0001f222 */		}
+/* 0001f228 */	}
+/* 0001f22e */}
+
+int CMessageWindowManager::GetOffsetZ(int MessageWindowNumber)
+/* 0001f236 */{
+/* 0001f236 */	int MessageWindowIndex = this.FindMessageWindow(MessageWindowNumber);
+/* 0001f250 */	if (MessageWindowIndex == -1)
+/* 0001f264 */	{
+/* 0001f264 */		return 0;
+/* 0001f26c */	}
+/* 0001f272 */	return this.m_MessageWindowList[MessageWindowIndex].GetOffsetZ();
+/* 0001f288 */}
+
+int CMessageWindowManager::GetShowingMaxOffsetZ()
+/* 0001f296 */{
+/* 0001f296 */	int ResultOffsetZ;
+/* 0001f2a0 */	int Index;
+/* 0001f2aa */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f2da */	{
+/* 0001f2da */		if (!this.m_MessageWindowList[Index].IsShow())
+/* 0001f2f6 */		{
+/* 0001f2f6 */			continue;
+/* 0001f2fc */		}
+/* 0001f302 */		int OffsetZ = this.m_MessageWindowList[Index].GetOffsetZ();
+/* 0001f322 */		if (OffsetZ > ResultOffsetZ)
+/* 0001f336 */		{
+/* 0001f336 */			ResultOffsetZ = OffsetZ;
+/* 0001f348 */		}
+/* 0001f34e */	}
+/* 0001f354 */	return ResultOffsetZ;
+/* 0001f35c */}
+
+void CMessageWindowManager::GC()
+/* 0001f36a */{
+/* 0001f36a */	if (this.m_MessageWindowList.Numof() < 10)
+/* 0001f37e */	{
+/* 0001f37e */		return;
+/* 0001f380 */	}
+/* 0001f386 */	if (this.m_HideAll)
+/* 0001f390 */	{
+/* 0001f390 */		return;
+/* 0001f392 */	}
+/* 0001f398 */	int Index;
+/* 0001f3a2 */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f3d2 */	{
+/* 0001f3d2 */		if (this.m_MessageWindowList[Index].IsShow())
+/* 0001f3ec */		{
+/* 0001f3ec */			continue;
+/* 0001f3f2 */		}
+/* 0001f3f8 */		this.m_MessageWindowList[Index].Release();
+/* 0001f40c */	}
+/* 0001f412 */}
+
+void CMessageWindowManager::UpdateAlpha()
+/* 0001f41a */{
+/* 0001f41a */	int Index;
+/* 0001f424 */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f454 */	{
+/* 0001f454 */		this.m_MessageWindowList[Index].UpdateAlpha();
+/* 0001f468 */	}
+/* 0001f46e */}
+
+void CMessageWindowManager::UpdateMulColor()
+/* 0001f476 */{
+/* 0001f476 */	int Index;
+/* 0001f480 */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f4b0 */	{
+/* 0001f4b0 */		this.m_MessageWindowList[Index].UpdateMulColor();
+/* 0001f4c4 */	}
+/* 0001f4ca */}
+
+void CMessageWindowManager::WaitShowFlat()
+/* 0001f4d2 */{
+/* 0001f4d2 */	for (; ; )
+/* 0001f4d2 */	{
+/* 0001f4d2 */		if (全文スキップ中確認() || 既読スキップ中確認())
+/* 0001f502 */		{
+/* 0001f502 */			this.StepAllFlatFinalFrame();
+/* 0001f50a */			break;
+/* 0001f510 */		}
+/* 0001f516 */		int Index;
+/* 0001f520 */		for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f550 */		{
+/* 0001f550 */			ref CMessageWindow MessageWindow = this.m_MessageWindowList[Index];
+/* 0001f57a */			if (!MessageWindow.IsOverFlatWaitFrame())
+/* 0001f58e */			{
+/* 0001f58e */				break;
+/* 0001f59a */			}
+/* 0001f5a0 */		}
+/* 0001f5ac */		if (Index >= this.m_MessageWindowList.Numof())
+/* 0001f5c0 */		{
+/* 0001f5c0 */			break;
+/* 0001f5cc */		}
+/* 0001f5d2 */		AFL_View_Update(true);
+/* 0001f5de */	}
+/* 0001f5de */}
+
+void CMessageWindowManager::StepAllFlatFinalFrame()
+/* 0001f5ec */{
+/* 0001f5ec */	int Index;
+/* 0001f5f6 */	for (Index = 0; Index < this.m_MessageWindowList.Numof(); ++Index)
+/* 0001f626 */	{
+/* 0001f626 */		if (!this.m_MessageWindowList[Index].IsFlat())
+/* 0001f642 */		{
+/* 0001f642 */			continue;
+/* 0001f648 */		}
+/* 0001f64e */		this.m_MessageWindowList[Index].StepFlatFinalFrame();
+/* 0001f662 */	}
+/* 0001f668 */}
+

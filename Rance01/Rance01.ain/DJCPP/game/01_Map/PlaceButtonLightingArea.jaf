@@ -1,0 +1,60 @@
+PlaceButtonLightingArea::PlaceButtonLightingArea()
+/* 0006b7cc */{
+/* 0006b7d4 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006b7f6 */}
+
+void PlaceButtonLightingArea::setPos(int x, int y)
+/* 0006b7fe */{
+/* 0006b7fe */	this.parts_[0].setPos(x, y, -2147483648);
+/* 0006b824 */	this.parts_[1].setPos(x, y, -2147483648);
+/* 0006b84a */}
+
+void PlaceButtonLightingArea::init(string imageName)
+/* 0006b852 */{
+/* 0006b852 */	this.parts_[0].init("システム／場所／領域／" + imageName, 0);
+/* 0006b87a */	this.w_ = this.parts_[0].getWidth() / 3;
+/* 0006b8a2 */	this.h_ = this.parts_[0].getHeight();
+/* 0006b8c2 */	this.parts_[1].initAsCgPlaneImage("システム／場所／領域／" + imageName, 255, 80, 0);
+/* 0006b8f6 */	this.parts_[1].setAlpha(180);
+/* 0006b910 */	this.parts_[1].setCgRange(0, 0, this.w_, this.h_);
+/* 0006b93c */	this.setSubPartsShowState();
+/* 0006b944 */	createPartsGroup(this.parent_, this.parts_, 1300);
+/* 0006b95c */}
+
+void PlaceButtonLightingArea::setPartsShowType(int type, bool hover)
+/* 0006b964 */{
+/* 0006b964 */	this.parts_[0].setCgRange(this.w_ * type, 0, this.w_, this.h_);
+/* 0006b998 */	this.parts_[1].setShow(hover);
+/* 0006b9b2 */}
+
+void PlaceButtonLightingArea::fadeIn(bool val)
+/* 0006b9ba */{
+/* 0006b9ba */	MotionInfomation m;
+/* 0006b9ca */	m = getStandardMotion(val ? 0 : 1);
+/* 0006b9fe */	if (val)
+/* 0006ba0a */	{
+/* 0006ba0a */		m.setTime(2000, 0);
+/* 0006ba22 */	}
+/* 0006ba28 */	else
+/* 0006ba28 */	{
+/* 0006ba28 */		m.setTime(200, 0);
+/* 0006ba40 */	}
+/* 0006ba40 */	this.parent_.setShow(true);
+/* 0006ba52 */	this.parent_.runMotion(m);
+/* 0006ba6c */}
+
+void PlaceButtonLightingArea::update()
+/* 0006ba74 */{
+/* 0006ba76 */}
+
+bool PlaceButtonLightingArea::isHover()
+/* 0006ba7c */{
+/* 0006ba7c */	return AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 0006bab6 */}
+
+void PlaceButtonLightingArea::setSubPartsShowState()
+/* 0006bac4 */{
+/* 0006bac4 */	this.parts_[0].setShow(true);
+/* 0006bade */	this.parts_[1].setShow(false);
+/* 0006baf8 */}
+

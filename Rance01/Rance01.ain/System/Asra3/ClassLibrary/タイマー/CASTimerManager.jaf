@@ -1,0 +1,71 @@
+CASTimerManager::CASTimerManager()
+/* 00000fd6 */{
+/* 00000fe0 */}
+
+CASTimerManager::~CASTimerManager()
+/* 00000fe6 */{
+/* 00000fe8 */}
+
+int CASTimerManager::CreateHandle()
+/* 00000fee */{
+/* 00000fee */	int nEmptyIndex = this.m_CreatedFlagList.Find(0, this.m_CreatedFlagList.Numof(), 0);
+/* 0000101c */	if (nEmptyIndex != -1)
+/* 00001030 */	{
+/* 00001030 */		this.m_CreatedFlagList[nEmptyIndex] = 1;
+/* 00001046 */		return nEmptyIndex;
+/* 0000104e */	}
+/* 00001054 */	int nNewIndex = this.m_TimerImpList.Numof();
+/* 00001066 */	this.m_TimerImpList.Realloc(this.m_TimerImpList.Numof() + 1);
+/* 00001084 */	this.m_CreatedFlagList.Realloc(this.m_CreatedFlagList.Numof() + 1);
+/* 000010a2 */	this.m_CreatedFlagList[nNewIndex] = 1;
+/* 000010b8 */	this.m_TimerImpList[nNewIndex].Reset();
+/* 000010cc */	return nNewIndex;
+/* 000010d4 */}
+
+void CASTimerManager::ReleaseHandle(int nHandle)
+/* 000010e2 */{
+/* 000010e2 */	if (!this.CheckHandle(nHandle))
+/* 000010f8 */	{
+/* 000010f8 */		return;
+/* 000010fa */	}
+/* 00001100 */	this.m_CreatedFlagList[nHandle] = 0;
+/* 00001116 */}
+
+ref CASTimerImp CASTimerManager::GetObject(int nHandle)
+/* 0000111e */{
+/* 0000111e */	if (!this.CheckHandle(nHandle))
+/* 00001134 */	{
+/* 00001134 */		return NULL;
+/* 0000113c */	}
+/* 00001142 */	return this.m_TimerImpList[nHandle];
+/* 00001156 */}
+
+bool CASTimerManager::CheckHandle(int nHandle)
+/* 00001164 */{
+/* 00001164 */	if (nHandle < 0 || nHandle >= this.m_CreatedFlagList.Numof() || !this.m_CreatedFlagList[nHandle])
+/* 000011cc */	{
+/* 000011cc */		system.Error("AsraFramework内部エラー\nCASTimerManager - ハンドルエラー");
+/* 000011da */		return false;
+/* 000011e4 */	}
+/* 000011ea */	return true;
+/* 000011f4 */}
+
+void CASTimerManager::UpdateCurrentTime()
+/* 00001202 */{
+/* 00001202 */	int nHandle;
+/* 0000120c */	for (nHandle = 0; nHandle < this.m_TimerImpList.Numof(); ++nHandle)
+/* 0000123c */	{
+/* 0000123c */		this.m_TimerImpList[nHandle].UpdateCurrentTime();
+/* 00001250 */	}
+/* 00001256 */}
+
+void CASTimerManager::Rebuild()
+/* 0000125e */{
+/* 0000125e */	int nCurrentTime = system.GetTime();
+/* 00001270 */	int nHandle;
+/* 0000127a */	for (nHandle = 0; nHandle < this.m_TimerImpList.Numof(); ++nHandle)
+/* 000012aa */	{
+/* 000012aa */		this.m_TimerImpList[nHandle].Rebuild(nCurrentTime);
+/* 000012c4 */	}
+/* 000012ca */}
+

@@ -1,0 +1,360 @@
+CConfigUIMessageTab::CConfigUIMessageTab()
+/* 0002dd9a */{
+/* 0002dda4 */}
+
+CConfigUIMessageTab::~CConfigUIMessageTab()
+/* 0002ddaa */{
+/* 0002ddac */}
+
+void CConfigUIMessageTab::Create()
+/* 0002ddb2 */{
+/* 0002ddb2 */	this.CreateUI();
+/* 0002ddba */}
+
+void CConfigUIMessageTab::Release()
+/* 0002ddc2 */{
+/* 0002ddc2 */	int Index;
+/* 0002ddcc */	for (Index = 0; Index < this.m_BackTextColorButtonList.Numof(); ++Index)
+/* 0002ddfc */	{
+/* 0002ddfc */		AFL_Parts_EraseMouseClickEvent(this.m_BackTextColorButtonList[Index], this.ClickBackTextColorButtonEvent);
+/* 0002de1a */		PARTS_Release(this.m_BackTextColorButtonList[Index]);
+/* 0002de2e */	}
+/* 0002de34 */	this.m_BackTextColorButtonList.Free();
+/* 0002de3e */	for (Index = 0; Index < this.m_ReadTextColorButtonList.Numof(); ++Index)
+/* 0002de6e */	{
+/* 0002de6e */		AFL_Parts_EraseMouseClickEvent(this.m_ReadTextColorButtonList[Index], this.ClickReadTextColorButtonEvent);
+/* 0002de8c */		PARTS_Release(this.m_ReadTextColorButtonList[Index]);
+/* 0002dea0 */	}
+/* 0002dea6 */	this.m_ReadTextColorButtonList.Free();
+/* 0002deb0 */	AFL_Parts_EraseChangedEvent(this.m_AnimationWindowCheckBox, this.ChangedCheckAnimationWindow);
+/* 0002dec6 */	AFL_Parts_EraseChangedEvent(this.m_StopScreensaverByAutoModeCheckBox, this.ChangedCheckStopScreensaverByAutoMode);
+/* 0002dedc */	AFL_Parts_EraseChangedEvent(this.m_ReleaseAutoModeByShowChoicesCheckBox, this.ChangedCheckReleaseAutoModeByShowChoices);
+/* 0002def2 */	AFL_Parts_EraseChangedEvent(this.m_ReleaseAutoModeByClickCheckBox, this.ChangedCheckReleaseAutoModeByClick);
+/* 0002df08 */	AFL_Parts_EraseChangedEvent(this.m_SkipFullMessageCheckBox, this.ChangedCheckSkipFullMessage);
+/* 0002df1e */	AFL_Parts_EraseChangedEvent(this.m_ReleaseSkipModeByReadMessageCheckBox, this.ChangedCheckReleaseSkipModeByReadMessage);
+/* 0002df34 */	AFL_Parts_EraseChangedEvent(this.m_ReleaseSkipModeByShowChoicesCheckBox, this.ChangedCheckReleaseSkipModeByShowChoices);
+/* 0002df4a */	AFL_Parts_EraseChangedEvent(this.m_ReleaseSkipModeByClickCheckBox, this.ChangedCheckReleaseSkipModeByClick);
+/* 0002df60 */	PARTS_Release(this.m_BackMessageTextColorSampleLabel);
+/* 0002df6c */	PARTS_Release(this.m_BackMessageTextColorLabel);
+/* 0002df78 */	PARTS_Release(this.m_ReadMessageTextColorSampleLabel);
+/* 0002df84 */	PARTS_Release(this.m_ReadMessageTextColorLabel);
+/* 0002df90 */	PARTS_Release(this.m_AnimationWindowCheckBox);
+/* 0002df9c */	PARTS_Release(this.m_EtcLabel);
+/* 0002dfa8 */	PARTS_Release(this.m_StopScreensaverByAutoModeCheckBox);
+/* 0002dfb4 */	PARTS_Release(this.m_ReleaseAutoModeByShowChoicesCheckBox);
+/* 0002dfc0 */	PARTS_Release(this.m_ReleaseAutoModeByClickCheckBox);
+/* 0002dfcc */	PARTS_Release(this.m_AutoModeLabel);
+/* 0002dfd8 */	PARTS_Release(this.m_SkipFullMessageCheckBox);
+/* 0002dfe4 */	PARTS_Release(this.m_ReleaseSkipModeByReadMessageCheckBox);
+/* 0002dff0 */	PARTS_Release(this.m_ReleaseSkipModeByShowChoicesCheckBox);
+/* 0002dffc */	PARTS_Release(this.m_ReleaseSkipModeByClickCheckBox);
+/* 0002e008 */	PARTS_Release(this.m_SkipModeLabel);
+/* 0002e014 */	PARTS_Release(this.m_BG);
+/* 0002e020 */	this.m_BackMessageTextColorSampleLabel = 0;
+/* 0002e02a */	this.m_BackMessageTextColorLabel = 0;
+/* 0002e034 */	this.m_ReadMessageTextColorSampleLabel = 0;
+/* 0002e03e */	this.m_ReadMessageTextColorLabel = 0;
+/* 0002e048 */	this.m_AnimationWindowCheckBox = 0;
+/* 0002e052 */	this.m_EtcLabel = 0;
+/* 0002e05c */	this.m_StopScreensaverByAutoModeCheckBox = 0;
+/* 0002e066 */	this.m_ReleaseAutoModeByShowChoicesCheckBox = 0;
+/* 0002e070 */	this.m_ReleaseAutoModeByClickCheckBox = 0;
+/* 0002e07a */	this.m_AutoModeLabel = 0;
+/* 0002e084 */	this.m_SkipFullMessageCheckBox = 0;
+/* 0002e08e */	this.m_ReleaseSkipModeByReadMessageCheckBox = 0;
+/* 0002e098 */	this.m_ReleaseSkipModeByShowChoicesCheckBox = 0;
+/* 0002e0a2 */	this.m_ReleaseSkipModeByClickCheckBox = 0;
+/* 0002e0ac */	this.m_SkipModeLabel = 0;
+/* 0002e0b6 */	this.m_BG = 0;
+/* 0002e0c0 */}
+
+void CConfigUIMessageTab::CreateUI()
+/* 0002e0c8 */{
+/* 0002e0c8 */	this.Release();
+/* 0002e0d0 */	this.CreateBG();
+/* 0002e0d8 */	this.CreateSkipMode();
+/* 0002e0e0 */	this.CreateAutoMode();
+/* 0002e0e8 */	this.CreateEtc();
+/* 0002e0f0 */	this.CreateReadMessageTextColor();
+/* 0002e0f8 */	this.CreateBackMessageTextColor();
+/* 0002e100 */}
+
+void CConfigUIMessageTab::CreateBG()
+/* 0002e108 */{
+/* 0002e108 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002e11a */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002e12c */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002e144 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002e162 */}
+
+void CConfigUIMessageTab::CreateSkipMode()
+/* 0002e16a */{
+/* 0002e16a */	this.m_SkipModeLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002e17c */	Ｐ＿ラベル＿座標設定(this.m_SkipModeLabel, 50, 100);
+/* 0002e194 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_SkipModeLabel, 100);
+/* 0002e1a6 */	Ｐ＿ラベル＿テキスト設定(this.m_SkipModeLabel, "スキップモード");
+/* 0002e1b8 */	Ｐ＿ラベル＿フォント設定(this.m_SkipModeLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 0002e200 */	this.m_ReleaseSkipModeByClickCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e212 */	Ｐ＿チェックボックス＿座標設定(this.m_ReleaseSkipModeByClickCheckBox, 50, 130);
+/* 0002e22a */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ReleaseSkipModeByClickCheckBox, 100);
+/* 0002e23c */	Ｐ＿チェックボックス＿サイズ設定(this.m_ReleaseSkipModeByClickCheckBox, 24, 24);
+/* 0002e254 */	Ｐ＿チェックボックス＿フォント設定(this.m_ReleaseSkipModeByClickCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e29c */	Ｐ＿チェックボックス＿テキスト設定(this.m_ReleaseSkipModeByClickCheckBox, "クリックで解除する");
+/* 0002e2ae */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ReleaseSkipModeByClickCheckBox, AFL_Config_GetReleaseSkipModeByClick());
+/* 0002e2c0 */	AFL_Parts_AddChangedEvent(this.m_ReleaseSkipModeByClickCheckBox, this.ChangedCheckReleaseSkipModeByClick);
+/* 0002e2d6 */	this.m_ReleaseSkipModeByShowChoicesCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e2e8 */	Ｐ＿チェックボックス＿座標設定(this.m_ReleaseSkipModeByShowChoicesCheckBox, 50, 160);
+/* 0002e300 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ReleaseSkipModeByShowChoicesCheckBox, 100);
+/* 0002e312 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ReleaseSkipModeByShowChoicesCheckBox, 24, 24);
+/* 0002e32a */	Ｐ＿チェックボックス＿フォント設定(this.m_ReleaseSkipModeByShowChoicesCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e372 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ReleaseSkipModeByShowChoicesCheckBox, "選択肢が表示された時に解除する");
+/* 0002e384 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ReleaseSkipModeByShowChoicesCheckBox, AFL_Config_GetReleaseMessageSkipInSelectMenu());
+/* 0002e396 */	AFL_Parts_AddChangedEvent(this.m_ReleaseSkipModeByShowChoicesCheckBox, this.ChangedCheckReleaseSkipModeByShowChoices);
+/* 0002e3ac */	this.m_ReleaseSkipModeByReadMessageCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e3be */	Ｐ＿チェックボックス＿座標設定(this.m_ReleaseSkipModeByReadMessageCheckBox, 50, 190);
+/* 0002e3d6 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ReleaseSkipModeByReadMessageCheckBox, 100);
+/* 0002e3e8 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ReleaseSkipModeByReadMessageCheckBox, 24, 24);
+/* 0002e400 */	Ｐ＿チェックボックス＿フォント設定(this.m_ReleaseSkipModeByReadMessageCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e448 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ReleaseSkipModeByReadMessageCheckBox, "未読メッセージが表示された時に解除する");
+/* 0002e45a */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ReleaseSkipModeByReadMessageCheckBox, AFL_Config_GetReleaseSkipModeByReadMessage());
+/* 0002e46c */	AFL_Parts_AddChangedEvent(this.m_ReleaseSkipModeByReadMessageCheckBox, this.ChangedCheckReleaseSkipModeByReadMessage);
+/* 0002e482 */	this.m_SkipFullMessageCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e494 */	Ｐ＿チェックボックス＿座標設定(this.m_SkipFullMessageCheckBox, 50, 220);
+/* 0002e4ac */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_SkipFullMessageCheckBox, 100);
+/* 0002e4be */	Ｐ＿チェックボックス＿サイズ設定(this.m_SkipFullMessageCheckBox, 24, 24);
+/* 0002e4d6 */	Ｐ＿チェックボックス＿フォント設定(this.m_SkipFullMessageCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e51e */	Ｐ＿チェックボックス＿テキスト設定(this.m_SkipFullMessageCheckBox, "未読メッセージもスキップする");
+/* 0002e530 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_SkipFullMessageCheckBox, AFL_Config_GetSkipAllMessage());
+/* 0002e542 */	AFL_Parts_AddChangedEvent(this.m_SkipFullMessageCheckBox, this.ChangedCheckSkipFullMessage);
+/* 0002e558 */}
+
+void CConfigUIMessageTab::CreateAutoMode()
+/* 0002e560 */{
+/* 0002e560 */	this.m_AutoModeLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002e572 */	Ｐ＿ラベル＿座標設定(this.m_AutoModeLabel, 50, 265);
+/* 0002e58a */	Ｐ＿ラベル＿Ｚ座標設定(this.m_AutoModeLabel, 100);
+/* 0002e59c */	Ｐ＿ラベル＿テキスト設定(this.m_AutoModeLabel, "オートモード");
+/* 0002e5ae */	Ｐ＿ラベル＿フォント設定(this.m_AutoModeLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 0002e5f6 */	this.m_ReleaseAutoModeByClickCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e608 */	Ｐ＿チェックボックス＿座標設定(this.m_ReleaseAutoModeByClickCheckBox, 50, 295);
+/* 0002e620 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ReleaseAutoModeByClickCheckBox, 100);
+/* 0002e632 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ReleaseAutoModeByClickCheckBox, 24, 24);
+/* 0002e64a */	Ｐ＿チェックボックス＿フォント設定(this.m_ReleaseAutoModeByClickCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e692 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ReleaseAutoModeByClickCheckBox, "クリックで解除する");
+/* 0002e6a4 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ReleaseAutoModeByClickCheckBox, AFL_Config_GetReleaseAutoModeByClick());
+/* 0002e6b6 */	AFL_Parts_AddChangedEvent(this.m_ReleaseAutoModeByClickCheckBox, this.ChangedCheckReleaseAutoModeByClick);
+/* 0002e6cc */	this.m_ReleaseAutoModeByShowChoicesCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e6de */	Ｐ＿チェックボックス＿座標設定(this.m_ReleaseAutoModeByShowChoicesCheckBox, 50, 325);
+/* 0002e6f6 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ReleaseAutoModeByShowChoicesCheckBox, 100);
+/* 0002e708 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ReleaseAutoModeByShowChoicesCheckBox, 24, 24);
+/* 0002e720 */	Ｐ＿チェックボックス＿フォント設定(this.m_ReleaseAutoModeByShowChoicesCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e768 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ReleaseAutoModeByShowChoicesCheckBox, "選択肢が表示された時に解除する");
+/* 0002e77a */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ReleaseAutoModeByShowChoicesCheckBox, AFL_Config_GetReleaseAutoModeInSelectMenu());
+/* 0002e78c */	AFL_Parts_AddChangedEvent(this.m_ReleaseAutoModeByShowChoicesCheckBox, this.ChangedCheckReleaseAutoModeByShowChoices);
+/* 0002e7a2 */	this.m_StopScreensaverByAutoModeCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e7b4 */	Ｐ＿チェックボックス＿座標設定(this.m_StopScreensaverByAutoModeCheckBox, 50, 355);
+/* 0002e7cc */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_StopScreensaverByAutoModeCheckBox, 100);
+/* 0002e7de */	Ｐ＿チェックボックス＿サイズ設定(this.m_StopScreensaverByAutoModeCheckBox, 24, 24);
+/* 0002e7f6 */	Ｐ＿チェックボックス＿フォント設定(this.m_StopScreensaverByAutoModeCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e83e */	Ｐ＿チェックボックス＿テキスト設定(this.m_StopScreensaverByAutoModeCheckBox, "オートモード中はスクリーンセーバーを起動しないようにする");
+/* 0002e850 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_StopScreensaverByAutoModeCheckBox, AFL_Config_GetRestrainScreensaverWhileAutoMode());
+/* 0002e862 */	AFL_Parts_AddChangedEvent(this.m_StopScreensaverByAutoModeCheckBox, this.ChangedCheckStopScreensaverByAutoMode);
+/* 0002e878 */}
+
+void CConfigUIMessageTab::CreateEtc()
+/* 0002e880 */{
+/* 0002e880 */	this.m_EtcLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002e892 */	Ｐ＿ラベル＿座標設定(this.m_EtcLabel, 50, 400);
+/* 0002e8aa */	Ｐ＿ラベル＿Ｚ座標設定(this.m_EtcLabel, 100);
+/* 0002e8bc */	Ｐ＿ラベル＿テキスト設定(this.m_EtcLabel, "その他");
+/* 0002e8ce */	Ｐ＿ラベル＿フォント設定(this.m_EtcLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 0002e916 */	this.m_AnimationWindowCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002e928 */	Ｐ＿チェックボックス＿座標設定(this.m_AnimationWindowCheckBox, 50, 430);
+/* 0002e940 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_AnimationWindowCheckBox, 100);
+/* 0002e952 */	Ｐ＿チェックボックス＿サイズ設定(this.m_AnimationWindowCheckBox, 24, 24);
+/* 0002e96a */	Ｐ＿チェックボックス＿フォント設定(this.m_AnimationWindowCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002e9b2 */	Ｐ＿チェックボックス＿テキスト設定(this.m_AnimationWindowCheckBox, "メッセージウィンドウのアニメーションをおこなう");
+/* 0002e9c4 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_AnimationWindowCheckBox, AFL_Config_IsAnimateMessageWindow());
+/* 0002e9d6 */	AFL_Parts_AddChangedEvent(this.m_AnimationWindowCheckBox, this.ChangedCheckAnimationWindow);
+/* 0002e9ec */}
+
+void CConfigUIMessageTab::CreateReadMessageTextColor()
+/* 0002e9f4 */{
+/* 0002e9f4 */	this.m_ReadMessageTextColorLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002ea06 */	Ｐ＿ラベル＿座標設定(this.m_ReadMessageTextColorLabel, 50, 490);
+/* 0002ea1e */	Ｐ＿ラベル＿Ｚ座標設定(this.m_ReadMessageTextColorLabel, 100);
+/* 0002ea30 */	Ｐ＿ラベル＿テキスト設定(this.m_ReadMessageTextColorLabel, "既読メッセージの色");
+/* 0002ea42 */	Ｐ＿ラベル＿フォント設定(this.m_ReadMessageTextColorLabel, 0, 22, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002ea8a */	int Red;
+/* 0002ea94 */	int Green;
+/* 0002ea9e */	int Blue;
+/* 0002eaa8 */	AFL_Config_GetReadTextColor(AFL_Config_GetReadTextColorIndex(), Red, Green, Blue);
+/* 0002eacc */	this.m_ReadMessageTextColorSampleLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002eade */	Ｐ＿ラベル＿座標設定(this.m_ReadMessageTextColorSampleLabel, 450, 490);
+/* 0002eaf6 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_ReadMessageTextColorSampleLabel, 100);
+/* 0002eb08 */	Ｐ＿ラベル＿テキスト設定(this.m_ReadMessageTextColorSampleLabel, "サンプル");
+/* 0002eb1a */	Ｐ＿ラベル＿フォント設定(this.m_ReadMessageTextColorSampleLabel, 0, 22, Red, Green, Blue, 0.0, 1.0, 0, 0, 0);
+/* 0002eb62 */	int PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0002eb74 */	this.m_ReadTextColorButtonList.PushBack(PartsNumber);
+/* 0002eb84 */	Ｐ＿ボタン＿座標設定(PartsNumber, 100, 520);
+/* 0002eb9c */	Ｐ＿ボタン＿Ｚ座標設定(PartsNumber, 100);
+/* 0002ebae */	Ｐ＿ボタン＿サイズ設定(PartsNumber, 120, 30);
+/* 0002ebc6 */	Ｐ＿ボタン＿色設定(PartsNumber, 150, 150, 150);
+/* 0002ebe4 */	Ｐ＿ボタン＿フォント設定(PartsNumber, 0, 16, 255, 255, 255, 0.0, 0.0, 0, 0, 0);
+/* 0002ec2c */	Ｐ＿ボタン＿テキスト設定(PartsNumber, "変更無し");
+/* 0002ec3e */	AFL_Parts_AddMouseClickEvent(PartsNumber, this.ClickReadTextColorButtonEvent);
+/* 0002ec54 */	int Index;
+/* 0002ec5e */	for (Index = 1; Index < 13; ++Index)
+/* 0002ec88 */	{
+/* 0002ec88 */		PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0002ec9a */		this.m_ReadTextColorButtonList.PushBack(PartsNumber);
+/* 0002ecaa */		Ｐ＿ボタン＿座標設定(PartsNumber, 220 + (Index - 1) * 30, 520);
+/* 0002ecda */		Ｐ＿ボタン＿Ｚ座標設定(PartsNumber, 100);
+/* 0002ecec */		Ｐ＿ボタン＿サイズ設定(PartsNumber, 30, 30);
+/* 0002ed04 */		int Red;
+/* 0002ed0e */		int Green;
+/* 0002ed18 */		int Blue;
+/* 0002ed22 */		AFL_Config_GetReadTextColor(Index - 1, Red, Green, Blue);
+/* 0002ed4e */		Ｐ＿ボタン＿色設定(PartsNumber, Red, Green, Blue);
+/* 0002ed6c */		AFL_Parts_AddMouseClickEvent(PartsNumber, this.ClickReadTextColorButtonEvent);
+/* 0002ed82 */	}
+/* 0002ed88 */}
+
+void CConfigUIMessageTab::CreateBackMessageTextColor()
+/* 0002ed90 */{
+/* 0002ed90 */	this.m_BackMessageTextColorLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002eda2 */	Ｐ＿ラベル＿座標設定(this.m_BackMessageTextColorLabel, 50, 570);
+/* 0002edba */	Ｐ＿ラベル＿Ｚ座標設定(this.m_BackMessageTextColorLabel, 100);
+/* 0002edcc */	Ｐ＿ラベル＿テキスト設定(this.m_BackMessageTextColorLabel, "バックシーンメッセージの色");
+/* 0002edde */	Ｐ＿ラベル＿フォント設定(this.m_BackMessageTextColorLabel, 0, 22, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002ee26 */	int Red;
+/* 0002ee30 */	int Green;
+/* 0002ee3a */	int Blue;
+/* 0002ee44 */	AFL_Config_GetBackSceneTextColor(AFL_Config_GetBackSceneTextColorIndex(), Red, Green, Blue);
+/* 0002ee68 */	this.m_BackMessageTextColorSampleLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002ee7a */	Ｐ＿ラベル＿座標設定(this.m_BackMessageTextColorSampleLabel, 450, 570);
+/* 0002ee92 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_BackMessageTextColorSampleLabel, 100);
+/* 0002eea4 */	Ｐ＿ラベル＿テキスト設定(this.m_BackMessageTextColorSampleLabel, "サンプル");
+/* 0002eeb6 */	Ｐ＿ラベル＿フォント設定(this.m_BackMessageTextColorSampleLabel, 0, 22, Red, Green, Blue, 0.0, 1.0, 0, 0, 0);
+/* 0002eefe */	int PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0002ef10 */	this.m_BackTextColorButtonList.PushBack(PartsNumber);
+/* 0002ef20 */	Ｐ＿ボタン＿座標設定(PartsNumber, 100, 600);
+/* 0002ef38 */	Ｐ＿ボタン＿Ｚ座標設定(PartsNumber, 100);
+/* 0002ef4a */	Ｐ＿ボタン＿サイズ設定(PartsNumber, 120, 30);
+/* 0002ef62 */	Ｐ＿ボタン＿色設定(PartsNumber, 150, 150, 150);
+/* 0002ef80 */	Ｐ＿ボタン＿フォント設定(PartsNumber, 0, 16, 255, 255, 255, 0.0, 0.0, 0, 0, 0);
+/* 0002efc8 */	Ｐ＿ボタン＿テキスト設定(PartsNumber, "変更無し");
+/* 0002efda */	AFL_Parts_AddMouseClickEvent(PartsNumber, this.ClickBackTextColorButtonEvent);
+/* 0002eff0 */	int Index;
+/* 0002effa */	for (Index = 1; Index < 13; ++Index)
+/* 0002f024 */	{
+/* 0002f024 */		PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0002f036 */		this.m_BackTextColorButtonList.PushBack(PartsNumber);
+/* 0002f046 */		Ｐ＿ボタン＿座標設定(PartsNumber, 220 + (Index - 1) * 30, 600);
+/* 0002f076 */		Ｐ＿ボタン＿Ｚ座標設定(PartsNumber, 100);
+/* 0002f088 */		Ｐ＿ボタン＿サイズ設定(PartsNumber, 30, 30);
+/* 0002f0a0 */		int Red;
+/* 0002f0aa */		int Green;
+/* 0002f0b4 */		int Blue;
+/* 0002f0be */		AFL_Config_GetBackSceneTextColor(Index - 1, Red, Green, Blue);
+/* 0002f0ea */		Ｐ＿ボタン＿色設定(PartsNumber, Red, Green, Blue);
+/* 0002f108 */		AFL_Parts_AddMouseClickEvent(PartsNumber, this.ClickBackTextColorButtonEvent);
+/* 0002f11e */	}
+/* 0002f124 */}
+
+void CConfigUIMessageTab::ChangedCheckReleaseSkipModeByClick(int Number)
+/* 0002f12c */{
+/* 0002f12c */	AFL_Config_SetReleaseSkipModeByClick(Ｐ＿チェックボックス＿チェック状態取得(this.m_ReleaseSkipModeByClickCheckBox));
+/* 0002f13e */}
+
+void CConfigUIMessageTab::ChangedCheckReleaseSkipModeByShowChoices(int Number)
+/* 0002f146 */{
+/* 0002f146 */	AFL_Config_SetReleaseMessageSkipInSelectMenu(Ｐ＿チェックボックス＿チェック状態取得(this.m_ReleaseSkipModeByShowChoicesCheckBox));
+/* 0002f158 */}
+
+void CConfigUIMessageTab::ChangedCheckSkipFullMessage(int Number)
+/* 0002f160 */{
+/* 0002f160 */	AFL_Config_SetSkipAllMessage(Ｐ＿チェックボックス＿チェック状態取得(this.m_SkipFullMessageCheckBox));
+/* 0002f172 */}
+
+void CConfigUIMessageTab::ChangedCheckReleaseSkipModeByReadMessage(int Number)
+/* 0002f17a */{
+/* 0002f17a */	AFL_Config_SetReleaseSkipModeByReadMessage(Ｐ＿チェックボックス＿チェック状態取得(this.m_ReleaseSkipModeByReadMessageCheckBox));
+/* 0002f18c */}
+
+void CConfigUIMessageTab::ChangedCheckReleaseAutoModeByClick(int Number)
+/* 0002f194 */{
+/* 0002f194 */	AFL_Config_SetReleaseAutoModeByClick(Ｐ＿チェックボックス＿チェック状態取得(this.m_ReleaseAutoModeByClickCheckBox));
+/* 0002f1a6 */}
+
+void CConfigUIMessageTab::ChangedCheckReleaseAutoModeByShowChoices(int Number)
+/* 0002f1ae */{
+/* 0002f1ae */	AFL_Config_SetReleaseAutoModeInSelectMenu(Ｐ＿チェックボックス＿チェック状態取得(this.m_ReleaseAutoModeByShowChoicesCheckBox));
+/* 0002f1c0 */}
+
+void CConfigUIMessageTab::ChangedCheckStopScreensaverByAutoMode(int Number)
+/* 0002f1c8 */{
+/* 0002f1c8 */	AFL_Config_SetRestrainScreensaverWhileAutoMode(Ｐ＿チェックボックス＿チェック状態取得(this.m_StopScreensaverByAutoModeCheckBox));
+/* 0002f1da */}
+
+void CConfigUIMessageTab::ChangedCheckAnimationWindow(int Number)
+/* 0002f1e2 */{
+/* 0002f1e2 */	AFL_Config_SetAnimateMessageWindow(Ｐ＿チェックボックス＿チェック状態取得(this.m_AnimationWindowCheckBox));
+/* 0002f1f4 */}
+
+void CConfigUIMessageTab::ClickReadTextColorButtonEvent(int PartsNumber, int MouseX, int MouseY)
+/* 0002f1fc */{
+/* 0002f1fc */	int Index;
+/* 0002f1fc */	for (Index = 0; Index < this.m_ReadTextColorButtonList.Numof(); ++Index)
+/* 0002f22c */	{
+/* 0002f22c */		if (this.m_ReadTextColorButtonList[Index] == PartsNumber)
+/* 0002f248 */		{
+/* 0002f248 */			int Red;
+/* 0002f252 */			int Green;
+/* 0002f25c */			int Blue;
+/* 0002f266 */			AFL_Config_SetReadTextColorIndex(Index - 1);
+/* 0002f27a */			AFL_Config_GetReadTextColor(AFL_Config_GetReadTextColorIndex(), Red, Green, Blue);
+/* 0002f29e */			int 種類;
+/* 0002f2a8 */			int サイズ;
+/* 0002f2b2 */			int 赤;
+/* 0002f2bc */			int 緑;
+/* 0002f2c6 */			int 青;
+/* 0002f2d0 */			int 縁取り赤;
+/* 0002f2da */			int 縁取り緑;
+/* 0002f2e4 */			int 縁取り青;
+/* 0002f2ee */			float 太字幅;
+/* 0002f300 */			float 縁取り幅;
+/* 0002f312 */			Ｐ＿ラベル＿フォント取得(this.m_ReadMessageTextColorSampleLabel, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り幅, 縁取り赤, 縁取り緑, 縁取り青);
+/* 0002f36e */			Ｐ＿ラベル＿フォント設定(this.m_ReadMessageTextColorSampleLabel, 種類, サイズ, Red, Green, Blue, 太字幅, 縁取り幅, 縁取り赤, 縁取り緑, 縁取り青);
+/* 0002f3b6 */		}
+/* 0002f3bc */	}
+/* 0002f3c2 */}
+
+void CConfigUIMessageTab::ClickBackTextColorButtonEvent(int PartsNumber, int MouseX, int MouseY)
+/* 0002f3ca */{
+/* 0002f3ca */	int Index;
+/* 0002f3ca */	for (Index = 0; Index < this.m_BackTextColorButtonList.Numof(); ++Index)
+/* 0002f3fa */	{
+/* 0002f3fa */		if (this.m_BackTextColorButtonList[Index] == PartsNumber)
+/* 0002f416 */		{
+/* 0002f416 */			int Red;
+/* 0002f420 */			int Green;
+/* 0002f42a */			int Blue;
+/* 0002f434 */			AFL_Config_SetBackSceneTextColorIndex(Index - 1);
+/* 0002f448 */			AFL_Config_GetBackSceneTextColor(AFL_Config_GetBackSceneTextColorIndex(), Red, Green, Blue);
+/* 0002f46c */			int 種類;
+/* 0002f476 */			int サイズ;
+/* 0002f480 */			int 赤;
+/* 0002f48a */			int 緑;
+/* 0002f494 */			int 青;
+/* 0002f49e */			int 縁取り赤;
+/* 0002f4a8 */			int 縁取り緑;
+/* 0002f4b2 */			int 縁取り青;
+/* 0002f4bc */			float 太字幅;
+/* 0002f4ce */			float 縁取り幅;
+/* 0002f4e0 */			Ｐ＿ラベル＿フォント取得(this.m_BackMessageTextColorSampleLabel, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り幅, 縁取り赤, 縁取り緑, 縁取り青);
+/* 0002f53c */			Ｐ＿ラベル＿フォント設定(this.m_BackMessageTextColorSampleLabel, 種類, サイズ, Red, Green, Blue, 太字幅, 縁取り幅, 縁取り赤, 縁取り緑, 縁取り青);
+/* 0002f584 */		}
+/* 0002f58a */	}
+/* 0002f590 */}
+

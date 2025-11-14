@@ -1,0 +1,159 @@
+EnquiteCheckBox::EnquiteCheckBox()
+/* 00089208 */{
+/* 00089210 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0008923c */	this.isChecked_ = false;
+/* 00089246 */}
+
+void EnquiteCheckBox::init(string caption)
+/* 0008924e */{
+/* 0008924e */	this.caption_ = caption;
+/* 00089258 */	int textSize = 24;
+/* 00089262 */	int type = 256;
+/* 0008926c */	int textSpanWidth = -1;
+/* 0008927e */	bool isEdge = false;
+/* 00089288 */	int w;
+/* 00089292 */	int h;
+/* 0008929c */	getTextSize(w, h, caption, textSize, type, isEdge, textSpanWidth);
+/* 000892d0 */	h = Math.Max(32, h);
+/* 000892f2 */	this.parts_[4].initAsPlaneImage(w + 40, h, 255, 0, 0, 255);
+/* 00089332 */	this.parts_[1].init("システム／チェックボックス", 0);
+/* 00089352 */	this.parts_[2].initAsText(caption, textSize, isEdge, type, 0, 0, 0);
+/* 00089390 */	this.parts_[3].init("システム／チェック", 0);
+/* 000893b0 */	createPartsGroup(this.parent_, this.parts_, 5000);
+/* 000893c8 */	this.parts_[4].setAlpha(0);
+/* 000893e2 */	this.setPartsShow();
+/* 000893ea */	this.setPartsPos();
+/* 000893f2 */	this.setCheckBoxCgRange();
+/* 000893fa */	this.updatePartsChecked();
+/* 00089402 */	this.updatePartsHover();
+/* 0008940a */}
+
+void EnquiteCheckBox::initAsImage(string image, string caption)
+/* 00089412 */{
+/* 00089412 */	this.caption_ = caption;
+/* 0008941c */	int textSize = 18;
+/* 00089426 */	int type = 256;
+/* 00089430 */	int textSpanWidth = -1;
+/* 00089442 */	bool isEdge = false;
+/* 0008944c */	string n = this.caption_;
+/* 00089458 */	if (!ＣＧモード確認("システム／名札／%s" % caption))
+/* 0008947a */	{
+/* 0008947a */		n = "？？？";
+/* 00089486 */	}
+/* 0008948c */	this.parts_[0].init(image, 0);
+/* 000894ac */	this.parts_[4].initAsPlaneImage(118, 122, 255, 0, 0, 255);
+/* 000894e4 */	this.parts_[1].init("システム／チェックボックス", 0);
+/* 00089504 */	this.parts_[2].initAsText(n, textSize, isEdge, type, 255, 255, 255);
+/* 00089542 */	this.parts_[3].init("システム／チェック", 0);
+/* 00089562 */	this.parts_[2].setOrigin(5);
+/* 0008957c */	this.parts_[2].setPos(59, 109, -2147483648);
+/* 000895a2 */	this.parts_[1].setPos(81, -3, -2147483648);
+/* 000895c8 */	this.parts_[3].setPos(81, -3, -2147483648);
+/* 000895ee */	createPartsGroup(this.parent_, this.parts_, 5000);
+/* 00089606 */	this.setPartsShow();
+/* 0008960e */	this.setCheckBoxCgRange();
+/* 00089616 */	this.updatePartsChecked();
+/* 0008961e */	this.updatePartsHover();
+/* 00089626 */}
+
+void EnquiteCheckBox::setPartsPos()
+/* 0008962e */{
+/* 0008962e */	this.parts_[2].setPos(32, this.getHeight() / 2, -2147483648);
+/* 0008965e */	this.parts_[2].setOrigin(4);
+/* 00089678 */}
+
+void EnquiteCheckBox::setCheckBoxCgRange()
+/* 00089680 */{
+/* 00089680 */	int n = this.isHover_ && g_mouse.isDown(0) ? 1 : 0;
+/* 000896d8 */	this.parts_[1].setCgRange(n * 32, 0, 32, 32);
+/* 0008970c */}
+
+void EnquiteCheckBox::setPartsShow()
+/* 00089714 */{
+/* 00089714 */	int i;
+/* 0008971e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008974e */	{
+/* 0008974e */		this.parts_[i].setShow(true);
+/* 00089768 */	}
+/* 0008976e */	this.parent_.setShow(true);
+/* 00089780 */}
+
+void EnquiteCheckBox::update()
+/* 00089788 */{
+/* 00089788 */	this.lastHover_ = this.isHover_;
+/* 0008979a */	this.updateHover();
+/* 000897a2 */	this.setCheckBoxCgRange();
+/* 000897aa */	this.isClick_ = this.isHover_ && g_mouse.isClickWithFocus();
+/* 000897e6 */	if (!this.lastHover_ && this.isHover_)
+/* 00089816 */	{
+/* 00089816 */		g_sysSound.play(2001, false);
+/* 0008982e */	}
+/* 00089834 */	if (this.isClick_)
+/* 0008983e */	{
+/* 0008983e */		g_sysSound.play(2002, false);
+/* 00089856 */	}
+/* 0008985c */	this.updatePartsHover();
+/* 00089864 */}
+
+void EnquiteCheckBox::updatePartsChecked()
+/* 0008986c */{
+/* 0008986c */	this.parts_[3].setShow(this.isChecked_);
+/* 00089886 */}
+
+bool EnquiteCheckBox::isChecked()
+/* 0008988e */{
+/* 0008988e */	return this.isChecked_;
+/* 00089896 */}
+
+void EnquiteCheckBox::setParent(int parentPartsNumber)
+/* 000898a4 */{
+/* 000898a4 */	this.parent_.setParent(parentPartsNumber);
+/* 000898b6 */}
+
+bool EnquiteCheckBox::isHover()
+/* 000898be */{
+/* 000898be */	this.updateHover();
+/* 000898c6 */	return this.isHover_;
+/* 000898ce */}
+
+int EnquiteCheckBox::getWidth()
+/* 000898dc */{
+/* 000898dc */	return this.parts_[4].getWidth();
+/* 000898f2 */}
+
+int EnquiteCheckBox::getHeight()
+/* 00089900 */{
+/* 00089900 */	return this.parts_[4].getHeight();
+/* 00089916 */}
+
+void EnquiteCheckBox::updateHover()
+/* 00089924 */{
+/* 00089924 */	this.isHover_ = AFL_Parts_IsPointIn(this.parts_[4].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 00089968 */}
+
+void EnquiteCheckBox::setPos(int x, int y)
+/* 00089970 */{
+/* 00089970 */	this.parent_.setPos(x, y, -2147483648);
+/* 0008998e */}
+
+void EnquiteCheckBox::setCheck(bool val)
+/* 00089996 */{
+/* 00089996 */	this.isChecked_ = val;
+/* 000899a0 */	this.updatePartsChecked();
+/* 000899a8 */}
+
+void EnquiteCheckBox::updatePartsHover()
+/* 000899b0 */{
+/* 000899b0 */	this.parts_[4].setAlpha(this.isHover_ ? 128 : 1);
+/* 000899e0 */}
+
+bool EnquiteCheckBox::isClick()
+/* 000899e8 */{
+/* 000899e8 */	return this.isClick_;
+/* 000899f0 */}
+
+string EnquiteCheckBox::getCaption()
+/* 000899fe */{
+/* 000899fe */	return this.caption_;
+/* 00089a06 */}
+

@@ -1,0 +1,288 @@
+CASBackSceneVerticalSlider::CASBackSceneVerticalSlider()
+/* 00025bf4 */{
+/* 00025bfc */	this.m_bDragging = false;
+/* 00025c06 */}
+
+void CASBackSceneVerticalSlider::Init()
+/* 00025c0e */{
+/* 00025c0e */	this.m_bDragging = false;
+/* 00025c18 */	this.m_LButtonDown = false;
+/* 00025c22 */}
+
+void CASBackSceneVerticalSlider::Release()
+/* 00025c2a */{
+/* 00025c2a */	this.m_BoxPartsList.Free();
+/* 00025c34 */}
+
+void CASBackSceneVerticalSlider::SetRect(int nX, int nY, int nWidth, int nHeight)
+/* 00025c3c */{
+/* 00025c3c */	this.m_SliderRect.Set(nX, nY, nWidth, nHeight);
+/* 00025c60 */}
+
+void CASBackSceneVerticalSlider::CreateSampleSprite(int nWidth, int nHeight)
+/* 00025c68 */{
+/* 00025c68 */	this.m_BoxPartsList.Alloc(4);
+/* 00025c7e */	int n;
+/* 00025c88 */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00025cb8 */	{
+/* 00025cb8 */		this.CreateConstructionBoxSprite(this.m_BoxPartsList[n], nWidth, nHeight, n);
+/* 00025ce0 */		this.m_BoxPartsList[n].SetPos(this.m_SliderRect.GetX(), this.m_SliderRect.GetY());
+/* 00025d0c */		this.m_BoxPartsList[n].SetShow(false);
+/* 00025d26 */	}
+/* 00025d2c */	this.m_State = 0;
+/* 00025d36 */	this.m_Show = true;
+/* 00025d40 */	this.m_BoxPartsList[0].SetShow(true);
+/* 00025d5a */}
+
+void CASBackSceneVerticalSlider::SetCG(string CG, string OnCursorCG, string KeyDownCG, string DisableCG)
+/* 00025d62 */{
+/* 00025d62 */	this.m_BoxPartsList.Alloc(4);
+/* 00025d78 */	int n;
+/* 00025d82 */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00025db2 */	{
+/* 00025db2 */		this.m_BoxPartsList[n].Create();
+/* 00025dc6 */		this.m_BoxPartsList[n].SetShow(false);
+/* 00025de0 */	}
+/* 00025de6 */	this.m_BoxPartsList[0].SetCG(CG, 1);
+/* 00025e06 */	this.m_BoxPartsList[1].SetCG(OnCursorCG, 1);
+/* 00025e26 */	this.m_BoxPartsList[2].SetCG(KeyDownCG, 1);
+/* 00025e46 */	this.m_BoxPartsList[3].SetCG(DisableCG, 1);
+/* 00025e66 */	this.m_State = 0;
+/* 00025e70 */	this.m_Show = true;
+/* 00025e7a */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00025eaa */	{
+/* 00025eaa */		this.m_BoxPartsList[n].SetPos(this.m_SliderRect.GetX() + (this.m_SliderRect.GetWidth() - this.m_BoxPartsList[n].GetWidth(1)) / 2, this.m_SliderRect.GetY());
+/* 00025f08 */	}
+/* 00025f0e */	this.m_BoxPartsList[0].SetShow(true);
+/* 00025f28 */}
+
+void CASBackSceneVerticalSlider::SetZ(int nZ)
+/* 00025f30 */{
+/* 00025f30 */	int n;
+/* 00025f3a */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00025f6a */	{
+/* 00025f6a */		this.m_BoxPartsList[n].SetZ(nZ);
+/* 00025f84 */	}
+/* 00025f8a */}
+
+void CASBackSceneVerticalSlider::SetZByBaseZ(int nZ, int BaseZ)
+/* 00025f92 */{
+/* 00025f92 */	int n;
+/* 00025f9c */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00025fcc */	{
+/* 00025fcc */		this.m_BoxPartsList[n].SetZByBaseZ(nZ, BaseZ);
+/* 00025fec */	}
+/* 00025ff2 */}
+
+void CASBackSceneVerticalSlider::SetShow(bool bShow)
+/* 00025ffa */{
+/* 00025ffa */	int n;
+/* 00026004 */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00026034 */	{
+/* 00026034 */		this.m_BoxPartsList[n].SetShow(bShow && n == this.m_State ? true : false);
+/* 00026092 */	}
+/* 00026098 */	this.m_Show = bShow;
+/* 000260a2 */}
+
+void CASBackSceneVerticalSlider::SetBoxPosByRate(float fRate)
+/* 000260aa */{
+/* 000260aa */	if (this.m_BoxPartsList.Empty())
+/* 000260b4 */	{
+/* 000260b4 */		return;
+/* 000260b6 */	}
+/* 000260bc */	if (fRate < 0.0)
+/* 000260d0 */	{
+/* 000260d0 */		fRate = 0.0;
+/* 000260e2 */	}
+/* 000260e8 */	else if (fRate > 1.0)
+/* 000260fc */	{
+/* 000260fc */		fRate = 1.0;
+/* 0002610e */	}
+/* 00026114 */	int nSpriteX = this.m_SliderRect.GetX();
+/* 0002612c */	int nSpriteY = this.m_SliderRect.GetY();
+/* 00026144 */	nSpriteY += (this.m_SliderRect.GetHeight() - this.m_BoxPartsList[0].GetHeight(1)) * fRate;
+/* 00026188 */	int n;
+/* 00026192 */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 000261c2 */	{
+/* 000261c2 */		this.m_BoxPartsList[n].SetPos(nSpriteX + (this.m_SliderRect.GetWidth() - this.m_BoxPartsList[n].GetWidth(1)) / 2, nSpriteY);
+/* 00026214 */	}
+/* 0002621a */}
+
+float CASBackSceneVerticalSlider::GetRateByBoxPos()
+/* 00026222 */{
+/* 00026222 */	if (this.m_BoxPartsList.Empty())
+/* 0002622c */	{
+/* 0002622c */		return 0.0;
+/* 00026234 */	}
+/* 0002623a */	int nY = this.m_BoxPartsList[0].GetY() - this.m_SliderRect.GetY();
+/* 00026268 */	float fRate = float(nY) / float(this.m_SliderRect.GetHeight() - this.m_BoxPartsList[0].GetHeight(1));
+/* 000262ac */	if (fRate < 0.0)
+/* 000262c0 */	{
+/* 000262c0 */		fRate = 0.0;
+/* 000262d2 */	}
+/* 000262d8 */	else if (fRate > 1.0)
+/* 000262ec */	{
+/* 000262ec */		fRate = 1.0;
+/* 000262fe */	}
+/* 00026304 */	return fRate;
+/* 0002630c */}
+
+void CASBackSceneVerticalSlider::CreateConstructionBoxSprite(ref CASParts ConstructionSprite, int nWidth, int nHeight, int State)
+/* 0002631a */{
+/* 0002631a */	ConstructionSprite.Create();
+/* 00026326 */	Ｐ＿構築手順＿初期化(ConstructionSprite.GetPartsNumber(), 1);
+/* 0002633e */	Ｐ＿構築手順＿作成(ConstructionSprite.GetPartsNumber(), nWidth, nHeight, 1);
+/* 00026362 */	Ｐ＿構築手順＿グラデーション(ConstructionSprite.GetPartsNumber(), 0, 0, nWidth, nHeight, 220, 200, 255, 240, 230, 255, 1);
+/* 000263b6 */	Ｐ＿構築手順＿色塗り(ConstructionSprite.GetPartsNumber(), 0, nHeight - 1, nWidth, 1, 140, 140, 140, -1, 1);
+/* 00026406 */	Ｐ＿構築手順＿色塗り(ConstructionSprite.GetPartsNumber(), nWidth - 1, 0, 1, nHeight, 140, 140, 140, -1, 1);
+/* 00026456 */	Ｐ＿構築手順＿色塗り(ConstructionSprite.GetPartsNumber(), 0, 0, nWidth, 1, 255, 255, 255, -1, 1);
+/* 0002649e */	Ｐ＿構築手順＿色塗り(ConstructionSprite.GetPartsNumber(), 0, 0, 1, nHeight - 1, 255, 255, 255, -1, 1);
+/* 000264ee */	switch (State)
+/* 00026500 */	{
+/* 00026500 */	case 1:
+/* 00026500 */		Ｐ＿構築手順＿ブレンド塗り(ConstructionSprite.GetPartsNumber(), 0, 0, nWidth, nHeight, 255, 255, 0, 128, 1);
+/* 00026548 */		break;
+/* 0002654e */	case 2:
+/* 0002654e */		Ｐ＿構築手順＿ブレンド塗り(ConstructionSprite.GetPartsNumber(), 0, 0, nWidth, nHeight, 0, 255, 255, 128, 1);
+/* 00026596 */		break;
+/* 0002659c */	}
+/* 0002659c */	Ｐ＿構築ビルド(ConstructionSprite.GetPartsNumber(), 1);
+/* 000265b4 */}
+
+void CASBackSceneVerticalSlider::UpdateState()
+/* 000265bc */{
+/* 000265bc */	if (this.m_bDragging)
+/* 000265c6 */	{
+/* 000265c6 */		this.m_State = 2;
+/* 000265d0 */	}
+/* 000265d6 */	else
+/* 000265d6 */	{
+/* 000265d6 */		bool OnCursor = this.IsMouseCursorInRect();
+/* 000265ea */		if (this.m_OnCursorSE > 0 && OnCursor && this.m_State == 0)
+/* 00026648 */		{
+/* 00026648 */			システム効果音(this.m_OnCursorSE);
+/* 00026654 */		}
+/* 0002665a */		this.m_State = OnCursor ? 1 : 0;
+/* 00026684 */	}
+/* 00026684 */	this.SetShow(this.m_Show);
+/* 00026692 */}
+
+bool CASBackSceneVerticalSlider::CheckBeginDrag()
+/* 0002669a */{
+/* 0002669a */	if (this.m_BoxPartsList.Empty())
+/* 000266a4 */	{
+/* 000266a4 */		return false;
+/* 000266ac */	}
+/* 000266b2 */	if (this.m_bDragging)
+/* 000266bc */	{
+/* 000266bc */		return false;
+/* 000266c4 */	}
+/* 000266ca */	if (!AFL_IsKeyDown(1))
+/* 000266de */	{
+/* 000266de */		this.m_LButtonDown = false;
+/* 000266e8 */		return false;
+/* 000266f0 */	}
+/* 000266f6 */	int nMouseX;
+/* 00026700 */	int nMouseY;
+/* 0002670a */	if (!AFL_Mouse_GetPos(nMouseX, nMouseY))
+/* 00026728 */	{
+/* 00026728 */		return false;
+/* 00026730 */	}
+/* 00026736 */	bool IsFirstLButtonDown = !this.m_LButtonDown;
+/* 0002674c */	this.m_LButtonDown = true;
+/* 00026756 */	if (this.m_SliderRect.IsIn(nMouseX, nMouseY) && IsFirstLButtonDown)
+/* 00026798 */	{
+/* 00026798 */		this.m_bDragging = true;
+/* 000267a2 */		this.m_OffsetBoxY = nMouseY - this.m_BoxPartsList[0].GetY();
+/* 000267ca */		if (this.m_OffsetBoxY < 0 || this.m_OffsetBoxY >= this.m_BoxPartsList[0].GetHeight(1))
+/* 0002681e */		{
+/* 0002681e */			this.m_OffsetBoxY = this.m_BoxPartsList[0].GetHeight(1) / 2;
+/* 0002684c */		}
+/* 00026852 */		if (this.m_ClickSE > 0)
+/* 00026866 */		{
+/* 00026866 */			システム効果音(this.m_ClickSE);
+/* 00026872 */		}
+/* 00026878 */		return true;
+/* 00026880 */	}
+/* 00026886 */	return false;
+/* 0002688e */}
+
+void CASBackSceneVerticalSlider::UpdateDraggingBox()
+/* 0002689c */{
+/* 0002689c */	if (this.m_BoxPartsList.Empty())
+/* 000268a6 */	{
+/* 000268a6 */		return;
+/* 000268a8 */	}
+/* 000268ae */	if (!this.m_bDragging)
+/* 000268bc */	{
+/* 000268bc */		return;
+/* 000268be */	}
+/* 000268c4 */	int nMouseX;
+/* 000268ce */	int nMouseY;
+/* 000268d8 */	if (!AFL_Mouse_GetPos(nMouseX, nMouseY))
+/* 000268f6 */	{
+/* 000268f6 */		this.m_bDragging = false;
+/* 00026900 */		return;
+/* 00026902 */	}
+/* 00026908 */	int nSpriteX = this.m_SliderRect.GetX();
+/* 00026920 */	int nSpriteY = nMouseY - this.m_OffsetBoxY;
+/* 0002693a */	if (nSpriteY < this.m_SliderRect.GetY())
+/* 00026954 */	{
+/* 00026954 */		nSpriteY = this.m_SliderRect.GetY();
+/* 0002696c */	}
+/* 00026972 */	else if (nSpriteY > (this.m_SliderRect.GetY() + this.m_SliderRect.GetHeight()) - this.m_BoxPartsList[0].GetHeight(1))
+/* 000269b6 */	{
+/* 000269b6 */		nSpriteY = (this.m_SliderRect.GetY() + this.m_SliderRect.GetHeight()) - this.m_BoxPartsList[0].GetHeight(1);
+/* 000269f8 */	}
+/* 000269fe */	int n;
+/* 00026a08 */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00026a38 */	{
+/* 00026a38 */		this.m_BoxPartsList[n].SetPos(nSpriteX + (this.m_SliderRect.GetWidth() - this.m_BoxPartsList[n].GetWidth(1)) / 2, nSpriteY);
+/* 00026a8a */	}
+/* 00026a90 */	if (!AFL_IsKeyDown(1))
+/* 00026aa4 */	{
+/* 00026aa4 */		this.m_bDragging = false;
+/* 00026aae */		return;
+/* 00026ab0 */	}
+/* 00026ab6 */}
+
+CASRect CASBackSceneVerticalSlider::GetRect()
+/* 00026abe */{
+/* 00026abe */	return this.m_SliderRect;
+/* 00026aca */}
+
+bool CASBackSceneVerticalSlider::IsDragging()
+/* 00026ad8 */{
+/* 00026ad8 */	return this.m_bDragging;
+/* 00026ae0 */}
+
+bool CASBackSceneVerticalSlider::IsMouseCursorInRect()
+/* 00026aee */{
+/* 00026aee */	int X;
+/* 00026af8 */	int Y;
+/* 00026b02 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00026b20 */	{
+/* 00026b20 */		return false;
+/* 00026b28 */	}
+/* 00026b2e */	int n;
+/* 00026b38 */	for (n = 0; n < this.m_BoxPartsList.Numof(); ++n)
+/* 00026b68 */	{
+/* 00026b68 */		Ｐ＿ピクセル判定設定(this.m_BoxPartsList[n].GetPartsNumber(), false);
+/* 00026b88 */		if (AFL_Parts_IsPointIn(this.m_BoxPartsList[n].GetPartsNumber(), X, Y, 1))
+/* 00026bba */		{
+/* 00026bba */			return true;
+/* 00026bc2 */		}
+/* 00026bc8 */	}
+/* 00026bce */	return false;
+/* 00026bd6 */}
+
+void CASBackSceneVerticalSlider::SetClickSE(int ClickSE)
+/* 00026be4 */{
+/* 00026be4 */	this.m_ClickSE = ClickSE;
+/* 00026bee */}
+
+void CASBackSceneVerticalSlider::SetOnCursorSE(int OnCursorSE)
+/* 00026bf6 */{
+/* 00026bf6 */	this.m_OnCursorSE = OnCursorSE;
+/* 00026c00 */}
+

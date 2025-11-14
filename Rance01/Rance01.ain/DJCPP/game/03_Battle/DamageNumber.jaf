@@ -1,0 +1,123 @@
+DamageNumber::DamageNumber()
+/* 0007277c */{
+/* 00072784 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000727a6 */}
+
+void DamageNumber::init(int type, int damage, bool isCritical)
+/* 000727ae */{
+/* 000727ae */	this.type_ = type;
+/* 000727b8 */	this.damage_ = damage;
+/* 000727c2 */	this.isCritical_ = isCritical;
+/* 000727cc */	if (this.type_ == 0)
+/* 000727da */	{
+/* 000727da */		this.x_ = 750;
+/* 000727e4 */		this.y_ = 180;
+/* 000727ee */	}
+/* 000727f4 */	else
+/* 000727f4 */	{
+/* 000727f4 */		this.x_ = 260;
+/* 000727fe */		this.y_ = 400;
+/* 00072808 */	}
+/* 00072808 */	this.parts_[0].init("システム／戦闘／ダメージ／下地", 0);
+/* 00072828 */	this.parts_[0].setOrigin(5);
+/* 00072842 */	this.parts_[0].setShow(true);
+/* 0007285c */	int i;
+/* 00072866 */	for (i = 0; i < 5; ++i)
+/* 00072890 */	{
+/* 00072890 */		if (this.isCritical_)
+/* 0007289a */		{
+/* 0007289a */			this.parts_[1 + i].init("システム／数字／幅４８／黄", 0);
+/* 000728c2 */		}
+/* 000728c8 */		else
+/* 000728c8 */		{
+/* 000728c8 */			this.parts_[1 + i].init("システム／数字／幅４８／白", 0);
+/* 000728f0 */		}
+/* 000728f0 */	}
+/* 000728f6 */	createPartsGroup(this.parent_, this.parts_, 3400);
+/* 0007290e */	this.parent_.setOrigin(5);
+/* 00072920 */	this.setNumber(this.damage_);
+/* 0007292e */	this.setScaling(150.0);
+/* 0007293c */}
+
+void DamageNumber::run()
+/* 00072944 */{
+/* 00072944 */	array@MotionInfomation m[4];
+/* 0007295a */	m[0].setTime(150, 0);
+/* 0007297a */	m[0].setAlpha(0, 255, 0);
+/* 000729a0 */	if (this.isCritical_)
+/* 000729aa */	{
+/* 000729aa */		m[0].setScaling(1000, 150, 3);
+/* 000729d0 */	}
+/* 000729d6 */	else
+/* 000729d6 */	{
+/* 000729d6 */		m[0].setScaling(500, 100, 3);
+/* 000729fc */	}
+/* 000729fc */	m[1].setShakeLevel(50, 0, 0);
+/* 00072a22 */	m[1].setTime(100, 0);
+/* 00072a42 */	m[2].setTime(1200, 0);
+/* 00072a62 */	m[3].setTime(500, 0);
+/* 00072a82 */	m[3].setAlpha(255, 0, 0);
+/* 00072aa8 */	this.state_ = 1;
+/* 00072ab2 */	this.parent_.setShow(true);
+/* 00072ac4 */	this.parent_.setPos(this.x_, this.y_, -2147483648);
+/* 00072ae2 */	this.parent_.runMotionArray(m);
+/* 00072af4 */}
+
+void DamageNumber::update()
+/* 00072afc */{
+/* 00072afc */	switch (this.state_)
+/* 00072b0e */	{
+/* 00072b0e */	case 1:
+/* 00072b0e */		this.setScaling(this.parent_.getScaling());
+/* 00072b22 */		if (!this.parent_.isMotion())
+/* 00072b36 */		{
+/* 00072b36 */			this.parent_.setShow(false);
+/* 00072b48 */			this.setScaling(100.0);
+/* 00072b56 */			this.state_ = 0;
+/* 00072b60 */		}
+/* 00072b66 */		break;
+/* 00072b6c */	case 0:
+/* 00072b6c */		break;
+/* 00072b72 */	}
+/* 00072b72 */}
+
+bool DamageNumber::isFinish()
+/* 00072b7a */{
+/* 00072b7a */	return this.state_ == 0;
+/* 00072b8c */}
+
+void DamageNumber::setNumber(int value)
+/* 00072b9a */{
+/* 00072b9a */	int digit;
+/* 00072c12 */	do {
+/* 00072ba4 */		int n = value % 10;
+/* 00072bbe */		value /= 10;
+/* 00072bd0 */		this.parts_[1 + digit].setCgRange(n * 48, 0, 48, 56);
+/* 00072c0c */		++digit;
+/* 00072c12 */	} while (value > 0);
+/* 00072c20 */	int width = digit * 40;
+/* 00072c3a */	int i;
+/* 00072c44 */	for (i = 0; i < 5; ++i)
+/* 00072c6e */	{
+/* 00072c6e */		this.numberPos_[i].x = (-50 - width / 2) + 40 * (digit - i - 1);
+/* 00072cbc */		this.numberPos_[i].y = -10;
+/* 00072cda */		this.parts_[1 + i].setShow(i < digit);
+/* 00072d06 */		this.parts_[1 + i].setPos(this.numberPos_[i].x, this.numberPos_[i].y, -2147483648);
+/* 00072d54 */	}
+/* 00072d5a */}
+
+void DamageNumber::setScaling(float val)
+/* 00072d62 */{
+/* 00072d62 */	this.parent_.setScaling(val);
+/* 00072d74 */	this.setNumberPartsScaledPos(val);
+/* 00072d82 */}
+
+void DamageNumber::setNumberPartsScaledPos(float val)
+/* 00072d8a */{
+/* 00072d8a */	int i;
+/* 00072d94 */	for (i = 0; i < 5; ++i)
+/* 00072dbe */	{
+/* 00072dbe */		this.parts_[1 + i].setPos((this.numberPos_[i].x * val) / 100.0, (this.numberPos_[i].y * val) / 100.0, -2147483648);
+/* 00072e3c */	}
+/* 00072e42 */}
+

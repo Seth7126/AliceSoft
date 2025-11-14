@@ -1,0 +1,70 @@
+MusicTime::MusicTime()
+/* 0008bf28 */{
+/* 0008bf30 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0008bf52 */	this.state_ = 1;
+/* 0008bf5c */}
+
+void MusicTime::init()
+/* 0008bf64 */{
+/* 0008bf64 */	this.initParts();
+/* 0008bf6c */}
+
+void MusicTime::update()
+/* 0008bf74 */{
+/* 0008bf74 */	switch (this.state_)
+/* 0008bf86 */	{
+/* 0008bf86 */	case 0:
+/* 0008bf86 */		break;
+/* 0008bf8c */	case 1:
+/* 0008bf8c */		break;
+/* 0008bf92 */	}
+/* 0008bf92 */}
+
+void MusicTime::setPos(int x, int y)
+/* 0008bf9a */{
+/* 0008bf9a */	this.parent_.setPos(x, y, -2147483648);
+/* 0008bfb8 */}
+
+void MusicTime::setShow(bool val)
+/* 0008bfc0 */{
+/* 0008bfc0 */	this.state_ = val ? 0 : 1;
+/* 0008bfea */}
+
+void MusicTime::initParts()
+/* 0008bff2 */{
+/* 0008bff2 */	NumberPartsInfomation n;
+/* 0008c002 */	n.setDigit(2);
+/* 0008c014 */	n.setSameWidth(18);
+/* 0008c026 */	this.parts_[0].initAsNumber("システム／数字／幅１８／白", n);
+/* 0008c046 */	this.parts_[1].initAsNumber("システム／数字／幅１８／白", n);
+/* 0008c066 */	this.parts_[2].initAsText(":", 36, false, 256, 255, 255, 255);
+/* 0008c0a4 */	this.parts_[0].setPos(0, 0, -2147483648);
+/* 0008c0ca */	this.parts_[2].setOrigin(4);
+/* 0008c0e4 */	this.parts_[2].setPos(36, 12, -2147483648);
+/* 0008c10a */	this.parts_[1].setPos(46, 0, -2147483648);
+/* 0008c130 */	createPartsGroup(this.parent_, this.parts_, 5000);
+/* 0008c148 */	this.setPartsShow(true);
+/* 0008c156 */}
+
+void MusicTime::setPartsShow(bool val)
+/* 0008c15e */{
+/* 0008c15e */	int i;
+/* 0008c168 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008c198 */	{
+/* 0008c198 */		this.parts_[i].setShow(true);
+/* 0008c1b2 */	}
+/* 0008c1b8 */	this.parent_.setShow(true);
+/* 0008c1ca */}
+
+void MusicTime::setTime(int sec)
+/* 0008c1d2 */{
+/* 0008c1d2 */	this.parts_[0].setNumber(sec / 60);
+/* 0008c1f4 */	this.parts_[1].setNumber(sec % 60);
+/* 0008c216 */}
+
+void MusicTime::fadeIn(bool val)
+/* 0008c21e */{
+/* 0008c21e */	this.state_ = val ? 0 : 1;
+/* 0008c248 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0008c278 */}
+

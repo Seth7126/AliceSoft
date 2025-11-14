@@ -1,0 +1,215 @@
+void Ｓ＿バックシーン()
+/* 0004cea2 */{
+/* 0004cea2 */	CASBackSceneView BackSceneView;
+/* 0004ceb2 */	BackSceneView.Execute();
+/* 0004cebe */}
+
+bool バックシーン登録制御(bool bFlag)
+/* 0004cecc */{
+/* 0004cecc */	bool bPrevFlag = g_bバックシーン登録可能;
+/* 0004cede */	g_bバックシーン登録可能 = bFlag;
+/* 0004cee8 */	return bPrevFlag;
+/* 0004cef0 */}
+
+void Ｓ＿バックシーン画面設定＿前ボタン(int _x, int _y, int _z, string _cg1, string _cg2, string KeyDownCGName, string DisableCGName, int MessageWindowNumber)
+/* 0004cf04 */{
+/* 0004cf04 */	if (MessageWindowNumber == -2147483648)
+/* 0004cf12 */	{
+/* 0004cf12 */		g_BackSceneDocument._SetBtn(1, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004cf4e */	}
+/* 0004cf54 */	else
+/* 0004cf54 */	{
+/* 0004cf54 */		g_BackSceneDocument.SetButtonByMessageWindow(MessageWindowNumber, 1, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004cf96 */	}
+/* 0004cf96 */}
+
+void Ｓ＿バックシーン画面設定＿次ボタン(int _x, int _y, int _z, string _cg1, string _cg2, string KeyDownCGName, string DisableCGName, int MessageWindowNumber)
+/* 0004cfa4 */{
+/* 0004cfa4 */	if (MessageWindowNumber == -2147483648)
+/* 0004cfb2 */	{
+/* 0004cfb2 */		g_BackSceneDocument._SetBtn(0, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004cfee */	}
+/* 0004cff4 */	else
+/* 0004cff4 */	{
+/* 0004cff4 */		g_BackSceneDocument.SetButtonByMessageWindow(MessageWindowNumber, 0, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d036 */	}
+/* 0004d036 */}
+
+void Ｓ＿バックシーン画面設定＿終ボタン(int _x, int _y, int _z, string _cg1, string _cg2, string KeyDownCGName, string DisableCGName, int MessageWindowNumber)
+/* 0004d044 */{
+/* 0004d044 */	if (MessageWindowNumber == -2147483648)
+/* 0004d052 */	{
+/* 0004d052 */		g_BackSceneDocument._SetBtn(2, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d08e */	}
+/* 0004d094 */	else
+/* 0004d094 */	{
+/* 0004d094 */		g_BackSceneDocument.SetButtonByMessageWindow(MessageWindowNumber, 2, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d0d6 */	}
+/* 0004d0d6 */}
+
+void Ｓ＿バックシーン画面設定＿音声再生ボタン(int _x, int _y, int _z, string _cg1, string _cg2, string KeyDownCGName, string DisableCGName, int MessageWindowNumber)
+/* 0004d0e4 */{
+/* 0004d0e4 */	if (MessageWindowNumber == -2147483648)
+/* 0004d0f2 */	{
+/* 0004d0f2 */		g_BackSceneDocument._SetBtn(3, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d12e */	}
+/* 0004d134 */	else
+/* 0004d134 */	{
+/* 0004d134 */		g_BackSceneDocument.SetButtonByMessageWindow(MessageWindowNumber, 3, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d176 */	}
+/* 0004d176 */}
+
+void Ｓ＿バックシーン画面設定＿ウィンドウ非表示ボタン(int _x, int _y, int _z, string _cg1, string _cg2, string KeyDownCGName, string DisableCGName, int MessageWindowNumber)
+/* 0004d184 */{
+/* 0004d184 */	if (MessageWindowNumber == -2147483648)
+/* 0004d192 */	{
+/* 0004d192 */		g_BackSceneDocument._SetBtn(5, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d1ce */	}
+/* 0004d1d4 */	else
+/* 0004d1d4 */	{
+/* 0004d1d4 */		g_BackSceneDocument.SetButtonByMessageWindow(MessageWindowNumber, 5, _x, _y, _z, _cg1, _cg2, KeyDownCGName, DisableCGName);
+/* 0004d216 */	}
+/* 0004d216 */}
+
+void Ｓ＿バックシーン画面設定＿タイトル(int _x, int _y, int _z, string _cg, int MessageWindowNumber)
+/* 0004d224 */{
+/* 0004d224 */	if (MessageWindowNumber == -2147483648)
+/* 0004d232 */	{
+/* 0004d232 */		g_BackSceneDocument._SetBtn(4, _x, _y, _z, _cg, _cg, "", "");
+/* 0004d26e */	}
+/* 0004d274 */	else
+/* 0004d274 */	{
+/* 0004d274 */		g_BackSceneDocument.SetButtonByMessageWindow(MessageWindowNumber, 4, _x, _y, _z, _cg, _cg, "", "");
+/* 0004d2b6 */	}
+/* 0004d2b6 */}
+
+void Ｓ＿バックシーン効果音設定＿前ボタン(int _click, int _cursor)
+/* 0004d2c4 */{
+/* 0004d2c4 */	g_BackSceneDocument._SetBtnSound(1, _click, _cursor);
+/* 0004d2e2 */}
+
+void Ｓ＿バックシーン効果音設定＿次ボタン(int _click, int _cursor)
+/* 0004d2f0 */{
+/* 0004d2f0 */	g_BackSceneDocument._SetBtnSound(0, _click, _cursor);
+/* 0004d30e */}
+
+void Ｓ＿バックシーン効果音設定＿終ボタン(int _click, int _cursor)
+/* 0004d31c */{
+/* 0004d31c */	g_BackSceneDocument._SetBtnSound(2, _click, _cursor);
+/* 0004d33a */}
+
+void Ｓ＿バックシーン効果音設定＿音声再生ボタン(int _click, int _cursor)
+/* 0004d348 */{
+/* 0004d348 */	g_BackSceneDocument._SetBtnSound(3, _click, _cursor);
+/* 0004d366 */}
+
+void Ｓ＿バックシーン効果音設定＿ウィンドウ非表示ボタン(int _click, int _cursor)
+/* 0004d374 */{
+/* 0004d374 */	g_BackSceneDocument._SetBtnSound(5, _click, _cursor);
+/* 0004d392 */}
+
+void Ｓ＿バックシーン画面設定＿タイトル文字位置(int _x, int _y)
+/* 0004d3a0 */{
+/* 0004d3a0 */	g_BackSceneDocument._SetCaptionTextPos(_x, _y);
+/* 0004d3b8 */}
+
+void Ｓ＿バックシーン画面設定＿タイトル文字(string _text)
+/* 0004d3c6 */{
+/* 0004d3c6 */	g_BackSceneDocument._SetCaptionText(_text);
+/* 0004d3d8 */}
+
+void Ｓ＿バックシーン画面設定＿タイトル文字フォント(int _size, int _face, int _col_r, int _col_g, int _col_b, int _deco_pix_top, int _deco_pix_right, int _deco_pix_bottom, int _deco_pix_left, int _deco_col_r, int _deco_col_g, int _deco_col_b)
+/* 0004d3e6 */{
+/* 0004d3e6 */	sact_text_metrics_t _tm;
+/* 0004d3f6 */	_tm.nColorR = _col_r;
+/* 0004d40c */	_tm.nColorG = _col_g;
+/* 0004d422 */	_tm.nColorB = _col_b;
+/* 0004d438 */	_tm.nSize = _size;
+/* 0004d44e */	_tm.nFace = _face;
+/* 0004d464 */	_tm.nShadowPixelL = _deco_pix_left;
+/* 0004d47a */	_tm.nShadowPixelU = _deco_pix_top;
+/* 0004d490 */	_tm.nShadowPixelR = _deco_pix_right;
+/* 0004d4a6 */	_tm.nShadowPixelD = _deco_pix_bottom;
+/* 0004d4bc */	_tm.nShadowColorR = _deco_col_r;
+/* 0004d4d2 */	_tm.nShadowColorG = _deco_col_g;
+/* 0004d4e8 */	_tm.nShadowColorB = _deco_col_b;
+/* 0004d4fe */	g_BackSceneDocument._SetCaptionTextTM(_tm);
+/* 0004d518 */}
+
+void Ｓ＿バックシーン画面設定＿ページ数字位置(int _x, int _y, int MessageWindowNumber)
+/* 0004d526 */{
+/* 0004d526 */	if (MessageWindowNumber == -2147483648)
+/* 0004d534 */	{
+/* 0004d534 */		g_BackSceneDocument._SetCaptionNumeralPos(_x, _y);
+/* 0004d54c */	}
+/* 0004d552 */	else
+/* 0004d552 */	{
+/* 0004d552 */		g_BackSceneDocument.SetCaptionNumeralPosByMessageWindow(MessageWindowNumber, _x, _y);
+/* 0004d570 */	}
+/* 0004d570 */}
+
+void Ｓ＿バックシーン画面設定＿最大ページ数字位置(int _x, int _y, int MessageWindowNumber)
+/* 0004d57e */{
+/* 0004d57e */	if (MessageWindowNumber == -2147483648)
+/* 0004d58c */	{
+/* 0004d58c */		g_BackSceneDocument._SetCaptionMaxNumeralPos(_x, _y);
+/* 0004d5a4 */	}
+/* 0004d5aa */	else
+/* 0004d5aa */	{
+/* 0004d5aa */		g_BackSceneDocument.SetCaptionMaxNumeralPosByMessageWindow(MessageWindowNumber, _x, _y);
+/* 0004d5c8 */	}
+/* 0004d5c8 */}
+
+void Ｓ＿バックシーン画面設定＿ページ数字フォント(int _size, int _face, int _col_r, int _col_g, int _col_b, int _deco_pix_top, int _deco_pix_right, int _deco_pix_bottom, int _deco_pix_left, int _deco_col_r, int _deco_col_g, int _deco_col_b)
+/* 0004d5d6 */{
+/* 0004d5d6 */	sact_text_metrics_t _tm;
+/* 0004d5e6 */	_tm.nColorR = _col_r;
+/* 0004d5fc */	_tm.nColorG = _col_g;
+/* 0004d612 */	_tm.nColorB = _col_b;
+/* 0004d628 */	_tm.nSize = _size;
+/* 0004d63e */	_tm.nFace = _face;
+/* 0004d654 */	_tm.nShadowPixelL = _deco_pix_left;
+/* 0004d66a */	_tm.nShadowPixelU = _deco_pix_top;
+/* 0004d680 */	_tm.nShadowPixelR = _deco_pix_right;
+/* 0004d696 */	_tm.nShadowPixelD = _deco_pix_bottom;
+/* 0004d6ac */	_tm.nShadowColorR = _deco_col_r;
+/* 0004d6c2 */	_tm.nShadowColorG = _deco_col_g;
+/* 0004d6d8 */	_tm.nShadowColorB = _deco_col_b;
+/* 0004d6ee */	g_BackSceneDocument._SetCaptionNumeralTM(_tm);
+/* 0004d708 */}
+
+void Ｓ＿バックシーン画面設定＿ページ数字字間隔(int nCharSpace)
+/* 0004d716 */{
+/* 0004d716 */	g_BackSceneDocument.SetPageNumberCharSpace(nCharSpace);
+/* 0004d728 */}
+
+void Ｓ＿バックシーン画面＿シーンスライダー背景ＣＧ設定(string CG)
+/* 0004d736 */{
+/* 0004d736 */	g_BackSceneDocument.SetSceneSliderBackCG(CG);
+/* 0004d748 */}
+
+void Ｓ＿バックシーン画面＿シーンスライダー背景位置設定(int nX, int nY)
+/* 0004d756 */{
+/* 0004d756 */	g_BackSceneDocument.SetSceneSliderBackPos(CF_CASPos(nX, nY));
+/* 0004d774 */}
+
+void Ｓ＿バックシーン画面＿シーンスライダーボックスＣＧ設定(string CG, string OnCursorCG, string KeyDownCG, string DisableCG)
+/* 0004d782 */{
+/* 0004d782 */	g_BackSceneDocument.SetSceneSliderBoxCG(CG, OnCursorCG, KeyDownCG, DisableCG);
+/* 0004d7a6 */}
+
+void Ｓ＿バックシーン効果音設定＿シーンスライダーボックス(int _click, int _cursor)
+/* 0004d7b4 */{
+/* 0004d7b4 */	g_BackSceneDocument.SetSceneSliderBoxSE(_click, _cursor);
+/* 0004d7cc */}
+
+void Ｓ＿バックシーン画面＿シーンスライダー移動範囲矩形設定(int nX, int nY, int nWidth, int nHeight)
+/* 0004d7da */{
+/* 0004d7da */	g_BackSceneDocument.SetSceneSliderRect(CF_CASRect(nX, nY, nWidth, nHeight));
+/* 0004d804 */}
+
+void Ｓ＿バックシーン画面＿シーンスライダー可視矩形設定(int nX, int nY, int nWidth, int nHeight)
+/* 0004d812 */{
+/* 0004d812 */	g_BackSceneDocument.SetSceneSliderShowRect(CF_CASRect(nX, nY, nWidth, nHeight));
+/* 0004d83c */}
+

@@ -1,0 +1,110 @@
+SceneGetChipConfimation::SceneGetChipConfimation()
+/* 0007d56a */{
+/* 0007d574 */}
+
+void SceneGetChipConfimation::run(string chipId, bool isDungeon)
+/* 0007d57a */{
+/* 0007d57a */	this.isDungeon_ = isDungeon;
+/* 0007d584 */	this.isDisposable_ = !getChip(chipId).isDepositoryDisable();
+/* 0007d5b0 */	this.id_ = chipId;
+/* 0007d5ba */	this.init();
+/* 0007d5c2 */	this.fadeObject(true);
+/* 0007d5d0 */	this.confirmation_.run();
+/* 0007d5dc */	this.state_ = 0;
+/* 0007d5e6 */}
+
+int SceneGetChipConfimation::getResult()
+/* 0007d5ee */{
+/* 0007d5ee */	return this.result_;
+/* 0007d5f6 */}
+
+void SceneGetChipConfimation::init()
+/* 0007d604 */{
+/* 0007d604 */	this.confirmation_.init(this.id_, this.isDisposable_);
+/* 0007d61c */	if (this.isDungeon_)
+/* 0007d626 */	{
+/* 0007d626 */		this.arranger_.Alloc(1);
+/* 0007d63c */		this.arranger_[0].init(0, true, false, false);
+/* 0007d668 */	}
+/* 0007d66e */	else
+/* 0007d66e */	{
+/* 0007d66e */		this.arranger_.Alloc(2);
+/* 0007d684 */		int i;
+/* 0007d68e */		for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 0007d6be */		{
+/* 0007d6be */			this.arranger_[i].init(i, true, i == 0, true);
+/* 0007d6f4 */		}
+/* 0007d6fa */	}
+/* 0007d6fa */	this.arranger_[0].setActive(true);
+/* 0007d714 */	int i;
+/* 0007d71e */	for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 0007d74e */	{
+/* 0007d74e */		this.arranger_[i].setEnableShowInfomation(false);
+/* 0007d768 */	}
+/* 0007d76e */}
+
+int SceneGetChipConfimation::update()
+/* 0007d776 */{
+/* 0007d776 */	switch (this.state_)
+/* 0007d788 */	{
+/* 0007d788 */	case 0:
+/* 0007d788 */		if (!this.confirmation_.isMotion())
+/* 0007d79c */		{
+/* 0007d79c */			this.state_ = 1;
+/* 0007d7a6 */		}
+/* 0007d7ac */		break;
+/* 0007d7b2 */	case 1:
+/* 0007d7b2 */		if (this.confirmation_.isConfirmed())
+/* 0007d7c4 */		{
+/* 0007d7c4 */			this.fadeObject(false);
+/* 0007d7d2 */			this.state_ = 2;
+/* 0007d7dc */			int sel = this.confirmation_.getSelection();
+/* 0007d7f4 */			switch (sel)
+/* 0007d806 */			{
+/* 0007d806 */			case 0:
+/* 0007d806 */				g_chipDepository[0].add(this.id_, true);
+/* 0007d826 */				break;
+/* 0007d82c */			case 1:
+/* 0007d82c */				g_chipDepository[1].add(this.id_, true);
+/* 0007d84c */				break;
+/* 0007d852 */			case 2:
+/* 0007d852 */				break;
+/* 0007d858 */			}
+/* 0007d858 */		}
+/* 0007d85e */		if (!this.isDungeon_)
+/* 0007d86c */		{
+/* 0007d86c */			if (this.arranger_[0].isClickChangeDepositoryButton())
+/* 0007d886 */			{
+/* 0007d886 */				this.arranger_[0].setActive(false);
+/* 0007d8a0 */				this.arranger_[1].setActive(true);
+/* 0007d8ba */			}
+/* 0007d8c0 */			else if (this.arranger_[1].isClickChangeDepositoryButton())
+/* 0007d8da */			{
+/* 0007d8da */				this.arranger_[0].setActive(true);
+/* 0007d8f4 */				this.arranger_[1].setActive(false);
+/* 0007d90e */			}
+/* 0007d914 */		}
+/* 0007d91a */		break;
+/* 0007d920 */	case 2:
+/* 0007d920 */		if (!this.confirmation_.isMotion())
+/* 0007d934 */		{
+/* 0007d934 */			this.result_ = this.confirmation_.getSelection();
+/* 0007d94c */			this.state_ = 3;
+/* 0007d956 */		}
+/* 0007d95c */		break;
+/* 0007d962 */	case 3:
+/* 0007d962 */		ResetBet(0);
+/* 0007d96e */		return 1;
+/* 0007d976 */	}
+/* 0007d976 */	return 0;
+/* 0007d97e */}
+
+void SceneGetChipConfimation::fadeObject(bool val)
+/* 0007d98c */{
+/* 0007d98c */	int i;
+/* 0007d996 */	for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 0007d9c6 */	{
+/* 0007d9c6 */		this.arranger_[i].fadeIn(val);
+/* 0007d9e0 */	}
+/* 0007d9e6 */}
+

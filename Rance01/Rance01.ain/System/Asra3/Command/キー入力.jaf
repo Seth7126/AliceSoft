@@ -1,0 +1,115 @@
+void キー待ち(bool _ignore_skip_mode)
+/* 0004d850 */{
+/* 0004d850 */	SYS_バックシーン登録();
+/* 0004d856 */	CASClick LButtonClick;
+/* 0004d866 */	CASClick MButtonClick;
+/* 0004d876 */	CASClick EnterKeyClick;
+/* 0004d886 */	CASClick UpKeyClick;
+/* 0004d896 */	CASClick DownKeyClick;
+/* 0004d8a6 */	CASClick EscapeKeyClick;
+/* 0004d8b6 */	CASClick AKeyClick;
+/* 0004d8c6 */	CASClick SKeyClick;
+/* 0004d8d6 */	CASClick PageUpKeyClick;
+/* 0004d8e6 */	CASClick HomeKeyClick;
+/* 0004d8f6 */	CASClick BackSpaceKeyClick;
+/* 0004d906 */	LButtonClick.Init(1, true);
+/* 0004d91e */	MButtonClick.Init(4, true);
+/* 0004d936 */	EnterKeyClick.Init(13, true);
+/* 0004d94e */	UpKeyClick.Init(38, true);
+/* 0004d966 */	DownKeyClick.Init(40, true);
+/* 0004d97e */	EscapeKeyClick.Init(27, true);
+/* 0004d996 */	AKeyClick.Init(65, true);
+/* 0004d9ae */	SKeyClick.Init(83, true);
+/* 0004d9c6 */	PageUpKeyClick.Init(33, true);
+/* 0004d9de */	HomeKeyClick.Init(36, true);
+/* 0004d9f6 */	BackSpaceKeyClick.Init(32, true);
+/* 0004da0e */	CASJoyClickAssignedKey JoyOkClick;
+/* 0004da1e */	JoyOkClick.Init(4, true);
+/* 0004da36 */	int _time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0004da56 */	for (; ; )
+/* 0004da56 */	{
+/* 0004da56 */		_g_MouseWheel._Update(true);
+/* 0004da68 */		if (SYS_全文スキップ中確認())
+/* 0004da74 */		{
+/* 0004da74 */			SYS_メッセージスキップ待ち();
+/* 0004da7a */			break;
+/* 0004da80 */		}
+/* 0004da86 */		if (LButtonClick.IsClick(-2147483648))
+/* 0004da9e */		{
+/* 0004da9e */			break;
+/* 0004daa4 */		}
+/* 0004daaa */		if (MButtonClick.IsClick(-2147483648))
+/* 0004dac2 */		{
+/* 0004dac2 */			Ｓ＿既読スキップ();
+/* 0004dac8 */		}
+/* 0004dace */		if (EnterKeyClick.IsClick(-2147483648))
+/* 0004dae6 */		{
+/* 0004dae6 */			break;
+/* 0004daec */		}
+/* 0004daf2 */		if (UpKeyClick.IsClick(-2147483648))
+/* 0004db0a */		{
+/* 0004db0a */			SYS_RunCommandMouseWheelForward();
+/* 0004db10 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0004db30 */		}
+/* 0004db36 */		if (DownKeyClick.IsClick(-2147483648))
+/* 0004db4e */		{
+/* 0004db4e */			break;
+/* 0004db54 */		}
+/* 0004db5a */		if (EscapeKeyClick.IsClick(-2147483648))
+/* 0004db72 */		{
+/* 0004db72 */			Ｓ＿コンフィグ();
+/* 0004db78 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0004db98 */		}
+/* 0004db9e */		if (AKeyClick.IsClick(-2147483648))
+/* 0004dbb6 */		{
+/* 0004dbb6 */			Ｓ＿オート();
+/* 0004dbbc */		}
+/* 0004dbc2 */		if (SKeyClick.IsClick(-2147483648))
+/* 0004dbda */		{
+/* 0004dbda */			Ｓ＿既読スキップ();
+/* 0004dbe0 */		}
+/* 0004dbe6 */		if (PageUpKeyClick.IsClick(-2147483648))
+/* 0004dbfe */		{
+/* 0004dbfe */			Ｓ＿バックログ();
+/* 0004dc04 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0004dc24 */		}
+/* 0004dc2a */		if (HomeKeyClick.IsClick(-2147483648))
+/* 0004dc42 */		{
+/* 0004dc42 */			Ｓ＿バックシーン();
+/* 0004dc48 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0004dc68 */		}
+/* 0004dc6e */		if (BackSpaceKeyClick.IsClick(-2147483648))
+/* 0004dc86 */		{
+/* 0004dc86 */			Ｓ＿ボイスリプレイ();
+/* 0004dc8c */		}
+/* 0004dc92 */		if (JoyOkClick.IsClick(-2147483648))
+/* 0004dcaa */		{
+/* 0004dcaa */			break;
+/* 0004dcb0 */		}
+/* 0004dcb6 */		if (!_ignore_skip_mode)
+/* 0004dcc4 */		{
+/* 0004dcc4 */			if (SYS_Ｍ送モード確認(1002))
+/* 0004dcd6 */			{
+/* 0004dcd6 */				SYS_メッセージスキップ待ち();
+/* 0004dcdc */				break;
+/* 0004dce2 */			}
+/* 0004dce8 */			if (SYS_Ｍ送モード確認(1003) && system.GetTime() >= _time_out)
+/* 0004dd26 */			{
+/* 0004dd26 */				break;
+/* 0004dd2c */			}
+/* 0004dd32 */		}
+/* 0004dd38 */		if (SYS_ホイールフォア即確認())
+/* 0004dd44 */		{
+/* 0004dd44 */			_g_MouseWheel._Clear();
+/* 0004dd50 */			SYS_RunCommandMouseWheelForward();
+/* 0004dd56 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0004dd76 */		}
+/* 0004dd7c */		if (SYS_ホイールバック確認())
+/* 0004dd88 */		{
+/* 0004dd88 */			break;
+/* 0004dd8e */		}
+/* 0004dd94 */		AFL_View_Update(true);
+/* 0004dda0 */	}
+/* 0004dda6 */	IbisInputEngine.Mouse_HideByStepMessage();
+/* 0004ddb0 */}
+

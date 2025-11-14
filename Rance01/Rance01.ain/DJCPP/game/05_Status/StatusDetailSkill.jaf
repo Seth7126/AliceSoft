@@ -1,0 +1,61 @@
+StatusDetailSkill::StatusDetailSkill()
+/* 00078e42 */{
+/* 00078e4a */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 00078e76 */}
+
+void StatusDetailSkill::init(string skillId)
+/* 00078e7e */{
+/* 00078e7e */	this.id_ = skillId;
+/* 00078e88 */	this.initParts();
+/* 00078e90 */}
+
+void StatusDetailSkill::initParts()
+/* 00078e98 */{
+/* 00078e98 */	int index = getSkillIndex(this.id_);
+/* 00078eb0 */	this.parts_[0].init("システム／キャンプ／スキル", 0);
+/* 00078ed0 */	this.parts_[0].setCgRange(index * 88, 0, 88, 38);
+/* 00078f04 */	this.parts_[1].initAsCgPlaneImage("システム／キャンプ／スキル", 255, 255, 0);
+/* 00078f30 */	this.parts_[1].setCgRange(index * 88, 0, 88, 38);
+/* 00078f64 */	this.parts_[1].setAlpha(80);
+/* 00078f7e */	createPartsGroup(this.parent_, this.parts_, 1);
+/* 00078f96 */	this.parts_[0].setShow(true);
+/* 00078fb0 */	this.parent_.setShow(true);
+/* 00078fc2 */}
+
+void StatusDetailSkill::setParent(int parentPartsNumber)
+/* 00078fca */{
+/* 00078fca */	this.parent_.setParent(parentPartsNumber);
+/* 00078fdc */}
+
+void StatusDetailSkill::update()
+/* 00078fe4 */{
+/* 00078fe4 */	this.isHover_ = AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 00079028 */	if (g_mouse.isClickWithFocus() && this.isHover_)
+/* 0007905c */	{
+/* 0007905c */		Skill skill;
+/* 0007906c */		skill = getSkill(this.id_);
+/* 00079098 */		DialogInfomation info;
+/* 000790a8 */		info.answerType = 0;
+/* 000790be */		info.type = 1;
+/* 000790d4 */		info.caption = "スキル：%s" % skill.getName();
+/* 00079100 */		array@string d;
+/* 0007910a */		splitToken(d, skill.getDesc(), "|");
+/* 00079128 */		d.Realloc(3);
+/* 0007913e */		info.desc[0] = d[0];
+/* 00079162 */		info.desc[1] = d[1];
+/* 00079186 */		info.desc[2] = d[2];
+/* 000791aa */		OpenDialog(info);
+/* 000791c2 */	}
+/* 000791da */	this.parts_[1].setShow(this.isHover_);
+/* 000791f4 */}
+
+bool StatusDetailSkill::isHover()
+/* 000791fc */{
+/* 000791fc */	return this.isHover_;
+/* 00079204 */}
+
+void StatusDetailSkill::setPos(int x, int y)
+/* 00079212 */{
+/* 00079212 */	this.parent_.setPos(x, y, -2147483648);
+/* 00079230 */}
+

@@ -1,0 +1,16 @@
+void 制御／戦闘開始時コールバック(string id)
+/* 000a3338 */{
+/* 000a3338 */	string name;
+/* 000a3344 */	string mes;
+/* 000a3350 */	name = getMonster(id).getName();
+/* 000a3376 */	mes = getMonster(id).getStartMessage();
+/* 000a339c */	g_log[2].add("%sが立ちはだかる！" % name, 0);
+/* 000a33ca */	g_log[2].add("%s" % mes, 0);
+/* 000a33f8 */	if (制御／チップ確認("CHIP628", 0))
+/* 000a3410 */	{
+/* 000a3410 */		g_log[2].add("俺は週刊ヒットポイントを読んだ。" % mes, 0);
+/* 000a343e */		g_log[2].add("こいつのHPは%dだ。" % getMonster(id).getMaxHp(), 0);
+/* 000a3482 */	}
+/* 000a348e */	return;
+/* 000a3490 */}
+

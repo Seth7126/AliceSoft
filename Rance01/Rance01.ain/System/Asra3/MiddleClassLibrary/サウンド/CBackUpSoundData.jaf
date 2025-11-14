@@ -1,0 +1,27 @@
+void CBackUpSoundData::SoundDataToTemp()
+/* 00038bfc */{
+/* 00038bfc */	this.m_音楽 = _音楽;
+/* 00038c0e */	this.m_一時停止中 = _一時停止中;
+/* 00038c20 */	this.m_BGMVolume = g_BGMVolume;
+/* 00038c32 */	this.m_TempBackVoiceList.Free();
+/* 00038c3c */	this.m_TempBackVoiceList.Alloc(g_サウンド再生リスト.Numof());
+/* 00038c52 */	this.m_TempBackVoiceList.Copy(0, g_サウンド再生リスト, 0, g_サウンド再生リスト.Numof());
+/* 00038c76 */	this.m_bTemp = true;
+/* 00038c80 */}
+
+void CBackUpSoundData::TempToSoundData()
+/* 00038c88 */{
+/* 00038c88 */	_音楽 = this.m_音楽;
+/* 00038c9a */	_一時停止中 = this.m_一時停止中;
+/* 00038cae */	g_BGMVolume = this.m_BGMVolume;
+/* 00038cc0 */	g_サウンド再生リスト.Free();
+/* 00038cca */	g_サウンド再生リスト.Alloc(this.m_TempBackVoiceList.Numof());
+/* 00038ce0 */	g_サウンド再生リスト.Copy(0, this.m_TempBackVoiceList, 0, this.m_TempBackVoiceList.Numof());
+/* 00038d04 */	this.m_bTemp = false;
+/* 00038d0e */}
+
+bool CBackUpSoundData::IsTemp()
+/* 00038d16 */{
+/* 00038d16 */	return this.m_bTemp;
+/* 00038d1e */}
+

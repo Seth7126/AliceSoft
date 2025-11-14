@@ -1,0 +1,62 @@
+ConfigPlaneButton::ConfigPlaneButton()
+/* 00087454 */{
+/* 0008745c */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 00087488 */}
+
+void ConfigPlaneButton::init(int width, int height, int r, int g, int b, string text)
+/* 00087490 */{
+/* 00087490 */	this.parts_[0].initAsPlaneImage(width, height, r, g, b, 255);
+/* 000874c8 */	this.parts_[1].initAsPlaneImage(width, height, 255, 255, 255, 255);
+/* 00087500 */	this.parts_[1].setAlpha(128);
+/* 0008751a */	this.parts_[2].initAsText(text, 24, false, 256, 0, 0, 0);
+/* 00087558 */	this.parts_[2].setOrigin(5);
+/* 00087572 */	this.parts_[2].setPos(width / 2, height / 2, -2147483648);
+/* 000875a8 */	this.setPartsShow();
+/* 000875b0 */	createPartsGroup(this.parent_, this.parts_, 5000);
+/* 000875c8 */	this.parent_.setShow(true);
+/* 000875da */}
+
+void ConfigPlaneButton::update()
+/* 000875e2 */{
+/* 000875e2 */	bool last = this.isHover_;
+/* 000875ec */	this.isHover_ = AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 00087630 */	this.parts_[1].setShow(this.isHover_ && !g_mouse.isDown(0));
+/* 0008767c */	if (!last && this.isHover_)
+/* 000876ac */	{
+/* 000876ac */		g_sysSound.play(2001, false);
+/* 000876c4 */	}
+/* 000876ca */	if (this.isClick())
+/* 000876d8 */	{
+/* 000876d8 */		g_sysSound.play(2002, false);
+/* 000876f0 */	}
+/* 000876f6 */}
+
+void ConfigPlaneButton::setPartsShow()
+/* 000876fe */{
+/* 000876fe */	int i;
+/* 00087708 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00087738 */	{
+/* 00087738 */		this.parts_[i].setShow(true);
+/* 00087752 */	}
+/* 00087758 */}
+
+bool ConfigPlaneButton::isHover()
+/* 00087760 */{
+/* 00087760 */	return this.isHover_;
+/* 00087768 */}
+
+void ConfigPlaneButton::setParent(int parentPartsNumber)
+/* 00087776 */{
+/* 00087776 */	this.parent_.setParent(parentPartsNumber);
+/* 00087788 */}
+
+bool ConfigPlaneButton::isClick()
+/* 00087790 */{
+/* 00087790 */	return this.isHover_ && g_mouse.isClickWithFocus();
+/* 000877c2 */}
+
+void ConfigPlaneButton::setPos(int x, int y)
+/* 000877d0 */{
+/* 000877d0 */	this.parent_.setPos(x, y, -2147483648);
+/* 000877ee */}
+

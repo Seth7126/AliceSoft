@@ -1,0 +1,440 @@
+CMessageTextModel::CMessageTextModel()
+/* 00015f66 */{
+/* 00015f70 */}
+
+void CMessageTextModel::Clear()
+/* 00015f76 */{
+/* 00015f76 */	int Index;
+/* 00015f80 */	for (Index = 0; Index < this._m_MessageList.Numof(); ++Index)
+/* 00015fb0 */	{
+/* 00015fb0 */		this.m_ReadMessageTextManager.EraseMessageNumber(this._m_MessageList[Index].nMsgNum);
+/* 00015fd2 */	}
+/* 00015fd8 */	this._m_MessageList.Free();
+/* 00015fe2 */}
+
+void CMessageTextModel::ClearMessageText(int MessageWindowNumber)
+/* 00015fea */{
+/* 00015fea */	int Index;
+/* 00015ff4 */	for (Index = 0; Index < this._m_MessageList.Numof(); )
+/* 0001601e */	{
+/* 0001601e */		if (this._m_MessageList[Index].MessageWindowNumber == MessageWindowNumber)
+/* 00016042 */		{
+/* 00016042 */			this.m_ReadMessageTextManager.EraseMessageNumber(this._m_MessageList[Index].nMsgNum);
+/* 00016064 */			this._m_MessageList.Erase(Index);
+/* 00016076 */		}
+/* 0001607c */		else
+/* 0001607c */		{
+/* 0001607c */			++Index;
+/* 00016082 */		}
+/* 00016082 */	}
+/* 00016088 */}
+
+void CMessageTextModel::AddMessageText(int _index, string _text)
+/* 00016090 */{
+/* 00016090 */	CMessageText MessageText;
+/* 000160a0 */	MessageText.nType = 0;
+/* 000160b6 */	MessageText.MessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 000160d2 */	float EdgeWeight = this.GetEdgeWeight();
+/* 000160e6 */	MessageText.nMsgNum = _index;
+/* 000160fc */	MessageText.MessageText = _text;
+/* 00016110 */	MessageText.Ｍフォント = this._GetFont();
+/* 00016128 */	MessageText.Ｍサイズ = this._GetFontSize();
+/* 00016140 */	MessageText.Ｍ太さ = this._GetFontWeight();
+/* 00016158 */	MessageText.ＭＲ = this._GetFontColorR();
+/* 00016170 */	MessageText.ＭＧ = this._GetFontColorG();
+/* 00016188 */	MessageText.ＭＢ = this._GetFontColorB();
+/* 000161a0 */	MessageText.Ｍ速度 = _Ｍ速度;
+/* 000161b6 */	MessageText.Ｍ配置 = this._GetFontPositionMode();
+/* 000161ce */	MessageText.Ｍ縁取り幅 = this.GetEdgeWeight();
+/* 000161e6 */	MessageText.Ｍ縁取りＲ = this._GetFontShadowColorR();
+/* 000161fe */	MessageText.Ｍ縁取りＧ = this._GetFontShadowColorG();
+/* 00016216 */	MessageText.Ｍ縁取りＢ = this._GetFontShadowColorB();
+/* 0001622e */	this._m_MessageList.PushBack(MessageText);
+/* 00016238 */}
+
+void CMessageTextModel::AddNewLine()
+/* 00016240 */{
+/* 00016240 */	CMessageText MessageText;
+/* 00016250 */	MessageText.nType = 1;
+/* 00016266 */	MessageText.MessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00016282 */	MessageText.nMsgNum = 0;
+/* 00016298 */	MessageText.MessageText = "";
+/* 000162ac */	MessageText.Ｍフォント = _Ｍフォント;
+/* 000162c2 */	MessageText.Ｍサイズ = _Ｍサイズ;
+/* 000162d8 */	MessageText.Ｍ太さ = 0.0;
+/* 000162ee */	MessageText.ＭＲ = _ＭＲ;
+/* 00016304 */	MessageText.ＭＧ = _ＭＧ;
+/* 0001631a */	MessageText.ＭＢ = _ＭＢ;
+/* 00016330 */	MessageText.Ｍ速度 = _Ｍ速度;
+/* 00016346 */	MessageText.Ｍ配置 = _Ｍ配置;
+/* 0001635c */	MessageText.Ｍ縁取り幅 = 0.0;
+/* 00016372 */	MessageText.Ｍ縁取りＲ = _Ｍ飾Ｒ;
+/* 00016388 */	MessageText.Ｍ縁取りＧ = _Ｍ飾Ｇ;
+/* 0001639e */	MessageText.Ｍ縁取りＢ = _Ｍ飾Ｂ;
+/* 000163b4 */	this._m_MessageList.PushBack(MessageText);
+/* 000163be */}
+
+void CMessageTextModel::AddVoice(int VoiceNumber)
+/* 000163c6 */{
+/* 000163c6 */	CMessageText MessageText;
+/* 000163d6 */	MessageText.nType = 2;
+/* 000163ec */	MessageText.MessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00016408 */	MessageText.nVoice = VoiceNumber;
+/* 0001641e */	this._m_MessageList.PushBack(MessageText);
+/* 00016428 */}
+
+void CMessageTextModel::AddC()
+/* 00016430 */{
+/* 00016430 */	CMessageText MessageText;
+/* 00016440 */	MessageText.nType = 4;
+/* 00016456 */	MessageText.MessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00016472 */	this._m_MessageList.PushBack(MessageText);
+/* 0001647c */}
+
+void CMessageTextModel::AddVibrationScreen(int _nWidth, int _nHeight, int _nTime)
+/* 00016484 */{
+/* 00016484 */	CMessageText MessageText;
+/* 00016494 */	MessageText.nType = 3;
+/* 000164aa */	MessageText.MessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 000164c6 */	MessageText.nQuakeWidth = _nWidth;
+/* 000164dc */	MessageText.nQuakeHeight = _nHeight;
+/* 000164f2 */	MessageText.nQuakeTime = _nTime;
+/* 00016508 */	this._m_MessageList.PushBack(MessageText);
+/* 00016512 */}
+
+int CMessageTextModel::GetNumofMessage()
+/* 0001651a */{
+/* 0001651a */	return this._m_MessageList.Numof();
+/* 00016522 */}
+
+ref CMessageText CMessageTextModel::GetMessage(int Index)
+/* 00016530 */{
+/* 00016530 */	return this._m_MessageList[Index];
+/* 00016544 */}
+
+int CMessageTextModel::GetMessageTextLength()
+/* 00016552 */{
+/* 00016552 */	int Length;
+/* 0001655c */	int nIndex;
+/* 00016566 */	for (nIndex = 0; nIndex < this._m_MessageList.Numof(); ++nIndex)
+/* 00016596 */	{
+/* 00016596 */		ref CMessageText Message = this._m_MessageList[nIndex];
+/* 000165c0 */		if (Message.nType == 0)
+/* 000165dc */		{
+/* 000165dc */			int nChar;
+/* 000165e6 */			for (nChar = 0; nChar < Message.MessageText.Length(); ++nChar)
+/* 0001661e */			{
+/* 0001661e */				int nSJISCode = Message.MessageText[nChar];
+/* 00016640 */				int nSJISCode1Byte = nSJISCode & 255;
+/* 0001665a */				if (nSJISCode > 255 && nSJISCode1Byte >= 136)
+/* 00016694 */				{
+/* 00016694 */					Length += 2;
+/* 000166a6 */				}
+/* 000166ac */				else
+/* 000166ac */				{
+/* 000166ac */					++Length;
+/* 000166b2 */				}
+/* 000166b2 */			}
+/* 000166b8 */		}
+/* 000166be */		else if (Message.nType == 4)
+/* 000166da */		{
+/* 000166da */			Length = 0;
+/* 000166e4 */		}
+/* 000166ea */	}
+/* 000166f6 */	return Length;
+/* 000166fe */}
+
+int CMessageTextModel::GetLastMessageNumber()
+/* 0001670c */{
+/* 0001670c */	int MessageNumber = -1;
+/* 0001671e */	int nIndex;
+/* 00016728 */	for (nIndex = 0; nIndex < this._m_MessageList.Numof(); ++nIndex)
+/* 00016758 */	{
+/* 00016758 */		ref CMessageText Message = this._m_MessageList[nIndex];
+/* 00016782 */		if (Message.nType != 0)
+/* 0001679e */		{
+/* 0001679e */			continue;
+/* 000167aa */		}
+/* 000167b0 */		MessageNumber = Message.nMsgNum;
+/* 000167ca */	}
+/* 000167d6 */	return MessageNumber;
+/* 000167de */}
+
+int CMessageTextModel::GetLastVoiceNumber()
+/* 000167ec */{
+/* 000167ec */	int VoiceNumber = -1;
+/* 000167fe */	int nIndex;
+/* 00016808 */	for (nIndex = 0; nIndex < this._m_MessageList.Numof(); ++nIndex)
+/* 00016838 */	{
+/* 00016838 */		ref CMessageText Message = this._m_MessageList[nIndex];
+/* 00016862 */		if (Message.nType != 2)
+/* 0001687e */		{
+/* 0001687e */			continue;
+/* 0001688a */		}
+/* 00016890 */		VoiceNumber = Message.nVoice;
+/* 000168aa */	}
+/* 000168b6 */	return VoiceNumber;
+/* 000168be */}
+
+bool CMessageTextModel::IsExistVoice()
+/* 000168cc */{
+/* 000168cc */	int nIndex;
+/* 000168d6 */	for (nIndex = 0; nIndex < this._m_MessageList.Numof(); ++nIndex)
+/* 00016906 */	{
+/* 00016906 */		ref CMessageText Message = this._m_MessageList[nIndex];
+/* 00016930 */		if (Message.nType == 2)
+/* 0001694c */		{
+/* 0001694c */			bool bExistC = false;
+/* 00016956 */			int nNext;
+/* 00016960 */			for (nNext = nIndex + 1; nNext < this._m_MessageList.Numof() - 1; ++nNext)
+/* 000169a8 */			{
+/* 000169a8 */				if (this._m_MessageList[nNext].nType == 4)
+/* 000169cc */				{
+/* 000169cc */					bExistC = true;
+/* 000169d6 */					break;
+/* 000169dc */				}
+/* 000169e2 */			}
+/* 000169e8 */			if (bExistC)
+/* 000169f4 */			{
+/* 000169f4 */				continue;
+/* 00016a00 */			}
+/* 00016a06 */			if (SYS_IsMuteVoice(Message.nVoice))
+/* 00016a20 */			{
+/* 00016a20 */				continue;
+/* 00016a2c */			}
+/* 00016a32 */			return true;
+/* 00016a3a */		}
+/* 00016a40 */	}
+/* 00016a4c */	return false;
+/* 00016a54 */}
+
+void CMessageTextModel::SetMessageReadFlag()
+/* 00016a62 */{
+/* 00016a62 */	int n;
+/* 00016a6c */	for (n = 0; n < this._m_MessageList.Numof(); ++n)
+/* 00016a9c */	{
+/* 00016a9c */		if (this._m_MessageList[n].nType != 0)
+/* 00016ac0 */		{
+/* 00016ac0 */			continue;
+/* 00016ac6 */		}
+/* 00016acc */		this.m_ReadMessageTextManager.SetReadMessage(this._m_MessageList[n].nMsgNum);
+/* 00016aee */	}
+/* 00016af4 */}
+
+int CMessageTextModel::_GetFont()
+/* 00016afc */{
+/* 00016afc */	if (_Ｍフォント != -1)
+/* 00016b10 */	{
+/* 00016b10 */		return _Ｍフォント;
+/* 00016b18 */	}
+/* 00016b1e */	return g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).フォント;
+/* 00016b4e */}
+
+int CMessageTextModel::_GetFontSize()
+/* 00016b5c */{
+/* 00016b5c */	if (_Ｍサイズ != -1)
+/* 00016b70 */	{
+/* 00016b70 */		return _Ｍサイズ;
+/* 00016b78 */	}
+/* 00016b7e */	return g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).GetFontSize();
+/* 00016bac */}
+
+int CMessageTextModel::_GetFontColorR()
+/* 00016bba */{
+/* 00016bba */	if (_ＭＲ != -1)
+/* 00016bce */	{
+/* 00016bce */		return _ＭＲ;
+/* 00016bd6 */	}
+/* 00016bdc */	return g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).文字Ｒ;
+/* 00016c0c */}
+
+int CMessageTextModel::_GetFontColorG()
+/* 00016c1a */{
+/* 00016c1a */	if (_ＭＧ != -1)
+/* 00016c2e */	{
+/* 00016c2e */		return _ＭＧ;
+/* 00016c36 */	}
+/* 00016c3c */	return g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).文字Ｇ;
+/* 00016c6c */}
+
+int CMessageTextModel::_GetFontColorB()
+/* 00016c7a */{
+/* 00016c7a */	if (_ＭＢ != -1)
+/* 00016c8e */	{
+/* 00016c8e */		return _ＭＢ;
+/* 00016c96 */	}
+/* 00016c9c */	return g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).文字Ｂ;
+/* 00016ccc */}
+
+float CMessageTextModel::_GetFontWeight()
+/* 00016cda */{
+/* 00016cda */	if (_g_Ｍ太さ != -1 && _g_Ｍ太さ != -2147483648)
+/* 00016d1a */	{
+/* 00016d1a */		return this.CalcFontWeight(_g_Ｍ太さ);
+/* 00016d2a */	}
+/* 00016d30 */	int ActiveMessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00016d48 */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.太さ" % ActiveMessageWindowNumber;
+/* 00016d66 */	if (EX_IsFloat(PartEXName))
+/* 00016d78 */	{
+/* 00016d78 */		return EX_Float(PartEXName, 0.0);
+/* 00016d8c */	}
+/* 00016d92 */	if (EX_IsFloat("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.太さ"))
+/* 00016da4 */	{
+/* 00016da4 */		return EX_Float("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.太さ", 0.0);
+/* 00016db8 */	}
+/* 00016dbe */	int BoldWeight = g_MessageWindowModelManager.GetMessageWindow(ActiveMessageWindowNumber)._文字太さ;
+/* 00016df2 */	return this.CalcFontWeight(BoldWeight);
+/* 00016e02 */}
+
+float CMessageTextModel::CalcFontWeight(int Weight)
+/* 00016e10 */{
+/* 00016e10 */	if (Weight <= 400)
+/* 00016e1e */	{
+/* 00016e1e */		return 0.0;
+/* 00016e26 */	}
+/* 00016e2c */	float fWeight = ((Weight - 400) * 2.0) / 600.0;
+/* 00016e5c */	if (fWeight > 2.0)
+/* 00016e70 */	{
+/* 00016e70 */		fWeight = 2.0;
+/* 00016e82 */	}
+/* 00016e88 */	return fWeight;
+/* 00016e90 */}
+
+float CMessageTextModel::GetEdgeWeight()
+/* 00016e9e */{
+/* 00016e9e */	if (g_MessageTextEdgeWeight >= 0.0)
+/* 00016eb2 */	{
+/* 00016eb2 */		return g_MessageTextEdgeWeight;
+/* 00016eba */	}
+/* 00016ec0 */	int ActiveMessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00016ed8 */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.幅" % ActiveMessageWindowNumber;
+/* 00016ef6 */	if (EX_IsFloat(PartEXName))
+/* 00016f08 */	{
+/* 00016f08 */		return EX_Float(PartEXName, 0.0);
+/* 00016f1c */	}
+/* 00016f22 */	if (EX_IsFloat("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.幅"))
+/* 00016f34 */	{
+/* 00016f34 */		return EX_Float("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.幅", 0.0);
+/* 00016f48 */	}
+/* 00016f4e */	ref CMessageWindowModel WindowModel = g_MessageWindowModelManager.GetMessageWindow(ActiveMessageWindowNumber);
+/* 00016f8a */	return WindowModel.GetEdgeWeight();
+/* 00016f98 */}
+
+int CMessageTextModel::_GetFontShadowColorR()
+/* 00016fa6 */{
+/* 00016fa6 */	if (_Ｍ飾Ｒ != -1)
+/* 00016fba */	{
+/* 00016fba */		return _Ｍ飾Ｒ;
+/* 00016fc2 */	}
+/* 00016fc8 */	int ActiveMessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00016fe0 */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.赤色" % ActiveMessageWindowNumber;
+/* 00016ffe */	if (EX_IsInt(PartEXName))
+/* 00017010 */	{
+/* 00017010 */		return EX_Int(PartEXName, 0);
+/* 00017024 */	}
+/* 0001702a */	if (EX_IsInt("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.赤色"))
+/* 0001703c */	{
+/* 0001703c */		return EX_Int("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.赤色", 0);
+/* 00017050 */	}
+/* 00017056 */	return g_MessageWindowModelManager.GetMessageWindow(ActiveMessageWindowNumber).飾Ｒ;
+/* 00017080 */}
+
+int CMessageTextModel::_GetFontShadowColorG()
+/* 0001708e */{
+/* 0001708e */	if (_Ｍ飾Ｇ != -1)
+/* 000170a2 */	{
+/* 000170a2 */		return _Ｍ飾Ｇ;
+/* 000170aa */	}
+/* 000170b0 */	int ActiveMessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 000170c8 */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.緑色" % ActiveMessageWindowNumber;
+/* 000170e6 */	if (EX_IsInt(PartEXName))
+/* 000170f8 */	{
+/* 000170f8 */		return EX_Int(PartEXName, 0);
+/* 0001710c */	}
+/* 00017112 */	if (EX_IsInt("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.緑色"))
+/* 00017124 */	{
+/* 00017124 */		return EX_Int("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.緑色", 0);
+/* 00017138 */	}
+/* 0001713e */	return g_MessageWindowModelManager.GetMessageWindow(ActiveMessageWindowNumber).飾Ｇ;
+/* 00017168 */}
+
+int CMessageTextModel::_GetFontShadowColorB()
+/* 00017176 */{
+/* 00017176 */	if (_Ｍ飾Ｂ != -1)
+/* 0001718a */	{
+/* 0001718a */		return _Ｍ飾Ｂ;
+/* 00017192 */	}
+/* 00017198 */	int ActiveMessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 000171b0 */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.青色" % ActiveMessageWindowNumber;
+/* 000171ce */	if (EX_IsInt(PartEXName))
+/* 000171e0 */	{
+/* 000171e0 */		return EX_Int(PartEXName, 0);
+/* 000171f4 */	}
+/* 000171fa */	if (EX_IsInt("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.青色"))
+/* 0001720c */	{
+/* 0001720c */		return EX_Int("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.青色", 0);
+/* 00017220 */	}
+/* 00017226 */	return g_MessageWindowModelManager.GetMessageWindow(ActiveMessageWindowNumber).飾Ｂ;
+/* 00017250 */}
+
+int CMessageTextModel::_GetFontPositionMode()
+/* 0001725e */{
+/* 0001725e */	if (_Ｍ配置 != -1)
+/* 00017272 */	{
+/* 00017272 */		return _Ｍ配置;
+/* 0001727a */	}
+/* 00017280 */	return g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).文字配置;
+/* 000172b0 */}
+
+void CMessageTextModel::DebugOutputMessageText()
+/* 000172be */{
+/* 000172be */	if (!system.IsDebugMode())
+/* 000172cc */	{
+/* 000172cc */		return;
+/* 000172ce */	}
+/* 000172d4 */	system.Output("--------MessageBegin--------\n");
+/* 000172e2 */	system.Output("【 %s 】\n" % SYS_GetEventName());
+/* 000172fe */	int Index;
+/* 00017308 */	for (Index = 0; Index < this._m_MessageList.Numof(); ++Index)
+/* 00017338 */	{
+/* 00017338 */		ref CMessageText DrawMessage = this._m_MessageList[Index];
+/* 00017362 */		switch (DrawMessage.nType)
+/* 0001737c */		{
+/* 0001737c */		case 0:
+/* 0001737c */			system.Output(DrawMessage.MessageText);
+/* 00017392 */			break;
+/* 00017398 */		case 1:
+/* 00017398 */			system.Output("\n");
+/* 000173a6 */			break;
+/* 000173ac */		}
+/* 000173ac */	}
+/* 000173b8 */	system.Output("\n--------MessageEnd----------\n");
+/* 000173c6 */}
+
+void CMessageTextModel::DebugMessageTextToClipboard()
+/* 000173ce */{
+/* 000173ce */	if (!system.IsDebugMode())
+/* 000173dc */	{
+/* 000173dc */		return;
+/* 000173de */	}
+/* 000173e4 */	string Text;
+/* 000173f0 */	Text += "--------MessageBegin--------\r\n";
+/* 00017400 */	Text += "【 %s 】\r\n" % SYS_GetEventName();
+/* 0001741e */	int Index;
+/* 00017428 */	for (Index = 0; Index < this._m_MessageList.Numof(); ++Index)
+/* 00017458 */	{
+/* 00017458 */		ref CMessageText DrawMessage = this._m_MessageList[Index];
+/* 00017482 */		switch (DrawMessage.nType)
+/* 0001749c */		{
+/* 0001749c */		case 0:
+/* 0001749c */			Text += DrawMessage.MessageText;
+/* 000174b4 */			break;
+/* 000174ba */		case 1:
+/* 000174ba */			Text += "\n";
+/* 000174ca */			break;
+/* 000174d0 */		}
+/* 000174d0 */	}
+/* 000174dc */	Text += "\n--------MessageEnd----------\r\n";
+/* 000174ec */	SYS_Clipboard_SetText(Text);
+/* 000174f8 */}
+

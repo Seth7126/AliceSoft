@@ -1,0 +1,33 @@
+void LoopSound::playSound(int soundNumber)
+/* 00060f74 */{
+/* 00060f74 */	if (this.sound_ == soundNumber)
+/* 00060f82 */	{
+/* 00060f82 */		++this.stack_;
+/* 00060f92 */	}
+/* 00060f98 */	else
+/* 00060f98 */	{
+/* 00060f98 */		this.innerPlay(0);
+/* 00060fa6 */		this.sound_ = soundNumber;
+/* 00060fb0 */		this.stack_ = 1;
+/* 00060fba */		this.innerPlay(this.sound_);
+/* 00060fc8 */	}
+/* 00060fc8 */}
+
+void LoopSound::stopSound(int soundNumber)
+/* 00060fd0 */{
+/* 00060fd0 */	if (this.sound_ == soundNumber)
+/* 00060fde */	{
+/* 00060fde */		--this.stack_;
+/* 00060fee */		if (this.stack_ == 0)
+/* 00060ffc */		{
+/* 00060ffc */			this.innerPlay(0);
+/* 0006100a */			this.sound_ = 0;
+/* 00061014 */		}
+/* 0006101a */	}
+/* 00061020 */}
+
+void LoopSound::innerPlay(int number)
+/* 00061028 */{
+/* 00061028 */	ループ効果音(number, -1, -1);
+/* 00061040 */}
+

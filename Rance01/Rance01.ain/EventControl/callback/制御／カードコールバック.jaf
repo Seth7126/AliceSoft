@@ -1,0 +1,35 @@
+int 制御／カードコールバック(string id)
+/* 0009ce8e */{
+/* 0009ce8e */	int type;
+/* 0009ce98 */	type = getCard(id).getType();
+/* 0009cec0 */	switch (type)
+/* 0009ced2 */	{
+/* 0009ced2 */	case 1:
+/* 0009ced2 */		制御／カードコールバック／イベント(id);
+/* 0009cede */		break;
+/* 0009cee4 */	case 2:
+/* 0009cee4 */		制御／カードコールバック／モンスター(id);
+/* 0009cef0 */		break;
+/* 0009cef6 */	case 3:
+/* 0009cef6 */		制御／カードコールバック／罠(id);
+/* 0009cf02 */		break;
+/* 0009cf08 */	case 4:
+/* 0009cf08 */		制御／カードコールバック／宝箱(id);
+/* 0009cf14 */		break;
+/* 0009cf1a */	case 5:
+/* 0009cf1a */		制御／カードコールバック／回復(id);
+/* 0009cf26 */		break;
+/* 0009cf2c */	case 6:
+/* 0009cf2c */		if (制御／カードコールバック／移動(id))
+/* 0009cf3e */		{
+/* 0009cf3e */			return 2;
+/* 0009cf46 */		}
+/* 0009cf4c */		break;
+/* 0009cf52 */	case 7:
+/* 0009cf52 */		break;
+/* 0009cf58 */	default:
+/* 0009cf58 */		break;
+/* 0009cf5e */	}
+/* 0009cf5e */	return 0;
+/* 0009cf66 */}
+

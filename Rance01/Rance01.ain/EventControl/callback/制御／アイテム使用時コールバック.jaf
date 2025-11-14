@@ -1,0 +1,114 @@
+string 制御／アイテム使用時コールバック(string id)
+/* 000a36de */{
+/* 000a36de */	switch (id)
+/* 000a36f0 */	{
+/* 000a36f0 */	case "CHIP551":
+/* 000a36f0 */		int val;
+/* 000a36fa */		val = getChip(id).getHpRecover();
+/* 000a3722 */		制御／ＨＰ増減(val, "");
+/* 000a3734 */		g_globalGameFlag.addValue("ハニメシ", 1);
+/* 000a374c */		break;
+/* 000a3758 */	case "CHIP571":
+/* 000a3758 */	case "CHIP570":
+/* 000a3758 */	case "CHIP559":
+/* 000a3758 */	case "CHIP621":
+/* 000a3758 */	case "CHIP623":
+/* 000a3758 */	case "CHIP625":
+/* 000a3758 */	case "CHIP622":
+/* 000a3758 */	case "CHIP624":
+/* 000a3758 */	case "CHIP626":
+/* 000a3758 */	case "CHIP627":
+/* 000a3758 */	case "CHIP565":
+/* 000a3758 */	case "CHIP557":
+/* 000a3758 */	case "CHIP573":
+/* 000a3758 */	case "CHIP552":
+/* 000a3758 */	case "CHIP555":
+/* 000a3758 */	case "CHIP567":
+/* 000a3758 */	case "CHIP563":
+/* 000a3758 */	case "CHIP628":
+/* 000a3758 */	case "CHIP553":
+/* 000a3758 */	case "CHIP554":
+/* 000a3758 */	case "CHIP556":
+/* 000a3758 */	case "CHIP558":
+/* 000a3758 */	case "CHIP560":
+/* 000a3758 */	case "CHIP561":
+/* 000a3758 */	case "CHIP562":
+/* 000a3758 */	case "CHIP564":
+/* 000a3758 */	case "CHIP566":
+/* 000a3758 */	case "CHIP568":
+/* 000a3758 */	case "CHIP569":
+/* 000a3758 */	case "CHIP572":
+/* 000a3758 */	case "CHIP574":
+/* 000a3758 */	case "CHIP575":
+/* 000a3758 */	case "CHIP600":
+/* 000a3758 */		int val;
+/* 000a3762 */		val = getChip(id).getHpRecover();
+/* 000a378a */		制御／ＨＰ増減(val, "");
+/* 000a379c */		break;
+/* 000a37a8 */	case "CHIP586":
+/* 000a37a8 */		制御／全状態異常消去();
+/* 000a37ae */		int val;
+/* 000a37b8 */		val = getChip(id).getHpRecover();
+/* 000a37e0 */		制御／ＨＰ増減(val, "");
+/* 000a37f2 */		break;
+/* 000a37fe */	case "CHIP587":
+/* 000a37fe */		制御／全状態異常消去();
+/* 000a3804 */		break;
+/* 000a380a */	case "CHIP590":
+/* 000a380a */		DialogInfomation info;
+/* 000a381a */		info.type = 0;
+/* 000a3830 */		info.chipId = "CHIP590";
+/* 000a3844 */		info.caption = "ハイポーションを飲んだ！";
+/* 000a3858 */		info.desc[0] = "ふほおおおおおおおおおおおおおおおおおおおお？";
+/* 000a3874 */		info.desc[1] = "なああああああああああああああああああああん！";
+/* 000a3890 */		OpenDialog(info);
+/* 000a389e */		int val;
+/* 000a38a8 */		val = (g_player.getMaxHp() * 999) / 100;
+/* 000a38d0 */		g_player.addHp(val);
+/* 000a38e2 */		g_player.setBadCondition("COND01", 13);
+/* 000a38fa */		g_player.setBadCondition("COND02", 13);
+/* 000a3912 */		g_player.setBadCondition("COND04", 13);
+/* 000a392a */		g_player.setBadCondition("COND05", 13);
+/* 000a3942 */		g_player.clearBadCondition("COND06");
+/* 000a3954 */		break;
+/* 000a3960 */	case "CHIP592":
+/* 000a3960 */		DialogInfomation info;
+/* 000a3970 */		info.type = 0;
+/* 000a3986 */		info.chipId = "CHIP592";
+/* 000a399a */		info.caption = "どこでもふすまを使った！";
+/* 000a39ae */		info.desc[0] = "がらっ。";
+/* 000a39ca */		OpenDialog(info);
+/* 000a39d8 */		hideGameObject();
+/* 000a39e4 */		制御／押入れ表示();
+/* 000a39ea */		restoreGameObject();
+/* 000a39f0 */		break;
+/* 000a39f6 */	case "CHIP591":
+/* 000a39f6 */		制御／クールタイム初期化();
+/* 000a39fc */		DialogInfomation info;
+/* 000a3a0c */		info.type = 0;
+/* 000a3a22 */		info.chipId = "CHIP591";
+/* 000a3a36 */		info.caption = "バラバラ時計を叩き壊した！";
+/* 000a3a4a */		info.desc[0] = "クールタイムがリセットされた。";
+/* 000a3a66 */		OpenDialog(info);
+/* 000a3a74 */		break;
+/* 000a3a80 */	case "CHIP593":
+/* 000a3a80 */		DialogInfomation info;
+/* 000a3a90 */		info.type = 0;
+/* 000a3aa6 */		info.chipId = "CHIP593";
+/* 000a3aba */		info.caption = "セーブライオンを使った！";
+/* 000a3ace */		info.desc[0] = "がおーっ。";
+/* 000a3aea */		OpenDialog(info);
+/* 000a3af8 */		hideGameObject();
+/* 000a3b04 */		制御／数値フラグ設定("セーブ日", 制御／日数確認());
+/* 000a3b16 */		OpenSave();
+/* 000a3b1c */		restoreGameObject();
+/* 000a3b22 */		break;
+/* 000a3b28 */	case "CHIP594":
+/* 000a3b28 */		制御／視界増減(2);
+/* 000a3b34 */		break;
+/* 000a3b3a */	default:
+/* 000a3b3a */		break;
+/* 000a3b40 */	}
+/* 000a3b40 */	return "";
+/* 000a3b48 */}
+

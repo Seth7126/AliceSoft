@@ -1,0 +1,117 @@
+void Ｐ＿マルチテキストボックス＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 000545e4 */{
+/* 000545e4 */	GUIEngine.SetMultiTextBoxPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 00054600 */}
+
+void Ｐ＿マルチテキストボックス＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 0005460e */{
+/* 0005460e */	GUIEngine.SetMultiTextBoxZ(パーツ番号, _Ｚ座標);
+/* 00054624 */}
+
+int Ｐ＿マルチテキストボックス＿Ｘ座標取得(int パーツ番号)
+/* 00054632 */{
+/* 00054632 */	return GUIEngine.GetMultiTextBoxX(パーツ番号);
+/* 00054644 */}
+
+int Ｐ＿マルチテキストボックス＿Ｙ座標取得(int パーツ番号)
+/* 00054658 */{
+/* 00054658 */	return GUIEngine.GetMultiTextBoxY(パーツ番号);
+/* 0005466a */}
+
+int Ｐ＿マルチテキストボックス＿Ｚ座標取得(int パーツ番号)
+/* 0005467e */{
+/* 0005467e */	return GUIEngine.GetMultiTextBoxZ(パーツ番号);
+/* 00054690 */}
+
+void Ｐ＿マルチテキストボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 000546a4 */{
+/* 000546a4 */	GUIEngine.SetMultiTextBoxWidth(パーツ番号, 幅);
+/* 000546ba */	GUIEngine.SetMultiTextBoxHeight(パーツ番号, 高さ);
+/* 000546d0 */}
+
+int Ｐ＿マルチテキストボックス＿幅取得(int パーツ番号)
+/* 000546de */{
+/* 000546de */	return GUIEngine.GetMultiTextBoxWidth(パーツ番号);
+/* 000546f0 */}
+
+int Ｐ＿マルチテキストボックス＿高さ取得(int パーツ番号)
+/* 00054704 */{
+/* 00054704 */	return GUIEngine.GetMultiTextBoxHeight(パーツ番号);
+/* 00054716 */}
+
+void Ｐ＿マルチテキストボックス＿表示設定(int パーツ番号, bool 表示)
+/* 0005472a */{
+/* 0005472a */	GUIEngine.SetMultiTextBoxShow(パーツ番号, 表示);
+/* 00054740 */}
+
+bool Ｐ＿マルチテキストボックス＿表示設定取得(int パーツ番号)
+/* 0005474e */{
+/* 0005474e */	return GUIEngine.IsMultiTextBoxShow(パーツ番号);
+/* 00054760 */}
+
+void Ｐ＿マルチテキストボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 00054774 */{
+/* 00054774 */	GUIEngine.SetMultiTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000547c0 */}
+
+void Ｐ＿マルチテキストボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 000547ce */{
+/* 000547ce */	GUIEngine.GetMultiTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 0005481a */}
+
+void Ｐ＿マルチテキストボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 00054828 */{
+/* 00054828 */	GUIEngine.SetMultiTextBoxText(パーツ番号, テキスト);
+/* 0005483e */}
+
+string Ｐ＿マルチテキストボックス＿テキスト取得(int パーツ番号)
+/* 0005484c */{
+/* 0005484c */	string Text;
+/* 00054858 */	GUIEngine.GetMultiTextBoxText(パーツ番号, Text);
+/* 0005486e */	return Text;
+/* 00054876 */}
+
+void Ｐ＿マルチテキストボックス＿最大文字数設定(int パーツ番号, int 最大文字数)
+/* 0005488a */{
+/* 0005488a */	GUIEngine.SetMultiTextBoxMaxTextLength(パーツ番号, 最大文字数);
+/* 000548a0 */}
+
+int Ｐ＿マルチテキストボックス＿最大文字数取得(int パーツ番号)
+/* 000548ae */{
+/* 000548ae */	return GUIEngine.GetMultiTextBoxMaxTextLength(パーツ番号);
+/* 000548c0 */}
+
+void Ｐ＿マルチテキストボックス＿選択色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 000548d4 */{
+/* 000548d4 */	GUIEngine.SetMultiTextBoxSelectR(パーツ番号, 赤);
+/* 000548ea */	GUIEngine.SetMultiTextBoxSelectG(パーツ番号, 緑);
+/* 00054900 */	GUIEngine.SetMultiTextBoxSelectB(パーツ番号, 青);
+/* 00054916 */}
+
+int Ｐ＿マルチテキストボックス＿選択色赤取得(int パーツ番号)
+/* 00054924 */{
+/* 00054924 */	return GUIEngine.GetMultiTextBoxSelectR(パーツ番号);
+/* 00054936 */}
+
+int Ｐ＿マルチテキストボックス＿選択色緑取得(int パーツ番号)
+/* 0005494a */{
+/* 0005494a */	return GUIEngine.GetMultiTextBoxSelectG(パーツ番号);
+/* 0005495c */}
+
+int Ｐ＿マルチテキストボックス＿選択色青取得(int パーツ番号)
+/* 00054970 */{
+/* 00054970 */	return GUIEngine.GetMultiTextBoxSelectB(パーツ番号);
+/* 00054982 */}
+
+void Ｐ＿マルチテキストボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00054996 */{
+/* 00054996 */	GUIEngine.SetMultiTextBoxCGName(パーツ番号, ＣＧ名);
+/* 000549ac */}
+
+string Ｐ＿マルチテキストボックス＿ＣＧ名取得(int パーツ番号)
+/* 000549ba */{
+/* 000549ba */	string Name;
+/* 000549c6 */	GUIEngine.GetMultiTextBoxCGName(パーツ番号, Name);
+/* 000549dc */	return Name;
+/* 000549e4 */}
+

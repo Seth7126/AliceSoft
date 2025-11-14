@@ -1,0 +1,129 @@
+ChipInfomation::ChipInfomation()
+/* 00069b00 */{
+/* 00069b08 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00069b2a */}
+
+void ChipInfomation::update()
+/* 00069b32 */{
+/* 00069b34 */}
+
+void ChipInfomation::init(string chipId, bool isShowPrice)
+/* 00069b3a */{
+/* 00069b3a */	this.initParts(chipId);
+/* 00069b48 */	this.initParam(chipId, isShowPrice);
+/* 00069b5c */	this.setPartsPos();
+/* 00069b64 */	this.setPartsShow();
+/* 00069b6c */}
+
+void ChipInfomation::initParts(string id)
+/* 00069b74 */{
+/* 00069b74 */	this.parts_[0].init("システム／確認／下地", 0);
+/* 00069b94 */	this.parts_[2].init("システム／確認／枠", 0);
+/* 00069bb4 */	this.parts_[1].init(getChip(id).getImageName(), 0);
+/* 00069bea */	this.parts_[3].initAsText(getChip(id).getName(), 30, false, 256, 0, 0, 0);
+/* 00069c3e */	array@string desc;
+/* 00069c48 */	splitToken(desc, getChip(id).getDesc(), "|");
+/* 00069c76 */	desc.Realloc(3);
+/* 00069c8c */	this.parts_[4].initAsText(desc[0], 20, false, 256, 0, 0, 0);
+/* 00069cd2 */	this.parts_[5].initAsText(desc[1], 20, false, 256, 0, 0, 0);
+/* 00069d18 */	this.parts_[6].initAsText(desc[2], 20, false, 256, 0, 0, 0);
+/* 00069d5e */	string n = getChip(id).getAttrId();
+/* 00069d84 */	if (n != "")
+/* 00069d94 */	{
+/* 00069d94 */		this.parts_[7].initAsText("属性", 20, false, 256, 0, 0, 0);
+/* 00069dd2 */		this.parts_[8].initAsText(getAttribute(n).getName(), 20, false, 256, 255, 200, 16);
+/* 00069e26 */	}
+/* 00069e32 */	createPartsGroup(this.parent_, this.parts_, 8000);
+/* 00069e4a */}
+
+void ChipInfomation::initParam(string id, bool isShowPrice)
+/* 00069e52 */{
+/* 00069e52 */	this.chipParam_.Free();
+/* 00069e5c */	ref Chip c = getChip(id);
+/* 00069e8e */	if (c.getAtk() > 0)
+/* 00069ea8 */	{
+/* 00069ea8 */		this.addChipParam("攻撃力", c.getAtk());
+/* 00069ec2 */	}
+/* 00069ec8 */	if (c.getDef() > 0)
+/* 00069ee2 */	{
+/* 00069ee2 */		this.addChipParam("防御力", c.getDef());
+/* 00069efc */	}
+/* 00069f02 */	if (c.getLuck() > 0)
+/* 00069f1c */	{
+/* 00069f1c */		this.addChipParam("幸運力", c.getLuck());
+/* 00069f36 */	}
+/* 00069f3c */	if (c.getHpRecover())
+/* 00069f4e */	{
+/* 00069f4e */		this.addChipParam("HP回復率", c.getHpRecover());
+/* 00069f68 */	}
+/* 00069f6e */	if (c.getUseSpan() > 0)
+/* 00069f88 */	{
+/* 00069f88 */		this.addChipParam("クールタイム", c.getUseSpan());
+/* 00069fa2 */	}
+/* 00069fa8 */	if (isShowPrice)
+/* 00069fb4 */	{
+/* 00069fb4 */		int index = this.chipParam_.Numof();
+/* 00069fc6 */		this.chipParam_.Realloc(index + 1);
+/* 00069fe4 */		this.chipParam_[index].init("価格", c.getPrice(), true);
+/* 0006a010 */		this.chipParam_[index].setPos(693, 712);
+/* 0006a030 */		this.chipParam_[index].setParent(this.parent_.getPartsNumber());
+/* 0006a050 */	}
+/* 0006a056 */}
+
+void ChipInfomation::setPartsShow()
+/* 0006a05e */{
+/* 0006a05e */	int i;
+/* 0006a068 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006a098 */	{
+/* 0006a098 */		this.parts_[i].setShow(true);
+/* 0006a0b2 */	}
+/* 0006a0b8 */}
+
+void ChipInfomation::setPartsPos()
+/* 0006a0c0 */{
+/* 0006a0c0 */	this.parts_[0].setPos(0, 0, -2147483648);
+/* 0006a0e6 */	this.parts_[1].setPos(144, 592, -2147483648);
+/* 0006a10c */	this.parts_[2].setPos(104, 560, -2147483648);
+/* 0006a132 */	this.parts_[3].setPos(344, 560, -2147483648);
+/* 0006a158 */	this.parts_[4].setPos(360, 592, -2147483648);
+/* 0006a17e */	this.parts_[5].setPos(360, 610, -2147483648);
+/* 0006a1a4 */	this.parts_[6].setPos(360, 628, -2147483648);
+/* 0006a1ca */	this.parts_[7].setPos(432, 712, -2147483648);
+/* 0006a1f0 */	this.parts_[8].setPos(432, 732, -2147483648);
+/* 0006a216 */	this.parts_[7].setOrigin(8);
+/* 0006a230 */	this.parts_[8].setOrigin(8);
+/* 0006a24a */	this.parent_.setPos(80, -544, -2147483648);
+/* 0006a268 */}
+
+void ChipInfomation::addChipParam(string caption, int value)
+/* 0006a270 */{
+/* 0006a270 */	int index = this.chipParam_.Numof();
+/* 0006a282 */	this.chipParam_.Realloc(index + 1);
+/* 0006a2a0 */	this.chipParam_[index].init(caption, value, false);
+/* 0006a2c6 */	this.chipParam_[index].setPos(380 + 88 * index, 656);
+/* 0006a2f6 */	this.chipParam_[index].setParent(this.parent_.getPartsNumber());
+/* 0006a316 */}
+
+void ChipInfomation::fadeIn(bool val)
+/* 0006a31e */{
+/* 0006a31e */	MotionInfomation m;
+/* 0006a32e */	if (val)
+/* 0006a33a */	{
+/* 0006a33a */		m.setTime(150, 0);
+/* 0006a352 */		m.setMove(80, -944, 80, -544, 3);
+/* 0006a37c */		g_sysSound.play(2201, false);
+/* 0006a394 */	}
+/* 0006a39a */	else
+/* 0006a39a */	{
+/* 0006a39a */		m.setTime(150, 0);
+/* 0006a3b2 */		m.setMove(80, -544, 80, -944, 1);
+/* 0006a3dc */	}
+/* 0006a3dc */	this.parent_.setShow(true);
+/* 0006a3ee */	this.parent_.runMotion(m);
+/* 0006a408 */}
+
+bool ChipInfomation::isMotion()
+/* 0006a410 */{
+/* 0006a410 */	return this.parent_.isMotion();
+/* 0006a41e */}
+

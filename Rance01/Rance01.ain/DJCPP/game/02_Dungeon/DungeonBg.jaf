@@ -1,0 +1,68 @@
+DungeonBg::DungeonBg()
+/* 0006fba6 */{
+/* 0006fbae */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006fbd0 */}
+
+void DungeonBg::init(string imageName)
+/* 0006fbd8 */{
+/* 0006fbd8 */	this.parts_[0].init(imageName, 0);
+/* 0006fbf8 */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 0006fc10 */	this.parts_[0].setPos(-50, -50, -2147483648);
+/* 0006fc36 */	this.parts_[0].setShow(true);
+/* 0006fc50 */}
+
+void DungeonBg::update()
+/* 0006fc58 */{
+/* 0006fc58 */	switch (this.state_)
+/* 0006fc6a */	{
+/* 0006fc6a */	case 0:
+/* 0006fc6a */		break;
+/* 0006fc70 */	case 1:
+/* 0006fc70 */		if (this.isFinish())
+/* 0006fc7e */		{
+/* 0006fc7e */			this.state_ = 2;
+/* 0006fc88 */		}
+/* 0006fc8e */		break;
+/* 0006fc94 */	case 2:
+/* 0006fc94 */		break;
+/* 0006fc9a */	case 3:
+/* 0006fc9a */		if (this.isFinish())
+/* 0006fca8 */		{
+/* 0006fca8 */			this.state_ = 0;
+/* 0006fcb2 */		}
+/* 0006fcb8 */		break;
+/* 0006fcbe */	}
+/* 0006fcbe */}
+
+void DungeonBg::fadeIn(bool val)
+/* 0006fcc6 */{
+/* 0006fcc6 */	if (this.isIgnoreFadeMotion(val))
+/* 0006fcda */	{
+/* 0006fcda */		return;
+/* 0006fcdc */	}
+/* 0006fce2 */	this.state_ = val ? 1 : 3;
+/* 0006fd0c */	this.parent_.setShow(true);
+/* 0006fd1e */	MotionInfomation m;
+/* 0006fd2e */	m = getStandardMotion(val ? 0 : 1);
+/* 0006fd62 */	m.setTime(500, 0);
+/* 0006fd7a */	this.parent_.runMotion(m);
+/* 0006fd94 */}
+
+bool DungeonBg::isIgnoreFadeMotion(bool val)
+/* 0006fd9c */{
+/* 0006fd9c */	if (val && (this.state_ == 1 || this.state_ == 2))
+/* 0006fe00 */	{
+/* 0006fe00 */		return true;
+/* 0006fe08 */	}
+/* 0006fe0e */	else if (!val && (this.state_ == 0 || this.state_ == 3))
+/* 0006fe74 */	{
+/* 0006fe74 */		return true;
+/* 0006fe7c */	}
+/* 0006fe82 */	return false;
+/* 0006fe8a */}
+
+bool DungeonBg::isFinish()
+/* 0006fe98 */{
+/* 0006fe98 */	return !this.parent_.isMotion();
+/* 0006feaa */}
+

@@ -1,0 +1,129 @@
+SystemMenu::SystemMenu()
+/* 0006860c */{
+/* 00068614 */	this.clickedButtonIndex_ = -1;
+/* 00068626 */}
+
+void SystemMenu::run(ref array@int menuList)
+/* 0006862e */{
+/* 0006862e */	this.menuList_.Alloc(menuList.Numof());
+/* 0006864e */	this.menuList_.Copy(0, menuList, 0, menuList.Numof());
+/* 0006867c */	this.init();
+/* 00068684 */	this.fadeObject(true);
+/* 00068692 */}
+
+int SystemMenu::update()
+/* 0006869a */{
+/* 0006869a */	switch (this.state_)
+/* 000686ac */	{
+/* 000686ac */	case 1:
+/* 000686ac */		if (!this.btn_[0].isMotion())
+/* 000686c8 */		{
+/* 000686c8 */			this.state_ = 2;
+/* 000686d2 */		}
+/* 000686d8 */		break;
+/* 000686de */	case 2:
+/* 000686de */		int n = this.getClickedButton();
+/* 000686f2 */		if (n != -1)
+/* 00068706 */		{
+/* 00068706 */			this.clickedButtonIndex_ = n;
+/* 00068710 */			this.fadeObject(false);
+/* 0006871e */		}
+/* 00068724 */		else if (g_mouse.isClick(1) || g_mouse.isClick(0))
+/* 0006876c */		{
+/* 0006876c */			if (g_mouse.isClick(1))
+/* 00068784 */			{
+/* 00068784 */				g_sysSound.play(2003, false);
+/* 0006879c */			}
+/* 000687a2 */			this.clickedButtonIndex_ = -1;
+/* 000687b4 */			this.fadeObject(false);
+/* 000687c2 */		}
+/* 000687c8 */		break;
+/* 000687ce */	case 3:
+/* 000687ce */		if (!this.btn_[0].isMotion())
+/* 000687ea */		{
+/* 000687ea */			this.state_ = 0;
+/* 000687f4 */		}
+/* 000687fa */		break;
+/* 00068800 */	case 0:
+/* 00068800 */		return 1;
+/* 00068808 */	}
+/* 00068808 */	return 0;
+/* 00068810 */}
+
+void SystemMenu::init()
+/* 0006881e */{
+/* 0006881e */	this.btn_.Alloc(this.menuList_.Numof());
+/* 00068834 */	int i;
+/* 0006883e */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0006886e */	{
+/* 0006886e */		this.btn_[i].init("システム／ボタン／幅２００", getSystemMenuButtonName(this.menuList_[i]), -1);
+/* 000688a2 */		this.btn_[i].setPos(16, 668 - 48 * (this.btn_.Numof() - i - 1), 25000);
+/* 000688e8 */	}
+/* 000688ee */	this.partsBg_.initAsPlaneImage(1024, 768, 0, 0, 0, 128);
+/* 0006891e */	this.partsBg_.setPos(0, 0, 20000);
+/* 0006893c */}
+
+void SystemMenu::fadeObject(bool val)
+/* 00068944 */{
+/* 00068944 */	int i;
+/* 0006894e */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0006897e */	{
+/* 0006897e */		this.btn_[i].fadeIn(val);
+/* 00068998 */	}
+/* 0006899e */	this.fadeBg(val);
+/* 000689ac */	this.state_ = val ? 1 : 3;
+/* 000689d6 */}
+
+void SystemMenu::fadeBg(bool val)
+/* 000689de */{
+/* 000689de */	this.partsBg_.setShow(true);
+/* 000689f0 */	MotionInfomation m;
+/* 00068a00 */	m = getStandardMotion(val ? 0 : 1);
+/* 00068a34 */	m.setTime(200, 0);
+/* 00068a4c */	this.partsBg_.runMotion(m);
+/* 00068a66 */}
+
+int SystemMenu::getClickedButton()
+/* 00068a6e */{
+/* 00068a6e */	int i;
+/* 00068a78 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00068aa8 */	{
+/* 00068aa8 */		if (this.btn_[i].isClick())
+/* 00068ac2 */		{
+/* 00068ac2 */			return i;
+/* 00068aca */		}
+/* 00068ad0 */	}
+/* 00068ad6 */	return -1;
+/* 00068ade */}
+
+int SystemMenu::getResult()
+/* 00068aec */{
+/* 00068aec */	if (this.clickedButtonIndex_ == -1)
+/* 00068b00 */	{
+/* 00068b00 */		return -1;
+/* 00068b08 */	}
+/* 00068b0e */	return this.menuList_[this.clickedButtonIndex_];
+/* 00068b1e */}
+
+string getSystemMenuButtonName(int index)
+/* 00068b2c */{
+/* 00068b2c */	switch (index)
+/* 00068b3e */	{
+/* 00068b3e */	case 0:
+/* 00068b3e */		return "オート";
+/* 00068b46 */	case 1:
+/* 00068b46 */		return "スキップ";
+/* 00068b4e */	case 2:
+/* 00068b4e */		return "バックログ";
+/* 00068b56 */	case 3:
+/* 00068b56 */		return "バックシーン";
+/* 00068b5e */	case 4:
+/* 00068b5e */		return "コンフィグ";
+/* 00068b66 */	case 5:
+/* 00068b66 */		return "マニュアル";
+/* 00068b6e */	case 6:
+/* 00068b6e */		return "メニューを閉じる";
+/* 00068b76 */	}
+/* 00068b76 */	return "";
+/* 00068b7e */}
+

@@ -1,0 +1,78 @@
+DepositoryScrollButton::DepositoryScrollButton()
+/* 0006826c */{
+/* 00068274 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00068296 */	this.isEnable_ = true;
+/* 000682a0 */}
+
+void DepositoryScrollButton::init(ref SwipeScroller ss, bool isLowerPosition)
+/* 000682a8 */{
+/* 000682a8 */	this.ss_ <- ss;
+/* 000682c4 */	this.isLowerPosition_ = isLowerPosition;
+/* 000682ce */	this.initButton();
+/* 000682d6 */	this.setButtonPos();
+/* 000682de */	this.setButtonShow();
+/* 000682e6 */}
+
+void DepositoryScrollButton::initButton()
+/* 000682ee */{
+/* 000682ee */	this.btnLR_[0].init("システム／チップエリア／戻る", "", -1);
+/* 00068314 */	this.btnLR_[1].init("システム／チップエリア／進む", "", -1);
+/* 0006833a */}
+
+void DepositoryScrollButton::setButtonShow()
+/* 00068342 */{
+/* 00068342 */	int i;
+/* 0006834c */	for (i = 0; i < this.btnLR_.Numof(); ++i)
+/* 0006837c */	{
+/* 0006837c */		this.btnLR_[i].setShow(true);
+/* 00068396 */	}
+/* 0006839c */}
+
+void DepositoryScrollButton::setButtonPos()
+/* 000683a4 */{
+/* 000683a4 */	int y = this.isLowerPosition_ ? 68 : 116;
+/* 000683cc */	this.btnLR_[0].setPos(144, y, 5000);
+/* 000683f2 */	this.btnLR_[1].setPos(894, y, 5000);
+/* 00068418 */}
+
+void DepositoryScrollButton::update()
+/* 00068420 */{
+/* 00068420 */	this.btnLR_[0].setEnable(this.isEnable_ && this.ss_.isAvairablePrevPage());
+/* 00068464 */	this.btnLR_[1].setEnable(this.isEnable_ && this.ss_.isAvairableNextPage());
+/* 000684a8 */	if (this.btnLR_[0].isClick())
+/* 000684c2 */	{
+/* 000684c2 */		this.ss_.scrollPage(false);
+/* 000684d4 */	}
+/* 000684da */	else if (this.btnLR_[1].isClick())
+/* 000684f4 */	{
+/* 000684f4 */		this.ss_.scrollPage(true);
+/* 00068506 */	}
+/* 0006850c */}
+
+int DepositoryScrollButton::getClickedButton()
+/* 00068514 */{
+/* 00068514 */	int i;
+/* 0006851e */	for (i = 0; i < this.btnLR_.Numof(); ++i)
+/* 0006854e */	{
+/* 0006854e */		if (this.btnLR_[i].isClick())
+/* 00068568 */		{
+/* 00068568 */			return i;
+/* 00068570 */		}
+/* 00068576 */	}
+/* 0006857c */	return -1;
+/* 00068584 */}
+
+void DepositoryScrollButton::setParent(int parentPartsNumber)
+/* 00068592 */{
+/* 00068592 */	int i;
+/* 0006859c */	for (i = 0; i < this.btnLR_.Numof(); ++i)
+/* 000685cc */	{
+/* 000685cc */		this.btnLR_[i].setParent(parentPartsNumber);
+/* 000685e6 */	}
+/* 000685ec */}
+
+void DepositoryScrollButton::setEnable(bool val)
+/* 000685f4 */{
+/* 000685f4 */	this.isEnable_ = val;
+/* 000685fe */}
+

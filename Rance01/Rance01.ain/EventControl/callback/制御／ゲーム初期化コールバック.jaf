@@ -1,0 +1,47 @@
+void 制御／ゲーム初期化コールバック()
+/* 0009b5c2 */{
+/* 0009b5c2 */	g_gameTime.setBlock(2);
+/* 0009b5d4 */	g_player.setLevel(9);
+/* 0009b5e6 */	g_player.setMaxLevel(999);
+/* 0009b5f8 */	g_player.setExp(0);
+/* 0009b60a */	g_player.setMaxHp(120);
+/* 0009b61c */	g_player.setHp(120);
+/* 0009b62e */	g_player.setLuck(2);
+/* 0009b640 */	g_player.setMaxChipCount(5);
+/* 0009b652 */	g_player.setMaxChipCountDepository(14);
+/* 0009b664 */	g_player.setGold(0);
+/* 0009b676 */	g_chipDepository[0].add("CHIP125", true);
+/* 0009b696 */	制御／文字列フラグ設定("俺のメモ", "うまいランチが待っている。|森を突っ切ってリーザスに急ぐぞ。|～捜査進行度:0％");
+/* 0009b6a8 */	g_gameFlagMap.setInt("鍵価格", 800);
+/* 0009b6c0 */	getPlace("PLACE01").setVisible(false);
+/* 0009b6e2 */	getPlace("PLACE02").setVisible(false);
+/* 0009b704 */	getPlace("PLACE03").setVisible(false);
+/* 0009b726 */	getPlace("PLACE04").setVisible(false);
+/* 0009b748 */	getPlace("PLACE05").setVisible(false);
+/* 0009b76a */	getPlace("PLACE06").setVisible(false);
+/* 0009b78c */	getPlace("PLACE07").setVisible(false);
+/* 0009b7ae */	getPlace("PLACE09").setVisible(false);
+/* 0009b7d0 */	getPlace("PLACE10").setVisible(false);
+/* 0009b7f2 */	getPlace("PLACE11").setVisible(false);
+/* 0009b814 */	getPlace("PLACE12").setVisible(false);
+/* 0009b836 */	getPlace("PLACE19").setVisible(false);
+/* 0009b858 */	getPlace("PLACE23").setVisible(false);
+/* 0009b87a */	getPlace("PLACE24").setVisible(false);
+/* 0009b89c */	getPlace("PLACE25").setVisible(false);
+/* 0009b8be */	getPlace("PLACE27").setVisible(false);
+/* 0009b8e0 */	getPlace("PLACE28").setVisible(false);
+/* 0009b902 */	制御／商品追加(0, "CHIP101");
+/* 0009b914 */	制御／商品追加(0, "CHIP102");
+/* 0009b926 */	制御／商品追加(0, "CHIP306");
+/* 0009b938 */	制御／商品追加(0, "CHIP311");
+/* 0009b94a */	制御／商品追加(1, "CHIP202");
+/* 0009b95c */	制御／商品追加(1, "CHIP223");
+/* 0009b96e */	制御／商品追加(1, "CHIP559");
+/* 0009b980 */	制御／商品追加(1, "CHIP571");
+/* 0009b992 */	制御／商品追加(1, "CHIP587");
+/* 0009b9a4 */	字初期値(0, 256);
+/* 0009b9b6 */	字サイズ初期値(0, 36);
+/* 0009b9c8 */	字間隔(0, -1, 5);
+/* 0009b9e0 */	選択文字設定(1, 256, 30, 255, 255, 255);
+/* 0009ba0a */}
+

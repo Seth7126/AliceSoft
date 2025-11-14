@@ -1,0 +1,269 @@
+ChipDepositoryArranger::ChipDepositoryArranger()
+/* 000642a2 */{
+/* 000642aa */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000642cc */	this.isEnableShowInfomation_ = true;
+/* 000642d6 */	this.isActive_ = false;
+/* 000642e0 */}
+
+void ChipDepositoryArranger::init(int depositoryIndex, bool isLowerPosition, bool isShowMoveChipToAnotherDepositoryButton, bool isShowChangeDepositoryButton)
+/* 000642e8 */{
+/* 000642e8 */	this.depositoryIndex_ = depositoryIndex;
+/* 000642f2 */	this.isLowerPosition_ = isLowerPosition;
+/* 000642fc */	this.isEnableAnotherDepository_ = isShowMoveChipToAnotherDepositoryButton;
+/* 00064306 */	this.isShowChangeDepository_ = isShowChangeDepositoryButton;
+/* 00064310 */	this.depository_ <- g_chipDepository[this.depositoryIndex_];
+/* 00064334 */	this.another_ <- g_chipDepository[this.depositoryIndex_ ^ 1];
+/* 00064360 */	this.depository_.addEventHandler(this.onEvent);
+/* 00064376 */	this.another_.addEventHandler(this.onEvent);
+/* 0006438c */	this.chipView_.init(this.depositoryIndex_, 0, this.isLowerPosition_);
+/* 000643aa */	this.initButton();
+/* 000643b2 */	this.setButtonPos();
+/* 000643ba */	this.updateButtonState();
+/* 000643c2 */}
+
+void ChipDepositoryArranger::update()
+/* 000643ca */{
+/* 000643ca */	this.checkClicked();
+/* 000643d2 */	int n = this.getClickedButton();
+/* 000643e6 */	switch (n)
+/* 000643f8 */	{
+/* 000643f8 */	case 0:
+/* 000643f8 */		this.showChipInfomation();
+/* 00064400 */		break;
+/* 00064406 */	case 4:
+/* 00064406 */		this.sortChip();
+/* 0006440e */		break;
+/* 00064414 */	case 2:
+/* 00064414 */		this.eraseSelectedChip();
+/* 0006441c */		break;
+/* 00064422 */	case 1:
+/* 00064422 */		this.moveSelectedChip();
+/* 0006442a */		break;
+/* 00064430 */	}
+/* 00064430 */	if (n != -1)
+/* 00064444 */	{
+/* 00064444 */		this.updateButtonState();
+/* 0006444c */	}
+/* 00064452 */}
+
+void ChipDepositoryArranger::fadeIn(bool val)
+/* 0006445a */{
+/* 0006445a */	if (val)
+/* 00064466 */	{
+/* 00064466 */		this.state_ = this.isActive_ ? 2 : 1;
+/* 0006448e */		if (this.state_ == 2)
+/* 0006449c */		{
+/* 0006449c */			this.fadeObject(true);
+/* 000644aa */		}
+/* 000644b0 */	}
+/* 000644b6 */	else
+/* 000644b6 */	{
+/* 000644b6 */		this.state_ = 0;
+/* 000644c0 */		this.fadeObject(false);
+/* 000644ce */	}
+/* 000644ce */}
+
+void ChipDepositoryArranger::checkClicked()
+/* 000644d6 */{
+/* 000644d6 */	int m = this.chipView_.getClickedIndex();
+/* 000644ee */	if (m != -1)
+/* 00064502 */	{
+/* 00064502 */		ref ChipInstance c = g_chipDepository[this.depositoryIndex_].getInstance(m);
+/* 00064546 */		c.setBet(!c.isBet());
+/* 00064562 */		this.updateButtonState();
+/* 0006456a */	}
+/* 0006457c */}
+
+void ChipDepositoryArranger::initButton()
+/* 00064584 */{
+/* 00064584 */	this.btn_[0].init("システム／ボタン／幅１２８", "詳細を見る", -1);
+/* 000645aa */	this.btn_[2].init("システム／ボタン／幅１２８", "捨てる", 2111);
+/* 000645d0 */	if (this.isShowChangeDepository_)
+/* 000645da */	{
+/* 000645da */		this.btn_[3].init("システム／ボタン／幅２００", this.getAnotherDepositoryString(), -1);
+/* 00064602 */	}
+/* 00064608 */	if (this.isEnableAnotherDepository_)
+/* 00064612 */	{
+/* 00064612 */		this.btn_[1].init("システム／ボタン／幅１２８", this.getMoveAnotherDepositoryString(), -1);
+/* 0006463a */	}
+/* 00064640 */	else
+/* 00064640 */	{
+/* 00064640 */		this.btn_[4].init("システム／ボタン／幅１２８", "ソート", -1);
+/* 00064666 */	}
+/* 00064666 */}
+
+string ChipDepositoryArranger::getAnotherDepositoryString()
+/* 0006466e */{
+/* 0006466e */	return this.depositoryIndex_ == 0 ? "押入れを表示" : "手持ちを表示";
+/* 00064690 */}
+
+string ChipDepositoryArranger::getMoveAnotherDepositoryString()
+/* 0006469e */{
+/* 0006469e */	return this.depositoryIndex_ == 0 ? "押入れに移動" : "手持ちに移動";
+/* 000646c0 */}
+
+void ChipDepositoryArranger::setButtonPos()
+/* 000646ce */{
+/* 000646ce */	int i;
+/* 000646d8 */	for (i = 0; i < 3; ++i)
+/* 00064702 */	{
+/* 00064702 */		this.btn_[i].setPos(this.chipView_.getXPos() + 576 + i * 144, this.chipView_.getYPos() + (this.isLowerPosition_ ? 8 : 56), -2147483648);
+/* 0006476a */	}
+/* 00064770 */	if (!this.isEnableAnotherDepository_)
+/* 0006477e */	{
+/* 0006477e */		this.btn_[4].setPos(this.chipView_.getXPos() + 576 + 144, this.chipView_.getYPos() + (this.isLowerPosition_ ? 8 : 56), -2147483648);
+/* 000647de */	}
+/* 000647e4 */	this.btn_[3].setPos(this.chipView_.getXPos() + 296, this.chipView_.getYPos() + (this.isLowerPosition_ ? 8 : 56), -2147483648);
+/* 0006483c */}
+
+void ChipDepositoryArranger::updateButtonState()
+/* 00064844 */{
+/* 00064844 */	int betCount = this.getBetCount();
+/* 00064858 */	bool isContainDisableObject = this.isContainBetChipDepositoryDisable();
+/* 0006486c */	this.btn_[1].setEnable(0 < betCount && betCount <= this.another_.getEmptyCount() && !isContainDisableObject);
+/* 000648e8 */	this.btn_[2].setEnable(0 < betCount && !isContainDisableObject);
+/* 00064932 */	this.btn_[0].setEnable(betCount == 1 && this.isEnableShowInfomation_);
+/* 00064972 */}
+
+bool ChipDepositoryArranger::isContainBetChipDepositoryDisable()
+/* 0006497a */{
+/* 0006497a */	int i;
+/* 00064984 */	for (i = 0; i < this.depository_.getCount(); ++i)
+/* 000649ba */	{
+/* 000649ba */		if (this.depository_.getInstance(i).isBet() && getChip(this.depository_.getInstance(i).getId()).isDepositoryDisable())
+/* 00064a40 */		{
+/* 00064a40 */			return true;
+/* 00064a48 */		}
+/* 00064a4e */	}
+/* 00064a66 */	return false;
+/* 00064a6e */}
+
+int ChipDepositoryArranger::getBetCount()
+/* 00064a7c */{
+/* 00064a7c */	int i;
+/* 00064a86 */	int count;
+/* 00064a90 */	for (i = 0; i < this.depository_.getCount(); ++i)
+/* 00064ac6 */	{
+/* 00064ac6 */		if (this.depository_.getInstance(i).isBet())
+/* 00064af2 */		{
+/* 00064af2 */			++count;
+/* 00064af8 */		}
+/* 00064afe */	}
+/* 00064b0a */	return count;
+/* 00064b12 */}
+
+int ChipDepositoryArranger::getClickedButton()
+/* 00064b20 */{
+/* 00064b20 */	int i;
+/* 00064b2a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00064b5a */	{
+/* 00064b5a */		if (this.btn_[i].isClick())
+/* 00064b74 */		{
+/* 00064b74 */			return i;
+/* 00064b7c */		}
+/* 00064b82 */	}
+/* 00064b88 */	return -1;
+/* 00064b90 */}
+
+void ChipDepositoryArranger::moveSelectedChip()
+/* 00064b9e */{
+/* 00064b9e */	int i;
+/* 00064ba8 */	while (i < this.depository_.getCount())
+/* 00064bc2 */	{
+/* 00064bc2 */		ref ChipInstance inst = this.depository_.getInstance(i);
+/* 00064bfe */		if (inst.isBet())
+/* 00064c10 */		{
+/* 00064c10 */			this.depository_.erase(i);
+/* 00064c22 */			this.another_.add(inst.getId(), true);
+/* 00064c40 */		}
+/* 00064c46 */		else
+/* 00064c46 */		{
+/* 00064c46 */			++i;
+/* 00064c4c */		}
+/* 00064c4c */	}
+/* 00064c5e */}
+
+void ChipDepositoryArranger::eraseSelectedChip()
+/* 00064c66 */{
+/* 00064c66 */	int i;
+/* 00064c70 */	while (i < this.depository_.getCount())
+/* 00064c8a */	{
+/* 00064c8a */		ref ChipInstance inst = this.depository_.getInstance(i);
+/* 00064cc6 */		if (inst.isBet())
+/* 00064cd8 */		{
+/* 00064cd8 */			this.depository_.erase(i);
+/* 00064cea */		}
+/* 00064cf0 */		else
+/* 00064cf0 */		{
+/* 00064cf0 */			++i;
+/* 00064cf6 */		}
+/* 00064cf6 */	}
+/* 00064d08 */}
+
+void ChipDepositoryArranger::fadeObject(bool val)
+/* 00064d10 */{
+/* 00064d10 */	this.chipView_.fadeIn(val);
+/* 00064d22 */	int i;
+/* 00064d2c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00064d5c */	{
+/* 00064d5c */		this.btn_[i].fadeIn(val);
+/* 00064d76 */	}
+/* 00064d7c */}
+
+void ChipDepositoryArranger::setActive(bool val)
+/* 00064d84 */{
+/* 00064d84 */	this.isActive_ = val;
+/* 00064d8e */	if (val)
+/* 00064d9a */	{
+/* 00064d9a */		if (this.state_ == 1)
+/* 00064da8 */		{
+/* 00064da8 */			this.state_ = 2;
+/* 00064db2 */			this.fadeObject(true);
+/* 00064dc0 */		}
+/* 00064dc6 */	}
+/* 00064dcc */	else if (this.state_ == 2)
+/* 00064dda */	{
+/* 00064dda */		this.state_ = 1;
+/* 00064de4 */		this.fadeObject(false);
+/* 00064df2 */	}
+/* 00064df8 */}
+
+bool ChipDepositoryArranger::isClickChangeDepositoryButton()
+/* 00064e00 */{
+/* 00064e00 */	return this.btn_[3].isClick();
+/* 00064e16 */}
+
+bool ChipDepositoryArranger::isMotion()
+/* 00064e24 */{
+/* 00064e24 */	return this.chipView_.isMotion();
+/* 00064e32 */}
+
+void ChipDepositoryArranger::showChipInfomation()
+/* 00064e40 */{
+/* 00064e40 */	int i;
+/* 00064e4a */	for (i = 0; i < this.depository_.getCount(); ++i)
+/* 00064e80 */	{
+/* 00064e80 */		if (this.depository_.getInstance(i).isBet())
+/* 00064eac */		{
+/* 00064eac */			OpenChipInfomation(this.depository_.getInstance(i).getId());
+/* 00064ed8 */			ResetBet(this.depositoryIndex_);
+/* 00064ee4 */		}
+/* 00064ef0 */	}
+/* 00064efc */}
+
+void ChipDepositoryArranger::sortChip()
+/* 00064f04 */{
+/* 00064f04 */	this.depository_.sort();
+/* 00064f10 */}
+
+void ChipDepositoryArranger::setEnableShowInfomation(bool val)
+/* 00064f18 */{
+/* 00064f18 */	this.isEnableShowInfomation_ = val;
+/* 00064f22 */	this.updateButtonState();
+/* 00064f2a */}
+
+void ChipDepositoryArranger::onEvent(int type, int value)
+/* 00064f32 */{
+/* 00064f32 */	this.updateButtonState();
+/* 00064f3a */}
+

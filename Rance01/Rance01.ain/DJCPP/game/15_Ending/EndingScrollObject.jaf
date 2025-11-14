@@ -1,0 +1,41 @@
+EndingScrollObject::EndingScrollObject()
+/* 00087a2a */{
+/* 00087a32 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00087a54 */}
+
+void EndingScrollObject::update()
+/* 00087a5c */{
+/* 00087a5c */	int pos = (float(this.speedObj_) * float(this.timer_.getTime())) / 1000.0;
+/* 00087a8e */	this.parentObj_.setPos(0, 768 - pos, -2147483648);
+/* 00087ab4 */}
+
+void EndingScrollObject::run()
+/* 00087abc */{
+/* 00087abc */	this.timer_.reset();
+/* 00087ac8 */}
+
+void EndingScrollObject::init()
+/* 00087ad0 */{
+/* 00087ad0 */	this.parentObj_.initAsDummy();
+/* 00087adc */	this.initScrollObjectParts();
+/* 00087ae4 */	this.parentObj_.setPos(0, 768, -2147483648);
+/* 00087b02 */	this.parentObj_.setShow(true);
+/* 00087b14 */}
+
+void EndingScrollObject::initScrollObjectParts()
+/* 00087b1c */{
+/* 00087b1c */	this.speedObj_ = EX_Int("エンディング／スピード／オブジェクト", 0);
+/* 00087b3a */	int count = EX_Height("エンディングスクロールオブジェクト");
+/* 00087b52 */	this.partsObj_.Alloc(count);
+/* 00087b68 */	int i;
+/* 00087b72 */	for (i = 0; i < count; ++i)
+/* 00087ba2 */	{
+/* 00087ba2 */		this.partsObj_[i].init(EX_A2String("エンディングスクロールオブジェクト", 0, i, ""), 0);
+/* 00087bda */		int x = EX_A2Int("エンディングスクロールオブジェクト", 1, i, 0);
+/* 00087c04 */		int y = EX_A2Int("エンディングスクロールオブジェクト", 2, i, 0);
+/* 00087c2e */		this.partsObj_[i].setPos(x, y, i + 1000);
+/* 00087c5c */		this.partsObj_[i].setParent(this.parentObj_.getPartsNumber());
+/* 00087c7c */		this.partsObj_[i].setShow(true);
+/* 00087c96 */	}
+/* 00087c9c */}
+

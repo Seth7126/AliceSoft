@@ -1,0 +1,82 @@
+void CgMoveNavigation::init(ref SwipeScroller ss)
+/* 00081d06 */{
+/* 00081d06 */	this.ss_ <- ss;
+/* 00081d22 */	this.parts_[0].init("システム／ＣＧ／左移動", 0);
+/* 00081d42 */	this.parts_[1].init("システム／ＣＧ／右移動", 0);
+/* 00081d62 */	this.parts_[0].setPos(0, 0, 5000);
+/* 00081d88 */	this.parts_[1].setPos(928, 0, 5000);
+/* 00081dae */}
+
+CgMoveNavigation::CgMoveNavigation()
+/* 00081db6 */{
+/* 00081dbe */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00081de0 */}
+
+void CgMoveNavigation::update()
+/* 00081de8 */{
+/* 00081de8 */	switch (this.state_)
+/* 00081dfa */	{
+/* 00081dfa */	case 0:
+/* 00081dfa */		break;
+/* 00081e00 */	case 1:
+/* 00081e00 */		if (!this.parts_[0].isMotion())
+/* 00081e1c */		{
+/* 00081e1c */			this.state_ = 2;
+/* 00081e26 */		}
+/* 00081e2c */		break;
+/* 00081e32 */	case 2:
+/* 00081e32 */		break;
+/* 00081e38 */	case 3:
+/* 00081e38 */		if (!this.parts_[0].isMotion())
+/* 00081e54 */		{
+/* 00081e54 */			this.state_ = 0;
+/* 00081e5e */		}
+/* 00081e64 */		break;
+/* 00081e6a */	}
+/* 00081e6a */	this.updatePartsShowState();
+/* 00081e72 */}
+
+void CgMoveNavigation::fadeIn(bool val)
+/* 00081e7a */{
+/* 00081e7a */	if (this.isIgnoreFadeMotion(val))
+/* 00081e8e */	{
+/* 00081e8e */		return;
+/* 00081e90 */	}
+/* 00081e96 */	MotionInfomation m;
+/* 00081ea6 */	m = getStandardMotion(val ? 0 : 1);
+/* 00081eda */	int i;
+/* 00081ee4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00081f14 */	{
+/* 00081f14 */		this.parts_[i].runMotion(m);
+/* 00081f36 */	}
+/* 00081f3c */	this.state_ = val ? 1 : 3;
+/* 00081f66 */}
+
+bool CgMoveNavigation::isIgnoreFadeMotion(bool val)
+/* 00081f6e */{
+/* 00081f6e */	if (val)
+/* 00081f7a */	{
+/* 00081f7a */		if (this.state_ == 2 || this.state_ == 1)
+/* 00081fba */		{
+/* 00081fba */			return true;
+/* 00081fc2 */		}
+/* 00081fc8 */	}
+/* 00081fce */	else if (this.state_ == 0 || this.state_ == 3)
+/* 0008200e */	{
+/* 0008200e */		return true;
+/* 00082016 */	}
+/* 0008201c */	return false;
+/* 00082024 */}
+
+void CgMoveNavigation::updatePartsShowState()
+/* 00082032 */{
+/* 00082032 */	int n = roundOff(this.ss_.getFloatingPage());
+/* 00082050 */	this.parts_[0].setShow(n > 0);
+/* 00082074 */	this.parts_[1].setShow(n < this.ss_.getPageCount() - 1);
+/* 000820a6 */}
+
+bool CgMoveNavigation::isShow()
+/* 000820ae */{
+/* 000820ae */	return this.state_ == 2 || this.state_ == 1;
+/* 000820ec */}
+

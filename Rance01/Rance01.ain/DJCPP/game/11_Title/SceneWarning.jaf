@@ -1,0 +1,27 @@
+void SceneWarning::run()
+/* 0007f8be */{
+/* 0007f8be */	this.logo_.run("システム／アリスロゴ", true);
+/* 0007f8d6 */	this.state_ = 0;
+/* 0007f8e0 */}
+
+int SceneWarning::update()
+/* 0007f8e8 */{
+/* 0007f8e8 */	switch (this.state_)
+/* 0007f8fa */	{
+/* 0007f8fa */	case 0:
+/* 0007f8fa */		if (this.logo_.isFinish())
+/* 0007f90c */		{
+/* 0007f90c */			this.warning_.run("システム／注意", false);
+/* 0007f924 */			this.state_ = 1;
+/* 0007f92e */		}
+/* 0007f934 */		break;
+/* 0007f93a */	case 1:
+/* 0007f93a */		if (this.warning_.isFinish())
+/* 0007f94c */		{
+/* 0007f94c */			return 1;
+/* 0007f954 */		}
+/* 0007f95a */		break;
+/* 0007f960 */	}
+/* 0007f960 */	return 0;
+/* 0007f968 */}
+

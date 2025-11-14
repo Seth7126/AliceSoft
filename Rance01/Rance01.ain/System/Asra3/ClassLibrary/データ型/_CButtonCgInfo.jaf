@@ -1,0 +1,172 @@
+void _CButtonCgInfo::_SetCgPln(string _cg)
+/* 00001b64 */{
+/* 00001b64 */	this._SetCg(this._m_cg_pln, _cg);
+/* 00001b78 */}
+
+void _CButtonCgInfo::_SetCgHlt(string _cg)
+/* 00001b80 */{
+/* 00001b80 */	this._SetCg(this._m_cg_hlt, _cg);
+/* 00001b94 */}
+
+void _CButtonCgInfo::_SetCgInv(string _cg)
+/* 00001b9c */{
+/* 00001b9c */	this._SetCg(this._m_cg_inv, _cg);
+/* 00001bb0 */}
+
+void _CButtonCgInfo::_SetCgChk(string _cg)
+/* 00001bb8 */{
+/* 00001bb8 */	this._SetCg(this._m_cg_chk, _cg);
+/* 00001bcc */}
+
+void _CButtonCgInfo::_SetCgHltChk(string _cg)
+/* 00001bd4 */{
+/* 00001bd4 */	this._SetCg(this._m_cg_hlt_chk, _cg);
+/* 00001be8 */}
+
+void _CButtonCgInfo::_SetClickSound(int _click)
+/* 00001bf0 */{
+/* 00001bf0 */	this._m_click_sound = _click;
+/* 00001bfa */}
+
+void _CButtonCgInfo::_SetCursorSound(int _cursor)
+/* 00001c02 */{
+/* 00001c02 */	this._m_cursor_sound = _cursor;
+/* 00001c0c */}
+
+bool _CButtonCgInfo::_IsSetCgPln()
+/* 00001c14 */{
+/* 00001c14 */	return !this._m_cg_pln.Empty();
+/* 00001c20 */}
+
+bool _CButtonCgInfo::_IsSetCgHlt()
+/* 00001c2e */{
+/* 00001c2e */	return !this._m_cg_hlt.Empty();
+/* 00001c3a */}
+
+bool _CButtonCgInfo::_IsSetCgInv()
+/* 00001c48 */{
+/* 00001c48 */	return !this._m_cg_inv.Empty();
+/* 00001c54 */}
+
+bool _CButtonCgInfo::_IsSetCgChk()
+/* 00001c62 */{
+/* 00001c62 */	return !this._m_cg_chk.Empty();
+/* 00001c6e */}
+
+bool _CButtonCgInfo::_IsSetCgHltChk()
+/* 00001c7c */{
+/* 00001c7c */	return this._m_cg_hlt_chk.Empty();
+/* 00001c86 */}
+
+int _CButtonCgInfo::_GetX()
+/* 00001c94 */{
+/* 00001c94 */	return this._m_x;
+/* 00001c9c */}
+
+int _CButtonCgInfo::_GetY()
+/* 00001caa */{
+/* 00001caa */	return this._m_y;
+/* 00001cb2 */}
+
+int _CButtonCgInfo::_GetZ()
+/* 00001cc0 */{
+/* 00001cc0 */	return this._m_z;
+/* 00001cc8 */}
+
+int _CButtonCgInfo::_GetClickSound()
+/* 00001cd6 */{
+/* 00001cd6 */	return this._m_click_sound;
+/* 00001cde */}
+
+int _CButtonCgInfo::_GetCursorSound()
+/* 00001cec */{
+/* 00001cec */	return this._m_cursor_sound;
+/* 00001cf4 */}
+
+void _CButtonCgInfo::_SetCg(ref string _dst, string _src)
+/* 00001d02 */{
+/* 00001d02 */	if (_src != "")
+/* 00001d12 */	{
+/* 00001d12 */		_dst = _src;
+/* 00001d1c */	}
+/* 00001d22 */}
+
+_CButtonCgInfo::_CButtonCgInfo()
+/* 00001d2a */{
+/* 00001d32 */	this._m_x = -2147483648;
+/* 00001d3c */	this._m_y = -2147483648;
+/* 00001d46 */	this._m_z = 1;
+/* 00001d50 */	this._m_cg_pln = "";
+/* 00001d5c */	this._m_cg_hlt = "";
+/* 00001d68 */	this._m_cg_inv = "";
+/* 00001d74 */	this._m_cg_chk = "";
+/* 00001d80 */	this._m_cg_hlt_chk = "";
+/* 00001d8c */	this._m_click_sound = 0;
+/* 00001d96 */	this._m_cursor_sound = 0;
+/* 00001da0 */}
+
+void _CButtonCgInfo::_SetPos(int _x, int _y)
+/* 00001da8 */{
+/* 00001da8 */	if (_x != -2147483648)
+/* 00001dbc */	{
+/* 00001dbc */		this._m_x = _x;
+/* 00001dc6 */	}
+/* 00001dcc */	if (_y != -2147483648)
+/* 00001de0 */	{
+/* 00001de0 */		this._m_y = _y;
+/* 00001dea */	}
+/* 00001df0 */}
+
+void _CButtonCgInfo::_SetZ(int _z)
+/* 00001df8 */{
+/* 00001df8 */	if (_z != -2147483648)
+/* 00001e0c */	{
+/* 00001e0c */		this._m_z = _z;
+/* 00001e16 */	}
+/* 00001e1c */}
+
+string _CButtonCgInfo::_GetCg(bool _hilite, bool _check, bool _invalid)
+/* 00001e24 */{
+/* 00001e24 */	if (_invalid)
+/* 00001e30 */	{
+/* 00001e30 */		if (!this._m_cg_inv.Empty())
+/* 00001e3e */		{
+/* 00001e3e */			return this._m_cg_inv;
+/* 00001e46 */		}
+/* 00001e4c */		return this._m_cg_pln;
+/* 00001e54 */	}
+/* 00001e5a */	if (_hilite && _check)
+/* 00001e8a */	{
+/* 00001e8a */		if (!this._m_cg_hlt_chk.Empty())
+/* 00001e98 */		{
+/* 00001e98 */			return this._m_cg_hlt_chk;
+/* 00001ea0 */		}
+/* 00001ea6 */		if (!this._m_cg_chk.Empty())
+/* 00001eb4 */		{
+/* 00001eb4 */			return this._m_cg_chk;
+/* 00001ebc */		}
+/* 00001ec2 */		if (!this._m_cg_hlt.Empty())
+/* 00001ed0 */		{
+/* 00001ed0 */			return this._m_cg_hlt;
+/* 00001ed8 */		}
+/* 00001ede */		return this._m_cg_pln;
+/* 00001ee6 */	}
+/* 00001eec */	if (_hilite)
+/* 00001ef8 */	{
+/* 00001ef8 */		if (!this._m_cg_hlt.Empty())
+/* 00001f06 */		{
+/* 00001f06 */			return this._m_cg_hlt;
+/* 00001f0e */		}
+/* 00001f14 */		return this._m_cg_pln;
+/* 00001f1c */	}
+/* 00001f22 */	if (_check)
+/* 00001f2e */	{
+/* 00001f2e */		if (!this._m_cg_chk.Empty())
+/* 00001f3c */		{
+/* 00001f3c */			return this._m_cg_chk;
+/* 00001f44 */		}
+/* 00001f4a */		return this._m_cg_pln;
+/* 00001f52 */	}
+/* 00001f58 */	return this._m_cg_pln;
+/* 00001f60 */}
+

@@ -1,0 +1,62 @@
+ChipIndicator::ChipIndicator()
+/* 00066206 */{
+/* 0006620e */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00066230 */}
+
+void ChipIndicator::init(ref ChipInstance instance)
+/* 00066238 */{
+/* 00066238 */	this.instance_ <- instance;
+/* 00066254 */	this.parts_[0].init("システム／チップインジケータ／チップ", 0);
+/* 00066274 */	this.parts_[0].setShow(true);
+/* 0006628e */	createPartsGroup(this.parent_, this.parts_, 4400);
+/* 000662a6 */	this.parent_.setShow(this.state_ != 0);
+/* 000662c2 */	if (this.instance_ !== NULL)
+/* 000662d6 */	{
+/* 000662d6 */		this.instance_.addEventHandler(this.onEvent);
+/* 000662ec */	}
+/* 000662f2 */	this.setShowClock();
+/* 000662fa */}
+
+void ChipIndicator::update()
+/* 00066302 */{
+/* 00066304 */}
+
+void ChipIndicator::setPos(int x, int y)
+/* 0006630a */{
+/* 0006630a */	this.parent_.setPos(x, y, -2147483648);
+/* 00066328 */}
+
+void ChipIndicator::fadeIn(bool val)
+/* 00066330 */{
+/* 00066330 */	this.state_ = val ? 1 : 0;
+/* 0006635a */	this.parent_.setShow(this.state_ != 0);
+/* 00066376 */}
+
+void ChipIndicator::setShowClock()
+/* 0006637e */{
+/* 0006637e */	if (this.instance_ !== NULL)
+/* 00066392 */	{
+/* 00066392 */		bool s = this.instance_.getTimeRemain() > 0;
+/* 000663b4 */		int type = getChip(this.instance_.getId()).getIndicatorType();
+/* 000663e2 */		this.parts_[0].setCgRange(s ? 16 : 0, type * 16, 16, 16);
+/* 0006642e */	}
+/* 0006643a */	else
+/* 0006643a */	{
+/* 0006643a */		this.parts_[0].setCgRange(0, 48, 16, 16);
+/* 00066466 */	}
+/* 00066466 */}
+
+void ChipIndicator::onEvent(int type)
+/* 0006646e */{
+/* 0006646e */	if (type == 0)
+/* 0006647c */	{
+/* 0006647c */		this.setShowClock();
+/* 00066484 */	}
+/* 0006648a */}
+
+void ChipIndicator::setParent(int parentPartsNumber)
+/* 00066492 */{
+/* 00066492 */	this.parent_.setPos(-2147483648, -2147483648, 1);
+/* 000664b0 */	this.parent_.setParent(parentPartsNumber);
+/* 000664c2 */}
+

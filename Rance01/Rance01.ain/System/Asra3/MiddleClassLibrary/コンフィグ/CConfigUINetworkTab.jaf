@@ -1,0 +1,54 @@
+CConfigUINetworkTab::CConfigUINetworkTab()
+/* 0002fb00 */{
+/* 0002fb0a */}
+
+CConfigUINetworkTab::~CConfigUINetworkTab()
+/* 0002fb10 */{
+/* 0002fb12 */}
+
+void CConfigUINetworkTab::Create()
+/* 0002fb18 */{
+/* 0002fb18 */	this.CreateUI();
+/* 0002fb20 */}
+
+void CConfigUINetworkTab::Release()
+/* 0002fb28 */{
+/* 0002fb28 */	AFL_Parts_EraseChangedEvent(this.m_AccessNetworkCheckBox, this.ChangedCheckAccessNetwork);
+/* 0002fb3e */	PARTS_Release(this.m_AccessNetworkCheckBox);
+/* 0002fb4a */	PARTS_Release(this.m_BG);
+/* 0002fb56 */	this.m_AccessNetworkCheckBox = 0;
+/* 0002fb60 */	this.m_BG = 0;
+/* 0002fb6a */}
+
+void CConfigUINetworkTab::CreateUI()
+/* 0002fb72 */{
+/* 0002fb72 */	this.Release();
+/* 0002fb7a */	this.CreateBG();
+/* 0002fb82 */	this.CreateAccessNetwork();
+/* 0002fb8a */}
+
+void CConfigUINetworkTab::CreateBG()
+/* 0002fb92 */{
+/* 0002fb92 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002fba4 */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002fbb6 */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002fbce */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002fbec */}
+
+void CConfigUINetworkTab::CreateAccessNetwork()
+/* 0002fbf4 */{
+/* 0002fbf4 */	this.m_AccessNetworkCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002fc06 */	Ｐ＿チェックボックス＿座標設定(this.m_AccessNetworkCheckBox, 50, 100);
+/* 0002fc1e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_AccessNetworkCheckBox, 100);
+/* 0002fc30 */	Ｐ＿チェックボックス＿サイズ設定(this.m_AccessNetworkCheckBox, 24, 24);
+/* 0002fc48 */	Ｐ＿チェックボックス＿テキスト設定(this.m_AccessNetworkCheckBox, "ネットワーク接続を許可する");
+/* 0002fc5a */	Ｐ＿チェックボックス＿フォント設定(this.m_AccessNetworkCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002fca2 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_AccessNetworkCheckBox, AFL_Config_Network_GetEnableConnection());
+/* 0002fcb4 */	AFL_Parts_AddChangedEvent(this.m_AccessNetworkCheckBox, this.ChangedCheckAccessNetwork);
+/* 0002fcca */}
+
+void CConfigUINetworkTab::ChangedCheckAccessNetwork(int Number)
+/* 0002fcd2 */{
+/* 0002fcd2 */	AFL_Config_Network_SetEnableConnection(Ｐ＿チェックボックス＿チェック状態取得(this.m_AccessNetworkCheckBox));
+/* 0002fce4 */}
+

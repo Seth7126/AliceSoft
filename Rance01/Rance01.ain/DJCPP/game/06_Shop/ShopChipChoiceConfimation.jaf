@@ -1,0 +1,126 @@
+ShopChipChoiceConfimation::ShopChipChoiceConfimation()
+/* 0007a87c */{
+/* 0007a884 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0007a8a6 */}
+
+void ShopChipChoiceConfimation::init(ref ShopChipInstance instance)
+/* 0007a8ae */{
+/* 0007a8ae */	this.id_ = instance.getId();
+/* 0007a8c4 */	this.price_ = instance.getPrice();
+/* 0007a8dc */	g_chipDepository[0].addEventHandler(this.onEvent);
+/* 0007a8fa */	g_chipDepository[1].addEventHandler(this.onEvent);
+/* 0007a918 */	this.chipInfo_.init(this.id_, true);
+/* 0007a930 */	this.initButton();
+/* 0007a938 */	this.setButtonPos();
+/* 0007a940 */	this.updateButtonState();
+/* 0007a948 */}
+
+void ShopChipChoiceConfimation::run()
+/* 0007a950 */{
+/* 0007a950 */	this.state_ = 2;
+/* 0007a95a */	this.fadeObject(true);
+/* 0007a968 */}
+
+void ShopChipChoiceConfimation::update()
+/* 0007a970 */{
+/* 0007a970 */	switch (this.state_)
+/* 0007a982 */	{
+/* 0007a982 */	case 2:
+/* 0007a982 */		this.selected_ = this.getButtonClicked();
+/* 0007a996 */		if (this.selected_ != -1)
+/* 0007a9aa */		{
+/* 0007a9aa */			this.fadeObject(false);
+/* 0007a9b8 */			this.state_ = 3;
+/* 0007a9c2 */		}
+/* 0007a9c8 */		if (g_mouse.isClick(1))
+/* 0007a9e0 */		{
+/* 0007a9e0 */			g_sysSound.play(2003, false);
+/* 0007a9f8 */			this.selected_ = 2;
+/* 0007aa02 */			this.fadeObject(false);
+/* 0007aa10 */			this.state_ = 3;
+/* 0007aa1a */		}
+/* 0007aa20 */		break;
+/* 0007aa26 */	case 3:
+/* 0007aa26 */		if (!this.chipInfo_.isMotion())
+/* 0007aa3a */		{
+/* 0007aa3a */			this.state_ = 0;
+/* 0007aa44 */		}
+/* 0007aa4a */		break;
+/* 0007aa50 */	case 0:
+/* 0007aa50 */		break;
+/* 0007aa56 */	}
+/* 0007aa56 */}
+
+bool ShopChipChoiceConfimation::isFinish()
+/* 0007aa5e */{
+/* 0007aa5e */	return this.state_ == 0;
+/* 0007aa70 */}
+
+int ShopChipChoiceConfimation::getSelection()
+/* 0007aa7e */{
+/* 0007aa7e */	return this.selected_;
+/* 0007aa86 */}
+
+void ShopChipChoiceConfimation::initButton()
+/* 0007aa94 */{
+/* 0007aa94 */	this.btn_[0].init("システム／ボタン／幅１２８", "買う(手持ちへ)", 2112);
+/* 0007aaba */	this.btn_[1].init("システム／ボタン／幅１２８", "買う(押入れへ)", 2112);
+/* 0007aae0 */	this.btn_[2].init("システム／ボタン／幅１２８", "買わない", -1);
+/* 0007ab06 */}
+
+void ShopChipChoiceConfimation::setButtonPos()
+/* 0007ab0e */{
+/* 0007ab0e */	int i;
+/* 0007ab18 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007ab48 */	{
+/* 0007ab48 */		this.btn_[i].setPos(288 + 144 * i, 264, 8100);
+/* 0007ab7e */	}
+/* 0007ab84 */}
+
+int ShopChipChoiceConfimation::getButtonClicked()
+/* 0007ab8c */{
+/* 0007ab8c */	int i;
+/* 0007ab96 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007abc6 */	{
+/* 0007abc6 */		if (this.btn_[i].isClick())
+/* 0007abe0 */		{
+/* 0007abe0 */			return i;
+/* 0007abe8 */		}
+/* 0007abee */	}
+/* 0007abf4 */	return -1;
+/* 0007abfc */}
+
+void ShopChipChoiceConfimation::fadeObject(bool val)
+/* 0007ac0a */{
+/* 0007ac0a */	this.fadeButton(val);
+/* 0007ac18 */	this.chipInfo_.fadeIn(val);
+/* 0007ac2a */}
+
+void ShopChipChoiceConfimation::fadeButton(bool val)
+/* 0007ac32 */{
+/* 0007ac32 */	int i;
+/* 0007ac3c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007ac6c */	{
+/* 0007ac6c */		this.btn_[i].fadeIn(val);
+/* 0007ac86 */	}
+/* 0007ac8c */}
+
+void ShopChipChoiceConfimation::onEvent(int event, int info)
+/* 0007ac94 */{
+/* 0007ac94 */	this.updateButtonState();
+/* 0007ac9c */}
+
+void ShopChipChoiceConfimation::updateButtonState()
+/* 0007aca4 */{
+/* 0007aca4 */	int i;
+/* 0007acae */	for (i = 0; i < g_chipDepository.Numof(); ++i)
+/* 0007acde */	{
+/* 0007acde */		this.btn_[i].setEnable(!g_chipDepository[i].isNoMargin() && this.price_ <= g_player.getGold());
+/* 0007ad3c */	}
+/* 0007ad42 */}
+
+bool ShopChipChoiceConfimation::isConfirmed()
+/* 0007ad4a */{
+/* 0007ad4a */	return this.selected_ != -1;
+/* 0007ad5c */}
+

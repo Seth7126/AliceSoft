@@ -1,0 +1,319 @@
+CConfigUI::CConfigUI()
+/* 00028c30 */{
+/* 00028c3a */}
+
+CConfigUI::~CConfigUI()
+/* 00028c40 */{
+/* 00028c40 */	this.Release();
+/* 00028c48 */}
+
+void CConfigUI::CreateUI()
+/* 00028c50 */{
+/* 00028c50 */	this.Release();
+/* 00028c58 */	this.m_SelectEndButtonNumber = 0;
+/* 00028c62 */	this.CreateMessageSpeed();
+/* 00028c6a */	this.CreateMessage();
+/* 00028c72 */	this.CreateMessageWindow();
+/* 00028c7a */	this.CreateSound();
+/* 00028c82 */	this.CreateInput();
+/* 00028c8a */	this.CreateWindow();
+/* 00028c92 */	this.CreateNetwork();
+/* 00028c9a */	this.Create3D();
+/* 00028ca2 */	this.CreateDebug();
+/* 00028caa */	this.CreateEnd();
+/* 00028cb2 */	this.CreateTitle();
+/* 00028cba */	this.CreateGame();
+/* 00028cc2 */}
+
+void CConfigUI::Release()
+/* 00028cca */{
+/* 00028cca */	PARTS_Release(this.m_ButtonGame);
+/* 00028cd6 */	PARTS_Release(this.m_ButtonTitle);
+/* 00028ce2 */	PARTS_Release(this.m_ButtonEnd);
+/* 00028cee */	PARTS_Release(this.m_ButtonDebug);
+/* 00028cfa */	PARTS_Release(this.m_Button3D);
+/* 00028d06 */	PARTS_Release(this.m_ButtonNetwork);
+/* 00028d12 */	PARTS_Release(this.m_ButtonWindow);
+/* 00028d1e */	PARTS_Release(this.m_ButtonInput);
+/* 00028d2a */	PARTS_Release(this.m_ButtonSound);
+/* 00028d36 */	PARTS_Release(this.m_ButtonMessageWindow);
+/* 00028d42 */	PARTS_Release(this.m_ButtonMessageSpeed);
+/* 00028d4e */	PARTS_Release(this.m_ButtonMessage);
+/* 00028d5a */	this.m_ButtonGame = 0;
+/* 00028d64 */	this.m_ButtonTitle = 0;
+/* 00028d6e */	this.m_ButtonEnd = 0;
+/* 00028d78 */	this.m_ButtonDebug = 0;
+/* 00028d82 */	this.m_Button3D = 0;
+/* 00028d8c */	this.m_ButtonNetwork = 0;
+/* 00028d96 */	this.m_ButtonWindow = 0;
+/* 00028da0 */	this.m_ButtonInput = 0;
+/* 00028daa */	this.m_ButtonSound = 0;
+/* 00028db4 */	this.m_ButtonMessageWindow = 0;
+/* 00028dbe */	this.m_ButtonMessageSpeed = 0;
+/* 00028dc8 */	this.m_ButtonMessage = 0;
+/* 00028dd2 */	this.m_TabDebug.Release();
+/* 00028dde */	this.m_Tab3D.Release();
+/* 00028dea */	this.m_TabNetwork.Release();
+/* 00028df6 */	this.m_TabWindow.Release();
+/* 00028e02 */	this.m_TabInput.Release();
+/* 00028e0e */	this.m_TabSound.Release();
+/* 00028e1a */	this.m_TabMessageWindow.Release();
+/* 00028e26 */	this.m_TabMessage.Release();
+/* 00028e32 */	this.m_TabMessageSpeed.Release();
+/* 00028e3e */}
+
+bool CConfigUI::IsEnd()
+/* 00028e46 */{
+/* 00028e46 */	return this.m_SelectEndButtonNumber == this.m_ButtonEnd;
+/* 00028e58 */}
+
+bool CConfigUI::IsBackTitle()
+/* 00028e66 */{
+/* 00028e66 */	return this.m_SelectEndButtonNumber == this.m_ButtonTitle;
+/* 00028e78 */}
+
+bool CConfigUI::IsExit()
+/* 00028e86 */{
+/* 00028e86 */	return this.m_SelectEndButtonNumber == this.m_ButtonGame;
+/* 00028e98 */}
+
+void CConfigUI::CreateMessageSpeed()
+/* 00028ea6 */{
+/* 00028ea6 */	this.m_ButtonMessageSpeed = PARTS_GetFreeSystemPartsNumber();
+/* 00028eb8 */	Ｐ＿ボタン＿座標設定(this.m_ButtonMessageSpeed, 0, 0);
+/* 00028ed0 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonMessageSpeed, 10);
+/* 00028ee2 */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonMessageSpeed, 150, 30);
+/* 00028efa */	Ｐ＿ボタン＿フォント設定(this.m_ButtonMessageSpeed, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 00028f42 */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonMessageSpeed, "メッセージ速度");
+/* 00028f54 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonMessageSpeed, this.ClickTabEvent);
+/* 00028f6a */	this.m_SelectTabNumber = this.m_ButtonMessageSpeed;
+/* 00028f7c */	Ｐ＿ボタン＿有効設定(this.m_ButtonMessageSpeed, false);
+/* 00028f8e */	this.m_TabMessageSpeed.Create();
+/* 00028f9a */}
+
+void CConfigUI::CreateMessage()
+/* 00028fa2 */{
+/* 00028fa2 */	this.m_ButtonMessage = PARTS_GetFreeSystemPartsNumber();
+/* 00028fb4 */	Ｐ＿ボタン＿座標設定(this.m_ButtonMessage, 150, 0);
+/* 00028fcc */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonMessage, 10);
+/* 00028fde */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonMessage, 110, 30);
+/* 00028ff6 */	Ｐ＿ボタン＿フォント設定(this.m_ButtonMessage, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002903e */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonMessage, "メッセージ");
+/* 00029050 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonMessage, this.ClickTabEvent);
+/* 00029066 */}
+
+void CConfigUI::CreateMessageWindow()
+/* 0002906e */{
+/* 0002906e */	this.m_ButtonMessageWindow = PARTS_GetFreeSystemPartsNumber();
+/* 00029080 */	Ｐ＿ボタン＿座標設定(this.m_ButtonMessageWindow, 260, 0);
+/* 00029098 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonMessageWindow, 10);
+/* 000290aa */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonMessageWindow, 200, 30);
+/* 000290c2 */	Ｐ＿ボタン＿フォント設定(this.m_ButtonMessageWindow, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002910a */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonMessageWindow, "メッセージウィンドウ");
+/* 0002911c */	AFL_Parts_AddMouseClickEvent(this.m_ButtonMessageWindow, this.ClickTabEvent);
+/* 00029132 */}
+
+void CConfigUI::CreateSound()
+/* 0002913a */{
+/* 0002913a */	this.m_ButtonSound = PARTS_GetFreeSystemPartsNumber();
+/* 0002914c */	Ｐ＿ボタン＿座標設定(this.m_ButtonSound, 460, 0);
+/* 00029164 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonSound, 10);
+/* 00029176 */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonSound, 90, 30);
+/* 0002918e */	Ｐ＿ボタン＿フォント設定(this.m_ButtonSound, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 000291d6 */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonSound, "サウンド");
+/* 000291e8 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonSound, this.ClickTabEvent);
+/* 000291fe */}
+
+void CConfigUI::CreateInput()
+/* 00029206 */{
+/* 00029206 */	this.m_ButtonInput = PARTS_GetFreeSystemPartsNumber();
+/* 00029218 */	Ｐ＿ボタン＿座標設定(this.m_ButtonInput, 550, 0);
+/* 00029230 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonInput, 10);
+/* 00029242 */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonInput, 50, 30);
+/* 0002925a */	Ｐ＿ボタン＿フォント設定(this.m_ButtonInput, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 000292a2 */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonInput, "入力");
+/* 000292b4 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonInput, this.ClickTabEvent);
+/* 000292ca */}
+
+void CConfigUI::CreateWindow()
+/* 000292d2 */{
+/* 000292d2 */	this.m_ButtonWindow = PARTS_GetFreeSystemPartsNumber();
+/* 000292e4 */	Ｐ＿ボタン＿座標設定(this.m_ButtonWindow, 600, 0);
+/* 000292fc */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonWindow, 10);
+/* 0002930e */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonWindow, 110, 30);
+/* 00029326 */	Ｐ＿ボタン＿フォント設定(this.m_ButtonWindow, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002936e */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonWindow, "ウィンドウ");
+/* 00029380 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonWindow, this.ClickTabEvent);
+/* 00029396 */}
+
+void CConfigUI::CreateNetwork()
+/* 0002939e */{
+/* 0002939e */	this.m_ButtonNetwork = PARTS_GetFreeSystemPartsNumber();
+/* 000293b0 */	Ｐ＿ボタン＿座標設定(this.m_ButtonNetwork, 710, 0);
+/* 000293c8 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonNetwork, 10);
+/* 000293da */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonNetwork, 130, 30);
+/* 000293f2 */	Ｐ＿ボタン＿フォント設定(this.m_ButtonNetwork, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002943a */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonNetwork, "ネットワーク");
+/* 0002944c */	AFL_Parts_AddMouseClickEvent(this.m_ButtonNetwork, this.ClickTabEvent);
+/* 00029462 */}
+
+void CConfigUI::Create3D()
+/* 0002946a */{
+/* 0002946a */	this.m_Button3D = PARTS_GetFreeSystemPartsNumber();
+/* 0002947c */	Ｐ＿ボタン＿座標設定(this.m_Button3D, 840, 0);
+/* 00029494 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_Button3D, 10);
+/* 000294a6 */	Ｐ＿ボタン＿サイズ設定(this.m_Button3D, 50, 30);
+/* 000294be */	Ｐ＿ボタン＿フォント設定(this.m_Button3D, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 00029506 */	Ｐ＿ボタン＿テキスト設定(this.m_Button3D, "３Ｄ");
+/* 00029518 */	AFL_Parts_AddMouseClickEvent(this.m_Button3D, this.ClickTabEvent);
+/* 0002952e */}
+
+void CConfigUI::CreateDebug()
+/* 00029536 */{
+/* 00029536 */	this.m_ButtonDebug = PARTS_GetFreeSystemPartsNumber();
+/* 00029548 */	Ｐ＿ボタン＿座標設定(this.m_ButtonDebug, 890, 0);
+/* 00029560 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonDebug, 10);
+/* 00029572 */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonDebug, 110, 30);
+/* 0002958a */	Ｐ＿ボタン＿フォント設定(this.m_ButtonDebug, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 000295d2 */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonDebug, "デバッグ");
+/* 000295e4 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonDebug, this.ClickTabEvent);
+/* 000295fa */}
+
+void CConfigUI::CreateEnd()
+/* 00029602 */{
+/* 00029602 */	this.m_ButtonEnd = PARTS_GetFreeSystemPartsNumber();
+/* 00029614 */	Ｐ＿ボタン＿座標設定(this.m_ButtonEnd, 569, 685);
+/* 0002962c */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonEnd, 10);
+/* 0002963e */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonEnd, 150, 30);
+/* 00029656 */	Ｐ＿ボタン＿フォント設定(this.m_ButtonEnd, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002969e */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonEnd, "ゲームを終了する");
+/* 000296b0 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonEnd, this.ClickEndButtonEvent);
+/* 000296c6 */}
+
+void CConfigUI::CreateTitle()
+/* 000296ce */{
+/* 000296ce */	this.m_ButtonTitle = PARTS_GetFreeSystemPartsNumber();
+/* 000296e0 */	Ｐ＿ボタン＿座標設定(this.m_ButtonTitle, 719, 685);
+/* 000296f8 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonTitle, 10);
+/* 0002970a */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonTitle, 150, 30);
+/* 00029722 */	Ｐ＿ボタン＿フォント設定(this.m_ButtonTitle, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002976a */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonTitle, "タイトル画面に戻る");
+/* 0002977c */	AFL_Parts_AddMouseClickEvent(this.m_ButtonTitle, this.ClickEndButtonEvent);
+/* 00029792 */}
+
+void CConfigUI::CreateGame()
+/* 0002979a */{
+/* 0002979a */	this.m_ButtonGame = PARTS_GetFreeSystemPartsNumber();
+/* 000297ac */	Ｐ＿ボタン＿座標設定(this.m_ButtonGame, 869, 685);
+/* 000297c4 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ButtonGame, 10);
+/* 000297d6 */	Ｐ＿ボタン＿サイズ設定(this.m_ButtonGame, 150, 30);
+/* 000297ee */	Ｐ＿ボタン＿フォント設定(this.m_ButtonGame, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 00029836 */	Ｐ＿ボタン＿テキスト設定(this.m_ButtonGame, "ゲームに戻る");
+/* 00029848 */	AFL_Parts_AddMouseClickEvent(this.m_ButtonGame, this.ClickEndButtonEvent);
+/* 0002985e */}
+
+void CConfigUI::ClickTabEvent(int PartsNumber, int MouseX, int MouseY)
+/* 00029866 */{
+/* 00029866 */	Ｐ＿ボタン＿有効設定(this.m_SelectTabNumber, true);
+/* 00029878 */	Ｐ＿ボタン＿有効設定(PartsNumber, false);
+/* 0002988a */	this.ReleaseTab(this.m_SelectTabNumber);
+/* 00029898 */	this.CreateTab(PartsNumber);
+/* 000298a6 */	this.m_SelectTabNumber = PartsNumber;
+/* 000298b0 */	全表示(1, 100);
+/* 000298c2 */}
+
+void CConfigUI::ClickEndButtonEvent(int PartsNumber, int MouseX, int MouseY)
+/* 000298ca */{
+/* 000298ca */	if (PartsNumber == this.m_ButtonEnd)
+/* 000298de */	{
+/* 000298de */		ゲーム終了();
+/* 000298e4 */		return;
+/* 000298e6 */	}
+/* 000298ec */	else if (PartsNumber == this.m_ButtonTitle)
+/* 00029900 */	{
+/* 00029900 */		タイトルに戻る();
+/* 00029906 */		return;
+/* 00029908 */	}
+/* 0002990e */	this.m_SelectEndButtonNumber = PartsNumber;
+/* 00029918 */}
+
+void CConfigUI::CreateTab(int PartsNumber)
+/* 00029920 */{
+/* 00029920 */	if (PartsNumber == this.m_ButtonMessageSpeed)
+/* 00029934 */	{
+/* 00029934 */		this.m_TabMessageSpeed.Create();
+/* 00029940 */	}
+/* 00029946 */	else if (PartsNumber == this.m_ButtonMessage)
+/* 0002995a */	{
+/* 0002995a */		this.m_TabMessage.Create();
+/* 00029966 */	}
+/* 0002996c */	else if (PartsNumber == this.m_ButtonMessageWindow)
+/* 00029980 */	{
+/* 00029980 */		this.m_TabMessageWindow.Create();
+/* 0002998c */	}
+/* 00029992 */	else if (PartsNumber == this.m_ButtonSound)
+/* 000299a6 */	{
+/* 000299a6 */		this.m_TabSound.Create();
+/* 000299b2 */	}
+/* 000299b8 */	else if (PartsNumber == this.m_ButtonInput)
+/* 000299cc */	{
+/* 000299cc */		this.m_TabInput.Create();
+/* 000299d8 */	}
+/* 000299de */	else if (PartsNumber == this.m_ButtonWindow)
+/* 000299f2 */	{
+/* 000299f2 */		this.m_TabWindow.Create();
+/* 000299fe */	}
+/* 00029a04 */	else if (PartsNumber == this.m_ButtonNetwork)
+/* 00029a18 */	{
+/* 00029a18 */		this.m_TabNetwork.Create();
+/* 00029a24 */	}
+/* 00029a2a */	else if (PartsNumber == this.m_Button3D)
+/* 00029a3e */	{
+/* 00029a3e */		this.m_Tab3D.Create();
+/* 00029a4a */	}
+/* 00029a50 */	else if (PartsNumber == this.m_ButtonDebug)
+/* 00029a64 */	{
+/* 00029a64 */		this.m_TabDebug.Create();
+/* 00029a70 */	}
+/* 00029a76 */}
+
+void CConfigUI::ReleaseTab(int PartsNumber)
+/* 00029a7e */{
+/* 00029a7e */	if (PartsNumber == this.m_ButtonMessageSpeed)
+/* 00029a92 */	{
+/* 00029a92 */		this.m_TabMessageSpeed.Release();
+/* 00029a9e */	}
+/* 00029aa4 */	else if (PartsNumber == this.m_ButtonMessage)
+/* 00029ab8 */	{
+/* 00029ab8 */		this.m_TabMessage.Release();
+/* 00029ac4 */	}
+/* 00029aca */	else if (PartsNumber == this.m_ButtonMessageWindow)
+/* 00029ade */	{
+/* 00029ade */		this.m_TabMessageWindow.Release();
+/* 00029aea */	}
+/* 00029af0 */	else if (PartsNumber == this.m_ButtonSound)
+/* 00029b04 */	{
+/* 00029b04 */		this.m_TabSound.Release();
+/* 00029b10 */	}
+/* 00029b16 */	else if (PartsNumber == this.m_ButtonInput)
+/* 00029b2a */	{
+/* 00029b2a */		this.m_TabInput.Release();
+/* 00029b36 */	}
+/* 00029b3c */	else if (PartsNumber == this.m_ButtonWindow)
+/* 00029b50 */	{
+/* 00029b50 */		this.m_TabWindow.Release();
+/* 00029b5c */	}
+/* 00029b62 */	else if (PartsNumber == this.m_ButtonNetwork)
+/* 00029b76 */	{
+/* 00029b76 */		this.m_TabNetwork.Release();
+/* 00029b82 */	}
+/* 00029b88 */	else if (PartsNumber == this.m_Button3D)
+/* 00029b9c */	{
+/* 00029b9c */		this.m_Tab3D.Release();
+/* 00029ba8 */	}
+/* 00029bae */	else if (PartsNumber == this.m_ButtonDebug)
+/* 00029bc2 */	{
+/* 00029bc2 */		this.m_TabDebug.Release();
+/* 00029bce */	}
+/* 00029bd4 */}
+

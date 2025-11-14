@@ -1,0 +1,283 @@
+SceneMusic::SceneMusic()
+/* 0008b252 */{
+/* 0008b25a */	this.currentIndex_ = 0;
+/* 0008b264 */	this.isAllPlay_ = false;
+/* 0008b26e */}
+
+int SceneMusic::update()
+/* 0008b276 */{
+/* 0008b276 */	switch (this.state_)
+/* 0008b288 */	{
+/* 0008b288 */	case 0:
+/* 0008b288 */		if (!this.parent_.isMotion())
+/* 0008b29c */		{
+/* 0008b29c */			this.state_ = 1;
+/* 0008b2a6 */		}
+/* 0008b2ac */		break;
+/* 0008b2b2 */	case 1:
+/* 0008b2b2 */		this.updatePlayTime();
+/* 0008b2ba */		this.checkMusicButtonClick();
+/* 0008b2c2 */		this.checkSysButtonClick();
+/* 0008b2ca */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 0008b30c */		{
+/* 0008b30c */			if (g_mouse.isClick(1))
+/* 0008b324 */			{
+/* 0008b324 */				g_sysSound.play(2003, false);
+/* 0008b33c */			}
+/* 0008b342 */			this.fadeIn(false);
+/* 0008b350 */		}
+/* 0008b356 */		break;
+/* 0008b35c */	case 2:
+/* 0008b35c */		if (!this.parent_.isMotion())
+/* 0008b370 */		{
+/* 0008b370 */			this.state_ = 3;
+/* 0008b37a */		}
+/* 0008b380 */		break;
+/* 0008b386 */	case 3:
+/* 0008b386 */		return 1;
+/* 0008b38e */	}
+/* 0008b38e */	return 0;
+/* 0008b396 */}
+
+void SceneMusic::run()
+/* 0008b3a4 */{
+/* 0008b3a4 */	this.init();
+/* 0008b3ac */	this.initMusicButton();
+/* 0008b3b4 */	this.fadeIn(true);
+/* 0008b3c2 */}
+
+void SceneMusic::init()
+/* 0008b3ca */{
+/* 0008b3ca */	this.parts_[0].init("システム／音楽／下地", 0);
+/* 0008b3ea */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 0008b402 */	this.ss_.init(510, 974, 100, 1);
+/* 0008b426 */	this.musicTime_[0].init();
+/* 0008b43a */	this.musicTime_[0].setPos(418, 130);
+/* 0008b45a */	this.musicTime_[1].init();
+/* 0008b46e */	this.musicTime_[1].setPos(525, 130);
+/* 0008b48e */	this.initButton();
+/* 0008b496 */	this.initSysButton();
+/* 0008b49e */	this.setPartsShow();
+/* 0008b4a6 */	this.setButtonPos();
+/* 0008b4ae */	this.currentIndex_ = -1;
+/* 0008b4c0 */	this.currentIndex_ = this.getNextIndex();
+/* 0008b4d4 */}
+
+void SceneMusic::fadeIn(bool val)
+/* 0008b4dc */{
+/* 0008b4dc */	MotionInfomation m;
+/* 0008b4ec */	if (val)
+/* 0008b4f8 */	{
+/* 0008b4f8 */		m.setTime(300, 0);
+/* 0008b510 */		m.setAlpha(0, 255, 0);
+/* 0008b52e */	}
+/* 0008b534 */	else
+/* 0008b534 */	{
+/* 0008b534 */		m.setTime(300, 0);
+/* 0008b54c */		m.setAlpha(255, 0, 0);
+/* 0008b56a */	}
+/* 0008b56a */	this.parent_.runMotion(m);
+/* 0008b584 */	this.ss_.fadeIn(val);
+/* 0008b596 */	this.fadeButton(val);
+/* 0008b5a4 */	int i;
+/* 0008b5ae */	for (i = 0; i < this.musicTime_.Numof(); ++i)
+/* 0008b5de */	{
+/* 0008b5de */		this.musicTime_[i].fadeIn(val);
+/* 0008b5f8 */	}
+/* 0008b5fe */	this.state_ = val ? 0 : 2;
+/* 0008b628 */}
+
+void SceneMusic::setPartsShow()
+/* 0008b630 */{
+/* 0008b630 */	int i;
+/* 0008b63a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008b66a */	{
+/* 0008b66a */		this.parts_[i].setShow(true);
+/* 0008b684 */	}
+/* 0008b68a */	this.parent_.setShow(true);
+/* 0008b69c */}
+
+void SceneMusic::initButton()
+/* 0008b6a4 */{
+/* 0008b6a4 */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 0008b6c2 */}
+
+void SceneMusic::setButtonPos()
+/* 0008b6ca */{
+/* 0008b6ca */	this.btnExit_.setPos(868, 688, -2147483648);
+/* 0008b6e8 */}
+
+void SceneMusic::fadeButton(bool val)
+/* 0008b6f0 */{
+/* 0008b6f0 */	this.btnExit_.fadeIn(val);
+/* 0008b702 */	int i;
+/* 0008b70c */	for (i = 0; i < this.btnMusic_.Numof(); ++i)
+/* 0008b73c */	{
+/* 0008b73c */		this.btnMusic_[i].fadeIn(val);
+/* 0008b756 */	}
+/* 0008b75c */	this.btnJump_.fadeIn(val);
+/* 0008b76e */}
+
+void SceneMusic::initMusicButton()
+/* 0008b776 */{
+/* 0008b776 */	int count = g_musicInfoManager.getCount();
+/* 0008b78e */	this.btnMusic_.Alloc(count);
+/* 0008b7a4 */	int i;
+/* 0008b7ae */	for (i = 0; i < count; ++i)
+/* 0008b7de */	{
+/* 0008b7de */		if (this.isMusicIndexEnable(i))
+/* 0008b7f2 */		{
+/* 0008b7f2 */			this.btnMusic_[i].init("システム／ボタン／幅２８０", g_musicInfoManager.getName(i), -1);
+/* 0008b824 */		}
+/* 0008b82a */		else
+/* 0008b82a */		{
+/* 0008b82a */			this.btnMusic_[i].init("システム／ボタン／幅２８０", "？？？", -1);
+/* 0008b850 */			this.btnMusic_[i].setEnable(false);
+/* 0008b86a */		}
+/* 0008b86a */		this.btnMusic_[i].setPos(62 + 310 * (i / 10), 174 + (i % 10) * 50, -2147483648);
+/* 0008b8c0 */	}
+/* 0008b8c6 */}
+
+void SceneMusic::checkMusicButtonClick()
+/* 0008b8ce */{
+/* 0008b8ce */	int n = -1;
+/* 0008b8e0 */	int i;
+/* 0008b8ea */	for (i = 0; i < this.btnMusic_.Numof(); ++i)
+/* 0008b91a */	{
+/* 0008b91a */		if (this.btnMusic_[i].isClick())
+/* 0008b934 */		{
+/* 0008b934 */			n = i;
+/* 0008b946 */			break;
+/* 0008b94c */		}
+/* 0008b952 */	}
+/* 0008b958 */	if (n != -1)
+/* 0008b96c */	{
+/* 0008b96c */		this.play(n, true);
+/* 0008b980 */	}
+/* 0008b986 */}
+
+void SceneMusic::initSysButton()
+/* 0008b98e */{
+/* 0008b98e */	array@string btnName;
+/* 0008b998 */	btnName.PushBack("システム／音楽／前へ");
+/* 0008b9a8 */	btnName.PushBack("システム／音楽／再生");
+/* 0008b9b8 */	btnName.PushBack("システム／音楽／停止");
+/* 0008b9c8 */	btnName.PushBack("システム／音楽／次へ");
+/* 0008b9d8 */	btnName.PushBack("システム／音楽／全曲再生");
+/* 0008b9e8 */	this.btnJump_.initFromList(btnName);
+/* 0008b9fc */}
+
+void SceneMusic::play(int index, bool immediately)
+/* 0008ba04 */{
+/* 0008ba04 */	this.currentIndex_ = index;
+/* 0008ba0e */	this.lastPlayTime_ = 0;
+/* 0008ba18 */	this.timer_.Reset();
+/* 0008ba24 */	if (immediately)
+/* 0008ba30 */	{
+/* 0008ba30 */		g_music.fadeOut(0);
+/* 0008ba42 */	}
+/* 0008ba48 */	g_music.play(g_musicInfoManager.getNumber(index), -2147483648);
+/* 0008ba6c */	this.musicTime_[1].setTime(g_music.getLength() / 1000);
+/* 0008ba94 */	this.setButtonSelected(index);
+/* 0008baa2 */	g_globalGameFlag.addValue("音楽モード[%s]再生" % g_musicInfoManager.getName(index), 1);
+/* 0008bad4 */}
+
+void SceneMusic::checkSysButtonClick()
+/* 0008badc */{
+/* 0008badc */	int n = this.btnJump_.getClickedButton();
+/* 0008baf4 */	switch (n)
+/* 0008bb06 */	{
+/* 0008bb06 */	case 0:
+/* 0008bb06 */		this.play(this.getPrevIndex(), true);
+/* 0008bb1c */		break;
+/* 0008bb22 */	case 1:
+/* 0008bb22 */		this.play(this.currentIndex_, true);
+/* 0008bb36 */		break;
+/* 0008bb3c */	case 2:
+/* 0008bb3c */		g_music.fadeOut(0);
+/* 0008bb4e */		this.setButtonSelected(-1);
+/* 0008bb5c */		break;
+/* 0008bb62 */	case 3:
+/* 0008bb62 */		this.play(this.getNextIndex(), true);
+/* 0008bb78 */		break;
+/* 0008bb7e */	case 4:
+/* 0008bb7e */		this.isAllPlay_ = !this.isAllPlay_;
+/* 0008bb94 */		this.btnJump_.setSelectedButton(this.isAllPlay_ ? 4 : -1);
+/* 0008bbbc */		if (this.isAllPlay_ && g_music.getPlayingMusicNumber() == 0)
+/* 0008bbf8 */		{
+/* 0008bbf8 */			this.play(this.currentIndex_, true);
+/* 0008bc0c */		}
+/* 0008bc12 */		break;
+/* 0008bc18 */	}
+/* 0008bc18 */}
+
+int SceneMusic::getPrevIndex()
+/* 0008bc20 */{
+/* 0008bc20 */	int c = g_musicInfoManager.getCount();
+/* 0008bc38 */	int i = ((this.currentIndex_ + c) - 1) % c;
+/* 0008bc62 */	while (true)
+/* 0008bc6e */	{
+/* 0008bc6e */		if (this.isMusicIndexEnable(i))
+/* 0008bc82 */		{
+/* 0008bc82 */			break;
+/* 0008bc88 */		}
+/* 0008bc8e */		i = ((i + c) - 1) % c;
+/* 0008bcb8 */	}
+/* 0008bcbe */	return i;
+/* 0008bcc6 */}
+
+int SceneMusic::getNextIndex()
+/* 0008bcd4 */{
+/* 0008bcd4 */	int c = g_musicInfoManager.getCount();
+/* 0008bcec */	int i = (this.currentIndex_ + 1) % c;
+/* 0008bd0e */	while (true)
+/* 0008bd1a */	{
+/* 0008bd1a */		if (this.isMusicIndexEnable(i))
+/* 0008bd2e */		{
+/* 0008bd2e */			break;
+/* 0008bd34 */		}
+/* 0008bd3a */		i = (i + 1) % c;
+/* 0008bd5c */	}
+/* 0008bd62 */	return i;
+/* 0008bd6a */}
+
+bool SceneMusic::isMusicIndexEnable(int index)
+/* 0008bd78 */{
+/* 0008bd78 */	return g_globalGameFlag.getInt("音楽再生[%s]" % g_musicInfoManager.getName(index)) > 0;
+/* 0008bdb0 */}
+
+void SceneMusic::setButtonSelected(int index)
+/* 0008bdbe */{
+/* 0008bdbe */	int i;
+/* 0008bdc8 */	for (i = 0; i < this.btnMusic_.Numof(); ++i)
+/* 0008bdf8 */	{
+/* 0008bdf8 */		this.btnMusic_[i].setSelected(index == i);
+/* 0008be1c */	}
+/* 0008be22 */}
+
+void SceneMusic::updatePlayTime()
+/* 0008be2a */{
+/* 0008be2a */	if (g_music.getPlayingMusicNumber() != 0 && this.timer_.Get() > 1000)
+/* 0008be76 */	{
+/* 0008be76 */		int l = this.lastPlayTime_;
+/* 0008be80 */		this.lastPlayTime_ = g_music.getPlayingPosition();
+/* 0008be98 */		if (l > this.lastPlayTime_)
+/* 0008beac */		{
+/* 0008beac */			this.onLoopMusic();
+/* 0008beb4 */		}
+/* 0008beba */	}
+/* 0008bec0 */	else
+/* 0008bec0 */	{
+/* 0008bec0 */		this.lastPlayTime_ = 0;
+/* 0008beca */	}
+/* 0008beca */	this.musicTime_[0].setTime(this.lastPlayTime_ / 1000);
+/* 0008beec */}
+
+void SceneMusic::onLoopMusic()
+/* 0008bef4 */{
+/* 0008bef4 */	if (this.isAllPlay_)
+/* 0008befe */	{
+/* 0008befe */		this.play(this.getNextIndex(), false);
+/* 0008bf14 */	}
+/* 0008bf1a */}
+

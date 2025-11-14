@@ -1,0 +1,25 @@
+PartsInitializeOption::PartsInitializeOption()
+/* 000605c8 */{
+/* 000605d2 */}
+
+void PartsInitializeOption::setSleepLevel(int val)
+/* 000605d8 */{
+/* 000605d8 */	if (val < 0)
+/* 000605e6 */	{
+/* 000605e6 */		this.sleepLevel_.Erase(this.sleepLevel_.Numof() - 1);
+/* 00060600 */	}
+/* 00060606 */	else
+/* 00060606 */	{
+/* 00060606 */		this.sleepLevel_.PushBack(val);
+/* 00060616 */	}
+/* 00060616 */}
+
+int PartsInitializeOption::getSleepLevel()
+/* 0006061e */{
+/* 0006061e */	if (this.sleepLevel_.Empty())
+/* 00060628 */	{
+/* 00060628 */		return 0;
+/* 00060630 */	}
+/* 00060636 */	return this.sleepLevel_[this.sleepLevel_.Numof() - 1];
+/* 0006064e */}
+

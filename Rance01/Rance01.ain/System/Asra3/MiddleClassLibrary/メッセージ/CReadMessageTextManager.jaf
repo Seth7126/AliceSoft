@@ -1,0 +1,40 @@
+CReadMessageTextManager::CReadMessageTextManager()
+/* 0001bbf2 */{
+/* 0001bbfc */}
+
+void CReadMessageTextManager::SetReadMessage(int MessageNumber)
+/* 0001bc02 */{
+/* 0001bc02 */	SReadMessageTextInfo Info;
+/* 0001bc12 */	Info.m_MessageNumber = MessageNumber;
+/* 0001bc28 */	Info.m_ReserveErase = false;
+/* 0001bc3e */	this.m_ReadMessageTextQueue.Insert(0, Info);
+/* 0001bc5c */}
+
+void CReadMessageTextManager::EraseMessageNumber(int MessageNumber)
+/* 0001bc64 */{
+/* 0001bc64 */	int QueueCount = this.m_ReadMessageTextQueue.Numof();
+/* 0001bc76 */	if (QueueCount == 0)
+/* 0001bc84 */	{
+/* 0001bc84 */		return;
+/* 0001bc86 */	}
+/* 0001bc8c */	int Index;
+/* 0001bc96 */	for (Index = QueueCount - 1; Index >= 0; --Index)
+/* 0001bcd0 */	{
+/* 0001bcd0 */		ref SReadMessageTextInfo Info = this.m_ReadMessageTextQueue[Index];
+/* 0001bcfa */		if (Info.m_MessageNumber == MessageNumber)
+/* 0001bd16 */		{
+/* 0001bd16 */			Info.m_ReserveErase = true;
+/* 0001bd2c */		}
+/* 0001bd32 */	}
+/* 0001bd3e */	for (; this.m_ReadMessageTextQueue.Numof() != 0; )
+/* 0001bd5e */	{
+/* 0001bd5e */		ref SReadMessageTextInfo Info = this.m_ReadMessageTextQueue[this.m_ReadMessageTextQueue.Numof() - 1];
+/* 0001bd90 */		if (!Info.m_ReserveErase)
+/* 0001bda6 */		{
+/* 0001bda6 */			break;
+/* 0001bdb2 */		}
+/* 0001bdb8 */		MsgSkip.SetFlag(Info.m_MessageNumber);
+/* 0001bdd0 */		this.m_ReadMessageTextQueue.PopBack();
+/* 0001bdda */	}
+/* 0001bde6 */}
+

@@ -1,0 +1,46 @@
+Skill::Skill()
+/* 00091c8e */{
+/* 00091c98 */}
+
+void Skill::reload()
+/* 00091c9e */{
+/* 00091c9e */	this.loadValue();
+/* 00091ca6 */}
+
+void Skill::loadValue()
+/* 00091cae */{
+/* 00091cae */	this.setName(EX_SA2String("スキルデータ", this.id_, "name", ""));
+/* 00091cd4 */	this.setDesc(EX_SA2String("スキルデータ", this.id_, "desc", ""));
+/* 00091cfa */}
+
+void Skill::setId(string val)
+/* 00091d02 */{
+/* 00091d02 */	this.id_ = val;
+/* 00091d0c */	this.loadValue();
+/* 00091d14 */}
+
+void Skill::setName(string val)
+/* 00091d1c */{
+/* 00091d1c */	this.name_ = val;
+/* 00091d26 */}
+
+void Skill::setDesc(string val)
+/* 00091d2e */{
+/* 00091d2e */	this.desc_ = val;
+/* 00091d38 */}
+
+string Skill::getId()
+/* 00091d40 */{
+/* 00091d40 */	return this.id_;
+/* 00091d48 */}
+
+string Skill::getName()
+/* 00091d56 */{
+/* 00091d56 */	return this.name_;
+/* 00091d5e */}
+
+string Skill::getDesc()
+/* 00091d6c */{
+/* 00091d6c */	return this.desc_;
+/* 00091d74 */}
+

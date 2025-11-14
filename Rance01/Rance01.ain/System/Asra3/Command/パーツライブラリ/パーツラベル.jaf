@@ -1,0 +1,103 @@
+void Ｐ＿ラベル＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 00052cf6 */{
+/* 00052cf6 */	GUIEngine.SetLabelPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 00052d12 */}
+
+void Ｐ＿ラベル＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 00052d20 */{
+/* 00052d20 */	GUIEngine.SetLabelZ(パーツ番号, _Ｚ座標);
+/* 00052d36 */}
+
+int Ｐ＿ラベル＿Ｘ座標取得(int パーツ番号)
+/* 00052d44 */{
+/* 00052d44 */	return GUIEngine.GetLabelX(パーツ番号);
+/* 00052d56 */}
+
+int Ｐ＿ラベル＿Ｙ座標取得(int パーツ番号)
+/* 00052d6a */{
+/* 00052d6a */	return GUIEngine.GetLabelY(パーツ番号);
+/* 00052d7c */}
+
+int Ｐ＿ラベル＿Ｚ座標取得(int パーツ番号)
+/* 00052d90 */{
+/* 00052d90 */	return GUIEngine.GetLabelZ(パーツ番号);
+/* 00052da2 */}
+
+void Ｐ＿ラベル＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00052db6 */{
+/* 00052db6 */	GUIEngine.SetLabelWidth(パーツ番号, 幅);
+/* 00052dcc */	GUIEngine.SetLabelHeight(パーツ番号, 高さ);
+/* 00052de2 */}
+
+int Ｐ＿ラベル＿幅取得(int パーツ番号)
+/* 00052df0 */{
+/* 00052df0 */	return GUIEngine.GetLabelWidth(パーツ番号);
+/* 00052e02 */}
+
+int Ｐ＿ラベル＿高さ取得(int パーツ番号)
+/* 00052e16 */{
+/* 00052e16 */	return GUIEngine.GetLabelHeight(パーツ番号);
+/* 00052e28 */}
+
+void Ｐ＿ラベル＿アルファ値設定(int パーツ番号, int アルファ)
+/* 00052e3c */{
+/* 00052e3c */	GUIEngine.SetLabelAlpha(パーツ番号, アルファ);
+/* 00052e52 */}
+
+int Ｐ＿ラベル＿アルファ値取得(int パーツ番号)
+/* 00052e60 */{
+/* 00052e60 */	return GUIEngine.GetLabelAlpha(パーツ番号);
+/* 00052e72 */}
+
+void Ｐ＿ラベル＿表示設定(int パーツ番号, bool 表示)
+/* 00052e86 */{
+/* 00052e86 */	GUIEngine.SetLabelShow(パーツ番号, 表示);
+/* 00052e9c */}
+
+bool Ｐ＿ラベル＿表示設定取得(int パーツ番号)
+/* 00052eaa */{
+/* 00052eaa */	return GUIEngine.IsLabelShow(パーツ番号);
+/* 00052ebc */}
+
+void Ｐ＿ラベル＿ドラッグ設定(int パーツ番号, bool ドラッグ)
+/* 00052ed0 */{
+/* 00052ed0 */	GUIEngine.SetLabelDrag(パーツ番号, ドラッグ);
+/* 00052ee6 */}
+
+bool Ｐ＿ラベル＿ドラッグ設定取得(int パーツ番号)
+/* 00052ef4 */{
+/* 00052ef4 */	return GUIEngine.IsLabelDrag(パーツ番号);
+/* 00052f06 */}
+
+void Ｐ＿ラベル＿クリップ設定(int パーツ番号, bool 有効)
+/* 00052f1a */{
+/* 00052f1a */	GUIEngine.SetLabelClip(パーツ番号, 有効);
+/* 00052f30 */}
+
+bool Ｐ＿ラベル＿クリップ設定取得(int パーツ番号)
+/* 00052f3e */{
+/* 00052f3e */	return GUIEngine.IsLabelClip(パーツ番号);
+/* 00052f50 */}
+
+void Ｐ＿ラベル＿テキスト設定(int パーツ番号, string テキスト)
+/* 00052f64 */{
+/* 00052f64 */	GUIEngine.SetLabelText(パーツ番号, テキスト);
+/* 00052f7a */}
+
+string Ｐ＿ラベル＿テキスト取得(int パーツ番号)
+/* 00052f88 */{
+/* 00052f88 */	string Text;
+/* 00052f94 */	GUIEngine.GetLabelText(パーツ番号, Text);
+/* 00052faa */	return Text;
+/* 00052fb2 */}
+
+void Ｐ＿ラベル＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 00052fc6 */{
+/* 00052fc6 */	GUIEngine.SetLabelFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00053012 */}
+
+void Ｐ＿ラベル＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 00053020 */{
+/* 00053020 */	GUIEngine.GetLabelFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 0005306c */}
+

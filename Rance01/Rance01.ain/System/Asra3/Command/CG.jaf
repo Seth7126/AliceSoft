@@ -1,0 +1,25 @@
+bool Ａ＿ＣＧ存在確認(string CGName)
+/* 0004e442 */{
+/* 0004e442 */	return ChipmunkSpriteEngine.CG_IsExist(CGName);
+/* 0004e456 */}
+
+int Ａ＿ＣＧ幅取得(string CGName)
+/* 0004e46a */{
+/* 0004e46a */	cg_metrics_t CGMetrics;
+/* 0004e47a */	if (!ChipmunkSpriteEngine.CG_GetMetrics(CGName, CGMetrics))
+/* 0004e498 */	{
+/* 0004e498 */		return 0;
+/* 0004e4a0 */	}
+/* 0004e4a6 */	return CGMetrics.nWidth;
+/* 0004e4b6 */}
+
+int Ａ＿ＣＧ高さ取得(string CGName)
+/* 0004e4ca */{
+/* 0004e4ca */	cg_metrics_t CGMetrics;
+/* 0004e4da */	if (!ChipmunkSpriteEngine.CG_GetMetrics(CGName, CGMetrics))
+/* 0004e4f8 */	{
+/* 0004e4f8 */		return 0;
+/* 0004e500 */	}
+/* 0004e506 */	return CGMetrics.nHeight;
+/* 0004e516 */}
+

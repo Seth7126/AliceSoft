@@ -1,0 +1,240 @@
+SwipeScroller::SwipeScroller()
+/* 000679a0 */{
+/* 000679a8 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000679ca */	this.scrollParent_.initAsDummy();
+/* 000679d6 */	this.scrollParent_.setShow(true);
+/* 000679e8 */	this.state_ = 6;
+/* 000679f2 */	this.isLockScroll_ = false;
+/* 000679fc */}
+
+bool SwipeScroller::isHover()
+/* 00067a04 */{
+/* 00067a04 */	return this.isHover_;
+/* 00067a0c */}
+
+void SwipeScroller::init(int height, int snapSpan, int yPos, int pageCount)
+/* 00067a1a */{
+/* 00067a1a */	this.height_ = height;
+/* 00067a24 */	this.snapSpan_ = snapSpan;
+/* 00067a2e */	this.yPos_ = yPos;
+/* 00067a38 */	this.pageCount_ = pageCount;
+/* 00067a42 */	this.page_ = 0;
+/* 00067a4c */	this.scrollParent_.setPos(0, this.yPos_, 4200);
+/* 00067a6a */	this.scrollParent_.setShow(false);
+/* 00067a7c */}
+
+void SwipeScroller::update()
+/* 00067a84 */{
+/* 00067a84 */	switch (this.state_)
+/* 00067a96 */	{
+/* 00067a96 */	case 0:
+/* 00067a96 */		if (!this.scrollParent_.isMotion())
+/* 00067aaa */		{
+/* 00067aaa */			this.state_ = 1;
+/* 00067ab4 */		}
+/* 00067aba */		this.isHover_ = false;
+/* 00067ac4 */		break;
+/* 00067aca */	case 1:
+/* 00067aca */		this.isHover_ = isCollideWithMouseWH(0, this.yPos_, 1024, this.height_);
+/* 00067af4 */		if (this.isHover_)
+/* 00067afe */		{
+/* 00067afe */			if (g_mouse.onDown(0))
+/* 00067b16 */			{
+/* 00067b16 */				this.state_ = 2;
+/* 00067b20 */				this.mouseDownPos_ = g_mouse.getX();
+/* 00067b38 */			}
+/* 00067b3e */			else
+/* 00067b3e */			{
+/* 00067b3e */				this.checkMouseWheel();
+/* 00067b46 */			}
+/* 00067b46 */		}
+/* 00067b4c */		break;
+/* 00067b52 */	case 2:
+/* 00067b52 */		if (g_mouse.isDown(0))
+/* 00067b6a */		{
+/* 00067b6a */			if (!this.isLockScroll_ && Math.Abs(g_mouse.getX() - this.mouseDownPos_) > 20)
+/* 00067bbc */			{
+/* 00067bbc */				this.dragStartPos_ = this.scrollParent_.getX();
+/* 00067bd4 */				g_mouse.setNextMouseUpIgnore();
+/* 00067be0 */				this.state_ = 3;
+/* 00067bea */			}
+/* 00067bf0 */		}
+/* 00067bf6 */		else
+/* 00067bf6 */		{
+/* 00067bf6 */			this.state_ = 1;
+/* 00067c00 */		}
+/* 00067c00 */		break;
+/* 00067c06 */	case 3:
+/* 00067c06 */		if (g_mouse.isDown(0))
+/* 00067c1e */		{
+/* 00067c1e */			int r = g_mouse.getX() - this.mouseDownPos_;
+/* 00067c3e */			this.scrollParent_.setPos(this.dragStartPos_ + r, -2147483648, -2147483648);
+/* 00067c64 */		}
+/* 00067c6a */		else
+/* 00067c6a */		{
+/* 00067c6a */			this.snapPage();
+/* 00067c72 */		}
+/* 00067c72 */		break;
+/* 00067c78 */	case 4:
+/* 00067c78 */		if (this.timer_.getTime() < 300)
+/* 00067c92 */		{
+/* 00067c92 */			int n = motion(1, this.snapStartPos_, this.snapEndPos_, this.timer_.getTime() / 300.0);
+/* 00067cd2 */			this.scrollParent_.setPos(n, -2147483648, -2147483648);
+/* 00067cf0 */		}
+/* 00067cf6 */		else
+/* 00067cf6 */		{
+/* 00067cf6 */			this.scrollParent_.setPos(this.snapEndPos_, -2147483648, -2147483648);
+/* 00067d14 */			this.state_ = 1;
+/* 00067d1e */		}
+/* 00067d1e */		this.checkMouseWheel();
+/* 00067d26 */		break;
+/* 00067d2c */	case 5:
+/* 00067d2c */		if (!this.scrollParent_.isMotion())
+/* 00067d40 */		{
+/* 00067d40 */			this.state_ = 6;
+/* 00067d4a */		}
+/* 00067d50 */		this.isHover_ = false;
+/* 00067d5a */		break;
+/* 00067d60 */	case 6:
+/* 00067d60 */		this.isHover_ = false;
+/* 00067d6a */		break;
+/* 00067d70 */	}
+/* 00067d70 */	this.scrollParent_.setShow(this.state_ != 6);
+/* 00067d8c */}
+
+void SwipeScroller::fadeIn(bool val)
+/* 00067d94 */{
+/* 00067d94 */	this.fadeWithMotion(val, getStandardMotion(val ? 0 : 1));
+/* 00067dc6 */}
+
+void SwipeScroller::fadeWithMotion(bool val, MotionInfomation m)
+/* 00067dce */{
+/* 00067dce */	if (this.state_ == 4)
+/* 00067ddc */	{
+/* 00067ddc */		this.scrollParent_.setPos(this.snapEndPos_, -2147483648, -2147483648);
+/* 00067dfa */	}
+/* 00067e00 */	this.scrollParent_.runMotion(m);
+/* 00067e1a */	this.state_ = val ? 0 : 5;
+/* 00067e44 */}
+
+int SwipeScroller::getPage()
+/* 00067e4c */{
+/* 00067e4c */	return this.page_;
+/* 00067e54 */}
+
+void SwipeScroller::scrollPage(bool isNextPage)
+/* 00067e62 */{
+/* 00067e62 */	this.jumpPage(isNextPage ? this.page_ + 1 : this.page_ - 1);
+/* 00067e98 */}
+
+void SwipeScroller::jumpPage(int pg)
+/* 00067ea0 */{
+/* 00067ea0 */	int last = this.page_;
+/* 00067eaa */	this.page_ = Math.Max(0, Math.Min(pg, this.pageCount_ - 1));
+/* 00067ee4 */	if (last != this.page_)
+/* 00067ef8 */	{
+/* 00067ef8 */		this.changePageHandler_(last, this.page_);
+/* 00067f20 */	}
+/* 00067f26 */	this.timer_.reset();
+/* 00067f32 */	this.state_ = 4;
+/* 00067f3c */	this.snapStartPos_ = this.scrollParent_.getX();
+/* 00067f54 */	this.snapEndPos_ = -this.snapSpan_ * this.page_;
+/* 00067f70 */}
+
+void SwipeScroller::snapPage()
+/* 00067f78 */{
+/* 00067f78 */	int r = g_mouse.getX() - this.mouseDownPos_;
+/* 00067f98 */	if (r > 200 && this.page_ > 0)
+/* 00067fd8 */	{
+/* 00067fd8 */		this.jumpPage(this.page_ - 1);
+/* 00067fee */	}
+/* 00067ff4 */	else if (r < -200 && this.page_ + 1 < this.pageCount_)
+/* 0006803c */	{
+/* 0006803c */		this.jumpPage(this.page_ + 1);
+/* 00068052 */	}
+/* 00068058 */	else
+/* 00068058 */	{
+/* 00068058 */		this.jumpPage(this.page_);
+/* 00068066 */	}
+/* 00068066 */}
+
+int SwipeScroller::getParentPartsNumber()
+/* 0006806e */{
+/* 0006806e */	return this.scrollParent_.getPartsNumber();
+/* 0006807c */}
+
+float SwipeScroller::getFloatingPage()
+/* 0006808a */{
+/* 0006808a */	return -float(this.scrollParent_.getX()) / this.snapSpan_;
+/* 000680a6 */}
+
+int SwipeScroller::getYPos()
+/* 000680b4 */{
+/* 000680b4 */	return this.yPos_;
+/* 000680bc */}
+
+int SwipeScroller::getXPos()
+/* 000680ca */{
+/* 000680ca */	return this.scrollParent_.getX();
+/* 000680d8 */}
+
+bool SwipeScroller::isAvairableNextPage()
+/* 000680e6 */{
+/* 000680e6 */	return this.page_ + 1 < this.pageCount_;
+/* 00068100 */}
+
+bool SwipeScroller::isAvairablePrevPage()
+/* 0006810e */{
+/* 0006810e */	return 0 < this.page_;
+/* 00068120 */}
+
+void SwipeScroller::checkMouseWheel()
+/* 0006812e */{
+/* 0006812e */	if (this.isLockScroll_)
+/* 00068138 */	{
+/* 00068138 */		return;
+/* 0006813a */	}
+/* 00068140 */	if (g_mouse.getWheel() < 0)
+/* 0006815a */	{
+/* 0006815a */		this.jumpPage(this.page_ + 1);
+/* 00068170 */	}
+/* 00068176 */	else if (g_mouse.getWheel() > 0)
+/* 00068190 */	{
+/* 00068190 */		this.jumpPage(this.page_ - 1);
+/* 000681a6 */	}
+/* 000681ac */}
+
+void SwipeScroller::lockScroll(bool val)
+/* 000681b4 */{
+/* 000681b4 */	this.isLockScroll_ = val;
+/* 000681be */}
+
+void SwipeScroller::setBaseZ(int baseZ)
+/* 000681c6 */{
+/* 000681c6 */	this.scrollParent_.setZBasePos(baseZ);
+/* 000681d8 */}
+
+void SwipeScroller::setPageCount(int pageCount)
+/* 000681e0 */{
+/* 000681e0 */	if (this.pageCount_ > pageCount)
+/* 000681f4 */	{
+/* 000681f4 */		this.jumpPage(pageCount);
+/* 00068202 */	}
+/* 00068208 */	this.pageCount_ = pageCount;
+/* 00068212 */}
+
+void SwipeScroller::addChangePageHandler(DG_OnChangePage changePageHandler)
+/* 0006821a */{
+/* 0006821a */	this.changePageHandler_ += changePageHandler;
+/* 0006822c */}
+
+bool SwipeScroller::isMotion()
+/* 00068234 */{
+/* 00068234 */	return this.scrollParent_.isMotion();
+/* 00068242 */}
+
+int SwipeScroller::getPageCount()
+/* 00068250 */{
+/* 00068250 */	return this.pageCount_;
+/* 00068258 */}
+

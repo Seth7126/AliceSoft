@@ -1,0 +1,48 @@
+void Attribute::reload()
+/* 000905f8 */{
+/* 000905f8 */	this.loadValue();
+/* 00090600 */}
+
+void Attribute::loadValue()
+/* 00090608 */{
+/* 00090608 */	this.setName(EX_SA2String("属性データ", this.id_, "name", ""));
+/* 0009062e */	this.setImageName(EX_SA2String("属性データ", this.id_, "imageName", ""));
+/* 00090654 */}
+
+Attribute::Attribute()
+/* 0009065c */{
+/* 00090664 */	this.id_ = "";
+/* 00090670 */	this.name_ = "";
+/* 0009067c */}
+
+string Attribute::getId()
+/* 00090684 */{
+/* 00090684 */	return this.id_;
+/* 0009068c */}
+
+string Attribute::getName()
+/* 0009069a */{
+/* 0009069a */	return this.name_;
+/* 000906a2 */}
+
+string Attribute::getImageName()
+/* 000906b0 */{
+/* 000906b0 */	return this.imageName_;
+/* 000906b8 */}
+
+void Attribute::setImageName(string val)
+/* 000906c6 */{
+/* 000906c6 */	this.imageName_ = val;
+/* 000906d0 */}
+
+void Attribute::setId(string val)
+/* 000906d8 */{
+/* 000906d8 */	this.id_ = val;
+/* 000906e2 */	this.loadValue();
+/* 000906ea */}
+
+void Attribute::setName(string val)
+/* 000906f2 */{
+/* 000906f2 */	this.name_ = val;
+/* 000906fc */}
+

@@ -1,0 +1,43 @@
+void SceneChipInfomation::run(string chipId)
+/* 0007d3f0 */{
+/* 0007d3f0 */	this.chipInfo_.init(chipId, false);
+/* 0007d408 */	this.chipInfo_.fadeIn(true);
+/* 0007d41a */}
+
+int SceneChipInfomation::update()
+/* 0007d422 */{
+/* 0007d422 */	switch (this.state_)
+/* 0007d434 */	{
+/* 0007d434 */	case 0:
+/* 0007d434 */		if (!this.chipInfo_.isMotion())
+/* 0007d448 */		{
+/* 0007d448 */			this.state_ = 1;
+/* 0007d452 */		}
+/* 0007d458 */		break;
+/* 0007d45e */	case 1:
+/* 0007d45e */		if (g_mouse.isClick(1) || g_mouse.isClick(0))
+/* 0007d4a6 */		{
+/* 0007d4a6 */			if (g_mouse.isClick(1))
+/* 0007d4be */			{
+/* 0007d4be */				g_sysSound.play(2003, false);
+/* 0007d4d6 */			}
+/* 0007d4dc */			else
+/* 0007d4dc */			{
+/* 0007d4dc */				g_sysSound.play(2002, false);
+/* 0007d4f4 */			}
+/* 0007d4f4 */			this.state_ = 2;
+/* 0007d4fe */			this.chipInfo_.fadeIn(false);
+/* 0007d510 */		}
+/* 0007d516 */		break;
+/* 0007d51c */	case 2:
+/* 0007d51c */		if (!this.chipInfo_.isMotion())
+/* 0007d530 */		{
+/* 0007d530 */			this.state_ = 3;
+/* 0007d53a */		}
+/* 0007d540 */		break;
+/* 0007d546 */	case 3:
+/* 0007d546 */		return 1;
+/* 0007d54e */	}
+/* 0007d54e */	return 0;
+/* 0007d556 */}
+

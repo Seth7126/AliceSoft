@@ -1,0 +1,52 @@
+KeyInput::KeyInput()
+/* 0005bbe8 */{
+/* 0005bbf0 */	array@int key;
+/* 0005bbfa */	key.PushBack(13);
+/* 0005bc0a */	key.PushBack(16);
+/* 0005bc1a */	key.PushBack(17);
+/* 0005bc2a */	key.PushBack(27);
+/* 0005bc3a */	key.PushBack(32);
+/* 0005bc4a */	key.PushBack(33);
+/* 0005bc5a */	key.PushBack(36);
+/* 0005bc6a */	key.PushBack(65);
+/* 0005bc7a */	key.PushBack(83);
+/* 0005bc8a */	key.PushBack(119);
+/* 0005bc9a */	key.PushBack(123);
+/* 0005bcaa */	this.monitoringKey_.Free();
+/* 0005bcb4 */	this.monitoringKey_.Alloc(key.Numof());
+/* 0005bcd4 */	this.monitoringKey_.Copy(0, key, 0, key.Numof());
+/* 0005bd02 */	int num = this.monitoringKey_.Numof();
+/* 0005bd14 */	this.bs_.Alloc(num);
+/* 0005bd2a */	this.rep_.Alloc(num);
+/* 0005bd40 */}
+
+void KeyInput::update()
+/* 0005bd48 */{
+/* 0005bd48 */	int i;
+/* 0005bd52 */	for (i = 0; i < this.monitoringKey_.Numof(); ++i)
+/* 0005bd82 */	{
+/* 0005bd82 */		this.bs_[i].update(AFL_IsKeyDown(this.monitoringKey_[i]));
+/* 0005bdaa */		this.rep_[i].update(AFL_IsKeyDown(this.monitoringKey_[i]));
+/* 0005bdd2 */	}
+/* 0005bdd8 */}
+
+bool KeyInput::isDown(int vKey)
+/* 0005bde0 */{
+/* 0005bde0 */	return this.bs_[this.indexFromVirtualKey(vKey)].isDown();
+/* 0005bdfe */}
+
+bool KeyInput::isPress(int vKey)
+/* 0005be0c */{
+/* 0005be0c */	return this.bs_[this.indexFromVirtualKey(vKey)].isPress();
+/* 0005be2a */}
+
+bool KeyInput::isPressWithRepeat(int vKey)
+/* 0005be38 */{
+/* 0005be38 */	return this.rep_[this.indexFromVirtualKey(vKey)].isPress();
+/* 0005be56 */}
+
+int KeyInput::indexFromVirtualKey(int vKey)
+/* 0005be64 */{
+/* 0005be64 */	return this.monitoringKey_.Find(0, this.monitoringKey_.Numof(), vKey);
+/* 0005be88 */}
+

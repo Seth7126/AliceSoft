@@ -1,0 +1,125 @@
+SceneShop::SceneShop()
+/* 0007923e */{
+/* 00079248 */}
+
+void SceneShop::init(int stockIndex)
+/* 0007924e */{
+/* 0007924e */	if (stockIndex >= 0 && stockIndex < g_shopStock.Numof())
+/* 00079288 */	{
+/* 00079288 */		this.stock_ <- g_shopStock[stockIndex];
+/* 000792ac */	}
+/* 000792b2 */	this.shopStockView_.init(this.stock_, 100);
+/* 000792ca */	this.statusView_.init(200);
+/* 000792dc */	this.arranger_[0].init(0, true, true, true);
+/* 00079308 */	this.arranger_[1].init(1, true, true, true);
+/* 00079334 */	this.btnExit_.init("システム／ボタン／幅４０", "×", -1);
+/* 00079352 */	this.btnExit_.setPos(968, 716, -2147483648);
+/* 00079370 */}
+
+void SceneShop::run()
+/* 00079378 */{
+/* 00079378 */	this.fadeIn(true);
+/* 00079386 */	this.setActiveArranger(0);
+/* 00079394 */}
+
+int SceneShop::update()
+/* 0007939c */{
+/* 0007939c */	switch (this.state_)
+/* 000793ae */	{
+/* 000793ae */	case 0:
+/* 000793ae */		if (!this.arranger_[0].isMotion())
+/* 000793ca */		{
+/* 000793ca */			this.state_ = 1;
+/* 000793d4 */		}
+/* 000793da */		break;
+/* 000793e0 */	case 1:
+/* 000793e0 */		this.selectedStockIndex_ = this.shopStockView_.getClickedIndex();
+/* 000793f8 */		if (this.selectedStockIndex_ != -1)
+/* 0007940c */		{
+/* 0007940c */			this.confirmation_.init(this.stock_.getInstance(this.selectedStockIndex_));
+/* 00079438 */			this.confirmation_.run();
+/* 00079444 */			this.setEnableOperatableObject(false);
+/* 00079452 */			this.state_ = 2;
+/* 0007945c */		}
+/* 00079468 */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 000794aa */		{
+/* 000794aa */			if (g_mouse.isClick(1))
+/* 000794c2 */			{
+/* 000794c2 */				g_sysSound.play(2003, false);
+/* 000794da */			}
+/* 000794e0 */			this.fadeIn(false);
+/* 000794ee */		}
+/* 000794f4 */		this.checkActiveButtonClick();
+/* 000794fc */		break;
+/* 00079502 */	case 2:
+/* 00079502 */		if (this.confirmation_.isConfirmed())
+/* 00079514 */		{
+/* 00079514 */			int depIndex = this.confirmation_.getSelection();
+/* 0007952c */			if (depIndex != 2)
+/* 00079540 */			{
+/* 00079540 */				this.buyItem(this.stock_.getInstance(this.selectedStockIndex_), depIndex);
+/* 0007956e */			}
+/* 0007957a */			this.state_ = 1;
+/* 00079584 */			this.setEnableOperatableObject(true);
+/* 00079592 */		}
+/* 00079598 */		this.checkActiveButtonClick();
+/* 000795a0 */		break;
+/* 000795a6 */	case 3:
+/* 000795a6 */		if (!this.arranger_[0].isMotion())
+/* 000795c2 */		{
+/* 000795c2 */			this.state_ = 4;
+/* 000795cc */		}
+/* 000795d2 */		break;
+/* 000795d8 */	case 4:
+/* 000795d8 */		ResetBet(0);
+/* 000795e4 */		ResetBet(1);
+/* 000795f0 */		return 1;
+/* 000795f8 */	}
+/* 000795f8 */	return 0;
+/* 00079600 */}
+
+void SceneShop::checkActiveButtonClick()
+/* 0007960e */{
+/* 0007960e */	if (this.arranger_[0].isClickChangeDepositoryButton())
+/* 00079628 */	{
+/* 00079628 */		this.setActiveArranger(1);
+/* 00079636 */	}
+/* 0007963c */	else if (this.arranger_[1].isClickChangeDepositoryButton())
+/* 00079656 */	{
+/* 00079656 */		this.setActiveArranger(0);
+/* 00079664 */	}
+/* 0007966a */}
+
+void SceneShop::setActiveArranger(int val)
+/* 00079672 */{
+/* 00079672 */	this.arranger_[0].setActive(val == 0);
+/* 00079696 */	this.arranger_[1].setActive(val == 1);
+/* 000796ba */}
+
+void SceneShop::fadeIn(bool val)
+/* 000796c2 */{
+/* 000796c2 */	this.shopStockView_.fadeIn(val, 300);
+/* 000796da */	this.statusView_.fadeIn(val);
+/* 000796ec */	this.btnExit_.fadeIn(val);
+/* 000796fe */	int i;
+/* 00079708 */	for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 00079738 */	{
+/* 00079738 */		this.arranger_[i].fadeIn(val);
+/* 00079752 */	}
+/* 00079758 */	this.state_ = val ? 0 : 3;
+/* 00079782 */}
+
+void SceneShop::buyItem(ref ShopChipInstance inst, int depositoryIndex)
+/* 0007978a */{
+/* 0007978a */	g_chipDepository[depositoryIndex].add(inst.getId(), true);
+/* 000797b0 */	g_player.addGold(-inst.getDiscountedPrice());
+/* 000797ca */}
+
+void SceneShop::setEnableOperatableObject(bool val)
+/* 000797d2 */{
+/* 000797d2 */	this.btnExit_.setEnable(val);
+/* 000797e4 */	this.arranger_[0].setEnableShowInfomation(val);
+/* 000797fe */	this.arranger_[1].setEnableShowInfomation(val);
+/* 00079818 */	this.shopStockView_.setOperatable(val);
+/* 0007982a */}
+

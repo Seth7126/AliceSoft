@@ -1,0 +1,156 @@
+CDrawMovie::CDrawMovie()
+/* 00014820 */{
+/* 00014828 */	this.m_nSprite = -1;
+/* 0001483a */	this.m_anKeyCode.PushBack(1);
+/* 0001484a */	this.m_anKeyCode.PushBack(2);
+/* 0001485a */	this.m_anKeyCode.PushBack(13);
+/* 0001486a */	this.m_anKeyCode.PushBack(32);
+/* 0001487a */	this.m_abKeyDown.Alloc(this.m_anKeyCode.Numof());
+/* 00014890 */	this.m_abKeyDown.Fill(0, this.m_abKeyDown.Numof(), false);
+/* 000148ae */	this.m_nBackColorR = 0;
+/* 000148b8 */	this.m_nBackColorG = 0;
+/* 000148c2 */	this.m_nBackColorB = 0;
+/* 000148cc */	this.m_nInnerVolumeRate = 100;
+/* 000148d6 */}
+
+CDrawMovie::~CDrawMovie()
+/* 000148de */{
+/* 000148de */	this.Release();
+/* 000148e6 */}
+
+void CDrawMovie::Release()
+/* 000148ee */{
+/* 000148ee */	DrawMovie3.Release();
+/* 000148f8 */	if (this.m_nSprite != -1)
+/* 0001490c */	{
+/* 0001490c */		ChipmunkSpriteEngine.SP_Delete(this.m_nSprite);
+/* 0001491e */		this.m_nSprite = -1;
+/* 00014930 */	}
+/* 00014936 */	this.m_abKeyDown.Fill(0, this.m_abKeyDown.Numof(), false);
+/* 00014954 */}
+
+bool CDrawMovie::_CreateSprite(int nWidth, int nHeight)
+/* 0001495c */{
+/* 0001495c */	this.m_nSprite = ChipmunkSpriteEngine.SP_GetUnuseNum(1000);
+/* 00014978 */	ChipmunkSpriteEngine.SP_CreatePixelOnly(this.m_nSprite, nWidth, nHeight);
+/* 00014996 */	DrawGraph.Fill(this.m_nSprite, 0, 0, nWidth, nHeight, this.m_nBackColorR, this.m_nBackColorG, this.m_nBackColorB);
+/* 000149d0 */	ChipmunkSpriteEngine.SP_SetZ(this.m_nSprite, 36864);
+/* 000149e8 */	ChipmunkSpriteEngine.SP_SetShow(this.m_nSprite, 1);
+/* 00014a00 */	return true;
+/* 00014a08 */}
+
+bool CDrawMovie::InitPlugin()
+/* 00014a16 */{
+/* 00014a16 */	if (!DrawPluginManager.IsLoad("DrawMovie3"))
+/* 00014a2e */	{
+/* 00014a2e */		if (!DrawPluginManager.Load("DrawMovie3"))
+/* 00014a46 */		{
+/* 00014a46 */			system.MsgBox("DrawMovie3プラグイン初期化に失敗しました");
+/* 00014a54 */			return false;
+/* 00014a5c */		}
+/* 00014a62 */	}
+/* 00014a68 */	return true;
+/* 00014a70 */}
+
+bool CDrawMovie::IsClick()
+/* 00014a7e */{
+/* 00014a7e */	int n;
+/* 00014a88 */	for (n = 0; n < this.m_anKeyCode.Numof(); ++n)
+/* 00014ab8 */	{
+/* 00014ab8 */		if (AFL_IsKeyDown(this.m_anKeyCode[n]))
+/* 00014ad2 */		{
+/* 00014ad2 */			this.m_abKeyDown[n] = true;
+/* 00014ae8 */		}
+/* 00014aee */		else if (this.m_abKeyDown[n])
+/* 00014b02 */		{
+/* 00014b02 */			this.m_abKeyDown[n] = false;
+/* 00014b18 */			return true;
+/* 00014b20 */		}
+/* 00014b26 */	}
+/* 00014b2c */	return false;
+/* 00014b34 */}
+
+bool CDrawMovie::Play(string FileName, int nWidth, int nHeight, bool bKeyCancel)
+/* 00014b42 */{
+/* 00014b42 */	this.Release();
+/* 00014b4a */	if (!this._CreateSprite(nWidth, nHeight))
+/* 00014b66 */	{
+/* 00014b66 */		return false;
+/* 00014b6e */	}
+/* 00014b74 */	if (!this.InitPlugin())
+/* 00014b84 */	{
+/* 00014b84 */		return false;
+/* 00014b8c */	}
+/* 00014b92 */	if (!DrawMovie3.Load(FileName))
+/* 00014baa */	{
+/* 00014baa */		return false;
+/* 00014bb2 */	}
+/* 00014bb8 */	IbisInputEngine.Mouse_HideCursorByGame(true);
+/* 00014bca */	DrawMovie3.SetInnerVolume(this.m_nInnerVolumeRate);
+/* 00014bda */	DrawMovie3.UpdateVolume(AFL_Config_IsMuteByInactiveWindow());
+/* 00014bea */	SYS_AddPostCallUpdateViewFuncList(&SYS_Movie_UpdateVolume);
+/* 00014bf6 */	this.m_EscapeKeyClick.Init(27, true);
+/* 00014c0e */	CASJoyClickAssignedKey CancelOKButton;
+/* 00014c1e */	CASJoyClickAssignedKey CancelJoyClick;
+/* 00014c2e */	CancelOKButton.Init(4, true);
+/* 00014c46 */	CancelJoyClick.Init(5, true);
+/* 00014c5e */	int nStartTime = system.GetTime();
+/* 00014c70 */	if (!DrawMovie3.Run())
+/* 00014c82 */	{
+/* 00014c82 */		IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00014c94 */		SYS_DeletePostCallUpdateViewFuncList(&SYS_Movie_UpdateVolume);
+/* 00014ca0 */		return false;
+/* 00014ca8 */	}
+/* 00014cae */	for (; ; )
+/* 00014cae */	{
+/* 00014cae */		if (DrawMovie3.IsEnd())
+/* 00014cbe */		{
+/* 00014cbe */			break;
+/* 00014cc4 */		}
+/* 00014cca */		if (bKeyCancel && system.GetTime() - nStartTime >= 1000)
+/* 00014d0a */		{
+/* 00014d0a */			if (this.IsClick())
+/* 00014d18 */			{
+/* 00014d18 */				break;
+/* 00014d1e */			}
+/* 00014d24 */			if (CancelOKButton.IsClick(-2147483648))
+/* 00014d3c */			{
+/* 00014d3c */				break;
+/* 00014d42 */			}
+/* 00014d48 */			if (CancelJoyClick.IsClick(-2147483648))
+/* 00014d60 */			{
+/* 00014d60 */				break;
+/* 00014d66 */			}
+/* 00014d6c */		}
+/* 00014d72 */		if (this.m_EscapeKeyClick.IsClick(-2147483648))
+/* 00014d8a */		{
+/* 00014d8a */			IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00014d9c */			Ｓ＿コンフィグ();
+/* 00014da2 */			IbisInputEngine.Mouse_HideCursorByGame(true);
+/* 00014db4 */		}
+/* 00014dba */		if (!DrawMovie3.Draw(this.m_nSprite))
+/* 00014dd2 */		{
+/* 00014dd2 */			IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00014de4 */			return false;
+/* 00014dec */		}
+/* 00014df2 */		AFL_View_Update(true);
+/* 00014dfe */		SYS_RestrainScreensaverWhileAutoMode();
+/* 00014e04 */	}
+/* 00014e0a */	SYS_DeletePostCallUpdateViewFuncList(&SYS_Movie_UpdateVolume);
+/* 00014e16 */	this.Release();
+/* 00014e1e */	IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00014e30 */	return true;
+/* 00014e38 */}
+
+void CDrawMovie::SetBackColor(int nR, int nG, int nB)
+/* 00014e46 */{
+/* 00014e46 */	this.m_nBackColorR = nR;
+/* 00014e50 */	this.m_nBackColorG = nG;
+/* 00014e5a */	this.m_nBackColorB = nB;
+/* 00014e64 */}
+
+void CDrawMovie::SetInnerVolumeRate(int nInnerVolumeRate)
+/* 00014e6c */{
+/* 00014e6c */	this.m_nInnerVolumeRate = nInnerVolumeRate;
+/* 00014e76 */}
+

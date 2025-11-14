@@ -1,0 +1,286 @@
+void CASBackSceneDocument::_SetCaptionTextPos(int _x, int _y)
+/* 000248b8 */{
+/* 000248b8 */	this._m_caption_text_pos.Set(_x, _y);
+/* 000248d0 */}
+
+void CASBackSceneDocument::_SetCaptionText(string _text)
+/* 000248d8 */{
+/* 000248d8 */	this._m_caption_text = _text;
+/* 000248e2 */}
+
+void CASBackSceneDocument::_SetCaptionNumeralTM(sact_text_metrics_t _tm)
+/* 000248ea */{
+/* 000248ea */	this._m_caption_numeral_tm = _tm;
+/* 000248fa */}
+
+void CASBackSceneDocument::_SetCaptionTextTM(sact_text_metrics_t _tm)
+/* 00024902 */{
+/* 00024902 */	this._m_caption_text_tm = _tm;
+/* 00024912 */}
+
+string CASBackSceneDocument::_GetCaptionText()
+/* 0002491a */{
+/* 0002491a */	return this._m_caption_text;
+/* 00024922 */}
+
+CASPos CASBackSceneDocument::_GetCaptionTextPos()
+/* 00024930 */{
+/* 00024930 */	return this._m_caption_text_pos;
+/* 0002493c */}
+
+sact_text_metrics_t CASBackSceneDocument::_GetCaptionNumeralTM()
+/* 0002494a */{
+/* 0002494a */	return this._m_caption_numeral_tm;
+/* 00024956 */}
+
+sact_text_metrics_t CASBackSceneDocument::_GetCaptionTextTM()
+/* 00024964 */{
+/* 00024964 */	return this._m_caption_text_tm;
+/* 00024970 */}
+
+CASBackSceneDocument::CASBackSceneDocument()
+/* 0002497e */{
+/* 00024986 */	this.m_ButtonListByMessageWindow.Alloc(40, 6);
+/* 000249a2 */	this._m_caption_text = "Scene";
+/* 000249ae */	this._m_caption_text_pos.Set(0, 0);
+/* 000249c6 */	this._m_caption_numeral_pos.Set(50, 0);
+/* 000249de */	this._m_caption_max_numeral_pos.Set(100, 0);
+/* 000249f6 */	this.m_CaptionNumberPosListByMessageWindow.Alloc(40);
+/* 00024a0c */	this.m_CaptionMaxNumberPosListByMessageWindow.Alloc(40);
+/* 00024a22 */	this.m_nPageNumberCharSpace = 0;
+/* 00024a2c */}
+
+void CASBackSceneDocument::_SetBtn(int _id, int _x, int _y, int _z, string _cg1, string _cg2, string KeyDownCGName, string DisableCGName)
+/* 00024a34 */{
+/* 00024a34 */	if (!this._asserte_button_id(_id))
+/* 00024a4a */	{
+/* 00024a4a */		return;
+/* 00024a4c */	}
+/* 00024a52 */	this._m_bt[_id]._SetPos(_x, _y);
+/* 00024a72 */	this._m_bt[_id]._SetZ(_z);
+/* 00024a8c */	this._m_bt[_id]._SetCgPln(_cg1);
+/* 00024aa6 */	this._m_bt[_id]._SetCgHlt(_cg2);
+/* 00024ac0 */	this._m_bt[_id]._SetCgChk(KeyDownCGName);
+/* 00024ada */	this._m_bt[_id]._SetCgInv(DisableCGName);
+/* 00024af4 */	int Index;
+/* 00024afe */	for (Index = 0; Index < this.m_ButtonListByMessageWindow.Numof(1); ++Index)
+/* 00024b2e */	{
+/* 00024b2e */		this.m_ButtonListByMessageWindow[Index][_id]._SetPos(_x, _y);
+/* 00024b56 */		this.m_ButtonListByMessageWindow[Index][_id]._SetZ(_z);
+/* 00024b78 */		this.m_ButtonListByMessageWindow[Index][_id]._SetCgPln(_cg1);
+/* 00024b9a */		this.m_ButtonListByMessageWindow[Index][_id]._SetCgHlt(_cg2);
+/* 00024bbc */		this.m_ButtonListByMessageWindow[Index][_id]._SetCgChk(KeyDownCGName);
+/* 00024bde */		this.m_ButtonListByMessageWindow[Index][_id]._SetCgInv(DisableCGName);
+/* 00024c00 */	}
+/* 00024c06 */}
+
+void CASBackSceneDocument::SetButtonByMessageWindow(int MessageWindowNumber, int ButtonIndex, int X, int Y, int Z, string CGName, string OnCursorCGName, string KeyDownCGName, string DisableCGName)
+/* 00024c0e */{
+/* 00024c0e */	if (MessageWindowNumber < 0 || MessageWindowNumber >= this.m_ButtonListByMessageWindow.Numof(1) || ButtonIndex < 0 || ButtonIndex >= this.m_ButtonListByMessageWindow.Numof(2))
+/* 00024ca4 */	{
+/* 00024ca4 */		return;
+/* 00024ca6 */	}
+/* 00024cac */	ref _CButtonCgInfo Button = this.m_ButtonListByMessageWindow[MessageWindowNumber][ButtonIndex];
+/* 00024cde */	Button._SetPos(X, Y);
+/* 00024cf6 */	Button._SetZ(Z);
+/* 00024d08 */	Button._SetCgPln(CGName);
+/* 00024d1a */	Button._SetCgHlt(OnCursorCGName);
+/* 00024d2c */	Button._SetCgChk(KeyDownCGName);
+/* 00024d3e */	Button._SetCgInv(DisableCGName);
+/* 00024d50 */}
+
+void CASBackSceneDocument::_SetBtnSound(int _id, int _click, int _cursor)
+/* 00024d58 */{
+/* 00024d58 */	if (!this._asserte_button_id(_id))
+/* 00024d6e */	{
+/* 00024d6e */		return;
+/* 00024d70 */	}
+/* 00024d76 */	this._m_bt[_id]._SetClickSound(_click);
+/* 00024d90 */	this._m_bt[_id]._SetCursorSound(_cursor);
+/* 00024daa */	int Index;
+/* 00024db4 */	for (Index = 0; Index < this.m_ButtonListByMessageWindow.Numof(1); ++Index)
+/* 00024de4 */	{
+/* 00024de4 */		this.m_ButtonListByMessageWindow[Index][_id]._SetClickSound(_click);
+/* 00024e06 */		this.m_ButtonListByMessageWindow[Index][_id]._SetCursorSound(_cursor);
+/* 00024e28 */	}
+/* 00024e2e */}
+
+_CButtonCgInfo CASBackSceneDocument::_GetButton(int _id)
+/* 00024e36 */{
+/* 00024e36 */	if (!this._asserte_button_id(_id))
+/* 00024e4c */	{
+/* 00024e4c */		_CButtonCgInfo _t;
+/* 00024e5c */		return _t;
+/* 00024e6c */	}
+/* 00024e78 */	return this._m_bt[_id];
+/* 00024e8c */}
+
+_CButtonCgInfo CASBackSceneDocument::GetButtonByMessageWindow(int MessageWindowNumber, int ButtonIndex)
+/* 00024e9a */{
+/* 00024e9a */	if (MessageWindowNumber < 0 || MessageWindowNumber >= this.m_ButtonListByMessageWindow.Numof(1) || ButtonIndex < 0 || ButtonIndex >= this.m_ButtonListByMessageWindow.Numof(2))
+/* 00024f30 */	{
+/* 00024f30 */		return this._GetButton(ButtonIndex);
+/* 00024f40 */	}
+/* 00024f46 */	return this.m_ButtonListByMessageWindow[MessageWindowNumber][ButtonIndex];
+/* 00024f62 */}
+
+bool CASBackSceneDocument::_asserte_button_id(int _id)
+/* 00024f70 */{
+/* 00024f70 */	if (_id < 0 || _id >= this._m_bt.Numof())
+/* 00024faa */	{
+/* 00024faa */		system.Error("_id=%d\n_m_bt.Numof()=%d" % _id % this._m_bt.Numof());
+/* 00024fd4 */		return false;
+/* 00024fdc */	}
+/* 00024fe2 */	return true;
+/* 00024fea */}
+
+void CASBackSceneDocument::_SetCaptionNumeralPos(int _x, int _y)
+/* 00024ff8 */{
+/* 00024ff8 */	this._m_caption_numeral_pos.Set(_x, _y);
+/* 00025010 */	int Index;
+/* 0002501a */	for (Index = 0; Index < this.m_CaptionNumberPosListByMessageWindow.Numof(); ++Index)
+/* 0002504a */	{
+/* 0002504a */		this.m_CaptionNumberPosListByMessageWindow[Index].Set(_x, _y);
+/* 0002506a */	}
+/* 00025070 */}
+
+void CASBackSceneDocument::_SetCaptionMaxNumeralPos(int _x, int _y)
+/* 00025078 */{
+/* 00025078 */	this._m_caption_max_numeral_pos.Set(_x, _y);
+/* 00025090 */	int Index;
+/* 0002509a */	for (Index = 0; Index < this.m_CaptionMaxNumberPosListByMessageWindow.Numof(); ++Index)
+/* 000250ca */	{
+/* 000250ca */		this.m_CaptionMaxNumberPosListByMessageWindow[Index].Set(_x, _y);
+/* 000250ea */	}
+/* 000250f0 */}
+
+void CASBackSceneDocument::SetCaptionNumeralPosByMessageWindow(int MessageWindowNumber, int X, int Y)
+/* 000250f8 */{
+/* 000250f8 */	if (MessageWindowNumber < 0 || MessageWindowNumber >= this.m_CaptionNumberPosListByMessageWindow.Numof())
+/* 00025132 */	{
+/* 00025132 */		return;
+/* 00025134 */	}
+/* 0002513a */	this.m_CaptionNumberPosListByMessageWindow[MessageWindowNumber].Set(X, Y);
+/* 0002515a */}
+
+void CASBackSceneDocument::SetCaptionMaxNumeralPosByMessageWindow(int MessageWindowNumber, int X, int Y)
+/* 00025162 */{
+/* 00025162 */	if (MessageWindowNumber < 0 || MessageWindowNumber >= this.m_CaptionMaxNumberPosListByMessageWindow.Numof())
+/* 0002519c */	{
+/* 0002519c */		return;
+/* 0002519e */	}
+/* 000251a4 */	this.m_CaptionMaxNumberPosListByMessageWindow[MessageWindowNumber].Set(X, Y);
+/* 000251c4 */}
+
+CASPos CASBackSceneDocument::GetCaptionNumeralPosByMessageWindow(int MessageWindowNumber)
+/* 000251cc */{
+/* 000251cc */	if (MessageWindowNumber < 0 || MessageWindowNumber >= this.m_CaptionNumberPosListByMessageWindow.Numof())
+/* 00025206 */	{
+/* 00025206 */		return this._m_caption_numeral_pos;
+/* 00025212 */	}
+/* 00025218 */	return this.m_CaptionNumberPosListByMessageWindow[MessageWindowNumber];
+/* 0002522c */}
+
+CASPos CASBackSceneDocument::GetCaptionMaxNumeralPosByMessageWindow(int MessageWindowNumber)
+/* 0002523a */{
+/* 0002523a */	if (MessageWindowNumber < 0 || MessageWindowNumber >= this.m_CaptionMaxNumberPosListByMessageWindow.Numof())
+/* 00025274 */	{
+/* 00025274 */		return this._m_caption_max_numeral_pos;
+/* 00025280 */	}
+/* 00025286 */	return this.m_CaptionMaxNumberPosListByMessageWindow[MessageWindowNumber];
+/* 0002529a */}
+
+void CASBackSceneDocument::SetPageNumberCharSpace(int nCharSpace)
+/* 000252a8 */{
+/* 000252a8 */	this.m_nPageNumberCharSpace = nCharSpace;
+/* 000252b2 */}
+
+int CASBackSceneDocument::GetPageNumberCharSpace()
+/* 000252ba */{
+/* 000252ba */	return this.m_nPageNumberCharSpace;
+/* 000252c2 */}
+
+void CASBackSceneDocument::SetSceneSliderBackCG(string CG)
+/* 000252d0 */{
+/* 000252d0 */	this.m_SceneSliderBackCG = CG;
+/* 000252da */}
+
+void CASBackSceneDocument::SetSceneSliderBackPos(CASPos Pos)
+/* 000252e2 */{
+/* 000252e2 */	this.m_SceneSliderBackPos = Pos;
+/* 000252f2 */}
+
+void CASBackSceneDocument::SetSceneSliderBoxCG(string CG, string OnCursorCG, string KeyDownCG, string DisableCG)
+/* 000252fa */{
+/* 000252fa */	this.m_SceneSliderBoxCG = CG;
+/* 00025304 */	this.m_SceneSliderBoxOnCursorCG = OnCursorCG;
+/* 0002530e */	this.m_SceneSliderBoxKeyDownCG = KeyDownCG;
+/* 00025318 */	this.m_SceneSliderBoxDisableCG = DisableCG;
+/* 00025322 */}
+
+void CASBackSceneDocument::SetSceneSliderRect(CASRect Rect)
+/* 0002532a */{
+/* 0002532a */	this.m_SceneSliderRect = Rect;
+/* 0002533a */}
+
+void CASBackSceneDocument::SetSceneSliderShowRect(CASRect Rect)
+/* 00025342 */{
+/* 00025342 */	this.m_SceneSliderShowRect = Rect;
+/* 00025352 */}
+
+string CASBackSceneDocument::GetSceneSliderBackCG()
+/* 0002535a */{
+/* 0002535a */	return this.m_SceneSliderBackCG;
+/* 00025362 */}
+
+CASPos CASBackSceneDocument::GetSceneSliderBackPos()
+/* 00025370 */{
+/* 00025370 */	return this.m_SceneSliderBackPos;
+/* 0002537c */}
+
+string CASBackSceneDocument::GetSceneSliderBoxCG()
+/* 0002538a */{
+/* 0002538a */	return this.m_SceneSliderBoxCG;
+/* 00025392 */}
+
+string CASBackSceneDocument::GetSceneSliderBoxOnCursorCG()
+/* 000253a0 */{
+/* 000253a0 */	return this.m_SceneSliderBoxOnCursorCG;
+/* 000253a8 */}
+
+string CASBackSceneDocument::GetSceneSliderBoxKeyDownCG()
+/* 000253b6 */{
+/* 000253b6 */	return this.m_SceneSliderBoxKeyDownCG;
+/* 000253be */}
+
+string CASBackSceneDocument::GetSceneSliderBoxDisableCG()
+/* 000253cc */{
+/* 000253cc */	return this.m_SceneSliderBoxDisableCG;
+/* 000253d4 */}
+
+void CASBackSceneDocument::SetSceneSliderBoxSE(int ClickSE, int OnCursorSE)
+/* 000253e2 */{
+/* 000253e2 */	this.m_SceneSliderBoxClickSE = ClickSE;
+/* 000253ec */	this.m_SceneSliderBoxOnCursorSE = OnCursorSE;
+/* 000253f6 */}
+
+int CASBackSceneDocument::GetSceneSliderBoxClickSE()
+/* 000253fe */{
+/* 000253fe */	return this.m_SceneSliderBoxClickSE;
+/* 00025406 */}
+
+int CASBackSceneDocument::GetSceneSliderBoxOnCursorSE()
+/* 00025414 */{
+/* 00025414 */	return this.m_SceneSliderBoxOnCursorSE;
+/* 0002541c */}
+
+CASRect CASBackSceneDocument::GetSceneSliderRect()
+/* 0002542a */{
+/* 0002542a */	return this.m_SceneSliderRect;
+/* 00025436 */}
+
+CASRect CASBackSceneDocument::GetSceneSliderShowRect()
+/* 00025444 */{
+/* 00025444 */	return this.m_SceneSliderShowRect;
+/* 00025450 */}
+

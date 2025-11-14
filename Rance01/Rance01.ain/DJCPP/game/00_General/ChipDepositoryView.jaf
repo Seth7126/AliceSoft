@@ -1,0 +1,233 @@
+ChipDepositoryView::ChipDepositoryView()
+/* 000657f6 */{
+/* 000657fe */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00065820 */	this.isUpdatedParameterOnSleep_ = false;
+/* 0006582a */	this.state_ = 3;
+/* 00065834 */	this.clickedChipIndex_ = -1;
+/* 00065846 */}
+
+void ChipDepositoryView::update()
+/* 0006584e */{
+/* 0006584e */	if (this.isUpdatedParameterOnSleep_)
+/* 00065858 */	{
+/* 00065858 */		this.isUpdatedParameterOnSleep_ = false;
+/* 00065862 */		this.resetView();
+/* 0006586a */	}
+/* 00065870 */	switch (this.state_)
+/* 00065882 */	{
+/* 00065882 */	case 0:
+/* 00065882 */		break;
+/* 00065888 */	case 1:
+/* 00065888 */		if (this.indicatorList_.getClickedGroup() != -1)
+/* 000658a2 */		{
+/* 000658a2 */			this.jumpPage(this.indicatorList_.getClickedGroup());
+/* 000658b6 */		}
+/* 000658bc */		if (g_mouse.getWheel() != 0 && this.indicatorList_.isHover())
+/* 00065900 */		{
+/* 00065900 */			this.ss_.scrollPage(g_mouse.getWheel() < 0);
+/* 00065922 */		}
+/* 00065928 */		this.indicatorList_.setFloatingPage(this.ss_.getFloatingPage());
+/* 00065940 */		this.clickedChipIndex_ = this.getClickedChipIndex();
+/* 00065954 */		break;
+/* 0006595a */	case 2:
+/* 0006595a */		break;
+/* 00065960 */	case 3:
+/* 00065960 */		break;
+/* 00065966 */	}
+/* 00065966 */}
+
+void ChipDepositoryView::init(int depositoryIndex, int chipMode, bool isLowerPosition)
+/* 0006596e */{
+/* 0006596e */	this.depositoryIndex_ = depositoryIndex;
+/* 00065978 */	this.chipMode_ = chipMode;
+/* 00065982 */	this.isLowerPosition_ = isLowerPosition;
+/* 0006598c */	this.instance_ <- g_chipDepository[this.depositoryIndex_];
+/* 000659b0 */	this.instance_.addEventHandler(this.onEvent);
+/* 000659c6 */	int groupCount = getChipGroupCount(this.instance_.getSize());
+/* 000659e4 */	this.bg_.init(this.ss_.getPage, this.isLowerPosition_, this.depositoryIndex_, groupCount, this.instance_.getSize() % 7);
+/* 00065a24 */	this.ss_.init(128, 840, this.bg_.getY() + (this.isLowerPosition_ ? 72 : 120), groupCount);
+/* 00065a6c */	this.initButton();
+/* 00065a74 */	this.initChip();
+/* 00065a7c */	this.setChipPosition();
+/* 00065a84 */	this.setChipShow(true);
+/* 00065a92 */	this.indicatorList_.init(this.instance_, this.isLowerPosition_ ? 208 : 256);
+/* 00065ac0 */	this.indicatorList_.setParent(this.bg_.getParentPartsNumber());
+/* 00065ad8 */}
+
+void ChipDepositoryView::initButton()
+/* 00065ae0 */{
+/* 00065ae0 */	this.btnScroll_.init(this.ss_, this.isLowerPosition_);
+/* 00065af8 */	this.btnScroll_.setParent(this.bg_.getParentPartsNumber());
+/* 00065b10 */}
+
+void ChipDepositoryView::initChip()
+/* 00065b18 */{
+/* 00065b18 */	this.chip_.Free();
+/* 00065b22 */	this.chip_.Alloc(this.instance_.getCount());
+/* 00065b3e */	int i;
+/* 00065b48 */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 00065b78 */	{
+/* 00065b78 */		this.chip_[i].init(this.instance_.getInstance(i), this.chipMode_);
+/* 00065bb2 */		this.chip_[i].setParent(this.ss_.getParentPartsNumber());
+/* 00065bd2 */	}
+/* 00065bde */}
+
+void ChipDepositoryView::fadeIn(bool val)
+/* 00065be6 */{
+/* 00065be6 */	this.bg_.fadeIn(val);
+/* 00065bf8 */	this.ss_.fadeWithMotion(val, getSwipeScrollerChipBaseFadeMotion(val, this.isLowerPosition_, this.ss_.getXPos(), this.ss_.getYPos()));
+/* 00065c34 */	this.indicatorList_.fadeIn(val);
+/* 00065c46 */	if (val)
+/* 00065c52 */	{
+/* 00065c52 */		this.state_ = 1;
+/* 00065c5c */	}
+/* 00065c62 */	else
+/* 00065c62 */	{
+/* 00065c62 */		this.state_ = 3;
+/* 00065c6c */	}
+/* 00065c6c */}
+
+void ChipDepositoryView::setChipPosition()
+/* 00065c74 */{
+/* 00065c74 */	int i;
+/* 00065c7e */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 00065cae */	{
+/* 00065cae */		this.chip_[i].setPos(getChipXPos(i), 56);
+/* 00065cd4 */	}
+/* 00065cda */}
+
+void ChipDepositoryView::resetView()
+/* 00065ce2 */{
+/* 00065ce2 */	this.initChip();
+/* 00065cea */	this.setChipPosition();
+/* 00065cf2 */	this.setChipShow(true);
+/* 00065d00 */	this.indicatorList_.resetView();
+/* 00065d0c */}
+
+void ChipDepositoryView::setChipShow(bool val)
+/* 00065d14 */{
+/* 00065d14 */	int i;
+/* 00065d1e */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 00065d4e */	{
+/* 00065d4e */		this.chip_[i].setShow(val);
+/* 00065d68 */	}
+/* 00065d6e */}
+
+void ChipDepositoryView::jumpPage(int pg)
+/* 00065d76 */{
+/* 00065d76 */	this.ss_.jumpPage(pg);
+/* 00065d88 */}
+
+int ChipDepositoryView::getClickedChipIndex()
+/* 00065d90 */{
+/* 00065d90 */	int i;
+/* 00065d9a */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 00065dca */	{
+/* 00065dca */		if (this.chip_[i].isClick())
+/* 00065de4 */		{
+/* 00065de4 */			return i;
+/* 00065dec */		}
+/* 00065df2 */	}
+/* 00065df8 */	return -1;
+/* 00065e00 */}
+
+int ChipDepositoryView::getClickedIndex()
+/* 00065e0e */{
+/* 00065e0e */	return this.clickedChipIndex_;
+/* 00065e16 */}
+
+int ChipDepositoryView::getXPos()
+/* 00065e24 */{
+/* 00065e24 */	return this.bg_.getX();
+/* 00065e32 */}
+
+int ChipDepositoryView::getYPos()
+/* 00065e40 */{
+/* 00065e40 */	return this.bg_.getY();
+/* 00065e4e */}
+
+void ChipDepositoryView::onEvent(int eventType, int info)
+/* 00065e5c */{
+/* 00065e5c */	if (g_gameObjectManager.getSleepLevel(this.gameObjectId_) > 0)
+/* 00065e7c */	{
+/* 00065e7c */		this.isUpdatedParameterOnSleep_ = true;
+/* 00065e86 */		return;
+/* 00065e88 */	}
+/* 00065e8e */	switch (eventType)
+/* 00065ea0 */	{
+/* 00065ea0 */	case 0:
+/* 00065ea0 */		this.addChip(info);
+/* 00065eae */		break;
+/* 00065eb4 */	case 1:
+/* 00065eb4 */		this.eraseChip(info);
+/* 00065ec2 */		break;
+/* 00065ec8 */	case 3:
+/* 00065ec8 */		this.resetView();
+/* 00065ed0 */		break;
+/* 00065ed6 */	}
+/* 00065ed6 */}
+
+void ChipDepositoryView::eraseChip(int index)
+/* 00065ede */{
+/* 00065ede */	this.chip_.Erase(index);
+/* 00065ef0 */	this.setChipPosition();
+/* 00065ef8 */}
+
+void ChipDepositoryView::addChip(int index)
+/* 00065f00 */{
+/* 00065f00 */	this.chip_.Realloc(this.chip_.Numof() + 1);
+/* 00065f1e */	this.chip_[index].init(this.instance_.getInstance(index), this.chipMode_);
+/* 00065f58 */	this.chip_[index].setParent(this.ss_.getParentPartsNumber());
+/* 00065f78 */	this.chip_[index].setShow(true);
+/* 00065f92 */	g_gameObjectManager.setSleepLevel(this.chip_[index].getGameObjectId(), g_gameObjectManager.getSleepLevel(this.gameObjectId_));
+/* 00065fc4 */	this.setChipPosition();
+/* 00065fcc */}
+
+string ChipDepositoryView::getBgCgName(bool isLower, int depIndex)
+/* 00065fd4 */{
+/* 00065fd4 */	if (isLower)
+/* 00065fe0 */	{
+/* 00065fe0 */		if (depIndex == 0)
+/* 00065fee */		{
+/* 00065fee */			return "システム／手持ち／下地";
+/* 00065ff6 */		}
+/* 00065ffc */		return "システム／手持ち／下地／押入れ";
+/* 00066004 */	}
+/* 0006600a */	return "システム／押入れ／下地";
+/* 00066012 */}
+
+bool ChipDepositoryView::isMotion()
+/* 00066020 */{
+/* 00066020 */	return this.bg_.isMotion();
+/* 0006602e */}
+
+int getIndicatorXPos(int groupCount)
+/* 0006603c */{
+/* 0006603c */	return 560 - (152 * groupCount + 16 * (groupCount - 1)) / 2;
+/* 00066074 */}
+
+void ChipDepositoryView::setOperatable(bool val)
+/* 00066088 */{
+/* 00066088 */	int i;
+/* 00066092 */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 000660c2 */	{
+/* 000660c2 */		this.chip_[i].setOperatable(val);
+/* 000660dc */	}
+/* 000660e2 */}
+
+MotionInfomation getSwipeScrollerChipBaseFadeMotion(bool val, bool isLowerPosition, int x, int y)
+/* 000660ea */{
+/* 000660ea */	MotionInfomation m;
+/* 000660fa */	if (val)
+/* 00066106 */	{
+/* 00066106 */		m.setMove(x, y + (isLowerPosition ? 300 : -300), x, y, 4);
+/* 00066150 */		m.setAlpha(255, 255, 0);
+/* 0006616e */	}
+/* 00066174 */	else
+/* 00066174 */	{
+/* 00066174 */		m.setMove(x, y, x, y + (isLowerPosition ? 300 : -300), 1);
+/* 000661be */		m.setAlpha(255, 255, 0);
+/* 000661dc */	}
+/* 000661dc */	return m;
+/* 000661ec */}
+

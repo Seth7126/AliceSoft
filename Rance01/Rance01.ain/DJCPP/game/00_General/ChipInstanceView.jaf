@@ -1,0 +1,285 @@
+ChipInstanceView::ChipInstanceView()
+/* 00066c66 */{
+/* 00066c6e */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 00066c9a */	this.isOperatable_ = true;
+/* 00066ca4 */}
+
+int ChipInstanceView::getGameObjectId()
+/* 00066cac */{
+/* 00066cac */	return this.gameObjectId_;
+/* 00066cb4 */}
+
+void ChipInstanceView::init(ref ChipInstance instance, int mode)
+/* 00066cc2 */{
+/* 00066cc2 */	this.mode_ = mode;
+/* 00066ccc */	this.instance_ <- instance;
+/* 00066ce8 */	this.instance_.addEventHandler(this.onEvent);
+/* 00066cfe */	this.initParts();
+/* 00066d06 */	this.setPartsOrigin();
+/* 00066d0e */	this.setPartsPos();
+/* 00066d16 */	this.setPartsShow();
+/* 00066d1e */	this.setShowTimeRemain();
+/* 00066d26 */	this.setShowBet();
+/* 00066d2e */	this.setShowDisable();
+/* 00066d36 */}
+
+void ChipInstanceView::initParts()
+/* 00066d3e */{
+/* 00066d3e */	string n = getChip(this.instance_.getId()).getImageName();
+/* 00066d6a */	this.parts_[0].init(n, 0);
+/* 00066d8a */	this.parts_[2].init("システム／チップエリア／選択", 0);
+/* 00066daa */	this.parts_[2].setCgRange(0, 0, 80, 80);
+/* 00066dd6 */	this.parts_[6].initAsText(getChipShowName(this.instance_.getId()), 16, false, 256, 255, 255, 255);
+/* 00066e20 */	this.parts_[1].initAsCgPlaneImage(n, 255, 255, 0);
+/* 00066e4c */	this.parts_[1].setAlpha(128);
+/* 00066e66 */	this.parts_[3].init("システム／チップエリア／選択不可", 0);
+/* 00066e86 */	this.parts_[4].init("システム／チップエリア／クールタイム", 0);
+/* 00066ea6 */	NumberPartsInfomation num;
+/* 00066eb6 */	num.setSameWidth(18);
+/* 00066ec8 */	this.parts_[5].initAsNumber("システム／数字／幅１８／赤", num);
+/* 00066ee8 */	this.initDebugParts();
+/* 00066ef0 */	createPartsGroup(this.parent_, this.parts_, 4400);
+/* 00066f08 */}
+
+void ChipInstanceView::initDebugParts()
+/* 00066f10 */{
+/* 00066f10 */	if (getChip(this.instance_.getId()).getImageName() == "システム／仮チップ")
+/* 00066f40 */	{
+/* 00066f40 */		string s = getChip(this.instance_.getId()).getName();
+/* 00066f6c */		int line = s.Length() / 4;
+/* 00066f8a */		if (s.Length() % 4 != 0)
+/* 00066faa */		{
+/* 00066faa */			++line;
+/* 00066fb0 */		}
+/* 00066fb6 */		line = Math.Min(3, line);
+/* 00066fd8 */		int i;
+/* 00066fe2 */		for (i = 0; i < line; ++i)
+/* 00067012 */		{
+/* 00067012 */			string m = s.GetPart(i * 4, 4);
+/* 00067038 */			this.parts_[7 + i].initAsText(m, 20, true, 256, 255, 255, 255);
+/* 0006707e */			this.parts_[7 + i].setPos(0, (-line * 20) / 2 + i * 20 + 10, -2147483648);
+/* 000670d6 */		}
+/* 000670dc */	}
+/* 000670e8 */}
+
+void ChipInstanceView::update()
+/* 000670f0 */{
+/* 000670f0 */	this.updateHoverState();
+/* 000670f8 */	this.updateClick();
+/* 00067100 */	switch (this.state_)
+/* 00067112 */	{
+/* 00067112 */	case 1:
+/* 00067112 */		if (!this.parts_[0].isMotion())
+/* 0006712e */		{
+/* 0006712e */			this.state_ = 2;
+/* 00067138 */		}
+/* 0006713e */		break;
+/* 00067144 */	case 2:
+/* 00067144 */		if (!this.last_ && this.isHover_)
+/* 00067174 */		{
+/* 00067174 */			g_sysSound.play(2001, false);
+/* 0006718c */		}
+/* 00067192 */		if (this.isClick_)
+/* 0006719c */		{
+/* 0006719c */			g_sysSound.play(2002, false);
+/* 000671b4 */		}
+/* 000671ba */		break;
+/* 000671c0 */	case 3:
+/* 000671c0 */		if (!this.parts_[0].isMotion())
+/* 000671dc */		{
+/* 000671dc */			this.state_ = 0;
+/* 000671e6 */			this.parent_.setShow(false);
+/* 000671f8 */		}
+/* 000671fe */		break;
+/* 00067204 */	case 0:
+/* 00067204 */		break;
+/* 0006720a */	}
+/* 0006720a */}
+
+void ChipInstanceView::setPartsOrigin()
+/* 00067212 */{
+/* 00067212 */	int i;
+/* 0006721c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006724c */	{
+/* 0006724c */		this.parts_[i].setOrigin(5);
+/* 00067266 */	}
+/* 0006726c */	this.parts_[4].setOrigin(7);
+/* 00067286 */	this.parts_[5].setOrigin(7);
+/* 000672a0 */}
+
+void ChipInstanceView::setPartsShow()
+/* 000672a8 */{
+/* 000672a8 */	int i;
+/* 000672b2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 000672e2 */	{
+/* 000672e2 */		this.parts_[i].setShow(true);
+/* 000672fc */	}
+/* 00067302 */	this.parts_[1].setShow(false);
+/* 0006731c */}
+
+void ChipInstanceView::setPartsPos()
+/* 00067324 */{
+/* 00067324 */	this.parts_[6].setPos(0, 48, -2147483648);
+/* 0006734a */	this.parts_[4].setPos(-26, -52, -2147483648);
+/* 00067370 */	this.parts_[5].setPos(8, -52, -2147483648);
+/* 00067396 */}
+
+void ChipInstanceView::setPos(int x, int y)
+/* 0006739e */{
+/* 0006739e */	this.x_ = x;
+/* 000673a8 */	this.y_ = y;
+/* 000673b2 */	this.parent_.setPos(this.x_, this.y_, -2147483648);
+/* 000673d0 */}
+
+void ChipInstanceView::setShow(bool val)
+/* 000673d8 */{
+/* 000673d8 */	if (val)
+/* 000673e4 */	{
+/* 000673e4 */		this.state_ = 2;
+/* 000673ee */	}
+/* 000673f4 */	else
+/* 000673f4 */	{
+/* 000673f4 */		this.state_ = 0;
+/* 000673fe */	}
+/* 000673fe */	this.parent_.setShow(val);
+/* 00067410 */}
+
+void ChipInstanceView::fadeIn(bool val, int delayTime)
+/* 00067418 */{
+/* 00067418 */	this.parent_.setShow(true);
+/* 0006742a */	if (val)
+/* 00067436 */	{
+/* 00067436 */		this.state_ = 1;
+/* 00067440 */		this.parent_.runMotion(getStandardMotion(0));
+/* 00067458 */	}
+/* 0006745e */	else
+/* 0006745e */	{
+/* 0006745e */		this.state_ = 3;
+/* 00067468 */		this.parent_.runMotion(getStandardMotion(1));
+/* 00067480 */	}
+/* 00067480 */}
+
+void ChipInstanceView::setParent(int number)
+/* 00067488 */{
+/* 00067488 */	this.parent_.setPos(-2147483648, -2147483648, 1);
+/* 000674a6 */	this.parent_.setParent(number);
+/* 000674b8 */}
+
+void ChipInstanceView::setShowTimeRemain()
+/* 000674c0 */{
+/* 000674c0 */	bool s = this.instance_.getTimeRemain() > 0;
+/* 000674e2 */	this.parts_[4].setShow(s);
+/* 000674fc */	this.parts_[5].setShow(s);
+/* 00067516 */	this.parts_[5].setNumber(this.instance_.getTimeRemain());
+/* 00067536 */}
+
+void ChipInstanceView::setShowBet()
+/* 0006753e */{
+/* 0006753e */	this.parts_[2].setShow(this.instance_.isBet());
+/* 0006755e */}
+
+void ChipInstanceView::setShowDisable()
+/* 00067566 */{
+/* 00067566 */	if (this.mode_ == 0)
+/* 00067574 */	{
+/* 00067574 */		this.setShowDisableParts(-1);
+/* 00067582 */		return;
+/* 00067584 */	}
+/* 0006758a */	int ut = getChip(this.instance_.getId()).getUseType();
+/* 000675b8 */	if (this.instance_.getTimeRemain() > 0)
+/* 000675d2 */	{
+/* 000675d2 */		this.setShowDisableParts(0);
+/* 000675e0 */	}
+/* 000675e6 */	else if (this.mode_ == 2 && ut == 1)
+/* 0006761a */	{
+/* 0006761a */		this.setShowDisableParts(1);
+/* 00067628 */	}
+/* 0006762e */	else if (this.mode_ == 1 && ut == 2)
+/* 00067662 */	{
+/* 00067662 */		this.setShowDisableParts(2);
+/* 00067670 */	}
+/* 00067676 */	else
+/* 00067676 */	{
+/* 00067676 */		this.setShowDisableParts(-1);
+/* 00067684 */	}
+/* 00067684 */}
+
+void ChipInstanceView::setShowDisableParts(int n)
+/* 0006768c */{
+/* 0006768c */	if (n < 0)
+/* 0006769a */	{
+/* 0006769a */		this.parts_[3].setShow(false);
+/* 000676b4 */	}
+/* 000676ba */	else
+/* 000676ba */	{
+/* 000676ba */		this.parts_[3].setCgRange(n * 80, 0, 80, 80);
+/* 000676ee */		this.parts_[3].setShow(true);
+/* 00067708 */	}
+/* 00067708 */}
+
+bool ChipInstanceView::isClick()
+/* 00067710 */{
+/* 00067710 */	return this.isClick_;
+/* 00067718 */}
+
+bool ChipInstanceView::isHover()
+/* 00067726 */{
+/* 00067726 */	this.updateHoverState();
+/* 0006772e */	return this.isHover_;
+/* 00067736 */}
+
+void ChipInstanceView::onEvent(int type)
+/* 00067744 */{
+/* 00067744 */	if (type == 0)
+/* 00067752 */	{
+/* 00067752 */		this.setShowTimeRemain();
+/* 0006775a */		this.setShowDisable();
+/* 00067762 */	}
+/* 00067768 */	else if (type == 1)
+/* 00067776 */	{
+/* 00067776 */		this.setShowBet();
+/* 0006777e */	}
+/* 00067784 */}
+
+string getChipShowName(string id)
+/* 0006778c */{
+/* 0006778c */	string n = getChip(id).getName();
+/* 000677b2 */	if (n.Length() <= 7)
+/* 000677ca */	{
+/* 000677ca */		return n;
+/* 000677d2 */	}
+/* 000677d8 */	return n.GetPart(0, 6) + "…";
+/* 000677f6 */}
+
+bool ChipInstanceView::getHoverState()
+/* 0006780a */{
+/* 0006780a */	return this.state_ == 2 && this.isOperatable_ && !this.parts_[3].isShow() && AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 000678c2 */}
+
+void ChipInstanceView::updateHoverState()
+/* 000678d0 */{
+/* 000678d0 */	this.last_ = this.isHover_;
+/* 000678e2 */	this.isHover_ = this.getHoverState();
+/* 000678f6 */	this.updateHoverPartsState();
+/* 000678fe */}
+
+void ChipInstanceView::updateHoverPartsState()
+/* 00067906 */{
+/* 00067906 */	this.parts_[1].setShow(this.isHover_);
+/* 00067920 */}
+
+string ChipInstanceView::getId()
+/* 00067928 */{
+/* 00067928 */	return this.instance_.getId();
+/* 00067936 */}
+
+void ChipInstanceView::updateClick()
+/* 00067944 */{
+/* 00067944 */	this.isClick_ = this.isHover_ && g_mouse.isClickWithFocus();
+/* 00067980 */}
+
+void ChipInstanceView::setOperatable(bool val)
+/* 00067988 */{
+/* 00067988 */	this.isOperatable_ = val;
+/* 00067992 */}
+

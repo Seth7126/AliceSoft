@@ -1,0 +1,39 @@
+void AFL_KeepPreviousView_SetMode(bool KeepPreviousViewMode)
+/* 00057b60 */{
+/* 00057b60 */	ChipmunkSpriteEngine.KeepPreviousView_SetMode(KeepPreviousViewMode);
+/* 00057b72 */}
+
+bool AFL_KeepPreviousView_GetMode()
+/* 00057b80 */{
+/* 00057b80 */	return ChipmunkSpriteEngine.KeepPreviousView_GetMode();
+/* 00057b8c */}
+
+void AFL_View_Update(bool 未読既読スキップ)
+/* 00057ba0 */{
+/* 00057ba0 */	SYS_View_Update(未読既読スキップ, false, 0.0);
+/* 00057bb8 */}
+
+int AFL_View_GetWidth()
+/* 00057bc6 */{
+/* 00057bc6 */	return SystemService.GetViewWidth();
+/* 00057bd2 */}
+
+int AFL_View_GetHeight()
+/* 00057be6 */{
+/* 00057be6 */	return SystemService.GetViewHeight();
+/* 00057bf2 */}
+
+bool AFL_View_SetMode(int Mode)
+/* 00057c06 */{
+/* 00057c06 */	if (Mode != 0 && Mode != 1)
+/* 00057c46 */	{
+/* 00057c46 */		return false;
+/* 00057c4e */	}
+/* 00057c54 */	return ChipmunkSpriteEngine.VIEW_SetMode(Mode);
+/* 00057c66 */}
+
+int AFL_View_GetMode()
+/* 00057c7a */{
+/* 00057c7a */	return ChipmunkSpriteEngine.VIEW_GetMode();
+/* 00057c86 */}
+

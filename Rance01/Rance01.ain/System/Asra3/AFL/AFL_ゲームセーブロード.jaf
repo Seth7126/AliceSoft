@@ -1,0 +1,118 @@
+bool AFL_GameSave_IsExistFile(int SaveNumber)
+/* 0005a6be */{
+/* 0005a6be */	return SYS_セーブファイル存在(SaveNumber);
+/* 0005a6cc */}
+
+bool AFL_GameSave_GetFileInfo(int SaveNumber, ref int Year, ref int Month, ref int Day, ref int Week, ref int Hour, ref int Min, ref int Sec, ref string TimeInGameText, ref string UserComment, ref int PlayMinuteTime)
+/* 0005a6e0 */{
+/* 0005a6e0 */	セーブ２_t Info;
+/* 0005a6f0 */	if (!SYS_追加ロード(SaveNumber, Info))
+/* 0005a70a */	{
+/* 0005a70a */		return false;
+/* 0005a712 */	}
+/* 0005a718 */	Year = Info.sys年;
+/* 0005a730 */	Month = Info.sys月;
+/* 0005a748 */	Day = Info.sys日;
+/* 0005a760 */	Week = Info.sys曜;
+/* 0005a778 */	Hour = Info.sys時;
+/* 0005a790 */	Min = Info.sys分;
+/* 0005a7a8 */	Sec = Info.sys秒;
+/* 0005a7c0 */	TimeInGameText = Info.ゲーム時間文字列;
+/* 0005a7d4 */	UserComment = Info.コメント;
+/* 0005a7e8 */	PlayMinuteTime = Info.PlayMinuteTime;
+/* 0005a800 */	return true;
+/* 0005a808 */}
+
+int AFL_GameSave_GetLatestSaveNumber()
+/* 0005a81c */{
+/* 0005a81c */	return SYS_最終セーブ番号取得();
+/* 0005a824 */}
+
+bool AFL_GameSave_Save(int SaveNumber, string UserComment)
+/* 0005a838 */{
+/* 0005a838 */	return SYS_ゲームセーブ(SaveNumber, _ゲーム時間, UserComment);
+/* 0005a852 */}
+
+void AFL_GameSave_Load(int SaveNumber)
+/* 0005a866 */{
+/* 0005a866 */	SYS_ロード実行(SaveNumber);
+/* 0005a872 */}
+
+bool AFL_GameSave_SaveThumbnail(int SaveNumber, int ReductionSize)
+/* 0005a880 */{
+/* 0005a880 */	if (ReductionSize < 1)
+/* 0005a88e */	{
+/* 0005a88e */		ReductionSize = 1;
+/* 0005a898 */	}
+/* 0005a89e */	int ViewWidth = AFL_View_GetWidth();
+/* 0005a8b0 */	int ViewHeight = AFL_View_GetHeight();
+/* 0005a8c2 */	int ViewSprite = ChipmunkSpriteEngine.SP_GetUnuseNum(1000);
+/* 0005a8de */	ChipmunkSpriteEngine.SP_CreatePixelOnly(ViewSprite, ViewWidth, ViewHeight);
+/* 0005a8fc */	DrawGraph.FillWithAlpha(ViewSprite, 0, 0, ViewWidth, ViewHeight, 0, 0, 0, 0);
+/* 0005a93c */	ChipmunkSpriteEngine.SP_SetShow(ViewSprite, 0);
+/* 0005a954 */	PARTS_SetThumbnailReductionSize(ReductionSize);
+/* 0005a960 */	PARTS_SetThumbnailMode(true);
+/* 0005a96c */	PARTS_Update(false);
+/* 0005a978 */	ChipmunkSpriteEngine.SP_RenderView(ViewSprite);
+/* 0005a98a */	PARTS_SetThumbnailMode(false);
+/* 0005a996 */	PARTS_Update(false);
+/* 0005a9a2 */	int ThumbnailWidth = ViewWidth / ReductionSize;
+/* 0005a9bc */	int ThumbnailHeight = ViewHeight / ReductionSize;
+/* 0005a9d6 */	int ThumbnailSprite = ChipmunkSpriteEngine.SP_GetUnuseNum(1000);
+/* 0005a9f2 */	ChipmunkSpriteEngine.SP_CreatePixelOnly(ThumbnailSprite, ThumbnailWidth, ThumbnailHeight);
+/* 0005aa10 */	DrawGraph.CopyReduce(ThumbnailSprite, 0, 0, ThumbnailWidth, ThumbnailHeight, ViewSprite, 0, 0, ViewWidth, ViewHeight);
+/* 0005aa56 */	string SaveFileName = system.GetSaveFolderName() + "\\" + AFL_GameSave_GetThumbnailFileName(SaveNumber);
+/* 0005aa7c */	ChipmunkSpriteEngine.SP_SaveCG(ThumbnailSprite, SaveFileName);
+/* 0005aa94 */	ChipmunkSpriteEngine.SP_Delete(ThumbnailSprite);
+/* 0005aaa6 */	ChipmunkSpriteEngine.SP_Delete(ViewSprite);
+/* 0005aab8 */	return true;
+/* 0005aac0 */}
+
+bool AFL_GameSave_Copy(int DestSaveNumber, int SrcSaveNumber)
+/* 0005aad4 */{
+/* 0005aad4 */	if (!SYS_セーブファイルコピー(DestSaveNumber, SrcSaveNumber))
+/* 0005aaee */	{
+/* 0005aaee */		return false;
+/* 0005aaf6 */	}
+/* 0005aafc */	if (AFL_GameSave_IsExistThumbnail(SrcSaveNumber))
+/* 0005ab0e */	{
+/* 0005ab0e */		if (!AFL_GameSave_CopyThumbnail(DestSaveNumber, SrcSaveNumber))
+/* 0005ab28 */		{
+/* 0005ab28 */			return false;
+/* 0005ab30 */		}
+/* 0005ab36 */	}
+/* 0005ab3c */	return true;
+/* 0005ab44 */}
+
+void AFL_GameSave_Delete(int SaveNumber)
+/* 0005ab58 */{
+/* 0005ab58 */	SYS_セーブファイル削除(SaveNumber);
+/* 0005ab64 */	system.DeleteSaveFile(SYS_GameSave_GetThumbnailFileName(SaveNumber));
+/* 0005ab78 */}
+
+bool AFL_GameSave_CopyThumbnail(int DestSaveNumber, int SrcSaveNumber)
+/* 0005ab86 */{
+/* 0005ab86 */	if (!AFL_GameSave_IsExistThumbnail(SrcSaveNumber))
+/* 0005ab9a */	{
+/* 0005ab9a */		return false;
+/* 0005aba2 */	}
+/* 0005aba8 */	string DestFileName = SYS_GameSave_GetThumbnailFileName(DestSaveNumber);
+/* 0005abbe */	string SrcFileName = SYS_GameSave_GetThumbnailFileName(SrcSaveNumber);
+/* 0005abd4 */	if (system.CopySaveFile(DestFileName, SrcFileName) == 0)
+/* 0005abf4 */	{
+/* 0005abf4 */		return false;
+/* 0005abfc */	}
+/* 0005ac02 */	return true;
+/* 0005ac0a */}
+
+string AFL_GameSave_GetThumbnailFileName(int SaveNumber)
+/* 0005ac1e */{
+/* 0005ac1e */	return SYS_GameSave_GetThumbnailFileName(SaveNumber);
+/* 0005ac2c */}
+
+bool AFL_GameSave_IsExistThumbnail(int SaveNumber)
+/* 0005ac40 */{
+/* 0005ac40 */	string SaveFileName = SYS_GameSave_GetThumbnailFileName(SaveNumber);
+/* 0005ac56 */	return system.ExistSaveFile(SaveFileName);
+/* 0005ac66 */}
+

@@ -1,0 +1,43 @@
+ConfigButton::ConfigButton()
+/* 0008606a */{
+/* 00086072 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00086094 */}
+
+void ConfigButton::init(string cgBase, string text, string funcName)
+/* 0008609c */{
+/* 0008609c */	this.func_ = funcName;
+/* 000860b4 */	if (this.func_ == NULL)
+/* 000860c2 */	{
+/* 000860c2 */		dlogF(funcName);
+/* 000860ce */	}
+/* 000860d4 */	this.btn_.init(cgBase, text, -1);
+/* 000860f2 */}
+
+void ConfigButton::update()
+/* 000860fa */{
+/* 000860fa */	if (this.btn_.isClick())
+/* 0008610c */	{
+/* 0008610c */		this.func_();
+/* 0008611a */	}
+/* 00086120 */}
+
+void ConfigButton::fadeIn(bool val)
+/* 00086128 */{
+/* 00086128 */	this.btn_.fadeIn(val);
+/* 0008613a */}
+
+void ConfigButton::setPos(int x, int y, int z)
+/* 00086142 */{
+/* 00086142 */	this.btn_.setPos(x, y, z);
+/* 00086160 */}
+
+void ConfigButton::setEnable(bool val)
+/* 00086168 */{
+/* 00086168 */	this.btn_.setEnable(val);
+/* 0008617a */}
+
+void ConfigButton::setParent(int parentPartsNumber)
+/* 00086182 */{
+/* 00086182 */	this.btn_.setParent(parentPartsNumber);
+/* 00086194 */}
+

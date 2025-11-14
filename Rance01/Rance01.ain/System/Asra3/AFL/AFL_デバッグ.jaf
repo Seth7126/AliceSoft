@@ -1,0 +1,10 @@
+void AFL_DebugFPS_SetShow(bool Show)
+/* 0005b86c */{
+/* 0005b86c */	g_DebugFPS.SetShow(Show);
+/* 0005b87e */}
+
+bool AFL_DebugFPS_GetShow()
+/* 0005b88c */{
+/* 0005b88c */	return g_DebugFPS.GetShow();
+/* 0005b89a */}
+

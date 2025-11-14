@@ -1,0 +1,820 @@
+void 制御／選択肢(int number, string label, int route)
+/* 000bc946 */{
+/* 000bc946 */	AddAdvSelection(number, label);
+/* 000bc958 */	return;
+/* 000bc95a */}
+
+int 制御／選択肢番号()
+/* 000bc968 */{
+/* 000bc968 */	int i;
+/* 000bc972 */	i = OpenAdvSelection();
+/* 000bc984 */	return i;
+/* 000bc98c */}
+
+int 制御／主選択肢()
+/* 000bc9a0 */{
+/* 000bc9a0 */	選択肢(1, "目", 0);
+/* 000bc9b8 */	選択肢(2, "口", 0);
+/* 000bc9d0 */	選択肢(3, "手", 0);
+/* 000bc9e8 */	選択肢(4, "竿", 0);
+/* 000bca00 */	選択肢(5, "足", 0);
+/* 000bca18 */	return 選択(false, -1);
+/* 000bca2c */}
+
+int 制御／日数確認()
+/* 000bca40 */{
+/* 000bca40 */	int day;
+/* 000bca4a */	day = g_gameTime.getDay();
+/* 000bca62 */	return day;
+/* 000bca6a */}
+
+int 制御／時間確認()
+/* 000bca7e */{
+/* 000bca7e */	int block;
+/* 000bca88 */	block = g_gameTime.getBlock();
+/* 000bcaa0 */	return block;
+/* 000bcaa8 */}
+
+void 制御／時間設定(int block)
+/* 000bcabc */{
+/* 000bcabc */	g_gameTime.setBlock(block);
+/* 000bcace */}
+
+void 制御／場所状態設定(string id, bool enable)
+/* 000bcadc */{
+/* 000bcadc */	string name;
+/* 000bcae8 */	name = getPlace(id).getName();
+/* 000bcb0e */	if (enable)
+/* 000bcb1a */	{
+/* 000bcb1a */		DialogInfomation info;
+/* 000bcb2a */		info.type = 2;
+/* 000bcb40 */		info.imageName = "システム／ダイアログ／移動";
+/* 000bcb54 */		info.caption = "移動場所拡大のお知らせ";
+/* 000bcb68 */		info.desc[0] = "%sに" % name;
+/* 000bcb96 */		info.desc[1] = "移動できるようになった！";
+/* 000bcbb2 */		OpenDialog(info);
+/* 000bcbc0 */		getPlace(id).setVisible(true);
+/* 000bcbe2 */	}
+/* 000bcbf4 */	else
+/* 000bcbf4 */	{
+/* 000bcbf4 */		DialogInfomation info;
+/* 000bcc04 */		info.type = 1;
+/* 000bcc1a */		info.imageName = "システム／ダイアログ／移動";
+/* 000bcc2e */		info.caption = "移動場所縮小のお知らせ";
+/* 000bcc42 */		info.desc[0] = "%sに" % name;
+/* 000bcc70 */		info.desc[1] = "移動できなくなった！";
+/* 000bcc8c */		OpenDialog(info);
+/* 000bcc9a */		getPlace(id).setOpen(false);
+/* 000bccbc */	}
+/* 000bccc8 */}
+
+void 制御／就寝()
+/* 000bccd6 */{
+/* 000bccd6 */	制御／ＨＰ増減(100, "");
+/* 000bcce8 */	g_player.clearBadCondition("COND06");
+/* 000bccfa */	getPlace("PLACE21").setOpen(true);
+/* 000bcd1c */	AutoSave();
+/* 000bcd22 */}
+
+int 制御／所持金確認()
+/* 000bcd30 */{
+/* 000bcd30 */	int gold;
+/* 000bcd3a */	gold = g_player.getGold();
+/* 000bcd52 */	return gold;
+/* 000bcd5a */}
+
+void 制御／所持金増減(int gold)
+/* 000bcd6e */{
+/* 000bcd6e */	int nowGold;
+/* 000bcd78 */	int afterGold;
+/* 000bcd82 */	nowGold = g_player.getGold();
+/* 000bcd9a */	g_player.addGold(gold);
+/* 000bcdac */	afterGold = g_player.getGold();
+/* 000bcdc4 */	if (gold > 0)
+/* 000bcdd8 */	{
+/* 000bcdd8 */		DialogInfomation info;
+/* 000bcde8 */		info.type = 2;
+/* 000bcdfe */		info.imageName = "システム／ダイアログ／金獲得";
+/* 000bce12 */		info.caption = "%dGOLDを手に入れた！" % gold;
+/* 000bce38 */		info.desc[0] = "GOLD:%d → %d" % nowGold % afterGold;
+/* 000bce74 */		OpenDialog(info);
+/* 000bce82 */	}
+/* 000bce8e */	else
+/* 000bce8e */	{
+/* 000bce8e */		int mark;
+/* 000bce98 */		mark = gold * -1;
+/* 000bceb2 */		DialogInfomation info;
+/* 000bcec2 */		info.type = 1;
+/* 000bced8 */		info.imageName = "システム／ダイアログ／金喪失";
+/* 000bceec */		info.caption = "%dGOLDを失った！" % mark;
+/* 000bcf12 */		info.desc[0] = "GOLD:%d → %d" % nowGold % afterGold;
+/* 000bcf4e */		OpenDialog(info);
+/* 000bcf5c */	}
+/* 000bcf62 */}
+
+bool 制御／チップ確認(string id, int scope)
+/* 000bcf70 */{
+/* 000bcf70 */	int i;
+/* 000bcf7a */	for (i = 0; i < g_chipDepository[scope].getCount(); ++i)
+/* 000bcfb8 */	{
+/* 000bcfb8 */		if (id == g_chipDepository[scope].getInstance(i).getId())
+/* 000bcff4 */		{
+/* 000bcff4 */			return true;
+/* 000bcffc */		}
+/* 000bd002 */	}
+/* 000bd00e */	return false;
+/* 000bd016 */}
+
+void 制御／チップ獲得(string id, bool isDungeon)
+/* 000bd02a */{
+/* 000bd02a */	OpenGetChipDialog(id, true);
+/* 000bd03c */}
+
+void 制御／チップ喪失(string id, bool dialog)
+/* 000bd04a */{
+/* 000bd04a */	string name;
+/* 000bd056 */	name = getChip(id).getName();
+/* 000bd07c */	if (dialog)
+/* 000bd088 */	{
+/* 000bd088 */		DialogInfomation info;
+/* 000bd098 */		info.type = 1;
+/* 000bd0ae */		info.chipId = id;
+/* 000bd0c2 */		info.caption = "所持チップ喪失のお知らせ";
+/* 000bd0d6 */		info.desc[0] = "%sを" % name;
+/* 000bd104 */		info.desc[1] = "失った！";
+/* 000bd120 */		OpenDialog(info);
+/* 000bd12e */	}
+/* 000bd13a */	int i;
+/* 000bd144 */	for (i = 0; i < g_chipDepository[0].getCount(); ++i)
+/* 000bd182 */	{
+/* 000bd182 */		if (id == g_chipDepository[0].getInstance(i).getId())
+/* 000bd1be */		{
+/* 000bd1be */			g_chipDepository[0].erase(i);
+/* 000bd1d8 */			break;
+/* 000bd1e4 */		}
+/* 000bd1ea */	}
+/* 000bd1f6 */}
+
+int 制御／チップ数確認()
+/* 000bd204 */{
+/* 000bd204 */	int count;
+/* 000bd20e */	count = g_chipDepository[0].getCount();
+/* 000bd22e */	return count;
+/* 000bd236 */}
+
+void 制御／所持チップ数増加(int value)
+/* 000bd24a */{
+/* 000bd24a */	int now;
+/* 000bd254 */	now = g_player.getMaxChipCount();
+/* 000bd26c */	g_player.setMaxChipCount(now + value);
+/* 000bd286 */	DialogInfomation info;
+/* 000bd296 */	info.type = 2;
+/* 000bd2ac */	info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000bd2c0 */	info.caption = "手持ちチップ数拡大のお知らせ";
+/* 000bd2d4 */	info.desc[0] = "チップを持てる最大数が";
+/* 000bd2f0 */	info.desc[1] = "%dつぶん増えた！" % value;
+/* 000bd31e */	OpenDialog(info);
+/* 000bd32c */}
+
+void 制御／移動／マップ(string id)
+/* 000bd33a */{
+/* 000bd33a */	g_gameFlow.setNextMap(id);
+/* 000bd34c */}
+
+void 制御／移動／ダンジョン(string id, int x, int y)
+/* 000bd35a */{
+/* 000bd35a */	g_gameFlow.setNextDungeon(id, x, y);
+/* 000bd378 */}
+
+void 制御／押入れ表示()
+/* 000bd386 */{
+/* 000bd386 */	OpenDepository();
+/* 000bd38c */}
+
+void 制御／商品表示(int type)
+/* 000bd39a */{
+/* 000bd39a */	OpenShop(type);
+/* 000bd3a6 */}
+
+void 制御／商品追加(int type, string id)
+/* 000bd3b4 */{
+/* 000bd3b4 */	g_shopStock[type].add(id, 0);
+/* 000bd3d4 */}
+
+void 制御／商品削除(int type, string id)
+/* 000bd3e2 */{
+/* 000bd3e2 */	g_shopStock[type].erase(id);
+/* 000bd3fc */}
+
+void 制御／ＨＰ増減(int per, string death)
+/* 000bd40a */{
+/* 000bd40a */	int nowHp;
+/* 000bd414 */	int afterHp;
+/* 000bd41e */	int val;
+/* 000bd428 */	nowHp = g_player.getHp();
+/* 000bd440 */	val = (g_player.getMaxHp() * per) / 100;
+/* 000bd468 */	g_player.addHp(val);
+/* 000bd47a */	afterHp = g_player.getHp();
+/* 000bd492 */	if (val > 0)
+/* 000bd4a6 */	{
+/* 000bd4a6 */		string maxInfo;
+/* 000bd4b2 */		if (afterHp == g_player.getMaxHp())
+/* 000bd4cc */		{
+/* 000bd4cc */			maxInfo = "(最大HP)";
+/* 000bd4d8 */		}
+/* 000bd4de */		else
+/* 000bd4de */		{
+/* 000bd4de */			maxInfo = "";
+/* 000bd4ea */		}
+/* 000bd4ea */		DialogInfomation info;
+/* 000bd4fa */		info.type = 2;
+/* 000bd510 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000bd524 */		info.caption = "HPが%d点回復した！" % val;
+/* 000bd54a */		info.desc[0] = "HP:%d → %d%s" % nowHp % afterHp % maxInfo;
+/* 000bd594 */		OpenDialog(info);
+/* 000bd5a2 */	}
+/* 000bd5ae */	else
+/* 000bd5ae */	{
+/* 000bd5ae */		int mark;
+/* 000bd5b8 */		mark = val * -1;
+/* 000bd5d2 */		DialogInfomation info;
+/* 000bd5e2 */		info.type = 1;
+/* 000bd5f8 */		info.imageName = "システム／ダイアログ／ダメージ";
+/* 000bd60c */		info.caption = "%d点のダメージを受けた！" % mark;
+/* 000bd632 */		info.desc[0] = "HP:%d → %d" % nowHp % afterHp;
+/* 000bd66e */		OpenDialog(info);
+/* 000bd67c */		if (g_player.getHp() <= 0)
+/* 000bd696 */		{
+/* 000bd696 */			if (death != "")
+/* 000bd6a6 */			{
+/* 000bd6a6 */				g_globalGameFlag.addValue(death, 1);
+/* 000bd6be */			}
+/* 000bd6c4 */			OpenGameOver();
+/* 000bd6ca */		}
+/* 000bd6d0 */	}
+/* 000bd6d6 */}
+
+void 制御／ＨＰ増減／固定(int val, string death)
+/* 000bd6e4 */{
+/* 000bd6e4 */	int nowHp;
+/* 000bd6ee */	int afterHp;
+/* 000bd6f8 */	nowHp = g_player.getHp();
+/* 000bd710 */	g_player.addHp(val);
+/* 000bd722 */	afterHp = g_player.getHp();
+/* 000bd73a */	if (val > 0)
+/* 000bd74e */	{
+/* 000bd74e */		string maxInfo;
+/* 000bd75a */		if (afterHp == g_player.getMaxHp())
+/* 000bd774 */		{
+/* 000bd774 */			maxInfo = "(最大HP)";
+/* 000bd780 */		}
+/* 000bd786 */		else
+/* 000bd786 */		{
+/* 000bd786 */			maxInfo = "";
+/* 000bd792 */		}
+/* 000bd792 */		DialogInfomation info;
+/* 000bd7a2 */		info.type = 2;
+/* 000bd7b8 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000bd7cc */		info.caption = "HPが%d点回復した！" % val;
+/* 000bd7f2 */		info.desc[0] = "現在HP:%d → %d%s" % nowHp % afterHp % maxInfo;
+/* 000bd83c */		OpenDialog(info);
+/* 000bd84a */	}
+/* 000bd856 */	else
+/* 000bd856 */	{
+/* 000bd856 */		int mark;
+/* 000bd860 */		mark = val * -1;
+/* 000bd87a */		DialogInfomation info;
+/* 000bd88a */		info.type = 1;
+/* 000bd8a0 */		info.imageName = "システム／ダイアログ／ダメージ";
+/* 000bd8b4 */		info.caption = "%d点のダメージを受けた！" % mark;
+/* 000bd8da */		info.desc[0] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 000bd916 */		OpenDialog(info);
+/* 000bd924 */		if (g_player.getHp() <= 0)
+/* 000bd93e */		{
+/* 000bd93e */			if (death != "")
+/* 000bd94e */			{
+/* 000bd94e */				g_globalGameFlag.addValue(death, 1);
+/* 000bd966 */			}
+/* 000bd96c */			OpenGameOver();
+/* 000bd972 */		}
+/* 000bd978 */	}
+/* 000bd97e */}
+
+void 制御／経験値増減(int per)
+/* 000bd98c */{
+/* 000bd98c */	int nowExp;
+/* 000bd996 */	int afterExp;
+/* 000bd9a0 */	int val;
+/* 000bd9aa */	nowExp = g_player.getExp();
+/* 000bd9c2 */	val = (制御／必要経験値確認() * per) / 100;
+/* 000bd9e4 */	g_player.addExp(val);
+/* 000bd9f6 */	afterExp = g_player.getExp();
+/* 000bda0e */	if (val > 0)
+/* 000bda22 */	{
+/* 000bda22 */		DialogInfomation info;
+/* 000bda32 */		info.type = 2;
+/* 000bda48 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000bda5c */		info.caption = "経験値を%d点手に入れた！" % val;
+/* 000bda82 */		info.desc[0] = "現在EXP:%d → %d" % nowExp % afterExp;
+/* 000bdabe */		OpenDialog(info);
+/* 000bdacc */	}
+/* 000bdad8 */	else
+/* 000bdad8 */	{
+/* 000bdad8 */		int mark;
+/* 000bdae2 */		mark = per * -1;
+/* 000bdafc */		DialogInfomation info;
+/* 000bdb0c */		info.type = 1;
+/* 000bdb22 */		info.imageName = "システム／ダイアログ／経験値喪失";
+/* 000bdb36 */		info.caption = "経験値を%d点失った！" % mark;
+/* 000bdb5c */		info.desc[0] = "現在EXP:%d → %d" % nowExp % afterExp;
+/* 000bdb98 */		OpenDialog(info);
+/* 000bdba6 */	}
+/* 000bdbac */}
+
+void 制御／経験値増減／固定(int val)
+/* 000bdbba */{
+/* 000bdbba */	int nowExp;
+/* 000bdbc4 */	int afterExp;
+/* 000bdbce */	nowExp = g_player.getExp();
+/* 000bdbe6 */	g_player.addExp(val);
+/* 000bdbf8 */	afterExp = g_player.getExp();
+/* 000bdc10 */	if (val > 0)
+/* 000bdc24 */	{
+/* 000bdc24 */		DialogInfomation info;
+/* 000bdc34 */		info.type = 2;
+/* 000bdc4a */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000bdc5e */		info.caption = "経験値を%d点手に入れた！" % val;
+/* 000bdc84 */		info.desc[0] = "現在EXP:%d → %d" % nowExp % afterExp;
+/* 000bdcc0 */		OpenDialog(info);
+/* 000bdcce */	}
+/* 000bdcda */	else
+/* 000bdcda */	{
+/* 000bdcda */		int mark;
+/* 000bdce4 */		mark = val * -1;
+/* 000bdcfe */		DialogInfomation info;
+/* 000bdd0e */		info.type = 1;
+/* 000bdd24 */		info.imageName = "システム／ダイアログ／経験値喪失";
+/* 000bdd38 */		info.caption = "経験値を%d点失った！" % mark;
+/* 000bdd5e */		info.desc[0] = "現在EXP:%d → %d" % nowExp % afterExp;
+/* 000bdd9a */		OpenDialog(info);
+/* 000bdda8 */	}
+/* 000bddae */}
+
+void 制御／視界増減(int val)
+/* 000bddbc */{
+/* 000bddbc */	int now;
+/* 000bddc6 */	now = g_player.getViewAlternation();
+/* 000bddde */	g_player.setViewAlternation(now + val);
+/* 000bddf8 */	if (val > 0)
+/* 000bde0c */	{
+/* 000bde0c */		DialogInfomation info;
+/* 000bde1c */		info.type = 2;
+/* 000bde32 */		info.chipId = "CHIP594";
+/* 000bde46 */		info.caption = "陸ほたるを潰した！";
+/* 000bde5a */		info.desc[0] = "ぷちゅっ。";
+/* 000bde76 */		info.desc[1] = "尻が強烈に発光して周囲を照らした。";
+/* 000bde92 */		OpenDialog(info);
+/* 000bdea0 */	}
+/* 000bdeac */	else
+/* 000bdeac */	{
+/* 000bdeac */		string ika;
+/* 000bdeb8 */		switch (制御／時間確認())
+/* 000bdeca */		{
+/* 000bdeca */		case 0:
+/* 000bdeca */		case 1:
+/* 000bdeca */		case 2:
+/* 000bdeca */			ika = "おねぼうイカマンを踏んだ！";
+/* 000bded6 */			break;
+/* 000bdedc */		case 3:
+/* 000bdedc */		case 4:
+/* 000bdedc */		case 5:
+/* 000bdedc */			ika = "おひるねイカマンを踏んだ！";
+/* 000bdee8 */			break;
+/* 000bdeee */		case 6:
+/* 000bdeee */		case 7:
+/* 000bdeee */		case 8:
+/* 000bdeee */			ika = "ぐっすりイカマンを踏んだ！";
+/* 000bdefa */			break;
+/* 000bdf00 */		}
+/* 000bdf00 */		DialogInfomation info;
+/* 000bdf10 */		info.type = 1;
+/* 000bdf26 */		info.imageName = "システム／ダイアログ／暗闇";
+/* 000bdf3a */		info.caption = ika;
+/* 000bdf4e */		info.desc[0] = "ぶちゅー。";
+/* 000bdf6a */		info.desc[1] = "墨が目に入って視界が悪くなった。";
+/* 000bdf86 */		OpenDialog(info);
+/* 000bdf94 */	}
+/* 000bdf9a */}
+
+void 制御／視界初期化()
+/* 000bdfa8 */{
+/* 000bdfa8 */	g_player.setViewAlternation(0);
+/* 000bdfba */}
+
+void 制御／数値フラグ設定(string name, int val)
+/* 000bdfc8 */{
+/* 000bdfc8 */	g_gameFlagMap.setInt(name, val);
+/* 000bdfe0 */}
+
+int 制御／数値フラグ確認(string name)
+/* 000bdfee */{
+/* 000bdfee */	int i;
+/* 000bdff8 */	i = g_gameFlagMap.getInt(name);
+/* 000be016 */	return i;
+/* 000be01e */}
+
+void 制御／グローバル数値フラグ設定(string name, int val)
+/* 000be032 */{
+/* 000be032 */	g_globalGameFlag.setInt(name, val);
+/* 000be04a */}
+
+int 制御／グローバル数値フラグ確認(string name)
+/* 000be058 */{
+/* 000be058 */	int i;
+/* 000be062 */	i = g_globalGameFlag.getInt(name);
+/* 000be080 */	return i;
+/* 000be088 */}
+
+void 制御／文字列フラグ設定(string name, string val)
+/* 000be09c */{
+/* 000be09c */	g_gameFlagMap.setString(name, val);
+/* 000be0b4 */}
+
+string 制御／文字列フラグ確認(string name)
+/* 000be0c2 */{
+/* 000be0c2 */	string s;
+/* 000be0ce */	s = g_gameFlagMap.getString(name);
+/* 000be0ea */	return s;
+/* 000be0f2 */}
+
+void 制御／戦闘開始(string id, string bgImageName)
+/* 000be106 */{
+/* 000be106 */	OpenBattle(id, bgImageName);
+/* 000be118 */}
+
+void 制御／クールタイム初期化()
+/* 000be126 */{
+/* 000be126 */	int i;
+/* 000be130 */	for (i = 0; i < g_chipDepository[0].getCount(); ++i)
+/* 000be16e */	{
+/* 000be16e */		g_chipDepository[0].getInstance(i).setTimeRemain(0);
+/* 000be1a2 */	}
+/* 000be1ae */}
+
+bool 制御／プレイヤー属性確認(string attrId)
+/* 000be1bc */{
+/* 000be1bc */	ref ChipDepository dep = g_chipDepository[0];
+/* 000be1e6 */	int i;
+/* 000be1f0 */	for (i = 0; i < dep.getCount(); ++i)
+/* 000be226 */	{
+/* 000be226 */		if (dep.getInstance(i).isBet())
+/* 000be252 */		{
+/* 000be252 */			string chipId = dep.getInstance(i).getId();
+/* 000be282 */			if (getChip(chipId).getAttrId() == attrId)
+/* 000be2ac */			{
+/* 000be2ac */				return true;
+/* 000be2b4 */			}
+/* 000be2ba */		}
+/* 000be2cc */	}
+/* 000be2d8 */	return false;
+/* 000be2e0 */}
+
+bool 制御／モンスター属性確認(string monsterId, int turn, string attrId)
+/* 000be2f4 */{
+/* 000be2f4 */	int i;
+/* 000be2fe */	for (i = 0; i < 3; ++i)
+/* 000be328 */	{
+/* 000be328 */		if (getMonster(monsterId).getAttribute(turn, i) == attrId)
+/* 000be35e */		{
+/* 000be35e */			return true;
+/* 000be366 */		}
+/* 000be36c */	}
+/* 000be378 */	return false;
+/* 000be380 */}
+
+void 制御／レベルアップ()
+/* 000be394 */{
+/* 000be394 */	if (!EV("レベル屋／口／レベルアップ／初回", -2147483648))
+/* 000be3ae */	{
+/* 000be3ae */		レベル屋／口／レベルアップ／初回();
+/* 000be3b4 */	}
+/* 000be3ba */	else
+/* 000be3ba */	{
+/* 000be3ba */		レベル屋／口／レベルアップ();
+/* 000be3c0 */	}
+/* 000be3c0 */	if (制御／経験値確認() >= 制御／必要経験値確認())
+/* 000be3d4 */	{
+/* 000be3d4 */		レベル屋／口／レベルアップ／成功();
+/* 000be3da */		int nowLevel;
+/* 000be3e4 */		int afterLevel;
+/* 000be3ee */		int nowMaxHp;
+/* 000be3f8 */		int afterMaxHp;
+/* 000be402 */		int nowLuck;
+/* 000be40c */		int afterLuck;
+/* 000be416 */		int nowMaxChipCount;
+/* 000be420 */		int afterMaxChipCount;
+/* 000be42a */		nowLevel = g_player.getLevel();
+/* 000be442 */		nowMaxHp = g_player.getMaxHp();
+/* 000be45a */		nowLuck = g_player.getLuck();
+/* 000be472 */		afterLuck = g_player.getLuck();
+/* 000be48a */		nowMaxChipCount = g_player.getMaxChipCount();
+/* 000be4a2 */		afterMaxChipCount = g_player.getMaxChipCount();
+/* 000be4ba */		int exp;
+/* 000be4c4 */		exp = g_player.getExp();
+/* 000be4dc */		g_player.setExp(exp - 制御／必要経験値確認());
+/* 000be4f6 */		g_player.addLevel(1);
+/* 000be508 */		afterLevel = g_player.getLevel();
+/* 000be520 */		int lv;
+/* 000be52a */		lv = g_player.getLevel();
+/* 000be542 */		レベル屋／口／レベルアップ／ＨＰ();
+/* 000be548 */		int hp;
+/* 000be552 */		hp = g_player.getMaxHp();
+/* 000be56a */		g_player.setMaxHp(hp + 40);
+/* 000be584 */		g_player.setHp(g_player.getMaxHp());
+/* 000be59c */		afterMaxHp = g_player.getMaxHp();
+/* 000be5b4 */		if (lv <= 30 && lv >= 11)
+/* 000be5e8 */		{
+/* 000be5e8 */			if (lv % 3 == 2)
+/* 000be604 */			{
+/* 000be604 */				レベル屋／口／レベルアップ／幸運力();
+/* 000be60a */				g_player.addLuck(1);
+/* 000be61c */				afterLuck = g_player.getLuck();
+/* 000be634 */			}
+/* 000be63a */			if (lv % 3 == 0)
+/* 000be656 */			{
+/* 000be656 */				int chip;
+/* 000be660 */				int chipAdd;
+/* 000be66a */				if (lv == 27 || lv == 30)
+/* 000be6aa */				{
+/* 000be6aa */					chipAdd = 1;
+/* 000be6b4 */				}
+/* 000be6ba */				else
+/* 000be6ba */				{
+/* 000be6ba */					chipAdd = 2;
+/* 000be6c4 */				}
+/* 000be6c4 */				制御／数値フラグ設定("増加所持チップ数", chipAdd);
+/* 000be6d6 */				レベル屋／口／レベルアップ／所持チップ数();
+/* 000be6dc */				chip = g_player.getMaxChipCount();
+/* 000be6f4 */				g_player.setMaxChipCount(chip + chipAdd);
+/* 000be70e */				afterMaxChipCount = g_player.getMaxChipCount();
+/* 000be726 */			}
+/* 000be72c */			if (lv % 3 == 1)
+/* 000be748 */			{
+/* 000be748 */				if (!EV("レベル屋／口／レベルアップ／銅貨／初回", -2147483648))
+/* 000be762 */				{
+/* 000be762 */					レベル屋／口／レベルアップ／銅貨／初回();
+/* 000be768 */				}
+/* 000be76e */				else
+/* 000be76e */				{
+/* 000be76e */					レベル屋／口／レベルアップ／銅貨();
+/* 000be774 */				}
+/* 000be774 */				制御／チップ獲得("CHIP597", true);
+/* 000be786 */			}
+/* 000be78c */		}
+/* 000be792 */		レベル屋／口／レベルアップ／終了();
+/* 000be798 */		DialogInfomation info;
+/* 000be7a8 */		info.type = 2;
+/* 000be7be */		info.imageName = "システム／ダイアログ／レベルアップ";
+/* 000be7d2 */		info.caption = "レベル:%d → %d" % nowLevel % afterLevel;
+/* 000be806 */		info.desc[0] = "最大ＨＰ:%d → %d" % nowMaxHp % afterMaxHp;
+/* 000be842 */		info.desc[1] = "　　　運:%d → %d" % nowLuck % afterLuck;
+/* 000be87e */		info.desc[2] = "チップ数:%d → %d" % nowMaxChipCount % afterMaxChipCount;
+/* 000be8ba */		OpenDialog(info);
+/* 000be8c8 */		制御／数値フラグ設定("レベルアップ通知", 0);
+/* 000be8e0 */	}
+/* 000be8e6 */	else
+/* 000be8e6 */	{
+/* 000be8e6 */		レベル屋／口／レベルアップ／失敗();
+/* 000be8ec */	}
+/* 000be8ec */}
+
+int 制御／レベル確認()
+/* 000be8fa */{
+/* 000be8fa */	int lv;
+/* 000be904 */	lv = g_player.getLevel();
+/* 000be91c */	return lv;
+/* 000be924 */}
+
+int 制御／経験値確認()
+/* 000be938 */{
+/* 000be938 */	int exp;
+/* 000be942 */	exp = g_player.getExp();
+/* 000be95a */	return exp;
+/* 000be962 */}
+
+int 制御／必要経験値確認()
+/* 000be976 */{
+/* 000be976 */	int lv;
+/* 000be980 */	int next;
+/* 000be98a */	lv = g_player.getLevel();
+/* 000be9a2 */	switch (lv)
+/* 000be9b4 */	{
+/* 000be9b4 */	case 9:
+/* 000be9b4 */		next = 64;
+/* 000be9be */		break;
+/* 000be9c4 */	case 10:
+/* 000be9c4 */	case 11:
+/* 000be9c4 */	case 12:
+/* 000be9c4 */	case 13:
+/* 000be9c4 */	case 14:
+/* 000be9c4 */		next = (lv - 10) * 20 + 100;
+/* 000be9ee */		break;
+/* 000be9f4 */	case 15:
+/* 000be9f4 */	case 16:
+/* 000be9f4 */	case 17:
+/* 000be9f4 */	case 18:
+/* 000be9f4 */		next = (lv - 15) * 90 + 450;
+/* 000bea1e */		break;
+/* 000bea24 */	case 19:
+/* 000bea24 */	case 20:
+/* 000bea24 */	case 21:
+/* 000bea24 */	case 22:
+/* 000bea24 */		next = (lv - 19) * 360 + 1800;
+/* 000bea4e */		break;
+/* 000bea54 */	case 23:
+/* 000bea54 */	case 24:
+/* 000bea54 */	case 25:
+/* 000bea54 */	case 26:
+/* 000bea54 */		next = (lv - 23) * 1350 + 8100;
+/* 000bea7e */		break;
+/* 000bea84 */	case 27:
+/* 000bea84 */	case 28:
+/* 000bea84 */	case 29:
+/* 000bea84 */	case 30:
+/* 000bea84 */		next = (lv - 27) * 4860 + 24300;
+/* 000beaae */		break;
+/* 000beab4 */	default:
+/* 000beab4 */		next = 85050;
+/* 000beabe */	}
+/* 000beabe */	return next;
+/* 000beac6 */}
+
+bool 制御／スキル確認(string id)
+/* 000beada */{
+/* 000beada */	if (g_player.isHaveSkill(id))
+/* 000beaf2 */	{
+/* 000beaf2 */		return true;
+/* 000beafa */	}
+/* 000beb00 */	return false;
+/* 000beb08 */}
+
+bool 制御／状態異常確認(string id)
+/* 000beb1c */{
+/* 000beb1c */	int condition;
+/* 000beb26 */	condition = g_player.getBadCondition(id);
+/* 000beb44 */	if (condition > 0)
+/* 000beb58 */	{
+/* 000beb58 */		return true;
+/* 000beb60 */	}
+/* 000beb66 */	return false;
+/* 000beb6e */}
+
+void 制御／全状態異常時間経過()
+/* 000beb82 */{
+/* 000beb82 */	g_player.decBadCondition();
+/* 000beb8e */}
+
+void 制御／全状態異常消去()
+/* 000beb9c */{
+/* 000beb9c */	g_player.clearBadCondition("COND01");
+/* 000bebae */	g_player.clearBadCondition("COND02");
+/* 000bebc0 */	g_player.clearBadCondition("COND03");
+/* 000bebd2 */	g_player.clearBadCondition("COND04");
+/* 000bebe4 */	g_player.clearBadCondition("COND05");
+/* 000bebf6 */	DialogInfomation info;
+/* 000bec06 */	info.type = 2;
+/* 000bec1c */	info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000bec30 */	info.caption = "状態異常が消え去った！";
+/* 000bec44 */	info.desc[0] = "身体が正常な状態に回復しました。";
+/* 000bec60 */	OpenDialog(info);
+/* 000bec6e */}
+
+void 制御／状態異常／結石()
+/* 000bec7c */{
+/* 000bec7c */	int nowHp;
+/* 000bec86 */	int afterHp;
+/* 000bec90 */	int val;
+/* 000bec9a */	nowHp = g_player.getHp();
+/* 000becb2 */	if (RAND(6) == 1)
+/* 000beccc */	{
+/* 000beccc */		val = ((g_player.getMaxHp() * (RAND(11) + 29)) / 100) * -1;
+/* 000bed0a */	}
+/* 000bed10 */	else
+/* 000bed10 */	{
+/* 000bed10 */		val = RAND(6) * -1;
+/* 000bed30 */	}
+/* 000bed30 */	g_player.addHp(val);
+/* 000bed42 */	afterHp = g_player.getHp();
+/* 000bed5a */	int mark;
+/* 000bed64 */	mark = val * -1;
+/* 000bed7e */	DialogInfomation info;
+/* 000bed8e */	info.type = 1;
+/* 000beda4 */	if (val < -6)
+/* 000bedb8 */	{
+/* 000bedb8 */		info.imageName = "システム／ダイアログ／状態異常";
+/* 000bedcc */	}
+/* 000bedd2 */	else
+/* 000bedd2 */	{
+/* 000bedd2 */		info.imageName = "システム／ダイアログ／ダメージ";
+/* 000bede6 */	}
+/* 000bede6 */	info.caption = "尿管結石の激痛！" % mark;
+/* 000bee0c */	info.desc[0] = "%d点のダメージ！" % mark;
+/* 000bee3a */	info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 000bee76 */	OpenDialog(info);
+/* 000bee84 */	if (g_player.getHp() <= 0)
+/* 000bee9e */	{
+/* 000bee9e */		OpenGameOver();
+/* 000beea4 */	}
+/* 000beeaa */}
+
+void 制御／ダンジョン時間初期化()
+/* 000beeb8 */{
+/* 000beeb8 */	制御／数値フラグ設定("ダンジョン時間", 0);
+/* 000beeca */}
+
+void 制御／ダンジョン時間経過()
+/* 000beed8 */{
+/* 000beed8 */	int dungeonTime = 制御／数値フラグ確認("ダンジョン時間");
+/* 000beef0 */	++dungeonTime;
+/* 000beef6 */	if (dungeonTime > 8)
+/* 000bef0a */	{
+/* 000bef0a */		制御／数値フラグ設定("ダンジョン時間", 0);
+/* 000bef1c */		g_gameTime.setForwardBlock();
+/* 000bef28 */		if (制御／時間確認() == 0)
+/* 000bef3c */		{
+/* 000bef3c */			DialogInfomation info;
+/* 000bef4c */			info.type = 1;
+/* 000bef62 */			info.imageName = "システム／ダイアログ／徹夜";
+/* 000bef76 */			info.caption = "朝が来た！";
+/* 000bef8a */			info.desc[0] = "気がついたら徹夜していた。";
+/* 000befa6 */			info.desc[1] = "こんな眠い状態での戦闘はやばい。";
+/* 000befc2 */			OpenDialog(info);
+/* 000befd0 */			g_player.setBadCondition("COND06", 99);
+/* 000befe8 */		}
+/* 000beff4 */	}
+/* 000beffa */	else
+/* 000beffa */	{
+/* 000beffa */		制御／数値フラグ設定("ダンジョン時間", dungeonTime);
+/* 000bf00c */	}
+/* 000bf00c */}
+
+void 制御／ゲームクリア()
+/* 000bf01a */{
+/* 000bf01a */	制御／グローバル数値フラグ設定("ゲームクリア", 1);
+/* 000bf02c */	if (制御／グローバル数値フラグ確認("表彰状／最低クリアレベル") == 0 || 制御／グローバル数値フラグ確認("表彰状／最低クリアレベル") > 制御／レベル確認())
+/* 000bf078 */	{
+/* 000bf078 */		制御／グローバル数値フラグ設定("表彰状／最低クリアレベル", 制御／レベル確認());
+/* 000bf08a */	}
+/* 000bf090 */	if (制御／グローバル数値フラグ確認("表彰状／最低クリア日数") == 0 || 制御／グローバル数値フラグ確認("表彰状／最低クリア日数") > 制御／日数確認())
+/* 000bf0dc */	{
+/* 000bf0dc */		制御／グローバル数値フラグ設定("表彰状／最低クリア日数", 制御／日数確認());
+/* 000bf0ee */	}
+/* 000bf0f4 */	if (EV("イェリコ／寝る", -2147483648) && EV("ウィリス／足コキＨ", -2147483648) && EV("エンエン／拷問Ｈ", -2147483648) && EV("クリン／フェラチオＨ", -2147483648) && EV("シィル／学生服Ｈ", -2147483648) && EV("シィル／公園Ｈ", -2147483648) && EV("シィル／性格反転Ｈ", -2147483648) && EV("ニウ／拷問Ｈ", -2147483648) && EV("ネカイ／手コキＨ", -2147483648) && EV("ハイジ／パンＨ", -2147483648) && EV("パティ／プールＨ", -2147483648) && EV("パティ／クンニＨ", -2147483648) && EV("パルプテンクス／パイズリＨ", -2147483648) && EV("ミリー／眼鏡Ｈ", -2147483648) && EV("メナド／墓地Ｈ", -2147483648) && EV("ユキ／姉妹Ｈ", -2147483648) && (EV("ユラン／控え室Ｈ／膣外射精", -2147483648) || EV("ユラン／控え室Ｈ／膣外射精", -2147483648)) && EV("奈美／客室Ｈ", -2147483648) && EV("葉月／トイレＨ", -2147483648) && EV("客室／手／パンツを取る／二回目", -2147483648))
+/* 000bf4cc */	{
+/* 000bf4cc */		if (制御／グローバル数値フラグ確認("表彰状／最短豪遊クリア日数") == 0 || 制御／グローバル数値フラグ確認("表彰状／最短豪遊クリア日数") > 制御／日数確認())
+/* 000bf518 */		{
+/* 000bf518 */			制御／グローバル数値フラグ設定("表彰状／最短豪遊クリア日数", 制御／日数確認());
+/* 000bf52a */		}
+/* 000bf530 */	}
+/* 000bf536 */	if (制御／グローバル数値フラグ確認("戦闘回数") >= 1000)
+/* 000bf550 */	{
+/* 000bf550 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[0]", 1);
+/* 000bf562 */	}
+/* 000bf568 */	if (制御／グローバル数値フラグ確認("勝利／MONS105") >= 100)
+/* 000bf582 */	{
+/* 000bf582 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[1]", 1);
+/* 000bf594 */	}
+/* 000bf59a */	if (制御／グローバル数値フラグ確認("勝利／MONS402") != 0 && 制御／グローバル数値フラグ確認("勝利／MONS426") != 0 && 制御／グローバル数値フラグ確認("勝利／MONS414") != 0 && 制御／グローバル数値フラグ確認("勝利／MONS310") != 0)
+/* 000bf64a */	{
+/* 000bf64a */		制御／グローバル数値フラグ設定("表彰状／スタンプ[2]", 1);
+/* 000bf65c */	}
+/* 000bf662 */	if (制御／グローバル数値フラグ確認("勝利／MONS449") != 0)
+/* 000bf67c */	{
+/* 000bf67c */		制御／グローバル数値フラグ設定("表彰状／スタンプ[3]", 1);
+/* 000bf68e */	}
+/* 000bf694 */	if (制御／グローバル数値フラグ確認("ボーナス／フィーバー！") >= 10)
+/* 000bf6ae */	{
+/* 000bf6ae */		制御／グローバル数値フラグ設定("表彰状／スタンプ[4]", 1);
+/* 000bf6c0 */	}
+/* 000bf6c6 */	if (制御／グローバル数値フラグ確認("ゲームオーバーがコールされた") >= 100)
+/* 000bf6e0 */	{
+/* 000bf6e0 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[5]", 1);
+/* 000bf6f2 */	}
+/* 000bf6f8 */	if (制御／グローバル数値フラグ確認("状態異常[幻聴]") >= 10)
+/* 000bf712 */	{
+/* 000bf712 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[6]", 1);
+/* 000bf724 */	}
+/* 000bf72a */	if (制御／グローバル数値フラグ確認("状態異常[徹夜]") >= 10)
+/* 000bf744 */	{
+/* 000bf744 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[7]", 1);
+/* 000bf756 */	}
+/* 000bf75c */	if (制御／グローバル数値フラグ確認("城壁登頂") != 0)
+/* 000bf776 */	{
+/* 000bf776 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[8]", 1);
+/* 000bf788 */	}
+/* 000bf78e */	if (制御／グローバル数値フラグ確認("ハニメシ") >= 10)
+/* 000bf7a8 */	{
+/* 000bf7a8 */		制御／グローバル数値フラグ設定("表彰状／スタンプ[9]", 1);
+/* 000bf7ba */	}
+/* 000bf7c0 */}
+

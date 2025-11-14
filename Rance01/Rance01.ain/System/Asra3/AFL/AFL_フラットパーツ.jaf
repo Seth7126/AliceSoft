@@ -1,0 +1,35 @@
+bool AFL_Parts_SetPartsFlatAndStop(int PartsNumber, string pIFlatFileName, int State)
+/* 0005801c */{
+/* 0005801c */	if (!GUIEngine.Parts_SetPartsFlatAndStop(PartsNumber, pIFlatFileName, State))
+/* 00058040 */	{
+/* 00058040 */		PARTS_Warning("AFL_Parts_SetPartsFlatAndStop(パーツ番号 = %d, フラットファイル名 = \"%s\", 状態 = %d\n" % PartsNumber % pIFlatFileName % State);
+/* 00058076 */		return false;
+/* 0005807e */	}
+/* 00058084 */	return true;
+/* 0005808c */}
+
+bool AFL_Parts_StopPartsFlat(int PartsNumber, int State)
+/* 000580a0 */{
+/* 000580a0 */	return GUIEngine.Parts_StopPartsFlat(PartsNumber, State);
+/* 000580b8 */}
+
+bool AFL_Parts_StartPartsFlat(int PartsNumber, int State)
+/* 000580cc */{
+/* 000580cc */	return GUIEngine.Parts_StartPartsFlat(PartsNumber, State);
+/* 000580e4 */}
+
+bool AFL_Parts_GoFramePartsFlat(int PartsNumber, int FrameNumber, int State)
+/* 000580f8 */{
+/* 000580f8 */	return GUIEngine.Parts_GoFramePartsFlat(PartsNumber, FrameNumber, State);
+/* 00058116 */}
+
+int AFL_Parts_GetPartsFlatEndFrameNumber(int PartsNumber, int State)
+/* 0005812a */{
+/* 0005812a */	return GUIEngine.Parts_GetPartsFlatEndFrame(PartsNumber, State);
+/* 00058142 */}
+
+int AFL_Parts_GetPartsFlatCurrentFrameNumber(int PartsNumber, int State)
+/* 00058156 */{
+/* 00058156 */	return GUIEngine.Parts_GetPartsFlatCurrentFrameNumber(PartsNumber, State);
+/* 0005816e */}
+

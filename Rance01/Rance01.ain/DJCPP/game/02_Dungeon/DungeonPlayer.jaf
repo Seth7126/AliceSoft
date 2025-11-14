@@ -1,0 +1,140 @@
+DungeonPlayer::DungeonPlayer()
+/* 0006f55a */{
+/* 0006f562 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006f584 */	this.pos_ = -1;
+/* 0006f596 */	this.state_ = 0;
+/* 0006f5a0 */}
+
+void DungeonPlayer::update()
+/* 0006f5a8 */{
+/* 0006f5a8 */	switch (this.state_)
+/* 0006f5ba */	{
+/* 0006f5ba */	case 1:
+/* 0006f5ba */	case 3:
+/* 0006f5ba */		if (!this.parent_.isMotion())
+/* 0006f5ce */		{
+/* 0006f5ce */			this.state_ = 2;
+/* 0006f5d8 */		}
+/* 0006f5de */		break;
+/* 0006f5e4 */	case 4:
+/* 0006f5e4 */		if (!this.parent_.isMotion())
+/* 0006f5f8 */		{
+/* 0006f5f8 */			this.state_ = 0;
+/* 0006f602 */		}
+/* 0006f608 */		break;
+/* 0006f60e */	case 2:
+/* 0006f60e */		break;
+/* 0006f614 */	}
+/* 0006f614 */}
+
+void DungeonPlayer::init()
+/* 0006f61c */{
+/* 0006f61c */	this.initParts();
+/* 0006f624 */	this.setPartsOrigin();
+/* 0006f62c */	this.setPartsShow();
+/* 0006f634 */	this.parent_.setPos(this.getXPos(2), 384, -2147483648);
+/* 0006f65a */}
+
+void DungeonPlayer::initParts()
+/* 0006f662 */{
+/* 0006f662 */	this.parts_[0].init("システム／ダンジョン／ランス", 0);
+/* 0006f682 */	createPartsGroup(this.parent_, this.parts_, 2700);
+/* 0006f69a */}
+
+void DungeonPlayer::setPartsOrigin()
+/* 0006f6a2 */{
+/* 0006f6a2 */	int i;
+/* 0006f6ac */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006f6dc */	{
+/* 0006f6dc */		this.parts_[i].setOrigin(7);
+/* 0006f6f6 */	}
+/* 0006f6fc */}
+
+void DungeonPlayer::setPartsShow()
+/* 0006f704 */{
+/* 0006f704 */	int i;
+/* 0006f70e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006f73e */	{
+/* 0006f73e */		this.parts_[i].setShow(true);
+/* 0006f758 */	}
+/* 0006f75e */}
+
+void DungeonPlayer::fadeIn(bool val)
+/* 0006f766 */{
+/* 0006f766 */	if (this.isIgnoreFadeMotion(val))
+/* 0006f77a */	{
+/* 0006f77a */		return;
+/* 0006f77c */	}
+/* 0006f782 */	this.parent_.setShow(true);
+/* 0006f794 */	if (val)
+/* 0006f7a0 */	{
+/* 0006f7a0 */		MotionInfomation m;
+/* 0006f7b0 */		m.setTime(300, 0);
+/* 0006f7c8 */		m.setAlpha(0, 255, 0);
+/* 0006f7e6 */		m.setMove(this.getXPos(this.pos_), 534, this.getXPos(this.pos_), 384, 3);
+/* 0006f820 */		this.parent_.runMotion(m);
+/* 0006f83a */	}
+/* 0006f846 */	else
+/* 0006f846 */	{
+/* 0006f846 */		MotionInfomation m;
+/* 0006f856 */		m.setTime(150, 0);
+/* 0006f86e */		m.setAlpha(255, 0, 0);
+/* 0006f88c */		m.setMove(this.getXPos(this.pos_), 384, this.getXPos(this.pos_), 634, 1);
+/* 0006f8c6 */		this.parent_.runMotion(m);
+/* 0006f8e0 */	}
+/* 0006f8e6 */	this.state_ = val ? 1 : 4;
+/* 0006f910 */}
+
+int DungeonPlayer::getXPos(int p)
+/* 0006f918 */{
+/* 0006f918 */	return p * 160 + 66;
+/* 0006f930 */}
+
+void DungeonPlayer::setDungeonPos(int moveTo, bool isSwing)
+/* 0006f93e */{
+/* 0006f93e */	if (this.pos_ == moveTo && !isSwing)
+/* 0006f972 */	{
+/* 0006f972 */		return;
+/* 0006f974 */	}
+/* 0006f97a */	if (this.state_ != 0)
+/* 0006f988 */	{
+/* 0006f988 */		this.setMoveMotion(this.pos_, moveTo, isSwing);
+/* 0006f9a2 */		this.state_ = 3;
+/* 0006f9ac */	}
+/* 0006f9b2 */	this.pos_ = moveTo;
+/* 0006f9bc */}
+
+void DungeonPlayer::setMoveMotion(int from, int to, bool isSwing)
+/* 0006f9c4 */{
+/* 0006f9c4 */	MotionInfomation m;
+/* 0006f9d4 */	if (isSwing)
+/* 0006f9e0 */	{
+/* 0006f9e0 */		m.setMove(this.getXPos(from), 384, this.getXPos(to), 384, 0);
+/* 0006fa1a */		m.setTime(800, 0);
+/* 0006fa32 */		m.setSwingCount(3);
+/* 0006fa44 */		m.setSwingX(100, 0, 1);
+/* 0006fa62 */	}
+/* 0006fa68 */	else
+/* 0006fa68 */	{
+/* 0006fa68 */		m.setMove(this.getXPos(from), 384, this.getXPos(to), 384, 1);
+/* 0006faa2 */		m.setTime(250, 0);
+/* 0006faba */	}
+/* 0006faba */	this.parent_.runMotion(m);
+/* 0006fad4 */}
+
+bool DungeonPlayer::isIgnoreFadeMotion(bool val)
+/* 0006fadc */{
+/* 0006fadc */	if (val)
+/* 0006fae8 */	{
+/* 0006fae8 */		if (this.state_ == 1 || this.state_ == 2)
+/* 0006fb28 */		{
+/* 0006fb28 */			return true;
+/* 0006fb30 */		}
+/* 0006fb36 */	}
+/* 0006fb3c */	else if (this.state_ == 4 || this.state_ == 0)
+/* 0006fb7c */	{
+/* 0006fb7c */		return true;
+/* 0006fb84 */	}
+/* 0006fb8a */	return false;
+/* 0006fb92 */}
+

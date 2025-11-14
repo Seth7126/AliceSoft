@@ -1,0 +1,31 @@
+int AFL_Sound_GetLength(int DataNumber)
+/* 00057ca0 */{
+/* 00057ca0 */	return KiwiSoundEngine.Sound_GetDataLength(DataNumber);
+/* 00057cb2 */}
+
+int AFL_BGM_GetPlayLength()
+/* 00057cc6 */{
+/* 00057cc6 */	return SYS_BGM_GetPlayLength();
+/* 00057cce */}
+
+int AFL_BGM_GetPlayPos()
+/* 00057ce2 */{
+/* 00057ce2 */	return SYS_BGM_GetPlayPos();
+/* 00057cea */}
+
+int AFL_BGM_Seek(int MilliSecond)
+/* 00057cfe */{
+/* 00057cfe */	return SYS_BGM_Seek(MilliSecond);
+/* 00057d0c */}
+
+void AFL_BGM_Play(int BGMNumber, int Volume, int TotalTime)
+/* 00057d20 */{
+/* 00057d20 */	SYS_PlayBGM(BGMNumber, 0, 1, TotalTime, Volume);
+/* 00057d44 */}
+
+void AFL_BGM_BeginFade(int Volume, int TotalTime)
+/* 00057d52 */{
+/* 00057d52 */	SYS_BGM_SetVolume(Volume);
+/* 00057d5e */	SYS_BGM_BeginFade(TotalTime);
+/* 00057d6a */}
+

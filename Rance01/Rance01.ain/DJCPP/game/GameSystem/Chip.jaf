@@ -1,0 +1,187 @@
+Chip::Chip()
+/* 0008f73a */{
+/* 0008f742 */	this.id_ = "";
+/* 0008f74e */	this.name_ = "未定義";
+/* 0008f75a */	this.imageName_ = "未定義";
+/* 0008f766 */	this.desc_ = "未定義";
+/* 0008f772 */	this.useType_ = 0;
+/* 0008f77c */	this.hpRecover_ = this.spRecover_ = 0;
+/* 0008f798 */	this.atk_ = this.def_ = this.luck_ = this.price_ = 0;
+/* 0008f7c8 */}
+
+void Chip::reload()
+/* 0008f7d0 */{
+/* 0008f7d0 */	this.loadValue();
+/* 0008f7d8 */}
+
+void Chip::loadValue()
+/* 0008f7e0 */{
+/* 0008f7e0 */	this.setName(EX_SA2String("チップデータ", this.id_, "name", ""));
+/* 0008f806 */	this.setImageName(EX_SA2String("チップデータ", this.id_, "imageName", ""));
+/* 0008f82c */	this.setDesc(EX_SA2String("チップデータ", this.id_, "desc", ""));
+/* 0008f852 */	this.setUseType(EX_SA2Int("チップデータ", this.id_, "useType", 0));
+/* 0008f878 */	this.setHpRecover(EX_SA2Int("チップデータ", this.id_, "hpRecover", 0));
+/* 0008f89e */	this.setSpRecover(EX_SA2Int("チップデータ", this.id_, "spRecover", 0));
+/* 0008f8c4 */	this.setAtk(EX_SA2Int("チップデータ", this.id_, "atk", 0));
+/* 0008f8ea */	this.setDef(EX_SA2Int("チップデータ", this.id_, "def", 0));
+/* 0008f910 */	this.setLuck(EX_SA2Int("チップデータ", this.id_, "luck", 0));
+/* 0008f936 */	this.setPrice(EX_SA2Int("チップデータ", this.id_, "price", 0));
+/* 0008f95c */	this.setAttrId(EX_SA2String("チップデータ", this.id_, "attrId", ""));
+/* 0008f982 */	this.setUseSpan(EX_SA2Int("チップデータ", this.id_, "coolTime", 0));
+/* 0008f9a8 */	this.setDepositoryDisable(EX_SA2Int("チップデータ", this.id_, "depositDisable", 0) == 0 ? false : true);
+/* 0008f9ee */}
+
+string Chip::getId()
+/* 0008f9f6 */{
+/* 0008f9f6 */	return this.id_;
+/* 0008f9fe */}
+
+string Chip::getName()
+/* 0008fa0c */{
+/* 0008fa0c */	return this.name_;
+/* 0008fa14 */}
+
+string Chip::getImageName()
+/* 0008fa22 */{
+/* 0008fa22 */	return this.imageName_;
+/* 0008fa2a */}
+
+string Chip::getDesc()
+/* 0008fa38 */{
+/* 0008fa38 */	return this.desc_;
+/* 0008fa40 */}
+
+int Chip::getUseType()
+/* 0008fa4e */{
+/* 0008fa4e */	return this.useType_;
+/* 0008fa56 */}
+
+int Chip::getHpRecover()
+/* 0008fa64 */{
+/* 0008fa64 */	return this.hpRecover_;
+/* 0008fa6c */}
+
+int Chip::getSpRecover()
+/* 0008fa7a */{
+/* 0008fa7a */	return this.spRecover_;
+/* 0008fa82 */}
+
+int Chip::getAtk()
+/* 0008fa90 */{
+/* 0008fa90 */	return this.atk_;
+/* 0008fa98 */}
+
+int Chip::getDef()
+/* 0008faa6 */{
+/* 0008faa6 */	return this.def_;
+/* 0008faae */}
+
+int Chip::getLuck()
+/* 0008fabc */{
+/* 0008fabc */	return this.luck_;
+/* 0008fac4 */}
+
+int Chip::getPrice()
+/* 0008fad2 */{
+/* 0008fad2 */	return this.price_;
+/* 0008fada */}
+
+string Chip::getAttrId()
+/* 0008fae8 */{
+/* 0008fae8 */	return this.attrId_;
+/* 0008faf0 */}
+
+int Chip::getUseSpan()
+/* 0008fafe */{
+/* 0008fafe */	return this.useSpan_;
+/* 0008fb06 */}
+
+bool Chip::isDepositoryDisable()
+/* 0008fb14 */{
+/* 0008fb14 */	return this.isDepositoryDisable_;
+/* 0008fb1c */}
+
+void Chip::setId(string val)
+/* 0008fb2a */{
+/* 0008fb2a */	this.id_ = val;
+/* 0008fb34 */	this.loadValue();
+/* 0008fb3c */}
+
+void Chip::setName(string val)
+/* 0008fb44 */{
+/* 0008fb44 */	this.name_ = val;
+/* 0008fb4e */}
+
+void Chip::setImageName(string val)
+/* 0008fb56 */{
+/* 0008fb56 */	this.imageName_ = val;
+/* 0008fb60 */}
+
+void Chip::setDesc(string val)
+/* 0008fb68 */{
+/* 0008fb68 */	this.desc_ = val;
+/* 0008fb72 */}
+
+void Chip::setUseType(int val)
+/* 0008fb7a */{
+/* 0008fb7a */	this.useType_ = val;
+/* 0008fb84 */}
+
+void Chip::setHpRecover(int val)
+/* 0008fb8c */{
+/* 0008fb8c */	this.hpRecover_ = val;
+/* 0008fb96 */}
+
+void Chip::setSpRecover(int val)
+/* 0008fb9e */{
+/* 0008fb9e */	this.spRecover_ = val;
+/* 0008fba8 */}
+
+void Chip::setAtk(int val)
+/* 0008fbb0 */{
+/* 0008fbb0 */	this.atk_ = val;
+/* 0008fbba */}
+
+void Chip::setDef(int val)
+/* 0008fbc2 */{
+/* 0008fbc2 */	this.def_ = val;
+/* 0008fbcc */}
+
+void Chip::setLuck(int val)
+/* 0008fbd4 */{
+/* 0008fbd4 */	this.luck_ = val;
+/* 0008fbde */}
+
+void Chip::setAttrId(string val)
+/* 0008fbe6 */{
+/* 0008fbe6 */	this.attrId_ = val;
+/* 0008fbf0 */}
+
+void Chip::setPrice(int val)
+/* 0008fbf8 */{
+/* 0008fbf8 */	this.price_ = val;
+/* 0008fc02 */}
+
+void Chip::setUseSpan(int val)
+/* 0008fc0a */{
+/* 0008fc0a */	this.useSpan_ = val;
+/* 0008fc14 */}
+
+void Chip::setDepositoryDisable(bool val)
+/* 0008fc1c */{
+/* 0008fc1c */	this.isDepositoryDisable_ = val;
+/* 0008fc26 */}
+
+int Chip::getIndicatorType()
+/* 0008fc2e */{
+/* 0008fc2e */	if (this.isDepositoryDisable())
+/* 0008fc3c */	{
+/* 0008fc3c */		return 2;
+/* 0008fc44 */	}
+/* 0008fc4a */	if (this.getUseSpan() == -1)
+/* 0008fc60 */	{
+/* 0008fc60 */		return 1;
+/* 0008fc68 */	}
+/* 0008fc6e */	return 0;
+/* 0008fc76 */}
+

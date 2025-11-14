@@ -1,0 +1,54 @@
+MusicInfoManager::MusicInfoManager()
+/* 0009439c */{
+/* 000943a4 */	this.loadInfo();
+/* 000943ac */}
+
+int MusicInfoManager::getCount()
+/* 000943b4 */{
+/* 000943b4 */	return this.info_.Numof();
+/* 000943bc */}
+
+int MusicInfoManager::getNumber(int index)
+/* 000943ca */{
+/* 000943ca */	if (index >= 0 && index < this.info_.Numof())
+/* 00094404 */	{
+/* 00094404 */		return this.info_[index].number;
+/* 0009441c */	}
+/* 00094422 */	return 0;
+/* 0009442a */}
+
+string MusicInfoManager::getName(int index)
+/* 00094438 */{
+/* 00094438 */	if (index >= 0 && index < this.info_.Numof())
+/* 00094472 */	{
+/* 00094472 */		return this.info_[index].name;
+/* 0009448a */	}
+/* 00094490 */	return "";
+/* 00094498 */}
+
+void MusicInfoManager::loadInfo()
+/* 000944a6 */{
+/* 000944a6 */	int count = EX_Height("MusicInfo");
+/* 000944be */	int i;
+/* 000944c8 */	for (i = 0; i < count; ++i)
+/* 000944f8 */	{
+/* 000944f8 */		MusicInfo info;
+/* 00094508 */		info.number = EX_A2Int("MusicInfo", 0, i, 0);
+/* 00094536 */		info.name = EX_A2String("MusicInfo", 1, i, "");
+/* 00094566 */		this.info_.PushBack(info);
+/* 00094570 */	}
+/* 0009457c */}
+
+string MusicInfoManager::getNameFromMusicNumber(int number)
+/* 00094584 */{
+/* 00094584 */	int i;
+/* 0009458e */	for (i = 0; i < this.info_.Numof(); ++i)
+/* 000945be */	{
+/* 000945be */		if (this.info_[i].number == number)
+/* 000945e2 */		{
+/* 000945e2 */			return this.info_[i].name;
+/* 000945fa */		}
+/* 00094600 */	}
+/* 00094606 */	return "";
+/* 0009460e */}
+

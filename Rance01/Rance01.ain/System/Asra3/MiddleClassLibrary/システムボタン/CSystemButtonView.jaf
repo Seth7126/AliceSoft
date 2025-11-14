@@ -1,0 +1,157 @@
+CSystemButtonView::CSystemButtonView()
+/* 0001d598 */{
+/* 0001d5a0 */	this.m_FirstUpdate = true;
+/* 0001d5aa */	this.m_ButtonIndex = -2147483648;
+/* 0001d5b4 */	this.m_State = -2147483648;
+/* 0001d5be */	this.m_Show = true;
+/* 0001d5c8 */}
+
+void CSystemButtonView::Create(int ButtonIndex)
+/* 0001d5d0 */{
+/* 0001d5d0 */	this.m_ButtonIndex = ButtonIndex;
+/* 0001d5da */	this.m_Parts.Create();
+/* 0001d5e6 */}
+
+void CSystemButtonView::Delete()
+/* 0001d5ee */{
+/* 0001d5ee */	this.m_Parts.Release();
+/* 0001d5fa */	this.m_FirstUpdate = true;
+/* 0001d604 */	this.m_ButtonIndex = -2147483648;
+/* 0001d60e */	this.m_State = -2147483648;
+/* 0001d618 */}
+
+void CSystemButtonView::RecreateButtonByState(int MessageWindowNumber, int ButtonIndex, int State)
+/* 0001d620 */{
+/* 0001d620 */	if (!this.m_Parts.IsExist())
+/* 0001d634 */	{
+/* 0001d634 */		this.m_Parts.Create();
+/* 0001d640 */	}
+/* 0001d646 */	ref CSystemButtonModelMap ModelMap = g_SystemButtonModelMap;
+/* 0001d668 */	switch (State)
+/* 0001d67a */	{
+/* 0001d67a */	case 0:
+/* 0001d67a */		this.m_Parts.SetCG(ModelMap.GetPlainCGName(MessageWindowNumber, ButtonIndex), 1);
+/* 0001d6a4 */		break;
+/* 0001d6aa */	case 1:
+/* 0001d6aa */		this.m_Parts.SetCG(ModelMap.GetOnCursorCGName(MessageWindowNumber, ButtonIndex), 1);
+/* 0001d6d4 */		break;
+/* 0001d6da */	case 2:
+/* 0001d6da */		string CGName = ModelMap.GetKeyDownCGName(MessageWindowNumber, ButtonIndex);
+/* 0001d6fc */		if (CGName.Empty())
+/* 0001d708 */		{
+/* 0001d708 */			CGName = ModelMap.GetOnCursorCGName(MessageWindowNumber, ButtonIndex);
+/* 0001d72a */		}
+/* 0001d730 */		this.m_Parts.SetCG(CGName, 1);
+/* 0001d748 */		break;
+/* 0001d74e */	case 3:
+/* 0001d74e */		if (_g_回想中 && ModelMap.IsInvalidByReminisceMode(MessageWindowNumber, ButtonIndex))
+/* 0001d790 */		{
+/* 0001d790 */			if (ModelMap.GetCoverCGName(MessageWindowNumber, ButtonIndex).Empty())
+/* 0001d7b0 */			{
+/* 0001d7b0 */				this.m_Parts.Release();
+/* 0001d7bc */			}
+/* 0001d7c2 */			else
+/* 0001d7c2 */			{
+/* 0001d7c2 */				this.m_Parts.SetCG(ModelMap.GetCoverCGName(MessageWindowNumber, ButtonIndex), 1);
+/* 0001d7ec */			}
+/* 0001d7ec */		}
+/* 0001d7f2 */		else if (ModelMap.GetDisableCGName(MessageWindowNumber, ButtonIndex).Empty())
+/* 0001d812 */		{
+/* 0001d812 */			this.m_Parts.Release();
+/* 0001d81e */		}
+/* 0001d824 */		else
+/* 0001d824 */		{
+/* 0001d824 */			this.m_Parts.SetCG(ModelMap.GetDisableCGName(MessageWindowNumber, ButtonIndex), 1);
+/* 0001d84e */		}
+/* 0001d84e */		break;
+/* 0001d854 */	}
+/* 0001d854 */	this.m_Parts.SetPos(ModelMap.GetX(MessageWindowNumber, ButtonIndex), ModelMap.GetY(MessageWindowNumber, ButtonIndex));
+/* 0001d890 */	this.m_Parts.SetZ(ModelMap.GetZ(MessageWindowNumber, ButtonIndex));
+/* 0001d8b4 */}
+
+void CSystemButtonView::Update()
+/* 0001d8bc */{
+/* 0001d8bc */	int MessageWindowNumber = g_SystemButtonViewList.GetMessageWindowNumber();
+/* 0001d8d4 */	int ButtonCount = g_SystemButtonModelMap.GetButtonCount(MessageWindowNumber);
+/* 0001d8f2 */	if (this.m_ButtonIndex < 0 || this.m_ButtonIndex >= ButtonCount)
+/* 0001d932 */	{
+/* 0001d932 */		system.Error("m_ButtonIndex = %d\ng_SystemButtonModelMap.GetButtonCount(%d) = %d\n" % this.m_ButtonIndex % MessageWindowNumber % ButtonCount);
+/* 0001d96a */		return;
+/* 0001d96c */	}
+/* 0001d972 */	if (this.m_FirstUpdate)
+/* 0001d97c */	{
+/* 0001d97c */		this.RecreateButtonByState(MessageWindowNumber, this.m_ButtonIndex, 0);
+/* 0001d996 */		this.m_FirstUpdate = false;
+/* 0001d9a0 */	}
+/* 0001d9a6 */	this.m_State = this.UpdateState();
+/* 0001d9ba */	if (this.m_State == 4)
+/* 0001d9c8 */	{
+/* 0001d9c8 */		if (this.m_Parts.IsExist())
+/* 0001d9da */		{
+/* 0001d9da */			this.m_Parts.SetShow(false);
+/* 0001d9ec */		}
+/* 0001d9f2 */	}
+/* 0001d9f8 */	else
+/* 0001d9f8 */	{
+/* 0001d9f8 */		this.RecreateButtonByState(MessageWindowNumber, this.m_ButtonIndex, this.m_State);
+/* 0001da12 */		if (this.m_Parts.IsExist())
+/* 0001da24 */		{
+/* 0001da24 */			this.m_Parts.SetShow(this.m_Show);
+/* 0001da36 */		}
+/* 0001da3c */	}
+/* 0001da3c */}
+
+int CSystemButtonView::UpdateState()
+/* 0001da44 */{
+/* 0001da44 */	int MessageWindowNumber = g_SystemButtonViewList.GetMessageWindowNumber();
+/* 0001da5c */	ref CASRect VisibleRect = g_SystemButtonModelMap.GetVisibleRectByIndex(MessageWindowNumber, this.m_ButtonIndex);
+/* 0001da9e */	if (VisibleRect.GetX() != -2147483648)
+/* 0001dab8 */	{
+/* 0001dab8 */		int CursorX;
+/* 0001dac2 */		int CursorY;
+/* 0001dacc */		if (!AFL_Mouse_GetPos(CursorX, CursorY))
+/* 0001daea */		{
+/* 0001daea */			return 4;
+/* 0001daf2 */		}
+/* 0001daf8 */		if (!VisibleRect.IsIn(CursorX, CursorY))
+/* 0001db18 */		{
+/* 0001db18 */			return 4;
+/* 0001db20 */		}
+/* 0001db26 */	}
+/* 0001db2c */	if (!g_SystemButtonModelMap.IsEnable(MessageWindowNumber, this.m_ButtonIndex))
+/* 0001db4c */	{
+/* 0001db4c */		return 3;
+/* 0001db54 */	}
+/* 0001db5a */	if (全文スキップ中確認() || 既読スキップ中確認())
+/* 0001db8a */	{
+/* 0001db8a */		return 0;
+/* 0001db92 */	}
+/* 0001db98 */	if (this.m_Parts.IsExist())
+/* 0001dbaa */	{
+/* 0001dbaa */		int PartsNumber = this.m_Parts.GetPartsNumber();
+/* 0001dbc2 */		bool IsPixelDecide = g_SystemButtonModelMap.IsPixelDecide(MessageWindowNumber, this.m_ButtonIndex);
+/* 0001dbe6 */		Ｐ＿ピクセル判定設定(PartsNumber, IsPixelDecide);
+/* 0001dbf8 */		if (Ｐ＿オンカーソル判定(this.m_Parts.GetPartsNumber(), 1))
+/* 0001dc16 */		{
+/* 0001dc16 */			if (AFL_IsKeyDown(1))
+/* 0001dc28 */			{
+/* 0001dc28 */				return 2;
+/* 0001dc30 */			}
+/* 0001dc36 */			return 1;
+/* 0001dc3e */		}
+/* 0001dc44 */	}
+/* 0001dc4a */	return 0;
+/* 0001dc52 */}
+
+void CSystemButtonView::SetShow(bool Show)
+/* 0001dc60 */{
+/* 0001dc60 */	this.m_Show = Show;
+/* 0001dc6a */	this.m_FirstUpdate = true;
+/* 0001dc74 */	this.Update();
+/* 0001dc7c */}
+
+bool CSystemButtonView::IsSelecting()
+/* 0001dc84 */{
+/* 0001dc84 */	return this.m_State == 1 || this.m_State == 2;
+/* 0001dcc2 */}
+

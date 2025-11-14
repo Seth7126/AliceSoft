@@ -1,0 +1,70 @@
+CASEffectKeyCancelChecker::CASEffectKeyCancelChecker()
+/* 00038f36 */{
+/* 00038f40 */}
+
+bool CASEffectKeyCancelChecker::Init()
+/* 00038f46 */{
+/* 00038f46 */	this.m_KeyList.Alloc(14);
+/* 00038f5c */	bool FirstKeyDownCancel = true;
+/* 00038f66 */	if (SYS_IsClickModeCancel())
+/* 00038f72 */	{
+/* 00038f72 */		FirstKeyDownCancel = false;
+/* 00038f7c */	}
+/* 00038f82 */	this.m_KeyList[0].Init(1, FirstKeyDownCancel);
+/* 00038fa4 */	this.m_KeyList[1].Init(2, false);
+/* 00038fc6 */	this.m_KeyList[2].Init(4, false);
+/* 00038fe8 */	this.m_KeyList[3].Init(13, FirstKeyDownCancel);
+/* 0003900a */	this.m_KeyList[4].Init(27, false);
+/* 0003902c */	this.m_KeyList[5].Init(32, false);
+/* 0003904e */	this.m_KeyList[6].Init(65, false);
+/* 00039070 */	this.m_KeyList[7].Init(83, false);
+/* 00039092 */	this.m_KeyList[8].Init(90, false);
+/* 000390b4 */	this.m_KeyList[9].Init(33, false);
+/* 000390d6 */	this.m_KeyList[10].Init(8, false);
+/* 000390f8 */	this.m_KeyList[11].Init(36, false);
+/* 0003911a */	this.m_KeyList[12].Init(38, false);
+/* 0003913c */	this.m_KeyList[13].Init(40, FirstKeyDownCancel);
+/* 0003915e */	this.m_ClickCanceled = false;
+/* 00039168 */	return true;
+/* 00039170 */}
+
+bool CASEffectKeyCancelChecker::IsCancel()
+/* 0003917e */{
+/* 0003917e */	_g_MouseWheel._Update(true);
+/* 00039190 */	if (!Ａ＿オートモード中確認())
+/* 0003919e */	{
+/* 0003919e */		if (SYS_ホイールバック確認())
+/* 000391aa */		{
+/* 000391aa */			this.m_ClickCanceled = false;
+/* 000391b4 */			return true;
+/* 000391bc */		}
+/* 000391c2 */	}
+/* 000391c8 */	if (SYS_ホイールフォア即確認())
+/* 000391d4 */	{
+/* 000391d4 */		this.m_ClickCanceled = false;
+/* 000391de */		return true;
+/* 000391e6 */	}
+/* 000391ec */	int n;
+/* 000391f6 */	for (n = 0; n < this.m_KeyList.Numof(); ++n)
+/* 00039226 */	{
+/* 00039226 */		if (this.m_KeyList[n].IsKeyDown())
+/* 00039240 */		{
+/* 00039240 */			if (this.m_KeyList[n].GetKey() == 1 || this.m_KeyList[n].GetKey() == 13 || this.m_KeyList[n].GetKey() == 40)
+/* 000392d6 */			{
+/* 000392d6 */				this.m_ClickCanceled = true;
+/* 000392e0 */			}
+/* 000392e6 */			else
+/* 000392e6 */			{
+/* 000392e6 */				this.m_ClickCanceled = false;
+/* 000392f0 */			}
+/* 000392f0 */			return true;
+/* 000392f8 */		}
+/* 000392fe */	}
+/* 00039304 */	return false;
+/* 0003930c */}
+
+bool CASEffectKeyCancelChecker::IsClickCanceled()
+/* 0003931a */{
+/* 0003931a */	return this.m_ClickCanceled;
+/* 00039322 */}
+

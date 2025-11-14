@@ -1,0 +1,39 @@
+void ムービー(string ファイル名, bool キーキャンセル, int nBackColorR, int nBackColorG, int nBackColorB)
+/* 000570a8 */{
+/* 000570a8 */	if (AFL_IsKeyDown(27))
+/* 000570ba */	{
+/* 000570ba */		return;
+/* 000570bc */	}
+/* 000570c2 */	bool bPrevInvalidateFrameSkip = AFL_GetInvalidateFrameSkipWhileMessageSkip();
+/* 000570d4 */	AFL_SetInvalidateFrameSkipWhileMessageSkip(true);
+/* 000570e0 */	bool bPrev既読スキップモードマーク表示許可 = SYS_スキップモードマーク表示許可フラグ取得();
+/* 000570f2 */	bool bPrevオートモードマーク表示許可 = SYS_オートモードマーク表示許可フラグ取得();
+/* 00057104 */	既読スキップモードマーク表示許可設定(false);
+/* 00057110 */	オートモードマーク表示許可設定(false);
+/* 0005711c */	CDrawMovie PluginObject;
+/* 0005712c */	PluginObject.SetBackColor(nBackColorR, nBackColorG, nBackColorB);
+/* 0005714a */	PluginObject.SetInnerVolumeRate(g_nMovieInnerVolumeRate);
+/* 0005715c */	int nWidth = AFL_View_GetWidth();
+/* 0005716e */	int nHeight = AFL_View_GetHeight();
+/* 00057180 */	if (!PluginObject.Play(ファイル名, nWidth, nHeight, キーキャンセル))
+/* 000571ac */	{
+/* 000571ac */		system.Error("【 %s 】\nムービー再生に失敗しました" % ファイル名);
+/* 000571c8 */	}
+/* 000571ce */	既読スキップモードマーク表示許可設定(bPrev既読スキップモードマーク表示許可);
+/* 000571da */	オートモードマーク表示許可設定(bPrevオートモードマーク表示許可);
+/* 000571e6 */	AFL_SetInvalidateFrameSkipWhileMessageSkip(bPrevInvalidateFrameSkip);
+/* 000571f2 */}
+
+void ムービー内部ボリューム率設定(int nInnerVolumeRate)
+/* 00057200 */{
+/* 00057200 */	if (nInnerVolumeRate < 0)
+/* 0005720e */	{
+/* 0005720e */		nInnerVolumeRate = 0;
+/* 00057218 */	}
+/* 0005721e */	else if (nInnerVolumeRate > 100)
+/* 00057232 */	{
+/* 00057232 */		nInnerVolumeRate = 100;
+/* 0005723c */	}
+/* 00057242 */	g_nMovieInnerVolumeRate = nInnerVolumeRate;
+/* 0005724c */}
+

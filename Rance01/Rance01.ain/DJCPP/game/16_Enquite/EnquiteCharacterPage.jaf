@@ -1,0 +1,19 @@
+EnquiteCharacterPage::EnquiteCharacterPage()
+/* 0008aa92 */{
+/* 0008aa9c */}
+
+void EnquiteCharacterPage::init()
+/* 0008aaa2 */{
+/* 0008aaa2 */	array@string question;
+/* 0008aaac */	int count = EX_Height("キャラアンケート");
+/* 0008aac4 */	array@string image;
+/* 0008aace */	array@string name;
+/* 0008aad8 */	int i;
+/* 0008aae2 */	for (i = 0; i < count; ++i)
+/* 0008ab12 */	{
+/* 0008ab12 */		image.PushBack(EX_A2String("キャラアンケート", 0, i, ""));
+/* 0008ab3a */		name.PushBack(EX_A2String("キャラアンケート", 1, i, ""));
+/* 0008ab62 */	}
+/* 0008ab68 */	this.group_.init("Q22.気に入ったキャラクターを選択してください", image, name);
+/* 0008ab8a */}
+

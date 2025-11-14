@@ -1,0 +1,58 @@
+BattleBonusManager::BattleBonusManager()
+/* 000910de */{
+/* 000910e8 */}
+
+void BattleBonusManager::add(BattleBonusInfomation info)
+/* 000910ee */{
+/* 000910ee */	g_globalGameFlag.addValue("ボーナス／%s" % info.caption, 1);
+/* 0009111c */	this.result_.PushBack(info);
+/* 00091126 */}
+
+void BattleBonusManager::clear()
+/* 0009112e */{
+/* 0009112e */	this.result_.Free();
+/* 00091138 */}
+
+int BattleBonusManager::getExp()
+/* 00091140 */{
+/* 00091140 */	int n;
+/* 0009114a */	int i;
+/* 00091154 */	for (i = 0; i < this.result_.Numof(); ++i)
+/* 00091184 */	{
+/* 00091184 */		if (this.result_[i].type == 0)
+/* 000911a8 */		{
+/* 000911a8 */			n += this.result_[i].value;
+/* 000911ca */		}
+/* 000911d0 */	}
+/* 000911d6 */	return n;
+/* 000911de */}
+
+int BattleBonusManager::getGold()
+/* 000911ec */{
+/* 000911ec */	int n;
+/* 000911f6 */	int i;
+/* 00091200 */	for (i = 0; i < this.result_.Numof(); ++i)
+/* 00091230 */	{
+/* 00091230 */		if (this.result_[i].type == 1)
+/* 00091254 */		{
+/* 00091254 */			n += this.result_[i].value;
+/* 00091276 */		}
+/* 0009127c */	}
+/* 00091282 */	return n;
+/* 0009128a */}
+
+int BattleBonusManager::getCount()
+/* 00091298 */{
+/* 00091298 */	return this.result_.Numof();
+/* 000912a0 */}
+
+string BattleBonusManager::getCaption(int index)
+/* 000912ae */{
+/* 000912ae */	return this.result_[index].caption;
+/* 000912c6 */}
+
+int BattleBonusManager::getValue(int index)
+/* 000912d4 */{
+/* 000912d4 */	return this.result_[index].value;
+/* 000912ec */}
+

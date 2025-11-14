@@ -1,0 +1,117 @@
+void Ｐ＿テキストボックス＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 0005392c */{
+/* 0005392c */	GUIEngine.SetTextBoxPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 00053948 */}
+
+void Ｐ＿テキストボックス＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 00053956 */{
+/* 00053956 */	GUIEngine.SetTextBoxZ(パーツ番号, _Ｚ座標);
+/* 0005396c */}
+
+int Ｐ＿テキストボックス＿Ｘ座標取得(int パーツ番号)
+/* 0005397a */{
+/* 0005397a */	return GUIEngine.GetTextBoxX(パーツ番号);
+/* 0005398c */}
+
+int Ｐ＿テキストボックス＿Ｙ座標取得(int パーツ番号)
+/* 000539a0 */{
+/* 000539a0 */	return GUIEngine.GetTextBoxY(パーツ番号);
+/* 000539b2 */}
+
+int Ｐ＿テキストボックス＿Ｚ座標取得(int パーツ番号)
+/* 000539c6 */{
+/* 000539c6 */	return GUIEngine.GetTextBoxZ(パーツ番号);
+/* 000539d8 */}
+
+void Ｐ＿テキストボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 000539ec */{
+/* 000539ec */	GUIEngine.SetTextBoxWidth(パーツ番号, 幅);
+/* 00053a02 */	GUIEngine.SetTextBoxHeight(パーツ番号, 高さ);
+/* 00053a18 */}
+
+int Ｐ＿テキストボックス＿幅取得(int パーツ番号)
+/* 00053a26 */{
+/* 00053a26 */	return GUIEngine.GetTextBoxWidth(パーツ番号);
+/* 00053a38 */}
+
+int Ｐ＿テキストボックス＿高さ取得(int パーツ番号)
+/* 00053a4c */{
+/* 00053a4c */	return GUIEngine.GetTextBoxHeight(パーツ番号);
+/* 00053a5e */}
+
+void Ｐ＿テキストボックス＿表示設定(int パーツ番号, bool 表示)
+/* 00053a72 */{
+/* 00053a72 */	GUIEngine.SetTextBoxShow(パーツ番号, 表示);
+/* 00053a88 */}
+
+bool Ｐ＿テキストボックス＿表示設定取得(int パーツ番号)
+/* 00053a96 */{
+/* 00053a96 */	return GUIEngine.IsTextBoxShow(パーツ番号);
+/* 00053aa8 */}
+
+void Ｐ＿テキストボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 00053abc */{
+/* 00053abc */	GUIEngine.SetTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00053b08 */}
+
+void Ｐ＿テキストボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 00053b16 */{
+/* 00053b16 */	GUIEngine.GetTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00053b62 */}
+
+void Ｐ＿テキストボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 00053b70 */{
+/* 00053b70 */	GUIEngine.SetTextBoxText(パーツ番号, テキスト);
+/* 00053b86 */}
+
+string Ｐ＿テキストボックス＿テキスト取得(int パーツ番号)
+/* 00053b94 */{
+/* 00053b94 */	string Text;
+/* 00053ba0 */	GUIEngine.GetTextBoxText(パーツ番号, Text);
+/* 00053bb6 */	return Text;
+/* 00053bbe */}
+
+void Ｐ＿テキストボックス＿最大文字数設定(int パーツ番号, int 最大文字数)
+/* 00053bd2 */{
+/* 00053bd2 */	GUIEngine.SetTextBoxMaxTextLength(パーツ番号, 最大文字数);
+/* 00053be8 */}
+
+int Ｐ＿テキストボックス＿最大文字数取得(int パーツ番号)
+/* 00053bf6 */{
+/* 00053bf6 */	return GUIEngine.GetTextBoxMaxTextLength(パーツ番号);
+/* 00053c08 */}
+
+void Ｐ＿テキストボックス＿選択色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00053c1c */{
+/* 00053c1c */	GUIEngine.SetTextBoxSelectR(パーツ番号, 赤);
+/* 00053c32 */	GUIEngine.SetTextBoxSelectG(パーツ番号, 緑);
+/* 00053c48 */	GUIEngine.SetTextBoxSelectB(パーツ番号, 青);
+/* 00053c5e */}
+
+int Ｐ＿テキストボックス＿選択色赤取得(int パーツ番号)
+/* 00053c6c */{
+/* 00053c6c */	return GUIEngine.GetTextBoxSelectR(パーツ番号);
+/* 00053c7e */}
+
+int Ｐ＿テキストボックス＿選択色緑取得(int パーツ番号)
+/* 00053c92 */{
+/* 00053c92 */	return GUIEngine.GetTextBoxSelectG(パーツ番号);
+/* 00053ca4 */}
+
+int Ｐ＿テキストボックス＿選択色青取得(int パーツ番号)
+/* 00053cb8 */{
+/* 00053cb8 */	return GUIEngine.GetTextBoxSelectB(パーツ番号);
+/* 00053cca */}
+
+void Ｐ＿テキストボックス＿背景ＣＧ設定(int パーツ番号, string ＣＧ名)
+/* 00053cde */{
+/* 00053cde */	GUIEngine.SetTextBoxCGName(パーツ番号, ＣＧ名);
+/* 00053cf4 */}
+
+string Ｐ＿テキストボックス＿背景ＣＧ取得(int パーツ番号)
+/* 00053d02 */{
+/* 00053d02 */	string Name;
+/* 00053d0e */	GUIEngine.GetTextBoxCGName(パーツ番号, Name);
+/* 00053d24 */	return Name;
+/* 00053d2c */}
+

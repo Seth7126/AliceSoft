@@ -1,0 +1,47 @@
+bool _CMouseWheel::_IsFore()
+/* 00038d32 */{
+/* 00038d32 */	return this._m_fore != 0;
+/* 00038d44 */}
+
+bool _CMouseWheel::_IsBack()
+/* 00038d52 */{
+/* 00038d52 */	return this._m_back != 0;
+/* 00038d64 */}
+
+int _CMouseWheel::GetForeCount()
+/* 00038d72 */{
+/* 00038d72 */	return this._m_fore;
+/* 00038d7a */}
+
+int _CMouseWheel::GetBackCount()
+/* 00038d88 */{
+/* 00038d88 */	return this._m_back;
+/* 00038d90 */}
+
+int _CMouseWheel::_GetDelta()
+/* 00038d9e */{
+/* 00038d9e */	return this._m_back - this._m_fore;
+/* 00038dae */}
+
+_CMouseWheel::_CMouseWheel()
+/* 00038dbc */{
+/* 00038dc4 */	this._m_fore = 0;
+/* 00038dce */	this._m_back = 0;
+/* 00038dd8 */}
+
+void _CMouseWheel::_Update(bool _bClear)
+/* 00038de0 */{
+/* 00038de0 */	AFL_MouseWheel_GetCount(this._m_fore, this._m_back);
+/* 00038df6 */	if (_bClear)
+/* 00038e02 */	{
+/* 00038e02 */		AFL_MouseWheel_ClearCount();
+/* 00038e08 */	}
+/* 00038e0e */}
+
+void _CMouseWheel::_Clear()
+/* 00038e16 */{
+/* 00038e16 */	AFL_MouseWheel_ClearCount();
+/* 00038e1c */	this._m_fore = 0;
+/* 00038e26 */	this._m_back = 0;
+/* 00038e30 */}
+

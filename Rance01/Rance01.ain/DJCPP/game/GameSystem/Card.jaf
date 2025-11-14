@@ -1,0 +1,72 @@
+Card::Card()
+/* 00091aca */{
+/* 00091ad2 */	this.id_ = "";
+/* 00091ade */	this.imageName_ = "";
+/* 00091aea */	this.name_ = "";
+/* 00091af6 */	this.type_ = 0;
+/* 00091b00 */}
+
+void Card::reload()
+/* 00091b08 */{
+/* 00091b08 */	this.loadValue();
+/* 00091b10 */}
+
+void Card::loadValue()
+/* 00091b18 */{
+/* 00091b18 */	this.setImageName(EX_SA2String("カードデータ", this.id_, "imageName", ""));
+/* 00091b3e */	this.setRankImageName(EX_SA2String("カードデータ", this.id_, "rankImageName", ""));
+/* 00091b64 */	this.setName(EX_SA2String("カードデータ", this.id_, "name", ""));
+/* 00091b8a */	this.setType(EX_SA2Int("カードデータ", this.id_, "type", 0));
+/* 00091bb0 */}
+
+string Card::getId()
+/* 00091bb8 */{
+/* 00091bb8 */	return this.id_;
+/* 00091bc0 */}
+
+string Card::getName()
+/* 00091bce */{
+/* 00091bce */	return this.name_;
+/* 00091bd6 */}
+
+string Card::getImageName()
+/* 00091be4 */{
+/* 00091be4 */	return this.imageName_;
+/* 00091bec */}
+
+int Card::getType()
+/* 00091bfa */{
+/* 00091bfa */	return this.type_;
+/* 00091c02 */}
+
+void Card::setId(string val)
+/* 00091c10 */{
+/* 00091c10 */	this.id_ = val;
+/* 00091c1a */	this.loadValue();
+/* 00091c22 */}
+
+void Card::setImageName(string val)
+/* 00091c2a */{
+/* 00091c2a */	this.imageName_ = val;
+/* 00091c34 */}
+
+void Card::setType(int val)
+/* 00091c3c */{
+/* 00091c3c */	this.type_ = val;
+/* 00091c46 */}
+
+void Card::setName(string val)
+/* 00091c4e */{
+/* 00091c4e */	this.name_ = val;
+/* 00091c58 */}
+
+void Card::setRankImageName(string val)
+/* 00091c60 */{
+/* 00091c60 */	this.rankImageName_ = val;
+/* 00091c6a */}
+
+string Card::getRankImageName()
+/* 00091c72 */{
+/* 00091c72 */	return this.rankImageName_;
+/* 00091c7a */}
+

@@ -1,0 +1,101 @@
+void Ｐ＿コンボボックス＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 00054250 */{
+/* 00054250 */	GUIEngine.SetComboBoxPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 0005426c */}
+
+void Ｐ＿コンボボックス＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 0005427a */{
+/* 0005427a */	GUIEngine.SetComboBoxZ(パーツ番号, _Ｚ座標);
+/* 00054290 */}
+
+int Ｐ＿コンボボックス＿Ｘ座標取得(int パーツ番号)
+/* 0005429e */{
+/* 0005429e */	return GUIEngine.GetComboBoxX(パーツ番号);
+/* 000542b0 */}
+
+int Ｐ＿コンボボックス＿Ｙ座標取得(int パーツ番号)
+/* 000542c4 */{
+/* 000542c4 */	return GUIEngine.GetComboBoxY(パーツ番号);
+/* 000542d6 */}
+
+int Ｐ＿コンボボックス＿Ｚ座標取得(int パーツ番号)
+/* 000542ea */{
+/* 000542ea */	return GUIEngine.GetComboBoxZ(パーツ番号);
+/* 000542fc */}
+
+void Ｐ＿コンボボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00054310 */{
+/* 00054310 */	GUIEngine.SetComboBoxWidth(パーツ番号, 幅);
+/* 00054326 */	GUIEngine.SetComboBoxHeight(パーツ番号, 高さ);
+/* 0005433c */}
+
+int Ｐ＿コンボボックス＿幅取得(int パーツ番号)
+/* 0005434a */{
+/* 0005434a */	return GUIEngine.GetComboBoxWidth(パーツ番号);
+/* 0005435c */}
+
+int Ｐ＿コンボボックス＿高さ取得(int パーツ番号)
+/* 00054370 */{
+/* 00054370 */	return GUIEngine.GetComboBoxHeight(パーツ番号);
+/* 00054382 */}
+
+void Ｐ＿コンボボックス＿ボックスマージン設定(int パーツ番号, int 幅, int 高さ)
+/* 00054396 */{
+/* 00054396 */	GUIEngine.SetComboBoxTextWidthMargin(パーツ番号, 幅);
+/* 000543ac */	GUIEngine.SetComboBoxTextHeightMargin(パーツ番号, 高さ);
+/* 000543c2 */}
+
+int Ｐ＿コンボボックス＿ボックスマージン幅取得(int パーツ番号)
+/* 000543d0 */{
+/* 000543d0 */	return GUIEngine.GetComboBoxTextWidthMargin(パーツ番号);
+/* 000543e2 */}
+
+int Ｐ＿コンボボックス＿ボックスマージン高さ取得(int パーツ番号)
+/* 000543f6 */{
+/* 000543f6 */	return GUIEngine.GetComboBoxTextHeightMargin(パーツ番号);
+/* 00054408 */}
+
+void Ｐ＿コンボボックス＿表示設定(int パーツ番号, bool 表示)
+/* 0005441c */{
+/* 0005441c */	GUIEngine.SetComboBoxShow(パーツ番号, 表示);
+/* 00054432 */}
+
+bool Ｐ＿コンボボックス＿表示設定取得(int パーツ番号)
+/* 00054440 */{
+/* 00054440 */	return GUIEngine.IsComboBoxShow(パーツ番号);
+/* 00054452 */}
+
+void Ｐ＿コンボボックス＿背景ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00054466 */{
+/* 00054466 */	GUIEngine.SetComboBoxCGName(パーツ番号, ＣＧ名);
+/* 0005447c */}
+
+string Ｐ＿コンボボックス＿背景ＣＧ名取得(int パーツ番号)
+/* 0005448a */{
+/* 0005448a */	string Name;
+/* 00054496 */	GUIEngine.GetComboBoxCGName(パーツ番号, Name);
+/* 000544ac */	return Name;
+/* 000544b4 */}
+
+void Ｐ＿コンボボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 000544c8 */{
+/* 000544c8 */	GUIEngine.SetComboBoxText(パーツ番号, テキスト);
+/* 000544de */}
+
+string Ｐ＿コンボボックス＿テキスト取得(int パーツ番号)
+/* 000544ec */{
+/* 000544ec */	string Text;
+/* 000544f8 */	GUIEngine.GetComboBoxText(パーツ番号, Text);
+/* 0005450e */	return Text;
+/* 00054516 */}
+
+void Ｐ＿コンボボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 0005452a */{
+/* 0005452a */	GUIEngine.SetComboBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00054576 */}
+
+void Ｐ＿コンボボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 00054584 */{
+/* 00054584 */	GUIEngine.GetComboBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000545d0 */}
+

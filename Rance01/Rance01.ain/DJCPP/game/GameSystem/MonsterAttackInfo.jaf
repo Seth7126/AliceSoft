@@ -1,0 +1,48 @@
+void MonsterAttackInfo::loadValue(string key, int turn)
+/* 00090ec6 */{
+/* 00090ec6 */	this.setAtk(EX_SA2Int("モンスターデータ", key, "t%d_atk" % turn, 0));
+/* 00090efa */	this.setDef(EX_SA2Int("モンスターデータ", key, "t%d_def" % turn, 0));
+/* 00090f2e */	int i;
+/* 00090f38 */	for (i = 0; i < this.attribute_.Numof(); ++i)
+/* 00090f68 */	{
+/* 00090f68 */		this.setAttribute(i, EX_SA2String("モンスターデータ", key, "t%d_attr%d" % turn % (i + 1), ""));
+/* 00090fb8 */	}
+/* 00090fbe */}
+
+int MonsterAttackInfo::getAtk()
+/* 00090fc6 */{
+/* 00090fc6 */	return this.atk_;
+/* 00090fce */}
+
+int MonsterAttackInfo::getDef()
+/* 00090fdc */{
+/* 00090fdc */	return this.def_;
+/* 00090fe4 */}
+
+string MonsterAttackInfo::getAttribute(int index)
+/* 00090ff2 */{
+/* 00090ff2 */	if (index >= 0 && index < this.attribute_.Numof())
+/* 0009102c */	{
+/* 0009102c */		return this.attribute_[index];
+/* 0009103c */	}
+/* 00091042 */	return "";
+/* 0009104a */}
+
+void MonsterAttackInfo::setAtk(int val)
+/* 00091058 */{
+/* 00091058 */	this.atk_ = val;
+/* 00091062 */}
+
+void MonsterAttackInfo::setDef(int val)
+/* 0009106a */{
+/* 0009106a */	this.def_ = val;
+/* 00091074 */}
+
+void MonsterAttackInfo::setAttribute(int index, string val)
+/* 0009107c */{
+/* 0009107c */	if (index >= 0 && index < this.attribute_.Numof())
+/* 000910b6 */	{
+/* 000910b6 */		this.attribute_[index] = val;
+/* 000910ca */	}
+/* 000910d0 */}
+

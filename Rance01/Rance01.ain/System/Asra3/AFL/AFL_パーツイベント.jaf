@@ -1,0 +1,220 @@
+void AFL_Parts_AddMouseEnterEvent(int PartsNumber, DG_MouseEnterHandler DelegateObject)
+/* 0005b08e */{
+/* 0005b08e */	g_PartsMessageManager.AddMouseEnterEvent(PartsNumber, DelegateObject);
+/* 0005b0a8 */}
+
+void AFL_Parts_EraseMouseEnterEvent(int PartsNumber, DG_MouseEnterHandler DelegateObject)
+/* 0005b0b6 */{
+/* 0005b0b6 */	g_PartsMessageManager.EraseMouseEnterEvent(PartsNumber, DelegateObject);
+/* 0005b0d0 */}
+
+void AFL_Parts_AddMouseMoveEvent(int PartsNumber, DG_MouseMoveHandler DelegateObject)
+/* 0005b0de */{
+/* 0005b0de */	g_PartsMessageManager.AddMouseMoveEvent(PartsNumber, DelegateObject);
+/* 0005b0f8 */}
+
+void AFL_Parts_EraseMouseMoveEvent(int PartsNumber, DG_MouseMoveHandler DelegateObject)
+/* 0005b106 */{
+/* 0005b106 */	g_PartsMessageManager.EraseMouseMoveEvent(PartsNumber, DelegateObject);
+/* 0005b120 */}
+
+void AFL_Parts_AddMouseLeaveEvent(int PartsNumber, DG_MouseLeaveHandler DelegateObject)
+/* 0005b12e */{
+/* 0005b12e */	g_PartsMessageManager.AddMouseLeaveEvent(PartsNumber, DelegateObject);
+/* 0005b148 */}
+
+void AFL_Parts_EraseMouseLeaveEvent(int PartsNumber, DG_MouseLeaveHandler DelegateObject)
+/* 0005b156 */{
+/* 0005b156 */	g_PartsMessageManager.EraseMouseLeaveEvent(PartsNumber, DelegateObject);
+/* 0005b170 */}
+
+void AFL_Parts_AddMouseWheelEvent(int PartsNumber, DG_MouseWheelHandler DelegateObject)
+/* 0005b17e */{
+/* 0005b17e */	g_PartsMessageManager.AddMouseWheelEvent(PartsNumber, DelegateObject);
+/* 0005b198 */}
+
+void AFL_Parts_EraseMouseWheelEvent(int PartsNumber, DG_MouseWheelHandler DelegateObject)
+/* 0005b1a6 */{
+/* 0005b1a6 */	g_PartsMessageManager.EraseMouseWheelEvent(PartsNumber, DelegateObject);
+/* 0005b1c0 */}
+
+void AFL_Parts_AddMouseClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0005b1ce */{
+/* 0005b1ce */	g_PartsMessageManager.AddMouseClickEvent(PartsNumber, DelegateObject);
+/* 0005b1e8 */}
+
+void AFL_Parts_EraseMouseClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0005b1f6 */{
+/* 0005b1f6 */	g_PartsMessageManager.EraseMouseClickEvent(PartsNumber, DelegateObject);
+/* 0005b210 */}
+
+void AFL_Parts_AddMouseOnEvent(int PartsNumber, DG_MouseOnHandler DelegateObject)
+/* 0005b21e */{
+/* 0005b21e */	g_PartsMessageManager.AddMouseOnEvent(PartsNumber, DelegateObject);
+/* 0005b238 */}
+
+void AFL_Parts_EraseMouseOnEvent(int PartsNumber, DG_MouseOnHandler DelegateObject)
+/* 0005b246 */{
+/* 0005b246 */	g_PartsMessageManager.EraseMouseOnEvent(PartsNumber, DelegateObject);
+/* 0005b260 */}
+
+void AFL_Parts_AddKeyTriggerEvent(int PartsNumber, DG_KeyTriggerHandler DelegateObject)
+/* 0005b26e */{
+/* 0005b26e */	g_PartsMessageManager.AddKeyTriggerEvent(PartsNumber, DelegateObject);
+/* 0005b288 */}
+
+void AFL_Parts_EraseKeyTriggerEvent(int PartsNumber, DG_KeyTriggerHandler DelegateObject)
+/* 0005b296 */{
+/* 0005b296 */	g_PartsMessageManager.EraseKeyTriggerEvent(PartsNumber, DelegateObject);
+/* 0005b2b0 */}
+
+void AFL_Parts_AddKeyDownEvent(int PartsNumber, DG_KeyDownHandler DelegateObject)
+/* 0005b2be */{
+/* 0005b2be */	g_PartsMessageManager.AddKeyDownEvent(PartsNumber, DelegateObject);
+/* 0005b2d8 */}
+
+void AFL_Parts_EraseKeyDownEvent(int PartsNumber, DG_KeyDownHandler DelegateObject)
+/* 0005b2e6 */{
+/* 0005b2e6 */	g_PartsMessageManager.EraseKeyDownEvent(PartsNumber, DelegateObject);
+/* 0005b300 */}
+
+void AFL_Parts_AddKeyPressEvent(int PartsNumber, DG_KeyPressHandler DelegateObject)
+/* 0005b30e */{
+/* 0005b30e */	g_PartsMessageManager.AddKeyPressEvent(PartsNumber, DelegateObject);
+/* 0005b328 */}
+
+void AFL_Parts_EraseKeyPressEvent(int PartsNumber, DG_KeyPressHandler DelegateObject)
+/* 0005b336 */{
+/* 0005b336 */	g_PartsMessageManager.EraseKeyPressEvent(PartsNumber, DelegateObject);
+/* 0005b350 */}
+
+void AFL_Parts_AddKeyUpEvent(int PartsNumber, DG_KeyUpHandler DelegateObject)
+/* 0005b35e */{
+/* 0005b35e */	g_PartsMessageManager.AddKeyUpEvent(PartsNumber, DelegateObject);
+/* 0005b378 */}
+
+void AFL_Parts_EraseKeyUpEvent(int PartsNumber, DG_KeyUpHandler DelegateObject)
+/* 0005b386 */{
+/* 0005b386 */	g_PartsMessageManager.EraseKeyUpEvent(PartsNumber, DelegateObject);
+/* 0005b3a0 */}
+
+void AFL_Parts_AddDragBeginEvent(int PartsNumber, DG_DragBeginHandler DelegateObject)
+/* 0005b3ae */{
+/* 0005b3ae */	g_PartsMessageManager.AddDragBeginEvent(PartsNumber, DelegateObject);
+/* 0005b3c8 */}
+
+void AFL_Parts_EraseDragBeginEvent(int PartsNumber, DG_DragBeginHandler DelegateObject)
+/* 0005b3d6 */{
+/* 0005b3d6 */	g_PartsMessageManager.EraseDragBeginEvent(PartsNumber, DelegateObject);
+/* 0005b3f0 */}
+
+void AFL_Parts_AddDragingEvent(int PartsNumber, DG_DragingHandler DelegateObject)
+/* 0005b3fe */{
+/* 0005b3fe */	g_PartsMessageManager.AddDragingEvent(PartsNumber, DelegateObject);
+/* 0005b418 */}
+
+void AFL_Parts_EraseDragingEvent(int PartsNumber, DG_DragingHandler DelegateObject)
+/* 0005b426 */{
+/* 0005b426 */	g_PartsMessageManager.EraseDragingEvent(PartsNumber, DelegateObject);
+/* 0005b440 */}
+
+void AFL_Parts_AddDragEndEvent(int PartsNumber, DG_DragEndHandler DelegateObject)
+/* 0005b44e */{
+/* 0005b44e */	g_PartsMessageManager.AddDragEndEvent(PartsNumber, DelegateObject);
+/* 0005b468 */}
+
+void AFL_Parts_EraseDragEndEvent(int PartsNumber, DG_DragEndHandler DelegateObject)
+/* 0005b476 */{
+/* 0005b476 */	g_PartsMessageManager.EraseDragEndEvent(PartsNumber, DelegateObject);
+/* 0005b490 */}
+
+void AFL_Parts_AddDropEnterEvent(int PartsNumber, DG_DropEnterHandler DelegateObject)
+/* 0005b49e */{
+/* 0005b49e */	g_PartsMessageManager.AddDropEnterEvent(PartsNumber, DelegateObject);
+/* 0005b4b8 */}
+
+void AFL_Parts_EraseDropEnterEvent(int PartsNumber, DG_DropEnterHandler DelegateObject)
+/* 0005b4c6 */{
+/* 0005b4c6 */	g_PartsMessageManager.EraseDropEnterEvent(PartsNumber, DelegateObject);
+/* 0005b4e0 */}
+
+void AFL_Parts_AddDropedEvent(int PartsNumber, DG_DropedHandler DelegateObject)
+/* 0005b4ee */{
+/* 0005b4ee */	g_PartsMessageManager.AddDropedEvent(PartsNumber, DelegateObject);
+/* 0005b508 */}
+
+void AFL_Parts_EraseDropedEvent(int PartsNumber, DG_DropedHandler DelegateObject)
+/* 0005b516 */{
+/* 0005b516 */	g_PartsMessageManager.EraseDropedEvent(PartsNumber, DelegateObject);
+/* 0005b530 */}
+
+void AFL_Parts_AddDropLeaveEvent(int PartsNumber, DG_DropLeaveHandler DelegateObject)
+/* 0005b53e */{
+/* 0005b53e */	g_PartsMessageManager.AddDropLeaveEvent(PartsNumber, DelegateObject);
+/* 0005b558 */}
+
+void AFL_Parts_EraseDropLeaveEvent(int PartsNumber, DG_DropLeaveHandler DelegateObject)
+/* 0005b566 */{
+/* 0005b566 */	g_PartsMessageManager.EraseDropLeaveEvent(PartsNumber, DelegateObject);
+/* 0005b580 */}
+
+void AFL_Parts_AddFocusEvent(int PartsNumber, DG_FocusHandler DelegateObject)
+/* 0005b58e */{
+/* 0005b58e */	g_PartsMessageManager.AddFocusEvent(PartsNumber, DelegateObject);
+/* 0005b5a8 */}
+
+void AFL_Parts_EraseFocusEvent(int PartsNumber, DG_FocusHandler DelegateObject)
+/* 0005b5b6 */{
+/* 0005b5b6 */	g_PartsMessageManager.EraseFocusEvent(PartsNumber, DelegateObject);
+/* 0005b5d0 */}
+
+void AFL_Parts_AddLostFocusEvent(int PartsNumber, DG_LostFocusHandler DelegateObject)
+/* 0005b5de */{
+/* 0005b5de */	g_PartsMessageManager.AddLostFocusEvent(PartsNumber, DelegateObject);
+/* 0005b5f8 */}
+
+void AFL_Parts_EraseLostFocusEvent(int PartsNumber, DG_LostFocusHandler DelegateObject)
+/* 0005b606 */{
+/* 0005b606 */	g_PartsMessageManager.EraseLostFocusEvent(PartsNumber, DelegateObject);
+/* 0005b620 */}
+
+void AFL_Parts_AddScrollEvent(int PartsNumber, DG_ScrollHandler DelegateObject)
+/* 0005b62e */{
+/* 0005b62e */	g_PartsMessageManager.AddScrollEvent(PartsNumber, DelegateObject);
+/* 0005b648 */}
+
+void AFL_Parts_EraseScrollEvent(int PartsNumber, DG_ScrollHandler DelegateObject)
+/* 0005b656 */{
+/* 0005b656 */	g_PartsMessageManager.EraseScrollEvent(PartsNumber, DelegateObject);
+/* 0005b670 */}
+
+void AFL_Parts_AddCreatedEvent(int PartsNumber, DG_CreatedHandler DelegateObject)
+/* 0005b67e */{
+/* 0005b67e */	g_PartsMessageManager.AddCreatedEvent(PartsNumber, DelegateObject);
+/* 0005b698 */}
+
+void AFL_Parts_EraseCreatedEvent(int PartsNumber, DG_CreatedHandler DelegateObject)
+/* 0005b6a6 */{
+/* 0005b6a6 */	g_PartsMessageManager.EraseCreatedEvent(PartsNumber, DelegateObject);
+/* 0005b6c0 */}
+
+void AFL_Parts_AddSelectedEvent(int PartsNumber, DG_SelectedHandler DelegateObject)
+/* 0005b6ce */{
+/* 0005b6ce */	g_PartsMessageManager.AddSelectedEvent(PartsNumber, DelegateObject);
+/* 0005b6e8 */}
+
+void AFL_Parts_EraseSelectedEvent(int PartsNumber, DG_SelectedHandler DelegateObject)
+/* 0005b6f6 */{
+/* 0005b6f6 */	g_PartsMessageManager.EraseSelectedEvent(PartsNumber, DelegateObject);
+/* 0005b710 */}
+
+void AFL_Parts_AddChangedEvent(int PartsNumber, DG_ChangedHandler DelegateObject)
+/* 0005b71e */{
+/* 0005b71e */	g_PartsMessageManager.AddChangedEvent(PartsNumber, DelegateObject);
+/* 0005b738 */}
+
+void AFL_Parts_EraseChangedEvent(int PartsNumber, DG_ChangedHandler DelegateObject)
+/* 0005b746 */{
+/* 0005b746 */	g_PartsMessageManager.EraseChangedEvent(PartsNumber, DelegateObject);
+/* 0005b760 */}
+

@@ -1,0 +1,119 @@
+ChipDepository::ChipDepository()
+/* 0008fc8a */{
+/* 0008fc92 */	this.size_ = 1;
+/* 0008fc9c */}
+
+void ChipDepository::add(string id, bool isSave)
+/* 0008fca4 */{
+/* 0008fca4 */	if (this.isNoMargin())
+/* 0008fcb2 */	{
+/* 0008fcb2 */		pass("所持数を超えてaddしようとしました。");
+/* 0008fcbe */		return;
+/* 0008fcc0 */	}
+/* 0008fcc6 */	ChipInstance instance;
+/* 0008fcd6 */	instance.init(id);
+/* 0008fce8 */	this.chip_.PushBack(instance);
+/* 0008fcf2 */	this.callEventHandler(0, this.chip_.Numof() - 1);
+/* 0008fd0e */	if (isSave)
+/* 0008fd1a */	{
+/* 0008fd1a */		g_globalGameFlag.addValue("チップ取得：%s" % id, 1);
+/* 0008fd40 */	}
+/* 0008fd46 */}
+
+void ChipDepository::erase(int index)
+/* 0008fd4e */{
+/* 0008fd4e */	if (index >= 0 && index < this.chip_.Numof())
+/* 0008fd88 */	{
+/* 0008fd88 */		this.chip_.Erase(index);
+/* 0008fd9a */		this.callEventHandler(1, index);
+/* 0008fdae */	}
+/* 0008fdb4 */}
+
+void ChipDepository::setSize(int val)
+/* 0008fdbc */{
+/* 0008fdbc */	if (this.chip_.Numof() <= val)
+/* 0008fdd0 */	{
+/* 0008fdd0 */		this.size_ = val;
+/* 0008fdda */		this.callEventHandler(2, this.size_);
+/* 0008fdee */	}
+/* 0008fdf4 */	else
+/* 0008fdf4 */	{
+/* 0008fdf4 */		pass("マージンを所持チップ数より少なくできません。");
+/* 0008fe00 */	}
+/* 0008fe00 */}
+
+int ChipDepository::getCount()
+/* 0008fe08 */{
+/* 0008fe08 */	return this.chip_.Numof();
+/* 0008fe10 */}
+
+ref ChipInstance ChipDepository::getInstance(int index)
+/* 0008fe1e */{
+/* 0008fe1e */	if (index >= 0 && index < this.chip_.Numof())
+/* 0008fe58 */	{
+/* 0008fe58 */		return this.chip_[index];
+/* 0008fe6c */	}
+/* 0008fe72 */	return NULL;
+/* 0008fe7a */}
+
+bool ChipDepository::isNoMargin()
+/* 0008fe88 */{
+/* 0008fe88 */	return this.chip_.Numof() == this.size_;
+/* 0008fe9a */}
+
+int ChipDepository::getSize()
+/* 0008fea8 */{
+/* 0008fea8 */	return this.size_;
+/* 0008feb0 */}
+
+void ChipDepository::addEventHandler(DG_DepositoryEventHandler handler)
+/* 0008febe */{
+/* 0008febe */	this.handler_ += handler;
+/* 0008fed0 */}
+
+void ChipDepository::callEventHandler(int type, int info)
+/* 0008fed8 */{
+/* 0008fed8 */	if (this.handler_.Numof() == 0)
+/* 0008feee */	{
+/* 0008feee */		return;
+/* 0008fef0 */	}
+/* 0008fef6 */	this.handler_(type, info);
+/* 0008ff1e */}
+
+void ChipDepository::clearEventHandler()
+/* 0008ff26 */{
+/* 0008ff26 */	this.handler_.Clear();
+/* 0008ff2e */}
+
+int ChipDepository::getEmptyCount()
+/* 0008ff36 */{
+/* 0008ff36 */	return this.getSize() - this.getCount();
+/* 0008ff4a */}
+
+void ChipDepository::sort()
+/* 0008ff58 */{
+/* 0008ff58 */	int i;
+/* 0008ff62 */	for (i = 0; i < this.chip_.Numof() - 1; ++i)
+/* 0008ff9a */	{
+/* 0008ff9a */		int min = i;
+/* 0008ffac */		string minId = this.chip_[i].getId();
+/* 0008ffca */		int j;
+/* 0008ffd4 */		for (j = i + 1; j < this.chip_.Numof(); ++j)
+/* 00090014 */		{
+/* 00090014 */			if (this.chip_[j].getId() < minId)
+/* 00090036 */			{
+/* 00090036 */				minId = this.chip_[j].getId();
+/* 00090054 */				min = j;
+/* 00090066 */			}
+/* 0009006c */		}
+/* 00090072 */		if (i != min)
+/* 00090086 */		{
+/* 00090086 */			this.chip_[i] <=> this.chip_[min];
+/* 000900a6 */		}
+/* 000900ac */	}
+/* 000900b2 */	if (this.handler_.Numof() != 0)
+/* 000900ca */	{
+/* 000900ca */		this.handler_(3, 0);
+/* 000900f2 */	}
+/* 000900f8 */}
+

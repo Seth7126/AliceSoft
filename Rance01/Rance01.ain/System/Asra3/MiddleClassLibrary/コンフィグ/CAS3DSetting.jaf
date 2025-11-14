@@ -1,0 +1,447 @@
+CAS3DSetting::CAS3DSetting()
+/* 00032e3e */{
+/* 00032e46 */	this.m_RenderMode = 2;
+/* 00032e50 */	this.m_LightingMode = 1;
+/* 00032e5a */	this.m_AntiAliasingMode = 0;
+/* 00032e64 */	this.m_Edge = 1;
+/* 00032e6e */	this.m_ShadowMode = 2;
+/* 00032e78 */	this.m_ShadowMapResolutionLevel = 2;
+/* 00032e82 */	this.m_BumpMode = 1;
+/* 00032e8c */	this.m_BloomMode = 0;
+/* 00032e96 */	this.m_GlareMode = 0;
+/* 00032ea0 */	this.m_FogMode = 1;
+/* 00032eaa */	this.m_SpecularMode = 1;
+/* 00032eb4 */	this.m_LightMapMode = 1;
+/* 00032ebe */	this.m_SoftFogEdgeMode = 0;
+/* 00032ec8 */	this.m_SSAOMode = 0;
+/* 00032ed2 */	this.m_VertexBlendMode = 2;
+/* 00032edc */	this.m_TextureResolutionLevel = 0;
+/* 00032ee6 */	this.m_TextureFilterMode = 1;
+/* 00032ef0 */	this.m_DOFMode = 0;
+/* 00032efa */}
+
+bool CAS3DSetting::Load()
+/* 00032f02 */{
+/* 00032f02 */	int nRenderMode;
+/* 00032f0c */	int LightingMode;
+/* 00032f16 */	int AntiAliasingMode;
+/* 00032f20 */	int Edge;
+/* 00032f2a */	int nShadowMode;
+/* 00032f34 */	int nShadowMapResolutionLevel;
+/* 00032f3e */	int nBumpMode;
+/* 00032f48 */	int nBloomMode;
+/* 00032f52 */	int nGlareMode;
+/* 00032f5c */	int nFogMode;
+/* 00032f66 */	int nSpecularMode;
+/* 00032f70 */	int nLightMapMode;
+/* 00032f7a */	int nSoftFogEdgeMode;
+/* 00032f84 */	int nSSAOMode;
+/* 00032f8e */	int nVertexBlendMode;
+/* 00032f98 */	int nTextureResolutionLevel;
+/* 00032fa2 */	int nTextureFilterMode;
+/* 00032fac */	int DOFMode;
+/* 00032fb6 */	if (!VSFile.OpenForRead(this.GetSaveFileName()))
+/* 00032fd0 */	{
+/* 00032fd0 */		return false;
+/* 00032fd8 */	}
+/* 00032fde */	string ChunkName;
+/* 00032fea */	if (!VSFile.ReadString(ChunkName))
+/* 00033002 */	{
+/* 00033002 */		return false;
+/* 0003300a */	}
+/* 00033010 */	if (ChunkName != "3CO")
+/* 00033020 */	{
+/* 00033020 */		return false;
+/* 00033028 */	}
+/* 0003302e */	int nVersion;
+/* 00033038 */	if (!VSFile.ReadInt(nVersion))
+/* 00033052 */	{
+/* 00033052 */		return false;
+/* 0003305a */	}
+/* 00033060 */	if (nVersion < 0 || nVersion > 1)
+/* 00033094 */	{
+/* 00033094 */		return false;
+/* 0003309c */	}
+/* 000330a2 */	if (!VSFile.ReadInt(nRenderMode))
+/* 000330bc */	{
+/* 000330bc */		return false;
+/* 000330c4 */	}
+/* 000330ca */	if (!VSFile.ReadInt(LightingMode))
+/* 000330e4 */	{
+/* 000330e4 */		return false;
+/* 000330ec */	}
+/* 000330f2 */	if (!VSFile.ReadInt(AntiAliasingMode))
+/* 0003310c */	{
+/* 0003310c */		return false;
+/* 00033114 */	}
+/* 0003311a */	if (!VSFile.ReadInt(Edge))
+/* 00033134 */	{
+/* 00033134 */		return false;
+/* 0003313c */	}
+/* 00033142 */	if (!VSFile.ReadInt(nShadowMode))
+/* 0003315c */	{
+/* 0003315c */		return false;
+/* 00033164 */	}
+/* 0003316a */	if (!VSFile.ReadInt(nShadowMapResolutionLevel))
+/* 00033184 */	{
+/* 00033184 */		return false;
+/* 0003318c */	}
+/* 00033192 */	if (!VSFile.ReadInt(nBumpMode))
+/* 000331ac */	{
+/* 000331ac */		return false;
+/* 000331b4 */	}
+/* 000331ba */	if (!VSFile.ReadInt(nBloomMode))
+/* 000331d4 */	{
+/* 000331d4 */		return false;
+/* 000331dc */	}
+/* 000331e2 */	if (!VSFile.ReadInt(nGlareMode))
+/* 000331fc */	{
+/* 000331fc */		return false;
+/* 00033204 */	}
+/* 0003320a */	if (!VSFile.ReadInt(nFogMode))
+/* 00033224 */	{
+/* 00033224 */		return false;
+/* 0003322c */	}
+/* 00033232 */	if (!VSFile.ReadInt(nSpecularMode))
+/* 0003324c */	{
+/* 0003324c */		return false;
+/* 00033254 */	}
+/* 0003325a */	if (!VSFile.ReadInt(nLightMapMode))
+/* 00033274 */	{
+/* 00033274 */		return false;
+/* 0003327c */	}
+/* 00033282 */	if (!VSFile.ReadInt(nSoftFogEdgeMode))
+/* 0003329c */	{
+/* 0003329c */		return false;
+/* 000332a4 */	}
+/* 000332aa */	if (!VSFile.ReadInt(nSSAOMode))
+/* 000332c4 */	{
+/* 000332c4 */		return false;
+/* 000332cc */	}
+/* 000332d2 */	if (!VSFile.ReadInt(nVertexBlendMode))
+/* 000332ec */	{
+/* 000332ec */		return false;
+/* 000332f4 */	}
+/* 000332fa */	if (!VSFile.ReadInt(nTextureResolutionLevel))
+/* 00033314 */	{
+/* 00033314 */		return false;
+/* 0003331c */	}
+/* 00033322 */	if (!VSFile.ReadInt(nTextureFilterMode))
+/* 0003333c */	{
+/* 0003333c */		return false;
+/* 00033344 */	}
+/* 0003334a */	if (nVersion >= 1)
+/* 00033358 */	{
+/* 00033358 */		if (!VSFile.ReadInt(DOFMode))
+/* 00033372 */		{
+/* 00033372 */			return false;
+/* 0003337a */		}
+/* 00033380 */	}
+/* 00033386 */	if (!VSFile.Close())
+/* 00033398 */	{
+/* 00033398 */		return false;
+/* 000333a0 */	}
+/* 000333a6 */	this.m_RenderMode = nRenderMode;
+/* 000333b0 */	this.m_LightingMode = LightingMode;
+/* 000333ba */	this.m_AntiAliasingMode = AntiAliasingMode;
+/* 000333c4 */	this.m_Edge = Edge;
+/* 000333ce */	this.m_ShadowMode = nShadowMode;
+/* 000333d8 */	this.m_ShadowMapResolutionLevel = nShadowMapResolutionLevel;
+/* 000333e2 */	this.m_BumpMode = nBumpMode;
+/* 000333ec */	this.m_BloomMode = nBloomMode;
+/* 000333f6 */	this.m_GlareMode = nGlareMode;
+/* 00033400 */	this.m_FogMode = nFogMode;
+/* 0003340a */	this.m_SpecularMode = nSpecularMode;
+/* 00033414 */	this.m_LightMapMode = nLightMapMode;
+/* 0003341e */	this.m_SoftFogEdgeMode = nSoftFogEdgeMode;
+/* 00033428 */	this.m_SSAOMode = nSSAOMode;
+/* 00033432 */	this.m_VertexBlendMode = nVertexBlendMode;
+/* 0003343c */	this.m_TextureResolutionLevel = nTextureResolutionLevel;
+/* 00033446 */	this.m_TextureFilterMode = nTextureFilterMode;
+/* 00033450 */	this.m_DOFMode = DOFMode;
+/* 0003345a */	return true;
+/* 00033462 */}
+
+bool CAS3DSetting::Save()
+/* 00033470 */{
+/* 00033470 */	if (!VSFile.OpenForWrite(this.GetSaveFileName()))
+/* 0003348a */	{
+/* 0003348a */		return false;
+/* 00033492 */	}
+/* 00033498 */	if (!VSFile.WriteString("3CO"))
+/* 000334b0 */	{
+/* 000334b0 */		return false;
+/* 000334b8 */	}
+/* 000334be */	if (!VSFile.WriteInt(1))
+/* 000334d6 */	{
+/* 000334d6 */		return false;
+/* 000334de */	}
+/* 000334e4 */	if (!VSFile.WriteInt(this.m_RenderMode))
+/* 000334fc */	{
+/* 000334fc */		return false;
+/* 00033504 */	}
+/* 0003350a */	if (!VSFile.WriteInt(this.m_LightingMode))
+/* 00033522 */	{
+/* 00033522 */		return false;
+/* 0003352a */	}
+/* 00033530 */	if (!VSFile.WriteInt(this.m_AntiAliasingMode))
+/* 00033548 */	{
+/* 00033548 */		return false;
+/* 00033550 */	}
+/* 00033556 */	if (!VSFile.WriteInt(this.m_Edge))
+/* 0003356e */	{
+/* 0003356e */		return false;
+/* 00033576 */	}
+/* 0003357c */	if (!VSFile.WriteInt(this.m_ShadowMode))
+/* 00033594 */	{
+/* 00033594 */		return false;
+/* 0003359c */	}
+/* 000335a2 */	if (!VSFile.WriteInt(this.m_ShadowMapResolutionLevel))
+/* 000335ba */	{
+/* 000335ba */		return false;
+/* 000335c2 */	}
+/* 000335c8 */	if (!VSFile.WriteInt(this.m_BumpMode))
+/* 000335e0 */	{
+/* 000335e0 */		return false;
+/* 000335e8 */	}
+/* 000335ee */	if (!VSFile.WriteInt(this.m_BloomMode))
+/* 00033606 */	{
+/* 00033606 */		return false;
+/* 0003360e */	}
+/* 00033614 */	if (!VSFile.WriteInt(this.m_GlareMode))
+/* 0003362c */	{
+/* 0003362c */		return false;
+/* 00033634 */	}
+/* 0003363a */	if (!VSFile.WriteInt(this.m_FogMode))
+/* 00033652 */	{
+/* 00033652 */		return false;
+/* 0003365a */	}
+/* 00033660 */	if (!VSFile.WriteInt(this.m_SpecularMode))
+/* 00033678 */	{
+/* 00033678 */		return false;
+/* 00033680 */	}
+/* 00033686 */	if (!VSFile.WriteInt(this.m_LightMapMode))
+/* 0003369e */	{
+/* 0003369e */		return false;
+/* 000336a6 */	}
+/* 000336ac */	if (!VSFile.WriteInt(this.m_SoftFogEdgeMode))
+/* 000336c4 */	{
+/* 000336c4 */		return false;
+/* 000336cc */	}
+/* 000336d2 */	if (!VSFile.WriteInt(this.m_SSAOMode))
+/* 000336ea */	{
+/* 000336ea */		return false;
+/* 000336f2 */	}
+/* 000336f8 */	if (!VSFile.WriteInt(this.m_VertexBlendMode))
+/* 00033710 */	{
+/* 00033710 */		return false;
+/* 00033718 */	}
+/* 0003371e */	if (!VSFile.WriteInt(this.m_TextureResolutionLevel))
+/* 00033736 */	{
+/* 00033736 */		return false;
+/* 0003373e */	}
+/* 00033744 */	if (!VSFile.WriteInt(this.m_TextureFilterMode))
+/* 0003375c */	{
+/* 0003375c */		return false;
+/* 00033764 */	}
+/* 0003376a */	if (!VSFile.WriteInt(this.m_DOFMode))
+/* 00033782 */	{
+/* 00033782 */		return false;
+/* 0003378a */	}
+/* 00033790 */	if (!VSFile.Close())
+/* 000337a2 */	{
+/* 000337a2 */		return false;
+/* 000337aa */	}
+/* 000337b0 */	return true;
+/* 000337b8 */}
+
+bool CAS3DSetting::ExistReignSaveFile()
+/* 000337c6 */{
+/* 000337c6 */	return system.ExistFile(this.GetSaveFileName());
+/* 000337d8 */}
+
+string CAS3DSetting::GetSaveFileName()
+/* 000337e6 */{
+/* 000337e6 */	return system.GetSaveFolderName() + "\\3DConfig.vsf";
+/* 000337f6 */}
+
+int CAS3DSetting::GetRenderMode()
+/* 00033804 */{
+/* 00033804 */	return this.m_RenderMode;
+/* 0003380c */}
+
+int CAS3DSetting::GetLightingMode()
+/* 0003381a */{
+/* 0003381a */	return this.m_LightingMode;
+/* 00033822 */}
+
+int CAS3DSetting::GetAntiAliasingMode()
+/* 00033830 */{
+/* 00033830 */	return this.m_AntiAliasingMode;
+/* 00033838 */}
+
+int CAS3DSetting::GetEdge()
+/* 00033846 */{
+/* 00033846 */	return this.m_Edge;
+/* 0003384e */}
+
+int CAS3DSetting::GetShadowMode()
+/* 0003385c */{
+/* 0003385c */	return this.m_ShadowMode;
+/* 00033864 */}
+
+int CAS3DSetting::GetShadowMapResolutionLevel()
+/* 00033872 */{
+/* 00033872 */	return this.m_ShadowMapResolutionLevel;
+/* 0003387a */}
+
+int CAS3DSetting::GetBumpMode()
+/* 00033888 */{
+/* 00033888 */	return this.m_BumpMode;
+/* 00033890 */}
+
+int CAS3DSetting::GetBloomMode()
+/* 0003389e */{
+/* 0003389e */	return this.m_BloomMode;
+/* 000338a6 */}
+
+int CAS3DSetting::GetGlareMode()
+/* 000338b4 */{
+/* 000338b4 */	return this.m_GlareMode;
+/* 000338bc */}
+
+int CAS3DSetting::GetFogMode()
+/* 000338ca */{
+/* 000338ca */	return this.m_FogMode;
+/* 000338d2 */}
+
+int CAS3DSetting::GetSpecularMode()
+/* 000338e0 */{
+/* 000338e0 */	return this.m_SpecularMode;
+/* 000338e8 */}
+
+int CAS3DSetting::GetLightMapMode()
+/* 000338f6 */{
+/* 000338f6 */	return this.m_LightMapMode;
+/* 000338fe */}
+
+int CAS3DSetting::GetSoftFogEdgeMode()
+/* 0003390c */{
+/* 0003390c */	return this.m_SoftFogEdgeMode;
+/* 00033914 */}
+
+int CAS3DSetting::GetSSAOMode()
+/* 00033922 */{
+/* 00033922 */	return this.m_SSAOMode;
+/* 0003392a */}
+
+int CAS3DSetting::GetVertexBlendMode()
+/* 00033938 */{
+/* 00033938 */	return this.m_VertexBlendMode;
+/* 00033940 */}
+
+int CAS3DSetting::GetTextureResolutionLevel()
+/* 0003394e */{
+/* 0003394e */	return this.m_TextureResolutionLevel;
+/* 00033956 */}
+
+int CAS3DSetting::GetTextureFilterMode()
+/* 00033964 */{
+/* 00033964 */	return this.m_TextureFilterMode;
+/* 0003396c */}
+
+int CAS3DSetting::GetDOFMode()
+/* 0003397a */{
+/* 0003397a */	return this.m_DOFMode;
+/* 00033982 */}
+
+void CAS3DSetting::SetRenderMode(int nRenderMode)
+/* 00033990 */{
+/* 00033990 */	this.m_RenderMode = nRenderMode;
+/* 0003399a */}
+
+void CAS3DSetting::SetLightingMode(int LightingMode)
+/* 000339a2 */{
+/* 000339a2 */	this.m_LightingMode = LightingMode;
+/* 000339ac */}
+
+void CAS3DSetting::SetAntiAliasingMode(int AntiAliasingMode)
+/* 000339b4 */{
+/* 000339b4 */	this.m_AntiAliasingMode = AntiAliasingMode;
+/* 000339be */}
+
+void CAS3DSetting::SetEdge(int Edge)
+/* 000339c6 */{
+/* 000339c6 */	this.m_Edge = Edge;
+/* 000339d0 */}
+
+void CAS3DSetting::SetShadowMode(int nShadowMode)
+/* 000339d8 */{
+/* 000339d8 */	this.m_ShadowMode = nShadowMode;
+/* 000339e2 */}
+
+void CAS3DSetting::SetShadowMapResolutionLevel(int nShadowMapResolutionLevel)
+/* 000339ea */{
+/* 000339ea */	this.m_ShadowMapResolutionLevel = nShadowMapResolutionLevel;
+/* 000339f4 */}
+
+void CAS3DSetting::SetBumpMode(int nBumpMode)
+/* 000339fc */{
+/* 000339fc */	this.m_BumpMode = nBumpMode;
+/* 00033a06 */}
+
+void CAS3DSetting::SetBloomMode(int nBloomMode)
+/* 00033a0e */{
+/* 00033a0e */	this.m_BloomMode = nBloomMode;
+/* 00033a18 */}
+
+void CAS3DSetting::SetGlareMode(int nGlareMode)
+/* 00033a20 */{
+/* 00033a20 */	this.m_GlareMode = nGlareMode;
+/* 00033a2a */}
+
+void CAS3DSetting::SetFogMode(int nFogMode)
+/* 00033a32 */{
+/* 00033a32 */	this.m_FogMode = nFogMode;
+/* 00033a3c */}
+
+void CAS3DSetting::SetSpecularMode(int nSpecularMode)
+/* 00033a44 */{
+/* 00033a44 */	this.m_SpecularMode = nSpecularMode;
+/* 00033a4e */}
+
+void CAS3DSetting::SetLightMapMode(int nLightMapMode)
+/* 00033a56 */{
+/* 00033a56 */	this.m_LightMapMode = nLightMapMode;
+/* 00033a60 */}
+
+void CAS3DSetting::SetSoftFogEdgeMode(int nSoftFogEdgeMode)
+/* 00033a68 */{
+/* 00033a68 */	this.m_SoftFogEdgeMode = nSoftFogEdgeMode;
+/* 00033a72 */}
+
+void CAS3DSetting::SetSSAOMode(int nSSAOMode)
+/* 00033a7a */{
+/* 00033a7a */	this.m_SSAOMode = nSSAOMode;
+/* 00033a84 */}
+
+void CAS3DSetting::SetVertexBlendMode(int nVertexBlendMode)
+/* 00033a8c */{
+/* 00033a8c */	this.m_VertexBlendMode = nVertexBlendMode;
+/* 00033a96 */}
+
+void CAS3DSetting::SetTextureResolutionLevel(int nTextureResolutionLevel)
+/* 00033a9e */{
+/* 00033a9e */	this.m_TextureResolutionLevel = nTextureResolutionLevel;
+/* 00033aa8 */}
+
+void CAS3DSetting::SetTextureFilterMode(int nTextureFilterMode)
+/* 00033ab0 */{
+/* 00033ab0 */	this.m_TextureFilterMode = nTextureFilterMode;
+/* 00033aba */}
+
+void CAS3DSetting::SetDOFMode(int DOFMode)
+/* 00033ac2 */{
+/* 00033ac2 */	this.m_DOFMode = DOFMode;
+/* 00033acc */}
+

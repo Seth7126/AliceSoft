@@ -1,0 +1,182 @@
+ShopChipInstanceView::ShopChipInstanceView()
+/* 00079838 */{
+/* 00079840 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0007986c */	this.isOperatable_ = true;
+/* 00079876 */}
+
+void ShopChipInstanceView::init(ref ShopChipInstance instance)
+/* 0007987e */{
+/* 0007987e */	this.instance_ <- instance;
+/* 0007989a */	this.initParts();
+/* 000798a2 */	this.setPartsOrigin();
+/* 000798aa */	this.setPartsPos();
+/* 000798b2 */	this.setPartsShow();
+/* 000798ba */}
+
+void ShopChipInstanceView::initParts()
+/* 000798c2 */{
+/* 000798c2 */	string n = getChip(this.instance_.getId()).getImageName();
+/* 000798ee */	this.parts_[0].init(n, 0);
+/* 0007990e */	this.parts_[1].initAsCgPlaneImage(n, 255, 255, 0);
+/* 0007993a */	this.parts_[1].setAlpha(64);
+/* 00079954 */	this.parts_[3].initAsText(getChipShowName(this.instance_.getId()), 16, false, 256, 255, 255, 255);
+/* 0007999e */	if (this.instance_.getDiscountPer() != 0)
+/* 000799b8 */	{
+/* 000799b8 */		this.parts_[2].init("システム／チップ安売り", 0);
+/* 000799d8 */	}
+/* 000799de */	this.initDebugParts();
+/* 000799e6 */	createPartsGroup(this.parent_, this.parts_, 4500);
+/* 000799fe */}
+
+void ShopChipInstanceView::initDebugParts()
+/* 00079a06 */{
+/* 00079a06 */	string n = getChip(this.instance_.getId()).getImageName();
+/* 00079a32 */	if (n == "システム／仮チップ")
+/* 00079a42 */	{
+/* 00079a42 */		string s = getChip(this.instance_.getId()).getName();
+/* 00079a6e */		int line = Math.Min(3, (s.Length() + 3) / 4);
+/* 00079aa4 */		int i;
+/* 00079aae */		for (i = 0; i < line; ++i)
+/* 00079ade */		{
+/* 00079ade */			string m = s.GetPart(i * 4, 4);
+/* 00079b04 */			this.parts_[4 + i].initAsText(m, 20, true, 256, 255, 255, 255);
+/* 00079b4a */			this.parts_[4 + i].setPos(0, (-line * 20) / 2 + i * 20 + 10, -2147483648);
+/* 00079ba2 */		}
+/* 00079ba8 */	}
+/* 00079bb4 */}
+
+void ShopChipInstanceView::setPartsPos()
+/* 00079bbc */{
+/* 00079bbc */	this.parts_[3].setPos(0, 48, -2147483648);
+/* 00079be2 */}
+
+void ShopChipInstanceView::setPartsOrigin()
+/* 00079bea */{
+/* 00079bea */	int i;
+/* 00079bf4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00079c24 */	{
+/* 00079c24 */		this.parts_[i].setOrigin(5);
+/* 00079c3e */	}
+/* 00079c44 */}
+
+void ShopChipInstanceView::setPartsShow()
+/* 00079c4c */{
+/* 00079c4c */	int i;
+/* 00079c56 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00079c86 */	{
+/* 00079c86 */		this.parts_[i].setShow(true);
+/* 00079ca0 */	}
+/* 00079ca6 */	this.parts_[1].setShow(false);
+/* 00079cc0 */}
+
+void ShopChipInstanceView::update()
+/* 00079cc8 */{
+/* 00079cc8 */	this.updateHover();
+/* 00079cd0 */	this.updateClick();
+/* 00079cd8 */	switch (this.state_)
+/* 00079cea */	{
+/* 00079cea */	case 1:
+/* 00079cea */		if (!this.parts_[0].isMotion())
+/* 00079d06 */		{
+/* 00079d06 */			this.state_ = 2;
+/* 00079d10 */		}
+/* 00079d16 */		break;
+/* 00079d1c */	case 2:
+/* 00079d1c */		if (!this.lastHover_ && this.isHover_)
+/* 00079d4c */		{
+/* 00079d4c */			g_sysSound.play(2001, false);
+/* 00079d64 */		}
+/* 00079d6a */		if (this.isHover_ && g_mouse.onDown(0))
+/* 00079da4 */		{
+/* 00079da4 */			g_sysSound.play(2002, false);
+/* 00079dbc */		}
+/* 00079dc2 */		break;
+/* 00079dc8 */	case 3:
+/* 00079dc8 */		if (!this.parts_[0].isMotion())
+/* 00079de4 */		{
+/* 00079de4 */			this.state_ = 0;
+/* 00079dee */			this.parent_.setShow(false);
+/* 00079e00 */		}
+/* 00079e06 */		break;
+/* 00079e0c */	case 0:
+/* 00079e0c */		break;
+/* 00079e12 */	}
+/* 00079e12 */	this.updatePartsShowState();
+/* 00079e1a */}
+
+void ShopChipInstanceView::setPos(int x, int y)
+/* 00079e22 */{
+/* 00079e22 */	this.x_ = x;
+/* 00079e2c */	this.y_ = y;
+/* 00079e36 */	this.parent_.setPos(this.x_, this.y_, -2147483648);
+/* 00079e54 */}
+
+void ShopChipInstanceView::fadeIn(bool val)
+/* 00079e5c */{
+/* 00079e5c */	this.parent_.setShow(true);
+/* 00079e6e */	if (val)
+/* 00079e7a */	{
+/* 00079e7a */		this.state_ = 1;
+/* 00079e84 */		this.parts_[0].runMotion(getStandardMotion(0));
+/* 00079ea4 */	}
+/* 00079eaa */	else
+/* 00079eaa */	{
+/* 00079eaa */		this.state_ = 3;
+/* 00079eb4 */		this.parent_.runMotion(getStandardMotion(1));
+/* 00079ecc */	}
+/* 00079ecc */}
+
+bool ShopChipInstanceView::isClick()
+/* 00079ed4 */{
+/* 00079ed4 */	return this.isClick_;
+/* 00079edc */}
+
+void ShopChipInstanceView::setShow(bool val)
+/* 00079eea */{
+/* 00079eea */	if (val)
+/* 00079ef6 */	{
+/* 00079ef6 */		this.state_ = 2;
+/* 00079f00 */	}
+/* 00079f06 */	else
+/* 00079f06 */	{
+/* 00079f06 */		this.state_ = 0;
+/* 00079f10 */	}
+/* 00079f10 */	this.parent_.setShow(val);
+/* 00079f22 */}
+
+void ShopChipInstanceView::setParent(int number)
+/* 00079f2a */{
+/* 00079f2a */	this.parent_.setPos(-2147483648, -2147483648, 1);
+/* 00079f48 */	this.parent_.setParent(number);
+/* 00079f5a */}
+
+void ShopChipInstanceView::updateHover()
+/* 00079f62 */{
+/* 00079f62 */	this.lastHover_ = this.isHover_;
+/* 00079f74 */	this.isHover_ = this.state_ == 2 && this.isOperatable_ && AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 0007a002 */}
+
+void ShopChipInstanceView::updateClick()
+/* 0007a00a */{
+/* 0007a00a */	this.isClick_ = this.isHover_ && g_mouse.isClickWithFocus();
+/* 0007a046 */}
+
+bool ShopChipInstanceView::isHover()
+/* 0007a04e */{
+/* 0007a04e */	this.updateHover();
+/* 0007a056 */	return this.isHover_;
+/* 0007a05e */}
+
+void ShopChipInstanceView::updatePartsShowState()
+/* 0007a06c */{
+/* 0007a06c */	if (this.isHover_ != this.lastHover_)
+/* 0007a080 */	{
+/* 0007a080 */		this.parts_[1].setShow(this.isHover_);
+/* 0007a09a */	}
+/* 0007a0a0 */}
+
+void ShopChipInstanceView::setOperatable(bool val)
+/* 0007a0a8 */{
+/* 0007a0a8 */	this.isOperatable_ = val;
+/* 0007a0b2 */}
+

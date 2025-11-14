@@ -1,0 +1,19 @@
+void initLibrary()
+/* 0005b8b4 */{
+/* 0005b8b4 */	createGlobalObject();
+/* 0005b8ba */}
+
+void createGlobalObject()
+/* 0005b8c8 */{
+/* 0005b8c8 */	g_globalTimer <- new GlobalGameTimer;
+/* 0005b8f0 */	g_frameManager <- new FrameManager;
+/* 0005b918 */	g_partsNumberProvider <- new PartsNumberProvider;
+/* 0005b940 */	g_keyboard <- new KeyInput;
+/* 0005b968 */	g_mouse <- new MouseInput;
+/* 0005b990 */	g_sysSound <- new SystemSound;
+/* 0005b9b8 */	g_loopSound <- new LoopSound;
+/* 0005b9e0 */	g_music <- new Music;
+/* 0005ba08 */	g_gameObjectManager <- new GameObjectManager;
+/* 0005ba30 */	g_partsInitializeOption <- new PartsInitializeOption;
+/* 0005ba58 */}
+

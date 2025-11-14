@@ -1,0 +1,27 @@
+AutoModeTimer::AutoModeTimer()
+/* 00061356 */{
+/* 0006135e */	this.reset();
+/* 00061366 */}
+
+void AutoModeTimer::reset()
+/* 0006136e */{
+/* 0006136e */	this.lastTime_ = -1;
+/* 00061380 */}
+
+bool AutoModeTimer::isSkipFrame()
+/* 00061388 */{
+/* 00061388 */	if (g_mouse.isClick(0))
+/* 000613a0 */	{
+/* 000613a0 */		return true;
+/* 000613a8 */	}
+/* 000613ae */	else if (this.lastTime_ == -1)
+/* 000613c2 */	{
+/* 000613c2 */		this.lastTime_ = g_globalTimer.getTime();
+/* 000613da */	}
+/* 000613e0 */	else if (g_globalTimer.getTime() - this.lastTime_ > 1200)
+/* 00061402 */	{
+/* 00061402 */		return true;
+/* 0006140a */	}
+/* 00061410 */	return false;
+/* 00061418 */}
+

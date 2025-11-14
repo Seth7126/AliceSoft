@@ -1,0 +1,63 @@
+void CASProjection::Set(float fWidth_, float fHeight_, float fNear_, float fFar_, float fDeg_)
+/* 00013280 */{
+/* 00013280 */	this.fWidth = fWidth_;
+/* 00013292 */	this.fHeight = fHeight_;
+/* 000132a4 */	this.fNear = fNear_;
+/* 000132b6 */	this.fFar = fFar_;
+/* 000132c8 */	this.fDeg = fDeg_;
+/* 000132da */}
+
+void CASProjection::SetNear(float Near)
+/* 000132e2 */{
+/* 000132e2 */	this.fNear = Near;
+/* 000132f4 */}
+
+void CASProjection::SetFar(float Far)
+/* 000132fc */{
+/* 000132fc */	this.fFar = Far;
+/* 0001330e */}
+
+void CASProjection::SetDegree(float Degree)
+/* 00013316 */{
+/* 00013316 */	this.fDeg = Degree;
+/* 00013328 */}
+
+float CASProjection::GetWidth()
+/* 00013330 */{
+/* 00013330 */	return this.fWidth;
+/* 00013338 */}
+
+float CASProjection::GetHeight()
+/* 00013346 */{
+/* 00013346 */	return this.fHeight;
+/* 0001334e */}
+
+float CASProjection::GetNear()
+/* 0001335c */{
+/* 0001335c */	return this.fNear;
+/* 00013364 */}
+
+float CASProjection::GetFar()
+/* 00013372 */{
+/* 00013372 */	return this.fFar;
+/* 0001337a */}
+
+float CASProjection::GetDegree()
+/* 00013388 */{
+/* 00013388 */	return this.fDeg;
+/* 00013390 */}
+
+CASMatrix CASProjection::GetMatrix()
+/* 0001339e */{
+/* 0001339e */	float dN = this.fNear;
+/* 000133b0 */	float dF = this.fFar;
+/* 000133c2 */	float dPI = 3.141593;
+/* 000133d4 */	float dHalfDeg = this.fDeg * 0.5;
+/* 000133ee */	float dTan = Math.Tan(dHalfDeg);
+/* 0001340a */	float dW = 1.0 / dTan;
+/* 00013424 */	float dH = this.fWidth / (dTan * this.fHeight);
+/* 00013446 */	CASMatrix Matrix;
+/* 00013456 */	Matrix.Set(dW, 0.0, 0.0, 0.0, 0.0, dH, 0.0, 0.0, 0.0, 0.0, dF / (dF - dN), 1.0, 0.0, 0.0, (-dN * dF) / (dF - dN), 0.0);
+/* 000134ec */	return Matrix;
+/* 000134fc */}
+

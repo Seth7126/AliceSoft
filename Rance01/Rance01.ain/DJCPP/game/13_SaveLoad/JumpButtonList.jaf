@@ -1,0 +1,62 @@
+JumpButtonList::JumpButtonList()
+/* 0008315c */{
+/* 00083164 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00083186 */}
+
+void JumpButtonList::init(int count)
+/* 0008318e */{
+/* 0008318e */	this.btn_.Alloc(count);
+/* 000831a4 */	int i;
+/* 000831ae */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 000831de */	{
+/* 000831de */		this.btn_[i].init("システム／タブ／%D" % (i + 1), "", -1);
+/* 0008321a */		this.btn_[i].setPos(27 + i * 140, 40, -2147483648);
+/* 00083250 */	}
+/* 00083256 */}
+
+void JumpButtonList::initFromList(array@string cgList)
+/* 0008325e */{
+/* 0008325e */	this.btn_.Alloc(cgList.Numof());
+/* 0008327e */	int i;
+/* 00083288 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 000832b8 */	{
+/* 000832b8 */		this.btn_[i].init(cgList[i], "", -1);
+/* 000832e6 */		this.btn_[i].setPos(27 + i * 140, 40, -2147483648);
+/* 0008331c */	}
+/* 00083322 */}
+
+void JumpButtonList::fadeIn(bool val)
+/* 0008332a */{
+/* 0008332a */	int i;
+/* 00083334 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00083364 */	{
+/* 00083364 */		this.btn_[i].fadeIn(val);
+/* 0008337e */	}
+/* 00083384 */}
+
+void JumpButtonList::update()
+/* 0008338c */{
+/* 0008338e */}
+
+int JumpButtonList::getClickedButton()
+/* 00083394 */{
+/* 00083394 */	int i;
+/* 0008339e */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 000833ce */	{
+/* 000833ce */		if (this.btn_[i].isClick())
+/* 000833e8 */		{
+/* 000833e8 */			return i;
+/* 000833f0 */		}
+/* 000833f6 */	}
+/* 000833fc */	return -1;
+/* 00083404 */}
+
+void JumpButtonList::setSelectedButton(int index)
+/* 00083412 */{
+/* 00083412 */	int i;
+/* 0008341c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0008344c */	{
+/* 0008344c */		this.btn_[i].setSelected(index == i);
+/* 00083470 */	}
+/* 00083476 */}
+

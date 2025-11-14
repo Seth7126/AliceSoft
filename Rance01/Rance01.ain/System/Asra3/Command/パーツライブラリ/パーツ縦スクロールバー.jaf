@@ -1,0 +1,147 @@
+void Ｐ＿縦スクロールバー＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 00053080 */{
+/* 00053080 */	GUIEngine.SetVScrollbarPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 0005309c */}
+
+void Ｐ＿縦スクロールバー＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 000530aa */{
+/* 000530aa */	GUIEngine.SetVScrollbarZ(パーツ番号, _Ｚ座標);
+/* 000530c0 */}
+
+int Ｐ＿縦スクロールバー＿Ｘ座標取得(int パーツ番号)
+/* 000530ce */{
+/* 000530ce */	return GUIEngine.GetVScrollbarX(パーツ番号);
+/* 000530e0 */}
+
+int Ｐ＿縦スクロールバー＿Ｙ座標取得(int パーツ番号)
+/* 000530f4 */{
+/* 000530f4 */	return GUIEngine.GetVScrollbarY(パーツ番号);
+/* 00053106 */}
+
+int Ｐ＿縦スクロールバー＿Ｚ座標取得(int パーツ番号)
+/* 0005311a */{
+/* 0005311a */	return GUIEngine.GetVScrollbarZ(パーツ番号);
+/* 0005312c */}
+
+void Ｐ＿縦スクロールバー＿表示設定(int パーツ番号, bool 表示)
+/* 00053140 */{
+/* 00053140 */	GUIEngine.SetVScrollbarShow(パーツ番号, 表示);
+/* 00053156 */}
+
+bool Ｐ＿縦スクロールバー＿表示設定取得(int パーツ番号)
+/* 00053164 */{
+/* 00053164 */	return GUIEngine.IsVScrollbarShow(パーツ番号);
+/* 00053176 */}
+
+void Ｐ＿縦スクロールバー＿オンカーソル効果音番号設定(int パーツ番号, int サウンド番号)
+/* 0005318a */{
+/* 0005318a */	GUIEngine.SetVScrollbarOnCursorSoundNumber(パーツ番号, サウンド番号);
+/* 000531a0 */}
+
+void Ｐ＿縦スクロールバー＿クリック効果音番号設定(int パーツ番号, int サウンド番号)
+/* 000531ae */{
+/* 000531ae */	GUIEngine.SetVScrollbarClickSoundNumber(パーツ番号, サウンド番号);
+/* 000531c4 */}
+
+int Ｐ＿縦スクロールバー＿オンカーソル効果音番号取得(int パーツ番号)
+/* 000531d2 */{
+/* 000531d2 */	return GUIEngine.GetVScrollbarOnCursorSoundNumber(パーツ番号);
+/* 000531e4 */}
+
+int Ｐ＿縦スクロールバー＿クリック効果音番号取得(int パーツ番号)
+/* 000531f8 */{
+/* 000531f8 */	return GUIEngine.GetVScrollbarClickSoundNumber(パーツ番号);
+/* 0005320a */}
+
+void Ｐ＿縦スクロールバー＿幅設定(int パーツ番号, int 幅)
+/* 0005321e */{
+/* 0005321e */	GUIEngine.SetVScrollbarWidth(パーツ番号, 幅);
+/* 00053234 */}
+
+void Ｐ＿縦スクロールバー＿高さ設定(int パーツ番号, int 高さ)
+/* 00053242 */{
+/* 00053242 */	GUIEngine.SetVScrollbarHeight(パーツ番号, 高さ);
+/* 00053258 */}
+
+void Ｐ＿縦スクロールバー＿上ボタン高さ設定(int パーツ番号, int 高さ)
+/* 00053266 */{
+/* 00053266 */	GUIEngine.SetVScrollbarUpHeight(パーツ番号, 高さ);
+/* 0005327c */}
+
+void Ｐ＿縦スクロールバー＿下ボタン高さ設定(int パーツ番号, int 高さ)
+/* 0005328a */{
+/* 0005328a */	GUIEngine.SetVScrollbarDownHeight(パーツ番号, 高さ);
+/* 000532a0 */}
+
+int Ｐ＿縦スクロールバー＿幅取得(int パーツ番号)
+/* 000532ae */{
+/* 000532ae */	return GUIEngine.GetVScrollbarWidth(パーツ番号);
+/* 000532c0 */}
+
+int Ｐ＿縦スクロールバー＿高さ取得(int パーツ番号)
+/* 000532d4 */{
+/* 000532d4 */	return GUIEngine.GetVScrollbarHeight(パーツ番号);
+/* 000532e6 */}
+
+int Ｐ＿縦スクロールバー＿上ボタン高さ取得(int パーツ番号)
+/* 000532fa */{
+/* 000532fa */	return GUIEngine.GetVScrollbarUpHeight(パーツ番号);
+/* 0005330c */}
+
+int Ｐ＿縦スクロールバー＿下ボタン高さ取得(int パーツ番号)
+/* 00053320 */{
+/* 00053320 */	return GUIEngine.GetVScrollbarDownHeight(パーツ番号);
+/* 00053332 */}
+
+void Ｐ＿縦スクロールバー＿全体量設定(int パーツ番号, int 全体量)
+/* 00053346 */{
+/* 00053346 */	GUIEngine.SetVScrollbarTotalSize(パーツ番号, 全体量);
+/* 0005335c */}
+
+void Ｐ＿縦スクロールバー＿表示量設定(int パーツ番号, int 表示量)
+/* 0005336a */{
+/* 0005336a */	GUIEngine.SetVScrollbarViewSize(パーツ番号, 表示量);
+/* 00053380 */}
+
+void Ｐ＿縦スクロールバー＿スクロール位置設定(int パーツ番号, int 表示位置)
+/* 0005338e */{
+/* 0005338e */	GUIEngine.SetVScrollbarScrollPos(パーツ番号, 表示位置);
+/* 000533a4 */}
+
+void Ｐ＿縦スクロールバー＿ボタンクリック移動量設定(int パーツ番号, int 移動量)
+/* 000533b2 */{
+/* 000533b2 */	GUIEngine.SetVScrollbarMoveSizeByButton(パーツ番号, 移動量);
+/* 000533c8 */}
+
+int Ｐ＿縦スクロールバー＿全体量取得(int パーツ番号)
+/* 000533d6 */{
+/* 000533d6 */	return GUIEngine.GetVScrollbarTotalSize(パーツ番号);
+/* 000533e8 */}
+
+int Ｐ＿縦スクロールバー＿表示量取得(int パーツ番号)
+/* 000533fc */{
+/* 000533fc */	return GUIEngine.GetVScrollbarViewSize(パーツ番号);
+/* 0005340e */}
+
+int Ｐ＿縦スクロールバー＿スクロール位置取得(int パーツ番号)
+/* 00053422 */{
+/* 00053422 */	return GUIEngine.GetVScrollbarScrollPos(パーツ番号);
+/* 00053434 */}
+
+int Ｐ＿縦スクロールバー＿ボタンクリック移動量取得(int パーツ番号)
+/* 00053448 */{
+/* 00053448 */	return GUIEngine.GetVScrollbarMoveSizeByButton(パーツ番号);
+/* 0005345a */}
+
+void Ｐ＿縦スクロールバー＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 0005346e */{
+/* 0005346e */	GUIEngine.SetVScrollbarCGName(パーツ番号, ＣＧ名);
+/* 00053484 */}
+
+string Ｐ＿縦スクロールバー＿ＣＧ名取得(int パーツ番号)
+/* 00053492 */{
+/* 00053492 */	string Name;
+/* 0005349e */	GUIEngine.GetVScrollbarCGName(パーツ番号, Name);
+/* 000534b4 */	return Name;
+/* 000534bc */}
+

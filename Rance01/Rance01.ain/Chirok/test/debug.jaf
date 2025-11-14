@@ -1,0 +1,68 @@
+void サイコロ／所持金増加()
+/* 0009b23a */{
+/* 0009b23a */	制御／所持金増減(100000);
+/* 0009b246 */}
+
+void サイコロ／経験値増加()
+/* 0009b254 */{
+/* 0009b254 */	制御／経験値増減／固定(1000000);
+/* 0009b260 */}
+
+void サイコロ／移動場所増加()
+/* 0009b26e */{
+/* 0009b26e */	getPlace("PLACE01").setVisible(true);
+/* 0009b290 */	getPlace("PLACE02").setVisible(true);
+/* 0009b2b2 */	getPlace("PLACE03").setVisible(true);
+/* 0009b2d4 */	getPlace("PLACE04").setVisible(true);
+/* 0009b2f6 */	getPlace("PLACE05").setVisible(true);
+/* 0009b318 */	getPlace("PLACE06").setVisible(true);
+/* 0009b33a */	getPlace("PLACE07").setVisible(true);
+/* 0009b35c */	getPlace("PLACE09").setVisible(true);
+/* 0009b37e */	getPlace("PLACE10").setVisible(true);
+/* 0009b3a0 */	getPlace("PLACE11").setVisible(true);
+/* 0009b3c2 */	getPlace("PLACE12").setVisible(true);
+/* 0009b3e4 */	getPlace("PLACE23").setVisible(true);
+/* 0009b406 */	getPlace("PLACE24").setVisible(true);
+/* 0009b428 */	getPlace("PLACE25").setVisible(true);
+/* 0009b44a */	getPlace("PLACE27").setVisible(true);
+/* 0009b46c */	getPlace("PLACE28").setVisible(true);
+/* 0009b48e */	g_gameFlow.setNextMap("MAP01");
+/* 0009b4a0 */}
+
+void サイコロ／うねりパイ()
+/* 0009b4ae */{
+/* 0009b4ae */	制御／チップ獲得("CHIP570", true);
+/* 0009b4c0 */	制御／チップ獲得("CHIP590", true);
+/* 0009b4d2 */}
+
+void サイコロ／銅貨()
+/* 0009b4e0 */{
+/* 0009b4e0 */	制御／チップ獲得("CHIP597", true);
+/* 0009b4f2 */}
+
+void サイコロ／ヒトリンガル()
+/* 0009b500 */{
+/* 0009b500 */	制御／チップ獲得("CHIP599", true);
+/* 0009b512 */}
+
+void サイコロ／状態異常()
+/* 0009b520 */{
+/* 0009b520 */	g_player.setBadCondition("COND03", 10);
+/* 0009b538 */}
+
+void サイコロ／ゲームクリアオン()
+/* 0009b546 */{
+/* 0009b546 */	制御／グローバル数値フラグ設定("ゲームクリア", 1);
+/* 0009b558 */}
+
+void サイコロ／ゲームクリアオフ()
+/* 0009b566 */{
+/* 0009b566 */	制御／グローバル数値フラグ設定("ゲームクリア", 0);
+/* 0009b578 */}
+
+void サイコロ／フラグテスト()
+/* 0009b586 */{
+/* 0009b586 */	EV("奈美／客室Ｈ", 1);
+/* 0009b59a */	EV("旅館／竿／奈美／Ｈ後", 1);
+/* 0009b5ae */}
+

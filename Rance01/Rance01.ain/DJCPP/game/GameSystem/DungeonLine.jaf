@@ -1,0 +1,37 @@
+void DungeonLine::loadValue(string key, int line)
+/* 00091904 */{
+/* 00091904 */	int i;
+/* 0009190e */	for (i = 0; i < 5; ++i)
+/* 00091938 */	{
+/* 00091938 */		this.cardId_[i] = EX_A2String(key, i * 2, line, "");
+/* 00091970 */		this.cardOpenType_[i] = EX_A2Int(key, i * 2 + 1, line, 0);
+/* 000919ae */	}
+/* 000919b4 */}
+
+string DungeonLine::getCardId(int index)
+/* 000919bc */{
+/* 000919bc */	if (index >= 0 && index < 5)
+/* 000919f0 */	{
+/* 000919f0 */		if (this.cardId_[index] == "")
+/* 00091a06 */		{
+/* 00091a06 */			return this.randomCardId_[index];
+/* 00091a16 */		}
+/* 00091a1c */		return this.cardId_[index];
+/* 00091a2c */	}
+/* 00091a32 */	return "インデックス範囲外です";
+/* 00091a3a */}
+
+int DungeonLine::getCardOpenType(int index)
+/* 00091a48 */{
+/* 00091a48 */	if (index >= 0 && index < 5)
+/* 00091a7c */	{
+/* 00091a7c */		return this.cardOpenType_[index];
+/* 00091a8c */	}
+/* 00091a92 */	return 0;
+/* 00091a9a */}
+
+void DungeonLine::setRandomCardId(int index, string id)
+/* 00091aa8 */{
+/* 00091aa8 */	this.randomCardId_[index] = id;
+/* 00091abc */}
+

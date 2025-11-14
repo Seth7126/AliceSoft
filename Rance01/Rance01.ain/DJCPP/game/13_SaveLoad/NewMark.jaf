@@ -1,0 +1,63 @@
+NewMark::NewMark()
+/* 00083484 */{
+/* 0008348c */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000834ae */	this.initParts();
+/* 000834b6 */}
+
+void NewMark::setParent(int parentPartsNumber)
+/* 000834be */{
+/* 000834be */	this.parent_.setParent(parentPartsNumber);
+/* 000834d0 */}
+
+void NewMark::initParts()
+/* 000834d8 */{
+/* 000834d8 */	this.parts_[0].initAsText("New", 24, true, 256, 255, 255, 0);
+/* 00083516 */	this.parts_[0].setShow(true);
+/* 00083530 */	this.parts_[0].setOrigin(5);
+/* 0008354a */	createPartsGroup(this.parent_, this.parts_, 5100);
+/* 00083562 */	this.parent_.setOrigin(5);
+/* 00083574 */	this.setPos(0, -100);
+/* 00083588 */}
+
+void NewMark::update()
+/* 00083590 */{
+/* 00083590 */	switch (this.state_)
+/* 000835a2 */	{
+/* 000835a2 */	case 1:
+/* 000835a2 */		if (!this.parent_.isMotion())
+/* 000835b6 */		{
+/* 000835b6 */			this.state_ = 2;
+/* 000835c0 */		}
+/* 000835c6 */		break;
+/* 000835cc */	case 2:
+/* 000835cc */		break;
+/* 000835d2 */	case 3:
+/* 000835d2 */		if (!this.parent_.isMotion())
+/* 000835e6 */		{
+/* 000835e6 */			this.state_ = 0;
+/* 000835f0 */		}
+/* 000835f6 */		break;
+/* 000835fc */	case 0:
+/* 000835fc */		break;
+/* 00083602 */	}
+/* 00083602 */	this.parent_.setShow(this.state_ != 0);
+/* 0008361e */}
+
+void NewMark::fadeIn(bool val)
+/* 00083626 */{
+/* 00083626 */	this.parent_.setShow(true);
+/* 00083638 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 00083668 */	this.state_ = val ? 1 : 3;
+/* 00083692 */}
+
+void NewMark::setPos(int x, int y)
+/* 0008369a */{
+/* 0008369a */	this.parent_.setPos(x, y, -2147483648);
+/* 000836b8 */}
+
+void NewMark::setShow(bool val)
+/* 000836c0 */{
+/* 000836c0 */	this.state_ = val ? 2 : 0;
+/* 000836ea */	this.parent_.setShow(val);
+/* 000836fc */}
+

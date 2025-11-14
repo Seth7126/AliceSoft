@@ -1,0 +1,195 @@
+bool Config_GetMouseWheelBackLog()
+/* 000861a2 */{
+/* 000861a2 */	return AFL_Config_GetWheelForward() == 0;
+/* 000861b4 */}
+
+void Config_SetMouseWheelBackLog(bool val)
+/* 000861c8 */{
+/* 000861c8 */	AFL_Config_SetWheelForward(0);
+/* 000861d4 */}
+
+bool Config_GetMouseWheelBackScene()
+/* 000861e2 */{
+/* 000861e2 */	return AFL_Config_GetWheelForward() == 1;
+/* 000861f4 */}
+
+void Config_SetMouseWheelBackScene(bool val)
+/* 00086208 */{
+/* 00086208 */	AFL_Config_SetWheelForward(1);
+/* 00086214 */}
+
+bool Config_GetFullScreenMode()
+/* 00086222 */{
+/* 00086222 */	return !AFL_Config_GetWindowMode();
+/* 0008622e */}
+
+void Config_SetFullScreenMode(bool val)
+/* 00086242 */{
+/* 00086242 */	AFL_Config_SetWindowMode(false);
+/* 0008624e */}
+
+void Config_SetWindowMode(bool val)
+/* 0008625c */{
+/* 0008625c */	AFL_Config_SetWindowMode(true);
+/* 00086268 */}
+
+bool Config_GetAspectRatioDefault()
+/* 00086276 */{
+/* 00086276 */	return AFL_Config_GetAspectRatio() == 0;
+/* 00086288 */}
+
+void Config_SetAspectRatioDefault(bool val)
+/* 0008629c */{
+/* 0008629c */	AFL_Config_SetAspectRatio(0);
+/* 000862a8 */}
+
+bool Config_GetAspectRatioFix()
+/* 000862b6 */{
+/* 000862b6 */	return AFL_Config_GetAspectRatio() == 1;
+/* 000862c8 */}
+
+void Config_SetAspectRatioFix(bool val)
+/* 000862dc */{
+/* 000862dc */	AFL_Config_SetAspectRatio(1);
+/* 000862e8 */}
+
+bool Config_GetScalingTypeDefault()
+/* 000862f6 */{
+/* 000862f6 */	return AFL_Config_GetScalingType() == 0;
+/* 00086308 */}
+
+void Config_SetScalingTypeDefault(bool val)
+/* 0008631c */{
+/* 0008631c */	AFL_Config_SetScalingType(0);
+/* 00086328 */}
+
+bool Config_GetScalingTypeBiCubic()
+/* 00086336 */{
+/* 00086336 */	return AFL_Config_GetScalingType() == 1;
+/* 00086348 */}
+
+void Config_SetScalingTypeBiCubic(bool val)
+/* 0008635c */{
+/* 0008635c */	AFL_Config_SetScalingType(1);
+/* 00086368 */}
+
+void Config_SetVolumeMaster(float val)
+/* 00086376 */{
+/* 00086376 */	AFL_Config_SetVolume(0, val * 100.0);
+/* 00086392 */}
+
+void Config_SetVolumeBgm(float val)
+/* 000863a0 */{
+/* 000863a0 */	AFL_Config_SetVolume(1, val * 100.0);
+/* 000863bc */}
+
+void Config_SetVolumeSound(float val)
+/* 000863ca */{
+/* 000863ca */	AFL_Config_SetVolume(2, val * 100.0);
+/* 000863e6 */}
+
+void Config_SetVolumeVoice(float val)
+/* 000863f4 */{
+/* 000863f4 */	AFL_Config_SetVolume(3, val * 100.0);
+/* 00086410 */}
+
+float Config_GetVolumeMaster()
+/* 0008641e */{
+/* 0008641e */	return AFL_Config_GetVolume(0) / 100.0;
+/* 00086436 */}
+
+float Config_GetVolumeBgm()
+/* 0008644a */{
+/* 0008644a */	return AFL_Config_GetVolume(1) / 100.0;
+/* 00086462 */}
+
+float Config_GetVolumeSound()
+/* 00086476 */{
+/* 00086476 */	return AFL_Config_GetVolume(2) / 100.0;
+/* 0008648e */}
+
+float Config_GetVolumeVoice()
+/* 000864a2 */{
+/* 000864a2 */	return AFL_Config_GetVolume(3) / 100.0;
+/* 000864ba */}
+
+void Config_ResetMulColorRate()
+/* 000864ce */{
+/* 000864ce */	AFL_Config_SetMessageWindowMulColorRate(1.0);
+/* 000864da */}
+
+void Config_ResetAlphaColorRate()
+/* 000864e8 */{
+/* 000864e8 */	AFL_Config_SetMessageWindowAlphaRate(1.0);
+/* 000864f4 */}
+
+void Config_ResetVolumeMaster()
+/* 00086502 */{
+/* 00086502 */	AFL_Config_SetVolume(0, AFL_Config_GetDefaultVolume(0));
+/* 0008651a */}
+
+void Config_ResetVolumeMusic()
+/* 00086528 */{
+/* 00086528 */	AFL_Config_SetVolume(1, AFL_Config_GetDefaultVolume(1));
+/* 00086540 */}
+
+void Config_ResetVolumeSoundEffect()
+/* 0008654e */{
+/* 0008654e */	AFL_Config_SetVolume(2, AFL_Config_GetDefaultVolume(2));
+/* 00086566 */}
+
+void Config_ResetVolumeVoice()
+/* 00086574 */{
+/* 00086574 */	AFL_Config_SetVolume(3, AFL_Config_GetDefaultVolume(3));
+/* 0008658c */}
+
+void Config_SetSoundMuteMaster(bool val)
+/* 0008659a */{
+/* 0008659a */	AFL_Config_SetMute(0, val);
+/* 000865ac */}
+
+bool Config_GetSoundMuteMaster()
+/* 000865ba */{
+/* 000865ba */	return AFL_Config_GetMute(0);
+/* 000865c8 */}
+
+void Config_SetSoundMuteMusic(bool val)
+/* 000865dc */{
+/* 000865dc */	AFL_Config_SetMute(1, val);
+/* 000865ee */}
+
+bool Config_GetSoundMuteMusic()
+/* 000865fc */{
+/* 000865fc */	return AFL_Config_GetMute(1);
+/* 0008660a */}
+
+void Config_SetSoundMuteSoundEffect(bool val)
+/* 0008661e */{
+/* 0008661e */	AFL_Config_SetMute(2, val);
+/* 00086630 */}
+
+bool Config_GetSoundMuteSoundEffect()
+/* 0008663e */{
+/* 0008663e */	return AFL_Config_GetMute(2);
+/* 0008664c */}
+
+void Config_SetSoundMuteVoice(bool val)
+/* 00086660 */{
+/* 00086660 */	AFL_Config_SetMute(3, val);
+/* 00086672 */}
+
+bool Config_GetSoundMuteVoice()
+/* 00086680 */{
+/* 00086680 */	return AFL_Config_GetMute(3);
+/* 0008668e */}
+
+void Config_SetGameSpeed(float val)
+/* 000866a2 */{
+/* 000866a2 */	g_globalTimer.setGlobalScaling(val * 2.0 + 1.0);
+/* 000866c4 */}
+
+float Config_GetGameSpeed()
+/* 000866d2 */{
+/* 000866d2 */	return (g_globalTimer.getGlobalScaling() - 1.0) / 2.0;
+/* 000866f0 */}
+

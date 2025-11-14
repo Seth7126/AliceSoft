@@ -1,0 +1,49 @@
+DungeonChipView::DungeonChipView()
+/* 0006d3e6 */{
+/* 0006d3ee */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006d410 */	this.chipView_.init(0, 1, true);
+/* 0006d42e */}
+
+void DungeonChipView::fadeIn(bool val)
+/* 0006d436 */{
+/* 0006d436 */	this.chipView_.fadeIn(val);
+/* 0006d448 */}
+
+void DungeonChipView::update()
+/* 0006d450 */{
+/* 0006d450 */	int index = this.chipView_.getClickedIndex();
+/* 0006d468 */	if (index != -1)
+/* 0006d47c */	{
+/* 0006d47c */		string id = g_chipDepository[0].getInstance(index).getId();
+/* 0006d4b4 */		if (OpenUseChipConfimation(id))
+/* 0006d4c6 */		{
+/* 0006d4c6 */			if (getChip(id).getUseType() == 1)
+/* 0006d4f0 */			{
+/* 0006d4f0 */				g_chipDepository[0].erase(index);
+/* 0006d50a */				string result = this.callItemCallback(id);
+/* 0006d522 */			}
+/* 0006d528 */		}
+/* 0006d534 */	}
+/* 0006d540 */}
+
+string DungeonChipView::callItemCallback(string id)
+/* 0006d548 */{
+/* 0006d548 */	FuncItemUseCallback fn = EX_String("アイテム使用時コールバック", "");
+/* 0006d56c */	if (fn != NULL)
+/* 0006d580 */	{
+/* 0006d580 */		string s = fn(id);
+/* 0006d5a0 */		return s;
+/* 0006d5a8 */	}
+/* 0006d5ae */	return "コールバックが見つかりません";
+/* 0006d5b6 */}
+
+bool DungeonChipView::isMotion()
+/* 0006d5c4 */{
+/* 0006d5c4 */	return this.chipView_.isMotion();
+/* 0006d5d2 */}
+
+void DungeonChipView::setOperatable(bool val)
+/* 0006d5e0 */{
+/* 0006d5e0 */	this.chipView_.setOperatable(val);
+/* 0006d5f2 */}
+

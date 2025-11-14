@@ -1,0 +1,805 @@
+void 制御／カードコールバック／罠(string id)
+/* 0009d730 */{
+/* 0009d730 */	switch (id)
+/* 0009d742 */	{
+/* 0009d742 */	case "CARD301":
+/* 0009d742 */	case "CARD327":
+/* 0009d742 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009d75a */		{
+/* 0009d75a */			if (RAND(100) > 5)
+/* 0009d774 */			{
+/* 0009d774 */				DialogInfomation info;
+/* 0009d784 */				info.type = 2;
+/* 0009d79a */				info.chipId = "CHIP621";
+/* 0009d7ae */				info.caption = "するりんくんが発動した！";
+/* 0009d7c2 */				info.desc[0] = "お陰でするりと穴を回避できた。";
+/* 0009d7de */				OpenDialog(info);
+/* 0009d7ec */				return;
+/* 0009d7ee */			}
+/* 0009d7fa */			else
+/* 0009d7fa */			{
+/* 0009d7fa */				DialogInfomation info;
+/* 0009d80a */				info.type = 2;
+/* 0009d820 */				info.chipId = "CHIP621";
+/* 0009d834 */				info.caption = "するりんくんが砕け散った！";
+/* 0009d848 */				info.desc[0] = "するりと穴を回避できたが、";
+/* 0009d864 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009d880 */				OpenDialog(info);
+/* 0009d88e */			}
+/* 0009d894 */			制御／チップ喪失("CHIP621", false);
+/* 0009d8a6 */			return;
+/* 0009d8a8 */		}
+/* 0009d8ae */		else
+/* 0009d8ae */		{
+/* 0009d8ae */			int nowHp;
+/* 0009d8b8 */			int afterHp;
+/* 0009d8c2 */			int val;
+/* 0009d8cc */			nowHp = g_player.getHp();
+/* 0009d8e4 */			val = ((g_player.getMaxHp() * (RAND(11) + 9)) / 100) * -1;
+/* 0009d922 */			g_player.addHp(val);
+/* 0009d934 */			afterHp = g_player.getHp();
+/* 0009d94c */			int mark;
+/* 0009d956 */			mark = val * -1;
+/* 0009d970 */			DialogInfomation info;
+/* 0009d980 */			info.type = 1;
+/* 0009d996 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009d9aa */			info.caption = "落とし穴にはまった！";
+/* 0009d9be */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009d9ec */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009da28 */			info.desc[2] = "こんな場所に穴を掘ったバカは誰だ。";
+/* 0009da44 */			OpenDialog(info);
+/* 0009da52 */		}
+/* 0009da58 */		break;
+/* 0009da5e */	case "CARD302":
+/* 0009da5e */		if (制御／チップ確認("CHIP621", 0))
+/* 0009da76 */		{
+/* 0009da76 */			if (RAND(100) > 5)
+/* 0009da90 */			{
+/* 0009da90 */				DialogInfomation info;
+/* 0009daa0 */				info.type = 2;
+/* 0009dab6 */				info.chipId = "CHIP621";
+/* 0009daca */				info.caption = "するりんくんが発動した！";
+/* 0009dade */				info.desc[0] = "お陰でするりと沼を回避できた。";
+/* 0009dafa */				OpenDialog(info);
+/* 0009db08 */				return;
+/* 0009db0a */			}
+/* 0009db16 */			else
+/* 0009db16 */			{
+/* 0009db16 */				DialogInfomation info;
+/* 0009db26 */				info.type = 2;
+/* 0009db3c */				info.chipId = "CHIP621";
+/* 0009db50 */				info.caption = "するりんくんが砕け散った！";
+/* 0009db64 */				info.desc[0] = "するりと沼を回避できたが、";
+/* 0009db80 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009db9c */				OpenDialog(info);
+/* 0009dbaa */			}
+/* 0009dbb0 */			制御／チップ喪失("CHIP621", false);
+/* 0009dbc2 */			return;
+/* 0009dbc4 */		}
+/* 0009dbca */		else
+/* 0009dbca */		{
+/* 0009dbca */			int nowHp;
+/* 0009dbd4 */			int afterHp;
+/* 0009dbde */			int val;
+/* 0009dbe8 */			nowHp = g_player.getHp();
+/* 0009dc00 */			val = ((g_player.getMaxHp() * (RAND(11) + 29)) / 100) * -1;
+/* 0009dc3e */			g_player.addHp(val);
+/* 0009dc50 */			afterHp = g_player.getHp();
+/* 0009dc68 */			int mark;
+/* 0009dc72 */			mark = val * -1;
+/* 0009dc8c */			DialogInfomation info;
+/* 0009dc9c */			info.type = 1;
+/* 0009dcb2 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009dcc6 */			info.caption = "強酸の沼にはまった！";
+/* 0009dcda */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009dd08 */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009dd44 */			info.desc[2] = "しゅわしゅわ火傷が痛い。";
+/* 0009dd60 */			OpenDialog(info);
+/* 0009dd6e */		}
+/* 0009dd74 */		break;
+/* 0009dd7a */	case "CARD303":
+/* 0009dd7a */		if (制御／チップ確認("CHIP623", 0))
+/* 0009dd92 */		{
+/* 0009dd92 */			if (RAND(100) > 5)
+/* 0009ddac */			{
+/* 0009ddac */				DialogInfomation info;
+/* 0009ddbc */				info.type = 2;
+/* 0009ddd2 */				info.chipId = "CHIP623";
+/* 0009dde6 */				info.caption = "頭教メトロが発動した！";
+/* 0009ddfa */				info.desc[0] = "正しいリズムで詩人の演奏を無効化した。";
+/* 0009de16 */				OpenDialog(info);
+/* 0009de24 */				return;
+/* 0009de26 */			}
+/* 0009de32 */			else
+/* 0009de32 */			{
+/* 0009de32 */				DialogInfomation info;
+/* 0009de42 */				info.type = 2;
+/* 0009de58 */				info.chipId = "CHIP623";
+/* 0009de6c */				info.caption = "頭教メトロが砕け散った！";
+/* 0009de80 */				info.desc[0] = "正しいリズムで詩人の演奏を無効化したが、";
+/* 0009de9c */				info.desc[1] = "役目を終えた頭教メトロは消滅した。";
+/* 0009deb8 */				OpenDialog(info);
+/* 0009dec6 */			}
+/* 0009decc */			制御／チップ喪失("CHIP623", false);
+/* 0009dede */			return;
+/* 0009dee0 */		}
+/* 0009dee6 */		else
+/* 0009dee6 */		{
+/* 0009dee6 */			if (制御／スキル確認("SKIL04"))
+/* 0009def8 */			{
+/* 0009def8 */				g_player.setBadCondition("COND02", 7);
+/* 0009df10 */			}
+/* 0009df16 */			else
+/* 0009df16 */			{
+/* 0009df16 */				g_player.setBadCondition("COND02", 13);
+/* 0009df2e */			}
+/* 0009df2e */			DialogInfomation info;
+/* 0009df3e */			info.type = 1;
+/* 0009df54 */			info.imageName = "システム／ダイアログ／幻聴";
+/* 0009df68 */			info.caption = "くそ詩人の即興演奏！";
+/* 0009df7c */			info.desc[0] = "すぐさま斬り殺してみたものの、";
+/* 0009df98 */			info.desc[1] = "狂った旋律が脳から離れない。";
+/* 0009dfb4 */			OpenDialog(info);
+/* 0009dfc2 */		}
+/* 0009dfc8 */		break;
+/* 0009dfce */	case "CARD304":
+/* 0009dfce */	case "CARD308":
+/* 0009dfce */	case "CARD324":
+/* 0009dfce */	case "CARD326":
+/* 0009dfce */	case "CARD340":
+/* 0009dfce */		if (制御／チップ確認("CHIP625", 0))
+/* 0009dfe6 */		{
+/* 0009dfe6 */			if (RAND(100) > 5)
+/* 0009e000 */			{
+/* 0009e000 */				DialogInfomation info;
+/* 0009e010 */				info.type = 2;
+/* 0009e026 */				info.chipId = "CHIP625";
+/* 0009e03a */				info.caption = "グリーンティーが発動した！";
+/* 0009e04e */				info.desc[0] = "下り腹を無効化した。";
+/* 0009e06a */				OpenDialog(info);
+/* 0009e078 */				return;
+/* 0009e07a */			}
+/* 0009e086 */			else
+/* 0009e086 */			{
+/* 0009e086 */				DialogInfomation info;
+/* 0009e096 */				info.type = 2;
+/* 0009e0ac */				info.chipId = "CHIP625";
+/* 0009e0c0 */				info.caption = "グリーンティーが砕け散った！";
+/* 0009e0d4 */				info.desc[0] = "下り腹を無効化したが、";
+/* 0009e0f0 */				info.desc[1] = "役目を終えたグリーンティーは消滅した。";
+/* 0009e10c */				OpenDialog(info);
+/* 0009e11a */			}
+/* 0009e120 */			制御／チップ喪失("CHIP625", false);
+/* 0009e132 */			return;
+/* 0009e134 */		}
+/* 0009e13a */		else
+/* 0009e13a */		{
+/* 0009e13a */			if (制御／スキル確認("SKIL04"))
+/* 0009e14c */			{
+/* 0009e14c */				g_player.setBadCondition("COND04", 7);
+/* 0009e164 */			}
+/* 0009e16a */			else
+/* 0009e16a */			{
+/* 0009e16a */				g_player.setBadCondition("COND04", 13);
+/* 0009e182 */			}
+/* 0009e182 */			DialogInfomation info;
+/* 0009e192 */			info.type = 1;
+/* 0009e1a8 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009e1bc */			info.caption = "食あたり！";
+/* 0009e1d0 */			info.desc[0] = "下り腹でうまく歩けない。";
+/* 0009e1ec */			info.desc[1] = "猛威が去るまでここは我慢だ。";
+/* 0009e208 */			OpenDialog(info);
+/* 0009e216 */		}
+/* 0009e21c */		break;
+/* 0009e222 */	case "CARD305":
+/* 0009e222 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009e23a */		{
+/* 0009e23a */			if (RAND(100) > 5)
+/* 0009e254 */			{
+/* 0009e254 */				DialogInfomation info;
+/* 0009e264 */				info.type = 2;
+/* 0009e27a */				info.chipId = "CHIP621";
+/* 0009e28e */				info.caption = "するりんくんが発動した！";
+/* 0009e2a2 */				info.desc[0] = "お陰でするりと矢を回避できた。";
+/* 0009e2be */				OpenDialog(info);
+/* 0009e2cc */				return;
+/* 0009e2ce */			}
+/* 0009e2da */			else
+/* 0009e2da */			{
+/* 0009e2da */				DialogInfomation info;
+/* 0009e2ea */				info.type = 2;
+/* 0009e300 */				info.chipId = "CHIP621";
+/* 0009e314 */				info.caption = "するりんくんが砕け散った！";
+/* 0009e328 */				info.desc[0] = "するりと矢を回避できたが、";
+/* 0009e344 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009e360 */				OpenDialog(info);
+/* 0009e36e */			}
+/* 0009e374 */			制御／チップ喪失("CHIP621", false);
+/* 0009e386 */			return;
+/* 0009e388 */		}
+/* 0009e38e */		else
+/* 0009e38e */		{
+/* 0009e38e */			int nowHp;
+/* 0009e398 */			int afterHp;
+/* 0009e3a2 */			int val;
+/* 0009e3ac */			nowHp = g_player.getHp();
+/* 0009e3c4 */			val = ((g_player.getMaxHp() * (RAND(11) + 9)) / 100) * -1;
+/* 0009e402 */			g_player.addHp(val);
+/* 0009e414 */			afterHp = g_player.getHp();
+/* 0009e42c */			int mark;
+/* 0009e436 */			mark = val * -1;
+/* 0009e450 */			DialogInfomation info;
+/* 0009e460 */			info.type = 1;
+/* 0009e476 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009e48a */			info.caption = "仕掛け矢に撃たれた！";
+/* 0009e49e */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009e4cc */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009e508 */			info.desc[2] = "こんなもので俺は止められん。";
+/* 0009e524 */			OpenDialog(info);
+/* 0009e532 */		}
+/* 0009e538 */		break;
+/* 0009e53e */	case "CARD306":
+/* 0009e53e */	case "CARD313":
+/* 0009e53e */		制御／視界増減(-2);
+/* 0009e54a */		break;
+/* 0009e550 */	case "CARD307":
+/* 0009e550 */	case "CARD314":
+/* 0009e550 */	case "CARD323":
+/* 0009e550 */	case "CARD337":
+/* 0009e550 */		if (制御／チップ確認("CHIP622", 0))
+/* 0009e568 */		{
+/* 0009e568 */			if (RAND(100) > 5)
+/* 0009e582 */			{
+/* 0009e582 */				DialogInfomation info;
+/* 0009e592 */				info.type = 2;
+/* 0009e5a8 */				info.chipId = "CHIP622";
+/* 0009e5bc */				info.caption = "丹下犬が発動した！";
+/* 0009e5d0 */				info.desc[0] = "うるさく吠えられて俺は正気を保った。";
+/* 0009e5ec */				OpenDialog(info);
+/* 0009e5fa */				return;
+/* 0009e5fc */			}
+/* 0009e608 */			else
+/* 0009e608 */			{
+/* 0009e608 */				DialogInfomation info;
+/* 0009e618 */				info.type = 2;
+/* 0009e62e */				info.chipId = "CHIP622";
+/* 0009e642 */				info.caption = "丹下犬が砕け散った！";
+/* 0009e656 */				info.desc[0] = "うるさく吠えられて俺は正気を保ったが、";
+/* 0009e672 */				info.desc[1] = "役目を終えた丹下犬は消滅した。";
+/* 0009e68e */				OpenDialog(info);
+/* 0009e69c */			}
+/* 0009e6a2 */			制御／チップ喪失("CHIP622", false);
+/* 0009e6b4 */			return;
+/* 0009e6b6 */		}
+/* 0009e6bc */		else
+/* 0009e6bc */		{
+/* 0009e6bc */			if (制御／スキル確認("SKIL04"))
+/* 0009e6ce */			{
+/* 0009e6ce */				g_player.setBadCondition("COND01", 7);
+/* 0009e6e6 */			}
+/* 0009e6ec */			else
+/* 0009e6ec */			{
+/* 0009e6ec */				g_player.setBadCondition("COND01", 13);
+/* 0009e704 */			}
+/* 0009e704 */			DialogInfomation info;
+/* 0009e714 */			info.type = 1;
+/* 0009e72a */			info.imageName = "システム／ダイアログ／興奮";
+/* 0009e73e */			info.caption = "不意の欲情！";
+/* 0009e752 */			info.desc[0] = "脳内がピンク色に染まった。";
+/* 0009e76e */			info.desc[1] = "俺をここまで興奮させるとは。";
+/* 0009e78a */			OpenDialog(info);
+/* 0009e798 */		}
+/* 0009e79e */		break;
+/* 0009e7a4 */	case "CARD309":
+/* 0009e7a4 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009e7bc */		{
+/* 0009e7bc */			if (RAND(100) > 5)
+/* 0009e7d6 */			{
+/* 0009e7d6 */				DialogInfomation info;
+/* 0009e7e6 */				info.type = 2;
+/* 0009e7fc */				info.chipId = "CHIP621";
+/* 0009e810 */				info.caption = "するりんくんが発動した！";
+/* 0009e824 */				info.desc[0] = "お陰でするりと墓穴を回避できた。";
+/* 0009e840 */				OpenDialog(info);
+/* 0009e84e */				return;
+/* 0009e850 */			}
+/* 0009e85c */			else
+/* 0009e85c */			{
+/* 0009e85c */				DialogInfomation info;
+/* 0009e86c */				info.type = 2;
+/* 0009e882 */				info.chipId = "CHIP621";
+/* 0009e896 */				info.caption = "するりんくんが砕け散った！";
+/* 0009e8aa */				info.desc[0] = "するりと墓穴を回避できたが、";
+/* 0009e8c6 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009e8e2 */				OpenDialog(info);
+/* 0009e8f0 */			}
+/* 0009e8f6 */			制御／チップ喪失("CHIP621", false);
+/* 0009e908 */			return;
+/* 0009e90a */		}
+/* 0009e910 */		else
+/* 0009e910 */		{
+/* 0009e910 */			int nowHp;
+/* 0009e91a */			int afterHp;
+/* 0009e924 */			int val;
+/* 0009e92e */			nowHp = g_player.getHp();
+/* 0009e946 */			val = ((g_player.getMaxHp() * (RAND(11) + 29)) / 100) * -1;
+/* 0009e984 */			g_player.addHp(val);
+/* 0009e996 */			afterHp = g_player.getHp();
+/* 0009e9ae */			int mark;
+/* 0009e9b8 */			mark = val * -1;
+/* 0009e9d2 */			DialogInfomation info;
+/* 0009e9e2 */			info.type = 1;
+/* 0009e9f8 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009ea0c */			info.caption = "墓穴にはまった！";
+/* 0009ea20 */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009ea4e */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009ea8a */			info.desc[2] = "使わないなら埋めておけ。";
+/* 0009eaa6 */			OpenDialog(info);
+/* 0009eab4 */		}
+/* 0009eaba */		break;
+/* 0009eac0 */	case "CARD310":
+/* 0009eac0 */	case "CARD318":
+/* 0009eac0 */	case "CARD338":
+/* 0009eac0 */		if (制御／チップ確認("CHIP623", 0))
+/* 0009ead8 */		{
+/* 0009ead8 */			if (RAND(100) > 5)
+/* 0009eaf2 */			{
+/* 0009eaf2 */				DialogInfomation info;
+/* 0009eb02 */				info.type = 2;
+/* 0009eb18 */				info.chipId = "CHIP623";
+/* 0009eb2c */				info.caption = "頭教メトロが発動した！";
+/* 0009eb40 */				info.desc[0] = "正しいリズムでオルゴールの演奏を無効化した。";
+/* 0009eb5c */				OpenDialog(info);
+/* 0009eb6a */				return;
+/* 0009eb6c */			}
+/* 0009eb78 */			else
+/* 0009eb78 */			{
+/* 0009eb78 */				DialogInfomation info;
+/* 0009eb88 */				info.type = 2;
+/* 0009eb9e */				info.chipId = "CHIP623";
+/* 0009ebb2 */				info.caption = "頭教メトロが砕け散った！";
+/* 0009ebc6 */				info.desc[0] = "正しいリズムでオルゴールの演奏を無効化したが、";
+/* 0009ebe2 */				info.desc[1] = "役目を終えた頭教メトロは消滅した。";
+/* 0009ebfe */				OpenDialog(info);
+/* 0009ec0c */			}
+/* 0009ec12 */			制御／チップ喪失("CHIP623", false);
+/* 0009ec24 */			return;
+/* 0009ec26 */		}
+/* 0009ec2c */		else
+/* 0009ec2c */		{
+/* 0009ec2c */			if (制御／スキル確認("SKIL04"))
+/* 0009ec3e */			{
+/* 0009ec3e */				g_player.setBadCondition("COND02", 7);
+/* 0009ec56 */			}
+/* 0009ec5c */			else
+/* 0009ec5c */			{
+/* 0009ec5c */				g_player.setBadCondition("COND02", 13);
+/* 0009ec74 */			}
+/* 0009ec74 */			DialogInfomation info;
+/* 0009ec84 */			info.type = 1;
+/* 0009ec9a */			info.imageName = "システム／ダイアログ／幻聴";
+/* 0009ecae */			info.caption = "くそオルゴールの調べ！";
+/* 0009ecc2 */			info.desc[0] = "なんでこんなものが落ちている。";
+/* 0009ecde */			info.desc[1] = "壊してみたが脳から曲が消えない。";
+/* 0009ecfa */			OpenDialog(info);
+/* 0009ed08 */		}
+/* 0009ed0e */		break;
+/* 0009ed14 */	case "CARD311":
+/* 0009ed14 */	case "CARD339":
+/* 0009ed14 */		if (制御／チップ確認("CHIP624", 0))
+/* 0009ed2c */		{
+/* 0009ed2c */			if (RAND(100) > 5)
+/* 0009ed46 */			{
+/* 0009ed46 */				DialogInfomation info;
+/* 0009ed56 */				info.type = 2;
+/* 0009ed6c */				info.chipId = "CHIP624";
+/* 0009ed80 */				info.caption = "アステロイドバスターが発動した！";
+/* 0009ed94 */				info.desc[0] = "超音波で体内の結石を破壊した。";
+/* 0009edb0 */				OpenDialog(info);
+/* 0009edbe */				return;
+/* 0009edc0 */			}
+/* 0009edcc */			else
+/* 0009edcc */			{
+/* 0009edcc */				DialogInfomation info;
+/* 0009eddc */				info.type = 2;
+/* 0009edf2 */				info.chipId = "CHIP624";
+/* 0009ee06 */				info.caption = "アステロイドバスターが砕け散った！";
+/* 0009ee1a */				info.desc[0] = "超音波で体内の結石を破壊したが、";
+/* 0009ee36 */				info.desc[1] = "役目を終えたアステロイドバスターは消滅した。";
+/* 0009ee52 */				OpenDialog(info);
+/* 0009ee60 */			}
+/* 0009ee66 */			制御／チップ喪失("CHIP624", false);
+/* 0009ee78 */			return;
+/* 0009ee7a */		}
+/* 0009ee80 */		else
+/* 0009ee80 */		{
+/* 0009ee80 */			if (制御／スキル確認("SKIL04"))
+/* 0009ee92 */			{
+/* 0009ee92 */				g_player.setBadCondition("COND03", 7);
+/* 0009eeaa */			}
+/* 0009eeb0 */			else
+/* 0009eeb0 */			{
+/* 0009eeb0 */				g_player.setBadCondition("COND03", 13);
+/* 0009eec8 */			}
+/* 0009eec8 */			DialogInfomation info;
+/* 0009eed8 */			info.type = 1;
+/* 0009eeee */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009ef02 */			info.caption = "結石の精が憑りついた！";
+/* 0009ef16 */			info.desc[0] = "尿管に尖った石を入れられた。";
+/* 0009ef32 */			info.desc[1] = "なんの意味があってこんな事を。";
+/* 0009ef4e */			OpenDialog(info);
+/* 0009ef5c */		}
+/* 0009ef62 */		break;
+/* 0009ef68 */	case "CARD312":
+/* 0009ef68 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009ef80 */		{
+/* 0009ef80 */			if (RAND(100) > 5)
+/* 0009ef9a */			{
+/* 0009ef9a */				DialogInfomation info;
+/* 0009efaa */				info.type = 2;
+/* 0009efc0 */				info.chipId = "CHIP621";
+/* 0009efd4 */				info.caption = "するりんくんが発動した！";
+/* 0009efe8 */				info.desc[0] = "お陰でするりと墓穴を回避できた。";
+/* 0009f004 */				OpenDialog(info);
+/* 0009f012 */				return;
+/* 0009f014 */			}
+/* 0009f020 */			else
+/* 0009f020 */			{
+/* 0009f020 */				DialogInfomation info;
+/* 0009f030 */				info.type = 2;
+/* 0009f046 */				info.chipId = "CHIP621";
+/* 0009f05a */				info.caption = "するりんくんが砕け散った！";
+/* 0009f06e */				info.desc[0] = "するりと墓穴を回避できたが、";
+/* 0009f08a */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009f0a6 */				OpenDialog(info);
+/* 0009f0b4 */			}
+/* 0009f0ba */			制御／チップ喪失("CHIP621", false);
+/* 0009f0cc */			return;
+/* 0009f0ce */		}
+/* 0009f0d4 */		else
+/* 0009f0d4 */		{
+/* 0009f0d4 */			int nowHp;
+/* 0009f0de */			int afterHp;
+/* 0009f0e8 */			int val;
+/* 0009f0f2 */			nowHp = g_player.getHp();
+/* 0009f10a */			val = ((g_player.getMaxHp() * (RAND(11) + 49)) / 100) * -1;
+/* 0009f148 */			g_player.addHp(val);
+/* 0009f15a */			afterHp = g_player.getHp();
+/* 0009f172 */			int mark;
+/* 0009f17c */			mark = val * -1;
+/* 0009f196 */			DialogInfomation info;
+/* 0009f1a6 */			info.type = 1;
+/* 0009f1bc */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009f1d0 */			info.caption = "ひどい墓穴にはまった！";
+/* 0009f1e4 */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009f212 */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009f24e */			info.desc[2] = "こんなに深い必要はねーだろ。";
+/* 0009f26a */			OpenDialog(info);
+/* 0009f278 */		}
+/* 0009f27e */		break;
+/* 0009f284 */	case "CARD315":
+/* 0009f284 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009f29c */		{
+/* 0009f29c */			if (RAND(100) > 5)
+/* 0009f2b6 */			{
+/* 0009f2b6 */				DialogInfomation info;
+/* 0009f2c6 */				info.type = 2;
+/* 0009f2dc */				info.chipId = "CHIP621";
+/* 0009f2f0 */				info.caption = "するりんくんが発動した！";
+/* 0009f304 */				info.desc[0] = "お陰でするりと家具を回避できた。";
+/* 0009f320 */				OpenDialog(info);
+/* 0009f32e */				return;
+/* 0009f330 */			}
+/* 0009f33c */			else
+/* 0009f33c */			{
+/* 0009f33c */				DialogInfomation info;
+/* 0009f34c */				info.type = 2;
+/* 0009f362 */				info.chipId = "CHIP621";
+/* 0009f376 */				info.caption = "するりんくんが砕け散った！";
+/* 0009f38a */				info.desc[0] = "するりと家具を回避できたが、";
+/* 0009f3a6 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009f3c2 */				OpenDialog(info);
+/* 0009f3d0 */			}
+/* 0009f3d6 */			制御／チップ喪失("CHIP621", false);
+/* 0009f3e8 */			return;
+/* 0009f3ea */		}
+/* 0009f3f0 */		else
+/* 0009f3f0 */		{
+/* 0009f3f0 */			int nowHp;
+/* 0009f3fa */			int afterHp;
+/* 0009f404 */			int val;
+/* 0009f40e */			nowHp = g_player.getHp();
+/* 0009f426 */			val = ((g_player.getMaxHp() * (RAND(11) + 29)) / 100) * -1;
+/* 0009f464 */			g_player.addHp(val);
+/* 0009f476 */			afterHp = g_player.getHp();
+/* 0009f48e */			int mark;
+/* 0009f498 */			mark = val * -1;
+/* 0009f4b2 */			DialogInfomation info;
+/* 0009f4c2 */			info.type = 1;
+/* 0009f4d8 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009f4ec */			info.caption = "家具が頭部を強打した！";
+/* 0009f500 */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009f52e */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009f56a */			info.desc[2] = "心霊現象ってやつか。";
+/* 0009f586 */			OpenDialog(info);
+/* 0009f594 */		}
+/* 0009f59a */		break;
+/* 0009f5a0 */	case "CARD316":
+/* 0009f5a0 */	case "CARD320":
+/* 0009f5a0 */	case "CARD325":
+/* 0009f5a0 */		if (制御／チップ確認("CHIP626", 0))
+/* 0009f5b8 */		{
+/* 0009f5b8 */			if (RAND(100) > 5)
+/* 0009f5d2 */			{
+/* 0009f5d2 */				DialogInfomation info;
+/* 0009f5e2 */				info.type = 2;
+/* 0009f5f8 */				info.chipId = "CHIP626";
+/* 0009f60c */				info.caption = "リーザスの走り方が発動した！";
+/* 0009f620 */				info.desc[0] = "お陰で迷子にならずに済んだ。";
+/* 0009f63c */				OpenDialog(info);
+/* 0009f64a */				return;
+/* 0009f64c */			}
+/* 0009f658 */			else
+/* 0009f658 */			{
+/* 0009f658 */				DialogInfomation info;
+/* 0009f668 */				info.type = 2;
+/* 0009f67e */				info.chipId = "CHIP626";
+/* 0009f692 */				info.caption = "リーザスの走り方が砕け散った！";
+/* 0009f6a6 */				info.desc[0] = "迷子にならずに済んだが、";
+/* 0009f6c2 */				info.desc[1] = "役目を終えたリーザスの走り方は消滅した。";
+/* 0009f6de */				OpenDialog(info);
+/* 0009f6ec */			}
+/* 0009f6f2 */			制御／チップ喪失("CHIP626", false);
+/* 0009f704 */			return;
+/* 0009f706 */		}
+/* 0009f70c */		else
+/* 0009f70c */		{
+/* 0009f70c */			if (制御／スキル確認("SKIL04"))
+/* 0009f71e */			{
+/* 0009f71e */				g_player.setBadCondition("COND05", 7);
+/* 0009f736 */			}
+/* 0009f73c */			else
+/* 0009f73c */			{
+/* 0009f73c */				g_player.setBadCondition("COND05", 13);
+/* 0009f754 */			}
+/* 0009f754 */			DialogInfomation info;
+/* 0009f764 */			info.type = 1;
+/* 0009f77a */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009f78e */			info.caption = "帰り道を忘れた！";
+/* 0009f7a2 */			info.desc[0] = "急いで帰れなくなった。";
+/* 0009f7be */			info.desc[1] = "少し思い出す時間が必要だ。";
+/* 0009f7da */			OpenDialog(info);
+/* 0009f7e8 */		}
+/* 0009f7ee */		break;
+/* 0009f7f4 */	case "CARD317":
+/* 0009f7f4 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009f80c */		{
+/* 0009f80c */			if (RAND(100) > 5)
+/* 0009f826 */			{
+/* 0009f826 */				DialogInfomation info;
+/* 0009f836 */				info.type = 2;
+/* 0009f84c */				info.chipId = "CHIP621";
+/* 0009f860 */				info.caption = "するりんくんが発動した！";
+/* 0009f874 */				info.desc[0] = "お陰でするりとムシを回避できた。";
+/* 0009f890 */				OpenDialog(info);
+/* 0009f89e */				return;
+/* 0009f8a0 */			}
+/* 0009f8ac */			else
+/* 0009f8ac */			{
+/* 0009f8ac */				DialogInfomation info;
+/* 0009f8bc */				info.type = 2;
+/* 0009f8d2 */				info.chipId = "CHIP621";
+/* 0009f8e6 */				info.caption = "するりんくんが砕け散った！";
+/* 0009f8fa */				info.desc[0] = "するりとムシを回避できたが、";
+/* 0009f916 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009f932 */				OpenDialog(info);
+/* 0009f940 */			}
+/* 0009f946 */			制御／チップ喪失("CHIP621", false);
+/* 0009f958 */			return;
+/* 0009f95a */		}
+/* 0009f960 */		else
+/* 0009f960 */		{
+/* 0009f960 */			int nowHp;
+/* 0009f96a */			int afterHp;
+/* 0009f974 */			int val;
+/* 0009f97e */			nowHp = g_player.getHp();
+/* 0009f996 */			val = ((g_player.getMaxHp() * (RAND(11) + 9)) / 100) * -1;
+/* 0009f9d4 */			g_player.addHp(val);
+/* 0009f9e6 */			afterHp = g_player.getHp();
+/* 0009f9fe */			int mark;
+/* 0009fa08 */			mark = val * -1;
+/* 0009fa22 */			DialogInfomation info;
+/* 0009fa32 */			info.type = 1;
+/* 0009fa48 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009fa5c */			info.caption = "ムシに噛みつかれた！";
+/* 0009fa70 */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 0009fa9e */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 0009fada */			info.desc[2] = "いつの間にか足に張りついてやがった。";
+/* 0009faf6 */			OpenDialog(info);
+/* 0009fb04 */		}
+/* 0009fb0a */		break;
+/* 0009fb10 */	case "CARD319":
+/* 0009fb10 */		if (制御／チップ確認("CHIP624", 0))
+/* 0009fb28 */		{
+/* 0009fb28 */			if (RAND(100) > 5)
+/* 0009fb42 */			{
+/* 0009fb42 */				DialogInfomation info;
+/* 0009fb52 */				info.type = 2;
+/* 0009fb68 */				info.chipId = "CHIP624";
+/* 0009fb7c */				info.caption = "アステロイドバスターが発動した！";
+/* 0009fb90 */				info.desc[0] = "超音波で体内の結石を破壊した。";
+/* 0009fbac */				OpenDialog(info);
+/* 0009fbba */				return;
+/* 0009fbbc */			}
+/* 0009fbc8 */			else
+/* 0009fbc8 */			{
+/* 0009fbc8 */				DialogInfomation info;
+/* 0009fbd8 */				info.type = 2;
+/* 0009fbee */				info.chipId = "CHIP624";
+/* 0009fc02 */				info.caption = "アステロイドバスターが砕け散った！";
+/* 0009fc16 */				info.desc[0] = "超音波で体内の結石を破壊したが、";
+/* 0009fc32 */				info.desc[1] = "役目を終えたアステロイドバスターは消滅した。";
+/* 0009fc4e */				OpenDialog(info);
+/* 0009fc5c */			}
+/* 0009fc62 */			制御／チップ喪失("CHIP624", false);
+/* 0009fc74 */			return;
+/* 0009fc76 */		}
+/* 0009fc7c */		else
+/* 0009fc7c */		{
+/* 0009fc7c */			if (制御／スキル確認("SKIL04"))
+/* 0009fc8e */			{
+/* 0009fc8e */				g_player.setBadCondition("COND03", 7);
+/* 0009fca6 */			}
+/* 0009fcac */			else
+/* 0009fcac */			{
+/* 0009fcac */				g_player.setBadCondition("COND03", 13);
+/* 0009fcc4 */			}
+/* 0009fcc4 */			DialogInfomation info;
+/* 0009fcd4 */			info.type = 1;
+/* 0009fcea */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009fcfe */			info.caption = "汚水を浴びた！";
+/* 0009fd12 */			info.desc[0] = "結石を患ってしまった。";
+/* 0009fd2e */			info.desc[1] = "なんの成分が入っていたのか。";
+/* 0009fd4a */			OpenDialog(info);
+/* 0009fd58 */		}
+/* 0009fd5e */		break;
+/* 0009fd64 */	case "CARD321":
+/* 0009fd64 */		if (制御／チップ確認("CHIP621", 0))
+/* 0009fd7c */		{
+/* 0009fd7c */			if (RAND(100) > 5)
+/* 0009fd96 */			{
+/* 0009fd96 */				DialogInfomation info;
+/* 0009fda6 */				info.type = 2;
+/* 0009fdbc */				info.chipId = "CHIP621";
+/* 0009fdd0 */				info.caption = "するりんくんが発動した！";
+/* 0009fde4 */				info.desc[0] = "お陰でするりと危険を回避できた。";
+/* 0009fe00 */				OpenDialog(info);
+/* 0009fe0e */				return;
+/* 0009fe10 */			}
+/* 0009fe1c */			else
+/* 0009fe1c */			{
+/* 0009fe1c */				DialogInfomation info;
+/* 0009fe2c */				info.type = 2;
+/* 0009fe42 */				info.chipId = "CHIP621";
+/* 0009fe56 */				info.caption = "するりんくんが砕け散った！";
+/* 0009fe6a */				info.desc[0] = "するりと危険を回避できたが、";
+/* 0009fe86 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 0009fea2 */				OpenDialog(info);
+/* 0009feb0 */			}
+/* 0009feb6 */			制御／チップ喪失("CHIP621", false);
+/* 0009fec8 */			return;
+/* 0009feca */		}
+/* 0009fed0 */		else
+/* 0009fed0 */		{
+/* 0009fed0 */			int nowHp;
+/* 0009feda */			int afterHp;
+/* 0009fee4 */			int val;
+/* 0009feee */			nowHp = g_player.getHp();
+/* 0009ff06 */			val = ((g_player.getMaxHp() * (RAND(11) + 9)) / 100) * -1;
+/* 0009ff44 */			g_player.addHp(val);
+/* 0009ff56 */			afterHp = g_player.getHp();
+/* 0009ff6e */			int mark;
+/* 0009ff78 */			mark = val * -1;
+/* 0009ff92 */			DialogInfomation info;
+/* 0009ffa2 */			info.type = 1;
+/* 0009ffb8 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 0009ffcc */			info.caption = "マキビシを踏んだ！";
+/* 0009ffe0 */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 000a000e */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 000a004a */			info.desc[2] = "あの忍者の仕業だな。";
+/* 000a0066 */			OpenDialog(info);
+/* 000a0074 */		}
+/* 000a007a */		break;
+/* 000a0080 */	case "CARD322":
+/* 000a0080 */		if (制御／チップ確認("CHIP621", 0))
+/* 000a0098 */		{
+/* 000a0098 */			if (RAND(100) > 5)
+/* 000a00b2 */			{
+/* 000a00b2 */				DialogInfomation info;
+/* 000a00c2 */				info.type = 2;
+/* 000a00d8 */				info.chipId = "CHIP621";
+/* 000a00ec */				info.caption = "するりんくんが発動した！";
+/* 000a0100 */				info.desc[0] = "お陰でするりと炎を回避できた。";
+/* 000a011c */				OpenDialog(info);
+/* 000a012a */				return;
+/* 000a012c */			}
+/* 000a0138 */			else
+/* 000a0138 */			{
+/* 000a0138 */				DialogInfomation info;
+/* 000a0148 */				info.type = 2;
+/* 000a015e */				info.chipId = "CHIP621";
+/* 000a0172 */				info.caption = "するりんくんが砕け散った！";
+/* 000a0186 */				info.desc[0] = "するりと炎を回避できたが、";
+/* 000a01a2 */				info.desc[1] = "役目を終えたするりんくんは消滅した。";
+/* 000a01be */				OpenDialog(info);
+/* 000a01cc */			}
+/* 000a01d2 */			制御／チップ喪失("CHIP621", false);
+/* 000a01e4 */			return;
+/* 000a01e6 */		}
+/* 000a01ec */		else
+/* 000a01ec */		{
+/* 000a01ec */			int nowHp;
+/* 000a01f6 */			int afterHp;
+/* 000a0200 */			int val;
+/* 000a020a */			nowHp = g_player.getHp();
+/* 000a0222 */			val = ((g_player.getMaxHp() * (RAND(11) + 49)) / 100) * -1;
+/* 000a0260 */			g_player.addHp(val);
+/* 000a0272 */			afterHp = g_player.getHp();
+/* 000a028a */			int mark;
+/* 000a0294 */			mark = val * -1;
+/* 000a02ae */			DialogInfomation info;
+/* 000a02be */			info.type = 1;
+/* 000a02d4 */			info.imageName = "システム／ダイアログ／ダメージ";
+/* 000a02e8 */			info.caption = "炎の罠に掛かった！";
+/* 000a02fc */			info.desc[0] = "%d点のダメージ！" % mark;
+/* 000a032a */			info.desc[1] = "現在HP:%d → %d" % nowHp % afterHp;
+/* 000a0366 */			info.desc[2] = "容赦せんぞあの忍者め。";
+/* 000a0382 */			OpenDialog(info);
+/* 000a0390 */		}
+/* 000a0396 */		break;
+/* 000a039c */	case "CARD333":
+/* 000a039c */		if (制御／チップ確認("CHIP627", 0))
+/* 000a03b4 */		{
+/* 000a03b4 */			if (RAND(100) > 5)
+/* 000a03ce */			{
+/* 000a03ce */				DialogInfomation info;
+/* 000a03de */				info.type = 2;
+/* 000a03f4 */				info.chipId = "CHIP627";
+/* 000a0408 */				info.caption = "クライムブーツが発動した！";
+/* 000a041c */				info.desc[0] = "お陰で警報は作動しなかった。";
+/* 000a0438 */				OpenDialog(info);
+/* 000a0446 */				return;
+/* 000a0448 */			}
+/* 000a0454 */			else
+/* 000a0454 */			{
+/* 000a0454 */				DialogInfomation info;
+/* 000a0464 */				info.type = 2;
+/* 000a047a */				info.chipId = "CHIP627";
+/* 000a048e */				info.caption = "クライムブーツが砕け散った！";
+/* 000a04a2 */				info.desc[0] = "警報は作動しなかったが、";
+/* 000a04be */				info.desc[1] = "役目を終えたクライムブーツは消滅した。";
+/* 000a04da */				OpenDialog(info);
+/* 000a04e8 */			}
+/* 000a04ee */			制御／チップ喪失("CHIP627", false);
+/* 000a0500 */			return;
+/* 000a0502 */		}
+/* 000a0508 */		else
+/* 000a0508 */		{
+/* 000a0508 */			hideGameObject();
+/* 000a050e */			if (!EV("牢獄／罠／警報／初回", -2147483648))
+/* 000a0528 */			{
+/* 000a0528 */				牢獄／罠／警報／初回();
+/* 000a052e */			}
+/* 000a0534 */			else
+/* 000a0534 */			{
+/* 000a0534 */				牢獄／罠／警報();
+/* 000a053a */			}
+/* 000a053a */			restoreGameObject();
+/* 000a0540 */			制御／移動／マップ("MAP02");
+/* 000a054c */			break;
+/* 000a067e */		}
+/* 000a067e */	default:
+/* 000a067e */		break;
+/* 000a0684 */	}
+/* 000a0684 */}
+

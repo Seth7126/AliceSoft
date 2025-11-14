@@ -1,0 +1,111 @@
+AutoSaveAlert::AutoSaveAlert()
+/* 000696b4 */{
+/* 000696bc */	this.gameObjectId_ = g_gameObjectManager.addNonSleepObject(this.update);
+/* 000696de */}
+
+void AutoSaveAlert::init()
+/* 000696e6 */{
+/* 000696e6 */	this.initParts();
+/* 000696ee */	this.setPartsNonSleep();
+/* 000696f6 */	this.setPartsPos();
+/* 000696fe */	this.setPartsShow();
+/* 00069706 */}
+
+void AutoSaveAlert::update()
+/* 0006970e */{
+/* 0006970e */	switch (this.state_)
+/* 00069720 */	{
+/* 00069720 */	case 0:
+/* 00069720 */		break;
+/* 00069726 */	case 1:
+/* 00069726 */		if (this.isMotionFinish())
+/* 00069734 */		{
+/* 00069734 */			this.state_ = 2;
+/* 0006973e */			this.timer_.reset();
+/* 0006974a */		}
+/* 00069750 */		break;
+/* 00069756 */	case 2:
+/* 00069756 */		if (this.timer_.getTime() > 3000)
+/* 00069770 */		{
+/* 00069770 */			this.fadeIn(false);
+/* 0006977e */		}
+/* 00069784 */		break;
+/* 0006978a */	case 3:
+/* 0006978a */		if (this.isMotionFinish())
+/* 00069798 */		{
+/* 00069798 */			this.state_ = 0;
+/* 000697a2 */		}
+/* 000697a8 */		break;
+/* 000697ae */	}
+/* 000697ae */}
+
+void AutoSaveAlert::fadeIn(bool val)
+/* 000697b6 */{
+/* 000697b6 */	if (this.isIgnoreFadeMotion(val))
+/* 000697ca */	{
+/* 000697ca */		return;
+/* 000697cc */	}
+/* 000697d2 */	this.state_ = val ? 1 : 3;
+/* 000697fc */	this.parent_.setShow(true);
+/* 0006980e */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0006983e */}
+
+void AutoSaveAlert::run()
+/* 00069846 */{
+/* 00069846 */	this.init();
+/* 0006984e */	this.fadeIn(true);
+/* 0006985c */}
+
+bool AutoSaveAlert::isIgnoreFadeMotion(bool val)
+/* 00069864 */{
+/* 00069864 */	if (val && (this.state_ == 1 || this.state_ == 2))
+/* 000698c8 */	{
+/* 000698c8 */		return true;
+/* 000698d0 */	}
+/* 000698d6 */	else if (!val && (this.state_ == 3 || this.state_ == 0))
+/* 0006993c */	{
+/* 0006993c */		return true;
+/* 00069944 */	}
+/* 0006994a */	return false;
+/* 00069952 */}
+
+bool AutoSaveAlert::isMotionFinish()
+/* 00069960 */{
+/* 00069960 */	return !this.parent_.isMotion();
+/* 00069972 */}
+
+void AutoSaveAlert::initParts()
+/* 00069980 */{
+/* 00069980 */	this.parts_[0].initAsText("オートセーブしました。", 20, true, 256, 255, 255, 255);
+/* 000699be */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 000699d6 */}
+
+void AutoSaveAlert::setPartsPos()
+/* 000699de */{
+/* 000699de */	this.parent_.setPos(0, 0, 25000);
+/* 000699fc */}
+
+bool AutoSaveAlert::isFinish()
+/* 00069a04 */{
+/* 00069a04 */	return this.state_ == 0;
+/* 00069a16 */}
+
+void AutoSaveAlert::setPartsShow()
+/* 00069a24 */{
+/* 00069a24 */	int i;
+/* 00069a2e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00069a5e */	{
+/* 00069a5e */		this.parts_[i].setShow(true);
+/* 00069a78 */	}
+/* 00069a7e */}
+
+void AutoSaveAlert::setPartsNonSleep()
+/* 00069a86 */{
+/* 00069a86 */	int i;
+/* 00069a90 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00069ac0 */	{
+/* 00069ac0 */		this.parts_[i].setNonSleep(true);
+/* 00069ada */	}
+/* 00069ae0 */	this.parent_.setNonSleep(true);
+/* 00069af2 */}
+

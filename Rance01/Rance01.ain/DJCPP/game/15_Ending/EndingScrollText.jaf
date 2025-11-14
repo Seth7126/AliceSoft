@@ -1,0 +1,46 @@
+EndingScrollText::EndingScrollText()
+/* 00087caa */{
+/* 00087cb2 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00087cd4 */}
+
+void EndingScrollText::update()
+/* 00087cdc */{
+/* 00087cdc */	int pos = (float(this.speed_) * float(this.timer_.getTime())) / 1000.0;
+/* 00087d0e */	this.parent_.setPos(0, 768 - pos, -2147483648);
+/* 00087d34 */}
+
+void EndingScrollText::run()
+/* 00087d3c */{
+/* 00087d3c */	this.timer_.reset();
+/* 00087d48 */}
+
+void EndingScrollText::init()
+/* 00087d50 */{
+/* 00087d50 */	this.parent_.initAsDummy();
+/* 00087d5c */	this.initScrollObjectParts();
+/* 00087d64 */	this.parent_.setPos(0, 768, -2147483648);
+/* 00087d82 */	this.parent_.setShow(true);
+/* 00087d94 */}
+
+void EndingScrollText::initScrollObjectParts()
+/* 00087d9c */{
+/* 00087d9c */	this.speed_ = EX_Int("エンディング／スピード／テキスト", 0);
+/* 00087dba */	string key = "エンディングスクロールテキスト";
+/* 00087dc6 */	int count = EX_Height(key);
+/* 00087dde */	this.parts_.Alloc(count);
+/* 00087df4 */	int i;
+/* 00087dfe */	for (i = 0; i < count; ++i)
+/* 00087e2e */	{
+/* 00087e2e */		string name = EX_A2String(key, 0, i, "");
+/* 00087e56 */		int size = EX_A2Int(key, 1, i, 0);
+/* 00087e80 */		int x = EX_A2Int(key, 2, i, 0);
+/* 00087eaa */		int y = EX_A2Int(key, 3, i, 0);
+/* 00087ed4 */		int origin = EX_A2Int(key, 4, i, 0);
+/* 00087efe */		this.parts_[i].initAsText(name, size, false, 256, 255, 255, 255);
+/* 00087f3c */		this.parts_[i].setOrigin(origin);
+/* 00087f56 */		this.parts_[i].setPos(x, y, i + 2000);
+/* 00087f84 */		this.parts_[i].setParent(this.parent_.getPartsNumber());
+/* 00087fa4 */		this.parts_[i].setShow(true);
+/* 00087fbe */	}
+/* 00087fc4 */}
+

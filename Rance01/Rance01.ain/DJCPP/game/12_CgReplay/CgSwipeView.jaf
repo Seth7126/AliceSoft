@@ -1,0 +1,145 @@
+CgSwipeView::CgSwipeView()
+/* 00080dac */{
+/* 00080db4 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00080dd6 */}
+
+void CgSwipeView::init(array@string cgList)
+/* 00080dde */{
+/* 00080dde */	this.ss_.init(1024, 1024, 0, cgList.Numof());
+/* 00080e0c */	this.navi_.init(this.ss_);
+/* 00080e1e */	this.initParts(cgList);
+/* 00080e2c */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 00080e4a */	this.btnExit_.setPos(448, 710, -2147483648);
+/* 00080e68 */}
+
+void CgSwipeView::run()
+/* 00080e70 */{
+/* 00080e70 */	this.fadeIn(true);
+/* 00080e7e */}
+
+void CgSwipeView::update()
+/* 00080e86 */{
+/* 00080e86 */	switch (this.state_)
+/* 00080e98 */	{
+/* 00080e98 */	case 0:
+/* 00080e98 */		if (!this.ss_.isMotion())
+/* 00080eac */		{
+/* 00080eac */			this.state_ = 1;
+/* 00080eb6 */			this.hideTimer_.Reset();
+/* 00080ec2 */		}
+/* 00080ec8 */		break;
+/* 00080ece */	case 1:
+/* 00080ece */		int click = this.getClicked();
+/* 00080ee2 */		if (g_mouse.isCursorChanged())
+/* 00080ef4 */		{
+/* 00080ef4 */			this.fadeNavi(true);
+/* 00080f02 */		}
+/* 00080f08 */		if (click == 0)
+/* 00080f16 */		{
+/* 00080f16 */			g_sysSound.play(2002, false);
+/* 00080f2e */			this.fadeNavi(!this.navi_.isShow());
+/* 00080f46 */		}
+/* 00080f4c */		if (click == 1)
+/* 00080f5a */		{
+/* 00080f5a */			g_sysSound.play(2002, false);
+/* 00080f72 */			this.ss_.scrollPage(false);
+/* 00080f84 */		}
+/* 00080f8a */		else if (click == 2)
+/* 00080f98 */		{
+/* 00080f98 */			g_sysSound.play(2002, false);
+/* 00080fb0 */			this.ss_.scrollPage(true);
+/* 00080fc2 */		}
+/* 00080fc8 */		if (this.hideTimer_.Get() > 3000)
+/* 00080fe2 */		{
+/* 00080fe2 */			int x = g_mouse.getX();
+/* 00080ffa */			if (!this.isHoverLeftSide() && !this.isHoverRightSide() && !this.btnExit_.isHover())
+/* 0008105e */			{
+/* 0008105e */				this.fadeNavi(false);
+/* 0008106c */			}
+/* 00081072 */		}
+/* 00081078 */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 000810ba */		{
+/* 000810ba */			if (g_mouse.isClick(1))
+/* 000810d2 */			{
+/* 000810d2 */				g_sysSound.play(2003, false);
+/* 000810ea */			}
+/* 000810f0 */			this.fadeIn(false);
+/* 000810fe */		}
+/* 00081104 */		break;
+/* 0008110a */	case 2:
+/* 0008110a */		if (!this.ss_.isMotion())
+/* 0008111e */		{
+/* 0008111e */			this.state_ = 3;
+/* 00081128 */		}
+/* 0008112e */		break;
+/* 00081134 */	case 3:
+/* 00081134 */		break;
+/* 0008113a */	}
+/* 0008113a */}
+
+void CgSwipeView::fadeNavi(bool val)
+/* 00081142 */{
+/* 00081142 */	if (val)
+/* 0008114e */	{
+/* 0008114e */		this.hideTimer_.Reset();
+/* 0008115a */	}
+/* 00081160 */	this.navi_.fadeIn(val);
+/* 00081172 */	this.btnExit_.fadeIn(val);
+/* 00081184 */}
+
+void CgSwipeView::fadeIn(bool val)
+/* 0008118c */{
+/* 0008118c */	this.ss_.fadeIn(val);
+/* 0008119e */	this.navi_.fadeIn(val);
+/* 000811b0 */	this.btnExit_.fadeIn(val);
+/* 000811c2 */	this.state_ = val ? 0 : 2;
+/* 000811ec */}
+
+bool CgSwipeView::isFinish()
+/* 000811f4 */{
+/* 000811f4 */	return this.state_ == 3;
+/* 00081206 */}
+
+void CgSwipeView::initParts(ref array@string cgList)
+/* 00081214 */{
+/* 00081214 */	this.partsCg_.Alloc(cgList.Numof());
+/* 00081234 */	int i;
+/* 0008123e */	for (i = 0; i < this.partsCg_.Numof(); ++i)
+/* 0008126e */	{
+/* 0008126e */		this.partsCg_[i].init(cgList[i], 0);
+/* 00081296 */		this.partsCg_[i].setPos(i * 1024, 0, -2147483648);
+/* 000812c4 */		this.partsCg_[i].setShow(true);
+/* 000812de */		this.partsCg_[i].setParent(this.ss_.getParentPartsNumber());
+/* 000812fe */	}
+/* 00081304 */}
+
+int CgSwipeView::getClicked()
+/* 0008130c */{
+/* 0008130c */	if (g_mouse.isClick(0))
+/* 00081324 */	{
+/* 00081324 */		if (this.isHoverLeftSide())
+/* 00081332 */		{
+/* 00081332 */			return 1;
+/* 0008133a */		}
+/* 00081340 */		else if (this.isHoverRightSide())
+/* 0008134e */		{
+/* 0008134e */			return 2;
+/* 00081356 */		}
+/* 0008135c */		else if (!this.btnExit_.isHover())
+/* 00081370 */		{
+/* 00081370 */			return 0;
+/* 00081378 */		}
+/* 0008137e */	}
+/* 00081384 */	return -1;
+/* 0008138c */}
+
+bool CgSwipeView::isHoverLeftSide()
+/* 0008139a */{
+/* 0008139a */	return g_mouse.getX() < 96 && roundOff(this.ss_.getFloatingPage()) > 0;
+/* 000813ea */}
+
+bool CgSwipeView::isHoverRightSide()
+/* 000813f8 */{
+/* 000813f8 */	return g_mouse.getX() > 928 && roundOff(this.ss_.getFloatingPage()) < this.ss_.getPageCount() - 1;
+/* 00081456 */}
+

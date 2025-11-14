@@ -1,0 +1,84 @@
+void SYS_Init_JoystickButtonAssignment()
+/* 0003bb04 */{
+/* 0003bb04 */	g_JoystickButtonAssignmentTable.Alloc(50);
+/* 0003bb1a */	g_JoystickButtonAssignmentTable.Fill(0, g_JoystickButtonAssignmentTable.Numof(), -1);
+/* 0003bb38 */	g_JoystickButtonAssignmentTable[0] = SYS_GetDefaultJoystickButtonAssignment(0);
+/* 0003bb54 */	g_JoystickButtonAssignmentTable[1] = SYS_GetDefaultJoystickButtonAssignment(1);
+/* 0003bb70 */	g_JoystickButtonAssignmentTable[2] = SYS_GetDefaultJoystickButtonAssignment(2);
+/* 0003bb8c */	g_JoystickButtonAssignmentTable[3] = SYS_GetDefaultJoystickButtonAssignment(3);
+/* 0003bba8 */	g_JoystickButtonAssignmentTable[4] = SYS_GetDefaultJoystickButtonAssignment(4);
+/* 0003bbc4 */	g_JoystickButtonAssignmentTable[5] = SYS_GetDefaultJoystickButtonAssignment(5);
+/* 0003bbe0 */	g_JoystickButtonAssignmentTable[6] = SYS_GetDefaultJoystickButtonAssignment(6);
+/* 0003bbfc */	g_JoystickButtonAssignmentTable[7] = SYS_GetDefaultJoystickButtonAssignment(7);
+/* 0003bc18 */	g_JoystickButtonAssignmentTable[8] = SYS_GetDefaultJoystickButtonAssignment(8);
+/* 0003bc34 */	g_JoystickButtonAssignmentTable[15] = SYS_GetDefaultJoystickButtonAssignment(15);
+/* 0003bc50 */	g_JoystickButtonAssignmentTable[16] = SYS_GetDefaultJoystickButtonAssignment(16);
+/* 0003bc6c */	g_JoystickButtonAssignmentTable[17] = SYS_GetDefaultJoystickButtonAssignment(17);
+/* 0003bc88 */	g_JoystickButtonAssignmentTable[18] = SYS_GetDefaultJoystickButtonAssignment(18);
+/* 0003bca4 */	g_JoystickButtonAssignmentTable[19] = SYS_GetDefaultJoystickButtonAssignment(19);
+/* 0003bcc0 */	g_JoystickButtonAssignmentTable[9] = SYS_GetDefaultJoystickButtonAssignment(9);
+/* 0003bcdc */	g_JoystickButtonAssignmentTable[10] = SYS_GetDefaultJoystickButtonAssignment(10);
+/* 0003bcf8 */	g_JoystickButtonAssignmentTable[11] = SYS_GetDefaultJoystickButtonAssignment(11);
+/* 0003bd14 */	g_JoystickButtonAssignmentTable[12] = SYS_GetDefaultJoystickButtonAssignment(12);
+/* 0003bd30 */	g_JoystickButtonAssignmentTable[20] = SYS_GetDefaultJoystickButtonAssignment(20);
+/* 0003bd4c */	g_JoystickButtonAssignmentTable[21] = SYS_GetDefaultJoystickButtonAssignment(21);
+/* 0003bd68 */	g_JoystickButtonAssignmentTable[40] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION01", "デフォルトキー", 0);
+/* 0003bd96 */	g_JoystickButtonAssignmentTable[41] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION02", "デフォルトキー", 0);
+/* 0003bdc4 */	g_JoystickButtonAssignmentTable[42] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION03", "デフォルトキー", 0);
+/* 0003bdf2 */	g_JoystickButtonAssignmentTable[43] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION04", "デフォルトキー", 0);
+/* 0003be20 */	g_JoystickButtonAssignmentTable[44] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION05", "デフォルトキー", 0);
+/* 0003be4e */	g_JoystickButtonAssignmentTable[45] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION06", "デフォルトキー", 0);
+/* 0003be7c */	g_JoystickButtonAssignmentTable[46] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION07", "デフォルトキー", 0);
+/* 0003beaa */	g_JoystickButtonAssignmentTable[47] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION08", "デフォルトキー", 0);
+/* 0003bed8 */	g_JoystickButtonAssignmentTable[48] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION09", "デフォルトキー", 0);
+/* 0003bf06 */	g_JoystickButtonAssignmentTable[49] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION10", "デフォルトキー", 0);
+/* 0003bf34 */}
+
+int SYS_GetDefaultJoystickButtonAssignment(int JoystickCode)
+/* 0003bf42 */{
+/* 0003bf42 */	switch (JoystickCode)
+/* 0003bf54 */	{
+/* 0003bf54 */	case 0:
+/* 0003bf54 */		return 1;
+/* 0003bf5c */	case 1:
+/* 0003bf5c */		return 2;
+/* 0003bf64 */	case 2:
+/* 0003bf64 */		return 3;
+/* 0003bf6c */	case 3:
+/* 0003bf6c */		return 4;
+/* 0003bf74 */	case 4:
+/* 0003bf74 */		return 6;
+/* 0003bf7c */	case 5:
+/* 0003bf7c */		return 7;
+/* 0003bf84 */	case 6:
+/* 0003bf84 */		return 5;
+/* 0003bf8c */	case 7:
+/* 0003bf8c */		return 8;
+/* 0003bf94 */	case 8:
+/* 0003bf94 */		return 9;
+/* 0003bf9c */	case 15:
+/* 0003bf9c */		return 10;
+/* 0003bfa4 */	case 16:
+/* 0003bfa4 */		return 3;
+/* 0003bfac */	case 17:
+/* 0003bfac */		return 4;
+/* 0003bfb4 */	case 18:
+/* 0003bfb4 */		return 11;
+/* 0003bfbc */	case 19:
+/* 0003bfbc */		return 12;
+/* 0003bfc4 */	case 9:
+/* 0003bfc4 */		return 3;
+/* 0003bfcc */	case 10:
+/* 0003bfcc */		return 4;
+/* 0003bfd4 */	case 11:
+/* 0003bfd4 */		return 11;
+/* 0003bfdc */	case 12:
+/* 0003bfdc */		return 12;
+/* 0003bfe4 */	case 20:
+/* 0003bfe4 */		return 5;
+/* 0003bfec */	case 21:
+/* 0003bfec */		return 6;
+/* 0003bff4 */	}
+/* 0003bff4 */	return -1;
+/* 0003bffc */}
+

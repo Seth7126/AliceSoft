@@ -1,0 +1,248 @@
+ConfigCheckBox::ConfigCheckBox()
+/* 00084dbc */{
+/* 00084dc4 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 00084df0 */	this.state_ = 3;
+/* 00084dfa */	this.origin_ = 7;
+/* 00084e04 */	this.isEnable_ = true;
+/* 00084e0e */	this.x_ = this.y_ = this.w_ = this.h_ = 0;
+/* 00084e3e */	this.z_ = 5000;
+/* 00084e48 */}
+
+void ConfigCheckBox::init(string text, string setFunc, string getFunc, int manualTextId)
+/* 00084e50 */{
+/* 00084e50 */	this.cgBase_ = "システム／チェックボックス";
+/* 00084e5c */	this.text_ = text;
+/* 00084e66 */	this.manualTextId_ = manualTextId;
+/* 00084e70 */	this.setCheckFunc_ = setFunc;
+/* 00084e88 */	this.getCheckFunc_ = getFunc;
+/* 00084ea0 */	if (this.setCheckFunc_ == NULL)
+/* 00084eae */	{
+/* 00084eae */		dlogF("%s" % setFunc);
+/* 00084ec8 */	}
+/* 00084ece */	if (this.getCheckFunc_ == NULL)
+/* 00084edc */	{
+/* 00084edc */		dlogF("%s" % getFunc);
+/* 00084ef6 */	}
+/* 00084efc */	this.initParts();
+/* 00084f04 */	this.parts_[3].setOrigin(4);
+/* 00084f1e */	this.parts_[3].setPos(this.x_ + 48, this.h_ / 2, -2147483648);
+/* 00084f54 */	this.setPartsShowState();
+/* 00084f5c */	this.updateChildPartsShowState();
+/* 00084f64 */}
+
+void ConfigCheckBox::initParts()
+/* 00084f6c */{
+/* 00084f6c */	this.parts_[0].init(this.cgBase_, 0);
+/* 00084f8c */	this.w_ = this.parts_[0].getWidth() / 3;
+/* 00084fb4 */	this.h_ = this.parts_[0].getHeight();
+/* 00084fd4 */	this.parts_[1].initAsCgPlaneImage(this.cgBase_, 255, 80, 0);
+/* 00085000 */	this.parts_[1].setAlpha(180);
+/* 0008501a */	this.parts_[1].setCgRange(0, 0, this.w_, this.h_);
+/* 00085046 */	this.parts_[3].initAsText(this.text_, 22, false, 256, 0, 0, 0);
+/* 00085084 */	this.parts_[2].init("システム／チェック", 0);
+/* 000850a4 */	this.parts_[4].initAsCgPlaneImage(this.cgBase_, 255, 255, 255);
+/* 000850d0 */	this.parts_[4].setCgRange(0, 0, this.w_, this.h_);
+/* 000850fc */	this.parts_[4].setAlpha(0);
+/* 00085116 */	this.parts_[5].initAsPlaneImage(this.parts_[3].getWidth() + 48, this.h_, 255, 0, 0, 255);
+/* 00085164 */	this.parts_[5].setAlpha(1);
+/* 0008517e */	createPartsGroup(this.parent_, this.parts_, this.z_);
+/* 00085196 */}
+
+void ConfigCheckBox::setParent(int parentPartsNumber)
+/* 0008519e */{
+/* 0008519e */	this.z_ = 1;
+/* 000851a8 */	this.parent_.setPos(this.x_, this.y_, this.z_);
+/* 000851c6 */	this.parent_.setParent(parentPartsNumber);
+/* 000851d8 */}
+
+void ConfigCheckBox::setPartsShowState()
+/* 000851e0 */{
+/* 000851e0 */	int i;
+/* 000851ea */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008521a */	{
+/* 0008521a */		this.parts_[i].setShow(true);
+/* 00085234 */	}
+/* 0008523a */}
+
+void ConfigCheckBox::update()
+/* 00085242 */{
+/* 00085242 */	if (this.parts_[0].getScreenX() > 1024 || this.parts_[0].getScreenX() < -600)
+/* 0008529e */	{
+/* 0008529e */		this.hideParts();
+/* 000852a6 */		return;
+/* 000852a8 */	}
+/* 000852ae */	else if (this.isHide_)
+/* 000852b8 */	{
+/* 000852b8 */		this.showParts();
+/* 000852c0 */	}
+/* 000852c6 */	if (this.w_ == 0)
+/* 000852d4 */	{
+/* 000852d4 */		return;
+/* 000852d6 */	}
+/* 000852dc */	switch (this.state_)
+/* 000852ee */	{
+/* 000852ee */	case 0:
+/* 000852ee */		this.isHover_ = false;
+/* 000852f8 */		if (!this.parent_.isMotion())
+/* 0008530c */		{
+/* 0008530c */			this.state_ = 1;
+/* 00085316 */		}
+/* 0008531c */		break;
+/* 00085322 */	case 1:
+/* 00085322 */		bool last = this.isHover_;
+/* 0008532c */		this.isHover_ = this.isEnable_ && this.collideWithOrigin();
+/* 00085364 */		if (this.isEnable_ && this.isHover_ && g_mouse.onDown(0))
+/* 000853c0 */		{
+/* 000853c0 */			this.runClickEffectMotion();
+/* 000853c8 */		}
+/* 000853ce */		if (!last && this.isHover_)
+/* 000853fe */		{
+/* 000853fe */			g_sysSound.play(2001, false);
+/* 00085416 */		}
+/* 0008541c */		if (this.isClick())
+/* 0008542a */		{
+/* 0008542a */			g_sysSound.play(2002, false);
+/* 00085442 */			this.setCheckFunc_(!this.getCheckFunc_());
+/* 00085464 */		}
+/* 0008546a */		break;
+/* 00085470 */	case 2:
+/* 00085470 */		this.isHover_ = false;
+/* 0008547a */		if (!this.parent_.isMotion())
+/* 0008548e */		{
+/* 0008548e */			this.state_ = 3;
+/* 00085498 */		}
+/* 0008549e */		break;
+/* 000854a4 */	case 3:
+/* 000854a4 */		this.isHover_ = false;
+/* 000854ae */		break;
+/* 000854b4 */	}
+/* 000854b4 */	this.updateChildPartsShowState();
+/* 000854bc */	this.parent_.setShow(this.isShow());
+/* 000854d0 */}
+
+bool ConfigCheckBox::isHover()
+/* 000854d8 */{
+/* 000854d8 */	return this.isHover_;
+/* 000854e0 */}
+
+bool ConfigCheckBox::isShow()
+/* 000854ee */{
+/* 000854ee */	return this.state_ != 3;
+/* 00085500 */}
+
+void ConfigCheckBox::fadeIn(bool val)
+/* 0008550e */{
+/* 0008550e */	if (val)
+/* 0008551a */	{
+/* 0008551a */		if (this.state_ == 0 || this.state_ == 1)
+/* 0008555a */		{
+/* 0008555a */			return;
+/* 0008555c */		}
+/* 00085562 */	}
+/* 00085568 */	else if (this.state_ == 2 || this.state_ == 3)
+/* 000855a8 */	{
+/* 000855a8 */		return;
+/* 000855aa */	}
+/* 000855b0 */	this.state_ = val ? 0 : 2;
+/* 000855da */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0008560a */}
+
+bool ConfigCheckBox::isClick()
+/* 00085612 */{
+/* 00085612 */	return this.isHover_ && g_mouse.isClickWithFocus();
+/* 00085644 */}
+
+void ConfigCheckBox::setPos(int x, int y, int z)
+/* 00085652 */{
+/* 00085652 */	this.x_ = x;
+/* 0008565c */	this.y_ = y;
+/* 00085666 */	if (z != -2147483648)
+/* 0008567a */	{
+/* 0008567a */		this.z_ = z;
+/* 00085684 */	}
+/* 0008568a */	this.parent_.setPos(this.x_, this.y_, this.z_);
+/* 000856a8 */}
+
+void ConfigCheckBox::setShow(bool val)
+/* 000856b0 */{
+/* 000856b0 */	this.state_ = val ? 1 : 3;
+/* 000856da */}
+
+void ConfigCheckBox::setEnable(bool val)
+/* 000856e2 */{
+/* 000856e2 */	this.isEnable_ = val;
+/* 000856ec */}
+
+bool ConfigCheckBox::isEnable()
+/* 000856f4 */{
+/* 000856f4 */	return this.isEnable_;
+/* 000856fc */}
+
+bool ConfigCheckBox::collideWithOrigin()
+/* 0008570a */{
+/* 0008570a */	return AFL_Parts_IsPointIn(this.parts_[5].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 00085744 */}
+
+void ConfigCheckBox::updateChildPartsShowState()
+/* 00085752 */{
+/* 00085752 */	int n;
+/* 0008575c */	if (this.isHover_ && g_mouse.isDown(0))
+/* 00085796 */	{
+/* 00085796 */		n = 1;
+/* 000857a0 */	}
+/* 000857a6 */	else if (!this.isEnable_)
+/* 000857b4 */	{
+/* 000857b4 */		n = 2;
+/* 000857be */	}
+/* 000857c4 */	this.parts_[1].setShow(this.isHover_ && !g_mouse.isDown(0));
+/* 00085810 */	this.parts_[2].setShow(this.getCheckFunc_());
+/* 00085832 */	this.parts_[0].setCgRange(this.w_ * n, 0, this.w_, this.h_);
+/* 00085866 */}
+
+bool ConfigCheckBox::isMotion()
+/* 0008586e */{
+/* 0008586e */	return this.parent_.isMotion();
+/* 0008587c */}
+
+void ConfigCheckBox::runClickEffectMotion()
+/* 0008588a */{
+/* 0008588a */	float per = 1.4;
+/* 0008589c */	float moveX = (-(per - 1.0) * this.w_) / 2.0;
+/* 000858ca */	float moveY = (-(per - 1.0) * this.h_) / 2.0;
+/* 000858f8 */	MotionInfomation m;
+/* 00085908 */	m.setScaling(100, per * 100.0, 1);
+/* 00085930 */	m.setMove(0, 0, moveX, moveY, 1);
+/* 0008595e */	m.setAlpha(180, 0, 0);
+/* 0008597c */	m.setTime(250, 0);
+/* 00085994 */	this.parts_[4].setShow(true);
+/* 000859ae */	this.parts_[4].runMotion(m);
+/* 000859d0 */}
+
+int ConfigCheckBox::getManualTextId()
+/* 000859d8 */{
+/* 000859d8 */	return this.manualTextId_;
+/* 000859e0 */}
+
+void ConfigCheckBox::hideParts()
+/* 000859ee */{
+/* 000859ee */	if (this.isHide_)
+/* 000859f8 */	{
+/* 000859f8 */		return;
+/* 000859fa */	}
+/* 00085a00 */	this.isHide_ = true;
+/* 00085a0a */	int i;
+/* 00085a14 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00085a44 */	{
+/* 00085a44 */		this.parts_[i].setShow(false);
+/* 00085a5e */	}
+/* 00085a64 */	this.parent_.setShow(false);
+/* 00085a76 */}
+
+void ConfigCheckBox::showParts()
+/* 00085a7e */{
+/* 00085a7e */	this.isHide_ = false;
+/* 00085a88 */	this.setPartsShowState();
+/* 00085a90 */	this.updateChildPartsShowState();
+/* 00085a98 */	this.parent_.setShow(true);
+/* 00085aaa */}
+

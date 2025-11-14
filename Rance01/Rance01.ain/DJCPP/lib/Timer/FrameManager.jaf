@@ -1,0 +1,54 @@
+FrameManager::FrameManager()
+/* 000611d0 */{
+/* 000611d8 */	this.timer_.Reset();
+/* 000611e4 */	this.defaultScaling_ = 1.0;
+/* 000611f6 */}
+
+void FrameManager::updateView()
+/* 000611fe */{
+/* 000611fe */	g_partsMotionUpdateMethod();
+/* 0006121a */	AFL_View_Update(true);
+/* 00061226 */}
+
+void FrameManager::setDefaultTimeScaling(float val)
+/* 0006122e */{
+/* 0006122e */	this.defaultScaling_ = val;
+/* 00061240 */}
+
+void FrameManager::updateFrame()
+/* 00061248 */{
+/* 00061248 */	this.updateView();
+/* 00061250 */	this.setSkippedButtonTimeScaling();
+/* 00061258 */	g_globalTimer.update();
+/* 00061264 */	this.udpateInputDevices();
+/* 0006126c */	if (g_keyboard.isPress(123))
+/* 00061284 */	{
+/* 00061284 */		GameDebugMenu();
+/* 0006128a */	}
+/* 00061290 */}
+
+void FrameManager::setSkippedButtonTimeScaling()
+/* 00061298 */{
+/* 00061298 */	float scaling = this.defaultScaling_;
+/* 000612aa */	if (g_keyboard.isDown(17))
+/* 000612c2 */	{
+/* 000612c2 */		if (g_keyboard.isDown(16))
+/* 7fffffffffffffff */		{
+/* 7fffffffffffffff */		}
+/* 000612e0 */		else
+/* 000612e0 */		{
+/* 000612e0 */			scaling *= 3.0;
+/* 000612f2 */		}
+/* 000612f2 */	}
+/* 000612f8 */	else if (g_keyboard.isDown(119))
+/* 7fffffffffffffff */	{
+/* 7fffffffffffffff */	}
+/* 00061316 */	g_globalTimer.setTimeScaling(scaling);
+/* 00061328 */}
+
+void FrameManager::udpateInputDevices()
+/* 00061330 */{
+/* 00061330 */	g_mouse.update();
+/* 0006133c */	g_keyboard.update();
+/* 00061348 */}
+

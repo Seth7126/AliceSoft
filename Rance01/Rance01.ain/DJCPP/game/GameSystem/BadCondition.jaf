@@ -1,0 +1,46 @@
+BadCondition::BadCondition()
+/* 00091d88 */{
+/* 00091d92 */}
+
+void BadCondition::reload()
+/* 00091d98 */{
+/* 00091d98 */	this.loadValue();
+/* 00091da0 */}
+
+void BadCondition::loadValue()
+/* 00091da8 */{
+/* 00091da8 */	this.setName(EX_SA2String("状態異常データ", this.id_, "name", ""));
+/* 00091dce */	this.setDesc(EX_SA2String("状態異常データ", this.id_, "desc", ""));
+/* 00091df4 */}
+
+void BadCondition::setId(string val)
+/* 00091dfc */{
+/* 00091dfc */	this.id_ = val;
+/* 00091e06 */	this.loadValue();
+/* 00091e0e */}
+
+void BadCondition::setName(string val)
+/* 00091e16 */{
+/* 00091e16 */	this.name_ = val;
+/* 00091e20 */}
+
+void BadCondition::setDesc(string val)
+/* 00091e28 */{
+/* 00091e28 */	this.desc_ = val;
+/* 00091e32 */}
+
+string BadCondition::getId()
+/* 00091e3a */{
+/* 00091e3a */	return this.id_;
+/* 00091e42 */}
+
+string BadCondition::getName()
+/* 00091e50 */{
+/* 00091e50 */	return this.name_;
+/* 00091e58 */}
+
+string BadCondition::getDesc()
+/* 00091e66 */{
+/* 00091e66 */	return this.desc_;
+/* 00091e6e */}
+

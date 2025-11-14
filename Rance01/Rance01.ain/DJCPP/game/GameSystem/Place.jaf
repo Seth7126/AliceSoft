@@ -1,0 +1,149 @@
+Place::Place()
+/* 0008f2e6 */{
+/* 0008f2ee */	this.isVisible_ = true;
+/* 0008f2f8 */	this.isOpen_ = true;
+/* 0008f302 */}
+
+void Place::reload()
+/* 0008f30a */{
+/* 0008f30a */	this.loadValue();
+/* 0008f312 */}
+
+void Place::loadValue()
+/* 0008f31a */{
+/* 0008f31a */	this.setMapId(EX_SA2String("場所データ", this.id_, "mapId", ""));
+/* 0008f340 */	this.setName(EX_SA2String("場所データ", this.id_, "name", ""));
+/* 0008f366 */	this.setEventFuncName(EX_SA2String("場所データ", this.id_, "eventFuncName", ""));
+/* 0008f38c */	this.setX(EX_SA2Int("場所データ", this.id_, "x", 0));
+/* 0008f3b2 */	this.setY(EX_SA2Int("場所データ", this.id_, "y", 0));
+/* 0008f3d8 */	this.setAreaX(EX_SA2Int("場所データ", this.id_, "areaX", 0));
+/* 0008f3fe */	this.setAreaY(EX_SA2Int("場所データ", this.id_, "areaY", 0));
+/* 0008f424 */	this.setImageName(EX_SA2String("場所データ", this.id_, "imageName", ""));
+/* 0008f44a */	int i;
+/* 0008f454 */	for (i = 0; i < this.selectable_.Numof(); ++i)
+/* 0008f484 */	{
+/* 0008f484 */		int n = EX_SA2Int("場所データ", this.id_, "sel%d" % i, 0);
+/* 0008f4bc */		this.selectable_[i] = n != 0;
+/* 0008f4dc */	}
+/* 0008f4e2 */}
+
+string Place::getId()
+/* 0008f4ea */{
+/* 0008f4ea */	return this.id_;
+/* 0008f4f2 */}
+
+string Place::getMapId()
+/* 0008f500 */{
+/* 0008f500 */	return this.mapId_;
+/* 0008f508 */}
+
+string Place::getName()
+/* 0008f516 */{
+/* 0008f516 */	return this.name_;
+/* 0008f51e */}
+
+string Place::getEventFuncName()
+/* 0008f52c */{
+/* 0008f52c */	return this.eventFuncName_;
+/* 0008f534 */}
+
+int Place::getX()
+/* 0008f542 */{
+/* 0008f542 */	return this.x_;
+/* 0008f54a */}
+
+int Place::getY()
+/* 0008f558 */{
+/* 0008f558 */	return this.y_;
+/* 0008f560 */}
+
+int Place::getAreaX()
+/* 0008f56e */{
+/* 0008f56e */	return this.areaX_;
+/* 0008f576 */}
+
+int Place::getAreaY()
+/* 0008f584 */{
+/* 0008f584 */	return this.areaY_;
+/* 0008f58c */}
+
+bool Place::isShowCurrentTime(int index)
+/* 0008f59a */{
+/* 0008f59a */	if (index >= 0 && index < this.selectable_.Numof())
+/* 0008f5d4 */	{
+/* 0008f5d4 */		return this.selectable_[index] && this.isVisible_;
+/* 0008f608 */	}
+/* 0008f60e */	return false;
+/* 0008f616 */}
+
+bool Place::isVisible()
+/* 0008f624 */{
+/* 0008f624 */	return this.isVisible_;
+/* 0008f62c */}
+
+void Place::setId(string val)
+/* 0008f63a */{
+/* 0008f63a */	this.id_ = val;
+/* 0008f644 */	this.loadValue();
+/* 0008f64c */}
+
+void Place::setMapId(string val)
+/* 0008f654 */{
+/* 0008f654 */	this.mapId_ = val;
+/* 0008f65e */}
+
+void Place::setName(string val)
+/* 0008f666 */{
+/* 0008f666 */	this.name_ = val;
+/* 0008f670 */}
+
+void Place::setEventFuncName(string val)
+/* 0008f678 */{
+/* 0008f678 */	this.eventFuncName_ = val;
+/* 0008f682 */}
+
+void Place::setX(int val)
+/* 0008f68a */{
+/* 0008f68a */	this.x_ = val;
+/* 0008f694 */}
+
+void Place::setY(int val)
+/* 0008f69c */{
+/* 0008f69c */	this.y_ = val;
+/* 0008f6a6 */}
+
+void Place::setAreaX(int val)
+/* 0008f6ae */{
+/* 0008f6ae */	this.areaX_ = val;
+/* 0008f6b8 */}
+
+void Place::setAreaY(int val)
+/* 0008f6c0 */{
+/* 0008f6c0 */	this.areaY_ = val;
+/* 0008f6ca */}
+
+void Place::setVisible(bool val)
+/* 0008f6d2 */{
+/* 0008f6d2 */	this.isVisible_ = val;
+/* 0008f6dc */}
+
+void Place::setImageName(string val)
+/* 0008f6e4 */{
+/* 0008f6e4 */	this.imageName_ = val;
+/* 0008f6ee */}
+
+string Place::getImageName()
+/* 0008f6f6 */{
+/* 0008f6f6 */	return this.imageName_;
+/* 0008f6fe */}
+
+bool Place::isOpen()
+/* 0008f70c */{
+/* 0008f70c */	return this.isOpen_;
+/* 0008f714 */}
+
+void Place::setOpen(bool val)
+/* 0008f722 */{
+/* 0008f722 */	this.isOpen_ = val;
+/* 0008f72c */}
+

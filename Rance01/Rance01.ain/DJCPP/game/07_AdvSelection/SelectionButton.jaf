@@ -1,0 +1,218 @@
+SelectionButton::SelectionButton()
+/* 0007aef4 */{
+/* 0007aefc */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0007af28 */	this.state_ = 3;
+/* 0007af32 */	this.isEnable_ = true;
+/* 0007af3c */	this.x_ = this.y_ = this.w_ = this.h_ = 0;
+/* 0007af6c */}
+
+void SelectionButton::init(string cgName, string caption)
+/* 0007af74 */{
+/* 0007af74 */	this.parts_[0].init(cgName, 0);
+/* 0007af94 */	this.w_ = this.parts_[0].getWidth() / 3;
+/* 0007afbc */	this.h_ = this.parts_[0].getHeight();
+/* 0007afdc */	this.parts_[1].initAsCgPlaneImage(cgName, 255, 80, 0);
+/* 0007b008 */	this.parts_[1].setAlpha(180);
+/* 0007b022 */	this.parts_[1].setCgRange(0, 0, this.w_, this.h_);
+/* 0007b04e */	this.parts_[2].initAsText(caption, 20, false, 256, 255, 255, 255);
+/* 0007b08c */	this.parts_[2].setMultiColorValue(0, 0, 0);
+/* 0007b0b2 */	this.parts_[2].setPos((this.w_ - this.parts_[2].getWidth()) / 2, (this.h_ - this.parts_[2].getHeight()) / 2, -2147483648);
+/* 0007b114 */	this.parts_[3].initAsCgPlaneImage(cgName, 255, 255, 255);
+/* 0007b140 */	this.parts_[3].setCgRange(0, 0, this.w_, this.h_);
+/* 0007b16c */	this.parts_[3].setAlpha(0);
+/* 0007b186 */	createPartsGroup(this.parent_, this.parts_, 9100);
+/* 0007b19e */	this.setPartsShowState();
+/* 0007b1a6 */}
+
+void SelectionButton::setSelected(bool val)
+/* 0007b1ae */{
+/* 0007b1ae */	this.isSelected_ = val;
+/* 0007b1b8 */}
+
+void SelectionButton::update()
+/* 0007b1c0 */{
+/* 0007b1c0 */	this.updateHover();
+/* 0007b1c8 */	this.updateClick();
+/* 0007b1d0 */	switch (this.state_)
+/* 0007b1e2 */	{
+/* 0007b1e2 */	case 0:
+/* 0007b1e2 */		if (!this.parent_.isMotion())
+/* 0007b1f6 */		{
+/* 0007b1f6 */			this.state_ = 1;
+/* 0007b200 */		}
+/* 0007b206 */		break;
+/* 0007b20c */	case 1:
+/* 0007b20c */		if (!this.lastHover_ && this.isHover_)
+/* 0007b23c */		{
+/* 0007b23c */			g_sysSound.play(2001, false);
+/* 0007b254 */		}
+/* 0007b25a */		if (this.isHover_ && this.isEnable_ && g_mouse.onDown(0))
+/* 0007b2b6 */		{
+/* 0007b2b6 */			this.runClickEffectMotion();
+/* 0007b2be */			g_sysSound.play(2002, false);
+/* 0007b2d6 */		}
+/* 0007b2dc */		if (this.isClick_)
+/* 7fffffffffffffff */		{
+/* 7fffffffffffffff */		}
+/* 0007b2ec */		break;
+/* 0007b2f2 */	case 2:
+/* 0007b2f2 */		if (!this.parent_.isMotion())
+/* 0007b306 */		{
+/* 0007b306 */			this.state_ = 3;
+/* 0007b310 */			this.parent_.setShow(false);
+/* 0007b322 */		}
+/* 0007b328 */		break;
+/* 0007b32e */	case 3:
+/* 0007b32e */		break;
+/* 0007b334 */	}
+/* 0007b334 */	this.updateChildPartsShowState();
+/* 0007b33c */}
+
+bool SelectionButton::isShow()
+/* 0007b344 */{
+/* 0007b344 */	return this.state_ != 3;
+/* 0007b356 */}
+
+bool SelectionButton::isHover()
+/* 0007b364 */{
+/* 0007b364 */	this.updateHover();
+/* 0007b36c */	return this.isHover_;
+/* 0007b374 */}
+
+void SelectionButton::fadeIn(bool val, int fadeInType, int fadeInDelay)
+/* 0007b382 */{
+/* 0007b382 */	if (val)
+/* 0007b38e */	{
+/* 0007b38e */		if (this.state_ == 0 || this.state_ == 1)
+/* 0007b3ce */		{
+/* 0007b3ce */			return;
+/* 0007b3d0 */		}
+/* 0007b3d6 */	}
+/* 0007b3dc */	else if (this.state_ == 2 || this.state_ == 3)
+/* 0007b41c */	{
+/* 0007b41c */		return;
+/* 0007b41e */	}
+/* 0007b424 */	this.state_ = val ? 0 : 2;
+/* 0007b44e */	array@MotionInfomation m[2];
+/* 0007b464 */	if (val)
+/* 0007b470 */	{
+/* 0007b470 */		this.getFadeInMotionInfomation(m, fadeInType, fadeInDelay);
+/* 0007b48a */	}
+/* 0007b490 */	else
+/* 0007b490 */	{
+/* 0007b490 */		this.getFadeOutMotionInfomation(m, fadeInType);
+/* 0007b4a4 */	}
+/* 0007b4a4 */	this.parent_.setShow(true);
+/* 0007b4b6 */	this.parent_.runMotionArray(m);
+/* 0007b4c8 */}
+
+void SelectionButton::getFadeInMotionInfomation(ref array@MotionInfomation m, int fadeInType, int fadeInDelay)
+/* 0007b4d0 */{
+/* 0007b4d0 */	m.Alloc(2);
+/* 0007b4e6 */	m[0].setAlpha(0, 0, 0);
+/* 0007b50c */	m[1].setAlpha(0, 255, 0);
+/* 0007b532 */	if (fadeInType == 0)
+/* 0007b540 */	{
+/* 0007b540 */		m[0].setTime(fadeInDelay * 50, 0);
+/* 0007b568 */		m[1].setTime(300, 0);
+/* 0007b588 */		m[1].setMove(this.x_ - 100, this.y_, this.x_, this.y_, 2);
+/* 0007b5c2 */	}
+/* 0007b5c8 */	else
+/* 0007b5c8 */	{
+/* 0007b5c8 */		m[0].setTime(0, 0);
+/* 0007b5e8 */		m[1].setTime(180, 0);
+/* 0007b608 */		m[1].setMove(this.x_, this.y_ - fadeInDelay * 48, this.x_, this.y_, 1);
+/* 0007b64a */	}
+/* 0007b64a */}
+
+void SelectionButton::getFadeOutMotionInfomation(ref array@MotionInfomation m, int fadeInType)
+/* 0007b652 */{
+/* 0007b652 */	m.Alloc(1);
+/* 0007b668 */	m[0].setAlpha(255, 0, 0);
+/* 0007b68e */	if (fadeInType == 0)
+/* 0007b69c */	{
+/* 0007b69c */		m[0].setMove(this.x_, this.y_, this.x_ - 100, this.y_, 1);
+/* 0007b6d6 */	}
+/* 0007b6dc */	else
+/* 0007b6dc */	{
+/* 0007b6dc */		m[0].setMove(this.x_, this.y_, this.x_ + 100, this.y_, 1);
+/* 0007b716 */	}
+/* 0007b716 */}
+
+bool SelectionButton::isClick()
+/* 0007b71e */{
+/* 0007b71e */	return this.isClick_;
+/* 0007b726 */}
+
+void SelectionButton::setPos(int x, int y, int z)
+/* 0007b734 */{
+/* 0007b734 */	this.x_ = x;
+/* 0007b73e */	this.y_ = y;
+/* 0007b748 */	this.parent_.setPos(this.x_, this.y_, z);
+/* 0007b766 */}
+
+void SelectionButton::setShow(bool val)
+/* 0007b76e */{
+/* 0007b76e */	this.state_ = val ? 1 : 3;
+/* 0007b798 */	this.parent_.setShow(val);
+/* 0007b7aa */}
+
+void SelectionButton::setEnable(bool val)
+/* 0007b7b2 */{
+/* 0007b7b2 */	this.isEnable_ = val;
+/* 0007b7bc */}
+
+bool SelectionButton::isEnable()
+/* 0007b7c4 */{
+/* 0007b7c4 */	return this.isEnable_;
+/* 0007b7cc */}
+
+void SelectionButton::updateHover()
+/* 0007b7da */{
+/* 0007b7da */	this.lastHover_ = this.isHover_;
+/* 0007b7ec */	this.isHover_ = AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1) && this.state_ == 1;
+/* 0007b858 */}
+
+void SelectionButton::updateChildPartsShowState()
+/* 0007b860 */{
+/* 0007b860 */	int n;
+/* 0007b86a */	if (!this.isEnable())
+/* 0007b87a */	{
+/* 0007b87a */		n = 2;
+/* 0007b884 */	}
+/* 0007b88a */	else if (this.isHover_ && g_mouse.isDown(0) || this.isSelected_)
+/* 0007b8e8 */	{
+/* 0007b8e8 */		n = 1;
+/* 0007b8f2 */	}
+/* 0007b8f8 */	this.parts_[1].setShow(this.isHover_ && !g_mouse.isDown(0) && !this.isSelected_);
+/* 0007b96a */	this.parts_[0].setCgRange(this.w_ * n, 0, this.w_, this.h_);
+/* 0007b99e */}
+
+void SelectionButton::setPartsShowState()
+/* 0007b9a6 */{
+/* 0007b9a6 */	int i;
+/* 0007b9b0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0007b9e0 */	{
+/* 0007b9e0 */		this.parts_[i].setShow(true);
+/* 0007b9fa */	}
+/* 0007ba00 */}
+
+void SelectionButton::runClickEffectMotion()
+/* 0007ba08 */{
+/* 0007ba08 */	float per = 1.4;
+/* 0007ba1a */	float moveX = (-(per - 1.0) * this.w_) / 2.0;
+/* 0007ba48 */	float moveY = (-(per - 1.0) * this.h_) / 2.0;
+/* 0007ba76 */	MotionInfomation m;
+/* 0007ba86 */	m.setScaling(100, per * 100.0, 1);
+/* 0007baae */	m.setMove(0, 0, moveX, moveY, 1);
+/* 0007badc */	m.setAlpha(180, 0, 0);
+/* 0007bafa */	m.setTime(250, 0);
+/* 0007bb12 */	this.parts_[3].setShow(true);
+/* 0007bb2c */	this.parts_[3].runMotion(m);
+/* 0007bb4e */}
+
+void SelectionButton::updateClick()
+/* 0007bb56 */{
+/* 0007bb56 */	this.isClick_ = this.isHover_ && g_mouse.isClickWithFocus();
+/* 0007bb92 */}
+

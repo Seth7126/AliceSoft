@@ -1,0 +1,139 @@
+CASCharSpriteProperty::CASCharSpriteProperty()
+/* 000016aa */{
+/* 000016b2 */	this.m_nType = 0;
+/* 000016bc */	this.m_nSize = 16;
+/* 000016c6 */	this.m_Color.Set(255, 255, 255, 255);
+/* 000016ea */	this.m_fBoldWeight = 0.0;
+/* 000016fc */	this.m_fEdgeWeight = 0.0;
+/* 0000170e */	this.m_EdgeColor.Set(0, 0, 0, 255);
+/* 00001732 */}
+
+void CASCharSpriteProperty::SetType(int nType)
+/* 0000173a */{
+/* 0000173a */	this.m_nType = nType;
+/* 00001744 */}
+
+void CASCharSpriteProperty::SetSize(int nSize)
+/* 0000174c */{
+/* 0000174c */	this.m_nSize = nSize;
+/* 00001756 */}
+
+void CASCharSpriteProperty::SetColor(CASColor Color)
+/* 0000175e */{
+/* 0000175e */	this.m_Color = Color;
+/* 0000176e */}
+
+void CASCharSpriteProperty::SetBoldWeight(float fBoldWeight)
+/* 00001776 */{
+/* 00001776 */	this.m_fBoldWeight = fBoldWeight;
+/* 00001788 */}
+
+void CASCharSpriteProperty::SetEdgeWeight(float fEdgeWeight)
+/* 00001790 */{
+/* 00001790 */	this.m_fEdgeWeight = fEdgeWeight;
+/* 000017a2 */}
+
+void CASCharSpriteProperty::SetEdgeColor(CASColor EdgeColor)
+/* 000017aa */{
+/* 000017aa */	this.m_EdgeColor = EdgeColor;
+/* 000017ba */}
+
+int CASCharSpriteProperty::GetType()
+/* 000017c2 */{
+/* 000017c2 */	return this.m_nType;
+/* 000017ca */}
+
+int CASCharSpriteProperty::GetSize()
+/* 000017d8 */{
+/* 000017d8 */	return this.m_nSize;
+/* 000017e0 */}
+
+CASColor CASCharSpriteProperty::GetColor()
+/* 000017ee */{
+/* 000017ee */	return this.m_Color;
+/* 000017fa */}
+
+float CASCharSpriteProperty::GetBoldWeight()
+/* 00001808 */{
+/* 00001808 */	return this.m_fBoldWeight;
+/* 00001810 */}
+
+float CASCharSpriteProperty::GetEdgeWeight()
+/* 0000181e */{
+/* 0000181e */	return this.m_fEdgeWeight;
+/* 00001826 */}
+
+CASColor CASCharSpriteProperty::GetEdgeColor()
+/* 00001834 */{
+/* 00001834 */	return this.m_EdgeColor;
+/* 00001840 */}
+
+bool CASCharSpriteProperty::Equal(ref CASCharSpriteProperty Obj)
+/* 0000184e */{
+/* 0000184e */	if (this.m_nType != Obj.m_nType)
+/* 0000186a */	{
+/* 0000186a */		return false;
+/* 00001872 */	}
+/* 00001878 */	if (this.m_nSize != Obj.m_nSize)
+/* 00001894 */	{
+/* 00001894 */		return false;
+/* 0000189c */	}
+/* 000018a2 */	if (!this.m_Color.Equal(Obj.m_Color))
+/* 000018c4 */	{
+/* 000018c4 */		return false;
+/* 000018cc */	}
+/* 000018d2 */	if (this.m_fBoldWeight != Obj.m_fBoldWeight)
+/* 000018ee */	{
+/* 000018ee */		return false;
+/* 000018f6 */	}
+/* 000018fc */	if (this.m_fEdgeWeight != Obj.m_fEdgeWeight)
+/* 00001918 */	{
+/* 00001918 */		return false;
+/* 00001920 */	}
+/* 00001926 */	if (!this.m_EdgeColor.Equal(Obj.m_EdgeColor))
+/* 00001948 */	{
+/* 00001948 */		return false;
+/* 00001950 */	}
+/* 00001956 */	return true;
+/* 0000195e */}
+
+void CASCharSpriteProperty::SetProperty()
+/* 0000196c */{
+/* 0000196c */	ChipmunkSpriteEngine.SP_SetTextSpriteType(this.m_nType);
+/* 0000197c */	ChipmunkSpriteEngine.SP_SetTextSpriteSize(this.m_nSize);
+/* 0000198c */	ChipmunkSpriteEngine.SP_SetTextSpriteColor(this.m_Color.GetR(), this.m_Color.GetG(), this.m_Color.GetB());
+/* 000019ba */	ChipmunkSpriteEngine.SP_SetTextSpriteBoldWeight(this.m_fBoldWeight);
+/* 000019ca */	ChipmunkSpriteEngine.SP_SetTextSpriteEdgeWeight(this.m_fEdgeWeight);
+/* 000019da */	ChipmunkSpriteEngine.SP_SetTextSpriteEdgeColor(this.m_EdgeColor.GetR(), this.m_EdgeColor.GetG(), this.m_EdgeColor.GetB());
+/* 00001a08 */}
+
+int CASCharSpriteProperty::GetPixelWidth()
+/* 00001a10 */{
+/* 00001a10 */	int nWidth = this.m_nSize;
+/* 00001a1a */	if (nWidth % 2 != 0)
+/* 00001a36 */	{
+/* 00001a36 */		++nWidth;
+/* 00001a3c */	}
+/* 00001a42 */	nWidth += Math.Max(Math.Ceil(this.m_fBoldWeight), Math.Ceil(this.m_fEdgeWeight)) * 2;
+/* 00001a80 */	return nWidth;
+/* 00001a88 */}
+
+int CASCharSpriteProperty::GetPixelHeight()
+/* 00001a96 */{
+/* 00001a96 */	int nHeight = this.m_nSize;
+/* 00001aa0 */	if (nHeight % 2 != 0)
+/* 00001abc */	{
+/* 00001abc */		++nHeight;
+/* 00001ac2 */	}
+/* 00001ac8 */	nHeight += Math.Max(Math.Ceil(this.m_fBoldWeight), Math.Ceil(this.m_fEdgeWeight)) * 2;
+/* 00001b06 */	return nHeight;
+/* 00001b0e */}
+
+int CASCharSpriteProperty::GetFontWidth(string Char)
+/* 00001b1c */{
+/* 00001b1c */	this.SetProperty();
+/* 00001b24 */	int Width;
+/* 00001b2e */	ChipmunkSpriteEngine.SP_GetFontWidth(Char, Width);
+/* 00001b48 */	return Width;
+/* 00001b50 */}
+

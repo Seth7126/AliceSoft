@@ -1,0 +1,41 @@
+SceneEnding::SceneEnding()
+/* 000877fc */{
+/* 00087804 */	this.partsOverlay_.initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 00087834 */	this.partsOverlay_.setPos(0, 0, 20000);
+/* 00087852 */	this.partsOverlay_.setShow(false);
+/* 00087864 */}
+
+void SceneEnding::init()
+/* 0008786c */{
+/* 0008786c */	this.scrollObject_.init();
+/* 00087878 */	this.scrollText_.init();
+/* 00087884 */	this.fixObject_.init();
+/* 00087890 */}
+
+int SceneEnding::update()
+/* 00087898 */{
+/* 00087898 */	if (g_mouse.isClick(0) && !this.partsOverlay_.isShow())
+/* 000878dc */	{
+/* 000878dc */		g_music.fadeOut(3000);
+/* 000878ee */		this.partsOverlay_.setShow(true);
+/* 00087900 */		MotionInfomation m;
+/* 00087910 */		m = getStandardMotion(0);
+/* 0008792c */		m.setTime(2000, 0);
+/* 00087944 */		this.partsOverlay_.runMotion(m);
+/* 0008795e */	}
+/* 0008796a */	if (this.partsOverlay_.isShow() && !this.partsOverlay_.isMotion())
+/* 000879a8 */	{
+/* 000879a8 */		return 1;
+/* 000879b0 */	}
+/* 000879b6 */	return 0;
+/* 000879be */}
+
+void SceneEnding::run()
+/* 000879cc */{
+/* 000879cc */	this.init();
+/* 000879d4 */	this.scrollObject_.run();
+/* 000879e0 */	this.scrollText_.run();
+/* 000879ec */	this.fixObject_.run();
+/* 000879f8 */	g_music.play(EX_Int("エンディング／曲", 0), -2147483648);
+/* 00087a1c */}
+

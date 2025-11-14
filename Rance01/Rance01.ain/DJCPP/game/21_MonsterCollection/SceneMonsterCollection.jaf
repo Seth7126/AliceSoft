@@ -1,0 +1,110 @@
+void SceneMonsterCollection::run()
+/* 0008d614 */{
+/* 0008d614 */	this.init();
+/* 0008d61c */	this.fadeIn(true);
+/* 0008d62a */}
+
+void SceneMonsterCollection::init()
+/* 0008d632 */{
+/* 0008d632 */	this.partsBg_.init("システム／汎用／下地", 0);
+/* 0008d64a */	this.partsBg_.setPos(0, 0, 4100);
+/* 0008d668 */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 0008d686 */	this.btnExit_.setPos(868, 688, -2147483648);
+/* 0008d6a4 */	int count = (g_monster.Numof() + 10) / 11;
+/* 0008d6c6 */	this.ss_.init(768, 1024, 0, count);
+/* 0008d6ea */	this.btnJump_.init(count);
+/* 0008d6fc */	this.btn_.Alloc(g_monster.Numof());
+/* 0008d712 */	int i;
+/* 0008d71c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0008d74c */	{
+/* 0008d74c */		if (g_globalGameFlag.getInt("勝利／%s" % g_monster[i].getId()) > 0)
+/* 0008d788 */		{
+/* 0008d788 */			this.btn_[i].init("システム／ボタン／幅４００", g_monster[i].getName(), -1);
+/* 0008d7bc */		}
+/* 0008d7c2 */		else
+/* 0008d7c2 */		{
+/* 0008d7c2 */			this.btn_[i].init("システム／ボタン／幅４００", "？？？", -1);
+/* 0008d7e8 */			this.btn_[i].setEnable(false);
+/* 0008d802 */		}
+/* 0008d802 */		this.btn_[i].setPos(50 + (i / 11) * 1024, 135 + (i % 11) * 48, -2147483648);
+/* 0008d858 */		this.btn_[i].setParent(this.ss_.getParentPartsNumber());
+/* 0008d878 */		this.btn_[i].setShow(true);
+/* 0008d892 */	}
+/* 0008d898 */}
+
+int SceneMonsterCollection::update()
+/* 0008d8a0 */{
+/* 0008d8a0 */	switch (this.state_)
+/* 0008d8b2 */	{
+/* 0008d8b2 */	case 1:
+/* 0008d8b2 */		if (!this.ss_.isMotion())
+/* 0008d8c6 */		{
+/* 0008d8c6 */			this.state_ = 2;
+/* 0008d8d0 */		}
+/* 0008d8d6 */		break;
+/* 0008d8dc */	case 2:
+/* 0008d8dc */		this.checkChipClicked();
+/* 0008d8e4 */		this.checkJumpButtonClicked();
+/* 0008d8ec */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 0008d92e */		{
+/* 0008d92e */			if (g_mouse.isClick(1))
+/* 0008d946 */			{
+/* 0008d946 */				g_sysSound.play(2003, false);
+/* 0008d95e */			}
+/* 0008d964 */			this.fadeIn(false);
+/* 0008d972 */		}
+/* 0008d978 */		break;
+/* 0008d97e */	case 3:
+/* 0008d97e */		if (!this.ss_.isMotion())
+/* 0008d992 */		{
+/* 0008d992 */			this.state_ = 0;
+/* 0008d99c */		}
+/* 0008d9a2 */		break;
+/* 0008d9a8 */	case 0:
+/* 0008d9a8 */		return 1;
+/* 0008d9b0 */	}
+/* 0008d9b0 */	return 0;
+/* 0008d9b8 */}
+
+void SceneMonsterCollection::fadeIn(bool val)
+/* 0008d9c6 */{
+/* 0008d9c6 */	this.btnExit_.fadeIn(val);
+/* 0008d9d8 */	this.btnJump_.fadeIn(val);
+/* 0008d9ea */	this.ss_.fadeIn(val);
+/* 0008d9fc */	this.partsBg_.setShow(true);
+/* 0008da0e */	this.partsBg_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0008da3e */	this.state_ = val ? 1 : 3;
+/* 0008da68 */	this.partsMonster_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0008da98 */}
+
+void SceneMonsterCollection::checkChipClicked()
+/* 0008daa0 */{
+/* 0008daa0 */	int i;
+/* 0008daaa */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0008dada */	{
+/* 0008dada */		if (this.btn_[i].isClick())
+/* 0008daf4 */		{
+/* 0008daf4 */			string cgName = "_%s" % g_monster[i].getImageName();
+/* 0008db20 */			this.partsMonster_.init(cgName, 0);
+/* 0008db38 */			this.partsMonster_.setShow(true);
+/* 0008db4a */			int x = EX_SA2Int("モンスターオフセット", cgName, "x", 0);
+/* 0008db74 */			int y = EX_SA2Int("モンスターオフセット", cgName, "y", 0);
+/* 0008db9e */			this.partsMonster_.setPos(x, y - 183, 4200);
+/* 0008dbc4 */			MotionInfomation m;
+/* 0008dbd4 */			m = getStandardMotion(0);
+/* 0008dbf0 */			m.setMove(x, y + -163, x, y - 183, 1);
+/* 0008dc2a */			this.partsMonster_.runMotion(m);
+/* 0008dc44 */		}
+/* 0008dc50 */	}
+/* 0008dc56 */}
+
+void SceneMonsterCollection::checkJumpButtonClicked()
+/* 0008dc5e */{
+/* 0008dc5e */	int n = this.btnJump_.getClickedButton();
+/* 0008dc76 */	if (n != -1)
+/* 0008dc8a */	{
+/* 0008dc8a */		this.ss_.jumpPage(n);
+/* 0008dc9c */	}
+/* 0008dca2 */	this.btnJump_.setSelectedButton(roundOff(this.ss_.getFloatingPage()));
+/* 0008dcc0 */}
+

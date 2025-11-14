@@ -1,0 +1,237 @@
+CConfigUISoundTab::CConfigUISoundTab()
+/* 0002fcf2 */{
+/* 0002fcfc */}
+
+CConfigUISoundTab::~CConfigUISoundTab()
+/* 0002fd02 */{
+/* 0002fd04 */}
+
+void CConfigUISoundTab::Create()
+/* 0002fd0a */{
+/* 0002fd0a */	this.CreateUI();
+/* 0002fd12 */}
+
+void CConfigUISoundTab::Release()
+/* 0002fd1a */{
+/* 0002fd1a */	AFL_Parts_EraseChangedEvent(this.m_MuteByInactiveWindowCheckBox, this.ChangedCheckMuteByInactiveWindow);
+/* 0002fd30 */	AFL_Parts_EraseChangedEvent(this.m_BGMFadeByVoiceCheckBox, this.ChangedCheckBGMFadeByVoice);
+/* 0002fd46 */	AFL_Parts_EraseChangedEvent(this.m_StopVoiceByStatusCheckBox, this.ChangedCheckStopVoiceByStatus);
+/* 0002fd5c */	PARTS_Release(this.m_MuteByInactiveWindowCheckBox);
+/* 0002fd68 */	PARTS_Release(this.m_BGMFadeByVoiceCheckBox);
+/* 0002fd74 */	PARTS_Release(this.m_StopVoiceByStatusCheckBox);
+/* 0002fd80 */	this.m_MuteByInactiveWindowCheckBox = 0;
+/* 0002fd8a */	this.m_BGMFadeByVoiceCheckBox = 0;
+/* 0002fd94 */	this.m_StopVoiceByStatusCheckBox = 0;
+/* 0002fd9e */	int Index;
+/* 0002fda8 */	for (Index = 0; Index < this.m_VolumeContentList.Numof(); ++Index)
+/* 0002fdd8 */	{
+/* 0002fdd8 */		AFL_Parts_EraseChangedEvent(this.m_VolumeContentList[Index].CheckNumber, this.ChangedMute);
+/* 0002fdfe */		PARTS_Release(this.m_VolumeContentList[Index].CheckNumber);
+/* 0002fe1a */		PARTS_Release(this.m_VolumeContentList[Index].LabelNumber);
+/* 0002fe36 */		this.m_VolumeContentList[Index].Slider.Release();
+/* 0002fe52 */	}
+/* 0002fe58 */	this.m_VolumeContentList.Free();
+/* 0002fe62 */	PARTS_Release(this.m_BG);
+/* 0002fe6e */}
+
+void CConfigUISoundTab::CreateUI()
+/* 0002fe76 */{
+/* 0002fe76 */	this.Release();
+/* 0002fe7e */	this.CreateBG();
+/* 0002fe86 */	this.CreateVolumeContent();
+/* 0002fe8e */	this.CreateStopVoiceByStatus();
+/* 0002fe96 */	this.CreateBGMFadeByVoice();
+/* 0002fe9e */	this.CreateMuteByInactiveWindow();
+/* 0002fea6 */}
+
+void CConfigUISoundTab::CreateBG()
+/* 0002feae */{
+/* 0002feae */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002fec0 */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002fed2 */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002feea */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002ff08 */}
+
+void CConfigUISoundTab::CreateVolumeContent()
+/* 0002ff10 */{
+/* 0002ff10 */	array@string NodeList;
+/* 0002ff1a */	NodeList.PushBack("マスター");
+/* 0002ff2a */	NodeList.PushBack("ＢＧＭ");
+/* 0002ff3a */	NodeList.PushBack("効果音");
+/* 0002ff4a */	NodeList.PushBack("音声");
+/* 0002ff5a */	NodeList.PushBack("擬音");
+/* 0002ff6a */	NodeList.PushBack("背景音声");
+/* 0002ff7a */	int Index;
+/* 0002ff84 */	for (Index = 0; Index < NodeList.Numof(); ++Index)
+/* 0002ffbe */	{
+/* 0002ffbe */		this.m_VolumeContentList.Realloc(this.m_VolumeContentList.Numof() + 1);
+/* 0002ffdc */		ref SConfigUIVolumeData Data = this.m_VolumeContentList[this.m_VolumeContentList.Numof() - 1];
+/* 0003000e */		Data.LabelNumber = PARTS_GetFreeSystemPartsNumber();
+/* 00030024 */		Data.CheckNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0003003a */		Data.Group = 0;
+/* 00030050 */		switch (NodeList[Index])
+/* 0003006a */		{
+/* 0003006a */		case "マスター":
+/* 0003006a */			Data.Group = SYS_SOUNDGROUP_MASTER();
+/* 00030080 */			break;
+/* 00030086 */		case "ＢＧＭ":
+/* 00030086 */			Data.Group = SYS_SOUNDGROUP_BGM();
+/* 0003009c */			break;
+/* 000300a2 */		case "効果音":
+/* 000300a2 */			Data.Group = SYS_SOUNDGROUP_SE();
+/* 000300b8 */			break;
+/* 000300be */		case "音声":
+/* 000300be */			Data.Group = SYS_SOUNDGROUP_VOICE();
+/* 000300d4 */			break;
+/* 000300da */		case "擬音":
+/* 000300da */			Data.Group = SYS_SOUNDGROUP_GIMICSE();
+/* 000300f0 */			break;
+/* 000300f6 */		case "背景音声":
+/* 000300f6 */			Data.Group = SYS_SOUNDGROUP_BACKVOICE();
+/* 0003010c */			break;
+/* 00030112 */		default:
+/* 00030112 */			continue;
+/* 0003011e */		}
+/* 0003011e */		Ｐ＿ラベル＿座標設定(Data.LabelNumber, 50, 100 + Index * 40);
+/* 0003014e */		Ｐ＿ラベル＿Ｚ座標設定(Data.LabelNumber, 100);
+/* 00030168 */		Ｐ＿ラベル＿テキスト設定(Data.LabelNumber, NodeList[Index]);
+/* 0003018a */		Ｐ＿ラベル＿フォント設定(Data.LabelNumber, 0, 22, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 000301da */		Data.Slider.Create();
+/* 000301ee */		Data.Slider.SetButtonPos(580, 100 + 40 * Index);
+/* 0003021e */		Data.Slider.SetButtonZ(100);
+/* 00030238 */		Data.Slider.SetButtonSize(100, 30);
+/* 00030258 */		Data.Slider.SetButtonColor(150, 150, 150);
+/* 0003027e */		Data.Slider.SetButtonText("初期化");
+/* 00030298 */		Data.Slider.SetHScrollbarPos(220, 100 + 40 * Index);
+/* 000302c8 */		Data.Slider.SetHScrollbarZ(100);
+/* 000302e2 */		Data.Slider.SetHScrollbarWidth(300);
+/* 000302fc */		Data.Slider.SetHScrollbarHeight(30);
+/* 00030316 */		Data.Slider.SetHScrollbarLeftWidth(0);
+/* 00030330 */		Data.Slider.SetHScrollbarRightWidth(0);
+/* 0003034a */		Data.Slider.SetHScrollbarTotalSize(100);
+/* 00030364 */		Data.Slider.SetHScrollbarViewSize(0);
+/* 0003037e */		int Volume;
+/* 00030388 */		SystemService.GetMixerVolume(Data.Group, Volume);
+/* 000303aa */		Data.Slider.SetRate(Volume / 100.0);
+/* 000303ce */		Data.Slider.AddInitializeButtonClickEvent(this.ResetVolumeRate);
+/* 000303ec */		Data.Slider.AddChangeRateEvent(this.ChangedVolumeRate);
+/* 0003040a */		Ｐ＿チェックボックス＿座標設定(Data.CheckNumber, 540, 105 + Index * 40);
+/* 0003043a */		Ｐ＿チェックボックス＿Ｚ座標設定(Data.CheckNumber, 100);
+/* 00030454 */		Ｐ＿チェックボックス＿サイズ設定(Data.CheckNumber, 24, 24);
+/* 00030474 */		Ｐ＿チェックボックス＿フォント設定(Data.CheckNumber, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 000304c4 */		bool Mute = false;
+/* 000304ce */		SystemService.GetMixerMute(Data.Group, Mute);
+/* 000304f0 */		Ｐ＿チェックボックス＿チェック状態設定(Data.CheckNumber, Mute);
+/* 0003050a */		AFL_Parts_AddChangedEvent(Data.CheckNumber, this.ChangedMute);
+/* 00030528 */	}
+/* 00030534 */}
+
+void CConfigUISoundTab::CreateStopVoiceByStatus()
+/* 0003053c */{
+/* 0003053c */	this.m_StopVoiceByStatusCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0003054e */	Ｐ＿チェックボックス＿座標設定(this.m_StopVoiceByStatusCheckBox, 50, 400);
+/* 00030566 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_StopVoiceByStatusCheckBox, 100);
+/* 00030578 */	Ｐ＿チェックボックス＿サイズ設定(this.m_StopVoiceByStatusCheckBox, 24, 24);
+/* 00030590 */	Ｐ＿チェックボックス＿テキスト設定(this.m_StopVoiceByStatusCheckBox, "メッセージを進めた時に、音声を停止する");
+/* 000305a2 */	Ｐ＿チェックボックス＿フォント設定(this.m_StopVoiceByStatusCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 000305ea */	Ｐ＿チェックボックス＿チェック状態設定(this.m_StopVoiceByStatusCheckBox, AFL_Config_GetStopVoiceByStatus());
+/* 000305fc */	AFL_Parts_AddChangedEvent(this.m_StopVoiceByStatusCheckBox, this.ChangedCheckStopVoiceByStatus);
+/* 00030612 */}
+
+void CConfigUISoundTab::CreateBGMFadeByVoice()
+/* 0003061a */{
+/* 0003061a */	this.m_BGMFadeByVoiceCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0003062c */	Ｐ＿チェックボックス＿座標設定(this.m_BGMFadeByVoiceCheckBox, 50, 430);
+/* 00030644 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_BGMFadeByVoiceCheckBox, 100);
+/* 00030656 */	Ｐ＿チェックボックス＿サイズ設定(this.m_BGMFadeByVoiceCheckBox, 24, 24);
+/* 0003066e */	Ｐ＿チェックボックス＿テキスト設定(this.m_BGMFadeByVoiceCheckBox, "音声再生時にＢＧＭ音量を下げる");
+/* 00030680 */	Ｐ＿チェックボックス＿フォント設定(this.m_BGMFadeByVoiceCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 000306c8 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_BGMFadeByVoiceCheckBox, AFL_Config_GetBGMFadeByVoice());
+/* 000306da */	AFL_Parts_AddChangedEvent(this.m_BGMFadeByVoiceCheckBox, this.ChangedCheckBGMFadeByVoice);
+/* 000306f0 */}
+
+void CConfigUISoundTab::CreateMuteByInactiveWindow()
+/* 000306f8 */{
+/* 000306f8 */	this.m_MuteByInactiveWindowCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0003070a */	Ｐ＿チェックボックス＿座標設定(this.m_MuteByInactiveWindowCheckBox, 50, 460);
+/* 00030722 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_MuteByInactiveWindowCheckBox, 100);
+/* 00030734 */	Ｐ＿チェックボックス＿サイズ設定(this.m_MuteByInactiveWindowCheckBox, 24, 24);
+/* 0003074c */	Ｐ＿チェックボックス＿テキスト設定(this.m_MuteByInactiveWindowCheckBox, "ウィンドウが非アクティブの時にミュートする");
+/* 0003075e */	Ｐ＿チェックボックス＿フォント設定(this.m_MuteByInactiveWindowCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 000307a6 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_MuteByInactiveWindowCheckBox, AFL_Config_IsMuteByInactiveWindow());
+/* 000307b8 */	AFL_Parts_AddChangedEvent(this.m_MuteByInactiveWindowCheckBox, this.ChangedCheckMuteByInactiveWindow);
+/* 000307ce */}
+
+bool SConfigUIVolumeDataCheckEqual(ref SConfigUIVolumeData Search, ref SConfigUIVolumeData Data)
+/* 000307d6 */{
+/* 000307d6 */	if (Search.CheckNumber == Data.CheckNumber)
+/* 000307fa */	{
+/* 000307fa */		return true;
+/* 00030802 */	}
+/* 00030808 */	return false;
+/* 00030810 */}
+
+void CConfigUISoundTab::ChangedMute(int Number)
+/* 00030824 */{
+/* 00030824 */	SConfigUIVolumeData Search;
+/* 00030834 */	Search.CheckNumber = Number;
+/* 0003084a */	int Result = this.m_VolumeContentList.Find(0, this.m_VolumeContentList.Numof(), Search, &SConfigUIVolumeDataCheckEqual);
+/* 00030878 */	if (Result == -1)
+/* 0003088c */	{
+/* 0003088c */		return;
+/* 0003088e */	}
+/* 00030894 */	ref SConfigUIVolumeData Data = this.m_VolumeContentList[Result];
+/* 000308be */	SystemService.SetMixerMute(Data.Group, Ｐ＿チェックボックス＿チェック状態取得(Data.CheckNumber));
+/* 000308ec */}
+
+void CConfigUISoundTab::ResetVolumeRate(int Number, int MouseX, int MouseY)
+/* 000308f4 */{
+/* 000308f4 */	int Index;
+/* 000308f4 */	for (Index = 0; Index < this.m_VolumeContentList.Numof(); ++Index)
+/* 00030924 */	{
+/* 00030924 */		if (this.m_VolumeContentList[Index].Slider.GetPartsNumber() == Number)
+/* 0003094e */		{
+/* 0003094e */			break;
+/* 00030954 */		}
+/* 0003095a */	}
+/* 00030960 */	if (Index == this.m_VolumeContentList.Numof())
+/* 00030974 */	{
+/* 00030974 */		return;
+/* 00030976 */	}
+/* 0003097c */	ref SConfigUIVolumeData Data = this.m_VolumeContentList[Index];
+/* 000309a6 */	Data.Slider.SetRate(AFL_Config_GetDefaultVolume(Data.Group) / 100.0);
+/* 000309d8 */}
+
+void CConfigUISoundTab::ChangedVolumeRate(int Number)
+/* 000309e0 */{
+/* 000309e0 */	int Index;
+/* 000309e0 */	for (Index = 0; Index < this.m_VolumeContentList.Numof(); ++Index)
+/* 00030a10 */	{
+/* 00030a10 */		if (this.m_VolumeContentList[Index].Slider.GetPartsNumber() == Number)
+/* 00030a3a */		{
+/* 00030a3a */			break;
+/* 00030a40 */		}
+/* 00030a46 */	}
+/* 00030a4c */	if (Index == this.m_VolumeContentList.Numof())
+/* 00030a60 */	{
+/* 00030a60 */		return;
+/* 00030a62 */	}
+/* 00030a68 */	ref SConfigUIVolumeData Data = this.m_VolumeContentList[Index];
+/* 00030a92 */	SystemService.SetMixerVolume(Data.Group, Data.Slider.GetRate() * 100.0);
+/* 00030aca */}
+
+void CConfigUISoundTab::ChangedCheckStopVoiceByStatus(int Number)
+/* 00030ad2 */{
+/* 00030ad2 */	AFL_Config_SetStopVoiceByStatus(Ｐ＿チェックボックス＿チェック状態取得(this.m_StopVoiceByStatusCheckBox));
+/* 00030ae4 */}
+
+void CConfigUISoundTab::ChangedCheckBGMFadeByVoice(int Number)
+/* 00030aec */{
+/* 00030aec */	AFL_Config_SetBGMFadeByVoice(Ｐ＿チェックボックス＿チェック状態取得(this.m_BGMFadeByVoiceCheckBox));
+/* 00030afe */}
+
+void CConfigUISoundTab::ChangedCheckMuteByInactiveWindow(int Number)
+/* 00030b06 */{
+/* 00030b06 */	AFL_Config_SetMuteByInactiveWindow(Ｐ＿チェックボックス＿チェック状態取得(this.m_MuteByInactiveWindowCheckBox));
+/* 00030b18 */}
+

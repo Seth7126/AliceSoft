@@ -1,0 +1,36 @@
+void AdvSelection::clear()
+/* 0007ad70 */{
+/* 0007ad70 */	this.item_.Free();
+/* 0007ad7a */}
+
+void AdvSelection::add(int id, string name, bool isMainRoute)
+/* 0007ad82 */{
+/* 0007ad82 */	SelectionItem item;
+/* 0007ad92 */	item.id = id;
+/* 0007ada8 */	item.name = name;
+/* 0007adbc */	item.isMainRoute = isMainRoute;
+/* 0007add2 */	item.position = this.getGroupObjectCount(id / 100);
+/* 0007adf8 */	this.item_.PushBack(item);
+/* 0007ae02 */}
+
+void AdvSelection::getItemList(ref array@SelectionItem item)
+/* 0007ae0a */{
+/* 0007ae0a */	item.Free();
+/* 0007ae14 */	item.Alloc(this.item_.Numof());
+/* 0007ae2a */	item.Copy(0, this.item_, 0, this.item_.Numof());
+/* 0007ae4e */}
+
+int AdvSelection::getGroupObjectCount(int group)
+/* 0007ae56 */{
+/* 0007ae56 */	int i;
+/* 0007ae60 */	int count;
+/* 0007ae6a */	for (i = 0; i < this.item_.Numof(); ++i)
+/* 0007ae9a */	{
+/* 0007ae9a */		if (this.item_[i].id / 100 == group)
+/* 0007aec6 */		{
+/* 0007aec6 */			++count;
+/* 0007aecc */		}
+/* 0007aed2 */	}
+/* 0007aed8 */	return count;
+/* 0007aee0 */}
+

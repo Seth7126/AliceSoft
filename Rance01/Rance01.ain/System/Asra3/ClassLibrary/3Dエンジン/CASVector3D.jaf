@@ -1,0 +1,120 @@
+void CASVector3D::Set(float X, float Y, float Z)
+/* 00013510 */{
+/* 00013510 */	this.fX = X;
+/* 00013522 */	this.fY = Y;
+/* 00013534 */	this.fZ = Z;
+/* 00013546 */}
+
+float CASVector3D::GetX()
+/* 0001354e */{
+/* 0001354e */	return this.fX;
+/* 00013556 */}
+
+float CASVector3D::GetY()
+/* 00013564 */{
+/* 00013564 */	return this.fY;
+/* 0001356c */}
+
+float CASVector3D::GetZ()
+/* 0001357a */{
+/* 0001357a */	return this.fZ;
+/* 00013582 */}
+
+CASVector3D CASVector3D::AddVector(CASVector3D Obj)
+/* 00013590 */{
+/* 00013590 */	CASVector3D Result;
+/* 000135a0 */	Result.fX = this.fX + Obj.fX;
+/* 000135c6 */	Result.fY = this.fY + Obj.fY;
+/* 000135ec */	Result.fZ = this.fZ + Obj.fZ;
+/* 00013612 */	return Result;
+/* 00013622 */}
+
+CASVector3D CASVector3D::SubVector(CASVector3D Obj)
+/* 00013630 */{
+/* 00013630 */	CASVector3D Result;
+/* 00013640 */	Result.fX = this.fX - Obj.fX;
+/* 00013666 */	Result.fY = this.fY - Obj.fY;
+/* 0001368c */	Result.fZ = this.fZ - Obj.fZ;
+/* 000136b2 */	return Result;
+/* 000136c2 */}
+
+float CASVector3D::DotVector(CASVector3D Obj)
+/* 000136d0 */{
+/* 000136d0 */	return this.fX * Obj.fX + this.fY * Obj.fY + this.fZ * Obj.fZ;
+/* 00013718 */}
+
+CASVector3D CASVector3D::CrossVector(CASVector3D Obj)
+/* 00013726 */{
+/* 00013726 */	CASVector3D Result;
+/* 00013736 */	Result.Set(this.fY * Obj.fZ - this.fZ * Obj.fY, this.fZ * Obj.fX - this.fX * Obj.fZ, this.fX * Obj.fY - this.fY * Obj.fZ);
+/* 000137cc */	return Result;
+/* 000137dc */}
+
+CASVector3D CASVector3D::MulMatrix(CASMatrix m)
+/* 000137ea */{
+/* 000137ea */	CASVector3D Result;
+/* 000137fa */	Result.fX = this.fX * m.m[0][0] + this.fY * m.m[1][0] + this.fZ * m.m[2][0] + m.m[3][0];
+/* 000138a0 */	Result.fY = this.fX * m.m[0][1] + this.fY * m.m[1][1] + this.fZ * m.m[2][1] + m.m[3][1];
+/* 00013946 */	Result.fZ = this.fX * m.m[0][2] + this.fY * m.m[1][2] + this.fZ * m.m[2][2] + m.m[3][2];
+/* 000139ec */	float fH = this.fX * m.m[0][3] + this.fY * m.m[1][3] + this.fZ * m.m[2][3] + m.m[3][3];
+/* 00013a8e */	if (fH != 0.0)
+/* 00013aa2 */	{
+/* 00013aa2 */		float fInvH = 1 / fH;
+/* 00013ac2 */		Result.fX *= fInvH;
+/* 00013ad8 */		Result.fY *= fInvH;
+/* 00013aee */		Result.fZ *= fInvH;
+/* 00013b04 */	}
+/* 00013b0a */	return Result;
+/* 00013b1a */}
+
+CASVector3D CASVector3D::MulScalar(float Scalar)
+/* 00013b28 */{
+/* 00013b28 */	CASVector3D Result;
+/* 00013b38 */	Result.fX = this.fX * Scalar;
+/* 00013b56 */	Result.fY = this.fY * Scalar;
+/* 00013b74 */	Result.fZ = this.fZ * Scalar;
+/* 00013b92 */	return Result;
+/* 00013ba2 */}
+
+void CASVector3D::Normalize()
+/* 00013bb0 */{
+/* 00013bb0 */	float fDenom = Math.Sqrt(this.fX * this.fX + this.fY * this.fY + this.fZ * this.fZ);
+/* 00013bf4 */	if (fDenom != 0.0)
+/* 00013c08 */	{
+/* 00013c08 */		fDenom = 1.0 / fDenom;
+/* 00013c22 */		this.fX *= fDenom;
+/* 00013c34 */		this.fY *= fDenom;
+/* 00013c46 */		this.fZ *= fDenom;
+/* 00013c58 */	}
+/* 00013c5e */}
+
+CASVector3D CASVector3D::GetNormal()
+/* 00013c66 */{
+/* 00013c66 */	CASVector3D Result;
+/* 00013c76 */	Result = this;
+/* 00013c8e */	Result.Normalize();
+/* 00013c9a */	return Result;
+/* 00013caa */}
+
+float CASVector3D::DistanceVector(CASVector3D Obj)
+/* 00013cb8 */{
+/* 00013cb8 */	return Math.Sqrt((this.fX - Obj.fX) * (this.fX - Obj.fX) + (this.fY - Obj.fY) * (this.fY - Obj.fY) + (this.fZ - Obj.fZ) * (this.fZ - Obj.fZ));
+/* 00013d52 */}
+
+float CASVector3D::LengthVector()
+/* 00013d60 */{
+/* 00013d60 */	return Math.Sqrt(this.fX * this.fX + this.fY * this.fY + this.fZ * this.fZ);
+/* 00013d9a */}
+
+float CASVector3D::LengthVectorSq()
+/* 00013da8 */{
+/* 00013da8 */	return this.fX * this.fX + this.fY * this.fY + this.fZ * this.fZ;
+/* 00013dd8 */}
+
+CASVector3D CF_CCASVector3D(float X, float Y, float Z)
+/* 00013de6 */{
+/* 00013de6 */	CASVector3D Result;
+/* 00013df6 */	Result.Set(X, Y, Z);
+/* 00013e14 */	return Result;
+/* 00013e24 */}
+

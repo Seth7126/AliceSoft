@@ -1,0 +1,15 @@
+MotionInfomation getStandardMotion(int type)
+/* 000602ac */{
+/* 000602ac */	MotionInfomation m;
+/* 000602bc */	switch (type)
+/* 000602ce */	{
+/* 000602ce */	case 0:
+/* 000602ce */		m.setAlpha(0, 255, 0);
+/* 000602ec */		break;
+/* 000602f2 */	case 1:
+/* 000602f2 */		m.setAlpha(255, 0, 0);
+/* 00060310 */		break;
+/* 00060316 */	}
+/* 00060316 */	return m;
+/* 00060326 */}
+

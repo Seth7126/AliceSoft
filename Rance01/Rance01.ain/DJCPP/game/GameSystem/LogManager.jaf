@@ -1,0 +1,109 @@
+LogManager::LogManager()
+/* 00092986 */{
+/* 00092990 */}
+
+void LogManager::clear()
+/* 00092996 */{
+/* 00092996 */	this.log_.Free();
+/* 000929a0 */}
+
+void LogManager::getText(ref array@string result, int count)
+/* 000929a8 */{
+/* 000929a8 */	result.Free();
+/* 000929b2 */	int start = Math.Max(0, this.log_.Numof() - count);
+/* 000929dc */	int i;
+/* 000929e6 */	for (i = start; i < this.log_.Numof(); ++i)
+/* 00092a1e */	{
+/* 00092a1e */		result.PushBack(this.log_[i].getText());
+/* 00092a3c */	}
+/* 00092a42 */}
+
+void LogManager::stack(string val)
+/* 00092a4a */{
+/* 00092a4a */	this.stack_.PushBack(val);
+/* 00092a54 */}
+
+void LogManager::flush()
+/* 00092a5c */{
+/* 00092a5c */	int i;
+/* 00092a66 */	for (i = 0; i < this.stack_.Numof(); ++i)
+/* 00092a96 */	{
+/* 00092a96 */		this.add(this.stack_[i], 0);
+/* 00092ab2 */	}
+/* 00092ab8 */	this.stack_.Free();
+/* 00092ac2 */}
+
+void LogManager::add(string val, int type)
+/* 00092aca */{
+/* 00092aca */	Log log;
+/* 00092ada */	log.set(val, type);
+/* 00092af2 */	this.log_.PushBack(log);
+/* 00092afc */	if (this.handler_.Numof() != 0)
+/* 00092b14 */	{
+/* 00092b14 */		this.handler_(val, type);
+/* 00092b3c */	}
+/* 00092b42 */	this.output(log);
+/* 00092b50 */	if (this.log_.Numof() == 1001)
+/* 00092b64 */	{
+/* 00092b64 */		this.log_.Erase(0);
+/* 00092b76 */	}
+/* 00092b7c */}
+
+void LogManager::outToConsole(bool val)
+/* 00092b84 */{
+/* 00092b84 */	if (val)
+/* 00092b90 */	{
+/* 00092b90 */		++this.outToConsole_;
+/* 00092ba0 */	}
+/* 00092ba6 */	else
+/* 00092ba6 */	{
+/* 00092ba6 */		--this.outToConsole_;
+/* 00092bb6 */	}
+/* 00092bb6 */	this.outToConsole_ = Math.Max(0, this.outToConsole_);
+/* 00092bd8 */}
+
+void LogManager::output(ref Log log)
+/* 00092be0 */{
+/* 00092be0 */	if (this.outToConsole_ > 0)
+/* 00092bf4 */	{
+/* 00092bf4 */		string s = "[%s][%s] %s\n" % log.getTime() % this.trimBack(log.getCallStack(), 50) % log.getText();
+/* 00092c4e */		system.Output(s);
+/* 00092c5c */	}
+/* 00092c62 */}
+
+string LogManager::trimBack(string n, int len)
+/* 00092c6a */{
+/* 00092c6a */	if (n.Length() < len)
+/* 00092c82 */	{
+/* 00092c82 */		return n;
+/* 00092c8a */	}
+/* 00092c90 */	return n.GetPart(n.Length() - len, len);
+/* 00092cb2 */}
+
+void LogManager::addEventHandler(DG_LogEventHandler handler)
+/* 00092cc0 */{
+/* 00092cc0 */	this.handler_ += handler;
+/* 00092cd2 */}
+
+void dlog(string msg)
+/* 00092cda */{
+/* 00092cda */	g_log[0].add(msg, 0);
+/* 00092cfa */}
+
+void dlogF(string msg)
+/* 00092d08 */{
+/* 00092d08 */	logOn();
+/* 00092d0e */	dlog(msg);
+/* 00092d1a */	logOff();
+/* 00092d20 */}
+
+void logOn()
+/* 00092d2e */{
+/* 00092d2e */	g_log[0].outToConsole(true);
+/* 00092d48 */}
+
+void logOff()
+/* 00092d56 */{
+/* 00092d56 */	g_log[0].outToConsole(false);
+/* 00092d70 */}
+

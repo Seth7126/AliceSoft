@@ -1,0 +1,152 @@
+HpView::HpView()
+/* 00077b4a */{
+/* 00077b52 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00077b74 */	g_player.addEventHandler(this.onEvent);
+/* 00077b8a */}
+
+HpView::~HpView()
+/* 00077b92 */{
+/* 00077b92 */	g_hallucination.setPos(-500, 0);
+/* 00077baa */}
+
+void HpView::init()
+/* 00077bb2 */{
+/* 00077bb2 */	g_hallucination.setPos(-128, -100);
+/* 00077bca */	this.parts_[0].init("システム／ＨＰ／下地", 0);
+/* 00077bea */	this.parts_[1].init("システム／ＨＰ／バー", 0);
+/* 00077c0a */	this.parts_[1].setPos(77, 71, -2147483648);
+/* 00077c30 */	NumberPartsInfomation n;
+/* 00077c40 */	n.setSameWidth(30);
+/* 00077c52 */	this.parts_[2].initAsNumber("システム／数字／幅３０／白", n);
+/* 00077c72 */	this.parts_[2].setOrigin(8);
+/* 00077c8c */	this.parts_[2].setPos(144, 24, -2147483648);
+/* 00077cb2 */	LoopMotionInfomation m;
+/* 00077cc2 */	m.set(2, 64, 128, 2000, 0);
+/* 00077cec */	this.parts_[2].setLoopMotion(m);
+/* 00077d06 */	n.setSameWidth(18);
+/* 00077d18 */	this.parts_[3].initAsNumber("システム／数字／幅１８／黒", n);
+/* 00077d38 */	this.parts_[3].setOrigin(8);
+/* 00077d52 */	this.parts_[3].setPos(140, 80, -2147483648);
+/* 00077d78 */	int i;
+/* 00077d82 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00077db2 */	{
+/* 00077db2 */		this.parts_[i].setShow(true);
+/* 00077dcc */	}
+/* 00077dd2 */	createPartsGroup(this.parent_, this.parts_, 100);
+/* 00077dea */	this.parent_.setPos(-48, 16, 6100);
+/* 00077e08 */	this.setPartsState();
+/* 00077e10 */	this.updatePartsState();
+/* 00077e18 */}
+
+void HpView::update()
+/* 00077e20 */{
+/* 00077e20 */	this.parent_.setShow(this.state_ != 0);
+/* 00077e3c */	switch (this.state_)
+/* 00077e4e */	{
+/* 00077e4e */	case 1:
+/* 00077e4e */		if (!this.parent_.isMotion())
+/* 00077e62 */		{
+/* 00077e62 */			this.state_ = 2;
+/* 00077e6c */		}
+/* 00077e72 */		break;
+/* 00077e78 */	case 2:
+/* 00077e78 */		break;
+/* 00077e7e */	case 3:
+/* 00077e7e */		if (!this.parent_.isMotion())
+/* 00077e92 */		{
+/* 00077e92 */			this.parent_.setShow(false);
+/* 00077ea4 */			this.state_ = 0;
+/* 00077eae */		}
+/* 00077eb4 */		break;
+/* 00077eba */	case 0:
+/* 00077eba */		break;
+/* 00077ec0 */	}
+/* 00077ec0 */}
+
+void HpView::setPartsState()
+/* 00077ec8 */{
+/* 00077ec8 */	float r = float(g_player.getHp()) / float(g_player.getMaxHp());
+/* 00077ef2 */	this.w_ = 126.0 * r;
+/* 00077f0e */	this.parts_[1].setCgRange(0, 0, this.w_, 2);
+/* 00077f3a */	this.parts_[2].setNumber(g_player.getHp());
+/* 00077f5a */	this.parts_[3].setNumber(g_player.getMaxHp());
+/* 00077f7a */}
+
+void HpView::updatePartsState()
+/* 00077f82 */{
+/* 00077f82 */	float r = float(g_player.getHp()) / float(g_player.getMaxHp());
+/* 00077fac */	if (r == 1.0)
+/* 00077fc0 */	{
+/* 00077fc0 */		this.parts_[2].setMultiColorValue(255, 255, 0);
+/* 00077fe6 */		this.parts_[2].setActiveLoopMotion(true);
+/* 00078000 */	}
+/* 00078006 */	else if (r < 0.3)
+/* 0007801a */	{
+/* 0007801a */		this.parts_[2].setMultiColorValue(255, 0, 0);
+/* 00078040 */		this.parts_[2].setActiveLoopMotion(true);
+/* 0007805a */	}
+/* 00078060 */	else
+/* 00078060 */	{
+/* 00078060 */		this.parts_[2].setMultiColorValue(255, 255, 255);
+/* 00078086 */		this.parts_[2].setActiveLoopMotion(false);
+/* 000780a0 */	}
+/* 000780a0 */}
+
+void HpView::moveChangePartsState()
+/* 000780a8 */{
+/* 000780a8 */	MotionInfomation m;
+/* 000780b8 */	m.setNumberMove(this.parts_[2].getNumber(), g_player.getHp(), 0);
+/* 000780ea */	m.setTime(300, 0);
+/* 00078102 */	this.parts_[2].runMotion(m);
+/* 00078124 */	float r = float(g_player.getHp()) / float(g_player.getMaxHp());
+/* 00078154 */	int lastW = this.w_;
+/* 0007815e */	this.w_ = 126.0 * r;
+/* 0007817a */	MotionInfomation m;
+/* 0007818a */	m.setTime(300, 0);
+/* 000781a2 */	m.setCgRangeMove(0, 0, lastW, 2, 0, 0, this.w_, 2, 0);
+/* 000781e4 */	this.parts_[1].runMotion(m);
+/* 00078206 */}
+
+void HpView::onEvent(int type, int val)
+/* 00078214 */{
+/* 00078214 */	if (type == 0)
+/* 00078222 */	{
+/* 00078222 */		this.updatePartsState();
+/* 0007822a */		this.moveChangePartsState();
+/* 00078232 */	}
+/* 00078238 */}
+
+void HpView::fadeIn(bool val)
+/* 00078240 */{
+/* 00078240 */	if (val)
+/* 0007824c */	{
+/* 0007824c */		if (this.state_ == 3 || this.state_ == 0)
+/* 0007828c */		{
+/* 0007828c */			this.state_ = 1;
+/* 00078296 */			this.parent_.setShow(true);
+/* 000782a8 */			this.parent_.setAlpha(0);
+/* 000782ba */			array@MotionInfomation m[2];
+/* 000782d0 */			m[1].setAlpha(255, 255, 0);
+/* 000782f6 */			m[1].setYFlip(-90, 0, 3);
+/* 0007831c */			m[1].setTime(300, 0);
+/* 0007833c */			this.parent_.runMotionArray(m);
+/* 00078358 */		}
+/* 0007835e */	}
+/* 00078364 */	else if (this.state_ == 1 || this.state_ == 2)
+/* 000783a4 */	{
+/* 000783a4 */		this.state_ = 3;
+/* 000783ae */		this.parent_.setShow(true);
+/* 000783c0 */		MotionInfomation m;
+/* 000783d0 */		m.setAlpha(255, 0, 0);
+/* 000783ee */		m.setYFlip(0, -90, 3);
+/* 0007840c */		m.setTime(300, 0);
+/* 00078424 */		this.parent_.runMotion(m);
+/* 0007843e */	}
+/* 0007844a */}
+
+void HpView::setOffsetY(int offsetY)
+/* 00078452 */{
+/* 00078452 */	this.parent_.setPos(-48, 16 + offsetY, -2147483648);
+/* 00078478 */	g_hallucination.setPos(-128, -100 + offsetY);
+/* 00078498 */}
+

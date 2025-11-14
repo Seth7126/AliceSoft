@@ -1,0 +1,172 @@
+void Monster::reload()
+/* 000909b0 */{
+/* 000909b0 */	this.loadValue();
+/* 000909b8 */}
+
+void Monster::loadValue()
+/* 000909c0 */{
+/* 000909c0 */	this.setImageName(EX_SA2String("モンスターデータ", this.id_, "imageName", ""));
+/* 000909e6 */	this.setName(EX_SA2String("モンスターデータ", this.id_, "name", ""));
+/* 00090a0c */	this.setMaxHp(EX_SA2Int("モンスターデータ", this.id_, "hp", 0));
+/* 00090a32 */	this.setExp(EX_SA2Int("モンスターデータ", this.id_, "exp", 0));
+/* 00090a58 */	this.setGold(EX_SA2Int("モンスターデータ", this.id_, "gold", 0));
+/* 00090a7e */	this.setDropChipId(EX_SA2String("モンスターデータ", this.id_, "dropChipId", ""));
+/* 00090aa4 */	this.setStartMessage(EX_SA2String("モンスターデータ", this.id_, "startMessage", ""));
+/* 00090aca */	this.setEndMessage(EX_SA2String("モンスターデータ", this.id_, "endMessage", ""));
+/* 00090af0 */	this.setMusicNumber(EX_SA2Int("モンスターデータ", this.id_, "music", 0));
+/* 00090b16 */	this.setEscapeDisable(EX_SA2Int("モンスターデータ", this.id_, "escapeDisable", 0) != 0);
+/* 00090b46 */	int i;
+/* 00090b50 */	for (i = 0; i < this.atkInfo_.Numof(); ++i)
+/* 00090b80 */	{
+/* 00090b80 */		this.atkInfo_[i].loadValue(this.id_, i + 1);
+/* 00090ba8 */	}
+/* 00090bae */}
+
+string Monster::getId()
+/* 00090bb6 */{
+/* 00090bb6 */	return this.id_;
+/* 00090bbe */}
+
+string Monster::getImageName()
+/* 00090bcc */{
+/* 00090bcc */	return this.imageName_;
+/* 00090bd4 */}
+
+string Monster::getName()
+/* 00090be2 */{
+/* 00090be2 */	return this.name_;
+/* 00090bea */}
+
+int Monster::getHp()
+/* 00090bf8 */{
+/* 00090bf8 */	return this.hp_;
+/* 00090c00 */}
+
+int Monster::getMaxHp()
+/* 00090c0e */{
+/* 00090c0e */	return this.maxHp_;
+/* 00090c16 */}
+
+int Monster::getExp()
+/* 00090c24 */{
+/* 00090c24 */	return this.exp_;
+/* 00090c2c */}
+
+int Monster::getGold()
+/* 00090c3a */{
+/* 00090c3a */	return this.gold_;
+/* 00090c42 */}
+
+string Monster::getDropChipId()
+/* 00090c50 */{
+/* 00090c50 */	return this.dropChipId_;
+/* 00090c58 */}
+
+string Monster::getStartMessage()
+/* 00090c66 */{
+/* 00090c66 */	return this.startMessage_;
+/* 00090c6e */}
+
+string Monster::getEndMessage()
+/* 00090c7c */{
+/* 00090c7c */	return this.endMessage_;
+/* 00090c84 */}
+
+void Monster::setId(string val)
+/* 00090c92 */{
+/* 00090c92 */	this.id_ = val;
+/* 00090c9c */	this.loadValue();
+/* 00090ca4 */}
+
+void Monster::setImageName(string val)
+/* 00090cac */{
+/* 00090cac */	this.imageName_ = val;
+/* 00090cb6 */}
+
+void Monster::setName(string val)
+/* 00090cbe */{
+/* 00090cbe */	this.name_ = val;
+/* 00090cc8 */}
+
+void Monster::setHp(int val)
+/* 00090cd0 */{
+/* 00090cd0 */	this.hp_ = val;
+/* 00090cda */}
+
+void Monster::setMaxHp(int val)
+/* 00090ce2 */{
+/* 00090ce2 */	this.maxHp_ = val;
+/* 00090cec */}
+
+void Monster::setExp(int val)
+/* 00090cf4 */{
+/* 00090cf4 */	this.exp_ = val;
+/* 00090cfe */}
+
+void Monster::setGold(int val)
+/* 00090d06 */{
+/* 00090d06 */	this.gold_ = val;
+/* 00090d10 */}
+
+void Monster::setDropChipId(string val)
+/* 00090d18 */{
+/* 00090d18 */	this.dropChipId_ = val;
+/* 00090d22 */}
+
+void Monster::setStartMessage(string val)
+/* 00090d2a */{
+/* 00090d2a */	this.startMessage_ = val;
+/* 00090d34 */}
+
+void Monster::setEndMessage(string val)
+/* 00090d3c */{
+/* 00090d3c */	this.endMessage_ = val;
+/* 00090d46 */}
+
+int Monster::getAtk(int turn)
+/* 00090d4e */{
+/* 00090d4e */	int t = turn % 3;
+/* 00090d68 */	return this.atkInfo_[t].getAtk();
+/* 00090d7e */}
+
+int Monster::getDef(int turn)
+/* 00090d8c */{
+/* 00090d8c */	int t = turn % 3;
+/* 00090da6 */	return this.atkInfo_[t].getDef();
+/* 00090dbc */}
+
+string Monster::getAttribute(int turn, int index)
+/* 00090dca */{
+/* 00090dca */	int t = turn % 3;
+/* 00090de4 */	if (index >= 0 && index < 3)
+/* 00090e18 */	{
+/* 00090e18 */		return this.atkInfo_[t].getAttribute(index);
+/* 00090e34 */	}
+/* 00090e3a */	return "";
+/* 00090e42 */}
+
+void Monster::addHp(int val)
+/* 00090e50 */{
+/* 00090e50 */	this.setHp(this.getHp() + val);
+/* 00090e68 */}
+
+void Monster::setMusicNumber(int val)
+/* 00090e70 */{
+/* 00090e70 */	this.musicNumber_ = val;
+/* 00090e7a */}
+
+int Monster::getMusicNumber()
+/* 00090e82 */{
+/* 00090e82 */	return this.musicNumber_;
+/* 00090e8a */}
+
+void Monster::setEscapeDisable(bool val)
+/* 00090e98 */{
+/* 00090e98 */	this.isEscapeDisable_ = val;
+/* 00090ea2 */}
+
+bool Monster::isEscapeDisable()
+/* 00090eaa */{
+/* 00090eaa */	return this.isEscapeDisable_;
+/* 00090eb2 */}
+

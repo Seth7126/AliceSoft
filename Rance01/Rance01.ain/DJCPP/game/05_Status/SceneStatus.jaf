@@ -1,0 +1,74 @@
+SceneStatus::SceneStatus()
+/* 00076164 */{
+/* 0007616c */	this.state_ = 0;
+/* 00076176 */}
+
+void SceneStatus::run(bool isShowExitToTownMap)
+/* 0007617e */{
+/* 0007617e */	this.isShowExitToTownMap_ = isShowExitToTownMap;
+/* 00076188 */	this.init();
+/* 00076190 */	this.fadeObject(true);
+/* 0007619e */}
+
+int SceneStatus::update()
+/* 000761a6 */{
+/* 000761a6 */	switch (this.state_)
+/* 000761b8 */	{
+/* 000761b8 */	case 1:
+/* 000761b8 */		if (!this.statusDetail_.isMotion())
+/* 000761cc */		{
+/* 000761cc */			this.state_ = 2;
+/* 000761d6 */		}
+/* 000761dc */		break;
+/* 000761e2 */	case 2:
+/* 000761e2 */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 00076224 */		{
+/* 00076224 */			if (g_mouse.isClick(1))
+/* 0007623c */			{
+/* 0007623c */				g_sysSound.play(2003, false);
+/* 00076254 */			}
+/* 0007625a */			this.fadeObject(false);
+/* 00076268 */			this.state_ = 3;
+/* 00076272 */		}
+/* 00076278 */		if (this.btnDungeonExit_.isClick())
+/* 0007628a */		{
+/* 0007628a */			this.fadeObject(false);
+/* 00076298 */			this.state_ = 3;
+/* 000762a2 */			g_gameFlow.setNextMap("MAP01");
+/* 000762b4 */		}
+/* 000762ba */		break;
+/* 000762c0 */	case 3:
+/* 000762c0 */		if (!this.statusDetail_.isMotion())
+/* 000762d4 */		{
+/* 000762d4 */			ResetBet(0);
+/* 000762e0 */			return 1;
+/* 000762e8 */		}
+/* 000762ee */		break;
+/* 000762f4 */	}
+/* 000762f4 */	return 0;
+/* 000762fc */}
+
+void SceneStatus::init()
+/* 0007630a */{
+/* 0007630a */	this.statusDetail_.init();
+/* 00076316 */	this.arranger_.init(0, true, false, false);
+/* 0007633a */	this.arranger_.setActive(true);
+/* 0007634c */	this.btnExit_.init("システム／ボタン／幅２００", "キャンプをたたむ", -1);
+/* 0007636a */	this.btnExit_.setPos(808, 716, 12000);
+/* 00076388 */	this.btnDungeonExit_.init("システム／ボタン／幅２００", "急いで城下町にもどる", -1);
+/* 000763a6 */	this.btnDungeonExit_.setPos(16, 716, 12000);
+/* 000763c4 */	this.btnDungeonExit_.setEnable(g_player.getBadCondition("COND05") == 0);
+/* 000763ec */}
+
+void SceneStatus::fadeObject(bool val)
+/* 000763f4 */{
+/* 000763f4 */	this.statusDetail_.fadeIn(val);
+/* 00076406 */	this.arranger_.fadeIn(val);
+/* 00076418 */	this.btnExit_.fadeIn(val);
+/* 0007642a */	if (this.isShowExitToTownMap_)
+/* 00076434 */	{
+/* 00076434 */		this.btnDungeonExit_.fadeIn(val);
+/* 00076446 */	}
+/* 0007644c */	this.state_ = val ? 1 : 3;
+/* 00076476 */}
+

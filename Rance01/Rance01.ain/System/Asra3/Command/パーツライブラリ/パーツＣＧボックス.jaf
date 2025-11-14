@@ -1,0 +1,137 @@
+void Ｐ＿ＣＧボックス＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 000523a4 */{
+/* 000523a4 */	GUIEngine.SetCGBoxPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 000523c0 */}
+
+void Ｐ＿ＣＧボックス＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 000523ce */{
+/* 000523ce */	GUIEngine.SetCGBoxZ(パーツ番号, _Ｚ座標);
+/* 000523e4 */}
+
+int Ｐ＿ＣＧボックス＿Ｘ座標取得(int パーツ番号)
+/* 000523f2 */{
+/* 000523f2 */	return GUIEngine.GetCGBoxX(パーツ番号);
+/* 00052404 */}
+
+int Ｐ＿ＣＧボックス＿Ｙ座標取得(int パーツ番号)
+/* 00052418 */{
+/* 00052418 */	return GUIEngine.GetCGBoxY(パーツ番号);
+/* 0005242a */}
+
+int Ｐ＿ＣＧボックス＿Ｚ座標取得(int パーツ番号)
+/* 0005243e */{
+/* 0005243e */	return GUIEngine.GetCGBoxZ(パーツ番号);
+/* 00052450 */}
+
+void Ｐ＿ＣＧボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00052464 */{
+/* 00052464 */	GUIEngine.SetCGBoxWidth(パーツ番号, 幅);
+/* 0005247a */	GUIEngine.SetCGBoxHeight(パーツ番号, 高さ);
+/* 00052490 */}
+
+int Ｐ＿ＣＧボックス＿幅取得(int パーツ番号)
+/* 0005249e */{
+/* 0005249e */	return GUIEngine.GetCGBoxWidth(パーツ番号);
+/* 000524b0 */}
+
+int Ｐ＿ＣＧボックス＿高さ取得(int パーツ番号)
+/* 000524c4 */{
+/* 000524c4 */	return GUIEngine.GetCGBoxHeight(パーツ番号);
+/* 000524d6 */}
+
+void Ｐ＿ＣＧボックス＿アルファ値設定(int パーツ番号, int アルファ値)
+/* 000524ea */{
+/* 000524ea */	GUIEngine.SetCGBoxAlpha(パーツ番号, アルファ値);
+/* 00052500 */}
+
+int Ｐ＿ＣＧボックス＿アルファ値取得(int パーツ番号)
+/* 0005250e */{
+/* 0005250e */	return GUIEngine.GetCGBoxAlpha(パーツ番号);
+/* 00052520 */}
+
+void Ｐ＿ＣＧボックス＿ズーム方法設定(int パーツ番号, int ズーム方法)
+/* 00052534 */{
+/* 00052534 */	GUIEngine.SetCGBoxViewMode(パーツ番号, ズーム方法);
+/* 0005254a */}
+
+int Ｐ＿ＣＧボックス＿ズーム方法取得(int パーツ番号)
+/* 00052558 */{
+/* 00052558 */	return GUIEngine.GetCGBoxViewMode(パーツ番号);
+/* 0005256a */}
+
+void Ｐ＿ＣＧボックス＿表示設定(int パーツ番号, bool 表示)
+/* 0005257e */{
+/* 0005257e */	GUIEngine.SetCGBoxShow(パーツ番号, 表示);
+/* 00052594 */}
+
+bool Ｐ＿ＣＧボックス＿表示設定取得(int パーツ番号)
+/* 000525a2 */{
+/* 000525a2 */	return GUIEngine.IsCGBoxShow(パーツ番号);
+/* 000525b4 */}
+
+void Ｐ＿ＣＧボックス＿ドラッグ設定(int パーツ番号, bool ドラッグ)
+/* 000525c8 */{
+/* 000525c8 */	GUIEngine.SetCGBoxDrag(パーツ番号, ドラッグ);
+/* 000525de */}
+
+bool Ｐ＿ＣＧボックス＿ドラッグ設定取得(int パーツ番号)
+/* 000525ec */{
+/* 000525ec */	return GUIEngine.IsCGBoxDrag(パーツ番号);
+/* 000525fe */}
+
+void Ｐ＿ＣＧボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00052612 */{
+/* 00052612 */	GUIEngine.SetCGBoxCGName(パーツ番号, ＣＧ名);
+/* 00052628 */}
+
+string Ｐ＿ＣＧボックス＿ＣＧ名取得(int パーツ番号)
+/* 00052636 */{
+/* 00052636 */	string Name;
+/* 00052642 */	GUIEngine.GetCGBoxCGName(パーツ番号, Name);
+/* 00052658 */	return Name;
+/* 00052660 */}
+
+void Ｐ＿ＣＧボックス＿加算色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00052674 */{
+/* 00052674 */	GUIEngine.SetCGBoxAddR(パーツ番号, 赤);
+/* 0005268a */	GUIEngine.SetCGBoxAddG(パーツ番号, 緑);
+/* 000526a0 */	GUIEngine.SetCGBoxAddB(パーツ番号, 青);
+/* 000526b6 */}
+
+int Ｐ＿ＣＧボックス＿加算色赤取得(int パーツ番号)
+/* 000526c4 */{
+/* 000526c4 */	return GUIEngine.GetCGBoxAddR(パーツ番号);
+/* 000526d6 */}
+
+int Ｐ＿ＣＧボックス＿加算色緑取得(int パーツ番号)
+/* 000526ea */{
+/* 000526ea */	return GUIEngine.GetCGBoxAddG(パーツ番号);
+/* 000526fc */}
+
+int Ｐ＿ＣＧボックス＿加算色青取得(int パーツ番号)
+/* 00052710 */{
+/* 00052710 */	return GUIEngine.GetCGBoxAddB(パーツ番号);
+/* 00052722 */}
+
+void Ｐ＿ＣＧボックス＿乗算色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00052736 */{
+/* 00052736 */	GUIEngine.SetCGBoxMulR(パーツ番号, 赤);
+/* 0005274c */	GUIEngine.SetCGBoxMulG(パーツ番号, 緑);
+/* 00052762 */	GUIEngine.SetCGBoxMulB(パーツ番号, 青);
+/* 00052778 */}
+
+int Ｐ＿ＣＧボックス＿乗算色赤取得(int パーツ番号)
+/* 00052786 */{
+/* 00052786 */	return GUIEngine.GetCGBoxMulR(パーツ番号);
+/* 00052798 */}
+
+int Ｐ＿ＣＧボックス＿乗算色緑取得(int パーツ番号)
+/* 000527ac */{
+/* 000527ac */	return GUIEngine.GetCGBoxMulG(パーツ番号);
+/* 000527be */}
+
+int Ｐ＿ＣＧボックス＿乗算色青取得(int パーツ番号)
+/* 000527d2 */{
+/* 000527d2 */	return GUIEngine.GetCGBoxMulB(パーツ番号);
+/* 000527e4 */}
+

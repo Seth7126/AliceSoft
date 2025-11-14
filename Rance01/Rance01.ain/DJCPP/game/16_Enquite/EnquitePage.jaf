@@ -1,0 +1,42 @@
+EnquitePage::EnquitePage()
+/* 0008a208 */{
+/* 0008a212 */}
+
+void EnquitePage::init(string pageName)
+/* 0008a218 */{
+/* 0008a218 */	array@string question;
+/* 0008a222 */	EX_GetNodeNameList(pageName, question);
+/* 0008a234 */	this.group_.Free();
+/* 0008a23e */	this.group_.Alloc(question.Numof());
+/* 0008a25e */	int i;
+/* 0008a268 */	for (i = 0; i < question.Numof(); ++i)
+/* 0008a2a2 */	{
+/* 0008a2a2 */		string key = "%s.%s." % pageName % question[i];
+/* 0008a2d6 */		int j;
+/* 0008a2e0 */		array@string list;
+/* 0008a2ea */		while (true)
+/* 0008a2f6 */		{
+/* 0008a2f6 */			string n = EX_AString(key + "selection", j, "");
+/* 0008a320 */			if (n == "")
+/* 0008a330 */			{
+/* 0008a330 */				break;
+/* 0008a336 */			}
+/* 0008a33c */			list.PushBack(n);
+/* 0008a346 */			++j;
+/* 0008a34c */		}
+/* 0008a352 */		this.group_[i].init(question[i], list, EX_Int(key + "isSingleSelect", 0) == 1);
+/* 0008a3aa */	}
+/* 0008a3b0 */	this.setGroupPos();
+/* 0008a3b8 */}
+
+void EnquitePage::setGroupPos()
+/* 0008a3c0 */{
+/* 0008a3c0 */	int y = 130;
+/* 0008a3ca */	int i;
+/* 0008a3d4 */	for (i = 0; i < this.group_.Numof(); ++i)
+/* 0008a404 */	{
+/* 0008a404 */		this.group_[i].setYPos(y);
+/* 0008a41e */		y += this.group_[i].getHeight() + 15;
+/* 0008a446 */	}
+/* 0008a44c */}
+

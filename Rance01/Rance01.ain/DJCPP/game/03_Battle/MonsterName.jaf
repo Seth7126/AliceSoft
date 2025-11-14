@@ -1,0 +1,137 @@
+MonsterName::MonsterName()
+/* 00074e04 */{
+/* 00074e0c */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00074e2e */}
+
+void MonsterName::init()
+/* 00074e36 */{
+/* 00074e36 */	this.initParts();
+/* 00074e3e */	this.setPartsPos();
+/* 00074e46 */	this.setPartsShow();
+/* 00074e4e */	this.setPartsOrigin();
+/* 00074e56 */}
+
+void MonsterName::update()
+/* 00074e5e */{
+/* 00074e5e */	switch (this.state_)
+/* 00074e70 */	{
+/* 00074e70 */	case 0:
+/* 00074e70 */		break;
+/* 00074e76 */	case 1:
+/* 00074e76 */		if (this.isMotionFinish())
+/* 00074e84 */		{
+/* 00074e84 */			this.state_ = 2;
+/* 00074e8e */		}
+/* 00074e94 */		break;
+/* 00074e9a */	case 2:
+/* 00074e9a */		if (g_mouse.isClick(0))
+/* 00074eb2 */		{
+/* 00074eb2 */			this.fadeIn(false);
+/* 00074ec0 */		}
+/* 00074ec6 */		break;
+/* 00074ecc */	case 3:
+/* 00074ecc */		if (this.isMotionFinish())
+/* 00074eda */		{
+/* 00074eda */			this.state_ = 0;
+/* 00074ee4 */		}
+/* 00074eea */		break;
+/* 00074ef0 */	}
+/* 00074ef0 */}
+
+void MonsterName::fadeIn(bool val)
+/* 00074ef8 */{
+/* 00074ef8 */	if (this.isIgnoreFadeMotion(val))
+/* 00074f0c */	{
+/* 00074f0c */		return;
+/* 00074f0e */	}
+/* 00074f14 */	this.state_ = val ? 1 : 3;
+/* 00074f3e */	if (val)
+/* 00074f4a */	{
+/* 00074f4a */		array@MotionInfomation m[2];
+/* 00074f60 */		m[0].setTime(100, 0);
+/* 00074f80 */		m[1].setTime(300, 0);
+/* 00074fa0 */		m[1].setScaling(100, 300, 0);
+/* 00074fc6 */		m[1].setAlpha(255, 0, 0);
+/* 00074fec */		this.parts_[1].runMotionArray(m);
+/* 00075006 */		m.Free();
+/* 00075010 */		MotionInfomation m;
+/* 00075020 */		m.setTime(100, 0);
+/* 00075038 */		m.setScaling(200, 100, 0);
+/* 00075056 */		m.setAlpha(0, 255, 0);
+/* 00075074 */		this.parent_.runMotion(m);
+/* 0007508e */	}
+/* 0007509a */	else
+/* 0007509a */	{
+/* 0007509a */		this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 000750ca */	}
+/* 000750ca */	this.parent_.setShow(true);
+/* 000750dc */}
+
+void MonsterName::run(string name)
+/* 000750e4 */{
+/* 000750e4 */	this.name_ = name;
+/* 000750ee */	this.init();
+/* 000750f6 */	this.fadeIn(true);
+/* 00075104 */}
+
+bool MonsterName::isIgnoreFadeMotion(bool val)
+/* 0007510c */{
+/* 0007510c */	if (val && (this.state_ == 1 || this.state_ == 2))
+/* 00075170 */	{
+/* 00075170 */		return true;
+/* 00075178 */	}
+/* 0007517e */	else if (!val && (this.state_ == 3 || this.state_ == 0))
+/* 000751e4 */	{
+/* 000751e4 */		return true;
+/* 000751ec */	}
+/* 000751f2 */	return false;
+/* 000751fa */}
+
+bool MonsterName::isMotionFinish()
+/* 00075208 */{
+/* 00075208 */	return !this.parent_.isMotion();
+/* 0007521a */}
+
+void MonsterName::initParts()
+/* 00075228 */{
+/* 00075228 */	this.parts_[0].initAsText(this.name_, 40, true, 256, 255, 255, 255);
+/* 00075266 */	this.parts_[1].initAsText(this.name_, 40, false, 256, 255, 255, 255);
+/* 000752a4 */	createPartsGroup(this.parent_, this.parts_, 3150);
+/* 000752bc */}
+
+void MonsterName::setPartsOrigin()
+/* 000752c4 */{
+/* 000752c4 */	int i;
+/* 000752ce */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 000752fe */	{
+/* 000752fe */		this.parts_[i].setOrigin(5);
+/* 00075318 */	}
+/* 0007531e */}
+
+void MonsterName::setPartsPos()
+/* 00075326 */{
+/* 00075326 */	this.parent_.setPos(760, 400, -2147483648);
+/* 00075344 */}
+
+bool MonsterName::isFinish()
+/* 0007534c */{
+/* 0007534c */	return this.state_ == 0;
+/* 0007535e */}
+
+void MonsterName::setPartsShow()
+/* 0007536c */{
+/* 0007536c */	int i;
+/* 00075376 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 000753a6 */	{
+/* 000753a6 */		this.parts_[i].setShow(true);
+/* 000753c0 */	}
+/* 000753c6 */}
+
+void MonsterName::fadeOut()
+/* 000753ce */{
+/* 000753ce */	if (this.state_ == 2 || this.state_ == 1)
+/* 0007540e */	{
+/* 0007540e */		this.parent_.runMotion(getStandardMotion(1));
+/* 00075426 */	}
+/* 0007542c */}
+

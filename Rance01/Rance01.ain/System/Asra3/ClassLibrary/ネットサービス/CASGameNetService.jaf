@@ -1,0 +1,289 @@
+CASGameNetService::CASGameNetService()
+/* 00013e3e */{
+/* 00013e46 */	this.m_UserIDFileID = 826366246;
+/* 00013e50 */	this.m_ServerURL = "http://game.lan.alicesoft.com/gamename/";
+/* 00013e5c */}
+
+void CASGameNetService::SetServerURL(string ServerURL)
+/* 00013e64 */{
+/* 00013e64 */	this.m_ServerURL = ServerURL;
+/* 00013e6e */}
+
+bool CASGameNetService::IsExistUserID()
+/* 00013e76 */{
+/* 00013e76 */	string UserIDFileName = this.GetUserIDFileName();
+/* 00013e88 */	if (!system.ExistFile(UserIDFileName))
+/* 00013e9c */	{
+/* 00013e9c */		return false;
+/* 00013ea4 */	}
+/* 00013eaa */	int UserID;
+/* 00013eb4 */	if (!this.LoadUserIDFile(UserID))
+/* 00013ecc */	{
+/* 00013ecc */		return false;
+/* 00013ed4 */	}
+/* 00013eda */	this.SetUserID(UserID);
+/* 00013ee8 */	return true;
+/* 00013ef0 */}
+
+bool CASGameNetService::BeginCreateUserID()
+/* 00013efe */{
+/* 00013efe */	if (this.IsExistUserID())
+/* 00013f0c */	{
+/* 00013f0c */		return false;
+/* 00013f14 */	}
+/* 00013f1a */	string URL = this.m_ServerURL + "createuserid.php";
+/* 00013f32 */	string Param;
+/* 00013f3e */	if (!HTTPDownloader.Post(URL, Param))
+/* 00013f5c */	{
+/* 00013f5c */		return false;
+/* 00013f64 */	}
+/* 00013f6a */	return true;
+/* 00013f72 */}
+
+bool CASGameNetService::IsEndCreateUserID()
+/* 00013f80 */{
+/* 00013f80 */	if (HTTPDownloader.IsRun())
+/* 00013f90 */	{
+/* 00013f90 */		return false;
+/* 00013f98 */	}
+/* 00013f9e */	return true;
+/* 00013fa6 */}
+
+void CASGameNetService::StopCreateUserID()
+/* 00013fb4 */{
+/* 00013fb4 */	HTTPDownloader.Stop();
+/* 00013fbe */}
+
+bool CASGameNetService::EndCreateUserID()
+/* 00013fc6 */{
+/* 00013fc6 */	for (; ; )
+/* 00013fc6 */	{
+/* 00013fc6 */		if (!HTTPDownloader.IsRun())
+/* 00013fd8 */		{
+/* 00013fd8 */			break;
+/* 00013fde */		}
+/* 00013fe4 */		AFL_View_Update(true);
+/* 00013ff0 */	}
+/* 00013ff6 */	int ReadSize = HTTPDownloader.GetReadSize();
+/* 0001400c */	if (ReadSize <= 0)
+/* 0001401a */	{
+/* 0001401a */		return false;
+/* 00014022 */	}
+/* 00014028 */	string ResultText;
+/* 00014034 */	if (!HTTPDownloader.ReadString(ResultText))
+/* 0001404c */	{
+/* 0001404c */		return false;
+/* 00014054 */	}
+/* 0001405a */	if (ResultText.Empty())
+/* 00014066 */	{
+/* 00014066 */		return false;
+/* 0001406e */	}
+/* 00014074 */	if (!HTTPDownloader.DecodeString(ResultText))
+/* 0001408c */	{
+/* 0001408c */		return false;
+/* 00014094 */	}
+/* 0001409a */	if (!HTTPDownloader.UTF8ToSJIS(ResultText))
+/* 000140b2 */	{
+/* 000140b2 */		return false;
+/* 000140ba */	}
+/* 000140c0 */	if (ResultText.GetPart(0, 6) == "ERROR=")
+/* 000140e2 */	{
+/* 000140e2 */		return false;
+/* 000140ea */	}
+/* 000140f0 */	if (ResultText.GetPart(0, 7) != "USERID=")
+/* 00014112 */	{
+/* 00014112 */		return false;
+/* 0001411a */	}
+/* 00014120 */	int UserID = ResultText.GetPart(7, ResultText.Length()).Int();
+/* 00014146 */	if (!this.SaveUserIDFile(UserID))
+/* 0001415c */	{
+/* 0001415c */		return false;
+/* 00014164 */	}
+/* 0001416a */	this.SetUserID(UserID);
+/* 00014178 */	return true;
+/* 00014180 */}
+
+string CASGameNetService::GetUserIDFileName()
+/* 0001418e */{
+/* 0001418e */	return system.GetSaveFolderName() + "\\" + "NetUserID.vsf";
+/* 000141a6 */}
+
+bool CASGameNetService::LoadUserIDFile(ref int UserID)
+/* 000141b4 */{
+/* 000141b4 */	string UserIDFileName = this.GetUserIDFileName();
+/* 000141c6 */	if (!VSFile.OpenForRead(UserIDFileName))
+/* 000141de */	{
+/* 000141de */		return false;
+/* 000141e6 */	}
+/* 000141ec */	int ID;
+/* 000141f6 */	if (!VSFile.ReadInt(ID))
+/* 00014210 */	{
+/* 00014210 */		VSFile.Close();
+/* 0001421c */		return false;
+/* 00014224 */	}
+/* 0001422a */	if (ID != this.m_UserIDFileID)
+/* 0001423e */	{
+/* 0001423e */		VSFile.Close();
+/* 0001424a */		return false;
+/* 00014252 */	}
+/* 00014258 */	int Version;
+/* 00014262 */	if (!VSFile.ReadInt(Version))
+/* 0001427c */	{
+/* 0001427c */		VSFile.Close();
+/* 00014288 */		return false;
+/* 00014290 */	}
+/* 00014296 */	if (Version != 0)
+/* 000142aa */	{
+/* 000142aa */		VSFile.Close();
+/* 000142b6 */		return false;
+/* 000142be */	}
+/* 000142c4 */	if (!VSFile.ReadInt(UserID))
+/* 000142dc */	{
+/* 000142dc */		VSFile.Close();
+/* 000142e8 */		return false;
+/* 000142f0 */	}
+/* 000142f6 */	if (!VSFile.Close())
+/* 00014308 */	{
+/* 00014308 */		return false;
+/* 00014310 */	}
+/* 00014316 */	return true;
+/* 0001431e */}
+
+bool CASGameNetService::SaveUserIDFile(int UserID)
+/* 0001432c */{
+/* 0001432c */	string UserIDFileName = this.GetUserIDFileName();
+/* 0001433e */	if (!VSFile.OpenForWrite(UserIDFileName))
+/* 00014356 */	{
+/* 00014356 */		return false;
+/* 0001435e */	}
+/* 00014364 */	if (!VSFile.WriteInt(this.m_UserIDFileID))
+/* 0001437c */	{
+/* 0001437c */		VSFile.Close();
+/* 00014388 */		return false;
+/* 00014390 */	}
+/* 00014396 */	if (!VSFile.WriteInt(0))
+/* 000143ae */	{
+/* 000143ae */		VSFile.Close();
+/* 000143ba */		return false;
+/* 000143c2 */	}
+/* 000143c8 */	if (!VSFile.WriteInt(UserID))
+/* 000143e0 */	{
+/* 000143e0 */		VSFile.Close();
+/* 000143ec */		return false;
+/* 000143f4 */	}
+/* 000143fa */	if (!VSFile.Close())
+/* 0001440c */	{
+/* 0001440c */		return false;
+/* 00014414 */	}
+/* 0001441a */	return true;
+/* 00014422 */}
+
+void CASGameNetService::SetUserID(int UserID)
+/* 00014430 */{
+/* 00014430 */	this.m_UserID = UserID;
+/* 0001443a */}
+
+string CASGameNetService::TransDelimiter(string Text)
+/* 00014442 */{
+/* 00014442 */	if (Text.Empty())
+/* 0001444e */	{
+/* 0001444e */		return "";
+/* 00014456 */	}
+/* 0001445c */	string Result;
+/* 00014468 */	for (; ; )
+/* 00014468 */	{
+/* 00014468 */		int HitIndex = Text.Find(",");
+/* 00014482 */		if (HitIndex == -1)
+/* 00014496 */		{
+/* 00014496 */			Result += Text;
+/* 000144a6 */			break;
+/* 000144ac */		}
+/* 000144b2 */		Result += Text.GetPart(0, HitIndex);
+/* 000144d0 */		Result += "，";
+/* 000144e0 */		Text = Text.GetPart(HitIndex + 1, Text.Length());
+/* 0001450a */	}
+/* 00014510 */	return Result;
+/* 00014518 */}
+
+bool CASGameNetService::BeginSendCommand(string Command, array@string ParamList)
+/* 00014526 */{
+/* 00014526 */	if (!this.IsExistUserID())
+/* 00014536 */	{
+/* 00014536 */		return false;
+/* 0001453e */	}
+/* 00014544 */	string URL = this.m_ServerURL + Command + ".php";
+/* 00014564 */	string Param = "%d" % this.m_UserID;
+/* 00014582 */	int n;
+/* 0001458c */	for (n = 0; n < ParamList.Numof(); ++n)
+/* 000145c6 */	{
+/* 000145c6 */		Param += "," + this.TransDelimiter(ParamList[n]);
+/* 000145ee */	}
+/* 000145f4 */	if (!HTTPDownloader.SJISToUTF8(Param))
+/* 0001460c */	{
+/* 0001460c */		return false;
+/* 00014614 */	}
+/* 0001461a */	if (!HTTPDownloader.EncodeString(Param))
+/* 00014632 */	{
+/* 00014632 */		return false;
+/* 0001463a */	}
+/* 00014640 */	if (!HTTPDownloader.Post(URL, "param=" + Param))
+/* 00014666 */	{
+/* 00014666 */		return false;
+/* 0001466e */	}
+/* 00014674 */	return true;
+/* 0001467c */}
+
+bool CASGameNetService::IsEndSendCommand()
+/* 0001468a */{
+/* 0001468a */	if (HTTPDownloader.IsRun())
+/* 0001469a */	{
+/* 0001469a */		return false;
+/* 000146a2 */	}
+/* 000146a8 */	return true;
+/* 000146b0 */}
+
+void CASGameNetService::StopSendCommand()
+/* 000146be */{
+/* 000146be */	HTTPDownloader.Stop();
+/* 000146c8 */}
+
+bool CASGameNetService::EndSendCommand(ref string Result)
+/* 000146d0 */{
+/* 000146d0 */	for (; ; )
+/* 000146d0 */	{
+/* 000146d0 */		if (!HTTPDownloader.IsRun())
+/* 000146e2 */		{
+/* 000146e2 */			break;
+/* 000146e8 */		}
+/* 000146ee */		AFL_View_Update(true);
+/* 000146fa */	}
+/* 00014700 */	int ReadSize = HTTPDownloader.GetReadSize();
+/* 00014716 */	if (ReadSize <= 0)
+/* 00014724 */	{
+/* 00014724 */		return false;
+/* 0001472c */	}
+/* 00014732 */	string ResultText;
+/* 0001473e */	if (!HTTPDownloader.ReadString(ResultText))
+/* 00014756 */	{
+/* 00014756 */		return false;
+/* 0001475e */	}
+/* 00014764 */	if (ResultText.Empty())
+/* 00014770 */	{
+/* 00014770 */		return false;
+/* 00014778 */	}
+/* 0001477e */	if (!HTTPDownloader.DecodeString(ResultText))
+/* 00014796 */	{
+/* 00014796 */		return false;
+/* 0001479e */	}
+/* 000147a4 */	if (!HTTPDownloader.UTF8ToSJIS(ResultText))
+/* 000147bc */	{
+/* 000147bc */		return false;
+/* 000147c4 */	}
+/* 000147ca */	if (ResultText.GetPart(0, 6) == "ERROR=")
+/* 000147ec */	{
+/* 000147ec */		return false;
+/* 000147f4 */	}
+/* 000147fa */	Result = ResultText;
+/* 00014804 */	return true;
+/* 0001480c */}
+

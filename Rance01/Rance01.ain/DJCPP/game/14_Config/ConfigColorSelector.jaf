@@ -1,0 +1,111 @@
+ConfigColorSelector::ConfigColorSelector()
+/* 00086e38 */{
+/* 00086e40 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00086e62 */}
+
+void ConfigColorSelector::init(string caption, string setFunc, string getFunc, string colorFunc)
+/* 00086e6a */{
+/* 00086e6a */	this.caption_ = caption;
+/* 00086e74 */	this.setFunc_ = setFunc;
+/* 00086e8c */	this.getFunc_ = getFunc;
+/* 00086ea4 */	this.getColorFunc_ = colorFunc;
+/* 00086ebc */	this.initParts();
+/* 00086ec4 */	this.initButton();
+/* 00086ecc */	this.updateSampleMessageColor();
+/* 00086ed4 */}
+
+void ConfigColorSelector::initParts()
+/* 00086edc */{
+/* 00086edc */	this.parts_[0].initAsText(this.caption_, 24, false, 256, 255, 255, 255);
+/* 00086f1a */	this.parts_[1].initAsText("サンプル", 24, false, 256, 255, 255, 255);
+/* 00086f58 */	this.parts_[1].setPos(300, 0, -2147483648);
+/* 00086f7e */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 00086f96 */	this.setPartsShow();
+/* 00086f9e */	this.parent_.setShow(true);
+/* 00086fb0 */}
+
+void ConfigColorSelector::update()
+/* 00086fb8 */{
+/* 00086fb8 */	this.checkPlaneButtonClick();
+/* 00086fc0 */}
+
+void ConfigColorSelector::updateSampleMessageColor()
+/* 00086fc8 */{
+/* 00086fc8 */	int r;
+/* 00086fd2 */	int g;
+/* 00086fdc */	int b;
+/* 00086fe6 */	this.getColorFunc_(this.getFunc_(), r, g, b);
+/* 0008702e */	this.parts_[1].setMultiColorValue(r, g, b);
+/* 00087054 */}
+
+void ConfigColorSelector::checkPlaneButtonClick()
+/* 0008705c */{
+/* 0008705c */	int clicked = -2147483648;
+/* 00087066 */	int i;
+/* 00087070 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 000870a0 */	{
+/* 000870a0 */		if (this.btn_[i].isClick())
+/* 000870ba */		{
+/* 000870ba */			clicked = i;
+/* 000870cc */			break;
+/* 000870d2 */		}
+/* 000870d8 */	}
+/* 000870de */	if (clicked != -2147483648)
+/* 000870f2 */	{
+/* 000870f2 */		dlogF("%d" % clicked);
+/* 0008710c */		this.setFunc_(clicked - 1);
+/* 0008712a */		this.updateSampleMessageColor();
+/* 00087132 */	}
+/* 00087138 */}
+
+void ConfigColorSelector::initButton()
+/* 00087140 */{
+/* 00087140 */	int i;
+/* 0008714a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0008717a */	{
+/* 0008717a */		int r;
+/* 00087184 */		int g;
+/* 0008718e */		int b;
+/* 00087198 */		this.getColorFunc_(i - 1, r, g, b);
+/* 000871e0 */		if (i == 0)
+/* 000871ee */		{
+/* 000871ee */			r = g = b = 128;
+/* 00087214 */		}
+/* 0008721a */		this.btn_[i].init(i == 0 ? 200 : 32, 32, r, g, b, i == 0 ? "変更しない" : "");
+/* 00087286 */	}
+/* 0008728c */}
+
+void ConfigColorSelector::setPartsShow()
+/* 00087294 */{
+/* 00087294 */	int i;
+/* 0008729e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 000872ce */	{
+/* 000872ce */		this.parts_[i].setShow(true);
+/* 000872e8 */	}
+/* 000872ee */}
+
+void ConfigColorSelector::setParent(int parentPartsNumber)
+/* 000872f6 */{
+/* 000872f6 */	this.parent_.setParent(parentPartsNumber);
+/* 00087308 */	int i;
+/* 00087312 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00087342 */	{
+/* 00087342 */		this.btn_[i].setParent(parentPartsNumber);
+/* 0008735c */	}
+/* 00087362 */}
+
+void ConfigColorSelector::setPos(int x, int y)
+/* 0008736a */{
+/* 0008736a */	this.parent_.setPos(x, y, -2147483648);
+/* 00087388 */	this.setButtonPos(x, y);
+/* 0008739c */}
+
+void ConfigColorSelector::setButtonPos(int x, int y)
+/* 000873a4 */{
+/* 000873a4 */	int i;
+/* 000873ae */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 000873de */	{
+/* 000873de */		this.btn_[i].setPos(x + (i == 0 ? 0 : 200 + (i - 1) * 32), y + 40);
+/* 00087440 */	}
+/* 00087446 */}
+

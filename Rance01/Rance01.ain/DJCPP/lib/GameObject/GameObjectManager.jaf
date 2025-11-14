@@ -1,0 +1,154 @@
+int GameObjectManager::addFocusObject(DG_UpdateMethod cbUpdate, DG_FocusedMethod cbFocused)
+/* 00061698 */{
+/* 00061698 */	GameObject m;
+/* 000616a8 */	m.setId(this.getNewObjectId());
+/* 000616bc */	m.setObjectName(system.GetFuncStackName(1));
+/* 000616d4 */	m.setUpdateMethod(cbUpdate);
+/* 000616e8 */	m.setFocusedMethod(cbFocused);
+/* 000616fc */	this.gameObject_.PushBack(m);
+/* 00061706 */	return m.getId();
+/* 00061714 */}
+
+int GameObjectManager::add(DG_UpdateMethod cbUpdate)
+/* 00061722 */{
+/* 00061722 */	GameObject m;
+/* 00061732 */	m.setId(this.getNewObjectId());
+/* 00061746 */	m.setObjectName(system.GetFuncStackName(1));
+/* 0006175e */	m.setUpdateMethod(cbUpdate);
+/* 00061772 */	this.gameObject_.PushBack(m);
+/* 0006177c */	return m.getId();
+/* 0006178a */}
+
+int GameObjectManager::addNonSleepObject(DG_UpdateMethod cbUpdate)
+/* 00061798 */{
+/* 00061798 */	GameObject m;
+/* 000617a8 */	m.setId(this.getNewObjectId());
+/* 000617bc */	m.setObjectName(system.GetFuncStackName(1));
+/* 000617d4 */	m.setUpdateMethod(cbUpdate);
+/* 000617e8 */	m.setNonSleepObject(true);
+/* 000617fa */	this.gameObject_.PushBack(m);
+/* 00061804 */	return m.getId();
+/* 00061812 */}
+
+int GameObjectManager::getNewObjectId()
+/* 00061820 */{
+/* 00061820 */	this.objectId_ = this.objectId_ + 1 & 65535;
+/* 00061842 */	return this.objectId_;
+/* 0006184a */}
+
+void GameObjectManager::setSleepLevel(int id, int level)
+/* 00061858 */{
+/* 00061858 */	int i;
+/* 00061862 */	for (i = 0; i < this.gameObject_.Numof(); ++i)
+/* 00061892 */	{
+/* 00061892 */		if (this.gameObject_[i].getId() == id)
+/* 000618b4 */		{
+/* 000618b4 */			this.gameObject_[i].setSleepLevel(level);
+/* 000618ce */			return;
+/* 000618d0 */		}
+/* 000618d6 */	}
+/* 000618dc */}
+
+int GameObjectManager::getSleepLevel(int id)
+/* 000618e4 */{
+/* 000618e4 */	int i;
+/* 000618ee */	for (i = 0; i < this.gameObject_.Numof(); ++i)
+/* 0006191e */	{
+/* 0006191e */		if (this.gameObject_[i].getId() == id)
+/* 00061940 */		{
+/* 00061940 */			return this.gameObject_[i].getSleepLevel();
+/* 00061956 */		}
+/* 0006195c */	}
+/* 00061962 */	return 0;
+/* 0006196a */}
+
+void GameObjectManager::update()
+/* 00061978 */{
+/* 00061978 */	int i;
+/* 00061982 */	while (i < this.gameObject_.Numof())
+/* 00061996 */	{
+/* 00061996 */		if (this.gameObject_[i].isAlive())
+/* 000619b0 */		{
+/* 000619b0 */			if (!this.gameObject_[i].isSleep())
+/* 000619cc */			{
+/* 000619cc */				this.gameObject_[i].callUpdateMethod();
+/* 000619e2 */			}
+/* 000619e8 */			++i;
+/* 000619ee */		}
+/* 000619f4 */		else
+/* 000619f4 */		{
+/* 000619f4 */			this.gameObject_.Erase(i);
+/* 00061a06 */		}
+/* 00061a06 */	}
+/* 00061a0c */}
+
+void GameObjectManager::sleep(bool val)
+/* 00061a14 */{
+/* 00061a14 */	this.sleepGameObject(val);
+/* 00061a22 */	g_partsSleepMethod(val, true);
+/* 00061a4a */}
+
+void GameObjectManager::sleepWithAsraFade(bool val)
+/* 00061a52 */{
+/* 00061a52 */	if (val)
+/* 00061a5e */	{
+/* 00061a5e */		g_viewModeManager.set(true);
+/* 00061a70 */		AFL_View_Update(true);
+/* 00061a7c */		this.sleepGameObject(val);
+/* 00061a8a */		g_partsSleepMethod(val, true);
+/* 00061ab2 */		全表示(1, 1000);
+/* 00061ac4 */	}
+/* 00061aca */	else
+/* 00061aca */	{
+/* 00061aca */		AFL_View_Update(true);
+/* 00061ad6 */		this.sleepGameObject(val);
+/* 00061ae4 */		g_partsSleepMethod(val, true);
+/* 00061b0c */		全表示(1, 1000);
+/* 00061b1e */		g_viewModeManager.restore();
+/* 00061b2a */		g_globalTimer.update();
+/* 00061b36 */	}
+/* 00061b36 */}
+
+void GameObjectManager::halfSleep(bool val)
+/* 00061b3e */{
+/* 00061b3e */	this.sleepGameObject(val);
+/* 00061b4c */	g_partsSleepMethod(val, false);
+/* 00061b74 */}
+
+void GameObjectManager::sleepGameObject(bool val)
+/* 00061b7c */{
+/* 00061b7c */	int i;
+/* 00061b86 */	while (i < this.gameObject_.Numof())
+/* 00061b9a */	{
+/* 00061b9a */		if (!this.gameObject_[i].isAlive())
+/* 00061bb6 */		{
+/* 00061bb6 */			this.gameObject_.Erase(i);
+/* 00061bc8 */		}
+/* 00061bce */		else
+/* 00061bce */		{
+/* 00061bce */			if (val)
+/* 00061bda */			{
+/* 00061bda */				this.gameObject_[i].addSleepLevel();
+/* 00061bee */			}
+/* 00061bf4 */			else
+/* 00061bf4 */			{
+/* 00061bf4 */				this.gameObject_[i].decSleepLevel();
+/* 00061c08 */			}
+/* 00061c08 */			++i;
+/* 00061c0e */		}
+/* 00061c0e */	}
+/* 00061c14 */}
+
+int GameObjectManager::getFocusedObjectId()
+/* 00061c1c */{
+/* 00061c1c */	int i;
+/* 00061c26 */	for (i = 0; i < this.gameObject_.Numof(); ++i)
+/* 00061c56 */	{
+/* 00061c56 */		if (!this.gameObject_[i].isSleep() && this.gameObject_[i].callFocuedMethod())
+/* 00061ca4 */		{
+/* 00061ca4 */			return this.gameObject_[i].getId();
+/* 00061cba */		}
+/* 00061cc0 */	}
+/* 00061cc6 */	return -1;
+/* 00061cce */}
+

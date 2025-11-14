@@ -1,0 +1,15 @@
+void 右クリック関数登録(sys_btn_fnc_t _f)
+/* 000494ce */{
+/* 000494ce */	_g_rbutton_callback_fnc = _f;
+/* 000494d8 */}
+
+void スペースキー関数登録(sys_btn_fnc_t _f)
+/* 000494e6 */{
+/* 000494e6 */	_g_spacekey_callback_fnc = _f;
+/* 000494f0 */}
+
+void エスケープキー関数登録(sys_btn_fnc_t _f)
+/* 000494fe */{
+/* 000494fe */	_g_escapekey_callback_fnc = _f;
+/* 00049508 */}
+

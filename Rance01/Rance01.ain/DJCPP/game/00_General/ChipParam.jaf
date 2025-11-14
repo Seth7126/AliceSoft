@@ -1,0 +1,70 @@
+ChipParam::ChipParam()
+/* 0006a432 */{
+/* 0006a43a */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006a45c */}
+
+void ChipParam::init(string caption, int value, bool isBigNumber)
+/* 0006a464 */{
+/* 0006a464 */	this.initParts(caption, isBigNumber);
+/* 0006a478 */	this.setPartsOrigin();
+/* 0006a480 */	this.setPartsPos();
+/* 0006a488 */	this.setPartsShow();
+/* 0006a490 */	this.parts_[1].setNumber(value);
+/* 0006a4aa */}
+
+void ChipParam::update()
+/* 0006a4b2 */{
+/* 0006a4b4 */}
+
+void ChipParam::setParent(int parentPartsNumber)
+/* 0006a4ba */{
+/* 0006a4ba */	this.parent_.setParent(parentPartsNumber);
+/* 0006a4cc */}
+
+void ChipParam::setPartsOrigin()
+/* 0006a4d4 */{
+/* 0006a4d4 */	int i;
+/* 0006a4de */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006a50e */	{
+/* 0006a50e */		this.parts_[i].setOrigin(8);
+/* 0006a528 */	}
+/* 0006a52e */	this.parent_.setOrigin(8);
+/* 0006a540 */}
+
+void ChipParam::setPartsPos()
+/* 0006a548 */{
+/* 0006a548 */	this.parts_[1].setPos(0, 20, -2147483648);
+/* 0006a56e */}
+
+void ChipParam::initParts(string caption, bool isBigNumber)
+/* 0006a576 */{
+/* 0006a576 */	this.parts_[0].initAsText(caption, 20, false, 256, 0, 0, 0);
+/* 0006a5b4 */	NumberPartsInfomation n;
+/* 0006a5c4 */	if (isBigNumber)
+/* 0006a5d0 */	{
+/* 0006a5d0 */		n.setSameWidth(30);
+/* 0006a5e2 */		this.parts_[1].initAsNumber("システム／数字／幅３０／白", n);
+/* 0006a602 */	}
+/* 0006a608 */	else
+/* 0006a608 */	{
+/* 0006a608 */		n.setSameWidth(18);
+/* 0006a61a */		this.parts_[1].initAsNumber("システム／数字／幅１８／白", n);
+/* 0006a63a */	}
+/* 0006a63a */	createPartsGroup(this.parent_, this.parts_, 1);
+/* 0006a652 */	this.parent_.setShow(true);
+/* 0006a664 */}
+
+void ChipParam::setPos(int x, int y)
+/* 0006a66c */{
+/* 0006a66c */	this.parent_.setPos(x, y, -2147483648);
+/* 0006a68a */}
+
+void ChipParam::setPartsShow()
+/* 0006a692 */{
+/* 0006a692 */	int i;
+/* 0006a69c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006a6cc */	{
+/* 0006a6cc */		this.parts_[i].setShow(true);
+/* 0006a6e6 */	}
+/* 0006a6ec */}
+

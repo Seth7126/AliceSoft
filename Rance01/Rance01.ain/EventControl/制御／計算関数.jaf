@@ -1,0 +1,652 @@
+DamageInfomation 制御／敵の受けるダメージ計算関数(string monsterId, int turn)
+/* 000a3f56 */{
+/* 000a3f56 */	float ranceMaxHp;
+/* 000a3f68 */	float ranceHp;
+/* 000a3f7a */	float ranceAtk;
+/* 000a3f8c */	float ranceLuck;
+/* 000a3f9e */	float monsterDef;
+/* 000a3fb0 */	float monsterMaxHp;
+/* 000a3fc2 */	float monsterHp;
+/* 000a3fd4 */	float monsterExp;
+/* 000a3fe6 */	float monsterGold;
+/* 000a3ff8 */	float damage;
+/* 000a400a */	bool critical = false;
+/* 000a4014 */	bool panching = false;
+/* 000a401e */	bool pulptenx = false;
+/* 000a4028 */	bool sillAtk = false;
+/* 000a4032 */	bool sillDef = false;
+/* 000a403c */	bool hikari = false;
+/* 000a4046 */	bool aki = false;
+/* 000a4050 */	ranceMaxHp = g_player.getMaxHp();
+/* 000a406a */	ranceHp = g_player.getHp();
+/* 000a4084 */	ranceLuck = g_player.getLuck();
+/* 000a409e */	monsterDef = getMonster(monsterId).getDef(turn);
+/* 000a40ce */	monsterMaxHp = getMonster(monsterId).getMaxHp();
+/* 000a40f8 */	monsterHp = getMonster(monsterId).getHp();
+/* 000a4122 */	monsterExp = getMonster(monsterId).getExp();
+/* 000a414c */	monsterGold = getMonster(monsterId).getGold();
+/* 000a4176 */	string monsterName;
+/* 000a4182 */	monsterName = getMonster(monsterId).getName();
+/* 000a41a8 */	ref ChipDepository dep = g_chipDepository[0];
+/* 000a41d2 */	int i;
+/* 000a41dc */	for (i = 0; i < dep.getCount(); ++i)
+/* 000a4212 */	{
+/* 000a4212 */		if (dep.getInstance(i).isBet())
+/* 000a423e */		{
+/* 000a423e */			string chipId = dep.getInstance(i).getId();
+/* 000a426e */			if (getChip(chipId).getAttrId() == "ATTR11" && 制御／モンスター属性確認(monsterId, turn, "ATTR21") || getChip(chipId).getAttrId() == "ATTR13" && 制御／モンスター属性確認(monsterId, turn, "ATTR23") || getChip(chipId).getAttrId() == "ATTR14" && 制御／モンスター属性確認(monsterId, turn, "ATTR24") || getChip(chipId).getAttrId() == "ATTR17" && 制御／モンスター属性確認(monsterId, turn, "ATTR27"))
+/* 000a4436 */			{
+/* 000a4436 */				ranceAtk += getChip(chipId).getAtk() * 3;
+/* 000a4468 */			}
+/* 000a4474 */			else
+/* 000a4474 */			{
+/* 000a4474 */				ranceAtk += getChip(chipId).getAtk();
+/* 000a449e */			}
+/* 000a44a4 */			ranceLuck += getChip(chipId).getLuck();
+/* 000a44ce */			if (chipId == "CHIP001")
+/* 000a44de */			{
+/* 000a44de */				pulptenx = true;
+/* 000a44e8 */			}
+/* 000a44ee */			if (chipId == "CHIP005")
+/* 000a44fe */			{
+/* 000a44fe */				sillAtk = true;
+/* 000a4508 */			}
+/* 000a450e */			if (chipId == "CHIP006")
+/* 000a451e */			{
+/* 000a451e */				sillDef = true;
+/* 000a4528 */			}
+/* 000a452e */			if (chipId == "CHIP009")
+/* 000a453e */			{
+/* 000a453e */				hikari = true;
+/* 000a4548 */			}
+/* 000a454e */			if (chipId == "CHIP017")
+/* 000a455e */			{
+/* 000a455e */				aki = true;
+/* 000a4568 */			}
+/* 000a456e */		}
+/* 000a4598 */	}
+/* 000a45a4 */	ranceAtk = (ranceAtk * (94 + RAND(11))) / 100.0;
+/* 000a45d6 */	monsterDef = (monsterDef * (94 + RAND(11))) / 100.0;
+/* 000a4608 */	if (ranceAtk < 1.0)
+/* 000a461c */	{
+/* 000a461c */		panching = true;
+/* 000a4626 */		float bare;
+/* 000a4638 */		if (制御／スキル確認("SKIL07"))
+/* 000a464a */		{
+/* 000a464a */			bare = 3.0;
+/* 000a465c */		}
+/* 000a4662 */		else
+/* 000a4662 */		{
+/* 000a4662 */			bare = 1.0;
+/* 000a4674 */		}
+/* 000a4674 */		if (制御／状態異常確認("COND06") && RAND(3) == 1)
+/* 000a46b8 */		{
+/* 000a46b8 */			g_log[2].add("ランス「……は、一瞬寝てた」", 2);
+/* 000a46d8 */			ranceAtk = 0.0;
+/* 000a46ea */		}
+/* 000a46f0 */		else if (RAND(32) == 1 && 制御／日数確認() > 制御／数値フラグ確認("必殺技発動日"))
+/* 000a473c */		{
+/* 000a473c */			ranceAtk = (monsterDef + RAND(monsterHp * 2.0)) * bare;
+/* 000a4770 */			制御／数値フラグ設定("必殺技発動日", 制御／日数確認());
+/* 000a4782 */			switch (RAND(3))
+/* 000a479a */			{
+/* 000a479a */			case 1:
+/* 000a479a */				g_log[2].add("俺は捨ててあった冷蔵庫を投げつけた。", 1);
+/* 000a47ba */				break;
+/* 000a47c0 */			case 2:
+/* 000a47c0 */				g_log[2].add("ランス「ランス放置自転車投げ！」", 1);
+/* 000a47e0 */				break;
+/* 000a47e6 */			case 3:
+/* 000a47e6 */				g_log[2].add("ランス「ラーンス腕ひしぎ逆十字！」", 1);
+/* 000a4806 */				break;
+/* 000a480c */			}
+/* 000a480c */		}
+/* 000a4812 */		else if (RAND(3) != 1)
+/* 000a482c */		{
+/* 000a482c */			int base;
+/* 000a4836 */			base = monsterMaxHp / 10.0;
+/* 000a4852 */			if (base < 1)
+/* 000a4860 */			{
+/* 000a4860 */				base = 1;
+/* 000a486a */			}
+/* 000a4870 */			ranceAtk = monsterDef + RAND(base) * bare;
+/* 000a489e */			switch (RAND(7))
+/* 000a48b6 */			{
+/* 000a48b6 */			case 1:
+/* 000a48b6 */				g_log[2].add("ランス「お前ごとき素手で十分だ！」", 0);
+/* 000a48d6 */				break;
+/* 000a48dc */			case 2:
+/* 000a48dc */				g_log[2].add("ランス「こうなりゃ殴りまくりだ！」", 0);
+/* 000a48fc */				break;
+/* 000a4902 */			case 3:
+/* 000a4902 */				g_log[2].add("ランス「チョップ、チョップ！」", 0);
+/* 000a4922 */				break;
+/* 000a4928 */			case 4:
+/* 000a4928 */				g_log[2].add("ランス「ランスキーック！」", 0);
+/* 000a4948 */				break;
+/* 000a494e */			case 5:
+/* 000a494e */				g_log[2].add("俺は%sに噛みついた。" % monsterName, 0);
+/* 000a497c */				break;
+/* 000a4982 */			case 6:
+/* 000a4982 */				g_log[2].add("俺は靴を投げつけた。", 0);
+/* 000a49a2 */				break;
+/* 000a49a8 */			case 7:
+/* 000a49a8 */				g_log[2].add("ランス「目つぶし！」", 0);
+/* 000a49c8 */				break;
+/* 000a49ce */			}
+/* 000a49ce */		}
+/* 000a49d4 */		else
+/* 000a49d4 */		{
+/* 000a49d4 */			ranceAtk = RAND(6) * bare;
+/* 000a49fa */			switch (RAND(7))
+/* 000a4a12 */			{
+/* 000a4a12 */			case 1:
+/* 000a4a12 */				g_log[2].add("ランス「とりあえず蹴るか……」", 0);
+/* 000a4a32 */				break;
+/* 000a4a38 */			case 2:
+/* 000a4a38 */				g_log[2].add("ランス「ランスビンタ！」", 0);
+/* 000a4a58 */				break;
+/* 000a4a5e */			case 3:
+/* 000a4a5e */				g_log[2].add("ランス「ええい、砂でもくらえ！」", 0);
+/* 000a4a7e */				break;
+/* 000a4a84 */			case 4:
+/* 000a4a84 */				g_log[2].add("俺は%sをつねった。" % monsterName, 0);
+/* 000a4ab2 */				break;
+/* 000a4ab8 */			case 5:
+/* 000a4ab8 */				g_log[2].add("俺は%sをこちょばした。" % monsterName, 0);
+/* 000a4ae6 */				break;
+/* 000a4aec */			case 6:
+/* 000a4aec */				g_log[2].add("俺は丸まったレシートを投げつけた。", 0);
+/* 000a4b0c */				break;
+/* 000a4b12 */			case 7:
+/* 000a4b12 */				g_log[2].add("俺は背後から膝カックンをした。", 0);
+/* 000a4b32 */				break;
+/* 000a4b38 */			}
+/* 000a4b38 */		}
+/* 000a4b38 */	}
+/* 000a4b3e */	else if (制御／状態異常確認("COND06") && RAND(3) == 1)
+/* 000a4b82 */	{
+/* 000a4b82 */		g_log[2].add("ランス「……いかん、意識が」", 2);
+/* 000a4ba2 */		ranceAtk = 0.0;
+/* 000a4bb4 */	}
+/* 000a4bba */	else if (制御／プレイヤー属性確認("ATTR11") && 制御／モンスター属性確認(monsterId, turn, "ATTR31"))
+/* 000a4c02 */	{
+/* 000a4c02 */		g_log[2].add("%s「感じないわ」" % monsterName, 2);
+/* 000a4c30 */		ranceAtk = 0.0;
+/* 000a4c42 */	}
+/* 000a4c48 */	else if (制御／プレイヤー属性確認("ATTR13") && 制御／モンスター属性確認(monsterId, turn, "ATTR33"))
+/* 000a4c90 */	{
+/* 000a4c90 */		g_log[2].add("ランス「浄化は効かんのか？」", 2);
+/* 000a4cb0 */		ranceAtk = 0.0;
+/* 000a4cc2 */	}
+/* 000a4cc8 */	else if (制御／プレイヤー属性確認("ATTR14") && 制御／モンスター属性確認(monsterId, turn, "ATTR34"))
+/* 000a4d10 */	{
+/* 000a4d10 */		g_log[2].add("シィル「ま、魔法が！？」", 2);
+/* 000a4d30 */		ranceAtk = 0.0;
+/* 000a4d42 */	}
+/* 000a4d48 */	else if (制御／プレイヤー属性確認("ATTR17") && 制御／モンスター属性確認(monsterId, turn, "ATTR37"))
+/* 000a4d90 */	{
+/* 000a4d90 */		g_log[2].add("ランス「む、効いてないぞ！」", 2);
+/* 000a4db0 */		ranceAtk = 0.0;
+/* 000a4dc2 */	}
+/* 000a4dc8 */	else if (制御／プレイヤー属性確認("ATTR11") && 制御／モンスター属性確認(monsterId, turn, "ATTR21"))
+/* 000a4e10 */	{
+/* 000a4e10 */		switch (RAND(3))
+/* 000a4e28 */		{
+/* 000a4e28 */		case 1:
+/* 000a4e28 */			g_log[2].add("ランス「うひひ、これがええのんか」", 1);
+/* 000a4e48 */			break;
+/* 000a4e4e */		case 2:
+/* 000a4e4e */			g_log[2].add("%sは震え上がった！" % monsterName, 1);
+/* 000a4e7c */			break;
+/* 000a4e82 */		case 3:
+/* 000a4e82 */			g_log[2].add("%s「きゃああ！」" % monsterName, 1);
+/* 000a4eb0 */			break;
+/* 000a4eb6 */		}
+/* 000a4eb6 */	}
+/* 000a4ebc */	else if (制御／プレイヤー属性確認("ATTR13") && 制御／モンスター属性確認(monsterId, turn, "ATTR23"))
+/* 000a4f04 */	{
+/* 000a4f04 */		g_log[2].add("ランス「聖なる俺様の一撃！」", 1);
+/* 000a4f24 */	}
+/* 000a4f2a */	else if (制御／プレイヤー属性確認("ATTR14") && 制御／モンスター属性確認(monsterId, turn, "ATTR24"))
+/* 000a4f72 */	{
+/* 000a4f72 */		switch (RAND(3))
+/* 000a4f8a */		{
+/* 000a4f8a */		case 1:
+/* 000a4f8a */			g_log[2].add("シィル「私の魔法をっ！」", 1);
+/* 000a4faa */			break;
+/* 000a4fb0 */		case 2:
+/* 000a4fb0 */			g_log[2].add("シィル「炎の……矢ーっ！」", 1);
+/* 000a4fd0 */			break;
+/* 000a4fd6 */		case 3:
+/* 000a4fd6 */			g_log[2].add("ランス「シィル、きりきり撃て！」", 1);
+/* 000a4ff6 */			break;
+/* 000a4ffc */		}
+/* 000a4ffc */	}
+/* 000a5002 */	else if (制御／プレイヤー属性確認("ATTR17") && 制御／モンスター属性確認(monsterId, turn, "ATTR27"))
+/* 000a504a */	{
+/* 000a504a */		g_log[2].add("ランス「遠慮なく弱点を突く！」", 1);
+/* 000a506a */	}
+/* 000a5070 */	else if (pulptenx)
+/* 000a507c */	{
+/* 000a507c */		g_log[2].add("パルプテンクス「ふええっ！」", 0);
+/* 000a509c */	}
+/* 000a50a2 */	else if (hikari)
+/* 000a50ae */	{
+/* 000a50ae */		g_log[2].add("ヒカリ「飛んで……る……？」", 0);
+/* 000a50ce */	}
+/* 000a50d4 */	else if (aki)
+/* 000a50e0 */	{
+/* 000a50e0 */		g_log[2].add("俺はアキちゃんを投げつけた。", 0);
+/* 000a5100 */	}
+/* 000a5106 */	else
+/* 000a5106 */	{
+/* 000a5106 */		switch (RAND(23))
+/* 000a511e */		{
+/* 000a511e */		case 1:
+/* 000a511e */			g_log[2].add("ランス「経験値になれ！」", 0);
+/* 000a513e */			break;
+/* 000a5144 */		case 2:
+/* 000a5144 */			g_log[2].add("ランス「まずは死ね！」", 0);
+/* 000a5164 */			break;
+/* 000a516a */		case 3:
+/* 000a516a */			g_log[2].add("ランス「でりゃーーーー！」", 0);
+/* 000a518a */			break;
+/* 000a5190 */		case 4:
+/* 000a5190 */			g_log[2].add("ランス「とーーーーっ！」", 0);
+/* 000a51b0 */			break;
+/* 000a51b6 */		case 5:
+/* 000a51b6 */			g_log[2].add("ランス「くたばれーー！」", 0);
+/* 000a51d6 */			break;
+/* 000a51dc */		case 6:
+/* 000a51dc */			g_log[2].add("ランス「こいつでとどめだーー！」", 0);
+/* 000a51fc */			break;
+/* 000a5202 */		case 7:
+/* 000a5202 */			g_log[2].add("ランス「どいてろ雑魚！」", 0);
+/* 000a5222 */			break;
+/* 000a5228 */		case 8:
+/* 000a5228 */			g_log[2].add("ランス「全殺しだ！」", 0);
+/* 000a5248 */			break;
+/* 000a524e */		case 9:
+/* 000a524e */			g_log[2].add("ランス「道をあけろ！」", 0);
+/* 000a526e */			break;
+/* 000a5274 */		case 10:
+/* 000a5274 */			g_log[2].add("ランス「後悔しろ！」", 0);
+/* 000a5294 */			break;
+/* 000a529a */		case 11:
+/* 000a529a */			g_log[2].add("ランス「よけたら許さん！」", 0);
+/* 000a52ba */			break;
+/* 000a52c0 */		case 12:
+/* 000a52c0 */			g_log[2].add("ランス「ラーンスフルボッコー！」", 0);
+/* 000a52e0 */			break;
+/* 000a52e6 */		case 13:
+/* 000a52e6 */			g_log[2].add("ランス「全治100万年！」", 0);
+/* 000a5306 */			break;
+/* 000a530c */		case 14:
+/* 000a530c */			g_log[2].add("ランス「相手が悪かったな」", 0);
+/* 000a532c */			break;
+/* 000a5332 */		case 15:
+/* 000a5332 */			g_log[2].add("ランス「あきらめろ！」", 0);
+/* 000a5352 */			break;
+/* 000a5358 */		case 16:
+/* 000a5358 */			g_log[2].add("ランス「俺様憲法で死刑だ！」", 0);
+/* 000a5378 */			break;
+/* 000a537e */		case 17:
+/* 000a537e */			g_log[2].add("ランス「金をよこせーー！」", 0);
+/* 000a539e */			break;
+/* 000a53a4 */		case 18:
+/* 000a53a4 */			g_log[2].add("ランス「フルパワー全開！」", 0);
+/* 000a53c4 */			break;
+/* 000a53ca */		case 19:
+/* 000a53ca */			g_log[2].add("ランス「そこを動くなよ」", 0);
+/* 000a53ea */			break;
+/* 000a53f0 */		case 20:
+/* 000a53f0 */			g_log[2].add("ランス「飛び散れ！」", 0);
+/* 000a5410 */			break;
+/* 000a5416 */		case 21:
+/* 000a5416 */			g_log[2].add("ランス「Rの字斬りーーっ！」", 0);
+/* 000a5436 */			break;
+/* 000a543c */		case 22:
+/* 000a543c */			g_log[2].add("ランス「さっさと経験値！」", 0);
+/* 000a545c */			break;
+/* 000a5462 */		case 23:
+/* 000a5462 */			g_log[2].add("ランス「俺の技に泣け！」", 0);
+/* 000a5482 */			break;
+/* 000a5488 */		}
+/* 000a5488 */	}
+/* 000a5488 */	if (RAND(100) <= ranceLuck && panching == false)
+/* 000a54ce */	{
+/* 000a54ce */		if (制御／スキル確認("SKIL01"))
+/* 000a54e0 */		{
+/* 000a54e0 */			ranceAtk = (ranceAtk * 240.0) / 100.0;
+/* 000a5502 */			monsterDef = (monsterDef * 20.0) / 100.0;
+/* 000a5524 */			g_log[2].add("ランス「クリティカルヒットだ！！」", 1);
+/* 000a5544 */			critical = true;
+/* 000a554e */		}
+/* 000a5554 */		else
+/* 000a5554 */		{
+/* 000a5554 */			ranceAtk = (ranceAtk * 160.0) / 100.0;
+/* 000a5576 */			monsterDef = (monsterDef * 40.0) / 100.0;
+/* 000a5598 */			g_log[2].add("ランス「クリティカルヒットだ！」", 1);
+/* 000a55b8 */			critical = true;
+/* 000a55c2 */		}
+/* 000a55c2 */	}
+/* 000a55c8 */	damage = ranceAtk - monsterDef;
+/* 000a55e2 */	if (damage >= monsterHp)
+/* 000a55f6 */	{
+/* 000a55f6 */		int fever = damage;
+/* 000a560a */		if (fever < 1000 && fever % 111 == 0 || fever > 999 && fever < 10000 && fever % 1111 == 0)
+/* 000a56d2 */		{
+/* 000a56d2 */			BattleBonusInfomation r;
+/* 000a56e2 */			r.caption = "フィーバー！";
+/* 000a56f6 */			r.type = 1;
+/* 000a570c */			r.value = monsterGold * 3.0;
+/* 000a572c */			g_bonusManager.add(r);
+/* 000a5746 */		}
+/* 000a5752 */		if (damage - monsterHp >= monsterMaxHp)
+/* 000a576e */		{
+/* 000a576e */			if (制御／プレイヤー属性確認("ATTR11") && 制御／モンスター属性確認(monsterId, turn, "ATTR21"))
+/* 000a57b6 */			{
+/* 000a57b6 */				BattleBonusInfomation r;
+/* 000a57c6 */				r.caption = "なさけむよう★";
+/* 000a57da */				r.type = 1;
+/* 000a57f0 */				r.value = (monsterGold * 60.0) / 100.0;
+/* 000a5818 */				g_bonusManager.add(r);
+/* 000a5832 */				制御／文字列フラグ設定("なさけむよう★", monsterId);
+/* 000a5844 */			}
+/* 000a5850 */			else
+/* 000a5850 */			{
+/* 000a5850 */				BattleBonusInfomation r;
+/* 000a5860 */				r.caption = "なさけむよう";
+/* 000a5874 */				r.type = 1;
+/* 000a588a */				r.value = (monsterGold * 60.0) / 100.0;
+/* 000a58b2 */				g_bonusManager.add(r);
+/* 000a58cc */			}
+/* 000a58d2 */		}
+/* 000a58d8 */		if (monsterHp * 1.1 >= damage)
+/* 000a58f4 */		{
+/* 000a58f4 */			BattleBonusInfomation r;
+/* 000a5904 */			r.caption = "テクニカルK.O.";
+/* 000a5918 */			r.type = 1;
+/* 000a592e */			r.value = (monsterGold * 25.0) / 100.0;
+/* 000a5956 */			g_bonusManager.add(r);
+/* 000a5970 */		}
+/* 000a597c */		if (turn == 0)
+/* 000a598a */		{
+/* 000a598a */			BattleBonusInfomation r;
+/* 000a599a */			r.caption = "一撃でクリア";
+/* 000a59ae */			r.type = 1;
+/* 000a59c4 */			r.value = (monsterGold * 20.0) / 100.0;
+/* 000a59ec */			g_bonusManager.add(r);
+/* 000a5a06 */		}
+/* 000a5a12 */		else if (turn >= 9)
+/* 000a5a20 */		{
+/* 000a5a20 */			BattleBonusInfomation r;
+/* 000a5a30 */			r.caption = "長期戦を制す";
+/* 000a5a44 */			r.type = 1;
+/* 000a5a5a */			r.value = (monsterGold * 15.0) / 100.0;
+/* 000a5a82 */			g_bonusManager.add(r);
+/* 000a5a9c */		}
+/* 000a5aa8 */		if (ranceHp >= (ranceMaxHp / 100.0) * 90.0)
+/* 000a5acc */		{
+/* 000a5acc */			BattleBonusInfomation r;
+/* 000a5adc */			r.caption = "余力ありまくり";
+/* 000a5af0 */			r.type = 1;
+/* 000a5b06 */			r.value = (monsterGold * 10.0) / 100.0;
+/* 000a5b2e */			g_bonusManager.add(r);
+/* 000a5b48 */		}
+/* 000a5b54 */		else if (ranceMaxHp / 10.0 >= ranceHp)
+/* 000a5b70 */		{
+/* 000a5b70 */			BattleBonusInfomation r;
+/* 000a5b80 */			r.caption = "死中に活あり";
+/* 000a5b94 */			r.type = 1;
+/* 000a5baa */			r.value = (monsterGold * 30.0) / 100.0;
+/* 000a5bd2 */			g_bonusManager.add(r);
+/* 000a5bec */		}
+/* 000a5bf8 */		if (panching)
+/* 000a5c04 */		{
+/* 000a5c04 */			BattleBonusInfomation r;
+/* 000a5c14 */			r.caption = "パンチング";
+/* 000a5c28 */			r.type = 1;
+/* 000a5c3e */			r.value = (monsterGold * 15.0) / 100.0;
+/* 000a5c66 */			g_bonusManager.add(r);
+/* 000a5c80 */		}
+/* 000a5c8c */		if (制御／時間確認() > 5)
+/* 000a5ca0 */		{
+/* 000a5ca0 */			BattleBonusInfomation r;
+/* 000a5cb0 */			r.caption = "夜間割増";
+/* 000a5cc4 */			r.type = 1;
+/* 000a5cda */			r.value = (monsterGold * 20.0) / 100.0;
+/* 000a5d02 */			g_bonusManager.add(r);
+/* 000a5d1c */		}
+/* 000a5d28 */		if (制御／スキル確認("SKIL06"))
+/* 000a5d3a */		{
+/* 000a5d3a */			BattleBonusInfomation r;
+/* 000a5d4a */			r.caption = "守銭奴";
+/* 000a5d5e */			r.type = 1;
+/* 000a5d74 */			r.value = (monsterGold * 20.0) / 100.0;
+/* 000a5d9c */			g_bonusManager.add(r);
+/* 000a5db6 */		}
+/* 000a5dc2 */		if (制御／状態異常確認("COND07"))
+/* 000a5dd4 */		{
+/* 000a5dd4 */			BattleBonusInfomation r;
+/* 000a5de4 */			r.caption = "身体づくりゴー(EXP)";
+/* 000a5df8 */			r.type = 0;
+/* 000a5e0e */			r.value = (monsterExp * 30.0) / 100.0;
+/* 000a5e36 */			g_bonusManager.add(r);
+/* 000a5e50 */		}
+/* 000a5e5c */		if (制御／スキル確認("SKIL05"))
+/* 000a5e6e */		{
+/* 000a5e6e */			BattleBonusInfomation r;
+/* 000a5e7e */			r.caption = "戦闘狂(EXP)";
+/* 000a5e92 */			r.type = 0;
+/* 000a5ea8 */			r.value = (monsterExp * 20.0) / 100.0;
+/* 000a5ed0 */			g_bonusManager.add(r);
+/* 000a5eea */		}
+/* 000a5ef6 */	}
+/* 000a5efc */	DamageInfomation Info;
+/* 000a5f0c */	Info.damage = Math.Max(0, damage);
+/* 000a5f34 */	Info.isCritical = critical;
+/* 000a5f4a */	return Info;
+/* 000a5f5a */}
+
+DamageInfomation 制御／プレイヤーの受けるダメージ計算関数(string monsterId, int turn)
+/* 000a5f6e */{
+/* 000a5f6e */	float monsterAtk;
+/* 000a5f80 */	float ranceDef;
+/* 000a5f92 */	float ranceHp;
+/* 000a5fa4 */	float damage;
+/* 000a5fb6 */	bool critical = false;
+/* 000a5fc0 */	monsterAtk = getMonster(monsterId).getAtk(turn);
+/* 000a5ff0 */	ranceHp = g_player.getHp();
+/* 000a600a */	string monsterName;
+/* 000a6016 */	monsterName = getMonster(monsterId).getName();
+/* 000a603c */	ref ChipDepository dep = g_chipDepository[0];
+/* 000a6066 */	int i;
+/* 000a6070 */	for (i = 0; i < dep.getCount(); ++i)
+/* 000a60a6 */	{
+/* 000a60a6 */		if (dep.getInstance(i).isBet())
+/* 000a60d2 */		{
+/* 000a60d2 */			string chipId = dep.getInstance(i).getId();
+/* 000a6102 */			ranceDef += getChip(chipId).getDef();
+/* 000a612c */		}
+/* 000a613e */	}
+/* 000a614a */	monsterAtk = (monsterAtk * (94 + RAND(11))) / 100.0;
+/* 000a617c */	int endurance;
+/* 000a6186 */	if (turn > 14)
+/* 000a619a */	{
+/* 000a619a */		g_log[2].add("ランス「ひー、ひー……」", 3);
+/* 000a61ba */		endurance = 19;
+/* 000a61c4 */	}
+/* 000a61ca */	else if (turn > 11)
+/* 000a61de */	{
+/* 000a61de */		g_log[2].add("ランス「ぜー、ぜー……」", 3);
+/* 000a61fe */		endurance = 44;
+/* 000a6208 */	}
+/* 000a620e */	else if (turn > 8)
+/* 000a6222 */	{
+/* 000a6222 */		g_log[2].add("ランス「はー、はー……」", 3);
+/* 000a6242 */		endurance = 64;
+/* 000a624c */	}
+/* 000a6252 */	else if (turn > 5)
+/* 000a6266 */	{
+/* 000a6266 */		g_log[2].add("ランス「いかん、疲れた……」", 3);
+/* 000a6286 */		endurance = 79;
+/* 000a6290 */	}
+/* 000a6296 */	else if (turn > 2)
+/* 000a62aa */	{
+/* 000a62aa */		g_log[2].add("ランス「ちょっと疲れたな……」", 3);
+/* 000a62ca */		endurance = 89;
+/* 000a62d4 */	}
+/* 000a62da */	else
+/* 000a62da */	{
+/* 000a62da */		endurance = 94;
+/* 000a62e4 */	}
+/* 000a62e4 */	ranceDef = (ranceDef * (endurance + RAND(11))) / 100.0;
+/* 000a6316 */	string name;
+/* 000a6322 */	name = getMonster(monsterId).getName();
+/* 000a6348 */	if (制御／モンスター属性確認(monsterId, turn, "ATTR12"))
+/* 000a6366 */	{
+/* 000a6366 */		if (EV("大居室／解放後／竿／リア", -2147483648))
+/* 000a637e */		{
+/* 000a637e */			g_log[2].add("%s「歪空幻夢剣！」" % name, 2);
+/* 000a63ac */			monsterAtk *= 3.0;
+/* 000a63be */		}
+/* 000a63c4 */		else
+/* 000a63c4 */		{
+/* 000a63c4 */			g_log[2].add("%s「幻夢剣！」" % name, 2);
+/* 000a63f2 */		}
+/* 000a63f2 */		if (制御／プレイヤー属性確認("ATTR32"))
+/* 000a6404 */		{
+/* 000a6404 */			monsterAtk = 0.0;
+/* 000a6416 */			制御／数値フラグ設定("スベリヒユ勝利", 1);
+/* 000a6428 */			g_log[2].add("しかし剣の切先は鎧の表面を滑る！", 1);
+/* 000a6448 */			g_log[2].add("%s「なにっ！」" % name, 0);
+/* 000a6476 */		}
+/* 000a647c */	}
+/* 000a6482 */	if (制御／モンスター属性確認(monsterId, turn, "ATTR14"))
+/* 000a64a0 */	{
+/* 000a64a0 */		g_log[2].add("%s「魔法の力よ！」" % name, 0);
+/* 000a64ce */		if (制御／プレイヤー属性確認("ATTR34"))
+/* 000a64e0 */		{
+/* 000a64e0 */			monsterAtk = 0.0;
+/* 000a64f2 */			switch (RAND(3))
+/* 000a650a */			{
+/* 000a650a */			case 1:
+/* 000a650a */				g_log[2].add("シィル「ランス様、援護します！」", 1);
+/* 000a652a */				break;
+/* 000a6530 */			case 2:
+/* 000a6530 */				g_log[2].add("シィル「これで防ぎます！」", 1);
+/* 000a6550 */				break;
+/* 000a6556 */			case 3:
+/* 000a6556 */				g_log[2].add("ランス「シィル、壁だ！」", 1);
+/* 000a6576 */				break;
+/* 000a657c */			}
+/* 000a657c */			g_log[2].add("%s「そんな！」" % name, 0);
+/* 000a65aa */		}
+/* 000a65b0 */	}
+/* 000a65b6 */	if (制御／モンスター属性確認(monsterId, turn, "ATTR15"))
+/* 000a65d4 */	{
+/* 000a65d4 */		g_log[2].add("%s「ハニーフラッシュ！」" % name, 2);
+/* 000a6602 */		if (制御／プレイヤー属性確認("ATTR35"))
+/* 000a6614 */		{
+/* 000a6614 */			monsterAtk = 0.0;
+/* 000a6626 */			g_log[2].add("しかしハニーフラッシュは弾かれる！", 1);
+/* 000a6646 */		}
+/* 000a664c */		else
+/* 000a664c */		{
+/* 000a664c */			ranceDef /= 20.0;
+/* 000a665e */		}
+/* 000a665e */	}
+/* 000a6664 */	if (制御／モンスター属性確認(monsterId, turn, "ATTR16"))
+/* 000a6682 */	{
+/* 000a6682 */		g_log[2].add("%s「わすれろー」" % name, 2);
+/* 000a66b0 */		if (制御／プレイヤー属性確認("ATTR36"))
+/* 000a66c2 */		{
+/* 000a66c2 */			monsterAtk = 0.0;
+/* 000a66d4 */			g_log[2].add("ランス「ふん、効かん！」", 1);
+/* 000a66f4 */		}
+/* 000a66fa */		else
+/* 000a66fa */		{
+/* 000a66fa */			int val;
+/* 000a6704 */			int nowExp;
+/* 000a670e */			val = 制御／必要経験値確認() / 10;
+/* 000a6728 */			nowExp = g_player.getExp();
+/* 000a6740 */			if (val > nowExp)
+/* 000a6754 */			{
+/* 000a6754 */				val = nowExp;
+/* 000a6766 */			}
+/* 000a676c */			g_log[2].add("経験値を%d点吸われた！" % val, 0);
+/* 000a679a */			g_player.addExp(val * -1);
+/* 000a67b4 */		}
+/* 000a67b4 */	}
+/* 000a67ba */	int monsterCritical;
+/* 000a67c4 */	if (制御／時間確認() > 5)
+/* 000a67d8 */	{
+/* 000a67d8 */		monsterCritical = 3;
+/* 000a67e2 */	}
+/* 000a67e8 */	else
+/* 000a67e8 */	{
+/* 000a67e8 */		monsterCritical = 0;
+/* 000a67f2 */	}
+/* 000a67f2 */	if (制御／状態異常確認("COND06"))
+/* 000a6804 */	{
+/* 000a6804 */		monsterCritical *= 3;
+/* 000a6816 */	}
+/* 000a681c */	if (monsterCritical > 0)
+/* 000a6830 */	{
+/* 000a6830 */		if (RAND(100) <= monsterCritical)
+/* 000a684a */		{
+/* 000a684a */			monsterAtk = (monsterAtk * 180.0) / 100.0;
+/* 000a686c */			ranceDef = (ranceDef * 40.0) / 100.0;
+/* 000a688e */			g_log[2].add("%s「クリティカルヒット！」" % monsterName, 2);
+/* 000a68bc */			critical = true;
+/* 000a68c6 */		}
+/* 000a68cc */	}
+/* 000a68d2 */	damage = Math.Max(0, monsterAtk - ranceDef);
+/* 000a6900 */	if (制御／スキル確認("SKIL03") && !制御／モンスター属性確認(monsterId, turn, "ATTR12") && damage >= ranceHp && ranceHp != 1.0 && RAND(3) == 1)
+/* 000a69d4 */	{
+/* 000a69d4 */		damage = ranceHp - 1.0;
+/* 000a69ee */		g_log[2].add("ランス「ばっちゃこーい！」", 1);
+/* 000a6a0e */	}
+/* 000a6a14 */	DamageInfomation Info;
+/* 000a6a24 */	Info.damage = Math.Max(0, damage);
+/* 000a6a4c */	Info.isCritical = critical;
+/* 000a6a62 */	return Info;
+/* 000a6a72 */}
+
+int 制御／アイテムドロップ率計算関数(string monsterId)
+/* 000a6a86 */{
+/* 000a6a86 */	if (monsterId == "MONS117")
+/* 000a6a96 */	{
+/* 000a6a96 */		if (EV("レベル屋／口／話す／レベル２０／初回", -2147483648) && !EV("レベル屋／手／うねりパイ／Ｈ前", -2147483648) && !制御／チップ確認("CHIP570", 0) && !制御／チップ確認("CHIP570", 1))
+/* 000a6b44 */		{
+/* 000a6b44 */			int bonusPer;
+/* 000a6b4e */			bonusPer = 制御／グローバル数値フラグ確認("勝利／MONS117") * 10;
+/* 000a6b6e */			if (bonusPer > 30)
+/* 000a6b82 */			{
+/* 000a6b82 */				bonusPer = 30;
+/* 000a6b8c */			}
+/* 000a6b92 */			return bonusPer + 60;
+/* 000a6ba2 */		}
+/* 000a6ba8 */	}
+/* 000a6bae */	else if (monsterId == "MONS310")
+/* 000a6bbe */	{
+/* 000a6bbe */		if (!制御／チップ確認("CHIP147", 0) && !制御／チップ確認("CHIP147", 1))
+/* 000a6c0a */		{
+/* 000a6c0a */			int bonusPer;
+/* 000a6c14 */			bonusPer = 制御／グローバル数値フラグ確認("勝利／MONS310");
+/* 000a6c2c */			if (bonusPer > 30)
+/* 000a6c40 */			{
+/* 000a6c40 */				bonusPer = 30;
+/* 000a6c4a */			}
+/* 000a6c50 */			return bonusPer + 60;
+/* 000a6c60 */		}
+/* 000a6c66 */	}
+/* 000a6c6c */	else if (制御／状態異常確認("COND08"))
+/* 000a6c7e */	{
+/* 000a6c7e */		return 60;
+/* 000a6c86 */	}
+/* 000a6c8c */	return 6;
+/* 000a6c94 */}
+

@@ -1,0 +1,139 @@
+GameTimeView::GameTimeView()
+/* 0006c084 */{
+/* 0006c08c */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006c0ae */	g_gameTime.addEventHandler(this.onEvent);
+/* 0006c0c4 */	this.initParts();
+/* 0006c0cc */	this.updateTimeBallPos();
+/* 0006c0d4 */}
+
+void GameTimeView::initParts()
+/* 0006c0dc */{
+/* 0006c0dc */	this.parts_[0].init("システム／時計／下地", 0);
+/* 0006c0fc */	this.parts_[1].init("システム／時計／" + g_gameTime.getTimeText(), 0);
+/* 0006c12a */	this.parts_[3].init("システム／時計／玉", 0);
+/* 0006c14a */	createPartsGroup(this.parent_, this.parts_, 1200);
+/* 0006c162 */	this.setPartsPos();
+/* 0006c16a */	this.setChildPartsShowState();
+/* 0006c172 */}
+
+void GameTimeView::updateTimeBallPos()
+/* 0006c17a */{
+/* 0006c17a */	int x;
+/* 0006c184 */	int y;
+/* 0006c18e */	this.getTimeBallPos(x, y);
+/* 0006c1a6 */	this.parts_[3].setPos(x, y, -2147483648);
+/* 0006c1cc */}
+
+void GameTimeView::getTimeBallPos(ref int x, ref int y)
+/* 0006c1d4 */{
+/* 0006c1d4 */	switch (g_gameTime.getBlock())
+/* 0006c1ec */	{
+/* 0006c1ec */	case 0:
+/* 0006c1ec */		x = 168;
+/* 0006c1fc */		y = 222;
+/* 0006c20c */		break;
+/* 0006c212 */	case 1:
+/* 0006c212 */		x = 147;
+/* 0006c222 */		y = 227;
+/* 0006c232 */		break;
+/* 0006c238 */	case 2:
+/* 0006c238 */		x = 121;
+/* 0006c248 */		y = 228;
+/* 0006c258 */		break;
+/* 0006c25e */	case 3:
+/* 0006c25e */		x = 93;
+/* 0006c26e */		y = 221;
+/* 0006c27e */		break;
+/* 0006c284 */	case 4:
+/* 0006c284 */		x = 73;
+/* 0006c294 */		y = 210;
+/* 0006c2a4 */		break;
+/* 0006c2aa */	case 5:
+/* 0006c2aa */		x = 54;
+/* 0006c2ba */		y = 192;
+/* 0006c2ca */		break;
+/* 0006c2d0 */	case 6:
+/* 0006c2d0 */		x = 41;
+/* 0006c2e0 */		y = 169;
+/* 0006c2f0 */		break;
+/* 0006c2f6 */	case 7:
+/* 0006c2f6 */		x = 33;
+/* 0006c306 */		y = 139;
+/* 0006c316 */		break;
+/* 0006c31c */	case 8:
+/* 0006c31c */		x = 34;
+/* 0006c32c */		y = 118;
+/* 0006c33c */		break;
+/* 0006c342 */	}
+/* 0006c342 */}
+
+void GameTimeView::update()
+/* 0006c34a */{
+/* 0006c34a */	switch (this.state_)
+/* 0006c35c */	{
+/* 0006c35c */	case 1:
+/* 0006c35c */		if (!this.parent_.isMotion())
+/* 0006c370 */		{
+/* 0006c370 */			this.state_ = 2;
+/* 0006c37a */		}
+/* 0006c380 */		break;
+/* 0006c386 */	case 2:
+/* 0006c386 */		break;
+/* 0006c38c */	case 3:
+/* 0006c38c */		if (!this.parent_.isMotion())
+/* 0006c3a0 */		{
+/* 0006c3a0 */			this.state_ = 0;
+/* 0006c3aa */		}
+/* 0006c3b0 */		break;
+/* 0006c3b6 */	case 0:
+/* 0006c3b6 */		break;
+/* 0006c3bc */	}
+/* 0006c3bc */	this.parent_.setShow(this.state_ != 0);
+/* 0006c3d8 */}
+
+void GameTimeView::fadeIn(bool val)
+/* 0006c3e0 */{
+/* 0006c3e0 */	this.parent_.setShow(true);
+/* 0006c3f2 */	MotionInfomation m;
+/* 0006c402 */	m.setTime(300, 0);
+/* 0006c41a */	if (val)
+/* 0006c426 */	{
+/* 0006c426 */		m.setMove(982, -262, 832, -112, 1);
+/* 0006c450 */		this.parent_.runMotion(m);
+/* 0006c46a */		this.state_ = 1;
+/* 0006c474 */	}
+/* 0006c47a */	else
+/* 0006c47a */	{
+/* 0006c47a */		m.setMove(832, -112, 982, -262, 1);
+/* 0006c4a4 */		this.parent_.runMotion(m);
+/* 0006c4be */		this.state_ = 3;
+/* 0006c4c8 */	}
+/* 0006c4c8 */}
+
+void GameTimeView::setPartsPos()
+/* 0006c4d0 */{
+/* 0006c4d0 */	this.parts_[1].setPos(50, 44, -2147483648);
+/* 0006c4f6 */	this.updateTimeBallPos();
+/* 0006c4fe */}
+
+void GameTimeView::setChildPartsShowState()
+/* 0006c506 */{
+/* 0006c506 */	int i;
+/* 0006c510 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006c540 */	{
+/* 0006c540 */		this.parts_[i].setShow(true);
+/* 0006c55a */	}
+/* 0006c560 */}
+
+void GameTimeView::onEvent(int type, int val)
+/* 0006c568 */{
+/* 0006c568 */	this.updateParts();
+/* 0006c570 */}
+
+void GameTimeView::updateParts()
+/* 0006c578 */{
+/* 0006c578 */	this.parts_[1].init("システム／時計／" + g_gameTime.getTimeText(), 0);
+/* 0006c5a6 */	this.parts_[1].setShow(true);
+/* 0006c5c0 */	this.updateTimeBallPos();
+/* 0006c5c8 */}
+

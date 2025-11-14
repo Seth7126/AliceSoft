@@ -1,0 +1,22 @@
+// Project Environment File
+Encoding = "UTF-8"
+ProjectName = "Rance01"
+
+CodeName = "Rance01.ain"
+
+#define _AINVERSION 6
+#define _KEYCODE 0x00000000
+#define _ISAI2FILE true
+#define _USESMSG1 false
+
+GameVersion = 100
+
+// Settings for each directory
+SourceDir = "."
+HLLDir = "HLL"
+ObjDir = "OBJ"
+OutputDir = ".."
+
+Source = {
+	"main.inc",
+}

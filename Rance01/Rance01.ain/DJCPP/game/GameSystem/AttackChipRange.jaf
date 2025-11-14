@@ -1,0 +1,50 @@
+string AttackChipRange::getAtkChipName(int value)
+/* 0009070a */{
+/* 0009070a */	return this.getChipName(value, this.rangeAtk_);
+/* 00090720 */}
+
+string AttackChipRange::getDefChipName(int value)
+/* 0009072e */{
+/* 0009072e */	return this.getChipName(value, this.rangeDef_);
+/* 00090744 */}
+
+string AttackChipRange::getChipName(int value, ref array@ChipEffectRange rangeVal)
+/* 00090752 */{
+/* 00090752 */	if (value == 0)
+/* 00090760 */	{
+/* 00090760 */		return "";
+/* 00090768 */	}
+/* 0009076e */	int i;
+/* 00090778 */	for (i = 0; i < rangeVal.Numof() - 1; ++i)
+/* 000907ba */	{
+/* 000907ba */		if (rangeVal[i].from <= value && value < rangeVal[i + 1].from)
+/* 00090822 */		{
+/* 00090822 */			return rangeVal[i].imageName;
+/* 0009083a */		}
+/* 00090840 */	}
+/* 00090846 */	return rangeVal[rangeVal.Numof() - 1].imageName;
+/* 00090870 */}
+
+AttackChipRange::AttackChipRange()
+/* 0009087e */{
+/* 00090886 */	this.load();
+/* 0009088e */}
+
+void AttackChipRange::load()
+/* 00090896 */{
+/* 00090896 */	this.loadOne("敵攻撃チップ判定", this.rangeAtk_);
+/* 000908aa */	this.loadOne("敵防御チップ判定", this.rangeDef_);
+/* 000908be */}
+
+void AttackChipRange::loadOne(string table, ref array@ChipEffectRange rangeVal)
+/* 000908c6 */{
+/* 000908c6 */	int count = EX_Height(table);
+/* 000908de */	rangeVal.Alloc(count);
+/* 000908f4 */	int i;
+/* 000908fe */	for (i = 0; i < count; ++i)
+/* 0009092e */	{
+/* 0009092e */		rangeVal[i].from = EX_A2Int(table, 0, i, 0);
+/* 00090964 */		rangeVal[i].imageName = EX_A2String(table, 1, i, "");
+/* 0009099c */	}
+/* 000909a2 */}
+

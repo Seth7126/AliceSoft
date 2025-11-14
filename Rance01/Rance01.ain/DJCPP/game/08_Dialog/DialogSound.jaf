@@ -1,0 +1,84 @@
+int getDialogSound(string caption)
+/* 0007e652 */{
+/* 0007e652 */	switch (caption)
+/* 0007e664 */	{
+/* 0007e664 */	case "仕掛け矢に撃たれた！":
+/* 0007e664 */	case "尿管結石の激痛！":
+/* 0007e664 */	case "ひどい墓穴にはまった！":
+/* 0007e664 */	case "マキビシを踏んだ！":
+/* 0007e664 */	case "ムシに噛みつかれた！":
+/* 0007e664 */	case "炎の罠に掛かった！":
+/* 0007e664 */	case "家具が頭部を強打した！":
+/* 0007e664 */	case "強酸の沼にはまった！":
+/* 0007e664 */	case "墓穴にはまった！":
+/* 0007e664 */	case "落とし穴にはまった！":
+/* 0007e664 */		return 2206;
+/* 0007e66c */	case "手持ちチップ数拡大のお知らせ":
+/* 0007e66c */		return 2212;
+/* 0007e674 */	case "所持チップ喪失のお知らせ":
+/* 0007e674 */		return 2210;
+/* 0007e67c */	case "くそオルゴールの調べ！":
+/* 0007e67c */	case "くそ詩人の即興演奏！":
+/* 0007e67c */	case "帰り道を忘れた！":
+/* 0007e67c */	case "食あたり！":
+/* 0007e67c */	case "結石の精が憑りついた！":
+/* 0007e67c */	case "汚水を浴びた！":
+/* 0007e67c */	case "不意の欲情！":
+/* 0007e67c */	case "おねぼうイカマンを踏んだ！":
+/* 0007e67c */	case "おひるねイカマンを踏んだ！":
+/* 0007e67c */	case "ぐっすりイカマンを踏んだ！":
+/* 0007e67c */		return 2207;
+/* 0007e684 */	case "朝が来た！":
+/* 0007e684 */		return 2211;
+/* 0007e68c */	case "身体づくりの魔法陣を踏んだ！":
+/* 0007e68c */	case "強制接収の魔法陣を踏んだ！":
+/* 0007e68c */		return 2208;
+/* 0007e694 */	case "お宝を発見した！":
+/* 0007e694 */		return 2209;
+/* 0007e69c */	case "休憩スポットを発見した！":
+/* 0007e69c */	case "うまそうな饅頭を食った！":
+/* 0007e69c */		return 2205;
+/* 0007e6a4 */	}
+/* 0007e6a4 */	if (isStringStartsWith("レベル:", caption))
+/* 0007e6bc */	{
+/* 0007e6bc */		return 2214;
+/* 0007e6c4 */	}
+/* 0007e6ca */	if (isStringEndsWith("点手に入れた！", caption))
+/* 0007e6e2 */	{
+/* 0007e6e2 */		return 2213;
+/* 0007e6ea */	}
+/* 0007e6f0 */	if (isStringEndsWith("点失った！", caption))
+/* 0007e708 */	{
+/* 0007e708 */		return 2210;
+/* 0007e710 */	}
+/* 0007e716 */	if (isStringEndsWith("GOLDを手に入れた！", caption))
+/* 0007e72e */	{
+/* 0007e72e */		return 2203;
+/* 0007e736 */	}
+/* 0007e73c */	if (isStringEndsWith("GOLDを失った！", caption))
+/* 0007e754 */	{
+/* 0007e754 */		return 2204;
+/* 0007e75c */	}
+/* 0007e762 */	if (isStringEndsWith("点回復した！", caption))
+/* 0007e77a */	{
+/* 0007e77a */		return 2205;
+/* 0007e782 */	}
+/* 0007e788 */	if (isStringEndsWith("点のダメージを受けた！", caption))
+/* 0007e7a0 */	{
+/* 0007e7a0 */		return 2206;
+/* 0007e7a8 */	}
+/* 0007e7ae */	return 2202;
+/* 0007e7b6 */}
+
+bool isStringStartsWith(string a, string b)
+/* 0007e7ca */{
+/* 0007e7ca */	int count = Math.Min(a.Length(), b.Length());
+/* 0007e7f4 */	return a.GetPart(0, count) == b.GetPart(0, count);
+/* 0007e822 */}
+
+bool isStringEndsWith(string a, string b)
+/* 0007e836 */{
+/* 0007e836 */	int count = Math.Min(a.Length(), b.Length());
+/* 0007e860 */	return a.GetPart(a.Length() - count, count) == b.GetPart(b.Length() - count, count);
+/* 0007e8a6 */}
+

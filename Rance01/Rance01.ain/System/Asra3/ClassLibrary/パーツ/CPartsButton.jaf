@@ -1,0 +1,474 @@
+CPartsButton::CPartsButton()
+/* 00008f4a */{
+/* 00008f52 */	this.m_PartsNumber = 0;
+/* 00008f5c */	this.Init();
+/* 00008f64 */}
+
+CPartsButton::~CPartsButton()
+/* 00008f6c */{
+/* 00008f6c */	this.Release();
+/* 00008f74 */}
+
+void CPartsButton::Init()
+/* 00008f7c */{
+/* 00008f7c */	this.Release();
+/* 00008f84 */	this.m_PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 00008f96 */	Ｐ＿ボタン＿サイズ設定(this.m_PartsNumber, 128, 64);
+/* 00008fae */	Ｐ＿ボタン＿色設定(this.m_PartsNumber, 220, 220, 220);
+/* 00008fcc */	Ｐ＿ボタン＿テキスト設定(this.m_PartsNumber, "BUTTON");
+/* 00008fde */}
+
+void CPartsButton::Release()
+/* 00008fe6 */{
+/* 00008fe6 */	PARTS_Release(this.m_PartsNumber);
+/* 00008ff2 */	this.m_PartsNumber = 0;
+/* 00008ffc */}
+
+bool CPartsButton::IsExist()
+/* 00009004 */{
+/* 00009004 */	return 0 < this.m_PartsNumber;
+/* 00009016 */}
+
+int CPartsButton::GetPartsNumber()
+/* 00009024 */{
+/* 00009024 */	return this.m_PartsNumber;
+/* 0000902c */}
+
+void CPartsButton::SetFocus()
+/* 0000903a */{
+/* 0000903a */	Ｐ＿フォーカス設定(this.m_PartsNumber);
+/* 00009046 */}
+
+bool CPartsButton::IsFocus()
+/* 0000904e */{
+/* 0000904e */	return Ｐ＿フォーカス確認(this.m_PartsNumber);
+/* 0000905c */}
+
+bool CPartsButton::IsOnCursor()
+/* 0000906a */{
+/* 0000906a */	return false;
+/* 00009072 */}
+
+bool CPartsButton::IsClick()
+/* 00009080 */{
+/* 00009080 */	return false;
+/* 00009088 */}
+
+void CPartsButton::SetPos(int PosX, int PosY)
+/* 00009096 */{
+/* 00009096 */	if (!this.IsExist())
+/* 000090a6 */	{
+/* 000090a6 */		return;
+/* 000090a8 */	}
+/* 000090ae */	Ｐ＿ボタン＿座標設定(this.m_PartsNumber, PosX, PosY);
+/* 000090c6 */}
+
+void CPartsButton::SetZ(int PosZ)
+/* 000090ce */{
+/* 000090ce */	if (!this.IsExist())
+/* 000090de */	{
+/* 000090de */		return;
+/* 000090e0 */	}
+/* 000090e6 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_PartsNumber, PosZ);
+/* 000090f8 */}
+
+int CPartsButton::GetX()
+/* 00009100 */{
+/* 00009100 */	if (!this.IsExist())
+/* 00009110 */	{
+/* 00009110 */		return 0;
+/* 00009118 */	}
+/* 0000911e */	return Ｐ＿ボタン＿Ｘ座標取得(this.m_PartsNumber);
+/* 0000912c */}
+
+int CPartsButton::GetY()
+/* 0000913a */{
+/* 0000913a */	if (!this.IsExist())
+/* 0000914a */	{
+/* 0000914a */		return 0;
+/* 00009152 */	}
+/* 00009158 */	return Ｐ＿ボタン＿Ｘ座標取得(this.m_PartsNumber);
+/* 00009166 */}
+
+int CPartsButton::GetZ()
+/* 00009174 */{
+/* 00009174 */	if (!this.IsExist())
+/* 00009184 */	{
+/* 00009184 */		return 0;
+/* 0000918c */	}
+/* 00009192 */	return Ｐ＿ボタン＿Ｚ座標取得(this.m_PartsNumber);
+/* 000091a0 */}
+
+void CPartsButton::SetSize(int Width, int Height)
+/* 000091ae */{
+/* 000091ae */	if (!this.IsExist())
+/* 000091be */	{
+/* 000091be */		return;
+/* 000091c0 */	}
+/* 000091c6 */	Ｐ＿ボタン＿サイズ設定(this.m_PartsNumber, Width, Height);
+/* 000091de */}
+
+int CPartsButton::GetWidth()
+/* 000091e6 */{
+/* 000091e6 */	if (!this.IsExist())
+/* 000091f6 */	{
+/* 000091f6 */		return 0;
+/* 000091fe */	}
+/* 00009204 */	return Ｐ＿ボタン＿幅取得(this.m_PartsNumber);
+/* 00009212 */}
+
+int CPartsButton::GetHeight()
+/* 00009220 */{
+/* 00009220 */	if (!this.IsExist())
+/* 00009230 */	{
+/* 00009230 */		return 0;
+/* 00009238 */	}
+/* 0000923e */	return Ｐ＿ボタン＿高さ取得(this.m_PartsNumber);
+/* 0000924c */}
+
+void CPartsButton::SetShow(bool Show)
+/* 0000925a */{
+/* 0000925a */	if (!this.IsExist())
+/* 0000926a */	{
+/* 0000926a */		return;
+/* 0000926c */	}
+/* 00009272 */	Ｐ＿ボタン＿表示設定(this.m_PartsNumber, Show);
+/* 00009284 */}
+
+bool CPartsButton::IsShow()
+/* 0000928c */{
+/* 0000928c */	if (!this.IsExist())
+/* 0000929c */	{
+/* 0000929c */		return false;
+/* 000092a4 */	}
+/* 000092aa */	return Ｐ＿ボタン＿表示設定取得(this.m_PartsNumber);
+/* 000092b8 */}
+
+void CPartsButton::SetDrag(bool Drag)
+/* 000092c6 */{
+/* 000092c6 */	if (!this.IsExist())
+/* 000092d6 */	{
+/* 000092d6 */		return;
+/* 000092d8 */	}
+/* 000092de */	Ｐ＿ボタン＿ドラッグ設定(this.m_PartsNumber, Drag);
+/* 000092f0 */}
+
+bool CPartsButton::IsDrag()
+/* 000092f8 */{
+/* 000092f8 */	if (!this.IsExist())
+/* 00009308 */	{
+/* 00009308 */		return false;
+/* 00009310 */	}
+/* 00009316 */	return Ｐ＿ボタン＿ドラッグ設定取得(this.m_PartsNumber);
+/* 00009324 */}
+
+void CPartsButton::SetEnable(bool Enable)
+/* 00009332 */{
+/* 00009332 */	if (!this.IsExist())
+/* 00009342 */	{
+/* 00009342 */		return;
+/* 00009344 */	}
+/* 0000934a */	Ｐ＿ボタン＿有効設定(this.m_PartsNumber, Enable);
+/* 0000935c */}
+
+bool CPartsButton::IsEnable()
+/* 00009364 */{
+/* 00009364 */	if (!this.IsExist())
+/* 00009374 */	{
+/* 00009374 */		return false;
+/* 0000937c */	}
+/* 00009382 */	return Ｐ＿ボタン＿有効設定取得(this.m_PartsNumber);
+/* 00009390 */}
+
+void CPartsButton::SetPixelDecide(bool PixelDecide)
+/* 0000939e */{
+/* 0000939e */	if (!this.IsExist())
+/* 000093ae */	{
+/* 000093ae */		return;
+/* 000093b0 */	}
+/* 000093b6 */	Ｐ＿ボタン＿ピクセル判定設定(this.m_PartsNumber, PixelDecide);
+/* 000093c8 */}
+
+bool CPartsButton::IsPixelDecide()
+/* 000093d0 */{
+/* 000093d0 */	if (!this.IsExist())
+/* 000093e0 */	{
+/* 000093e0 */		return false;
+/* 000093e8 */	}
+/* 000093ee */	return Ｐ＿ボタン＿ピクセル判定設定取得(this.m_PartsNumber);
+/* 000093fc */}
+
+void CPartsButton::SetColor(int Red, int Green, int Blue)
+/* 0000940a */{
+/* 0000940a */	if (!this.IsExist())
+/* 0000941a */	{
+/* 0000941a */		return;
+/* 0000941c */	}
+/* 00009422 */	Ｐ＿ボタン＿色設定(this.m_PartsNumber, Red, Green, Blue);
+/* 00009440 */}
+
+int CPartsButton::GetR()
+/* 00009448 */{
+/* 00009448 */	if (!this.IsExist())
+/* 00009458 */	{
+/* 00009458 */		return 0;
+/* 00009460 */	}
+/* 00009466 */	return Ｐ＿ボタン＿赤色取得(this.m_PartsNumber);
+/* 00009474 */}
+
+int CPartsButton::GetG()
+/* 00009482 */{
+/* 00009482 */	if (!this.IsExist())
+/* 00009492 */	{
+/* 00009492 */		return 0;
+/* 0000949a */	}
+/* 000094a0 */	return Ｐ＿ボタン＿緑色取得(this.m_PartsNumber);
+/* 000094ae */}
+
+int CPartsButton::GetB()
+/* 000094bc */{
+/* 000094bc */	if (!this.IsExist())
+/* 000094cc */	{
+/* 000094cc */		return 0;
+/* 000094d4 */	}
+/* 000094da */	return Ｐ＿ボタン＿青色取得(this.m_PartsNumber);
+/* 000094e8 */}
+
+void CPartsButton::SetFontProperty(ref CASCharSpriteProperty FontProperty)
+/* 000094f6 */{
+/* 000094f6 */	if (!this.IsExist())
+/* 00009506 */	{
+/* 00009506 */		return;
+/* 00009508 */	}
+/* 0000950e */	CASColor Color;
+/* 0000951e */	Color = FontProperty.GetColor();
+/* 0000953a */	CASColor EdgeColor;
+/* 0000954a */	EdgeColor = FontProperty.GetEdgeColor();
+/* 00009566 */	Ｐ＿ボタン＿フォント設定(this.m_PartsNumber, FontProperty.GetType(), FontProperty.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), FontProperty.GetBoldWeight(), FontProperty.GetEdgeWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB());
+/* 000095ea */}
+
+void CPartsButton::GetFontProperty(ref CASCharSpriteProperty FontProperty)
+/* 000095f2 */{
+/* 000095f2 */	if (!this.IsExist())
+/* 00009602 */	{
+/* 00009602 */		return;
+/* 00009604 */	}
+/* 0000960a */	int 種類;
+/* 00009614 */	int サイズ;
+/* 0000961e */	int 赤;
+/* 00009628 */	int 緑;
+/* 00009632 */	int 青;
+/* 0000963c */	int 縁取り赤;
+/* 00009646 */	int 縁取り緑;
+/* 00009650 */	int 縁取り青;
+/* 0000965a */	float 太字幅;
+/* 0000966c */	float 縁取り幅;
+/* 0000967e */	Ｐ＿ボタン＿フォント取得(this.m_PartsNumber, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り幅, 縁取り赤, 縁取り緑, 縁取り青);
+/* 000096da */	FontProperty.SetType(種類);
+/* 000096ec */	FontProperty.SetSize(サイズ);
+/* 000096fe */	FontProperty.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 00009728 */	FontProperty.SetBoldWeight(太字幅);
+/* 0000973a */	FontProperty.SetEdgeWeight(縁取り幅);
+/* 0000974c */	FontProperty.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 00009776 */}
+
+void CPartsButton::SetOnCursorSoundNumber(int SoundNumber)
+/* 0000977e */{
+/* 0000977e */	Ｐ＿ボタン＿オンカーソル効果音番号設定(this.m_PartsNumber, SoundNumber);
+/* 00009790 */}
+
+void CPartsButton::SetClickSoundNumber(int SoundNumber)
+/* 00009798 */{
+/* 00009798 */	Ｐ＿ボタン＿クリック効果音番号設定(this.m_PartsNumber, SoundNumber);
+/* 000097aa */}
+
+int CPartsButton::GetOnCursorSoundNumber()
+/* 000097b2 */{
+/* 000097b2 */	return Ｐ＿ボタン＿オンカーソル効果音番号取得(this.m_PartsNumber);
+/* 000097c0 */}
+
+int CPartsButton::GetClickSoundNumber()
+/* 000097ce */{
+/* 000097ce */	return Ｐ＿ボタン＿クリック効果音番号取得(this.m_PartsNumber);
+/* 000097dc */}
+
+void CPartsButton::SetCGName(string Name)
+/* 000097ea */{
+/* 000097ea */	Ｐ＿ボタン＿ＣＧ名設定(this.m_PartsNumber, Name);
+/* 000097fc */}
+
+string CPartsButton::GetCGName()
+/* 00009804 */{
+/* 00009804 */	return Ｐ＿ボタン＿ＣＧ名取得(this.m_PartsNumber);
+/* 00009812 */}
+
+void CPartsButton::SetText(string Text)
+/* 00009820 */{
+/* 00009820 */	Ｐ＿ボタン＿テキスト設定(this.m_PartsNumber, Text);
+/* 00009832 */}
+
+string CPartsButton::GetText()
+/* 0000983a */{
+/* 0000983a */	return Ｐ＿ボタン＿テキスト取得(this.m_PartsNumber);
+/* 00009848 */}
+
+void CPartsButton::AddMouseMoveEvent(DG_MouseMoveHandler DelegateObject)
+/* 00009856 */{
+/* 00009856 */	AFL_Parts_AddMouseMoveEvent(this.m_PartsNumber, DelegateObject);
+/* 0000986a */}
+
+void CPartsButton::EraseMouseMoveEvent(DG_MouseMoveHandler DelegateObject)
+/* 00009872 */{
+/* 00009872 */	AFL_Parts_EraseMouseMoveEvent(this.m_PartsNumber, DelegateObject);
+/* 00009886 */}
+
+void CPartsButton::AddMouseLeaveEvent(DG_MouseLeaveHandler DelegateObject)
+/* 0000988e */{
+/* 0000988e */	AFL_Parts_AddMouseLeaveEvent(this.m_PartsNumber, DelegateObject);
+/* 000098a2 */}
+
+void CPartsButton::EraseMouseLeaveEvent(DG_MouseLeaveHandler DelegateObject)
+/* 000098aa */{
+/* 000098aa */	AFL_Parts_EraseMouseLeaveEvent(this.m_PartsNumber, DelegateObject);
+/* 000098be */}
+
+void CPartsButton::AddMouseEnterEvent(DG_MouseEnterHandler DelegateObject)
+/* 000098c6 */{
+/* 000098c6 */	AFL_Parts_AddMouseEnterEvent(this.m_PartsNumber, DelegateObject);
+/* 000098da */}
+
+void CPartsButton::EraseMouseEnterEvent(DG_MouseEnterHandler DelegateObject)
+/* 000098e2 */{
+/* 000098e2 */	AFL_Parts_EraseMouseEnterEvent(this.m_PartsNumber, DelegateObject);
+/* 000098f6 */}
+
+void CPartsButton::AddMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 000098fe */{
+/* 000098fe */	AFL_Parts_AddMouseClickEvent(this.m_PartsNumber, DelegateObject);
+/* 00009912 */}
+
+void CPartsButton::EraseMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0000991a */{
+/* 0000991a */	AFL_Parts_EraseMouseClickEvent(this.m_PartsNumber, DelegateObject);
+/* 0000992e */}
+
+void CPartsButton::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00009936 */{
+/* 00009936 */	AFL_Parts_AddMouseWheelEvent(this.m_PartsNumber, DelegateObject);
+/* 0000994a */}
+
+void CPartsButton::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00009952 */{
+/* 00009952 */	AFL_Parts_EraseMouseWheelEvent(this.m_PartsNumber, DelegateObject);
+/* 00009966 */}
+
+void CPartsButton::AddMouseOnEvent(DG_MouseOnHandler DelegateObject)
+/* 0000996e */{
+/* 0000996e */	AFL_Parts_AddMouseOnEvent(this.m_PartsNumber, DelegateObject);
+/* 00009982 */}
+
+void CPartsButton::EraseMouseOnEvent(DG_MouseOnHandler DelegateObject)
+/* 0000998a */{
+/* 0000998a */	AFL_Parts_EraseMouseOnEvent(this.m_PartsNumber, DelegateObject);
+/* 0000999e */}
+
+void CPartsButton::AddDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 000099a6 */{
+/* 000099a6 */	AFL_Parts_AddDragBeginEvent(this.m_PartsNumber, DelegateObject);
+/* 000099ba */}
+
+void CPartsButton::EraseDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 000099c2 */{
+/* 000099c2 */	AFL_Parts_EraseDragBeginEvent(this.m_PartsNumber, DelegateObject);
+/* 000099d6 */}
+
+void CPartsButton::AddDragingEvent(DG_DragingHandler DelegateObject)
+/* 000099de */{
+/* 000099de */	AFL_Parts_AddDragingEvent(this.m_PartsNumber, DelegateObject);
+/* 000099f2 */}
+
+void CPartsButton::EraseDragingEvent(DG_DragingHandler DelegateObject)
+/* 000099fa */{
+/* 000099fa */	AFL_Parts_EraseDragingEvent(this.m_PartsNumber, DelegateObject);
+/* 00009a0e */}
+
+void CPartsButton::AddDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 00009a16 */{
+/* 00009a16 */	AFL_Parts_AddDragEndEvent(this.m_PartsNumber, DelegateObject);
+/* 00009a2a */}
+
+void CPartsButton::EraseDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 00009a32 */{
+/* 00009a32 */	AFL_Parts_EraseDragEndEvent(this.m_PartsNumber, DelegateObject);
+/* 00009a46 */}
+
+void CPartsButton::AddDropEnterEvent(DG_DropEnterHandler DelegateObject)
+/* 00009a4e */{
+/* 00009a4e */	AFL_Parts_AddDropEnterEvent(this.m_PartsNumber, DelegateObject);
+/* 00009a62 */}
+
+void CPartsButton::EraseDropEnterEvent(DG_DropEnterHandler DelegateObject)
+/* 00009a6a */{
+/* 00009a6a */	AFL_Parts_EraseDropEnterEvent(this.m_PartsNumber, DelegateObject);
+/* 00009a7e */}
+
+void CPartsButton::AddDropedEvent(DG_DropedHandler DelegateObject)
+/* 00009a86 */{
+/* 00009a86 */	AFL_Parts_AddDropedEvent(this.m_PartsNumber, DelegateObject);
+/* 00009a9a */}
+
+void CPartsButton::EraseDropedEvent(DG_DropedHandler DelegateObject)
+/* 00009aa2 */{
+/* 00009aa2 */	AFL_Parts_EraseDropedEvent(this.m_PartsNumber, DelegateObject);
+/* 00009ab6 */}
+
+void CPartsButton::AddDropLeaveEvent(DG_DropLeaveHandler DelegateObject)
+/* 00009abe */{
+/* 00009abe */	AFL_Parts_AddDropLeaveEvent(this.m_PartsNumber, DelegateObject);
+/* 00009ad2 */}
+
+void CPartsButton::EraseDropLeaveEvent(DG_DropLeaveHandler DelegateObject)
+/* 00009ada */{
+/* 00009ada */	AFL_Parts_EraseDropLeaveEvent(this.m_PartsNumber, DelegateObject);
+/* 00009aee */}
+
+void CPartsButton::AddKeyTriggerEvent(DG_KeyTriggerHandler DelegateObject)
+/* 00009af6 */{
+/* 00009af6 */	AFL_Parts_AddKeyTriggerEvent(this.m_PartsNumber, DelegateObject);
+/* 00009b0a */}
+
+void CPartsButton::EraseKeyTriggerEvent(DG_KeyTriggerHandler DelegateObject)
+/* 00009b12 */{
+/* 00009b12 */	AFL_Parts_EraseKeyTriggerEvent(this.m_PartsNumber, DelegateObject);
+/* 00009b26 */}
+
+void CPartsButton::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00009b2e */{
+/* 00009b2e */	AFL_Parts_AddKeyDownEvent(this.m_PartsNumber, DelegateObject);
+/* 00009b42 */}
+
+void CPartsButton::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00009b4a */{
+/* 00009b4a */	AFL_Parts_EraseKeyDownEvent(this.m_PartsNumber, DelegateObject);
+/* 00009b5e */}
+
+void CPartsButton::AddKeyPressEvent(DG_KeyPressHandler DelegateObject)
+/* 00009b66 */{
+/* 00009b66 */	AFL_Parts_AddKeyPressEvent(this.m_PartsNumber, DelegateObject);
+/* 00009b7a */}
+
+void CPartsButton::EraseKeyPressEvent(DG_KeyPressHandler DelegateObject)
+/* 00009b82 */{
+/* 00009b82 */	AFL_Parts_EraseKeyPressEvent(this.m_PartsNumber, DelegateObject);
+/* 00009b96 */}
+
+void CPartsButton::AddKeyUpEvent(DG_KeyUpHandler DelegateObject)
+/* 00009b9e */{
+/* 00009b9e */	AFL_Parts_AddKeyUpEvent(this.m_PartsNumber, DelegateObject);
+/* 00009bb2 */}
+
+void CPartsButton::EraseKeyUpEvent(DG_KeyUpHandler DelegateObject)
+/* 00009bba */{
+/* 00009bba */	AFL_Parts_EraseKeyUpEvent(this.m_PartsNumber, DelegateObject);
+/* 00009bce */}
+

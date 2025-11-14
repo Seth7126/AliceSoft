@@ -1,0 +1,157 @@
+void Ｐ＿ボタン＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 00051e62 */{
+/* 00051e62 */	GUIEngine.SetButtonPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 00051e7e */}
+
+void Ｐ＿ボタン＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 00051e8c */{
+/* 00051e8c */	GUIEngine.SetButtonZ(パーツ番号, _Ｚ座標);
+/* 00051ea2 */}
+
+int Ｐ＿ボタン＿Ｘ座標取得(int パーツ番号)
+/* 00051eb0 */{
+/* 00051eb0 */	return GUIEngine.GetButtonX(パーツ番号);
+/* 00051ec2 */}
+
+int Ｐ＿ボタン＿Ｙ座標取得(int パーツ番号)
+/* 00051ed6 */{
+/* 00051ed6 */	return GUIEngine.GetButtonY(パーツ番号);
+/* 00051ee8 */}
+
+int Ｐ＿ボタン＿Ｚ座標取得(int パーツ番号)
+/* 00051efc */{
+/* 00051efc */	return GUIEngine.GetButtonZ(パーツ番号);
+/* 00051f0e */}
+
+void Ｐ＿ボタン＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00051f22 */{
+/* 00051f22 */	GUIEngine.SetButtonWidth(パーツ番号, 幅);
+/* 00051f38 */	GUIEngine.SetButtonHeight(パーツ番号, 高さ);
+/* 00051f4e */}
+
+int Ｐ＿ボタン＿幅取得(int パーツ番号)
+/* 00051f5c */{
+/* 00051f5c */	return GUIEngine.GetButtonWidth(パーツ番号);
+/* 00051f6e */}
+
+int Ｐ＿ボタン＿高さ取得(int パーツ番号)
+/* 00051f82 */{
+/* 00051f82 */	return GUIEngine.GetButtonHeight(パーツ番号);
+/* 00051f94 */}
+
+void Ｐ＿ボタン＿表示設定(int パーツ番号, bool 表示)
+/* 00051fa8 */{
+/* 00051fa8 */	GUIEngine.SetButtonShow(パーツ番号, 表示);
+/* 00051fbe */}
+
+bool Ｐ＿ボタン＿表示設定取得(int パーツ番号)
+/* 00051fcc */{
+/* 00051fcc */	return GUIEngine.IsButtonShow(パーツ番号);
+/* 00051fde */}
+
+void Ｐ＿ボタン＿ドラッグ設定(int パーツ番号, bool ドラッグ)
+/* 00051ff2 */{
+/* 00051ff2 */	GUIEngine.SetButtonDrag(パーツ番号, ドラッグ);
+/* 00052008 */}
+
+bool Ｐ＿ボタン＿ドラッグ設定取得(int パーツ番号)
+/* 00052016 */{
+/* 00052016 */	return GUIEngine.IsButtonDrag(パーツ番号);
+/* 00052028 */}
+
+void Ｐ＿ボタン＿有効設定(int パーツ番号, bool 有効)
+/* 0005203c */{
+/* 0005203c */	GUIEngine.SetButtonEnable(パーツ番号, 有効);
+/* 00052052 */}
+
+bool Ｐ＿ボタン＿有効設定取得(int パーツ番号)
+/* 00052060 */{
+/* 00052060 */	return GUIEngine.IsButtonEnable(パーツ番号);
+/* 00052072 */}
+
+void Ｐ＿ボタン＿ピクセル判定設定(int パーツ番号, bool ピクセル判定)
+/* 00052086 */{
+/* 00052086 */	GUIEngine.SetButtonPixelDecide(パーツ番号, ピクセル判定);
+/* 0005209c */}
+
+bool Ｐ＿ボタン＿ピクセル判定設定取得(int パーツ番号)
+/* 000520aa */{
+/* 000520aa */	return GUIEngine.IsButtonPixelDecide(パーツ番号);
+/* 000520bc */}
+
+void Ｐ＿ボタン＿色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 000520d0 */{
+/* 000520d0 */	GUIEngine.SetButtonR(パーツ番号, 赤);
+/* 000520e6 */	GUIEngine.SetButtonG(パーツ番号, 緑);
+/* 000520fc */	GUIEngine.SetButtonB(パーツ番号, 青);
+/* 00052112 */}
+
+int Ｐ＿ボタン＿赤色取得(int パーツ番号)
+/* 00052120 */{
+/* 00052120 */	return GUIEngine.GetButtonR(パーツ番号);
+/* 00052132 */}
+
+int Ｐ＿ボタン＿緑色取得(int パーツ番号)
+/* 00052146 */{
+/* 00052146 */	return GUIEngine.GetButtonG(パーツ番号);
+/* 00052158 */}
+
+int Ｐ＿ボタン＿青色取得(int パーツ番号)
+/* 0005216c */{
+/* 0005216c */	return GUIEngine.GetButtonB(パーツ番号);
+/* 0005217e */}
+
+void Ｐ＿ボタン＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 00052192 */{
+/* 00052192 */	GUIEngine.SetButtonFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000521de */}
+
+void Ｐ＿ボタン＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 000521ec */{
+/* 000521ec */	GUIEngine.GetButtonFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00052238 */}
+
+void Ｐ＿ボタン＿オンカーソル効果音番号設定(int パーツ番号, int サウンド番号)
+/* 00052246 */{
+/* 00052246 */	GUIEngine.SetButtonOnCursorSoundNumber(パーツ番号, サウンド番号);
+/* 0005225c */}
+
+void Ｐ＿ボタン＿クリック効果音番号設定(int パーツ番号, int サウンド番号)
+/* 0005226a */{
+/* 0005226a */	GUIEngine.SetButtonClickSoundNumber(パーツ番号, サウンド番号);
+/* 00052280 */}
+
+int Ｐ＿ボタン＿オンカーソル効果音番号取得(int パーツ番号)
+/* 0005228e */{
+/* 0005228e */	return GUIEngine.GetButtonOnCursorSoundNumber(パーツ番号);
+/* 000522a0 */}
+
+int Ｐ＿ボタン＿クリック効果音番号取得(int パーツ番号)
+/* 000522b4 */{
+/* 000522b4 */	return GUIEngine.GetButtonClickSoundNumber(パーツ番号);
+/* 000522c6 */}
+
+void Ｐ＿ボタン＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 000522da */{
+/* 000522da */	GUIEngine.SetButtonCGName(パーツ番号, ＣＧ名);
+/* 000522f0 */}
+
+string Ｐ＿ボタン＿ＣＧ名取得(int パーツ番号)
+/* 000522fe */{
+/* 000522fe */	string Name;
+/* 0005230a */	GUIEngine.GetButtonCGName(パーツ番号, Name);
+/* 00052320 */	return Name;
+/* 00052328 */}
+
+void Ｐ＿ボタン＿テキスト設定(int パーツ番号, string テキスト)
+/* 0005233c */{
+/* 0005233c */	GUIEngine.SetButtonText(パーツ番号, テキスト);
+/* 00052352 */}
+
+string Ｐ＿ボタン＿テキスト取得(int パーツ番号)
+/* 00052360 */{
+/* 00052360 */	string Text;
+/* 0005236c */	GUIEngine.GetButtonText(パーツ番号, Text);
+/* 00052382 */	return Text;
+/* 0005238a */}
+

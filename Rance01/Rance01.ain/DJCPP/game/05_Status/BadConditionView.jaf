@@ -1,0 +1,127 @@
+BadConditionView::BadConditionView()
+/* 000784a6 */{
+/* 000784ae */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000784d0 */}
+
+void BadConditionView::init(string id)
+/* 000784d8 */{
+/* 000784d8 */	this.id_ = id;
+/* 000784e2 */	this.index_ = getBadConditionIndex(this.id_);
+/* 000784fa */	this.initParts();
+/* 00078502 */	this.setPartsPos();
+/* 0007850a */	this.setPartsShow();
+/* 00078512 */}
+
+void BadConditionView::setInsideYPos(int y)
+/* 0007851a */{
+/* 0007851a */	this.insideY_ = y;
+/* 00078524 */	this.parent_.setPos(this.x_, 100 + this.insideY_ + this.offsetY_, -2147483648);
+/* 00078552 */	dlogF("%d" % this.offsetY_);
+/* 0007856c */}
+
+void BadConditionView::update()
+/* 00078574 */{
+/* 00078574 */	switch (this.state_)
+/* 00078586 */	{
+/* 00078586 */	case 0:
+/* 00078586 */		break;
+/* 0007858c */	case 1:
+/* 0007858c */		if (this.isMotionFinish())
+/* 0007859a */		{
+/* 0007859a */			this.state_ = 2;
+/* 000785a4 */		}
+/* 000785aa */		break;
+/* 000785b0 */	case 2:
+/* 000785b0 */		this.parts_[1].setNumber(g_player.getBadCondition(this.id_));
+/* 000785d6 */		break;
+/* 000785dc */	case 3:
+/* 000785dc */		if (this.isMotionFinish())
+/* 000785ea */		{
+/* 000785ea */			this.state_ = 0;
+/* 000785f4 */		}
+/* 000785fa */		break;
+/* 00078600 */	}
+/* 00078600 */}
+
+void BadConditionView::fadeIn(bool val)
+/* 00078608 */{
+/* 00078608 */	if (this.isIgnoreFadeMotion(val))
+/* 0007861c */	{
+/* 0007861c */		return;
+/* 0007861e */	}
+/* 00078624 */	this.state_ = val ? 1 : 3;
+/* 0007864e */	this.parent_.setShow(true);
+/* 00078660 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 00078690 */}
+
+bool BadConditionView::isIgnoreFadeMotion(bool val)
+/* 00078698 */{
+/* 00078698 */	if (val && (this.state_ == 1 || this.state_ == 2))
+/* 000786fc */	{
+/* 000786fc */		return true;
+/* 00078704 */	}
+/* 0007870a */	else if (!val && (this.state_ == 3 || this.state_ == 0))
+/* 00078770 */	{
+/* 00078770 */		return true;
+/* 00078778 */	}
+/* 0007877e */	return false;
+/* 00078786 */}
+
+bool BadConditionView::isMotionFinish()
+/* 00078794 */{
+/* 00078794 */	return !this.parent_.isMotion();
+/* 000787a6 */}
+
+void BadConditionView::initParts()
+/* 000787b4 */{
+/* 000787b4 */	this.parts_[0].init("システム／ステータス／状態異常", 0);
+/* 000787d4 */	this.parts_[0].setCgRange((this.parts_[0].getWidth() / 10) * this.index_, 0, this.parts_[0].getWidth() / 10, this.parts_[0].getHeight());
+/* 00078842 */	NumberPartsInfomation n;
+/* 00078852 */	n.setSameWidth(18);
+/* 00078864 */	this.parts_[1].initAsNumber("システム／数字／幅１８／白", n);
+/* 00078884 */	this.parts_[1].setNumber(g_player.getBadCondition(this.id_));
+/* 000788aa */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 000788c2 */}
+
+void BadConditionView::setPartsPos()
+/* 000788ca */{
+/* 000788ca */	this.parts_[1].setPos(112, 16, -2147483648);
+/* 000788f0 */	this.parts_[1].setOrigin(9);
+/* 0007890a */	this.x_ = 70 + RAND(20);
+/* 0007892a */	this.parent_.setPos(this.x_, 100, 6300 + this.index_ * 50);
+/* 00078958 */}
+
+bool BadConditionView::isFinish()
+/* 00078960 */{
+/* 00078960 */	return this.state_ == 0;
+/* 00078972 */}
+
+void BadConditionView::setPartsShow()
+/* 00078980 */{
+/* 00078980 */	int i;
+/* 0007898a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 000789ba */	{
+/* 000789ba */		this.parts_[i].setShow(true);
+/* 000789d4 */	}
+/* 000789da */}
+
+string BadConditionView::getType()
+/* 000789e2 */{
+/* 000789e2 */	return this.id_;
+/* 000789ea */}
+
+bool BadConditionView::isHide()
+/* 000789f8 */{
+/* 000789f8 */	return this.state_ == 0;
+/* 00078a0a */}
+
+void BadConditionView::setOffsetY(int offsetY)
+/* 00078a18 */{
+/* 00078a18 */	this.offsetY_ = offsetY;
+/* 00078a22 */}
+
+int BadConditionView::getInsideYPos()
+/* 00078a2a */{
+/* 00078a2a */	return this.insideY_;
+/* 00078a32 */}
+

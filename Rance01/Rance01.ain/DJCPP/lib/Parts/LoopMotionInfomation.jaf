@@ -1,0 +1,45 @@
+LoopMotionKey::LoopMotionKey()
+/* 00060340 */{
+/* 00060348 */	this.offset = 0;
+/* 00060352 */	this.moveRange = 0;
+/* 0006035c */	this.loopTime = 1000;
+/* 00060366 */	this.loopMotionType = 0;
+/* 00060370 */}
+
+void LoopMotionInfomation::set(int key, int offset, int moveRange, int loopTime, int loopMotionType)
+/* 00060378 */{
+/* 00060378 */	this.key_[key].offset = offset;
+/* 00060396 */	this.key_[key].moveRange = moveRange;
+/* 000603b4 */	this.key_[key].loopTime = loopTime;
+/* 000603d2 */	this.key_[key].loopMotionType = loopMotionType;
+/* 000603f0 */}
+
+int LoopMotionInfomation::get(int key, int nowTime)
+/* 000603f8 */{
+/* 000603f8 */	int lt = this.key_[key].loopTime;
+/* 0006041a */	int ofs = this.key_[key].offset;
+/* 0006043c */	int r = this.key_[key].moveRange;
+/* 0006045e */	if (r == 0)
+/* 0006046c */	{
+/* 0006046c */		return ofs;
+/* 00060474 */	}
+/* 0006047a */	float t = float(nowTime % lt) / float(lt);
+/* 000604a0 */	switch (this.key_[key].loopMotionType)
+/* 000604c2 */	{
+/* 000604c2 */	case 0:
+/* 000604c2 */		return ofs + Math.Sin(t * 360.0) * (r / 2);
+/* 000604fe */	case 1:
+/* 000604fe */		return ofs + (t * r - r / 2);
+/* 00060532 */	case 2:
+/* 00060532 */		return ofs + ((1 - t) * r - r / 2);
+/* 00060574 */	default:
+/* 00060574 */		return ofs;
+/* 0006057c */	}
+/* 0006057c */	return ofs;
+/* 00060584 */}
+
+bool LoopMotionInfomation::isEnable(int key)
+/* 00060592 */{
+/* 00060592 */	return this.key_[key].moveRange != 0;
+/* 000605b4 */}
+

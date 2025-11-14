@@ -1,0 +1,302 @@
+void 音楽設定(int 効果タイプ, int 効果時間)
+/* 0004ad72 */{
+/* 0004ad72 */	_音楽効果 = 効果タイプ;
+/* 0004ad7c */	_音楽効果時間 = 効果時間;
+/* 0004ad86 */}
+
+void 音楽(int 音楽番号, int 効果タイプ, int 効果時間)
+/* 0004ad94 */{
+/* 0004ad94 */	SYS_PlayBGM(音楽番号, 0, 効果タイプ, 効果時間, 100);
+/* 0004adb8 */}
+
+void 音楽１回再生(int 音楽番号, int 効果タイプ, int 効果時間)
+/* 0004adc6 */{
+/* 0004adc6 */	SYS_PlayBGM(音楽番号, 1, 効果タイプ, 効果時間, 100);
+/* 0004adea */}
+
+bool 音楽再生中確認()
+/* 0004adf8 */{
+/* 0004adf8 */	return SYS_IsPlayBGM();
+/* 0004ae00 */}
+
+int 音楽再生中番号取得()
+/* 0004ae14 */{
+/* 0004ae14 */	return SYS_BGM_GetPlayingNumber();
+/* 0004ae1c */}
+
+void Ａ＿音楽一時停止()
+/* 0004ae30 */{
+/* 0004ae30 */	_一時停止中 = true;
+/* 0004ae3a */	KiwiSoundEngine.Music_Pause(ch音楽[ch音楽i]);
+/* 0004ae54 */}
+
+void Ａ＿音楽再開()
+/* 0004ae62 */{
+/* 0004ae62 */	_一時停止中 = false;
+/* 0004ae6c */	KiwiSoundEngine.Music_Restart(ch音楽[ch音楽i]);
+/* 0004ae86 */}
+
+bool Ａ＿音楽一時停止中確認()
+/* 0004ae94 */{
+/* 0004ae94 */	return KiwiSoundEngine.Music_IsPause(ch音楽[ch音楽i]);
+/* 0004aeb0 */}
+
+bool Ａ＿音楽確認(int 音楽番号)
+/* 0004aec4 */{
+/* 0004aec4 */	return PassRegister.ExistNumber(2, 音楽番号);
+/* 0004aedc */}
+
+void 効果音(int _効果音番号)
+/* 0004aef0 */{
+/* 0004aef0 */	SYS_PlaySE(_効果音番号, false, true, true);
+/* 0004af0e */}
+
+void Ａ＿効果音停止()
+/* 0004af1c */{
+/* 0004af1c */	SYS_StopSE();
+/* 0004af22 */}
+
+bool Ａ＿効果音再生中確認()
+/* 0004af30 */{
+/* 0004af30 */	return SYS_IsPlaySE();
+/* 0004af38 */}
+
+void Ａ＿効果音非継続(int _効果音番号)
+/* 0004af4c */{
+/* 0004af4c */	SYS_PlaySE(_効果音番号, false, true, false);
+/* 0004af6a */}
+
+void 効果音終了待ちあり(int _効果音番号)
+/* 0004af78 */{
+/* 0004af78 */	SYS_PlaySE(_効果音番号, true, true, false);
+/* 0004af96 */}
+
+void 効果音強制終了待ちあり(int _効果音番号)
+/* 0004afa4 */{
+/* 0004afa4 */	SYS_PlaySE(_効果音番号, true, false, false);
+/* 0004afc2 */}
+
+void 効果音ボリューム(int 音量)
+/* 0004afd0 */{
+/* 0004afd0 */	SYS_ASSERTE_VOLUME(音量);
+/* 0004afde */	_効果音ボリューム = 音量;
+/* 0004afe8 */	KiwiSoundEngine.Sound_Fade(1, 0, _効果音ボリューム, 0);
+/* 0004b00c */}
+
+void システム効果音(int _snd)
+/* 0004b01a */{
+/* 0004b01a */	_g_SystemSound._Play(_snd);
+/* 0004b02c */}
+
+void Ａ＿システム効果音停止()
+/* 0004b03a */{
+/* 0004b03a */	_g_SystemSound._ClearCache();
+/* 0004b046 */}
+
+bool Ａ＿システム効果音再生中確認()
+/* 0004b054 */{
+/* 0004b054 */	return _g_SystemSound.IsPlay();
+/* 0004b062 */}
+
+void ループ効果音設定(int 効果タイプ, int 効果時間)
+/* 0004b076 */{
+/* 0004b076 */	_ループ効果音効果 = 効果タイプ;
+/* 0004b080 */	_ループ効果音効果時間 = 効果時間;
+/* 0004b08a */}
+
+void ループ効果音(int ループ効果音番号, int 効果タイプ, int 効果時間)
+/* 0004b098 */{
+/* 0004b098 */	if (ループ効果音番号 != 0 && !KiwiSoundEngine.Music_IsExist(ループ効果音番号))
+/* 0004b0dc */	{
+/* 0004b0dc */		SYS_ERROR("ループ効果音[%d]ロード失敗" % ループ効果音番号, 0);
+/* 0004b0fc */		ループ効果音番号 = 0;
+/* 0004b106 */	}
+/* 0004b10c */	if (効果タイプ == -1)
+/* 0004b120 */	{
+/* 0004b120 */		効果タイプ = _ループ効果音効果;
+/* 0004b132 */	}
+/* 0004b138 */	if (効果時間 == -1)
+/* 0004b14c */	{
+/* 0004b14c */		効果時間 = _ループ効果音効果時間;
+/* 0004b15e */	}
+/* 0004b164 */	if (効果タイプ == 0)
+/* 0004b172 */	{
+/* 0004b172 */		効果時間 = 0;
+/* 0004b17c */	}
+/* 0004b182 */	if (ループ効果音番号 != 0)
+/* 0004b196 */	{
+/* 0004b196 */		KiwiSoundEngine.Music_Prepare(chループ効果音, ループ効果音番号);
+/* 0004b1ae */		KiwiSoundEngine.Music_Fade(chループ効果音, 0, 0, 0);
+/* 0004b1d2 */		KiwiSoundEngine.Music_Fade(chループ効果音, 効果時間, _ループ効果音ボリューム, 0);
+/* 0004b1f6 */		KiwiSoundEngine.Music_SetLoopCount(chループ効果音, 0);
+/* 0004b20e */		KiwiSoundEngine.Music_Play(chループ効果音);
+/* 0004b220 */	}
+/* 0004b226 */	else
+/* 0004b226 */	{
+/* 0004b226 */		KiwiSoundEngine.Music_Fade(chループ効果音, 効果時間, 0, 1);
+/* 0004b24a */	}
+/* 0004b24a */	_ループ効果音 = ループ効果音番号;
+/* 0004b254 */}
+
+void ループ効果音ボリューム(int 音量)
+/* 0004b262 */{
+/* 0004b262 */	SYS_ASSERTE_VOLUME(音量);
+/* 0004b270 */	_ループ効果音ボリューム = 音量;
+/* 0004b27a */	KiwiSoundEngine.Music_Fade(chループ効果音, 0, _ループ効果音ボリューム, 0);
+/* 0004b29e */}
+
+void VOICE(int VOICE番号)
+/* 0004b2ac */{
+/* 0004b2ac */	SYS_VOICE(VOICE番号);
+/* 0004b2b8 */}
+
+void Ａ＿ボイス停止()
+/* 0004b2c6 */{
+/* 0004b2c6 */	SYS_StopVoice();
+/* 0004b2cc */}
+
+bool Ａ＿ボイスリプレイ可能確認()
+/* 0004b2da */{
+/* 0004b2da */	if (_g_最終音声番号 <= 0)
+/* 0004b2ee */	{
+/* 0004b2ee */		return false;
+/* 0004b2f6 */	}
+/* 0004b2fc */	if (!KiwiSoundEngine.Sound_IsExist(_g_最終音声番号))
+/* 0004b314 */	{
+/* 0004b314 */		return false;
+/* 0004b31c */	}
+/* 0004b322 */	return true;
+/* 0004b32a */}
+
+void Ｓ＿ボイスリプレイ()
+/* 0004b33e */{
+/* 0004b33e */	if (Ａ＿ボイスリプレイ可能確認())
+/* 0004b34a */	{
+/* 0004b34a */		SYS_PlayVoice(_g_最終音声番号);
+/* 0004b356 */	}
+/* 0004b35c */}
+
+void Ａ＿ＢＧＭボリュームキャップ設定(int サウンドグループ番号, int ボリューム, int フェードアウト時間, int フェードイン待ち時間, int フェードイン時間)
+/* 0004b36a */{
+/* 0004b36c */}
+
+void Ａ＿擬音開始(int 効果音番号1, int 効果音番号2, int 効果音番号3, int 効果音番号4, int 効果音番号5, int 効果音番号6, int 効果音番号7, int 効果音番号8, int 効果音番号9, int 効果音番号10)
+/* 0004b378 */{
+/* 0004b378 */	array@int SoundList;
+/* 0004b382 */	SoundList.PushBack(効果音番号1);
+/* 0004b392 */	if (効果音番号2 != -1)
+/* 0004b3a6 */	{
+/* 0004b3a6 */		SoundList.PushBack(効果音番号2);
+/* 0004b3b6 */	}
+/* 0004b3bc */	if (効果音番号3 != -1)
+/* 0004b3d0 */	{
+/* 0004b3d0 */		SoundList.PushBack(効果音番号3);
+/* 0004b3e0 */	}
+/* 0004b3e6 */	if (効果音番号4 != -1)
+/* 0004b3fa */	{
+/* 0004b3fa */		SoundList.PushBack(効果音番号4);
+/* 0004b40a */	}
+/* 0004b410 */	if (効果音番号5 != -1)
+/* 0004b424 */	{
+/* 0004b424 */		SoundList.PushBack(効果音番号5);
+/* 0004b434 */	}
+/* 0004b43a */	if (効果音番号6 != -1)
+/* 0004b44e */	{
+/* 0004b44e */		SoundList.PushBack(効果音番号6);
+/* 0004b45e */	}
+/* 0004b464 */	if (効果音番号7 != -1)
+/* 0004b478 */	{
+/* 0004b478 */		SoundList.PushBack(効果音番号7);
+/* 0004b488 */	}
+/* 0004b48e */	if (効果音番号8 != -1)
+/* 0004b4a2 */	{
+/* 0004b4a2 */		SoundList.PushBack(効果音番号8);
+/* 0004b4b2 */	}
+/* 0004b4b8 */	if (効果音番号9 != -1)
+/* 0004b4cc */	{
+/* 0004b4cc */		SoundList.PushBack(効果音番号9);
+/* 0004b4dc */	}
+/* 0004b4e2 */	if (効果音番号10 != -1)
+/* 0004b4f6 */	{
+/* 0004b4f6 */		SoundList.PushBack(効果音番号10);
+/* 0004b506 */	}
+/* 0004b50c */	SYS_PlayBackSE(SYS_SOUNDGROUP_GIMICSE(), SoundList);
+/* 0004b520 */}
+
+void Ａ＿擬音終了()
+/* 0004b52e */{
+/* 0004b52e */	array@int SoundList;
+/* 0004b538 */	SoundList.PushBack(0);
+/* 0004b548 */	SYS_PlayBackSE(SYS_SOUNDGROUP_GIMICSE(), SoundList);
+/* 0004b55c */}
+
+void Ａ＿背景音声開始(int サウンドグループ番号, int 音声番号1, int 音声番号2, int 音声番号3, int 音声番号4, int 音声番号5, int 音声番号6, int 音声番号7, int 音声番号8, int 音声番号9, int 音声番号10)
+/* 0004b56a */{
+/* 0004b56a */	if (サウンドグループ番号 <= SYS_SOUNDGROUP_BACKVOICE())
+/* 0004b57e */	{
+/* 0004b57e */		SYS_ERROR("サウンドグループ[%d]無効" % サウンドグループ番号, 0);
+/* 0004b59e */		return;
+/* 0004b5a0 */	}
+/* 0004b5a6 */	array@int SoundList;
+/* 0004b5b0 */	SoundList.PushBack(音声番号1);
+/* 0004b5c0 */	if (音声番号2 != -1)
+/* 0004b5d4 */	{
+/* 0004b5d4 */		SoundList.PushBack(音声番号2);
+/* 0004b5e4 */	}
+/* 0004b5ea */	if (音声番号3 != -1)
+/* 0004b5fe */	{
+/* 0004b5fe */		SoundList.PushBack(音声番号3);
+/* 0004b60e */	}
+/* 0004b614 */	if (音声番号4 != -1)
+/* 0004b628 */	{
+/* 0004b628 */		SoundList.PushBack(音声番号4);
+/* 0004b638 */	}
+/* 0004b63e */	if (音声番号5 != -1)
+/* 0004b652 */	{
+/* 0004b652 */		SoundList.PushBack(音声番号5);
+/* 0004b662 */	}
+/* 0004b668 */	if (音声番号6 != -1)
+/* 0004b67c */	{
+/* 0004b67c */		SoundList.PushBack(音声番号6);
+/* 0004b68c */	}
+/* 0004b692 */	if (音声番号7 != -1)
+/* 0004b6a6 */	{
+/* 0004b6a6 */		SoundList.PushBack(音声番号7);
+/* 0004b6b6 */	}
+/* 0004b6bc */	if (音声番号8 != -1)
+/* 0004b6d0 */	{
+/* 0004b6d0 */		SoundList.PushBack(音声番号8);
+/* 0004b6e0 */	}
+/* 0004b6e6 */	if (音声番号9 != -1)
+/* 0004b6fa */	{
+/* 0004b6fa */		SoundList.PushBack(音声番号9);
+/* 0004b70a */	}
+/* 0004b710 */	if (音声番号10 != -1)
+/* 0004b724 */	{
+/* 0004b724 */		SoundList.PushBack(音声番号10);
+/* 0004b734 */	}
+/* 0004b73a */	SYS_PlayBackSE(サウンドグループ番号, SoundList);
+/* 0004b74e */}
+
+void Ａ＿背景音声終了(int サウンドグループ番号)
+/* 0004b75c */{
+/* 0004b75c */	if (サウンドグループ番号 <= SYS_SOUNDGROUP_BACKVOICE())
+/* 0004b770 */	{
+/* 0004b770 */		SYS_ERROR("サウンドグループ[%d]無効" % サウンドグループ番号, 0);
+/* 0004b790 */		return;
+/* 0004b792 */	}
+/* 0004b798 */	array@int SoundList;
+/* 0004b7a2 */	SoundList.PushBack(0);
+/* 0004b7b2 */	SYS_PlayBackSE(サウンドグループ番号, SoundList);
+/* 0004b7c6 */}
+
+void Ａ＿サウンド状態保存(bool 音楽停止)
+/* 0004b7d4 */{
+/* 0004b7d4 */	SYS_Sound_Status_Set(音楽停止);
+/* 0004b7e0 */}
+
+void Ａ＿サウンド状態復帰()
+/* 0004b7ee */{
+/* 0004b7ee */	SYS_Sound_Status_Return();
+/* 0004b7f4 */}
+

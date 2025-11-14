@@ -1,0 +1,91 @@
+SceneStatistics::SceneStatistics()
+/* 0008c9e4 */{
+/* 0008c9ee */}
+
+void SceneStatistics::run()
+/* 0008c9f4 */{
+/* 0008c9f4 */	this.init();
+/* 0008c9fc */	this.fadeIn(true);
+/* 0008ca0a */}
+
+int SceneStatistics::update()
+/* 0008ca12 */{
+/* 0008ca12 */	g_gameObjectManager.update();
+/* 0008ca1e */	switch (this.state_)
+/* 0008ca30 */	{
+/* 0008ca30 */	case 0:
+/* 0008ca30 */		if (!this.ss_.isMotion())
+/* 0008ca44 */		{
+/* 0008ca44 */			this.state_ = 1;
+/* 0008ca4e */		}
+/* 0008ca54 */		break;
+/* 0008ca5a */	case 1:
+/* 0008ca5a */		if (g_mouse.isClick(0) || g_mouse.isClick(1))
+/* 0008caa2 */		{
+/* 0008caa2 */			if (g_mouse.isClick(1))
+/* 0008caba */			{
+/* 0008caba */				g_sysSound.play(2003, false);
+/* 0008cad2 */			}
+/* 0008cad8 */			this.fadeIn(false);
+/* 0008cae6 */		}
+/* 0008caec */		break;
+/* 0008caf2 */	case 2:
+/* 0008caf2 */		if (!this.ss_.isMotion())
+/* 0008cb06 */		{
+/* 0008cb06 */			this.state_ = 3;
+/* 0008cb10 */		}
+/* 0008cb16 */		break;
+/* 0008cb1c */	case 3:
+/* 0008cb1c */		return 1;
+/* 0008cb24 */		break;
+/* 0008cb2a */	}
+/* 0008cb2a */	return 0;
+/* 0008cb32 */}
+
+void SceneStatistics::init()
+/* 0008cb40 */{
+/* 0008cb40 */	this.initParts();
+/* 0008cb48 */	this.setPartsPos();
+/* 0008cb50 */	this.setPartsShow();
+/* 0008cb58 */}
+
+void SceneStatistics::initParts()
+/* 0008cb60 */{
+/* 0008cb60 */	array@string key;
+/* 0008cb6a */	g_globalGameFlag.getKeyList(key);
+/* 0008cb7c */	this.parts_.Alloc(key.Numof());
+/* 0008cb9c */	this.ss_.init(768, 994, 0, (key.Numof() + 47) / 48);
+/* 0008cbda */	int i;
+/* 0008cbe4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008cc14 */	{
+/* 0008cc14 */		this.parts_[i].initAsText("%s:[%d]" % key[i].GetPart(0, 20) % g_globalGameFlag.getInt(key[i]), 24, false, 256, 255, 255, 255);
+/* 0008cc98 */		this.parts_[i].setParent(this.ss_.getParentPartsNumber());
+/* 0008ccb8 */	}
+/* 0008ccbe */}
+
+void SceneStatistics::setPartsPos()
+/* 0008ccc6 */{
+/* 0008ccc6 */	int i;
+/* 0008ccd0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008cd00 */	{
+/* 0008cd00 */		int g = i / 48;
+/* 0008cd1a */		int n = i % 48;
+/* 0008cd34 */		this.parts_[i].setPos(30 + (n / 24) * 482 + g * 994, 30 + (n % 24) * 30, -2147483648);
+/* 0008cd9a */	}
+/* 0008cda0 */}
+
+void SceneStatistics::setPartsShow()
+/* 0008cda8 */{
+/* 0008cda8 */	int i;
+/* 0008cdb2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008cde2 */	{
+/* 0008cde2 */		this.parts_[i].setShow(true);
+/* 0008cdfc */	}
+/* 0008ce02 */}
+
+void SceneStatistics::fadeIn(bool val)
+/* 0008ce0a */{
+/* 0008ce0a */	this.ss_.fadeIn(val);
+/* 0008ce1c */	this.state_ = val ? 0 : 2;
+/* 0008ce46 */}
+

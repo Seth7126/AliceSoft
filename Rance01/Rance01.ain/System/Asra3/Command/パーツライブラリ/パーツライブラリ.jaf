@@ -1,0 +1,856 @@
+bool Ｐ＿存在確認(int PartsNumber)
+/* 0004e530 */{
+/* 0004e530 */	return GUIEngine.IsExist(PartsNumber);
+/* 0004e542 */}
+
+void Ｐ＿ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0004e556 */{
+/* 0004e556 */	if (!GUIEngine.Parts_SetPartsCG(パーツ番号, ＣＧ名, 0, 状態))
+/* 0004e580 */	{
+/* 0004e580 */		PARTS_Warning("Ｐ＿ＣＧ名(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004e5b6 */	}
+/* 0004e5bc */	ＣＧモード登録(ＣＧ名);
+/* 0004e5c8 */}
+
+void Ｐ＿左右反転ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0004e5d6 */{
+/* 0004e5d6 */	if (!GUIEngine.Parts_SetPartsCG(パーツ番号, ＣＧ名, 1, 状態))
+/* 0004e600 */	{
+/* 0004e600 */		PARTS_Warning("Ｐ＿左右反転ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004e636 */	}
+/* 0004e63c */	ＣＧモード登録(ＣＧ名);
+/* 0004e648 */}
+
+void Ｐ＿上下反転ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0004e656 */{
+/* 0004e656 */	if (!GUIEngine.Parts_SetPartsCG(パーツ番号, ＣＧ名, 2, 状態))
+/* 0004e680 */	{
+/* 0004e680 */		PARTS_Warning("Ｐ＿上下反転ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004e6b6 */	}
+/* 0004e6bc */	ＣＧモード登録(ＣＧ名);
+/* 0004e6c8 */}
+
+string Ｐ＿ＣＧ名取得(int パーツ番号, int 状態)
+/* 0004e6d6 */{
+/* 0004e6d6 */	string CGName;
+/* 0004e6e2 */	GUIEngine.Parts_GetPartsCGName(パーツ番号, CGName, 状態);
+/* 0004e6fe */	return CGName;
+/* 0004e706 */}
+
+void Ｐ＿ＣＧ表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004e71a */{
+/* 0004e71a */	GUIEngine.Parts_SetPartsCGSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004e74a */}
+
+void Ｐ＿ループＣＧ設定(int パーツ番号, string 基本ＣＧ名, int 開始番号, int 枚数, int 時間, int 状態)
+/* 0004e758 */{
+/* 0004e758 */	if (!GUIEngine.Parts_SetLoopCG(パーツ番号, 基本ＣＧ名, 開始番号, 枚数, 時間, 状態))
+/* 0004e78e */	{
+/* 0004e78e */		PARTS_Warning("Ｐ＿ループＣＧ設定(パーツ番号 = %d, 基本ＣＧ名 = %s, 開始番号 = %d, 枚数 = %d, 時間 = %d, 状態 = %d)\n" % パーツ番号 % 基本ＣＧ名 % 開始番号 % 枚数 % 時間 % 状態);
+/* 0004e7ee */	}
+/* 0004e7f4 */}
+
+void Ｐ＿ループＣＧ表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004e802 */{
+/* 0004e802 */	GUIEngine.Parts_SetLoopCGSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004e832 */}
+
+void Ｐ＿テキスト設定(int パーツ番号, string テキスト, int 状態)
+/* 0004e840 */{
+/* 0004e840 */	GUIEngine.Parts_SetText(パーツ番号, テキスト, 状態);
+/* 0004e85e */}
+
+void Ｐ＿テキスト追加(int パーツ番号, string テキスト, int 状態)
+/* 0004e86c */{
+/* 0004e86c */	GUIEngine.Parts_AddPartsText(パーツ番号, テキスト, 状態);
+/* 0004e88a */}
+
+void Ｐ＿テキスト追加表示(int パーツ番号, string テキスト, int 時間, int 状態)
+/* 0004e898 */{
+/* 0004e898 */	int TotalTime = テキスト.Length() * 時間;
+/* 0004e8b6 */	int EndIndex;
+/* 0004e8c0 */	CASTimer Timer;
+/* 0004e8d0 */	Timer.Reset();
+/* 0004e8dc */	for (; ; )
+/* 0004e8dc */	{
+/* 0004e8dc */		int Time = Timer.Get();
+/* 0004e8f4 */		int Index = (テキスト.Length() * Time) / TotalTime;
+/* 0004e91a */		if (Index >= テキスト.Length())
+/* 0004e932 */		{
+/* 0004e932 */			Index = テキスト.Length() - 1;
+/* 0004e950 */		}
+/* 0004e956 */		while (Index >= EndIndex)
+/* 0004e96a */		{
+/* 0004e96a */			string OneChar = テキスト.GetPart(EndIndex, 1);
+/* 0004e988 */			if (!OneChar.Empty())
+/* 0004e996 */			{
+/* 0004e996 */				Ｐ＿テキスト追加(パーツ番号, OneChar, 状態);
+/* 0004e9ae */			}
+/* 0004e9b4 */			++EndIndex;
+/* 0004e9ba */		}
+/* 0004e9c0 */		AFL_View_Update(true);
+/* 0004e9cc */		if (Time >= TotalTime)
+/* 0004e9e0 */		{
+/* 0004e9e0 */			break;
+/* 0004e9e6 */		}
+/* 0004e9ec */	}
+/* 0004e9ec */}
+
+void Ｐ＿テキスト表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004ea00 */{
+/* 0004ea00 */	GUIEngine.Parts_SetPartsTextSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004ea30 */}
+
+void Ｐ＿フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 0004ea3e */{
+/* 0004ea3e */	GUIEngine.Parts_SetFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 0004ea92 */}
+
+void Ｐ＿テキスト先頭行削除(int パーツ番号, int 状態)
+/* 0004eaa0 */{
+/* 0004eaa0 */	GUIEngine.Parts_DeletePartsTopTextLine(パーツ番号, 状態);
+/* 0004eab8 */}
+
+void Ｐ＿テキストハイライト設定(int パーツ番号, int 開始位置, int 文字数, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 0004eac6 */{
+/* 0004eac6 */	GUIEngine.Parts_SetPartsTextHighlight(パーツ番号, 開始位置, 文字数, Ｒ, Ｇ, Ｂ, 状態);
+/* 0004eafa */}
+
+void Ｐ＿テキストハイライト追加(int パーツ番号, int 開始位置, int 文字数, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 0004eb08 */{
+/* 0004eb08 */	GUIEngine.Parts_AddPartsTextHighlight(パーツ番号, 開始位置, 文字数, Ｒ, Ｇ, Ｂ, 状態);
+/* 0004eb3c */}
+
+void Ｐ＿テキストハイライト削除(int パーツ番号, int 状態)
+/* 0004eb4a */{
+/* 0004eb4a */	GUIEngine.Parts_ClearPartsTextHighlight(パーツ番号, 状態);
+/* 0004eb60 */}
+
+void Ｐ＿テキスト改行表示(int パーツ番号, bool 許可, int 状態)
+/* 0004eb6e */{
+/* 0004eb6e */	GUIEngine.Parts_SetPartsTextCountReturn(パーツ番号, 許可, 状態);
+/* 0004eb8a */}
+
+bool Ｐ＿テキスト改行表示確認(int パーツ番号, bool 許可, int 状態)
+/* 0004eb98 */{
+/* 0004eb98 */	return GUIEngine.Parts_GetPartsTextCountReturn(パーツ番号, 状態);
+/* 0004ebb0 */}
+
+void Ｐ＿フォント種類設定(int パーツ番号, int 種類, int 状態)
+/* 0004ebc4 */{
+/* 0004ebc4 */	GUIEngine.Parts_SetPartsFontType(パーツ番号, 種類, 状態);
+/* 0004ebe2 */}
+
+void Ｐ＿フォントサイズ設定(int パーツ番号, int サイズ, int 状態)
+/* 0004ebf0 */{
+/* 0004ebf0 */	GUIEngine.Parts_SetPartsFontSize(パーツ番号, サイズ, 状態);
+/* 0004ec0e */}
+
+void Ｐ＿フォント色設定(int パーツ番号, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 0004ec1c */{
+/* 0004ec1c */	GUIEngine.Parts_SetPartsFontColor(パーツ番号, Ｒ, Ｇ, Ｂ, 状態);
+/* 0004ec46 */}
+
+void Ｐ＿フォント太字幅設定(int パーツ番号, float 太字幅, int 状態)
+/* 0004ec54 */{
+/* 0004ec54 */	GUIEngine.Parts_SetPartsFontBoldWeight(パーツ番号, 太字幅, 状態);
+/* 0004ec72 */}
+
+void Ｐ＿フォント縁取り色設定(int パーツ番号, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 0004ec80 */{
+/* 0004ec80 */	GUIEngine.Parts_SetPartsFontEdgeColor(パーツ番号, Ｒ, Ｇ, Ｂ, 状態);
+/* 0004ecaa */}
+
+void Ｐ＿フォント縁取り幅設定(int パーツ番号, float 縁取り幅, int 状態)
+/* 0004ecb8 */{
+/* 0004ecb8 */	GUIEngine.Parts_SetPartsFontEdgeWeight(パーツ番号, 縁取り幅, 状態);
+/* 0004ecd6 */}
+
+void Ｐ＿テキスト字間隔設定(int パーツ番号, int _字間隔, int 状態)
+/* 0004ece4 */{
+/* 0004ece4 */	GUIEngine.Parts_SetTextCharSpace(パーツ番号, _字間隔, 状態);
+/* 0004ed02 */}
+
+void Ｐ＿テキスト行間隔設定(int パーツ番号, int _行間隔, int 状態)
+/* 0004ed10 */{
+/* 0004ed10 */	GUIEngine.Parts_SetTextLineSpace(パーツ番号, _行間隔, 状態);
+/* 0004ed2e */}
+
+void Ｐ＿数字ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0004ed3c */{
+/* 0004ed3c */	if (!GUIEngine.Parts_SetNumeralCG(パーツ番号, ＣＧ名, 状態))
+/* 0004ed60 */	{
+/* 0004ed60 */		PARTS_Warning("Ｐ＿数字ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004ed96 */	}
+/* 0004ed9c */}
+
+void Ｐ＿数字連結ＣＧ設定(int パーツ番号, string ＣＧ名, int 幅０, int 幅１, int 幅２, int 幅３, int 幅４, int 幅５, int 幅６, int 幅７, int 幅８, int 幅９, int 幅マイナス, int 幅コンマ, int 状態)
+/* 0004edaa */{
+/* 0004edaa */	if (!GUIEngine.Parts_SetNumeralLinkedCGNumberWidthWidthList(パーツ番号, ＣＧ名, 幅０, 幅１, 幅２, 幅３, 幅４, 幅５, 幅６, 幅７, 幅８, 幅９, 幅マイナス, 幅コンマ, 状態))
+/* 0004ee16 */	{
+/* 0004ee16 */		PARTS_Warning("Ｐ＿数字連結ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004ee4c */	}
+/* 0004ee52 */}
+
+void Ｐ＿数字半角フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 0004ee60 */{
+/* 0004ee60 */	GUIEngine.Parts_SetNumeralFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, false, 状態);
+/* 0004eeba */}
+
+void Ｐ＿数字全角フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 0004eec8 */{
+/* 0004eec8 */	GUIEngine.Parts_SetNumeralFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, true, 状態);
+/* 0004ef22 */}
+
+void Ｐ＿数字設定(int パーツ番号, int 数, int 状態)
+/* 0004ef30 */{
+/* 0004ef30 */	GUIEngine.Parts_SetNumeralNumber(パーツ番号, 数, 状態);
+/* 0004ef4e */}
+
+void Ｐ＿数字コンマ表示設定(int パーツ番号, bool 表示フラグ, int 状態)
+/* 0004ef5c */{
+/* 0004ef5c */	GUIEngine.Parts_SetNumeralShowComma(パーツ番号, 表示フラグ, 状態);
+/* 0004ef7a */}
+
+void Ｐ＿数字字間隔設定(int パーツ番号, int _字間隔, int 状態)
+/* 0004ef88 */{
+/* 0004ef88 */	GUIEngine.Parts_SetNumeralSpace(パーツ番号, _字間隔, 状態);
+/* 0004efa6 */}
+
+void Ｐ＿数字桁設定(int パーツ番号, int 桁数, int 状態)
+/* 0004efb4 */{
+/* 0004efb4 */	GUIEngine.Parts_SetNumeralLength(パーツ番号, 桁数, 状態);
+/* 0004efd2 */}
+
+void Ｐ＿数字表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004efe0 */{
+/* 0004efe0 */	GUIEngine.Parts_SetNumeralSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004f010 */}
+
+void Ｐ＿横ゲージＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0004f01e */{
+/* 0004f01e */	if (!GUIEngine.Parts_SetHGaugeCG(パーツ番号, ＣＧ名, 状態))
+/* 0004f042 */	{
+/* 0004f042 */		PARTS_Warning("Ｐ＿横ゲージＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004f078 */	}
+/* 0004f07e */}
+
+void Ｐ＿横ゲージ率設定(int パーツ番号, float 分子, float 分母, int 状態)
+/* 0004f08c */{
+/* 0004f08c */	GUIEngine.Parts_SetHGaugeRate(パーツ番号, 分子, 分母, 状態);
+/* 0004f0b0 */}
+
+void Ｐ＿横ゲージ表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004f0be */{
+/* 0004f0be */	GUIEngine.Parts_SetHGaugeSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004f0ee */}
+
+void Ｐ＿縦ゲージＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0004f0fc */{
+/* 0004f0fc */	if (!GUIEngine.Parts_SetVGaugeCG(パーツ番号, ＣＧ名, 状態))
+/* 0004f120 */	{
+/* 0004f120 */		PARTS_Warning("Ｐ＿縦ゲージＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0004f156 */	}
+/* 0004f15c */}
+
+void Ｐ＿縦ゲージ率設定(int パーツ番号, float 分子, float 分母, int 状態)
+/* 0004f16a */{
+/* 0004f16a */	GUIEngine.Parts_SetVGaugeRate(パーツ番号, 分子, 分母, 状態);
+/* 0004f18e */}
+
+void Ｐ＿縦ゲージ表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004f19c */{
+/* 0004f19c */	GUIEngine.Parts_SetVGaugeSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004f1cc */}
+
+void Ｐ＿矩形判定設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ)
+/* 0004f1da */{
+/* 0004f1da */	GUIEngine.Parts_SetPos(パーツ番号, Ｘ, Ｙ);
+/* 0004f1f6 */	GUIEngine.Parts_SetPartsRectangleDetectionSize(パーツ番号, 幅, 高さ, 1);
+/* 0004f21a */}
+
+void Ｐ＿矩形判定範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004f228 */{
+/* 0004f228 */	GUIEngine.Parts_SetPartsRectangleDetectionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004f258 */}
+
+void Ｐ＿フラット設定(int パーツ番号, string ファイル名, int 状態)
+/* 0004f266 */{
+/* 0004f266 */	if (!GUIEngine.Parts_SetPartsFlat(パーツ番号, ファイル名, 状態))
+/* 0004f28a */	{
+/* 0004f28a */		PARTS_Warning("Ｐ＿フラット設定(パーツ番号 = %d, ファイル名 = \"%s\", 状態 = %d)\n" % パーツ番号 % ファイル名 % 状態);
+/* 0004f2c0 */	}
+/* 0004f2c6 */}
+
+bool Ｐ＿フラット終了確認(int パーツ番号, int 状態)
+/* 0004f2d4 */{
+/* 0004f2d4 */	return GUIEngine.Parts_IsPartsFlatEnd(パーツ番号, 状態);
+/* 0004f2ec */}
+
+void Ｐ＿フラット開始フレーム移動(int パーツ番号, int 状態)
+/* 0004f300 */{
+/* 0004f300 */	GUIEngine.Parts_BackPartsFlatBeginFrame(パーツ番号, 状態);
+/* 0004f318 */}
+
+void Ｐ＿フラット最終フレームステップ(int パーツ番号, int 状態)
+/* 0004f326 */{
+/* 0004f326 */	GUIEngine.Parts_StepPartsFlatFinalFrame(パーツ番号, 状態);
+/* 0004f33e */}
+
+void Ｐ＿ＣＧ判定設定(int パーツ番号, int Ｘ, int Ｙ, string ＣＧ名)
+/* 0004f34c */{
+/* 0004f34c */	GUIEngine.Parts_SetPos(パーツ番号, Ｘ, Ｙ);
+/* 0004f368 */	if (!GUIEngine.Parts_SetPartsCGDetectionSize(パーツ番号, ＣＧ名, 1))
+/* 0004f38c */	{
+/* 0004f38c */		PARTS_Warning("Ｐ＿ＣＧ判定設定(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, ＣＧ名 = %s)\n" % パーツ番号 % Ｘ % Ｙ % ＣＧ名);
+/* 0004f3d0 */	}
+/* 0004f3d6 */}
+
+void Ｐ＿ＣＧ判定範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0004f3e4 */{
+/* 0004f3e4 */	GUIEngine.Parts_SetPartsCGDetectionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0004f414 */}
+
+void Ｐ＿削除(int パーツ番号)
+/* 0004f422 */{
+/* 0004f422 */	if (パーツ番号 >= 1000000000)
+/* 0004f430 */	{
+/* 0004f430 */		string ErrorText;
+/* 0004f43c */		ErrorText += "指定されたパーツ番号【%d】はシステムが使用しています。\n" % パーツ番号;
+/* 0004f45a */		ErrorText += "削除することができません。\n";
+/* 0004f46a */		ErrorText += "使用可能なパーツ番号は【 1 ～ %d 】です" % 999999999;
+/* 0004f488 */		system.Error(ErrorText);
+/* 0004f496 */		return;
+/* 0004f498 */	}
+/* 0004f49e */	PARTS_Release(パーツ番号);
+/* 0004f4aa */}
+
+void Ｐ＿座標設定(int パーツ番号, int Ｘ, int Ｙ)
+/* 0004f4b8 */{
+/* 0004f4b8 */	GUIEngine.Parts_SetPos(パーツ番号, Ｘ, Ｙ);
+/* 0004f4d4 */}
+
+void Ｐ＿原点座標設定(int パーツ番号, int 原点座標)
+/* 0004f4e2 */{
+/* 0004f4e2 */	GUIEngine.Parts_SetPartsOriginPosMode(パーツ番号, 原点座標);
+/* 0004f4f8 */}
+
+void Ｐ＿Ｚ座標設定(int パーツ番号, int Ｚ)
+/* 0004f506 */{
+/* 0004f506 */	SYS_ASSERTE_Z(Ｚ);
+/* 0004f514 */	GUIEngine.Parts_SetZ(パーツ番号, Ｚ);
+/* 0004f52a */}
+
+void Ｐ＿表示設定(int パーツ番号, bool 表示フラグ)
+/* 0004f538 */{
+/* 0004f538 */	GUIEngine.Parts_SetShow(パーツ番号, 表示フラグ);
+/* 0004f54e */}
+
+void Ｐ＿アルファ値設定(int パーツ番号, int アルファ値)
+/* 0004f55c */{
+/* 0004f55c */	GUIEngine.Parts_SetAlpha(パーツ番号, アルファ値);
+/* 0004f572 */}
+
+void Ｐ＿加算色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 0004f580 */{
+/* 0004f580 */	GUIEngine.Parts_SetAddColor(パーツ番号, 赤, 緑, 青);
+/* 0004f5a2 */}
+
+void Ｐ＿乗算色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 0004f5b0 */{
+/* 0004f5b0 */	GUIEngine.Parts_SetMultiplyColor(パーツ番号, 赤, 緑, 青);
+/* 0004f5d2 */}
+
+void Ｐ＿描画フィルタ設定(int パーツ番号, int 描画フィルタ)
+/* 0004f5e0 */{
+/* 0004f5e0 */	GUIEngine.Parts_SetPartsDrawFilter(パーツ番号, 描画フィルタ);
+/* 0004f5f6 */}
+
+void Ｐ＿ピクセル判定設定(int パーツ番号, bool ピクセル判定)
+/* 0004f604 */{
+/* 0004f604 */	GUIEngine.Parts_SetPartsPixelDecide(パーツ番号, ピクセル判定);
+/* 0004f61a */}
+
+void Ｐ＿時間初期化許可設定(int パーツ番号, bool 許可, int 状態)
+/* 0004f628 */{
+/* 0004f628 */	GUIEngine.Parts_SetResetTimerByChangeInputStatus(パーツ番号, 許可, 状態);
+/* 0004f644 */}
+
+int Ｐ＿Ｘ座標取得(int パーツ番号)
+/* 0004f652 */{
+/* 0004f652 */	return GUIEngine.Parts_GetPartsX(パーツ番号);
+/* 0004f664 */}
+
+int Ｐ＿Ｙ座標取得(int パーツ番号)
+/* 0004f678 */{
+/* 0004f678 */	return GUIEngine.Parts_GetPartsY(パーツ番号);
+/* 0004f68a */}
+
+int Ｐ＿Ｚ座標取得(int パーツ番号)
+/* 0004f69e */{
+/* 0004f69e */	return GUIEngine.Parts_GetPartsZ(パーツ番号);
+/* 0004f6b0 */}
+
+int Ｐ＿原点座標取得(int パーツ番号)
+/* 0004f6c4 */{
+/* 0004f6c4 */	return GUIEngine.Parts_GetPartsOriginPosMode(パーツ番号);
+/* 0004f6d6 */}
+
+bool Ｐ＿表示設定取得(int パーツ番号)
+/* 0004f6ea */{
+/* 0004f6ea */	return GUIEngine.Parts_GetPartsShow(パーツ番号);
+/* 0004f6fc */}
+
+int Ｐ＿アルファ値取得(int パーツ番号)
+/* 0004f710 */{
+/* 0004f710 */	return GUIEngine.Parts_GetPartsAlpha(パーツ番号);
+/* 0004f722 */}
+
+void Ｐ＿加算色取得(int パーツ番号, ref int 赤, ref int 緑, ref int 青)
+/* 0004f736 */{
+/* 0004f736 */	GUIEngine.Parts_GetAddColor(パーツ番号, 赤, 緑, 青);
+/* 0004f758 */}
+
+void Ｐ＿乗算色取得(int パーツ番号, ref int 赤, ref int 緑, ref int 青)
+/* 0004f766 */{
+/* 0004f766 */	GUIEngine.Parts_GetMultiplyColor(パーツ番号, 赤, 緑, 青);
+/* 0004f788 */}
+
+bool Ｐ＿時間初期化許可取得(int パーツ番号, int 状態)
+/* 0004f796 */{
+/* 0004f796 */	return GUIEngine.Parts_GetResetTimerByChangeInputStatus(パーツ番号, 状態);
+/* 0004f7ae */}
+
+void Ｐ＿オンカーソル効果音設定(int パーツ番号, int 効果音番号)
+/* 0004f7c2 */{
+/* 0004f7c2 */	GUIEngine.Parts_SetSoundNumber(パーツ番号, 効果音番号, 2);
+/* 0004f7de */}
+
+void Ｐ＿クリック効果音設定(int パーツ番号, int 効果音番号)
+/* 0004f7ec */{
+/* 0004f7ec */	GUIEngine.Parts_SetSoundNumber(パーツ番号, 効果音番号, 3);
+/* 0004f808 */}
+
+void Ｐ＿親設定(int パーツ番号, int 親パーツ番号)
+/* 0004f816 */{
+/* 0004f816 */	GUIEngine.Parts_SetParentPartsNumber(パーツ番号, 親パーツ番号);
+/* 0004f82c */}
+
+void Ｐ＿親メッセージウィンドウ設定(int パーツ番号, int 親メッセージウィンドウ番号)
+/* 0004f83a */{
+/* 0004f83a */	Ｐ＿親設定(パーツ番号, 1000000000 + 親メッセージウィンドウ番号);
+/* 0004f854 */}
+
+void Ｐ＿オンカーソル表示連動設定(int パーツ番号, int 参照パーツ番号)
+/* 0004f862 */{
+/* 0004f862 */	GUIEngine.Parts_SetOnCursorShowLinkPartsNumber(パーツ番号, 参照パーツ番号);
+/* 0004f878 */}
+
+void Ｐ＿メッセージウィンドウ表示連動設定(int パーツ番号, bool 表示連動設定)
+/* 0004f886 */{
+/* 0004f886 */	GUIEngine.Parts_SetPartsMessageWindowShowLink(パーツ番号, 表示連動設定);
+/* 0004f89c */}
+
+void Ｐ＿クリック可能設定(int パーツ番号, bool 選択可能)
+/* 0004f8aa */{
+/* 0004f8aa */	GUIEngine.Parts_SetClickable(パーツ番号, 選択可能);
+/* 0004f8c0 */}
+
+bool Ｐ＿クリック可能設定取得(int パーツ番号)
+/* 0004f8ce */{
+/* 0004f8ce */	return GUIEngine.Parts_GetPartsClickable(パーツ番号);
+/* 0004f8e0 */}
+
+void Ｐ＿オンカーソル透過設定(int パーツ番号, bool 透過許可)
+/* 0004f8f4 */{
+/* 0004f8f4 */	GUIEngine.Parts_SetPassCursor(パーツ番号, 透過許可);
+/* 0004f90a */}
+
+bool Ｐ＿オンカーソル透過設定取得(int パーツ番号)
+/* 0004f918 */{
+/* 0004f918 */	return GUIEngine.Parts_GetPartsPassCursor(パーツ番号);
+/* 0004f92a */}
+
+void Ｐ＿クリックミス効果音設定(int 効果音番号)
+/* 0004f93e */{
+/* 0004f93e */	GUIEngine.Parts_SetClickMissSoundNumber(効果音番号);
+/* 0004f94e */}
+
+int Ｐ＿クリック実行(bool キーキャンセル)
+/* 0004f95c */{
+/* 0004f95c */	return PARTS_WaitForClick(NULL, キーキャンセル);
+/* 0004f970 */}
+
+void Ｐ＿モーション移動設定(int パーツ番号, int 開始Ｘ座標, int 開始Ｙ座標, int 終了Ｘ座標, int 終了Ｙ座標, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004f984 */{
+/* 0004f984 */	GUIEngine.Parts_AddMotionPos(パーツ番号, 開始Ｘ座標, 開始Ｙ座標, 終了Ｘ座標, 終了Ｙ座標, 開始時間, 終了時間, カーブ定義名);
+/* 0004f9be */}
+
+void Ｐ＿モーションアルファ設定(int パーツ番号, int 開始アルファ値, int 終了アルファ値, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004f9cc */{
+/* 0004f9cc */	GUIEngine.Parts_AddMotionAlpha(パーツ番号, 開始アルファ値, 終了アルファ値, 開始時間, 終了時間, カーブ定義名);
+/* 0004f9fa */}
+
+void Ｐ＿モーションＣＧ設定(int パーツ番号, string 基準ＣＧ名, int 開始番号, int 枚数, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fa08 */{
+/* 0004fa08 */	if (!GUIEngine.Parts_AddMotionCG(パーツ番号, 基準ＣＧ名, 開始番号, 枚数, 開始時間, 終了時間, カーブ定義名))
+/* 0004fa44 */	{
+/* 0004fa44 */		PARTS_Warning("Ｐ＿ＣＧ判定設定(パーツ番号 = %d, 基準ＣＧ名 = %s, 開始番号 = %d, 枚数 = %d, 開始時間 = %d, 終了時間 = %d, カーブ定義名 = %s)\n" % パーツ番号 % 基準ＣＧ名 % 開始番号 % 枚数 % 開始時間 % 終了時間 % カーブ定義名);
+/* 0004fab2 */	}
+/* 0004fab8 */}
+
+void Ｐ＿モーションＣＧエフェクト設定(int パーツ番号, string 基準ＣＧ名, int 開始番号, int 枚数, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fac6 */{
+/* 0004fac6 */	if (!GUIEngine.Parts_AddMotionCG(パーツ番号, 基準ＣＧ名, 開始番号, 枚数, 開始時間, 終了時間, カーブ定義名))
+/* 0004fb02 */	{
+/* 0004fb02 */		PARTS_Warning("Ｐ＿モーションＣＧエフェクト設定(パーツ番号 = %d, 基準ＣＧ名 = %s, 開始番号 = %d, 枚数 = %d, 開始時間 = %d, 終了時間 = %d, カーブ定義名 = %s)\n" % パーツ番号 % 基準ＣＧ名 % 開始番号 % 枚数 % 開始時間 % 終了時間 % カーブ定義名);
+/* 0004fb70 */	}
+/* 0004fb76 */	GUIEngine.Parts_AddMotionCG(パーツ番号, "", 0, 1, 終了時間, 終了時間, "");
+/* 0004fbac */}
+
+void Ｐ＿モーション横ゲージ率設定(int パーツ番号, float 開始分子, float 開始分母, float 終了分子, float 終了分母, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fbba */{
+/* 0004fbba */	GUIEngine.Parts_AddMotionHGaugeRate(パーツ番号, 開始分子, 開始分母, 終了分子, 終了分母, 開始時間, 終了時間, カーブ定義名);
+/* 0004fbf4 */}
+
+void Ｐ＿モーション縦ゲージ率設定(int パーツ番号, float 開始分子, float 開始分母, float 終了分子, float 終了分母, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fc02 */{
+/* 0004fc02 */	GUIEngine.Parts_AddMotionVGaugeRate(パーツ番号, 開始分子, 開始分母, 終了分子, 終了分母, 開始時間, 終了時間, カーブ定義名);
+/* 0004fc3c */}
+
+void Ｐ＿モーション数字設定(int パーツ番号, int 開始数, int 終了数, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fc4a */{
+/* 0004fc4a */	GUIEngine.Parts_AddMotionNumeralNumber(パーツ番号, 開始数, 終了数, 開始時間, 終了時間, カーブ定義名);
+/* 0004fc78 */}
+
+void Ｐ＿モーションＸ拡大率設定(int パーツ番号, float 開始Ｘ拡大率, float 終了Ｘ拡大率, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fc86 */{
+/* 0004fc86 */	GUIEngine.Parts_AddMotionMagX(パーツ番号, 開始Ｘ拡大率, 終了Ｘ拡大率, 開始時間, 終了時間, カーブ定義名);
+/* 0004fcb4 */}
+
+void Ｐ＿モーションＹ拡大率設定(int パーツ番号, float 開始Ｙ拡大率, float 終了Ｙ拡大率, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fcc2 */{
+/* 0004fcc2 */	GUIEngine.Parts_AddMotionMagY(パーツ番号, 開始Ｙ拡大率, 終了Ｙ拡大率, 開始時間, 終了時間, カーブ定義名);
+/* 0004fcf0 */}
+
+void Ｐ＿モーションＸ回転角度設定(int パーツ番号, float 開始Ｘ回転角度, float 終了Ｘ回転角度, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fcfe */{
+/* 0004fcfe */	GUIEngine.Parts_AddMotionRotateX(パーツ番号, 開始Ｘ回転角度, 終了Ｘ回転角度, 開始時間, 終了時間, カーブ定義名);
+/* 0004fd2c */}
+
+void Ｐ＿モーションＹ回転角度設定(int パーツ番号, float 開始Ｙ回転角度, float 終了Ｙ回転角度, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fd3a */{
+/* 0004fd3a */	GUIEngine.Parts_AddMotionRotateY(パーツ番号, 開始Ｙ回転角度, 終了Ｙ回転角度, 開始時間, 終了時間, カーブ定義名);
+/* 0004fd68 */}
+
+void Ｐ＿モーションＺ回転角度設定(int パーツ番号, float 開始Ｚ回転角度, float 終了Ｚ回転角度, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0004fd76 */{
+/* 0004fd76 */	GUIEngine.Parts_AddMotionRotateZ(パーツ番号, 開始Ｚ回転角度, 終了Ｚ回転角度, 開始時間, 終了時間, カーブ定義名);
+/* 0004fda4 */}
+
+void Ｐ＿モーション振動設定(int パーツ番号, int 開始幅, int 開始高さ, int 開始時間, int 終了時間)
+/* 0004fdb2 */{
+/* 0004fdb2 */	GUIEngine.Parts_AddMotionVibrationSize(パーツ番号, 開始幅, 開始高さ, 開始時間, 終了時間);
+/* 0004fdda */}
+
+void Ｐ＿モーション画面振動設定(int 横振幅, int 縦振幅, int 開始時間, int 終了時間)
+/* 0004fde8 */{
+/* 0004fde8 */	GUIEngine.Parts_AddWholeMotionVibrationSize(横振幅, 縦振幅, 開始時間, 終了時間);
+/* 0004fe0a */}
+
+void Ｐ＿モーション効果音設定(int 効果音番号, int 開始時間)
+/* 0004fe18 */{
+/* 0004fe18 */	GUIEngine.Parts_AddMotionSound(効果音番号, 開始時間);
+/* 0004fe2e */}
+
+void Ｐ＿モーション実行(bool 未読既読スキップ)
+/* 0004fe3c */{
+/* 0004fe3c */	PARTS_BeginMotion();
+/* 0004fe42 */	for (; ; )
+/* 0004fe42 */	{
+/* 0004fe42 */		PARTS_UpdateMotion(未読既読スキップ);
+/* 0004fe4e */		AFL_View_Update(未読既読スキップ);
+/* 0004fe5a */		if (!PARTS_IsMotion())
+/* 0004fe68 */		{
+/* 0004fe68 */			break;
+/* 0004fe6e */		}
+/* 0004fe74 */	}
+/* 0004fe7a */	PARTS_EndMotion();
+/* 0004fe80 */}
+
+void Ｐ＿モーション実行キャンセル可能()
+/* 0004fe8e */{
+/* 0004fe8e */	CASClick LButtonClick;
+/* 0004fe9e */	CASClick RButtonClick;
+/* 0004feae */	CASClick SpaceKeyClick;
+/* 0004febe */	CASClick EnterKeyClick;
+/* 0004fece */	LButtonClick.Init(1, true);
+/* 0004fee6 */	RButtonClick.Init(2, true);
+/* 0004fefe */	SpaceKeyClick.Init(32, true);
+/* 0004ff16 */	EnterKeyClick.Init(13, true);
+/* 0004ff2e */	PARTS_BeginMotion();
+/* 0004ff34 */	for (; ; )
+/* 0004ff34 */	{
+/* 0004ff34 */		_g_MouseWheel._Update(true);
+/* 0004ff46 */		if (LButtonClick.IsClick(-2147483648) || RButtonClick.IsClick(-2147483648) || SpaceKeyClick.IsClick(-2147483648) || EnterKeyClick.IsClick(-2147483648) || 全文スキップ中確認() || 既読スキップ中確認() || SYS_ホイールバック確認())
+/* 0005005a */		{
+/* 0005005a */			PARTS_EndMotionFociby();
+/* 00050060 */			break;
+/* 00050066 */		}
+/* 0005006c */		PARTS_UpdateMotion(false);
+/* 00050078 */		AFL_View_Update(true);
+/* 00050084 */		if (!PARTS_IsMotion())
+/* 00050092 */		{
+/* 00050092 */			break;
+/* 00050098 */		}
+/* 0005009e */	}
+/* 000500a4 */	PARTS_EndMotion();
+/* 000500aa */}
+
+void Ｐ＿Ｘ拡大率設定(int パーツ番号, float Ｘ拡大率)
+/* 000500b8 */{
+/* 000500b8 */	GUIEngine.Parts_SetPartsMagX(パーツ番号, Ｘ拡大率);
+/* 000500ce */}
+
+void Ｐ＿Ｙ拡大率設定(int パーツ番号, float Ｙ拡大率)
+/* 000500dc */{
+/* 000500dc */	GUIEngine.Parts_SetPartsMagY(パーツ番号, Ｙ拡大率);
+/* 000500f2 */}
+
+void Ｐ＿Ｘ回転角度設定(int パーツ番号, float Ｘ回転角度)
+/* 00050100 */{
+/* 00050100 */	GUIEngine.Parts_SetPartsRotateX(パーツ番号, Ｘ回転角度);
+/* 00050116 */}
+
+void Ｐ＿Ｙ回転角度設定(int パーツ番号, float Ｙ回転角度)
+/* 00050124 */{
+/* 00050124 */	GUIEngine.Parts_SetPartsRotateY(パーツ番号, Ｙ回転角度);
+/* 0005013a */}
+
+void Ｐ＿Ｚ回転角度設定(int パーツ番号, float Ｚ回転角度)
+/* 00050148 */{
+/* 00050148 */	GUIEngine.Parts_SetPartsRotateZ(パーツ番号, Ｚ回転角度);
+/* 0005015e */}
+
+void Ｐ＿アルファクリッパー設定(int パーツ番号, int アルファクリッパーパーツ番号)
+/* 0005016c */{
+/* 0005016c */	GUIEngine.Parts_SetPartsAlphaClipperPartsNumber(パーツ番号, アルファクリッパーパーツ番号);
+/* 00050182 */}
+
+void Ｐ＿構築手順＿作成(int パーツ番号, int 幅, int 高さ, int 状態)
+/* 00050190 */{
+/* 00050190 */	if (!GUIEngine.Parts_AddCreateToPartsConstructionProcess(パーツ番号, 幅, 高さ, 状態))
+/* 000501ba */	{
+/* 000501ba */		PARTS_Warning("Ｐ＿構築手順＿作成(パーツ番号 = %d, 幅 = %d, 高さ = %d, 状態 = %d)\n" % パーツ番号 % 幅 % 高さ % 状態);
+/* 000501fe */	}
+/* 00050204 */}
+
+void Ｐ＿構築手順＿ピクセル作成(int パーツ番号, int 幅, int 高さ, int 状態)
+/* 00050212 */{
+/* 00050212 */	if (!GUIEngine.Parts_AddCreatePixelOnlyToPartsConstructionProcess(パーツ番号, 幅, 高さ, 状態))
+/* 0005023c */	{
+/* 0005023c */		PARTS_Warning("Ｐ＿構築手順＿ピクセル作成(パーツ番号 = %d, 幅 = %d, 高さ = %d, 状態 = %d)\n" % パーツ番号 % 幅 % 高さ % 状態);
+/* 00050280 */	}
+/* 00050286 */}
+
+void Ｐ＿構築手順＿ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 00050294 */{
+/* 00050294 */	if (!GUIEngine.Parts_AddCreateCGToProcess(パーツ番号, ＣＧ名, 状態))
+/* 000502b8 */	{
+/* 000502b8 */		PARTS_Warning("Ｐ＿構築手順＿ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 000502ee */	}
+/* 000502f4 */}
+
+void Ｐ＿構築手順＿色塗り(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int Ｒ, int Ｇ, int Ｂ, int アルファ, int 状態)
+/* 00050302 */{
+/* 00050302 */	if (アルファ == -1)
+/* 00050316 */	{
+/* 00050316 */		if (!GUIEngine.Parts_AddFillToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, Ｒ, Ｇ, Ｂ, 状態))
+/* 0005035e */		{
+/* 0005035e */			PARTS_Warning("Ｐ＿構築手順＿色塗り(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % Ｒ % Ｇ % Ｂ % 状態);
+/* 000503e8 */		}
+/* 000503ee */	}
+/* 000503f4 */	else if (!GUIEngine.Parts_AddFillWithAlphaToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, Ｒ, Ｇ, Ｂ, アルファ, 状態))
+/* 00050442 */	{
+/* 00050442 */		PARTS_Warning("Ｐ＿構築手順＿色塗り(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, アルファ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % Ｒ % Ｇ % Ｂ % アルファ % 状態);
+/* 000504da */	}
+/* 000504e0 */}
+
+void Ｐ＿構築手順＿アルファ塗り(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int アルファ, int 状態)
+/* 000504ee */{
+/* 000504ee */	if (!GUIEngine.Parts_AddFillAMapToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, アルファ, 状態))
+/* 0005052a */	{
+/* 0005052a */		PARTS_Warning("Ｐ＿構築手順＿アルファ塗り(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, アルファ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % アルファ % 状態);
+/* 00050598 */	}
+/* 0005059e */}
+
+void Ｐ＿構築手順＿ブレンド塗り(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int Ｒ, int Ｇ, int Ｂ, int アルファ, int 状態)
+/* 000505ac */{
+/* 000505ac */	if (!GUIEngine.Parts_AddFillAlphaColorToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, Ｒ, Ｇ, Ｂ, アルファ, 状態))
+/* 000505fa */	{
+/* 000505fa */		PARTS_Warning("Ｐ＿構築手順＿ブレンド塗り(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, アルファ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % Ｒ % Ｇ % Ｂ % アルファ % 状態);
+/* 00050692 */	}
+/* 00050698 */}
+
+void Ｐ＿構築手順＿グラデーション(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 上Ｒ, int 上Ｇ, int 上Ｂ, int 下Ｒ, int 下Ｇ, int 下Ｂ, int 状態)
+/* 000506a6 */{
+/* 000506a6 */	GUIEngine.Parts_AddFillGradationHorizonToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 上Ｒ, 上Ｇ, 上Ｂ, 下Ｒ, 下Ｇ, 下Ｂ, 状態);
+/* 000506fa */	if (!GUIEngine.Parts_AddFillGradationHorizonToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 上Ｒ, 上Ｇ, 上Ｂ, 下Ｒ, 下Ｇ, 下Ｂ, 状態))
+/* 00050754 */	{
+/* 00050754 */		PARTS_Warning("Ｐ＿構築手順＿グラデーション(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, 上Ｒ = %d, 上Ｇ = %d, 上Ｂ = %d, 下Ｒ = %d, 下Ｇ = %d, 下Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % 上Ｒ % 上Ｇ % 上Ｂ % 下Ｒ % 下Ｇ % 下Ｂ % 状態);
+/* 00050808 */	}
+/* 0005080e */}
+
+void Ｐ＿構築手順＿テキストブレンド(int パーツ番号, int Ｘ, int Ｙ, string テキスト, CASCharSpriteProperty フォント, int 文字間隔, int 行間隔, int 状態)
+/* 0005081c */{
+/* 0005081c */	CASCharSpriteProperty Property;
+/* 0005082c */	Property = フォント;
+/* 0005083c */	CASColor Color;
+/* 0005084c */	Color = Property.GetColor();
+/* 00050868 */	CASColor EdgeColor;
+/* 00050878 */	EdgeColor = Property.GetEdgeColor();
+/* 00050894 */	if (!GUIEngine.Parts_AddDrawTextToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, テキスト, Property.GetType(), Property.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), Property.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Property.GetEdgeWeight(), 文字間隔, 行間隔, 状態))
+/* 00050948 */	{
+/* 00050948 */		PARTS_Warning("Ｐ＿構築手順＿テキストブレンド(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, テキスト = %s, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % テキスト % 状態);
+/* 0005099a */	}
+/* 000509a0 */}
+
+void Ｐ＿構築手順＿テキストコピー(int パーツ番号, int Ｘ, int Ｙ, string テキスト, CASCharSpriteProperty フォント, int 文字間隔, int 行間隔, int 状態)
+/* 000509ae */{
+/* 000509ae */	CASCharSpriteProperty Property;
+/* 000509be */	Property = フォント;
+/* 000509ce */	CASColor Color;
+/* 000509de */	Color = Property.GetColor();
+/* 000509fa */	CASColor EdgeColor;
+/* 00050a0a */	EdgeColor = Property.GetEdgeColor();
+/* 00050a26 */	if (!GUIEngine.Parts_AddCopyTextToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, テキスト, Property.GetType(), Property.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), Property.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Property.GetEdgeWeight(), 文字間隔, 行間隔, 状態))
+/* 00050ada */	{
+/* 00050ada */		PARTS_Warning("Ｐ＿構築手順＿テキストコピー(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, テキスト = %s, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % テキスト % 状態);
+/* 00050b2c */	}
+/* 00050b32 */}
+
+void Ｐ＿構築手順＿矩形(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 00050b40 */{
+/* 00050b40 */	if (!GUIEngine.Parts_AddDrawRectToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, Ｒ, Ｇ, Ｂ, 状態))
+/* 00050b88 */	{
+/* 00050b88 */		PARTS_Warning("Ｐ＿構築手順＿矩形(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % Ｒ % Ｇ % Ｂ % 状態);
+/* 00050c12 */	}
+/* 00050c18 */}
+
+void Ｐ＿構築手順＿ＣＧ部分ブレンド(int パーツ番号, string ＣＧ名, int 貼り付け先Ｘ, int 貼り付け先Ｙ, int 切り取り元Ｘ, int 切り取り元Ｙ, int 幅, int 高さ, int 状態)
+/* 00050c26 */{
+/* 00050c26 */	if (!GUIEngine.Parts_AddDrawCutCGToPartsConstructionProcess(パーツ番号, ＣＧ名, 貼り付け先Ｘ, 貼り付け先Ｙ, 幅, 高さ, 切り取り元Ｘ, 切り取り元Ｙ, 幅, 高さ, 1, 状態))
+/* 00050c80 */	{
+/* 00050c80 */		PARTS_Warning("Ｐ＿構築手順＿ＣＧ部分ブレンド(パーツ番号 = %d, ＣＧ名 = %s, 貼り付け先Ｘ = %d, 貼り付け先Ｙ = %d, 切り取り元Ｘ = %d, 切り取り元Ｙ = %d, 幅 = %d, 高さ = %d, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 貼り付け先Ｘ % 貼り付け先Ｙ % 切り取り元Ｘ % 切り取り元Ｙ % 幅 % 高さ % 状態);
+/* 00050d0a */	}
+/* 00050d10 */}
+
+void Ｐ＿構築手順＿ＣＧ部分コピー(int パーツ番号, string ＣＧ名, int 貼り付け先Ｘ, int 貼り付け先Ｙ, int 切り取り元Ｘ, int 切り取り元Ｙ, int 幅, int 高さ, int 状態)
+/* 00050d1e */{
+/* 00050d1e */	if (!GUIEngine.Parts_AddCopyCutCGToPartsConstructionProcess(パーツ番号, ＣＧ名, 貼り付け先Ｘ, 貼り付け先Ｙ, 幅, 高さ, 切り取り元Ｘ, 切り取り元Ｙ, 幅, 高さ, 1, 状態))
+/* 00050d78 */	{
+/* 00050d78 */		PARTS_Warning("Ｐ＿構築手順＿ＣＧ部分コピー(パーツ番号 = %d, ＣＧ名 = %s, 貼り付け先Ｘ = %d, 貼り付け先Ｙ = %d, 切り取り元Ｘ = %d, 切り取り元Ｙ = %d, 幅 = %d, 高さ = %d, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 貼り付け先Ｘ % 貼り付け先Ｙ % 切り取り元Ｘ % 切り取り元Ｙ % 幅 % 高さ % 状態);
+/* 00050e02 */	}
+/* 00050e08 */}
+
+void Ｐ＿構築手順＿ＣＧ部分拡大縮小ブレンド(int パーツ番号, string ＣＧ名, int 貼り付け先Ｘ, int 貼り付け先Ｙ, int 貼り付け先幅, int 貼り付け先高さ, int 切り取り元Ｘ, int 切り取り元Ｙ, int 切り取り元幅, int 切り取り元高さ, int 補間方法, int 状態)
+/* 00050e16 */{
+/* 00050e16 */	if (!GUIEngine.Parts_AddDrawCutCGToPartsConstructionProcess(パーツ番号, ＣＧ名, 貼り付け先Ｘ, 貼り付け先Ｙ, 貼り付け先幅, 貼り付け先高さ, 切り取り元Ｘ, 切り取り元Ｙ, 切り取り元幅, 切り取り元高さ, 補間方法, 状態))
+/* 00050e70 */	{
+/* 00050e70 */		PARTS_Warning("Ｐ＿構築手順＿ＣＧ部分拡大縮小ブレンド(パーツ番号 = %d, ＣＧ名 = %s, 貼り付け先Ｘ = %d, 貼り付け先Ｙ = %d, 貼り付け先幅 = %d, 貼り付け先高さ = %d, 切り取り元Ｘ = %d, 切り取り元Ｙ = %d, 切り取り元幅 = %d, 切り取り元高さ = %d, 補間方法 = %d, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 貼り付け先Ｘ % 貼り付け先Ｙ % 貼り付け先幅 % 貼り付け先高さ % 切り取り元Ｘ % 切り取り元Ｙ % 切り取り元幅 % 切り取り元高さ % 補間方法 % 状態);
+/* 00050f24 */	}
+/* 00050f2a */}
+
+void Ｐ＿構築手順＿ＣＧ部分拡大縮小コピー(int パーツ番号, string ＣＧ名, int 貼り付け先Ｘ, int 貼り付け先Ｙ, int 貼り付け先幅, int 貼り付け先高さ, int 切り取り元Ｘ, int 切り取り元Ｙ, int 切り取り元幅, int 切り取り元高さ, int 補間方法, int 状態)
+/* 00050f38 */{
+/* 00050f38 */	if (!GUIEngine.Parts_AddCopyCutCGToPartsConstructionProcess(パーツ番号, ＣＧ名, 貼り付け先Ｘ, 貼り付け先Ｙ, 貼り付け先幅, 貼り付け先高さ, 切り取り元Ｘ, 切り取り元Ｙ, 切り取り元幅, 切り取り元高さ, 補間方法, 状態))
+/* 00050f92 */	{
+/* 00050f92 */		PARTS_Warning("Ｐ＿構築手順＿ＣＧ部分拡大縮小コピー(パーツ番号 = %d, ＣＧ名 = %s, 貼り付け先Ｘ = %d, 貼り付け先Ｙ = %d, 貼り付け先幅 = %d, 貼り付け先高さ = %d, 切り取り元Ｘ = %d, 切り取り元Ｙ = %d, 切り取り元幅 = %d, 切り取り元高さ = %d, 補間方法 = %d, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 貼り付け先Ｘ % 貼り付け先Ｙ % 貼り付け先幅 % 貼り付け先高さ % 切り取り元Ｘ % 切り取り元Ｙ % 切り取り元幅 % 切り取り元高さ % 補間方法 % 状態);
+/* 00051046 */	}
+/* 0005104c */}
+
+void Ｐ＿構築手順＿白黒フィルタ(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0005105a */{
+/* 0005105a */	if (!GUIEngine.Parts_AddGrayFilterToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, false, 状態))
+/* 00051096 */	{
+/* 00051096 */		PARTS_Warning("Ｐ＿構築手順＿白黒フィルタ(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % 状態);
+/* 000510f6 */	}
+/* 000510fc */}
+
+void Ｐ＿構築手順＿白黒フィルタ全(int パーツ番号, int 状態)
+/* 0005110a */{
+/* 0005110a */	if (!GUIEngine.Parts_AddGrayFilterToPartsConstructionProcess(パーツ番号, 0, 0, 0, 0, true, 状態))
+/* 00051146 */	{
+/* 00051146 */		PARTS_Warning("Ｐ＿構築手順＿白黒フィルタ全(パーツ番号 = %d, 状態 = %d)\n" % パーツ番号 % 状態);
+/* 0005116e */	}
+/* 00051174 */}
+
+void Ｐ＿構築手順＿加算フィルタ(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 00051182 */{
+/* 00051182 */	if (!GUIEngine.Parts_AddAddFilterToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, Ｒ, Ｇ, Ｂ, false, 状態))
+/* 000511d0 */	{
+/* 000511d0 */		PARTS_Warning("Ｐ＿構築手順＿加算フィルタ(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % Ｒ % Ｇ % Ｂ % 状態);
+/* 0005125a */	}
+/* 00051260 */}
+
+void Ｐ＿構築手順＿加算フィルタ全(int パーツ番号, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 0005126e */{
+/* 0005126e */	if (!GUIEngine.Parts_AddAddFilterToPartsConstructionProcess(パーツ番号, 0, 0, 0, 0, Ｒ, Ｇ, Ｂ, true, 状態))
+/* 000512bc */	{
+/* 000512bc */		PARTS_Warning("Ｐ＿構築手順＿加算フィルタ全(パーツ番号 = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｒ % Ｇ % Ｂ % 状態);
+/* 0005130e */	}
+/* 00051314 */}
+
+void Ｐ＿構築手順＿乗算フィルタ(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 00051322 */{
+/* 00051322 */	if (!GUIEngine.Parts_AddMulFilterToPartsConstructionProcess(パーツ番号, Ｘ, Ｙ, 幅, 高さ, Ｒ, Ｇ, Ｂ, false, 状態))
+/* 00051370 */	{
+/* 00051370 */		PARTS_Warning("Ｐ＿構築手順＿乗算フィルタ(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, 幅 = %d, 高さ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ % Ｙ % 幅 % 高さ % Ｒ % Ｇ % Ｂ % 状態);
+/* 000513fa */	}
+/* 00051400 */}
+
+void Ｐ＿構築手順＿乗算フィルタ全(int パーツ番号, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 0005140e */{
+/* 0005140e */	if (!GUIEngine.Parts_AddMulFilterToPartsConstructionProcess(パーツ番号, 0, 0, 0, 0, Ｒ, Ｇ, Ｂ, true, 状態))
+/* 0005145c */	{
+/* 0005145c */		PARTS_Warning("Ｐ＿構築手順＿乗算フィルタ全(パーツ番号 = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, 状態 = %d)\n" % パーツ番号 % Ｒ % Ｇ % Ｂ % 状態);
+/* 000514ae */	}
+/* 000514b4 */}
+
+void Ｐ＿構築手順＿線(int パーツ番号, int Ｘ１, int Ｙ１, int Ｘ２, int Ｙ２, int Ｒ, int Ｇ, int Ｂ, int Ａ, int 状態)
+/* 000514c2 */{
+/* 000514c2 */	if (!GUIEngine.Parts_AddDrawLineToPartsConstructionProcess(パーツ番号, Ｘ１, Ｙ１, Ｘ２, Ｙ２, Ｒ, Ｇ, Ｂ, Ａ, 状態))
+/* 00051510 */	{
+/* 00051510 */		PARTS_Warning("Ｐ＿構築手順＿線(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, Ｘ = %d, Ｙ = %d, Ｒ = %d, Ｇ = %d, Ｂ = %d, Ａ = %d, 状態 = %d)\n" % パーツ番号 % Ｘ１ % Ｙ１ % Ｘ２ % Ｙ２ % Ｒ % Ｇ % Ｂ % Ａ % 状態);
+/* 000515a8 */	}
+/* 000515ae */}
+
+void Ｐ＿構築手順＿初期化(int パーツ番号, int 状態)
+/* 000515bc */{
+/* 000515bc */	GUIEngine.Parts_ClearPartsConstructionProcess(パーツ番号, 状態);
+/* 000515d4 */}
+
+void Ｐ＿構築ビルド(int パーツ番号, int 状態)
+/* 000515e2 */{
+/* 000515e2 */	if (!GUIEngine.Parts_BuildPartsConstructionProcess(パーツ番号, 状態))
+/* 00051600 */	{
+/* 00051600 */		PARTS_Warning("Ｐ＿構築ビルド(パーツ番号 = %d, 状態 = %d　ビルド中にエラーが発生しました。正しくビルドされていない可能性があります\n" % パーツ番号 % 状態);
+/* 00051628 */	}
+/* 0005162e */}
+
+void Ｐ＿構築表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0005163c */{
+/* 0005163c */	GUIEngine.Parts_SetPartsConstructionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0005166c */}
+
+bool Ｐ＿オンカーソル判定(int PartsNumber, int State)
+/* 0005167a */{
+/* 0005167a */	int MouseX;
+/* 00051684 */	int MouseY;
+/* 0005168e */	if (!AFL_Mouse_GetPos(MouseX, MouseY))
+/* 000516ac */	{
+/* 000516ac */		return false;
+/* 000516b4 */	}
+/* 000516ba */	return AFL_Parts_IsPointIn(PartsNumber, MouseX, MouseY, State);
+/* 000516da */}
+

@@ -1,0 +1,31 @@
+void pass(string msg)
+/* 0005ba6c */{
+/* 0005ba6e */}
+
+void stop(string msg)
+/* 0005ba7a */{
+/* 0005ba7c */}
+
+string getFuncStack(int excludeLatest)
+/* 0005ba88 */{
+/* 0005ba88 */	array@string fn;
+/* 0005ba92 */	int i;
+/* 0005ba9c */	while (true)
+/* 0005baa8 */	{
+/* 0005baa8 */		string r = system.GetFuncStackName(i);
+/* 0005bab6 */		if (r == "")
+/* 0005bac6 */		{
+/* 0005bac6 */			break;
+/* 0005bacc */		}
+/* 0005bad2 */		fn.PushBack(r);
+/* 0005badc */		++i;
+/* 0005bae2 */	}
+/* 0005bae8 */	fn.Reverse();
+/* 0005baf2 */	string result;
+/* 0005bafe */	for (i = 0; i < fn.Numof() - excludeLatest; ++i)
+/* 0005bb40 */	{
+/* 0005bb40 */		result += " > " + fn[i];
+/* 0005bb60 */	}
+/* 0005bb66 */	return result;
+/* 0005bb6e */}
+

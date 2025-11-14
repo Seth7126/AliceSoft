@@ -1,0 +1,54 @@
+EndingFixObject::EndingFixObject()
+/* 00087fd2 */{
+/* 00087fda */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00087ffc */}
+
+void EndingFixObject::update()
+/* 00088004 */{
+/* 00088004 */	int line = (float(this.speed_) * float(this.timer_.getTime())) / 1000.0;
+/* 00088036 */	int i;
+/* 00088040 */	for (i = 0; i < this.fixObject_.Numof(); ++i)
+/* 00088070 */	{
+/* 00088070 */		if (this.fixObject_[i].start < line && line < this.fixObject_[i].end && this.fixObject_[i].state == 0)
+/* 0008810c */		{
+/* 0008810c */			dlogF("%d" % line);
+/* 00088126 */			this.fixObject_[i].state = 1;
+/* 00088144 */			this.fixObject_[i].parts.setShow(true);
+/* 00088166 */			this.fixObject_[i].parts.runMotion(getStandardMotion(0));
+/* 0008818e */		}
+/* 00088194 */		else if (this.fixObject_[i].end < line && this.fixObject_[i].state == 1)
+/* 000881f4 */		{
+/* 000881f4 */			this.fixObject_[i].state = 2;
+/* 00088212 */			this.fixObject_[i].parts.runMotion(getStandardMotion(1));
+/* 0008823a */		}
+/* 00088240 */	}
+/* 00088246 */}
+
+void EndingFixObject::run()
+/* 0008824e */{
+/* 0008824e */	this.timer_.reset();
+/* 0008825a */}
+
+void EndingFixObject::init()
+/* 00088262 */{
+/* 00088262 */	this.speed_ = EX_Int("エンディング／スピード／オブジェクト", 0);
+/* 00088280 */	string key = "エンディング固定オブジェクト";
+/* 0008828c */	int count = EX_Height(key);
+/* 000882a4 */	this.fixObject_.Alloc(count);
+/* 000882ba */	int i;
+/* 000882c4 */	for (i = 0; i < count; ++i)
+/* 000882f4 */	{
+/* 000882f4 */		string name = EX_A2String(key, 0, i, "");
+/* 0008831c */		int x = EX_A2Int(key, 1, i, 0);
+/* 00088346 */		int y = EX_A2Int(key, 2, i, 0);
+/* 00088370 */		int origin = EX_A2Int(key, 3, i, 0);
+/* 0008839a */		int start = EX_A2Int(key, 4, i, 0);
+/* 000883c4 */		int end = EX_A2Int(key, 5, i, 0);
+/* 000883ee */		this.fixObject_[i].parts.init(name, 0);
+/* 00088416 */		this.fixObject_[i].parts.setPos(x, y, i + 3000);
+/* 0008844c */		this.fixObject_[i].parts.setOrigin(origin);
+/* 0008846e */		this.fixObject_[i].start = start;
+/* 0008848c */		this.fixObject_[i].end = end;
+/* 000884aa */	}
+/* 000884b0 */}
+

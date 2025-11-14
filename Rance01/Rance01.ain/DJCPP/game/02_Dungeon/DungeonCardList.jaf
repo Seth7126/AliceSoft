@@ -1,0 +1,238 @@
+DungeonCardList::DungeonCardList()
+/* 0006e5ce */{
+/* 0006e5d8 */}
+
+void DungeonCardList::init(ref Dungeon dungeon, int x, int y)
+/* 0006e5de */{
+/* 0006e5de */	this.dungeon_ <- dungeon;
+/* 0006e5fa */	this.setPlayerPosX(x);
+/* 0006e608 */	this.setPlayerPosY(y);
+/* 0006e616 */	this.createFirstCard();
+/* 0006e61e */}
+
+void DungeonCardList::changeViewDepth()
+/* 0006e626 */{
+/* 0006e626 */	int i;
+/* 0006e630 */	int j;
+/* 0006e63a */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006e66a */	{
+/* 0006e66a */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006e6a4 */		{
+/* 0006e6a4 */			this.card_[i][j].setLighted(this.getViewRange());
+/* 0006e6c8 */		}
+/* 0006e6ce */	}
+/* 0006e6d4 */}
+
+void DungeonCardList::createFirstCard()
+/* 0006e6dc */{
+/* 0006e6dc */	int i;
+/* 0006e6e6 */	int j;
+/* 0006e6f0 */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006e720 */	{
+/* 0006e720 */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006e75a */		{
+/* 0006e75a */			ref CardView c = this.card_[i][j];
+/* 0006e78c */			int line = (this.playerPosY_ + i) % this.dungeon_.getLineCount();
+/* 0006e7b4 */			this.initCardView(c, j, line, i);
+/* 0006e7d4 */		}
+/* 0006e7e0 */	}
+/* 0006e7e6 */}
+
+void DungeonCardList::fadeInCard(bool isDelayed)
+/* 0006e7ee */{
+/* 0006e7ee */	int i;
+/* 0006e7f8 */	int j;
+/* 0006e802 */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006e832 */	{
+/* 0006e832 */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006e86c */		{
+/* 0006e86c */			this.card_[i][j].fadeIn(true, isDelayed ? ((j + i * 5) - 2) * 30 : 0);
+/* 0006e8cc */		}
+/* 0006e8d2 */	}
+/* 0006e8d8 */}
+
+void DungeonCardList::slideOtherCard()
+/* 0006e8e0 */{
+/* 0006e8e0 */	int i;
+/* 0006e8ea */	int j;
+/* 0006e8f4 */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006e924 */	{
+/* 0006e924 */		int depth = i - this.frontIndex_;
+/* 0006e93e */		if (depth <= 0)
+/* 0006e94c */		{
+/* 0006e94c */			depth += 6;
+/* 0006e95e */		}
+/* 0006e964 */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006e99e */		{
+/* 0006e99e */			this.card_[i][j].moveFront();
+/* 0006e9ba */		}
+/* 0006e9c0 */	}
+/* 0006e9c6 */}
+
+void DungeonCardList::fadeOutFrontCard(int selected)
+/* 0006e9ce */{
+/* 0006e9ce */	int i;
+/* 0006e9d8 */	for (i = 0; i < 5; ++i)
+/* 0006ea02 */	{
+/* 0006ea02 */		if (selected != i)
+/* 0006ea16 */		{
+/* 0006ea16 */			this.card_[this.frontIndex_][i].moveFront();
+/* 0006ea32 */		}
+/* 0006ea38 */		else
+/* 0006ea38 */		{
+/* 0006ea38 */			this.card_[this.frontIndex_][i].setSelectable(false);
+/* 0006ea5a */		}
+/* 0006ea5a */	}
+/* 0006ea60 */}
+
+void DungeonCardList::roundFrontCard()
+/* 0006ea68 */{
+/* 0006ea68 */	int dungeonLine = (this.playerPosY_ + 6) % this.dungeon_.getLineCount();
+/* 0006ea90 */	int i;
+/* 0006ea9a */	for (i = 0; i < this.card_.Numof(2); ++i)
+/* 0006ead4 */	{
+/* 0006ead4 */		ref CardView c = this.card_[this.frontIndex_][i];
+/* 0006eb06 */		this.initCardView(c, i, dungeonLine, 6);
+/* 0006eb26 */		c.setShow(true);
+/* 0006eb38 */	}
+/* 0006eb44 */}
+
+void DungeonCardList::setCardSelectable()
+/* 0006eb4c */{
+/* 0006eb4c */	int i;
+/* 0006eb56 */	int j;
+/* 0006eb60 */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006eb90 */	{
+/* 0006eb90 */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006ebca */		{
+/* 0006ebca */			this.card_[i][j].setSelectable(this.isSelectableCard(this.card_[i][j].getId(), j, i));
+/* 0006ec16 */		}
+/* 0006ec1c */	}
+/* 0006ec22 */}
+
+bool DungeonCardList::isSelectableCard(string cardId, int xPos, int line)
+/* 0006ec2a */{
+/* 0006ec2a */	return line == this.frontIndex_ && Math.Abs(this.playerPosX_ - xPos) <= 1 && getCard(cardId).getType() != 7;
+/* 0006ecbc */}
+
+void DungeonCardList::getSelectableCardIndexList(ref array@int indexList)
+/* 0006ecca */{
+/* 0006ecca */	indexList.Free();
+/* 0006ecd4 */	int i;
+/* 0006ecde */	for (i = 0; i < this.card_.Numof(2); ++i)
+/* 0006ed18 */	{
+/* 0006ed18 */		if (this.isSelectableCard(this.card_[this.frontIndex_][i].getId(), i, this.frontIndex_))
+/* 0006ed4e */		{
+/* 0006ed4e */			indexList.PushBack(i);
+/* 0006ed5e */		}
+/* 0006ed64 */	}
+/* 0006ed6a */}
+
+bool DungeonCardList::getCardOpenState(int dungeonX, int dungeonLine)
+/* 0006ed72 */{
+/* 0006ed72 */	switch (this.dungeon_.getCardOpenType(dungeonLine, dungeonX))
+/* 0006ed96 */	{
+/* 0006ed96 */	case 0:
+/* 0006ed96 */		return true;
+/* 0006ed9e */	case 2:
+/* 0006ed9e */		return RAND(2) == 1;
+/* 0006edb6 */	}
+/* 0006edb6 */	return false;
+/* 0006edbe */}
+
+int DungeonCardList::getClickedCard()
+/* 0006edcc */{
+/* 0006edcc */	int i;
+/* 0006edd6 */	for (i = 0; i < this.card_.Numof(2); ++i)
+/* 0006ee10 */	{
+/* 0006ee10 */		if (this.card_[this.frontIndex_][i].isClick())
+/* 0006ee32 */		{
+/* 0006ee32 */			return i;
+/* 0006ee3a */		}
+/* 0006ee40 */	}
+/* 0006ee46 */	return -1;
+/* 0006ee4e */}
+
+void DungeonCardList::setPlayerPosX(int pos)
+/* 0006ee5c */{
+/* 0006ee5c */	this.playerPosX_ = pos;
+/* 0006ee66 */}
+
+void DungeonCardList::setPlayerPosY(int pos)
+/* 0006ee6e */{
+/* 0006ee6e */	this.playerPosY_ = pos;
+/* 0006ee78 */}
+
+bool DungeonCardList::isCardDown()
+/* 0006ee80 */{
+/* 0006ee80 */	return this.card_[this.frontIndex_][this.playerPosX_].isCardDown();
+/* 0006ee9e */}
+
+string DungeonCardList::getPlayerPosCardId()
+/* 0006eeac */{
+/* 0006eeac */	return this.card_[this.frontIndex_][this.playerPosX_].getId();
+/* 0006eeca */}
+
+void DungeonCardList::flipCard()
+/* 0006eed8 */{
+/* 0006eed8 */	this.card_[this.frontIndex_][this.playerPosX_].flip();
+/* 0006eef4 */}
+
+bool DungeonCardList::isFinishMoveFront()
+/* 0006eefc */{
+/* 0006eefc */	return !this.card_[this.frontIndex_][0].isFinishMoveFront();
+/* 0006ef1e */}
+
+void DungeonCardList::updateCardFrontPos()
+/* 0006ef2c */{
+/* 0006ef2c */	this.frontIndex_ = (this.frontIndex_ + 1) % 6;
+/* 0006ef4e */}
+
+int DungeonCardList::getViewRange()
+/* 0006ef56 */{
+/* 0006ef56 */	return Math.Max(1, this.dungeon_.getView() + g_player.getViewAlternation());
+/* 0006ef82 */}
+
+void DungeonCardList::initCardView(ref CardView c, int dungeonX, int dungeonLine, int abstructYPos)
+/* 0006ef90 */{
+/* 0006ef90 */	c.init(this.dungeon_.getCardId(dungeonLine, dungeonX), this.getViewRange(), dungeonLine);
+/* 0006efc2 */	c.setAbstructPosition(dungeonX - 2, abstructYPos);
+/* 0006efe6 */	c.setCardDown(this.getCardOpenState(dungeonX, dungeonLine));
+/* 0006f006 */}
+
+void DungeonCardList::fadeOut()
+/* 0006f00e */{
+/* 0006f00e */	int i;
+/* 0006f018 */	int j;
+/* 0006f022 */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006f052 */	{
+/* 0006f052 */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006f08c */		{
+/* 0006f08c */			this.card_[i][j].fadeIn(false, 0);
+/* 0006f0b4 */		}
+/* 0006f0ba */	}
+/* 0006f0c0 */}
+
+void DungeonCardList::finalizeMotion()
+/* 0006f0c8 */{
+/* 0006f0c8 */	int i;
+/* 0006f0d2 */	int j;
+/* 0006f0dc */	for (i = 0; i < this.card_.Numof(1); ++i)
+/* 0006f10c */	{
+/* 0006f10c */		for (j = 0; j < this.card_.Numof(2); ++j)
+/* 0006f146 */		{
+/* 0006f146 */			this.card_[i][j].finalizeMotion();
+/* 0006f162 */		}
+/* 0006f168 */	}
+/* 0006f16e */}
+
+void DungeonCardList::fadeIn()
+/* 0006f176 */{
+/* 0006f176 */	this.fadeInCard(false);
+/* 0006f184 */}
+
+void DungeonCardList::fadeInWithDelay()
+/* 0006f18c */{
+/* 0006f18c */	this.fadeInCard(true);
+/* 0006f19a */}
+

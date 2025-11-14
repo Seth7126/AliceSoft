@@ -1,0 +1,23 @@
+CASPos CF_CASPos(int nX, int nY)
+/* 0000147c */{
+/* 0000147c */	CASPos Pos;
+/* 0000148c */	Pos.Set(nX, nY);
+/* 000014a4 */	return Pos;
+/* 000014b4 */}
+
+void CASPos::Set(int nX, int nY)
+/* 000014c8 */{
+/* 000014c8 */	this.m_nX = nX;
+/* 000014d2 */	this.m_nY = nY;
+/* 000014dc */}
+
+int CASPos::GetX()
+/* 000014e4 */{
+/* 000014e4 */	return this.m_nX;
+/* 000014ec */}
+
+int CASPos::GetY()
+/* 000014fa */{
+/* 000014fa */	return this.m_nY;
+/* 00001502 */}
+

@@ -1,0 +1,795 @@
+Parts::Parts()
+/* 0005c87c */{
+/* 0005c884 */	this.clear();
+/* 0005c88c */	this.loopMotionTimer_.reset();
+/* 0005c898 */	g_partsMotionUpdateMethod += this.updateMotionState;
+/* 0005c8a8 */	g_partsSleepMethod += this.sleep;
+/* 0005c8b8 */}
+
+void Parts::init(string cgName, int loadingMode)
+/* 0005c8c0 */{
+/* 0005c8c0 */	if (cgName == "")
+/* 0005c8d0 */	{
+/* 0005c8d0 */		return;
+/* 0005c8d2 */	}
+/* 0005c8d8 */	if (this.partsNumber_ == 0)
+/* 0005c8e6 */	{
+/* 0005c8e6 */		this.partsNumber_ = g_partsNumberProvider.getNumber();
+/* 0005c8fe */	}
+/* 0005c904 */	switch (loadingMode)
+/* 0005c916 */	{
+/* 0005c916 */	case 0:
+/* 0005c916 */		Ｐ＿ＣＧ設定(this.partsNumber_, cgName, 1);
+/* 0005c92e */		break;
+/* 0005c934 */	case 1:
+/* 0005c934 */		Ｐ＿上下反転ＣＧ設定(this.partsNumber_, cgName, 1);
+/* 0005c94c */		break;
+/* 0005c952 */	case 2:
+/* 0005c952 */		Ｐ＿左右反転ＣＧ設定(this.partsNumber_, cgName, 1);
+/* 0005c96a */		break;
+/* 0005c970 */	}
+/* 0005c970 */	Ｐ＿表示設定(this.partsNumber_, false);
+/* 0005c982 */	this.type_ = 1;
+/* 0005c98c */	this.applyInitializeOption();
+/* 0005c994 */}
+
+void Parts::initAsText(string text, int size, bool isEdge, int type, int r, int g, int b)
+/* 0005c99c */{
+/* 0005c99c */	if (text == "")
+/* 0005c9ac */	{
+/* 0005c9ac */		this.initAsPlaneImage(1, 1, 0, 0, 0, 0);
+/* 0005c9d8 */		this.text_ = "";
+/* 0005c9e4 */		return;
+/* 0005c9e6 */	}
+/* 0005c9ec */	if (this.text_ == text)
+/* 0005c9fc */	{
+/* 0005c9fc */		return;
+/* 0005c9fe */	}
+/* 0005ca04 */	this.text_ = text;
+/* 0005ca0e */	if (this.partsNumber_ == 0)
+/* 0005ca1c */	{
+/* 0005ca1c */		this.partsNumber_ = g_partsNumberProvider.getNumber();
+/* 0005ca34 */	}
+/* 0005ca3a */	int textSpanWidth = -1;
+/* 0005ca4c */	CASCharSpriteProperty prop;
+/* 0005ca5c */	prop = getCharSpriteProperty(size, isEdge, type, r, g, b);
+/* 0005ca96 */	int w;
+/* 0005caa0 */	int h;
+/* 0005caaa */	getTextSize(w, h, text, size, type, isEdge, textSpanWidth);
+/* 0005cade */	Ｐ＿構築手順＿作成(this.partsNumber_, w, h, 1);
+/* 0005cafc */	Ｐ＿構築手順＿テキストコピー(this.partsNumber_, 0, 0, text, prop, textSpanWidth, 0, 1);
+/* 0005cb3a */	Ｐ＿構築ビルド(this.partsNumber_, 1);
+/* 0005cb4c */	Ｐ＿表示設定(this.partsNumber_, false);
+/* 0005cb5e */	this.type_ = 4;
+/* 0005cb68 */	this.applyInitializeOption();
+/* 0005cb70 */}
+
+void Parts::initAsPlaneImage(int w, int h, int r, int g, int b, int a)
+/* 0005cb78 */{
+/* 0005cb78 */	if (this.partsNumber_ == 0)
+/* 0005cb86 */	{
+/* 0005cb86 */		this.partsNumber_ = g_partsNumberProvider.getNumber();
+/* 0005cb9e */	}
+/* 0005cba4 */	Ｐ＿構築手順＿作成(this.partsNumber_, w, h, 1);
+/* 0005cbc2 */	Ｐ＿構築手順＿色塗り(this.partsNumber_, 0, 0, w, h, r, g, b, -1, 1);
+/* 0005cc04 */	Ｐ＿構築手順＿アルファ塗り(this.partsNumber_, 0, 0, w, h, a, 1);
+/* 0005cc34 */	Ｐ＿構築ビルド(this.partsNumber_, 1);
+/* 0005cc46 */	Ｐ＿表示設定(this.partsNumber_, false);
+/* 0005cc58 */	this.type_ = 4;
+/* 0005cc62 */	this.applyInitializeOption();
+/* 0005cc6a */}
+
+void Parts::initAsCgPlaneImage(string cgName, int r, int g, int b)
+/* 0005cc72 */{
+/* 0005cc72 */	if (this.partsNumber_ == 0)
+/* 0005cc80 */	{
+/* 0005cc80 */		this.partsNumber_ = g_partsNumberProvider.getNumber();
+/* 0005cc98 */	}
+/* 0005cc9e */	Ｐ＿構築手順＿ＣＧ設定(this.partsNumber_, cgName, 1);
+/* 0005ccb6 */	Ｐ＿構築手順＿ブレンド塗り(this.partsNumber_, 0, 0, Ａ＿ＣＧ幅取得(cgName), Ａ＿ＣＧ高さ取得(cgName), r, g, b, 255, 1);
+/* 0005cd04 */	Ｐ＿構築ビルド(this.partsNumber_, 1);
+/* 0005cd16 */	Ｐ＿表示設定(this.partsNumber_, false);
+/* 0005cd28 */	this.type_ = 4;
+/* 0005cd32 */	this.applyInitializeOption();
+/* 0005cd3a */}
+
+void Parts::initAsNumber(string cgName, ref NumberPartsInfomation info)
+/* 0005cd42 */{
+/* 0005cd42 */	if (this.partsNumber_ == 0)
+/* 0005cd50 */	{
+/* 0005cd50 */		this.partsNumber_ = g_partsNumberProvider.getNumber();
+/* 0005cd68 */	}
+/* 0005cd6e */	Ｐ＿数字連結ＣＧ設定(this.partsNumber_, cgName, info.getWidth(0), info.getWidth(1), info.getWidth(2), info.getWidth(3), info.getWidth(4), info.getWidth(5), info.getWidth(6), info.getWidth(7), info.getWidth(8), info.getWidth(9), info.getWidth(10), info.getWidth(11), 1);
+/* 0005ce5e */	Ｐ＿数字コンマ表示設定(this.partsNumber_, info.isUseComma(), 1);
+/* 0005ce7c */	Ｐ＿数字設定(this.partsNumber_, 0, 1);
+/* 0005ce94 */	Ｐ＿表示設定(this.partsNumber_, false);
+/* 0005cea6 */	Ｐ＿数字桁設定(this.partsNumber_, info.getDigit(), 1);
+/* 0005cec4 */	this.type_ = 2;
+/* 0005cece */	this.applyInitializeOption();
+/* 0005ced6 */}
+
+void Parts::initAsDummy()
+/* 0005cede */{
+/* 0005cede */	if (this.partsNumber_ == 0)
+/* 0005ceec */	{
+/* 0005ceec */		this.partsNumber_ = g_partsNumberProvider.getNumber();
+/* 0005cf04 */	}
+/* 0005cf0a */	Ｐ＿座標設定(this.partsNumber_, 0, 0);
+/* 0005cf22 */	Ｐ＿表示設定(this.partsNumber_, false);
+/* 0005cf34 */	this.type_ = 3;
+/* 0005cf3e */	this.applyInitializeOption();
+/* 0005cf46 */}
+
+void Parts::initAsUserStructure()
+/* 0005cf4e */{
+/* 0005cf4e */	this.initAsDummy();
+/* 0005cf56 */	this.type_ = 4;
+/* 0005cf60 */}
+
+void Parts::setNumber(int num)
+/* 0005cf68 */{
+/* 0005cf68 */	if (!this.isInitialized())
+/* 0005cf78 */	{
+/* 0005cf78 */		return;
+/* 0005cf7a */	}
+/* 0005cf80 */	if (this.type_ != 2)
+/* 0005cf8e */	{
+/* 0005cf8e */		return;
+/* 0005cf90 */	}
+/* 0005cf96 */	this.number_ = num;
+/* 0005cfa0 */	Ｐ＿数字設定(this.partsNumber_, this.number_, 1);
+/* 0005cfb8 */}
+
+void Parts::setParent(int parent)
+/* 0005cfc0 */{
+/* 0005cfc0 */	if (!this.isInitialized())
+/* 0005cfd0 */	{
+/* 0005cfd0 */		return;
+/* 0005cfd2 */	}
+/* 0005cfd8 */	if (this.partsNumber_ == parent)
+/* 0005cfe6 */	{
+/* 0005cfe6 */		return;
+/* 0005cfe8 */	}
+/* 0005cfee */	Ｐ＿親設定(this.partsNumber_, parent);
+/* 0005d000 */}
+
+void Parts::setOrigin(int val)
+/* 0005d008 */{
+/* 0005d008 */	if (!this.isInitialized())
+/* 0005d018 */	{
+/* 0005d018 */		return;
+/* 0005d01a */	}
+/* 0005d020 */	Ｐ＿原点座標設定(this.partsNumber_, asraPartsOriginFromPartsOriginMode(val));
+/* 0005d038 */}
+
+void Parts::setPos(int x, int y, int z)
+/* 0005d040 */{
+/* 0005d040 */	if (!this.isInitialized())
+/* 0005d050 */	{
+/* 0005d050 */		return;
+/* 0005d052 */	}
+/* 0005d058 */	if (x == -2147483648)
+/* 0005d066 */	{
+/* 0005d066 */		x = this.getX();
+/* 0005d07a */	}
+/* 0005d080 */	if (y == -2147483648)
+/* 0005d08e */	{
+/* 0005d08e */		y = this.getY();
+/* 0005d0a2 */	}
+/* 0005d0a8 */	if (z == -2147483648)
+/* 0005d0b6 */	{
+/* 0005d0b6 */		z = this.z_;
+/* 0005d0c0 */	}
+/* 0005d0c6 */	else
+/* 0005d0c6 */	{
+/* 0005d0c6 */		this.z_ = z;
+/* 0005d0d0 */	}
+/* 0005d0d0 */	Ｐ＿座標設定(this.partsNumber_, x, y);
+/* 0005d0e8 */	AFL_Parts_SetZByBaseZ(this.partsNumber_, this.z_, this.baseZ_);
+/* 0005d100 */}
+
+void Parts::setScaling(float per)
+/* 0005d108 */{
+/* 0005d108 */	if (!this.isInitialized())
+/* 0005d118 */	{
+/* 0005d118 */		return;
+/* 0005d11a */	}
+/* 0005d120 */	if (this.scaling_ == per)
+/* 0005d134 */	{
+/* 0005d134 */		return;
+/* 0005d136 */	}
+/* 0005d13c */	this.scaling_ = per;
+/* 0005d14e */	float rate = per / 100.0;
+/* 0005d168 */	Ｐ＿Ｘ拡大率設定(this.partsNumber_, rate);
+/* 0005d17a */	Ｐ＿Ｙ拡大率設定(this.partsNumber_, rate);
+/* 0005d18c */}
+
+void Parts::setRot(float rot)
+/* 0005d194 */{
+/* 0005d194 */	if (!this.isInitialized())
+/* 0005d1a4 */	{
+/* 0005d1a4 */		return;
+/* 0005d1a6 */	}
+/* 0005d1ac */	if (this.rot_ == rot)
+/* 0005d1c6 */	{
+/* 0005d1c6 */		return;
+/* 0005d1c8 */	}
+/* 0005d1ce */	this.rot_ = rot;
+/* 0005d1e2 */	Ｐ＿Ｚ回転角度設定(this.partsNumber_, rot);
+/* 0005d1f4 */}
+
+void Parts::setYFlip(float rot)
+/* 0005d1fc */{
+/* 0005d1fc */	if (!this.isInitialized())
+/* 0005d20c */	{
+/* 0005d20c */		return;
+/* 0005d20e */	}
+/* 0005d214 */	if (this.yFlip_ == rot)
+/* 0005d228 */	{
+/* 0005d228 */		return;
+/* 0005d22a */	}
+/* 0005d230 */	this.yFlip_ = rot;
+/* 0005d242 */	Ｐ＿Ｙ回転角度設定(this.partsNumber_, rot);
+/* 0005d254 */}
+
+void Parts::setXFlip(float rot)
+/* 0005d25c */{
+/* 0005d25c */	if (!this.isInitialized())
+/* 0005d26c */	{
+/* 0005d26c */		return;
+/* 0005d26e */	}
+/* 0005d274 */	if (this.xFlip_ == rot)
+/* 0005d288 */	{
+/* 0005d288 */		return;
+/* 0005d28a */	}
+/* 0005d290 */	this.xFlip_ = rot;
+/* 0005d2a2 */	Ｐ＿Ｘ回転角度設定(this.partsNumber_, rot);
+/* 0005d2b4 */}
+
+void Parts::setShow(bool val)
+/* 0005d2bc */{
+/* 0005d2bc */	if (!this.isInitialized())
+/* 0005d2cc */	{
+/* 0005d2cc */		return;
+/* 0005d2ce */	}
+/* 0005d2d4 */	this.isShow_ = val;
+/* 0005d2de */	Ｐ＿表示設定(this.partsNumber_, this.isShow_ && this.sleepLevel_ == 0);
+/* 0005d316 */}
+
+void Parts::setAlpha(int val)
+/* 0005d31e */{
+/* 0005d31e */	if (!this.isInitialized())
+/* 0005d32e */	{
+/* 0005d32e */		return;
+/* 0005d330 */	}
+/* 0005d336 */	if (this.alpha_ == val)
+/* 0005d344 */	{
+/* 0005d344 */		return;
+/* 0005d346 */	}
+/* 0005d34c */	this.alpha_ = val;
+/* 0005d356 */	Ｐ＿アルファ値設定(this.partsNumber_, this.alpha_);
+/* 0005d368 */}
+
+void Parts::setCgRange(int x, int y, int w, int h)
+/* 0005d370 */{
+/* 0005d370 */	if (!this.isInitialized())
+/* 0005d380 */	{
+/* 0005d380 */		return;
+/* 0005d382 */	}
+/* 0005d388 */	if (this.type_ == 4)
+/* 0005d396 */	{
+/* 0005d396 */		Ｐ＿構築表示範囲設定(this.partsNumber_, x, y, w, h, 1);
+/* 0005d3c0 */	}
+/* 0005d3c6 */	else if (this.type_ == 1)
+/* 0005d3d4 */	{
+/* 0005d3d4 */		Ｐ＿ＣＧ表示範囲設定(this.partsNumber_, x, y, w, h, 1);
+/* 0005d3fe */	}
+/* 0005d404 */}
+
+void Parts::setCgRangeRect(int l, int t, int r, int b)
+/* 0005d40c */{
+/* 0005d40c */	if (!this.isInitialized())
+/* 0005d41c */	{
+/* 0005d41c */		return;
+/* 0005d41e */	}
+/* 0005d424 */	this.setCgRange(l, t, r - l, b - t);
+/* 0005d454 */}
+
+void Parts::setDrawFilter(int filterType)
+/* 0005d45c */{
+/* 0005d45c */	if (!this.isInitialized())
+/* 0005d46c */	{
+/* 0005d46c */		return;
+/* 0005d46e */	}
+/* 0005d474 */	Ｐ＿描画フィルタ設定(this.partsNumber_, filterType);
+/* 0005d486 */}
+
+void Parts::setAddColorValue(int r, int g, int b)
+/* 0005d48e */{
+/* 0005d48e */	if (!this.isInitialized())
+/* 0005d49e */	{
+/* 0005d49e */		return;
+/* 0005d4a0 */	}
+/* 0005d4a6 */	Ｐ＿加算色設定(this.partsNumber_, r, g, b);
+/* 0005d4c4 */}
+
+void Parts::setMultiColorValue(int r, int g, int b)
+/* 0005d4cc */{
+/* 0005d4cc */	if (!this.isInitialized())
+/* 0005d4dc */	{
+/* 0005d4dc */		return;
+/* 0005d4de */	}
+/* 0005d4e4 */	Ｐ＿乗算色設定(this.partsNumber_, r, g, b);
+/* 0005d502 */}
+
+int Parts::getX()
+/* 0005d50a */{
+/* 0005d50a */	if (!this.isInitialized())
+/* 0005d51a */	{
+/* 0005d51a */		return 0;
+/* 0005d522 */	}
+/* 0005d528 */	return Ｐ＿Ｘ座標取得(this.partsNumber_);
+/* 0005d536 */}
+
+int Parts::getY()
+/* 0005d544 */{
+/* 0005d544 */	if (!this.isInitialized())
+/* 0005d554 */	{
+/* 0005d554 */		return 0;
+/* 0005d55c */	}
+/* 0005d562 */	return Ｐ＿Ｙ座標取得(this.partsNumber_);
+/* 0005d570 */}
+
+int Parts::getZ()
+/* 0005d57e */{
+/* 0005d57e */	if (!this.isInitialized())
+/* 0005d58e */	{
+/* 0005d58e */		return 0;
+/* 0005d596 */	}
+/* 0005d59c */	return this.z_;
+/* 0005d5a4 */}
+
+int Parts::getWidth()
+/* 0005d5b2 */{
+/* 0005d5b2 */	if (!this.isInitialized())
+/* 0005d5c2 */	{
+/* 0005d5c2 */		return 0;
+/* 0005d5ca */	}
+/* 0005d5d0 */	return AFL_Parts_GetWidth(this.partsNumber_, 1);
+/* 0005d5e4 */}
+
+int Parts::getHeight()
+/* 0005d5f2 */{
+/* 0005d5f2 */	if (!this.isInitialized())
+/* 0005d602 */	{
+/* 0005d602 */		return 0;
+/* 0005d60a */	}
+/* 0005d610 */	return AFL_Parts_GetHeight(this.partsNumber_, 1);
+/* 0005d624 */}
+
+int Parts::getAlpha()
+/* 0005d632 */{
+/* 0005d632 */	if (!this.isInitialized())
+/* 0005d642 */	{
+/* 0005d642 */		return 0;
+/* 0005d64a */	}
+/* 0005d650 */	return Ｐ＿アルファ値取得(this.partsNumber_);
+/* 0005d65e */}
+
+int Parts::getRot()
+/* 0005d66c */{
+/* 0005d66c */	return this.rot_;
+/* 0005d674 */}
+
+float Parts::getScaling()
+/* 0005d682 */{
+/* 0005d682 */	return this.scaling_;
+/* 0005d68a */}
+
+bool Parts::isShow()
+/* 0005d698 */{
+/* 0005d698 */	return this.isShow_;
+/* 0005d6a0 */}
+
+void Parts::finalizeMotion()
+/* 0005d6ae */{
+/* 0005d6ae */	if (!this.isInitialized())
+/* 0005d6be */	{
+/* 0005d6be */		return;
+/* 0005d6c0 */	}
+/* 0005d6c6 */	if (!this.isMotion() || this.motions_.Empty())
+/* 0005d6fe */	{
+/* 0005d6fe */		return;
+/* 0005d700 */	}
+/* 0005d706 */	for (; ; )
+/* 0005d706 */	{
+/* 0005d706 */		this.setMotionLastFrame(this.motions_[0]);
+/* 0005d71c */		this.motions_.Erase(0);
+/* 0005d72e */		if (this.motions_.Empty())
+/* 0005d738 */		{
+/* 0005d738 */			break;
+/* 0005d73e */		}
+/* 0005d744 */		this.setMotionDefaultValue(this.motions_[0]);
+/* 0005d75a */	}
+/* 0005d760 */	this.isMotion_ = false;
+/* 0005d76a */}
+
+void Parts::runMotion(MotionInfomation motionInfo)
+/* 0005d772 */{
+/* 0005d772 */	if (!this.isInitialized())
+/* 0005d782 */	{
+/* 0005d782 */		return;
+/* 0005d784 */	}
+/* 0005d78a */	this.addMotion(motionInfo);
+/* 0005d7a0 */	this.startMotion();
+/* 0005d7a8 */}
+
+void Parts::runMotionArray(ref array@MotionInfomation motions)
+/* 0005d7b0 */{
+/* 0005d7b0 */	if (!this.isInitialized())
+/* 0005d7c0 */	{
+/* 0005d7c0 */		return;
+/* 0005d7c2 */	}
+/* 0005d7c8 */	this.addMotionArray(motions);
+/* 0005d7d6 */	this.startMotion();
+/* 0005d7de */}
+
+void Parts::updateMotionState()
+/* 0005d7e6 */{
+/* 0005d7e6 */	if (!this.isInitialized())
+/* 0005d7f6 */	{
+/* 0005d7f6 */		return;
+/* 0005d7f8 */	}
+/* 0005d7fe */	if (!this.motions_.Empty())
+/* 0005d810 */	{
+/* 0005d810 */		int now = this.motionTimer_.getTime();
+/* 0005d828 */		if (now > this.motions_[0].getTime() + this.motions_[0].getDelay())
+/* 0005d860 */		{
+/* 0005d860 */			this.onMotionFinish();
+/* 0005d868 */		}
+/* 0005d86e */		else
+/* 0005d86e */		{
+/* 0005d86e */			this.onMotion(now);
+/* 0005d87c */		}
+/* 0005d87c */	}
+/* 0005d882 */	if (this.isLoopMotionActive_)
+/* 0005d88c */	{
+/* 0005d88c */		this.updateLoopMotion(this.loopMotionTimer_.getTime());
+/* 0005d8a0 */	}
+/* 0005d8a6 */}
+
+bool Parts::isMotion()
+/* 0005d8ae */{
+/* 0005d8ae */	return this.isMotion_;
+/* 0005d8b6 */}
+
+int Parts::getPartsNumber()
+/* 0005d8c4 */{
+/* 0005d8c4 */	return this.partsNumber_;
+/* 0005d8cc */}
+
+void Parts::release()
+/* 0005d8da */{
+/* 0005d8da */	if (!this.isInitialized())
+/* 0005d8ea */	{
+/* 0005d8ea */		return;
+/* 0005d8ec */	}
+/* 0005d8f2 */	g_partsNumberProvider.releaseNumber(this.partsNumber_);
+/* 0005d904 */	this.clear();
+/* 0005d90c */}
+
+void Parts::setLoopMotion(ref LoopMotionInfomation loopMotion)
+/* 0005d914 */{
+/* 0005d914 */	this.loopMotion_ = loopMotion;
+/* 0005d924 */}
+
+void Parts::setActiveLoopMotion(bool val)
+/* 0005d92c */{
+/* 0005d92c */	if (!this.isInitialized())
+/* 0005d93c */	{
+/* 0005d93c */		return;
+/* 0005d93e */	}
+/* 0005d944 */	this.isLoopMotionActive_ = val;
+/* 0005d94e */	if (!val)
+/* 0005d95c */	{
+/* 0005d95c */		this.setAddColorValue(0, 0, 0);
+/* 0005d976 */		this.setScaling(100.0);
+/* 0005d984 */	}
+/* 0005d98a */}
+
+void Parts::sleep(bool val, bool updateShowState)
+/* 0005d992 */{
+/* 0005d992 */	if (this.isNonSleep_)
+/* 0005d99c */	{
+/* 0005d99c */		return;
+/* 0005d99e */	}
+/* 0005d9a4 */	if (val)
+/* 0005d9b0 */	{
+/* 0005d9b0 */		++this.sleepLevel_;
+/* 0005d9c0 */	}
+/* 0005d9c6 */	else
+/* 0005d9c6 */	{
+/* 0005d9c6 */		this.sleepLevel_ = Math.Max(0, this.sleepLevel_ - 1);
+/* 0005d9f0 */	}
+/* 0005d9f0 */	if (updateShowState)
+/* 0005d9fc */	{
+/* 0005d9fc */		this.setShow(this.isShow());
+/* 0005da0c */	}
+/* 0005da12 */}
+
+void Parts::setNonSleep(bool val)
+/* 0005da1a */{
+/* 0005da1a */	this.isNonSleep_ = val;
+/* 0005da24 */}
+
+float Parts::getYFlip()
+/* 0005da2c */{
+/* 0005da2c */	return this.yFlip_;
+/* 0005da34 */}
+
+float Parts::getXFlip()
+/* 0005da42 */{
+/* 0005da42 */	return this.xFlip_;
+/* 0005da4a */}
+
+Parts::~Parts()
+/* 0005da58 */{
+/* 0005da58 */	this.release();
+/* 0005da60 */}
+
+void Parts::onMotionFinish()
+/* 0005da68 */{
+/* 0005da68 */	this.setMotionLastFrame(this.motions_[0]);
+/* 0005da7e */	this.motions_.Erase(0);
+/* 0005da90 */	if (this.motions_.Empty())
+/* 0005da9a */	{
+/* 0005da9a */		this.isMotion_ = false;
+/* 0005daa4 */	}
+/* 0005daaa */	else
+/* 0005daaa */	{
+/* 0005daaa */		this.setMotionDefaultValue(this.motions_[0]);
+/* 0005dac0 */		this.playMotionSound(this.motions_[0]);
+/* 0005dad6 */		this.motionTimer_.reset();
+/* 0005dae2 */	}
+/* 0005dae2 */}
+
+void Parts::onMotion(int now)
+/* 0005daea */{
+/* 0005daea */	float t;
+/* 0005dafc */	int rx;
+/* 0005db06 */	int ry;
+/* 0005db10 */	int sx;
+/* 0005db1a */	int sy;
+/* 0005db24 */	ref MotionInfomation m = this.motions_[0];
+/* 0005db4e */	if (now >= m.getDelay())
+/* 0005db68 */	{
+/* 0005db68 */		t = float(now - m.getDelay()) / float(m.getTime());
+/* 0005db9a */		int shake = motion(m.getMotionTypeShakeLevel(), m.getFromShakeLevel(), m.getToShakeLevel(), t);
+/* 0005dbdc */		rx = shake == 0 ? 0 : RAND(shake) - shake / 2;
+/* 0005dc1e */		ry = shake == 0 ? 0 : RAND(shake) - shake / 2;
+/* 0005dc60 */		int swX = motion(m.getMotionTypeSwingX(), m.getFromSwingX(), m.getToSwingX(), t);
+/* 0005dca2 */		int swY = motion(m.getMotionTypeSwingY(), m.getFromSwingY(), m.getToSwingY(), t);
+/* 0005dce4 */		sx = Math.Cos(m.getSwingCount() * 360 * t + (swY == 0 ? 90 : 0)) * swX;
+/* 0005dd4c */		sy = Math.Sin(m.getSwingCount() * 360 * t) * swY;
+/* 0005dd90 */	}
+/* 0005dd96 */	this.setPos(motion(m.getMotionTypeXY(), m.getFromX(), m.getToX(), t) + rx + sx, motion(m.getMotionTypeXY(), m.getFromY(), m.getToY(), t) + ry + sy, -2147483648);
+/* 0005de38 */	this.setAlpha(motion(m.getMotionTypeAlpha(), m.getFromAlpha(), m.getToAlpha(), t));
+/* 0005de76 */	this.setRot(motion(m.getMotionTypeRot(), m.getFromRot(), m.getToRot(), t));
+/* 0005deb2 */	this.setYFlip(motion(m.getMotionTypeYFlip(), m.getFromYFlip(), m.getToYFlip(), t));
+/* 0005deee */	this.setXFlip(motion(m.getMotionTypeXFlip(), m.getFromXFlip(), m.getToXFlip(), t));
+/* 0005df2a */	this.setScaling(motion(m.getMotionTypeScaling(), m.getFromScaling(), m.getToScaling(), t));
+/* 0005df66 */	this.setCgRangeRect(motion(m.getMotionTypeCgRange(), m.getFromCgRangeLeft(), m.getToCgRangeLeft(), t), motion(m.getMotionTypeCgRange(), m.getFromCgRangeTop(), m.getToCgRangeTop(), t), motion(m.getMotionTypeCgRange(), m.getFromCgRangeRight(), m.getToCgRangeRight(), t), motion(m.getMotionTypeCgRange(), m.getFromCgRangeBottom(), m.getToCgRangeBottom(), t));
+/* 0005e046 */	this.setNumber(motion(m.getMotionTypeNumber(), m.getFromNumber(), m.getToNumber(), t));
+/* 0005e084 */	int c = motion(m.getMotionTypeSpecular(), m.getFromSpecular(), m.getToSpecular(), t);
+/* 0005e0c6 */	this.setAddColorValue(c, c, c);
+/* 0005e0e0 */}
+
+void Parts::updateLoopMotion(int nowTime)
+/* 0005e0e8 */{
+/* 0005e0e8 */	if (this.loopMotion_.isEnable(2))
+/* 0005e100 */	{
+/* 0005e100 */		int c = this.loopMotion_.get(2, nowTime);
+/* 0005e124 */		this.setAddColorValue(c, c, c);
+/* 0005e13e */	}
+/* 0005e144 */	if (this.loopMotion_.isEnable(3))
+/* 0005e15c */	{
+/* 0005e15c */		this.setScaling(this.loopMotion_.get(3, nowTime));
+/* 0005e17e */	}
+/* 0005e184 */}
+
+void Parts::addMotion(MotionInfomation motionInfo)
+/* 0005e18c */{
+/* 0005e18c */	if (this.isMotion())
+/* 0005e19a */	{
+/* 0005e19a */		this.finalizeMotion();
+/* 0005e1a2 */	}
+/* 0005e1a8 */	this.motions_.PushBack(motionInfo);
+/* 0005e1b2 */}
+
+void Parts::addMotionArray(ref array@MotionInfomation motions)
+/* 0005e1ba */{
+/* 0005e1ba */	if (this.isMotion())
+/* 0005e1c8 */	{
+/* 0005e1c8 */		this.finalizeMotion();
+/* 0005e1d0 */	}
+/* 0005e1d6 */	int i;
+/* 0005e1e0 */	for (i = 0; i < motions.Numof(); ++i)
+/* 0005e21a */	{
+/* 0005e21a */		this.addMotion(motions[i]);
+/* 0005e234 */	}
+/* 0005e23a */}
+
+void Parts::startMotion()
+/* 0005e242 */{
+/* 0005e242 */	if (this.motions_.Empty())
+/* 0005e24c */	{
+/* 0005e24c */		return;
+/* 0005e24e */	}
+/* 0005e254 */	this.setMotionDefaultValue(this.motions_[0]);
+/* 0005e26a */	this.playMotionSound(this.motions_[0]);
+/* 0005e280 */	this.isMotion_ = true;
+/* 0005e28a */	this.motionTimer_.reset();
+/* 0005e296 */}
+
+void Parts::setMotionLastFrame(ref MotionInfomation m)
+/* 0005e29e */{
+/* 0005e29e */	this.setPos(m.getToX(), m.getToY(), -2147483648);
+/* 0005e2c4 */	this.setAlpha(m.getToAlpha());
+/* 0005e2d8 */	this.setRot(m.getToRot());
+/* 0005e2ee */	this.setYFlip(m.getToYFlip());
+/* 0005e304 */	this.setXFlip(m.getToXFlip());
+/* 0005e31a */	this.setScaling(m.getToScaling());
+/* 0005e330 */	this.setNumber(m.getToNumber());
+/* 0005e344 */	this.setCgRangeRect(m.getToCgRangeLeft(), m.getToCgRangeTop(), m.getToCgRangeRight(), m.getToCgRangeBottom());
+/* 0005e37c */	int c = m.getToSpecular();
+/* 0005e394 */	this.setAddColorValue(c, c, c);
+/* 0005e3ae */	int n = m.getLoopSoundNumber();
+/* 0005e3c6 */	if (n != 0)
+/* 0005e3da */	{
+/* 0005e3da */		g_loopSound.stopSound(n);
+/* 0005e3ec */	}
+/* 0005e3f2 */}
+
+void Parts::playMotionSound(ref MotionInfomation motionInfo)
+/* 0005e3fa */{
+/* 0005e3fa */	int n = motionInfo.getSoundNumber();
+/* 0005e412 */	if (n != 0)
+/* 0005e426 */	{
+/* 0005e426 */		g_sysSound.play(n, false);
+/* 0005e43e */	}
+/* 0005e444 */	int m = motionInfo.getLoopSoundNumber();
+/* 0005e45c */	if (m != 0)
+/* 0005e470 */	{
+/* 0005e470 */		g_loopSound.playSound(m);
+/* 0005e482 */	}
+/* 0005e488 */}
+
+void Parts::setMotionDefaultValue(ref MotionInfomation motionInfo)
+/* 0005e490 */{
+/* 0005e490 */	if (motionInfo.getToX() == -2147483648)
+/* 0005e4aa */	{
+/* 0005e4aa */		motionInfo.setMove(this.getX(), this.getY(), this.getX(), this.getY(), 1);
+/* 0005e4dc */	}
+/* 0005e4e2 */	else if (motionInfo.getFromX() == -2147483648)
+/* 0005e4fc */	{
+/* 0005e4fc */		motionInfo.setMove(this.getX(), this.getY(), motionInfo.getToX(), motionInfo.getToY(), 1);
+/* 0005e536 */	}
+/* 0005e53c */	if (motionInfo.getFromSwingX() == -2147483648)
+/* 0005e556 */	{
+/* 0005e556 */		motionInfo.setSwingX(0, 0, 1);
+/* 0005e574 */	}
+/* 0005e57a */	if (motionInfo.getFromSwingY() == -2147483648)
+/* 0005e594 */	{
+/* 0005e594 */		motionInfo.setSwingY(0, 0, 1);
+/* 0005e5b2 */	}
+/* 0005e5b8 */	if (motionInfo.getFromShakeLevel() == -2147483648)
+/* 0005e5d2 */	{
+/* 0005e5d2 */		motionInfo.setShakeLevel(0, 0, 0);
+/* 0005e5f0 */	}
+/* 0005e5f6 */	if (motionInfo.getFromAlpha() == -2147483648)
+/* 0005e610 */	{
+/* 0005e610 */		motionInfo.setAlpha(this.getAlpha(), this.getAlpha(), 0);
+/* 0005e632 */	}
+/* 0005e638 */	if (motionInfo.getFromRot() == -2147483648)
+/* 0005e652 */	{
+/* 0005e652 */		motionInfo.setRot(this.getRot(), this.getRot(), 0);
+/* 0005e674 */	}
+/* 0005e67a */	if (motionInfo.getFromYFlip() == -2147483648)
+/* 0005e694 */	{
+/* 0005e694 */		motionInfo.setYFlip(this.getYFlip(), this.getYFlip(), 0);
+/* 0005e6ba */	}
+/* 0005e6c0 */	if (motionInfo.getFromXFlip() == -2147483648)
+/* 0005e6da */	{
+/* 0005e6da */		motionInfo.setXFlip(this.getXFlip(), this.getXFlip(), 0);
+/* 0005e700 */	}
+/* 0005e706 */	if (motionInfo.getFromScaling() == -2147483648)
+/* 0005e720 */	{
+/* 0005e720 */		motionInfo.setScaling(this.getScaling(), this.getScaling(), 0);
+/* 0005e746 */	}
+/* 0005e74c */	if (motionInfo.getFromSpecular() == -2147483648)
+/* 0005e766 */	{
+/* 0005e766 */		motionInfo.setSpecular(0, 0, 0);
+/* 0005e784 */	}
+/* 0005e78a */}
+
+void Parts::clear()
+/* 0005e792 */{
+/* 0005e792 */	this.type_ = 0;
+/* 0005e79c */	this.partsNumber_ = 0;
+/* 0005e7a6 */	this.sleepLevel_ = 0;
+/* 0005e7b0 */	this.isLoopMotionActive_ = false;
+/* 0005e7ba */	this.isShow_ = false;
+/* 0005e7c4 */	this.scaling_ = 100.0;
+/* 0005e7d6 */	this.alpha_ = 255;
+/* 0005e7e0 */	this.rot_ = 0;
+/* 0005e7ea */	this.isMotion_ = false;
+/* 0005e7f4 */	this.motions_.Free();
+/* 0005e7fe */	this.text_ = "";
+/* 0005e80a */	this.z_ = 1;
+/* 0005e814 */	this.baseZ_ = 0;
+/* 0005e81e */	this.isNonSleep_ = false;
+/* 0005e828 */}
+
+int Parts::getScreenX()
+/* 0005e830 */{
+/* 0005e830 */	return AFL_Parts_GetUpperLeftPosX(this.partsNumber_, 1);
+/* 0005e844 */}
+
+int Parts::getScreenY()
+/* 0005e852 */{
+/* 0005e852 */	return AFL_Parts_GetUpperLeftPosY(this.partsNumber_, 1);
+/* 0005e866 */}
+
+void Parts::setZBasePos(int zbase)
+/* 0005e874 */{
+/* 0005e874 */	this.baseZ_ = zbase;
+/* 0005e87e */	AFL_Parts_SetZByBaseZ(this.partsNumber_, this.z_, this.baseZ_);
+/* 0005e896 */}
+
+void Parts::applyInitializeOption()
+/* 0005e89e */{
+/* 0005e89e */	this.sleepLevel_ = Math.Max(0, g_partsInitializeOption.getSleepLevel());
+/* 0005e8c6 */	if (this.sleepLevel_ != 0)
+/* 0005e8d4 */	{
+/* 0005e8d4 */		dlogF("スリープレベルつき初期化：%d" % this.sleepLevel_);
+/* 0005e8ee */		this.setShow(this.isShow());
+/* 0005e8fe */	}
+/* 0005e904 */}
+
+bool Parts::isInitialized()
+/* 0005e90c */{
+/* 0005e90c */	return this.partsNumber_ != 0;
+/* 0005e91e */}
+
+int Parts::getNumber()
+/* 0005e92c */{
+/* 0005e92c */	return this.number_;
+/* 0005e934 */}
+
+CASCharSpriteProperty getCharSpriteProperty(int size, bool isEdge, int type, int r, int g, int b)
+/* 0005e942 */{
+/* 0005e942 */	CASColor body;
+/* 0005e952 */	CASColor edge;
+/* 0005e962 */	body.Set(r, g, b, 255);
+/* 0005e986 */	edge.Set(0, 0, 0, 255);
+/* 0005e9aa */	CASCharSpriteProperty prop;
+/* 0005e9ba */	prop.SetType(type);
+/* 0005e9cc */	prop.SetSize(size);
+/* 0005e9de */	prop.SetColor(body);
+/* 0005e9f8 */	prop.SetEdgeWeight(isEdge ? 1.0 : 0.0);
+/* 0005ea22 */	prop.SetEdgeColor(edge);
+/* 0005ea3c */	prop.SetBoldWeight(0.0);
+/* 0005ea4e */	return prop;
+/* 0005ea5e */}
+
+void getTextSize(ref int width, ref int height, string text, int size, int type, bool isEdge, int textSpanWidth)
+/* 0005ea72 */{
+/* 0005ea72 */	int partsNumber = 5000;
+/* 0005ea7c */	Ｐ＿フォント設定(partsNumber, type, size, 0, 0, 0, 0.0, 0, 0, 0, isEdge ? 1.0 : 0.0, 1);
+/* 0005eae2 */	Ｐ＿テキスト字間隔設定(partsNumber, textSpanWidth, 1);
+/* 0005eafa */	Ｐ＿テキスト設定(partsNumber, text, 1);
+/* 0005eb12 */	width = AFL_Parts_GetWidth(partsNumber, 1);
+/* 0005eb2e */	height = AFL_Parts_GetHeight(partsNumber, 1);
+/* 0005eb4a */	Ｐ＿削除(partsNumber);
+/* 0005eb56 */}
+

@@ -1,0 +1,173 @@
+EnquiteAgreementDialog::EnquiteAgreementDialog()
+/* 0007e8c0 */{
+/* 0007e8ca */}
+
+void EnquiteAgreementDialog::run()
+/* 0007e8d0 */{
+/* 0007e8d0 */	this.init();
+/* 0007e8d8 */	this.fadeIn(true);
+/* 0007e8e6 */	g_sysSound.play(2201, false);
+/* 0007e8fe */}
+
+int EnquiteAgreementDialog::update()
+/* 0007e906 */{
+/* 0007e906 */	switch (this.state_)
+/* 0007e918 */	{
+/* 0007e918 */	case 1:
+/* 0007e918 */		if (!this.parent_.isMotion())
+/* 0007e92c */		{
+/* 0007e92c */			this.state_ = 2;
+/* 0007e936 */		}
+/* 0007e93c */		break;
+/* 0007e942 */	case 2:
+/* 0007e942 */		if (this.btn_.Numof() == 1)
+/* 0007e956 */		{
+/* 0007e956 */			if (g_mouse.isClick(1) || g_mouse.isClick(0))
+/* 0007e99e */			{
+/* 0007e99e */				if (this.getClickedButton() == -1)
+/* 0007e9b4 */				{
+/* 0007e9b4 */					g_sysSound.play(2002, false);
+/* 0007e9cc */				}
+/* 0007e9d2 */				this.fadeIn(false);
+/* 0007e9e0 */			}
+/* 0007e9e6 */		}
+/* 0007e9ec */		else
+/* 0007e9ec */		{
+/* 0007e9ec */			if (g_mouse.isClick(1))
+/* 0007ea04 */			{
+/* 0007ea04 */				g_sysSound.play(2003, false);
+/* 0007ea1c */				this.result_ = 1;
+/* 0007ea26 */				this.fadeIn(false);
+/* 0007ea34 */			}
+/* 0007ea3a */			this.checkButtonClick();
+/* 0007ea42 */		}
+/* 0007ea42 */		break;
+/* 0007ea48 */	case 3:
+/* 0007ea48 */		if (!this.parent_.isMotion())
+/* 0007ea5c */		{
+/* 0007ea5c */			this.state_ = 0;
+/* 0007ea66 */		}
+/* 0007ea6c */		break;
+/* 0007ea72 */	case 0:
+/* 0007ea72 */		return 1;
+/* 0007ea7a */	}
+/* 0007ea7a */	return 0;
+/* 0007ea82 */}
+
+void EnquiteAgreementDialog::init()
+/* 0007ea90 */{
+/* 0007ea90 */	this.initParts();
+/* 0007ea98 */	this.setPartsPos();
+/* 0007eaa0 */	this.setPartsShow();
+/* 0007eaa8 */	this.initButton();
+/* 0007eab0 */	this.setButtonPos();
+/* 0007eab8 */}
+
+void EnquiteAgreementDialog::initParts()
+/* 0007eac0 */{
+/* 0007eac0 */	int textCount = EX_Width("アンケート同意画面テキスト");
+/* 0007ead8 */	this.parts_.Alloc(1 + textCount);
+/* 0007eaf6 */	this.partsFade_.initAsPlaneImage(1024, 768, 0, 0, 0, 128);
+/* 0007eb26 */	this.partsFade_.setPos(0, 0, 19999);
+/* 0007eb44 */	this.parts_[0].init("システム／確認／下地", 0);
+/* 0007eb64 */	int i;
+/* 0007eb6e */	for (i = 0; i < textCount; ++i)
+/* 0007eb9e */	{
+/* 0007eb9e */		this.parts_[1 + i].initAsText(EX_AString("アンケート同意画面テキスト", i, ""), 24, false, 256, 0, 0, 0);
+/* 0007ebf6 */	}
+/* 0007ebfc */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 0007ec14 */}
+
+void EnquiteAgreementDialog::initButton()
+/* 0007ec1c */{
+/* 0007ec1c */	this.btn_.Alloc(2);
+/* 0007ec32 */	this.btn_[0].init("システム／ボタン／幅２００", "はい", -1);
+/* 0007ec58 */	this.btn_[1].init("システム／ボタン／幅２００", "いいえ", -1);
+/* 0007ec7e */}
+
+void EnquiteAgreementDialog::setPartsPos()
+/* 0007ec86 */{
+/* 0007ec86 */	this.parts_[0].setPos(0, 0, -2147483648);
+/* 0007ecac */	this.parent_.setPos(80, -948, -2147483648);
+/* 0007ecca */	int i;
+/* 0007ecd4 */	for (i = 1; i < this.parts_.Numof(); ++i)
+/* 0007ed04 */	{
+/* 0007ed04 */		this.parts_[i].setPos(160, 200 + i * 30, -2147483648);
+/* 0007ed3a */	}
+/* 0007ed40 */}
+
+void EnquiteAgreementDialog::setButtonPos()
+/* 0007ed48 */{
+/* 0007ed48 */	int c = this.btn_.Numof();
+/* 0007ed5a */	int width = 200 * c + 20 * (c - 1);
+/* 0007ed8c */	this.btn_[0].setPos(308, 540, 25000);
+/* 0007edb2 */	this.btn_[1].setPos(548, 540, 25000);
+/* 0007edd8 */}
+
+void EnquiteAgreementDialog::setPartsShow()
+/* 0007ede0 */{
+/* 0007ede0 */	int i;
+/* 0007edea */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0007ee1a */	{
+/* 0007ee1a */		this.parts_[i].setShow(true);
+/* 0007ee34 */	}
+/* 0007ee3a */}
+
+void EnquiteAgreementDialog::fadeIn(bool val)
+/* 0007ee42 */{
+/* 0007ee42 */	this.partsFade_.setShow(true);
+/* 0007ee54 */	this.partsFade_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0007ee84 */	this.parent_.setShow(val);
+/* 0007ee96 */	this.fadeButton(val);
+/* 0007eea4 */	this.state_ = val ? 1 : 3;
+/* 0007eece */	MotionInfomation m;
+/* 0007eede */	m.setTime(200, 0);
+/* 0007eef6 */	if (val)
+/* 0007ef02 */	{
+/* 0007ef02 */		m.setMove(80, -948, 80, -148, 1);
+/* 0007ef2c */	}
+/* 0007ef32 */	else
+/* 0007ef32 */	{
+/* 0007ef32 */		m.setMove(80, -148, 80, -948, 1);
+/* 0007ef5c */	}
+/* 0007ef5c */	this.parent_.setShow(true);
+/* 0007ef6e */	this.parent_.runMotion(m);
+/* 0007ef88 */}
+
+void EnquiteAgreementDialog::fadeButton(bool val)
+/* 0007ef90 */{
+/* 0007ef90 */	int i;
+/* 0007ef9a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007efca */	{
+/* 0007efca */		this.btn_[i].fadeIn(val);
+/* 0007efe4 */	}
+/* 0007efea */}
+
+int EnquiteAgreementDialog::getClickedButton()
+/* 0007eff2 */{
+/* 0007eff2 */	int i;
+/* 0007effc */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007f02c */	{
+/* 0007f02c */		if (this.btn_[i].isClick())
+/* 0007f046 */		{
+/* 0007f046 */			return i;
+/* 0007f04e */		}
+/* 0007f054 */	}
+/* 0007f05a */	return -1;
+/* 0007f062 */}
+
+void EnquiteAgreementDialog::checkButtonClick()
+/* 0007f070 */{
+/* 0007f070 */	int n = this.getClickedButton();
+/* 0007f084 */	if (n != -1)
+/* 0007f098 */	{
+/* 0007f098 */		this.result_ = n;
+/* 0007f0a2 */		this.fadeIn(false);
+/* 0007f0b0 */	}
+/* 0007f0b6 */}
+
+int EnquiteAgreementDialog::getResult()
+/* 0007f0be */{
+/* 0007f0be */	return this.result_;
+/* 0007f0c6 */}
+

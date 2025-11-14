@@ -1,0 +1,25 @@
+int AFL_GetKeyConfigMouseWheelForwardMode()
+/* 0005782a */{
+/* 0005782a */	return g_nKeyConfigMouseWheelForward;
+/* 00057832 */}
+
+bool AFL_GetConfigQuickSaveConfirm()
+/* 00057846 */{
+/* 00057846 */	return g_ConfigQuickSaveConfirm;
+/* 0005784e */}
+
+bool AFL_GetConfigQuickLoadConfirm()
+/* 00057862 */{
+/* 00057862 */	return g_ConfigQuickLoadConfirm;
+/* 0005786a */}
+
+bool AFL_GetConfigSaveConfirm()
+/* 0005787e */{
+/* 0005787e */	return g_ConfigSaveConfirm;
+/* 00057886 */}
+
+bool AFL_GetConfigLoadConfirm()
+/* 0005789a */{
+/* 0005789a */	return g_ConfigLoadConfirm;
+/* 000578a2 */}
+

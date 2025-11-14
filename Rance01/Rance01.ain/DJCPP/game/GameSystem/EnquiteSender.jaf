@@ -1,0 +1,553 @@
+EnquiteSender::EnquiteSender()
+/* 00094622 */{
+/* 0009462a */	this.net_.SetServerURL("http://games.alicesoft.com/rance01/");
+/* 0009463c */}
+
+void EnquiteSender::setInt(int enquiteId, int answer)
+/* 00094644 */{
+/* 00094644 */	if (enquiteId >= 0 && enquiteId < 229)
+/* 00094678 */	{
+/* 00094678 */		this.enquite_[enquiteId] = "%d" % answer;
+/* 0009469e */	}
+/* 000946a4 */}
+
+void EnquiteSender::setString(int enquiteId, string answer)
+/* 000946ac */{
+/* 000946ac */	if (enquiteId >= 0 && enquiteId < 229)
+/* 000946e0 */	{
+/* 000946e0 */		this.enquite_[enquiteId] = answer;
+/* 000946f4 */	}
+/* 000946fa */}
+
+bool EnquiteSender::createId()
+/* 00094702 */{
+/* 00094702 */	if (this.net_.IsExistUserID())
+/* 00094714 */	{
+/* 00094714 */		return true;
+/* 0009471c */	}
+/* 00094722 */	if (!this.net_.BeginCreateUserID())
+/* 00094736 */	{
+/* 00094736 */		return false;
+/* 0009473e */	}
+/* 00094744 */	LocalTimer t;
+/* 00094754 */	while (true)
+/* 00094760 */	{
+/* 00094760 */		if (this.net_.IsEndCreateUserID() || t.getTime() > 10000)
+/* 000947a4 */		{
+/* 000947a4 */			break;
+/* 000947aa */		}
+/* 000947b0 */		if (g_mouse.isClick(1))
+/* 000947c8 */		{
+/* 000947c8 */			this.net_.StopCreateUserID();
+/* 000947d4 */			break;
+/* 000947da */		}
+/* 000947e0 */		AFL_View_Update(true);
+/* 000947ec */	}
+/* 000947f2 */	return this.net_.EndCreateUserID();
+/* 00094800 */}
+
+bool EnquiteSender::send()
+/* 0009480e */{
+/* 0009480e */	this.updateValue();
+/* 00094816 */	if (!this.net_.BeginSendCommand("sendsurvey", this.enquite_))
+/* 00094838 */	{
+/* 00094838 */		return false;
+/* 00094840 */	}
+/* 00094846 */	LocalTimer t;
+/* 00094856 */	while (true)
+/* 00094862 */	{
+/* 00094862 */		if (this.net_.IsEndSendCommand() || t.getTime() > 10000)
+/* 000948a6 */		{
+/* 000948a6 */			break;
+/* 000948ac */		}
+/* 000948b2 */		if (g_mouse.isClick(1))
+/* 000948ca */		{
+/* 000948ca */			this.net_.StopSendCommand();
+/* 000948d6 */			break;
+/* 000948dc */		}
+/* 000948e2 */		AFL_View_Update(true);
+/* 000948ee */	}
+/* 000948f4 */	string result;
+/* 00094900 */	bool r = this.net_.EndSendCommand(result);
+/* 0009491e */	return r;
+/* 00094926 */}
+
+void EnquiteSender::updateValue()
+/* 00094934 */{
+/* 00094934 */	this.setString(0, "1.00");
+/* 00094948 */	this.setGamePlayValue();
+/* 00094950 */	this.setConfigValue();
+/* 00094958 */}
+
+void EnquiteSender::setGamePlayValue()
+/* 00094960 */{
+/* 00094960 */	this.setInt(1, g_globalGameFlag.getInt("アンケート／Q01.アンケートを答えている時点でのクリア状況を教えてください。"));
+/* 00094980 */	this.setInt(2, g_globalGameFlag.getInt("アンケート／Q02.購入したバージョンを教えてください"));
+/* 000949a0 */	this.setInt(3, g_globalGameFlag.getInt("アンケート／Q03.あなたの年齢を教えてください"));
+/* 000949c0 */	this.setInt(4, g_globalGameFlag.getInt("アンケート／Q04.あなたの性別を教えてください"));
+/* 000949e0 */	this.setInt(5, g_globalGameFlag.getInt("アンケート／Q05.あなたのエロゲー歴はどれぐらいですか？"));
+/* 00094a00 */	this.setInt(6, g_globalGameFlag.getInt("アンケート／Q06.過去にアリスソフトのゲームを何本プレイしたことがありますか？"));
+/* 00094a20 */	this.setInt(7, g_globalGameFlag.getInt("アンケート／Q07.この商品の総合評価"));
+/* 00094a40 */	this.setInt(8, g_globalGameFlag.getInt("アンケート／Q08.原画について、絵柄やデザインの品質はどうでしたか？"));
+/* 00094a60 */	this.setInt(9, g_globalGameFlag.getInt("アンケート／Q09.ＣＧについて、塗りの品質はどうでしたか？"));
+/* 00094a80 */	this.setInt(10, g_globalGameFlag.getInt("アンケート／Q10.ゲームシステムについて、どう感じましたか？"));
+/* 00094aa0 */	this.setInt(11, g_globalGameFlag.getInt("アンケート／Q11.ゲームのバランスや難易度について、どう感じましたか？"));
+/* 00094ac0 */	this.setInt(12, g_globalGameFlag.getInt("アンケート／Q12.操作性について、どう感じましたか？"));
+/* 00094ae0 */	this.setInt(13, g_globalGameFlag.getInt("アンケート／Q13.ストーリーやキャラクターの会話について、どう感じましたか？"));
+/* 00094b00 */	this.setInt(14, g_globalGameFlag.getInt("アンケート／Q14.エロシーンのシナリオについて、どう感じましたか？"));
+/* 00094b20 */	this.setInt(15, g_globalGameFlag.getInt("アンケート／Q15.音楽について、どう感じましたか？"));
+/* 00094b40 */	this.setInt(16, g_globalGameFlag.getInt("アンケート／Q16.このゲームをはじめて知ったきっかけを教えてください"));
+/* 00094b60 */	this.setInt(17, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／絵柄が好みだったから"));
+/* 00094b80 */	this.setInt(18, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／設定が好みだったから"));
+/* 00094ba0 */	this.setInt(19, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／ゲームが面白そうだったから"));
+/* 00094bc0 */	this.setInt(20, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／エロが良さそうだったから"));
+/* 00094be0 */	this.setInt(21, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／同シリーズをプレイしていたから"));
+/* 00094c00 */	this.setInt(22, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／体験版をプレイして気にいったから"));
+/* 00094c20 */	this.setInt(23, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／アリスソフトブランドだから"));
+/* 00094c40 */	this.setInt(24, g_globalGameFlag.getInt("アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／その他"));
+/* 00094c60 */	this.setInt(25, g_globalGameFlag.getInt("アンケート／Q18.このゲームのボリュームはどうでしたか？"));
+/* 00094c80 */	this.setInt(26, g_globalGameFlag.getInt("アンケート／Q19.このゲームの難易度はどうでしたか？"));
+/* 00094ca0 */	this.setInt(27, g_globalGameFlag.getInt("アンケート／Q20.今回のリメイク版の元となった元のランス－光を求めて－をプレイした事がありますか？"));
+/* 00094cc0 */	this.setInt(28, g_globalGameFlag.getInt("アンケート／Q21.えろげー、ちょうどいいなぁと思うクリアまでのプレイ時間はどのくらいですか？"));
+/* 00094ce0 */	this.setInt(29, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／アイ"));
+/* 00094d00 */	this.setInt(30, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／アキ"));
+/* 00094d20 */	this.setInt(31, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／イェリコ"));
+/* 00094d40 */	this.setInt(32, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ウィリス"));
+/* 00094d60 */	this.setInt(33, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／クリン"));
+/* 00094d80 */	this.setInt(34, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／シィル"));
+/* 00094da0 */	this.setInt(35, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ネカイ"));
+/* 00094dc0 */	this.setInt(36, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ハイジ"));
+/* 00094de0 */	this.setInt(37, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／パティ"));
+/* 00094e00 */	this.setInt(38, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／パルプテンクス"));
+/* 00094e20 */	this.setInt(39, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ヒカリ"));
+/* 00094e40 */	this.setInt(40, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／マリス"));
+/* 00094e60 */	this.setInt(41, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ミリー"));
+/* 00094e80 */	this.setInt(42, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／メナド"));
+/* 00094ea0 */	this.setInt(43, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ユキ"));
+/* 00094ec0 */	this.setInt(44, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ユラン"));
+/* 00094ee0 */	this.setInt(45, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／ラベンダー"));
+/* 00094f00 */	this.setInt(46, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／リア"));
+/* 00094f20 */	this.setInt(47, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／奈美"));
+/* 00094f40 */	this.setInt(48, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／忍者"));
+/* 00094f60 */	this.setInt(49, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／美樹"));
+/* 00094f80 */	this.setInt(50, g_globalGameFlag.getInt("アンケート／Q22.気に入ったキャラクターを選択してください／葉月"));
+/* 00094fa0 */	this.setInt(51, g_globalGameFlag.getInt("ゲームクリア"));
+/* 00094fc0 */	this.setInt(52, g_globalGameFlag.getInt("表彰状／最低クリアレベル"));
+/* 00094fe0 */	this.setInt(53, g_globalGameFlag.getInt("表彰状／最低クリア日数"));
+/* 00095000 */	this.setInt(54, g_globalGameFlag.getInt("表彰状／最短豪遊クリア日数"));
+/* 00095020 */	this.setInt(55, g_globalGameFlag.getInt("ＣＧ再生／イベント／シィル／学生服Ｈ０１挿入"));
+/* 00095040 */	this.setInt(56, g_globalGameFlag.getInt("ＣＧ再生／イベント／シィル／買い食い０１"));
+/* 00095060 */	this.setInt(57, g_globalGameFlag.getInt("ＣＧ再生／イベント／シィル／公園Ｈ０１"));
+/* 00095080 */	this.setInt(58, g_globalGameFlag.getInt("ＣＧ再生／イベント／シィル／性格反転Ｈ０１"));
+/* 000950a0 */	this.setInt(59, g_globalGameFlag.getInt("ＣＧ再生／イベント／シィル／魔法"));
+/* 000950c0 */	this.setInt(60, g_globalGameFlag.getInt("ＣＧ再生／イベント／リア／制裁Ｈ０１挿入"));
+/* 000950e0 */	this.setInt(61, g_globalGameFlag.getInt("ＣＧ再生／イベント／リア／大制裁Ｈ０１挿入前"));
+/* 00095100 */	this.setInt(62, g_globalGameFlag.getInt("ＣＧ再生／イベント／マリス／命令Ｈ０２挿入"));
+/* 00095120 */	this.setInt(63, g_globalGameFlag.getInt("ＣＧ再生／イベント／忍者／警告０１"));
+/* 00095140 */	this.setInt(64, g_globalGameFlag.getInt("ＣＧ再生／イベント／忍者／ランチ０１"));
+/* 00095160 */	this.setInt(65, g_globalGameFlag.getInt("ＣＧ再生／イベント／忍者／指挿入Ｈ０１"));
+/* 00095180 */	this.setInt(66, g_globalGameFlag.getInt("ＣＧ再生／イベント／パルプテンクス／バイブＨ０１"));
+/* 000951a0 */	this.setInt(67, g_globalGameFlag.getInt("ＣＧ再生／イベント／パルプテンクス／目隠しＨ０１挿入"));
+/* 000951c0 */	this.setInt(68, g_globalGameFlag.getInt("ＣＧ再生／イベント／パルプテンクス／パイズリＨ０１挿入"));
+/* 000951e0 */	this.setInt(69, g_globalGameFlag.getInt("ＣＧ再生／イベント／奈美／客室Ｈ０１"));
+/* 00095200 */	this.setInt(70, g_globalGameFlag.getInt("ＣＧ再生／イベント／ミリー／強盗０１"));
+/* 00095220 */	this.setInt(71, g_globalGameFlag.getInt("ＣＧ再生／イベント／ミリー／眼鏡Ｈ０１"));
+/* 00095240 */	this.setInt(72, g_globalGameFlag.getInt("ＣＧ再生／イベント／パティ／プールＨ０１挿入前"));
+/* 00095260 */	this.setInt(73, g_globalGameFlag.getInt("ＣＧ再生／イベント／パティ／クンニＨ０１"));
+/* 00095280 */	this.setInt(74, g_globalGameFlag.getInt("ＣＧ再生／イベント／ウィリス／足コキＨ０１"));
+/* 000952a0 */	this.setInt(75, g_globalGameFlag.getInt("ＣＧ再生／イベント／メナド／戦闘０１"));
+/* 000952c0 */	this.setInt(76, g_globalGameFlag.getInt("ＣＧ再生／イベント／メナド／墓地Ｈ０１挿入前"));
+/* 000952e0 */	this.setInt(77, g_globalGameFlag.getInt("ＣＧ再生／イベント／ユラン／和姦／０１"));
+/* 00095300 */	this.setInt(78, g_globalGameFlag.getInt("ＣＧ再生／イベント／ユラン／輪姦Ｈ０１"));
+/* 00095320 */	this.setInt(79, g_globalGameFlag.getInt("ＣＧ再生／イベント／葉月／ストリップＨ０１"));
+/* 00095340 */	this.setInt(80, g_globalGameFlag.getInt("ＣＧ再生／イベント／葉月／トイレＨ０１挿入前"));
+/* 00095360 */	this.setInt(81, g_globalGameFlag.getInt("ＣＧ再生／イベント／ユキ／姉妹Ｈ０１挿入"));
+/* 00095380 */	this.setInt(82, g_globalGameFlag.getInt("ＣＧ再生／イベント／美樹／ダメージ０１"));
+/* 000953a0 */	this.setInt(83, g_globalGameFlag.getInt("ＣＧ再生／イベント／美樹／パンツＨ０１"));
+/* 000953c0 */	this.setInt(84, g_globalGameFlag.getInt("ＣＧ再生／イベント／クリン／フェラチオＨ０１"));
+/* 000953e0 */	this.setInt(85, g_globalGameFlag.getInt("ＣＧ再生／イベント／ハイジ／パンＨ０１挿入"));
+/* 00095400 */	this.setInt(86, g_globalGameFlag.getInt("ＣＧ再生／イベント／イェリコ／寝る０１"));
+/* 00095420 */	this.setInt(87, g_globalGameFlag.getInt("ＣＧ再生／イベント／ラベンダー／拷問Ｈ０１"));
+/* 00095440 */	this.setInt(88, g_globalGameFlag.getInt("ＣＧ再生／イベント／エンエン／拷問Ｈ０１挿入前"));
+/* 00095460 */	this.setInt(89, g_globalGameFlag.getInt("ＣＧ再生／イベント／ニウ／拷問Ｈ０１挿入前"));
+/* 00095480 */	this.setInt(90, g_globalGameFlag.getInt("ＣＧ再生／イベント／ネカイ／手コキＨ０１"));
+/* 000954a0 */	this.setInt(91, g_globalGameFlag.getInt("ＣＧ再生／イベント／ヒカリ／発狂Ｈ０１"));
+/* 000954c0 */	this.setInt(92, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／ピクシーフォックス"));
+/* 000954e0 */	this.setInt(93, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／夜のピクシーフォックス"));
+/* 00095500 */	this.setInt(94, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／ハチ女"));
+/* 00095520 */	this.setInt(95, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／スモッグシルフ"));
+/* 00095540 */	this.setInt(96, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／ゾンビエルフ"));
+/* 00095560 */	this.setInt(97, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／プールポニー"));
+/* 00095580 */	this.setInt(98, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／フィシャースネーク"));
+/* 000955a0 */	this.setInt(99, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／マジスコ"));
+/* 000955c0 */	this.setInt(100, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／マジスコレトロ"));
+/* 000955e0 */	this.setInt(101, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／へびさん"));
+/* 00095600 */	this.setInt(102, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／ビギニングへびさん"));
+/* 00095620 */	this.setInt(103, g_globalGameFlag.getInt("ＣＧ再生／イベント／女の子モンスター／フィールドリンクス"));
+/* 00095640 */	this.setInt(104, g_globalGameFlag.getInt("ＣＧ再生／イベント／アリス／メインメニュー"));
+/* 00095660 */	this.setInt(105, g_globalGameFlag.getInt("ＣＧ再生／イベント／ランス／オープニング０１"));
+/* 00095680 */	this.setInt(106, g_globalGameFlag.getInt("ＣＧ再生／イベント／ランス／タイトル０１"));
+/* 000956a0 */	this.setInt(107, g_globalGameFlag.getInt("ＣＧ再生／イベント／ランス／ゲームオーバー０１"));
+/* 000956c0 */	this.setInt(108, g_globalGameFlag.getInt("ＣＧ再生／イベント／ランス／エンディング０１"));
+/* 000956e0 */	this.setInt(109, g_globalGameFlag.getInt("回想再生／シィル／学生服Ｈ"));
+/* 00095700 */	this.setInt(110, g_globalGameFlag.getInt("回想再生／公園／シィル"));
+/* 00095720 */	this.setInt(111, g_globalGameFlag.getInt("回想再生／シィル／公園Ｈ"));
+/* 00095740 */	this.setInt(112, g_globalGameFlag.getInt("回想再生／シィル／性格反転Ｈ"));
+/* 00095760 */	this.setInt(113, g_globalGameFlag.getInt("回想再生／回想／シィル／魔法"));
+/* 00095780 */	this.setInt(114, g_globalGameFlag.getInt("回想再生／リア／制裁Ｈ"));
+/* 000957a0 */	this.setInt(115, g_globalGameFlag.getInt("回想再生／リア／大制裁Ｈ"));
+/* 000957c0 */	this.setInt(116, g_globalGameFlag.getInt("回想再生／マリス／命令Ｈ"));
+/* 000957e0 */	this.setInt(117, g_globalGameFlag.getInt("回想再生／忍者／警告"));
+/* 00095800 */	this.setInt(118, g_globalGameFlag.getInt("回想再生／忍者／ランチ"));
+/* 00095820 */	this.setInt(119, g_globalGameFlag.getInt("回想再生／忍者／指入れＨ"));
+/* 00095840 */	this.setInt(120, g_globalGameFlag.getInt("回想再生／パルプテンクス／バイブＨ"));
+/* 00095860 */	this.setInt(121, g_globalGameFlag.getInt("回想再生／パルプテンクス／目隠しＨ"));
+/* 00095880 */	this.setInt(122, g_globalGameFlag.getInt("回想再生／パルプテンクス／パイズリＨ"));
+/* 000958a0 */	this.setInt(123, g_globalGameFlag.getInt("回想再生／奈美／客室Ｈ"));
+/* 000958c0 */	this.setInt(124, g_globalGameFlag.getInt("回想再生／ミリー／強盗"));
+/* 000958e0 */	this.setInt(125, g_globalGameFlag.getInt("回想再生／ミリー／眼鏡Ｈ"));
+/* 00095900 */	this.setInt(126, g_globalGameFlag.getInt("回想再生／パティ／クンニＨ"));
+/* 00095920 */	this.setInt(127, g_globalGameFlag.getInt("回想再生／パティ／プールＨ"));
+/* 00095940 */	this.setInt(128, g_globalGameFlag.getInt("回想再生／ウィリス／足コキＨ"));
+/* 00095960 */	this.setInt(129, g_globalGameFlag.getInt("回想再生／墓地／初回／戦闘後"));
+/* 00095980 */	this.setInt(130, g_globalGameFlag.getInt("回想再生／メナド／墓地Ｈ"));
+/* 000959a0 */	this.setInt(131, g_globalGameFlag.getInt("回想再生／ユラン／控え室Ｈ／膣外射精"));
+/* 000959c0 */	this.setInt(132, g_globalGameFlag.getInt("回想再生／ユラン／控え室Ｈ／膣内射精"));
+/* 000959e0 */	this.setInt(133, g_globalGameFlag.getInt("回想再生／ユラン／輪姦Ｈ"));
+/* 00095a00 */	this.setInt(134, g_globalGameFlag.getInt("回想再生／回想／葉月／ストリップＨ"));
+/* 00095a20 */	this.setInt(135, g_globalGameFlag.getInt("回想再生／葉月／トイレＨ"));
+/* 00095a40 */	this.setInt(136, g_globalGameFlag.getInt("回想再生／ユキ／姉妹Ｈ"));
+/* 00095a60 */	this.setInt(137, g_globalGameFlag.getInt("回想再生／回想／美樹／パンツＨ"));
+/* 00095a80 */	this.setInt(138, g_globalGameFlag.getInt("回想再生／クリン／フェラチオＨ"));
+/* 00095aa0 */	this.setInt(139, g_globalGameFlag.getInt("回想再生／ハイジ／パンＨ"));
+/* 00095ac0 */	this.setInt(140, g_globalGameFlag.getInt("回想再生／イェリコ／寝る"));
+/* 00095ae0 */	this.setInt(141, g_globalGameFlag.getInt("回想再生／回想／ラベンダー／拷問Ｈ"));
+/* 00095b00 */	this.setInt(142, g_globalGameFlag.getInt("回想再生／エンエン／拷問Ｈ"));
+/* 00095b20 */	this.setInt(143, g_globalGameFlag.getInt("回想再生／ニウ／拷問Ｈ"));
+/* 00095b40 */	this.setInt(144, g_globalGameFlag.getInt("回想再生／ネカイ／手コキＨ"));
+/* 00095b60 */	this.setInt(145, g_globalGameFlag.getInt("回想再生／ヒカリ／狂気Ｈ"));
+/* 00095b80 */	this.setInt(146, g_globalGameFlag.getInt("回想再生／女の子モンスター／ピクシーフォックス"));
+/* 00095ba0 */	this.setInt(147, g_globalGameFlag.getInt("回想再生／女の子モンスター／夜のピクシーフォックス"));
+/* 00095bc0 */	this.setInt(148, g_globalGameFlag.getInt("回想再生／女の子モンスター／ハチ女"));
+/* 00095be0 */	this.setInt(149, g_globalGameFlag.getInt("回想再生／女の子モンスター／集団ハチ女"));
+/* 00095c00 */	this.setInt(150, g_globalGameFlag.getInt("回想再生／女の子モンスター／スモッグシルフ"));
+/* 00095c20 */	this.setInt(151, g_globalGameFlag.getInt("回想再生／女の子モンスター／ゾンビエルフ"));
+/* 00095c40 */	this.setInt(152, g_globalGameFlag.getInt("回想再生／女の子モンスター／再生ゾンビエルフ"));
+/* 00095c60 */	this.setInt(153, g_globalGameFlag.getInt("回想再生／女の子モンスター／再生再生ゾンビエルフ"));
+/* 00095c80 */	this.setInt(154, g_globalGameFlag.getInt("回想再生／女の子モンスター／再生再生再生ゾンビエルフ"));
+/* 00095ca0 */	this.setInt(155, g_globalGameFlag.getInt("回想再生／女の子モンスター／プールポニー"));
+/* 00095cc0 */	this.setInt(156, g_globalGameFlag.getInt("回想再生／女の子モンスター／フィシャースネーク"));
+/* 00095ce0 */	this.setInt(157, g_globalGameFlag.getInt("回想再生／女の子モンスター／マジスコ"));
+/* 00095d00 */	this.setInt(158, g_globalGameFlag.getInt("回想再生／女の子モンスター／マジスコレトロ"));
+/* 00095d20 */	this.setInt(159, g_globalGameFlag.getInt("回想再生／女の子モンスター／へびさん"));
+/* 00095d40 */	this.setInt(160, g_globalGameFlag.getInt("回想再生／女の子モンスター／ビギニングへびさん"));
+/* 00095d60 */	this.setInt(161, g_globalGameFlag.getInt("回想再生／女の子モンスター／フィールドリンクス"));
+/* 00095d80 */	this.setInt(162, g_globalGameFlag.getInt("回想再生／リア／エピローグ"));
+/* 00095da0 */	this.setInt(163, g_globalGameFlag.getInt("死因／水"));
+/* 00095dc0 */	this.setInt(164, g_globalGameFlag.getInt("死因／ホモ"));
+/* 00095de0 */	this.setInt(165, g_globalGameFlag.getInt("死因／城壁"));
+/* 00095e00 */	this.setInt(166, g_globalGameFlag.getInt("死因／メナド"));
+/* 00095e20 */	this.setInt(167, g_globalGameFlag.getInt("死因／ゾンビエルフ"));
+/* 00095e40 */	this.setInt(168, g_globalGameFlag.getInt("死因／パイプ"));
+/* 00095e60 */	this.setInt(169, g_globalGameFlag.getInt("死因／はいてない"));
+/* 00095e80 */	this.setInt(170, g_globalGameFlag.getInt("死因／美樹"));
+/* 00095ea0 */	this.setInt(171, g_globalGameFlag.getInt("死因／三角木馬"));
+/* 00095ec0 */	this.setInt(172, g_globalGameFlag.getInt("死因／樽"));
+/* 00095ee0 */	this.setInt(173, g_globalGameFlag.getInt("死因／奈美"));
+/* 00095f00 */	this.setInt(174, g_globalGameFlag.getInt("死因／ちゃぶ台"));
+/* 00095f20 */	this.setInt(175, g_globalGameFlag.getInt("死因／ミリー"));
+/* 00095f40 */	this.setInt(176, g_globalGameFlag.getInt("死因／巻き巻き"));
+/* 00095f60 */	this.setInt(177, g_globalGameFlag.getInt("死因／バナナ"));
+/* 00095f80 */	this.setInt(178, g_globalGameFlag.getInt("死因／イェリコ"));
+/* 00095fa0 */	this.setInt(179, g_globalGameFlag.getInt("死因／王"));
+/* 00095fc0 */	this.setInt(180, g_globalGameFlag.getInt("死因／王妃"));
+/* 00095fe0 */	this.setInt(181, g_globalGameFlag.getInt("死因／食べ残し"));
+/* 00096000 */	this.setInt(182, g_globalGameFlag.getInt("死因／観客"));
+/* 00096020 */	this.setInt(183, g_globalGameFlag.getInt("死因／ユラン"));
+/* 00096040 */	this.setInt(184, g_globalGameFlag.getInt("マニュアルを開いた"));
+/* 00096060 */	this.setInt(185, AFL_TotalPlayTime_GetMinuteTime());
+/* 00096074 */	this.setInt(186, g_saveManager.getSavedObjectCount());
+/* 0009608e */	this.setString(228, g_globalGameFlag.getString("アンケート／自由記入"));
+/* 000960ae */}
+
+void EnquiteSender::setConfigValue()
+/* 000960b6 */{
+/* 000960b6 */	this.setInt(187, AFL_Config_GetMessageSpeedRate() * 100.0);
+/* 000960d4 */	this.setInt(188, AFL_Config_GetAutoModeWaitTimeRate() * 100.0);
+/* 000960f2 */	this.setInt(189, AFL_Config_GetReadMessageSkipWaitTimeRate() * 100.0);
+/* 00096110 */	this.setInt(190, AFL_Config_GetFrameSkipWhileMessageSkip());
+/* 00096124 */	this.setInt(191, AFL_Config_GetShowSampleMessage());
+/* 00096138 */	this.setInt(192, AFL_Config_GetReleaseSkipModeByClick());
+/* 0009614c */	this.setInt(193, AFL_Config_GetReleaseMessageSkipInSelectMenu());
+/* 00096160 */	this.setInt(194, AFL_Config_GetReleaseSkipModeByReadMessage());
+/* 00096174 */	this.setInt(195, AFL_Config_GetSkipAllMessage());
+/* 00096188 */	this.setInt(196, AFL_Config_GetReleaseAutoModeByClick());
+/* 0009619c */	this.setInt(197, AFL_Config_GetReleaseAutoModeInSelectMenu());
+/* 000961b0 */	this.setInt(198, AFL_Config_GetRestrainScreensaverWhileAutoMode());
+/* 000961c4 */	this.setInt(199, AFL_Config_IsAnimateMessageWindow());
+/* 000961d8 */	this.setInt(200, AFL_Config_GetReadTextColorIndex());
+/* 000961ec */	this.setInt(201, AFL_Config_GetBackSceneTextColorIndex());
+/* 00096200 */	this.setInt(202, AFL_Config_GetMessageWindowMulColorRate() * 100.0);
+/* 0009621e */	this.setInt(203, AFL_Config_GetMessageWindowAlphaRate() * 100.0);
+/* 0009623c */	this.setInt(204, AFL_Config_GetVolume(0));
+/* 00096256 */	this.setInt(205, AFL_Config_GetVolume(1));
+/* 00096270 */	this.setInt(206, AFL_Config_GetVolume(2));
+/* 0009628a */	this.setInt(207, AFL_Config_GetMute(0));
+/* 000962a4 */	this.setInt(208, AFL_Config_GetMute(1));
+/* 000962be */	this.setInt(209, AFL_Config_GetMute(2));
+/* 000962d8 */	this.setInt(210, AFL_Config_IsMuteByInactiveWindow());
+/* 000962ec */	this.setInt(211, AFL_Config_GetHideUnmoveMouseCursor());
+/* 00096300 */	this.setInt(212, AFL_Config_GetHideKeyOrJoypadInputMouseCursor());
+/* 00096314 */	this.setInt(213, AFL_Config_GetHideStepMessageMouseCursor());
+/* 00096328 */	this.setInt(214, AFL_Config_GetWheelForward());
+/* 0009633c */	this.setInt(215, AFL_Config_GetSaveConfirm());
+/* 00096350 */	this.setInt(216, AFL_Config_GetLoadConfirm());
+/* 00096364 */	this.setInt(217, AFL_Config_GetBackToTitleConfirm());
+/* 00096378 */	this.setInt(218, AFL_Config_GetCloseGameConfirm());
+/* 0009638c */	this.setInt(219, AFL_Config_GetWindowMode());
+/* 000963a0 */	this.setInt(220, AFL_Config_GetAspectRatio());
+/* 000963b4 */	this.setInt(221, AFL_Config_GetScalingType());
+/* 000963c8 */	this.setInt(222, AFL_Config_GetWaitVSync());
+/* 000963dc */	this.setInt(223, AFL_Config_GetRecordPosSize());
+/* 000963f0 */	this.setInt(224, AFL_Config_GetMinimizeByFullScreenInactive());
+/* 00096404 */	this.setInt(225, AFL_Config_GetSleepByInactive());
+/* 00096418 */	this.setInt(226, AFL_Config_GetOverFrameRateSleep());
+/* 0009642c */	this.setInt(227, Config_GetGameSpeed() * 100.0);
+/* 0009644a */}
+
+void EnquiteSender::outputEnquiteValueToDebugWindow()
+/* 00096452 */{
+/* 00096452 */	this.outputLog(1, "アンケート／Q01.アンケートを答えている時点でのクリア状況を教えてください。");
+/* 00096466 */	this.outputLog(2, "アンケート／Q02.購入したバージョンを教えてください");
+/* 0009647a */	this.outputLog(3, "アンケート／Q03.あなたの年齢を教えてください");
+/* 0009648e */	this.outputLog(4, "アンケート／Q04.あなたの性別を教えてください");
+/* 000964a2 */	this.outputLog(5, "アンケート／Q05.あなたのエロゲー歴はどれぐらいですか？");
+/* 000964b6 */	this.outputLog(6, "アンケート／Q06.過去にアリスソフトのゲームを何本プレイしたことがありますか？");
+/* 000964ca */	this.outputLog(7, "アンケート／Q07.この商品の総合評価");
+/* 000964de */	this.outputLog(8, "アンケート／Q08.原画について、絵柄やデザインの品質はどうでしたか？");
+/* 000964f2 */	this.outputLog(9, "アンケート／Q09.ＣＧについて、塗りの品質はどうでしたか？");
+/* 00096506 */	this.outputLog(10, "アンケート／Q10.ゲームシステムについて、どう感じましたか？");
+/* 0009651a */	this.outputLog(11, "アンケート／Q11.ゲームのバランスや難易度について、どう感じましたか？");
+/* 0009652e */	this.outputLog(12, "アンケート／Q12.操作性について、どう感じましたか？");
+/* 00096542 */	this.outputLog(13, "アンケート／Q13.ストーリーやキャラクターの会話について、どう感じましたか？");
+/* 00096556 */	this.outputLog(14, "アンケート／Q14.エロシーンのシナリオについて、どう感じましたか？");
+/* 0009656a */	this.outputLog(15, "アンケート／Q15.音楽について、どう感じましたか？");
+/* 0009657e */	this.outputLog(16, "アンケート／Q16.このゲームをはじめて知ったきっかけを教えてください");
+/* 00096592 */	this.outputLog(17, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／絵柄が好みだったから");
+/* 000965a6 */	this.outputLog(18, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／設定が好みだったから");
+/* 000965ba */	this.outputLog(19, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／ゲームが面白そうだったから");
+/* 000965ce */	this.outputLog(20, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／エロが良さそうだったから");
+/* 000965e2 */	this.outputLog(21, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／同シリーズをプレイしていたから");
+/* 000965f6 */	this.outputLog(22, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／体験版をプレイして気にいったから");
+/* 0009660a */	this.outputLog(23, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／アリスソフトブランドだから");
+/* 0009661e */	this.outputLog(24, "アンケート／Q17.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／その他");
+/* 00096632 */	this.outputLog(25, "アンケート／Q18.このゲームのボリュームはどうでしたか？");
+/* 00096646 */	this.outputLog(26, "アンケート／Q19.このゲームの難易度はどうでしたか？");
+/* 0009665a */	this.outputLog(27, "アンケート／Q20.今回のリメイク版の元となった元のランス－光を求めて－をプレイした事がありますか？");
+/* 0009666e */	this.outputLog(28, "アンケート／Q21.えろげー、ちょうどいいなぁと思うクリアまでのプレイ時間はどのくらいですか？");
+/* 00096682 */	this.outputLog(29, "アンケート／Q22.気に入ったキャラクターを選択してください／アイ");
+/* 00096696 */	this.outputLog(30, "アンケート／Q22.気に入ったキャラクターを選択してください／アキ");
+/* 000966aa */	this.outputLog(31, "アンケート／Q22.気に入ったキャラクターを選択してください／イェリコ");
+/* 000966be */	this.outputLog(32, "アンケート／Q22.気に入ったキャラクターを選択してください／ウィリス");
+/* 000966d2 */	this.outputLog(33, "アンケート／Q22.気に入ったキャラクターを選択してください／クリン");
+/* 000966e6 */	this.outputLog(34, "アンケート／Q22.気に入ったキャラクターを選択してください／シィル");
+/* 000966fa */	this.outputLog(35, "アンケート／Q22.気に入ったキャラクターを選択してください／ネカイ");
+/* 0009670e */	this.outputLog(36, "アンケート／Q22.気に入ったキャラクターを選択してください／ハイジ");
+/* 00096722 */	this.outputLog(37, "アンケート／Q22.気に入ったキャラクターを選択してください／パティ");
+/* 00096736 */	this.outputLog(38, "アンケート／Q22.気に入ったキャラクターを選択してください／パルプテンクス");
+/* 0009674a */	this.outputLog(39, "アンケート／Q22.気に入ったキャラクターを選択してください／ヒカリ");
+/* 0009675e */	this.outputLog(40, "アンケート／Q22.気に入ったキャラクターを選択してください／マリス");
+/* 00096772 */	this.outputLog(41, "アンケート／Q22.気に入ったキャラクターを選択してください／ミリー");
+/* 00096786 */	this.outputLog(42, "アンケート／Q22.気に入ったキャラクターを選択してください／メナド");
+/* 0009679a */	this.outputLog(43, "アンケート／Q22.気に入ったキャラクターを選択してください／ユキ");
+/* 000967ae */	this.outputLog(44, "アンケート／Q22.気に入ったキャラクターを選択してください／ユラン");
+/* 000967c2 */	this.outputLog(45, "アンケート／Q22.気に入ったキャラクターを選択してください／ラベンダー");
+/* 000967d6 */	this.outputLog(46, "アンケート／Q22.気に入ったキャラクターを選択してください／リア");
+/* 000967ea */	this.outputLog(47, "アンケート／Q22.気に入ったキャラクターを選択してください／奈美");
+/* 000967fe */	this.outputLog(48, "アンケート／Q22.気に入ったキャラクターを選択してください／忍者");
+/* 00096812 */	this.outputLog(49, "アンケート／Q22.気に入ったキャラクターを選択してください／美樹");
+/* 00096826 */	this.outputLog(50, "アンケート／Q22.気に入ったキャラクターを選択してください／葉月");
+/* 0009683a */	this.outputLog(51, "ゲームクリア");
+/* 0009684e */	this.outputLog(52, "表彰状／最低クリアレベル");
+/* 00096862 */	this.outputLog(53, "表彰状／最低クリア日数");
+/* 00096876 */	this.outputLog(54, "表彰状／最短豪遊クリア日数");
+/* 0009688a */	this.outputLog(55, "ＣＧ再生／イベント／シィル／学生服Ｈ０１挿入");
+/* 0009689e */	this.outputLog(56, "ＣＧ再生／イベント／シィル／買い食い０１");
+/* 000968b2 */	this.outputLog(57, "ＣＧ再生／イベント／シィル／公園Ｈ０１");
+/* 000968c6 */	this.outputLog(58, "ＣＧ再生／イベント／シィル／性格反転Ｈ０１");
+/* 000968da */	this.outputLog(59, "ＣＧ再生／イベント／シィル／魔法");
+/* 000968ee */	this.outputLog(60, "ＣＧ再生／イベント／リア／制裁Ｈ０１挿入");
+/* 00096902 */	this.outputLog(61, "ＣＧ再生／イベント／リア／大制裁Ｈ０１挿入前");
+/* 00096916 */	this.outputLog(62, "ＣＧ再生／イベント／マリス／命令Ｈ０２挿入");
+/* 0009692a */	this.outputLog(63, "ＣＧ再生／イベント／忍者／警告０１");
+/* 0009693e */	this.outputLog(64, "ＣＧ再生／イベント／忍者／ランチ０１");
+/* 00096952 */	this.outputLog(65, "ＣＧ再生／イベント／忍者／指挿入Ｈ０１");
+/* 00096966 */	this.outputLog(66, "ＣＧ再生／イベント／パルプテンクス／バイブＨ０１");
+/* 0009697a */	this.outputLog(67, "ＣＧ再生／イベント／パルプテンクス／目隠しＨ０１挿入");
+/* 0009698e */	this.outputLog(68, "ＣＧ再生／イベント／パルプテンクス／パイズリＨ０１挿入");
+/* 000969a2 */	this.outputLog(69, "ＣＧ再生／イベント／奈美／客室Ｈ０１");
+/* 000969b6 */	this.outputLog(70, "ＣＧ再生／イベント／ミリー／強盗０１");
+/* 000969ca */	this.outputLog(71, "ＣＧ再生／イベント／ミリー／眼鏡Ｈ０１");
+/* 000969de */	this.outputLog(72, "ＣＧ再生／イベント／パティ／プールＨ０１挿入前");
+/* 000969f2 */	this.outputLog(73, "ＣＧ再生／イベント／パティ／クンニＨ０１");
+/* 00096a06 */	this.outputLog(74, "ＣＧ再生／イベント／ウィリス／足コキＨ０１");
+/* 00096a1a */	this.outputLog(75, "ＣＧ再生／イベント／メナド／戦闘０１");
+/* 00096a2e */	this.outputLog(76, "ＣＧ再生／イベント／メナド／墓地Ｈ０１挿入前");
+/* 00096a42 */	this.outputLog(77, "ＣＧ再生／イベント／ユラン／和姦／０１");
+/* 00096a56 */	this.outputLog(78, "ＣＧ再生／イベント／ユラン／輪姦Ｈ０１");
+/* 00096a6a */	this.outputLog(79, "ＣＧ再生／イベント／葉月／ストリップＨ０１");
+/* 00096a7e */	this.outputLog(80, "ＣＧ再生／イベント／葉月／トイレＨ０１挿入前");
+/* 00096a92 */	this.outputLog(81, "ＣＧ再生／イベント／ユキ／姉妹Ｈ０１挿入");
+/* 00096aa6 */	this.outputLog(82, "ＣＧ再生／イベント／美樹／ダメージ０１");
+/* 00096aba */	this.outputLog(83, "ＣＧ再生／イベント／美樹／パンツＨ０１");
+/* 00096ace */	this.outputLog(84, "ＣＧ再生／イベント／クリン／フェラチオＨ０１");
+/* 00096ae2 */	this.outputLog(85, "ＣＧ再生／イベント／ハイジ／パンＨ０１挿入");
+/* 00096af6 */	this.outputLog(86, "ＣＧ再生／イベント／イェリコ／寝る０１");
+/* 00096b0a */	this.outputLog(87, "ＣＧ再生／イベント／ラベンダー／拷問Ｈ０１");
+/* 00096b1e */	this.outputLog(88, "ＣＧ再生／イベント／エンエン／拷問Ｈ０１挿入前");
+/* 00096b32 */	this.outputLog(89, "ＣＧ再生／イベント／ニウ／拷問Ｈ０１挿入前");
+/* 00096b46 */	this.outputLog(90, "ＣＧ再生／イベント／ネカイ／手コキＨ０１");
+/* 00096b5a */	this.outputLog(91, "ＣＧ再生／イベント／ヒカリ／発狂Ｈ０１");
+/* 00096b6e */	this.outputLog(92, "ＣＧ再生／イベント／女の子モンスター／ピクシーフォックス");
+/* 00096b82 */	this.outputLog(93, "ＣＧ再生／イベント／女の子モンスター／夜のピクシーフォックス");
+/* 00096b96 */	this.outputLog(94, "ＣＧ再生／イベント／女の子モンスター／ハチ女");
+/* 00096baa */	this.outputLog(95, "ＣＧ再生／イベント／女の子モンスター／スモッグシルフ");
+/* 00096bbe */	this.outputLog(96, "ＣＧ再生／イベント／女の子モンスター／ゾンビエルフ");
+/* 00096bd2 */	this.outputLog(97, "ＣＧ再生／イベント／女の子モンスター／プールポニー");
+/* 00096be6 */	this.outputLog(98, "ＣＧ再生／イベント／女の子モンスター／フィシャースネーク");
+/* 00096bfa */	this.outputLog(99, "ＣＧ再生／イベント／女の子モンスター／マジスコ");
+/* 00096c0e */	this.outputLog(100, "ＣＧ再生／イベント／女の子モンスター／マジスコレトロ");
+/* 00096c22 */	this.outputLog(101, "ＣＧ再生／イベント／女の子モンスター／へびさん");
+/* 00096c36 */	this.outputLog(102, "ＣＧ再生／イベント／女の子モンスター／ビギニングへびさん");
+/* 00096c4a */	this.outputLog(103, "ＣＧ再生／イベント／女の子モンスター／フィールドリンクス");
+/* 00096c5e */	this.outputLog(104, "ＣＧ再生／イベント／アリス／メインメニュー");
+/* 00096c72 */	this.outputLog(105, "ＣＧ再生／イベント／ランス／オープニング０１");
+/* 00096c86 */	this.outputLog(106, "ＣＧ再生／イベント／ランス／タイトル０１");
+/* 00096c9a */	this.outputLog(107, "ＣＧ再生／イベント／ランス／ゲームオーバー０１");
+/* 00096cae */	this.outputLog(108, "ＣＧ再生／イベント／ランス／エンディング０１");
+/* 00096cc2 */	this.outputLog(109, "回想再生／シィル／学生服Ｈ");
+/* 00096cd6 */	this.outputLog(110, "回想再生／公園／シィル");
+/* 00096cea */	this.outputLog(111, "回想再生／シィル／公園Ｈ");
+/* 00096cfe */	this.outputLog(112, "回想再生／シィル／性格反転Ｈ");
+/* 00096d12 */	this.outputLog(113, "回想再生／回想／シィル／魔法");
+/* 00096d26 */	this.outputLog(114, "回想再生／リア／制裁Ｈ");
+/* 00096d3a */	this.outputLog(115, "回想再生／リア／大制裁Ｈ");
+/* 00096d4e */	this.outputLog(116, "回想再生／マリス／命令Ｈ");
+/* 00096d62 */	this.outputLog(117, "回想再生／忍者／警告");
+/* 00096d76 */	this.outputLog(118, "回想再生／忍者／ランチ");
+/* 00096d8a */	this.outputLog(119, "回想再生／忍者／指入れＨ");
+/* 00096d9e */	this.outputLog(120, "回想再生／パルプテンクス／バイブＨ");
+/* 00096db2 */	this.outputLog(121, "回想再生／パルプテンクス／目隠しＨ");
+/* 00096dc6 */	this.outputLog(122, "回想再生／パルプテンクス／パイズリＨ");
+/* 00096dda */	this.outputLog(123, "回想再生／奈美／客室Ｈ");
+/* 00096dee */	this.outputLog(124, "回想再生／ミリー／強盗");
+/* 00096e02 */	this.outputLog(125, "回想再生／ミリー／眼鏡Ｈ");
+/* 00096e16 */	this.outputLog(126, "回想再生／パティ／クンニＨ");
+/* 00096e2a */	this.outputLog(127, "回想再生／パティ／プールＨ");
+/* 00096e3e */	this.outputLog(128, "回想再生／ウィリス／足コキＨ");
+/* 00096e52 */	this.outputLog(129, "回想再生／墓地／初回／戦闘後");
+/* 00096e66 */	this.outputLog(130, "回想再生／メナド／墓地Ｈ");
+/* 00096e7a */	this.outputLog(131, "回想再生／ユラン／控え室Ｈ／膣外射精");
+/* 00096e8e */	this.outputLog(132, "回想再生／ユラン／控え室Ｈ／膣内射精");
+/* 00096ea2 */	this.outputLog(133, "回想再生／ユラン／輪姦Ｈ");
+/* 00096eb6 */	this.outputLog(134, "回想再生／回想／葉月／ストリップＨ");
+/* 00096eca */	this.outputLog(135, "回想再生／葉月／トイレＨ");
+/* 00096ede */	this.outputLog(136, "回想再生／ユキ／姉妹Ｈ");
+/* 00096ef2 */	this.outputLog(137, "回想再生／回想／美樹／パンツＨ");
+/* 00096f06 */	this.outputLog(138, "回想再生／クリン／フェラチオＨ");
+/* 00096f1a */	this.outputLog(139, "回想再生／ハイジ／パンＨ");
+/* 00096f2e */	this.outputLog(140, "回想再生／イェリコ／寝る");
+/* 00096f42 */	this.outputLog(141, "回想再生／回想／ラベンダー／拷問Ｈ");
+/* 00096f56 */	this.outputLog(142, "回想再生／エンエン／拷問Ｈ");
+/* 00096f6a */	this.outputLog(143, "回想再生／ニウ／拷問Ｈ");
+/* 00096f7e */	this.outputLog(144, "回想再生／ネカイ／手コキＨ");
+/* 00096f92 */	this.outputLog(145, "回想再生／ヒカリ／狂気Ｈ");
+/* 00096fa6 */	this.outputLog(146, "回想再生／女の子モンスター／ピクシーフォックス");
+/* 00096fba */	this.outputLog(147, "回想再生／女の子モンスター／夜のピクシーフォックス");
+/* 00096fce */	this.outputLog(148, "回想再生／女の子モンスター／ハチ女");
+/* 00096fe2 */	this.outputLog(149, "回想再生／女の子モンスター／集団ハチ女");
+/* 00096ff6 */	this.outputLog(150, "回想再生／女の子モンスター／スモッグシルフ");
+/* 0009700a */	this.outputLog(151, "回想再生／女の子モンスター／ゾンビエルフ");
+/* 0009701e */	this.outputLog(152, "回想再生／女の子モンスター／再生ゾンビエルフ");
+/* 00097032 */	this.outputLog(153, "回想再生／女の子モンスター／再生再生ゾンビエルフ");
+/* 00097046 */	this.outputLog(154, "回想再生／女の子モンスター／再生再生再生ゾンビエルフ");
+/* 0009705a */	this.outputLog(155, "回想再生／女の子モンスター／プールポニー");
+/* 0009706e */	this.outputLog(156, "回想再生／女の子モンスター／フィシャースネーク");
+/* 00097082 */	this.outputLog(157, "回想再生／女の子モンスター／マジスコ");
+/* 00097096 */	this.outputLog(158, "回想再生／女の子モンスター／マジスコレトロ");
+/* 000970aa */	this.outputLog(159, "回想再生／女の子モンスター／へびさん");
+/* 000970be */	this.outputLog(160, "回想再生／女の子モンスター／ビギニングへびさん");
+/* 000970d2 */	this.outputLog(161, "回想再生／女の子モンスター／フィールドリンクス");
+/* 000970e6 */	this.outputLog(162, "回想再生／リア／エピローグ");
+/* 000970fa */	this.outputLog(163, "死因／水");
+/* 0009710e */	this.outputLog(164, "死因／ホモ");
+/* 00097122 */	this.outputLog(165, "死因／城壁");
+/* 00097136 */	this.outputLog(166, "死因／メナド");
+/* 0009714a */	this.outputLog(167, "死因／ゾンビエルフ");
+/* 0009715e */	this.outputLog(168, "死因／パイプ");
+/* 00097172 */	this.outputLog(169, "死因／はいてない");
+/* 00097186 */	this.outputLog(170, "死因／美樹");
+/* 0009719a */	this.outputLog(171, "死因／三角木馬");
+/* 000971ae */	this.outputLog(172, "死因／樽");
+/* 000971c2 */	this.outputLog(173, "死因／奈美");
+/* 000971d6 */	this.outputLog(174, "死因／ちゃぶ台");
+/* 000971ea */	this.outputLog(175, "死因／ミリー");
+/* 000971fe */	this.outputLog(176, "死因／巻き巻き");
+/* 00097212 */	this.outputLog(177, "死因／バナナ");
+/* 00097226 */	this.outputLog(178, "死因／イェリコ");
+/* 0009723a */	this.outputLog(179, "死因／王");
+/* 0009724e */	this.outputLog(180, "死因／王妃");
+/* 00097262 */	this.outputLog(181, "死因／食べ残し");
+/* 00097276 */	this.outputLog(182, "死因／観客");
+/* 0009728a */	this.outputLog(183, "死因／ユラン");
+/* 0009729e */	this.outputLog(184, "マニュアルを開いた");
+/* 000972b2 */	this.outputLog(185, "総プレイ時間");
+/* 000972c6 */	this.outputLog(186, "セーブ使用枠数");
+/* 000972da */	this.outputLog(187, "コンフィグ／メッセージスピード");
+/* 000972ee */	this.outputLog(188, "コンフィグ／オートモードスピード");
+/* 00097302 */	this.outputLog(189, "コンフィグ／全文スキップ速度");
+/* 00097316 */	this.outputLog(190, "コンフィグ／フレームスキップして高速化");
+/* 0009732a */	this.outputLog(191, "コンフィグ／サンプルメッセージ");
+/* 0009733e */	this.outputLog(192, "コンフィグ／スキップモード／クリックで解除");
+/* 00097352 */	this.outputLog(193, "コンフィグ／スキップモード／選択肢で解除");
+/* 00097366 */	this.outputLog(194, "コンフィグ／スキップモード／未読メッセージで解除");
+/* 0009737a */	this.outputLog(195, "コンフィグ／すべてのメッセージをスキップする");
+/* 0009738e */	this.outputLog(196, "コンフィグ／オートモード／クリックで解除");
+/* 000973a2 */	this.outputLog(197, "コンフィグ／オートモード／選択肢で解除");
+/* 000973b6 */	this.outputLog(198, "コンフィグ／オートモード／スクリーンセーバー抑止");
+/* 000973ca */	this.outputLog(199, "コンフィグ／メッセージウィンドウのアニメーション");
+/* 000973de */	this.outputLog(200, "コンフィグ／既読メッセージ色");
+/* 000973f2 */	this.outputLog(201, "コンフィグ／バックシーンメッセージ色");
+/* 00097406 */	this.outputLog(202, "コンフィグ／メッセージウィンドウの明るさ");
+/* 0009741a */	this.outputLog(203, "コンフィグ／メッセージウィンドウの透過率");
+/* 0009742e */	this.outputLog(204, "コンフィグ／ボリューム／マスター");
+/* 00097442 */	this.outputLog(205, "コンフィグ／ボリューム／BGM");
+/* 00097456 */	this.outputLog(206, "コンフィグ／ボリューム／SE");
+/* 0009746a */	this.outputLog(207, "コンフィグ／ミュート／マスター");
+/* 0009747e */	this.outputLog(208, "コンフィグ／ミュート／BGM");
+/* 00097492 */	this.outputLog(209, "コンフィグ／ミュート／SE");
+/* 000974a6 */	this.outputLog(210, "コンフィグ／非アクティブでミュート");
+/* 000974ba */	this.outputLog(211, "コンフィグ／マウスカーソル非表示／一定時間");
+/* 000974ce */	this.outputLog(212, "コンフィグ／マウスカーソル非表示／キーボード入力");
+/* 000974e2 */	this.outputLog(213, "コンフィグ／マウスカーソル非表示／メッセージを進めたとき");
+/* 000974f6 */	this.outputLog(214, "コンフィグ／ホイール上回転");
+/* 0009750a */	this.outputLog(215, "コンフィグ／確認／セーブ時");
+/* 0009751e */	this.outputLog(216, "コンフィグ／確認／ロード時");
+/* 00097532 */	this.outputLog(217, "コンフィグ／確認／タイトルに戻る");
+/* 00097546 */	this.outputLog(218, "コンフィグ／確認／ゲーム終了時");
+/* 0009755a */	this.outputLog(219, "コンフィグ／ウィンドウモード");
+/* 0009756e */	this.outputLog(220, "コンフィグ／アスペクト比");
+/* 00097582 */	this.outputLog(221, "コンフィグ／スケーリング方法");
+/* 00097596 */	this.outputLog(222, "コンフィグ／垂直同期");
+/* 000975aa */	this.outputLog(223, "コンフィグ／位置とサイズを復元");
+/* 000975be */	this.outputLog(224, "コンフィグ／非アクティブで最小化");
+/* 000975d2 */	this.outputLog(225, "コンフィグ／非アクティブでCPU使用率を下げる");
+/* 000975e6 */	this.outputLog(226, "コンフィグ／過剰な描画処理を抑える");
+/* 000975fa */	this.outputLog(227, "コンフィグ／ゲーム速度");
+/* 0009760e */}
+
+void EnquiteSender::outputLog(int key, string desc)
+/* 00097616 */{
+/* 00097616 */	g_enquiteLog.add("%s:[%s]\n" % desc % this.enquite_[key]);
+/* 0009764c */}
+

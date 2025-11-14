@@ -1,0 +1,216 @@
+BattleResultView::BattleResultView()
+/* 00073f2a */{
+/* 00073f32 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00073f54 */}
+
+void BattleResultView::init(string monsterId, bool isItemGet)
+/* 00073f5c */{
+/* 00073f5c */	this.monsterId_ = monsterId;
+/* 00073f66 */	this.resultCount_ = g_bonusManager.getCount();
+/* 00073f7e */	this.isItemGet_ = isItemGet;
+/* 00073f88 */	this.initParts();
+/* 00073f90 */	this.setPartsOrigin();
+/* 00073f98 */	this.setPartsPos();
+/* 00073fa0 */	this.setPartsShow();
+/* 00073fa8 */	this.setNumber();
+/* 00073fb0 */	this.initBonus();
+/* 00073fb8 */}
+
+void BattleResultView::update()
+/* 00073fc0 */{
+/* 00073fc0 */	switch (this.state_)
+/* 00073fd2 */	{
+/* 00073fd2 */	case 0:
+/* 00073fd2 */		break;
+/* 00073fd8 */	case 1:
+/* 00073fd8 */		if (this.isMotionFinish())
+/* 00073fe6 */		{
+/* 00073fe6 */			this.state_ = 2;
+/* 00073ff0 */		}
+/* 00073ff6 */		break;
+/* 00073ffc */	case 2:
+/* 00073ffc */		if (g_mouse.isClick(0))
+/* 00074014 */		{
+/* 00074014 */			this.finalizeBonusMotion();
+/* 0007401c */			this.countResultValue();
+/* 00074024 */			this.state_ = 3;
+/* 0007402e */		}
+/* 00074034 */		break;
+/* 0007403a */	case 3:
+/* 0007403a */		if (g_mouse.isClick(0))
+/* 00074052 */		{
+/* 00074052 */			this.fadeIn(false);
+/* 00074060 */		}
+/* 00074066 */		break;
+/* 0007406c */	case 4:
+/* 0007406c */		if (this.isMotionFinish())
+/* 0007407a */		{
+/* 0007407a */			this.state_ = 0;
+/* 00074084 */		}
+/* 0007408a */		break;
+/* 00074090 */	}
+/* 00074090 */}
+
+void BattleResultView::fadeIn(bool val)
+/* 00074098 */{
+/* 00074098 */	if (this.isIgnoreFadeMotion(val))
+/* 000740ac */	{
+/* 000740ac */		return;
+/* 000740ae */	}
+/* 000740b4 */	this.state_ = val ? 1 : 4;
+/* 000740de */	this.parent_.setShow(true);
+/* 000740f0 */	this.parent_.runMotion(this.getMotion(val));
+/* 0007410a */	this.fadeBonus(val);
+/* 00074118 */}
+
+MotionInfomation BattleResultView::getMotion(bool val)
+/* 00074120 */{
+/* 00074120 */	MotionInfomation m;
+/* 00074130 */	if (val)
+/* 0007413c */	{
+/* 0007413c */		m.setTime(300, 0);
+/* 00074154 */		m.setMove(80, -848, 80, -348, 1);
+/* 0007417e */	}
+/* 00074184 */	else
+/* 00074184 */	{
+/* 00074184 */		m.setTime(150, 0);
+/* 0007419c */		m.setMove(80, -348, 80, -848, 1);
+/* 000741c6 */	}
+/* 000741c6 */	return m;
+/* 000741d6 */}
+
+void BattleResultView::run(string monsterId, bool isItemGet)
+/* 000741e4 */{
+/* 000741e4 */	this.init(monsterId, isItemGet);
+/* 000741f8 */	this.fadeIn(true);
+/* 00074206 */}
+
+void BattleResultView::fadeBonus(bool val)
+/* 0007420e */{
+/* 0007420e */	int i;
+/* 00074218 */	for (i = 0; i < this.bonus_.Numof(); ++i)
+/* 00074248 */	{
+/* 00074248 */		this.bonus_[i].fadeIn(val, 300 + i * 150);
+/* 00074278 */	}
+/* 0007427e */}
+
+bool BattleResultView::isIgnoreFadeMotion(bool val)
+/* 00074286 */{
+/* 00074286 */	if (val && (this.state_ == 1 || this.state_ == 3 || this.state_ == 2))
+/* 00074316 */	{
+/* 00074316 */		return true;
+/* 0007431e */	}
+/* 00074324 */	else if (!val && (this.state_ == 4 || this.state_ == 0))
+/* 0007438a */	{
+/* 0007438a */		return true;
+/* 00074392 */	}
+/* 00074398 */	return false;
+/* 000743a0 */}
+
+bool BattleResultView::isMotionFinish()
+/* 000743ae */{
+/* 000743ae */	return !this.parent_.isMotion();
+/* 000743c0 */}
+
+void BattleResultView::initParts()
+/* 000743ce */{
+/* 000743ce */	this.parts_.Alloc(6);
+/* 000743e4 */	NumberPartsInfomation n;
+/* 000743f4 */	n.setSameWidth(30);
+/* 00074406 */	this.parts_[0].init("システム／勝利／下地", 0);
+/* 00074426 */	this.parts_[1].init("システム／勝利／宝箱", 0);
+/* 00074446 */	this.parts_[3].initAsNumber("システム／数字／幅３０／黄", n);
+/* 00074466 */	this.parts_[2].initAsNumber("システム／数字／幅３０／黄", n);
+/* 00074486 */	this.parts_[5].initAsNumber("システム／数字／幅３０／白", n);
+/* 000744a6 */	this.parts_[4].initAsNumber("システム／数字／幅３０／白", n);
+/* 000744c6 */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 000744de */}
+
+void BattleResultView::setNumber()
+/* 000744e6 */{
+/* 000744e6 */	this.parts_[3].setNumber(getTotalExp(this.monsterId_));
+/* 00074506 */	this.parts_[2].setNumber(getTotalGold(this.monsterId_));
+/* 00074526 */	this.parts_[5].setNumber(g_player.getExp());
+/* 00074546 */	this.parts_[4].setNumber(g_player.getGold());
+/* 00074566 */}
+
+void BattleResultView::setPartsOrigin()
+/* 0007456e */{
+/* 0007456e */	this.parts_[3].setOrigin(9);
+/* 00074588 */	this.parts_[2].setOrigin(9);
+/* 000745a2 */	this.parts_[5].setOrigin(9);
+/* 000745bc */	this.parts_[4].setOrigin(9);
+/* 000745d6 */}
+
+void BattleResultView::setPartsPos()
+/* 000745de */{
+/* 000745de */	this.parent_.setPos(80, -348, -2147483648);
+/* 000745fc */	this.parts_[1].setPos(24, 462, -2147483648);
+/* 00074622 */	this.parts_[3].setPos(512, 660, -2147483648);
+/* 00074648 */	this.parts_[2].setPos(824, 660, -2147483648);
+/* 0007466e */	this.parts_[5].setPos(512, 724, -2147483648);
+/* 00074694 */	this.parts_[4].setPos(824, 724, -2147483648);
+/* 000746ba */}
+
+bool BattleResultView::isFinish()
+/* 000746c2 */{
+/* 000746c2 */	return this.state_ == 0;
+/* 000746d4 */}
+
+void BattleResultView::setPartsShow()
+/* 000746e2 */{
+/* 000746e2 */	int i;
+/* 000746ec */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0007471c */	{
+/* 0007471c */		this.parts_[i].setShow(true);
+/* 00074736 */	}
+/* 0007473c */	this.parts_[1].setShow(this.isItemGet_);
+/* 00074756 */}
+
+void BattleResultView::initBonus()
+/* 0007475e */{
+/* 0007475e */	this.bonus_.Alloc(this.resultCount_);
+/* 00074774 */	int i;
+/* 0007477e */	for (i = 0; i < this.resultCount_; ++i)
+/* 000747ae */	{
+/* 000747ae */		this.bonus_[i].init(g_bonusManager.getCaption(i), g_bonusManager.getValue(i));
+/* 000747e6 */		this.bonus_[i].setParent(this.parent_.getPartsNumber());
+/* 00074806 */		this.bonus_[i].setPos(536, 390 + i * 32);
+/* 00074836 */	}
+/* 0007483c */}
+
+void BattleResultView::finalizeBonusMotion()
+/* 00074844 */{
+/* 00074844 */	int i;
+/* 0007484e */	for (i = 0; i < this.bonus_.Numof(); ++i)
+/* 0007487e */	{
+/* 0007487e */		this.bonus_[i].finalize();
+/* 00074892 */	}
+/* 00074898 */}
+
+void BattleResultView::countResultValue()
+/* 000748a0 */{
+/* 000748a0 */	this.countNumber(3, getTotalExp(this.monsterId_), 0);
+/* 000748c0 */	this.countNumber(2, getTotalGold(this.monsterId_), 0);
+/* 000748e0 */	this.countNumber(5, g_player.getExp(), g_player.getExp() + getTotalExp(this.monsterId_));
+/* 00074914 */	this.countNumber(4, g_player.getGold(), g_player.getGold() + getTotalGold(this.monsterId_));
+/* 00074948 */}
+
+void BattleResultView::countNumber(int partsIndex, int from, int to)
+/* 00074950 */{
+/* 00074950 */	MotionInfomation m;
+/* 00074960 */	m.setNumberMove(from, to, 0);
+/* 0007497e */	m.setLoopSoundNumber(502);
+/* 00074990 */	this.parts_[partsIndex].runMotion(m);
+/* 000749b2 */}
+
+int getTotalExp(string monsterId)
+/* 000749ba */{
+/* 000749ba */	return getMonster(monsterId).getExp() + g_bonusManager.getExp();
+/* 000749e6 */}
+
+int getTotalGold(string monsterId)
+/* 000749fa */{
+/* 000749fa */	return getMonster(monsterId).getGold() + g_bonusManager.getGold();
+/* 00074a26 */}
+

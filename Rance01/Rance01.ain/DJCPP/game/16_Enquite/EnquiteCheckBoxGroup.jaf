@@ -1,0 +1,164 @@
+EnquiteCheckBoxGroup::EnquiteCheckBoxGroup()
+/* 00089a1a */{
+/* 00089a22 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00089a44 */}
+
+void EnquiteCheckBoxGroup::init(string groupCaption, array@string list, bool isSingleSelect)
+/* 00089a4c */{
+/* 00089a4c */	this.caption_ = groupCaption;
+/* 00089a56 */	this.isSingleSelect_ = isSingleSelect;
+/* 00089a60 */	this.parent_.initAsDummy();
+/* 00089a6c */	this.checkBox_.Alloc(list.Numof());
+/* 00089a8c */	int i;
+/* 00089a96 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00089ac6 */	{
+/* 00089ac6 */		this.checkBox_[i].init(list[i]);
+/* 00089ae8 */		this.checkBox_[i].setParent(this.parent_.getPartsNumber());
+/* 00089b08 */	}
+/* 00089b0e */	this.setCheckBoxPos();
+/* 00089b16 */	this.partsCaption_.initAsText(groupCaption, 24, false, 256, 255, 255, 255);
+/* 00089b4c */	this.partsCaption_.setPos(50, 0, -2147483648);
+/* 00089b6a */	this.partsCaption_.setParent(this.parent_.getPartsNumber());
+/* 00089b82 */	this.partsCaption_.setShow(true);
+/* 00089b94 */	this.parent_.setShow(true);
+/* 00089ba6 */	this.parent_.setPos(-2147483648, -2147483648, 5000);
+/* 00089bc4 */	this.revertCheckedState();
+/* 00089bcc */}
+
+void EnquiteCheckBoxGroup::setCheckBoxPos()
+/* 00089bd4 */{
+/* 00089bd4 */	int x = 100;
+/* 00089bde */	int y = 32;
+/* 00089be8 */	int i;
+/* 00089bf2 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00089c22 */	{
+/* 00089c22 */		int w = this.checkBox_[i].getWidth();
+/* 00089c42 */		if (x + w > 824)
+/* 00089c5e */		{
+/* 00089c5e */			x = 100;
+/* 00089c68 */			y += this.checkBox_[i].getHeight() + 2;
+/* 00089c90 */		}
+/* 00089c96 */		this.checkBox_[i].setPos(x, y);
+/* 00089cb6 */		x += w + 10;
+/* 00089cd0 */	}
+/* 00089cd6 */	this.height_ = y + this.checkBox_[0].getHeight();
+/* 00089cfe */}
+
+void EnquiteCheckBoxGroup::update()
+/* 00089d06 */{
+/* 00089d06 */	int n = this.getClickedIndex();
+/* 00089d1a */	if (n != -1)
+/* 00089d2e */	{
+/* 00089d2e */		this.setCheck(n);
+/* 00089d3c */	}
+/* 00089d42 */}
+
+void EnquiteCheckBoxGroup::setCheck(int index)
+/* 00089d4a */{
+/* 00089d4a */	if (this.isSingleSelect_)
+/* 00089d54 */	{
+/* 00089d54 */		int i;
+/* 00089d5e */		for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00089d8e */		{
+/* 00089d8e */			this.checkBox_[i].setCheck(index == i);
+/* 00089db2 */		}
+/* 00089db8 */		this.onUpdateCheckState();
+/* 00089dc0 */		this.saveEnquite();
+/* 00089dc8 */	}
+/* 00089dce */	else
+/* 00089dce */	{
+/* 00089dce */		this.checkBox_[index].setCheck(!this.checkBox_[index].isChecked());
+/* 00089dfa */		this.onUpdateCheckState();
+/* 00089e02 */		this.saveEnquite();
+/* 00089e0a */	}
+/* 00089e0a */}
+
+int EnquiteCheckBoxGroup::getClickedIndex()
+/* 00089e12 */{
+/* 00089e12 */	int i;
+/* 00089e1c */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00089e4c */	{
+/* 00089e4c */		if (this.checkBox_[i].isClick())
+/* 00089e66 */		{
+/* 00089e66 */			return i;
+/* 00089e6e */		}
+/* 00089e74 */	}
+/* 00089e7a */	return -1;
+/* 00089e82 */}
+
+int EnquiteCheckBoxGroup::getSelected()
+/* 00089e90 */{
+/* 00089e90 */	int i;
+/* 00089e9a */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00089eca */	{
+/* 00089eca */		if (this.checkBox_[i].isChecked())
+/* 00089ee4 */		{
+/* 00089ee4 */			return i;
+/* 00089eec */		}
+/* 00089ef2 */	}
+/* 00089ef8 */	return -1;
+/* 00089f00 */}
+
+bool EnquiteCheckBoxGroup::isChecked(int index)
+/* 00089f0e */{
+/* 00089f0e */	if (index >= 0 && index < this.checkBox_.Numof())
+/* 00089f48 */	{
+/* 00089f48 */		return this.checkBox_[index].isChecked();
+/* 00089f5e */	}
+/* 00089f64 */	return false;
+/* 00089f6c */}
+
+int EnquiteCheckBoxGroup::getHeight()
+/* 00089f7a */{
+/* 00089f7a */	return this.height_;
+/* 00089f82 */}
+
+void EnquiteCheckBoxGroup::setYPos(int yPos)
+/* 00089f90 */{
+/* 00089f90 */	this.parent_.setPos(-2147483648, yPos, -2147483648);
+/* 00089fae */}
+
+void EnquiteCheckBoxGroup::onUpdateCheckState()
+/* 00089fb6 */{
+/* 00089fb6 */	this.partsCaption_.setMultiColorValue(200, 255, 128);
+/* 00089fd4 */}
+
+void EnquiteCheckBoxGroup::saveEnquite()
+/* 00089fdc */{
+/* 00089fdc */	if (this.isSingleSelect_)
+/* 00089fe6 */	{
+/* 00089fe6 */		g_globalGameFlag.setInt("アンケート／%s" % this.caption_, this.getSelected() + 1);
+/* 0008a016 */	}
+/* 0008a01c */	else
+/* 0008a01c */	{
+/* 0008a01c */		int i;
+/* 0008a026 */		for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a056 */		{
+/* 0008a056 */			g_globalGameFlag.setInt("アンケート／%s／%s" % this.caption_ % this.checkBox_[i].getCaption(), this.isChecked(i) ? 1 : 0);
+/* 0008a0b8 */		}
+/* 0008a0be */	}
+/* 0008a0be */}
+
+void EnquiteCheckBoxGroup::revertCheckedState()
+/* 0008a0c6 */{
+/* 0008a0c6 */	if (this.isSingleSelect_)
+/* 0008a0d0 */	{
+/* 0008a0d0 */		int n = g_globalGameFlag.getInt("アンケート／%s" % this.caption_);
+/* 0008a0fc */		if (n != 0)
+/* 0008a110 */		{
+/* 0008a110 */			this.checkBox_[n - 1].setCheck(true);
+/* 0008a132 */			this.onUpdateCheckState();
+/* 0008a13a */		}
+/* 0008a140 */	}
+/* 0008a146 */	else
+/* 0008a146 */	{
+/* 0008a146 */		int i;
+/* 0008a150 */		for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a180 */		{
+/* 0008a180 */			int n = g_globalGameFlag.getInt("アンケート／%s／%s" % this.caption_ % this.checkBox_[i].getCaption());
+/* 0008a1c8 */			this.checkBox_[i].setCheck(n == 1);
+/* 0008a1ec */			this.onUpdateCheckState();
+/* 0008a1f4 */		}
+/* 0008a1fa */	}
+/* 0008a1fa */}
+

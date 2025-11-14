@@ -1,0 +1,390 @@
+MotionKey::MotionKey()
+/* 0005f140 */{
+/* 0005f148 */	this.from = this.to = -2147483648;
+/* 0005f164 */	this.motionType = 0;
+/* 0005f16e */}
+
+MotionInfomation::MotionInfomation()
+/* 0005f176 */{
+/* 0005f17e */	this.clear();
+/* 0005f186 */}
+
+void MotionInfomation::clear()
+/* 0005f18e */{
+/* 0005f18e */	this.delay_ = 0;
+/* 0005f198 */	this.time_ = 200;
+/* 0005f1a2 */	this.swingCount_ = 5;
+/* 0005f1ac */	this.soundNumber_ = 0;
+/* 0005f1b6 */	this.key_.Free();
+/* 0005f1c0 */	this.key_.Alloc(16);
+/* 0005f1d6 */}
+
+void MotionInfomation::setMove(int fromX, int fromY, int toX, int toY, int motionType)
+/* 0005f1de */{
+/* 0005f1de */	this.key_[0].motionType = motionType;
+/* 0005f1fc */	this.key_[0].from = fromX;
+/* 0005f21a */	this.key_[0].to = toX;
+/* 0005f238 */	this.key_[1].motionType = motionType;
+/* 0005f256 */	this.key_[1].from = fromY;
+/* 0005f274 */	this.key_[1].to = toY;
+/* 0005f292 */}
+
+void MotionInfomation::setMoveTo(int toX, int toY, int motionType)
+/* 0005f29a */{
+/* 0005f29a */	this.key_[0].motionType = motionType;
+/* 0005f2b8 */	this.key_[0].from = -2147483648;
+/* 0005f2d6 */	this.key_[0].to = toX;
+/* 0005f2f4 */	this.key_[1].motionType = motionType;
+/* 0005f312 */	this.key_[1].from = -2147483648;
+/* 0005f330 */	this.key_[1].to = toY;
+/* 0005f34e */}
+
+void MotionInfomation::setSwingCount(int val)
+/* 0005f356 */{
+/* 0005f356 */	this.swingCount_ = val;
+/* 0005f360 */}
+
+void MotionInfomation::setAlpha(int from, int to, int motionType)
+/* 0005f368 */{
+/* 0005f368 */	this.key_[2].motionType = motionType;
+/* 0005f386 */	this.key_[2].from = from;
+/* 0005f3a4 */	this.key_[2].to = to;
+/* 0005f3c2 */}
+
+void MotionInfomation::setRot(int from, int to, int motionType)
+/* 0005f3ca */{
+/* 0005f3ca */	this.key_[3].motionType = motionType;
+/* 0005f3e8 */	this.key_[3].from = from;
+/* 0005f406 */	this.key_[3].to = to;
+/* 0005f424 */}
+
+void MotionInfomation::setYFlip(int from, int to, int motionType)
+/* 0005f42c */{
+/* 0005f42c */	this.key_[4].motionType = motionType;
+/* 0005f44a */	this.key_[4].from = from;
+/* 0005f468 */	this.key_[4].to = to;
+/* 0005f486 */}
+
+void MotionInfomation::setXFlip(int from, int to, int motionType)
+/* 0005f48e */{
+/* 0005f48e */	this.key_[5].motionType = motionType;
+/* 0005f4ac */	this.key_[5].from = from;
+/* 0005f4ca */	this.key_[5].to = to;
+/* 0005f4e8 */}
+
+void MotionInfomation::setScaling(int from, int to, int motionType)
+/* 0005f4f0 */{
+/* 0005f4f0 */	this.key_[6].motionType = motionType;
+/* 0005f50e */	this.key_[6].from = from;
+/* 0005f52c */	this.key_[6].to = to;
+/* 0005f54a */}
+
+void MotionInfomation::setShakeLevel(int from, int to, int motionType)
+/* 0005f552 */{
+/* 0005f552 */	this.key_[7].motionType = motionType;
+/* 0005f570 */	this.key_[7].from = from;
+/* 0005f58e */	this.key_[7].to = to;
+/* 0005f5ac */}
+
+void MotionInfomation::setSwingX(int from, int to, int motionType)
+/* 0005f5b4 */{
+/* 0005f5b4 */	this.key_[8].motionType = motionType;
+/* 0005f5d2 */	this.key_[8].from = from;
+/* 0005f5f0 */	this.key_[8].to = to;
+/* 0005f60e */}
+
+void MotionInfomation::setSwingY(int from, int to, int motionType)
+/* 0005f616 */{
+/* 0005f616 */	this.key_[9].motionType = motionType;
+/* 0005f634 */	this.key_[9].from = from;
+/* 0005f652 */	this.key_[9].to = to;
+/* 0005f670 */}
+
+void MotionInfomation::setCgRangeMove(int fromLeft, int fromTop, int fromRight, int fromBottom, int toLeft, int toTop, int toRight, int toBottom, int motionType)
+/* 0005f678 */{
+/* 0005f678 */	this.key_[10].from = fromLeft;
+/* 0005f696 */	this.key_[10].to = toLeft;
+/* 0005f6b4 */	this.key_[11].from = fromTop;
+/* 0005f6d2 */	this.key_[11].to = toTop;
+/* 0005f6f0 */	this.key_[12].from = fromRight;
+/* 0005f70e */	this.key_[12].to = toRight;
+/* 0005f72c */	this.key_[13].from = fromBottom;
+/* 0005f74a */	this.key_[13].to = toBottom;
+/* 0005f768 */	this.key_[10].motionType = this.key_[12].motionType = this.key_[11].motionType = this.key_[13].motionType = motionType;
+/* 0005f7c8 */}
+
+void MotionInfomation::setNumberMove(int from, int to, int motionType)
+/* 0005f7d0 */{
+/* 0005f7d0 */	this.key_[14].from = from;
+/* 0005f7ee */	this.key_[14].to = to;
+/* 0005f80c */	this.key_[14].motionType = motionType;
+/* 0005f82a */}
+
+void MotionInfomation::setSpecular(int from, int to, int motionType)
+/* 0005f832 */{
+/* 0005f832 */	this.key_[15].from = from;
+/* 0005f850 */	this.key_[15].to = to;
+/* 0005f86e */	this.key_[15].motionType = motionType;
+/* 0005f88c */}
+
+void MotionInfomation::setTime(int time, int delay)
+/* 0005f894 */{
+/* 0005f894 */	this.time_ = time;
+/* 0005f89e */	this.delay_ = delay;
+/* 0005f8a8 */}
+
+int MotionInfomation::getTime()
+/* 0005f8b0 */{
+/* 0005f8b0 */	return this.time_;
+/* 0005f8b8 */}
+
+int MotionInfomation::getDelay()
+/* 0005f8c6 */{
+/* 0005f8c6 */	return this.delay_;
+/* 0005f8ce */}
+
+int MotionInfomation::getSwingCount()
+/* 0005f8dc */{
+/* 0005f8dc */	return this.swingCount_;
+/* 0005f8e4 */}
+
+int MotionInfomation::getMotionTypeXY()
+/* 0005f8f2 */{
+/* 0005f8f2 */	return this.key_[0].motionType;
+/* 0005f90a */}
+
+int MotionInfomation::getMotionTypeAlpha()
+/* 0005f918 */{
+/* 0005f918 */	return this.key_[2].motionType;
+/* 0005f930 */}
+
+int MotionInfomation::getMotionTypeRot()
+/* 0005f93e */{
+/* 0005f93e */	return this.key_[3].motionType;
+/* 0005f956 */}
+
+int MotionInfomation::getMotionTypeYFlip()
+/* 0005f964 */{
+/* 0005f964 */	return this.key_[4].motionType;
+/* 0005f97c */}
+
+int MotionInfomation::getMotionTypeXFlip()
+/* 0005f98a */{
+/* 0005f98a */	return this.key_[5].motionType;
+/* 0005f9a2 */}
+
+int MotionInfomation::getMotionTypeScaling()
+/* 0005f9b0 */{
+/* 0005f9b0 */	return this.key_[6].motionType;
+/* 0005f9c8 */}
+
+int MotionInfomation::getFromX()
+/* 0005f9d6 */{
+/* 0005f9d6 */	return this.key_[0].from;
+/* 0005f9ee */}
+
+int MotionInfomation::getFromY()
+/* 0005f9fc */{
+/* 0005f9fc */	return this.key_[1].from;
+/* 0005fa14 */}
+
+int MotionInfomation::getToX()
+/* 0005fa22 */{
+/* 0005fa22 */	return this.key_[0].to;
+/* 0005fa3a */}
+
+int MotionInfomation::getToY()
+/* 0005fa48 */{
+/* 0005fa48 */	return this.key_[1].to;
+/* 0005fa60 */}
+
+int MotionInfomation::getFromAlpha()
+/* 0005fa6e */{
+/* 0005fa6e */	return this.key_[2].from;
+/* 0005fa86 */}
+
+int MotionInfomation::getToAlpha()
+/* 0005fa94 */{
+/* 0005fa94 */	return this.key_[2].to;
+/* 0005faac */}
+
+int MotionInfomation::getFromRot()
+/* 0005faba */{
+/* 0005faba */	return this.key_[3].from;
+/* 0005fad2 */}
+
+int MotionInfomation::getToRot()
+/* 0005fae0 */{
+/* 0005fae0 */	return this.key_[3].to;
+/* 0005faf8 */}
+
+int MotionInfomation::getFromYFlip()
+/* 0005fb06 */{
+/* 0005fb06 */	return this.key_[4].from;
+/* 0005fb1e */}
+
+int MotionInfomation::getToYFlip()
+/* 0005fb2c */{
+/* 0005fb2c */	return this.key_[4].to;
+/* 0005fb44 */}
+
+int MotionInfomation::getFromXFlip()
+/* 0005fb52 */{
+/* 0005fb52 */	return this.key_[5].from;
+/* 0005fb6a */}
+
+int MotionInfomation::getToXFlip()
+/* 0005fb78 */{
+/* 0005fb78 */	return this.key_[5].to;
+/* 0005fb90 */}
+
+int MotionInfomation::getFromScaling()
+/* 0005fb9e */{
+/* 0005fb9e */	return this.key_[6].from;
+/* 0005fbb6 */}
+
+int MotionInfomation::getToScaling()
+/* 0005fbc4 */{
+/* 0005fbc4 */	return this.key_[6].to;
+/* 0005fbdc */}
+
+int MotionInfomation::getMotionTypeShakeLevel()
+/* 0005fbea */{
+/* 0005fbea */	return this.key_[7].motionType;
+/* 0005fc02 */}
+
+int MotionInfomation::getFromShakeLevel()
+/* 0005fc10 */{
+/* 0005fc10 */	return this.key_[7].from;
+/* 0005fc28 */}
+
+int MotionInfomation::getToShakeLevel()
+/* 0005fc36 */{
+/* 0005fc36 */	return this.key_[7].to;
+/* 0005fc4e */}
+
+int MotionInfomation::getMotionTypeSwingX()
+/* 0005fc5c */{
+/* 0005fc5c */	return this.key_[8].motionType;
+/* 0005fc74 */}
+
+int MotionInfomation::getFromSwingX()
+/* 0005fc82 */{
+/* 0005fc82 */	return this.key_[8].from;
+/* 0005fc9a */}
+
+int MotionInfomation::getToSwingX()
+/* 0005fca8 */{
+/* 0005fca8 */	return this.key_[8].to;
+/* 0005fcc0 */}
+
+int MotionInfomation::getMotionTypeSwingY()
+/* 0005fcce */{
+/* 0005fcce */	return this.key_[9].motionType;
+/* 0005fce6 */}
+
+int MotionInfomation::getFromSwingY()
+/* 0005fcf4 */{
+/* 0005fcf4 */	return this.key_[9].from;
+/* 0005fd0c */}
+
+int MotionInfomation::getToSwingY()
+/* 0005fd1a */{
+/* 0005fd1a */	return this.key_[9].to;
+/* 0005fd32 */}
+
+int MotionInfomation::getFromCgRangeLeft()
+/* 0005fd40 */{
+/* 0005fd40 */	return this.key_[10].from;
+/* 0005fd58 */}
+
+int MotionInfomation::getFromCgRangeTop()
+/* 0005fd66 */{
+/* 0005fd66 */	return this.key_[11].from;
+/* 0005fd7e */}
+
+int MotionInfomation::getFromCgRangeRight()
+/* 0005fd8c */{
+/* 0005fd8c */	return this.key_[12].from;
+/* 0005fda4 */}
+
+int MotionInfomation::getFromCgRangeBottom()
+/* 0005fdb2 */{
+/* 0005fdb2 */	return this.key_[13].from;
+/* 0005fdca */}
+
+int MotionInfomation::getToCgRangeLeft()
+/* 0005fdd8 */{
+/* 0005fdd8 */	return this.key_[10].to;
+/* 0005fdf0 */}
+
+int MotionInfomation::getToCgRangeTop()
+/* 0005fdfe */{
+/* 0005fdfe */	return this.key_[11].to;
+/* 0005fe16 */}
+
+int MotionInfomation::getToCgRangeRight()
+/* 0005fe24 */{
+/* 0005fe24 */	return this.key_[12].to;
+/* 0005fe3c */}
+
+int MotionInfomation::getToCgRangeBottom()
+/* 0005fe4a */{
+/* 0005fe4a */	return this.key_[13].to;
+/* 0005fe62 */}
+
+int MotionInfomation::getMotionTypeCgRange()
+/* 0005fe70 */{
+/* 0005fe70 */	return this.key_[10].motionType;
+/* 0005fe88 */}
+
+int MotionInfomation::getFromNumber()
+/* 0005fe96 */{
+/* 0005fe96 */	return this.key_[14].from;
+/* 0005feae */}
+
+int MotionInfomation::getToNumber()
+/* 0005febc */{
+/* 0005febc */	return this.key_[14].to;
+/* 0005fed4 */}
+
+int MotionInfomation::getMotionTypeNumber()
+/* 0005fee2 */{
+/* 0005fee2 */	return this.key_[14].motionType;
+/* 0005fefa */}
+
+int MotionInfomation::getFromSpecular()
+/* 0005ff08 */{
+/* 0005ff08 */	return this.key_[15].from;
+/* 0005ff20 */}
+
+int MotionInfomation::getToSpecular()
+/* 0005ff2e */{
+/* 0005ff2e */	return this.key_[15].to;
+/* 0005ff46 */}
+
+int MotionInfomation::getMotionTypeSpecular()
+/* 0005ff54 */{
+/* 0005ff54 */	return this.key_[15].motionType;
+/* 0005ff6c */}
+
+void MotionInfomation::setSoundNumber(int number)
+/* 0005ff7a */{
+/* 0005ff7a */	this.soundNumber_ = number;
+/* 0005ff84 */}
+
+int MotionInfomation::getSoundNumber()
+/* 0005ff8c */{
+/* 0005ff8c */	return this.soundNumber_;
+/* 0005ff94 */}
+
+void MotionInfomation::setLoopSoundNumber(int number)
+/* 0005ffa2 */{
+/* 0005ffa2 */	this.loopSoundNumber_ = number;
+/* 0005ffac */}
+
+int MotionInfomation::getLoopSoundNumber()
+/* 0005ffb4 */{
+/* 0005ffb4 */	return this.loopSoundNumber_;
+/* 0005ffbc */}
+

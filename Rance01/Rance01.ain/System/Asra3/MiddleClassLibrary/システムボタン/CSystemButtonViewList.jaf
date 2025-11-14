@@ -1,0 +1,105 @@
+CSystemButtonViewList::CSystemButtonViewList()
+/* 0001d228 */{
+/* 0001d230 */	this.m_MessageWindowNumber = -2147483648;
+/* 0001d23a */	this.m_SelectButtonID = -2147483648;
+/* 0001d244 */	this.m_Show = true;
+/* 0001d24e */}
+
+void CSystemButtonViewList::Clear()
+/* 0001d256 */{
+/* 0001d256 */	if (this.m_MessageWindowNumber == -2147483648)
+/* 0001d264 */	{
+/* 0001d264 */		return;
+/* 0001d266 */	}
+/* 0001d26c */	int Index;
+/* 0001d276 */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001d2a6 */	{
+/* 0001d2a6 */		this.m_ViewList[Index].Delete();
+/* 0001d2ba */	}
+/* 0001d2c0 */	this.m_ViewList.Free();
+/* 0001d2ca */	this.m_MessageWindowNumber = -2147483648;
+/* 0001d2d4 */	this.m_SelectButtonID = -2147483648;
+/* 0001d2de */}
+
+void CSystemButtonViewList::SetMessageWindowNumber(int MessageWindowNumber)
+/* 0001d2e6 */{
+/* 0001d2e6 */	if (MessageWindowNumber == this.m_MessageWindowNumber)
+/* 0001d2fa */	{
+/* 0001d2fa */		return;
+/* 0001d2fc */	}
+/* 0001d302 */	this.Clear();
+/* 0001d30a */	this.m_MessageWindowNumber = MessageWindowNumber;
+/* 0001d314 */	this.Create();
+/* 0001d31c */}
+
+void CSystemButtonViewList::Create()
+/* 0001d324 */{
+/* 0001d324 */	this.m_ViewList.Alloc(g_SystemButtonModelMap.GetButtonCount(this.m_MessageWindowNumber));
+/* 0001d346 */	int Index;
+/* 0001d350 */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001d380 */	{
+/* 0001d380 */		this.m_ViewList[Index].Create(Index);
+/* 0001d39a */	}
+/* 0001d3a0 */}
+
+void CSystemButtonViewList::Update()
+/* 0001d3a8 */{
+/* 0001d3a8 */	if (this.m_MessageWindowNumber == -2147483648)
+/* 0001d3b6 */	{
+/* 0001d3b6 */		return;
+/* 0001d3b8 */	}
+/* 0001d3be */	int Index;
+/* 0001d3c8 */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001d3f8 */	{
+/* 0001d3f8 */		this.m_ViewList[Index].Update();
+/* 0001d40c */	}
+/* 0001d412 */	this.m_SelectButtonID = -2147483648;
+/* 0001d41c */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001d44c */	{
+/* 0001d44c */		if (this.m_ViewList[Index].IsSelecting())
+/* 0001d466 */		{
+/* 0001d466 */			this.m_SelectButtonID = Index;
+/* 0001d470 */			break;
+/* 0001d476 */		}
+/* 0001d47c */	}
+/* 0001d482 */}
+
+int CSystemButtonViewList::GetMessageWindowNumber()
+/* 0001d48a */{
+/* 0001d48a */	return this.m_MessageWindowNumber;
+/* 0001d492 */}
+
+sys_btn_fnc_t CSystemButtonViewList::GetSelectedFunc()
+/* 0001d4a0 */{
+/* 0001d4a0 */	if (this.m_SelectButtonID == -2147483648)
+/* 0001d4ae */	{
+/* 0001d4ae */		return NULL;
+/* 0001d4b6 */	}
+/* 0001d4bc */	return g_SystemButtonModelMap.GetFunction(this.m_MessageWindowNumber, this.m_SelectButtonID);
+/* 0001d4d6 */}
+
+void CSystemButtonViewList::Hide()
+/* 0001d4e4 */{
+/* 0001d4e4 */	this.SetShow(false);
+/* 0001d4f2 */}
+
+void CSystemButtonViewList::Show()
+/* 0001d4fa */{
+/* 0001d4fa */	this.SetShow(true);
+/* 0001d508 */}
+
+void CSystemButtonViewList::SetShow(bool ShowFlg)
+/* 0001d510 */{
+/* 0001d510 */	this.m_Show = ShowFlg;
+/* 0001d51a */	int Index;
+/* 0001d524 */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001d554 */	{
+/* 0001d554 */		this.m_ViewList[Index].SetShow(this.m_Show);
+/* 0001d56e */	}
+/* 0001d574 */}
+
+bool CSystemButtonViewList::IsShow()
+/* 0001d57c */{
+/* 0001d57c */	return this.m_Show;
+/* 0001d584 */}
+

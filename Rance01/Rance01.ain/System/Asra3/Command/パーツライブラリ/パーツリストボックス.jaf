@@ -1,0 +1,151 @@
+void Ｐ＿リストボックス＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 00053d46 */{
+/* 00053d46 */	GUIEngine.SetListBoxPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 00053d62 */}
+
+void Ｐ＿リストボックス＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 00053d70 */{
+/* 00053d70 */	GUIEngine.SetListBoxZ(パーツ番号, _Ｚ座標);
+/* 00053d86 */}
+
+int Ｐ＿リストボックス＿Ｘ座標取得(int パーツ番号)
+/* 00053d94 */{
+/* 00053d94 */	return GUIEngine.GetListBoxX(パーツ番号);
+/* 00053da6 */}
+
+int Ｐ＿リストボックス＿Ｙ座標取得(int パーツ番号)
+/* 00053dba */{
+/* 00053dba */	return GUIEngine.GetListBoxY(パーツ番号);
+/* 00053dcc */}
+
+int Ｐ＿リストボックス＿Ｚ座標取得(int パーツ番号)
+/* 00053de0 */{
+/* 00053de0 */	return GUIEngine.GetListBoxZ(パーツ番号);
+/* 00053df2 */}
+
+void Ｐ＿リストボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00053e06 */{
+/* 00053e06 */	GUIEngine.SetListBoxWidth(パーツ番号, 幅);
+/* 00053e1c */	GUIEngine.SetListBoxHeight(パーツ番号, 高さ);
+/* 00053e32 */}
+
+void Ｐ＿リストボックス＿行サイズ設定(int パーツ番号, int 高さ)
+/* 00053e40 */{
+/* 00053e40 */	GUIEngine.SetListBoxLineHeight(パーツ番号, 高さ);
+/* 00053e56 */}
+
+int Ｐ＿リストボックス＿幅取得(int パーツ番号)
+/* 00053e64 */{
+/* 00053e64 */	return GUIEngine.GetListBoxWidth(パーツ番号);
+/* 00053e76 */}
+
+int Ｐ＿リストボックス＿高さ取得(int パーツ番号)
+/* 00053e8a */{
+/* 00053e8a */	return GUIEngine.GetListBoxHeight(パーツ番号);
+/* 00053e9c */}
+
+int Ｐ＿リストボックス＿行サイズ取得(int パーツ番号)
+/* 00053eb0 */{
+/* 00053eb0 */	return GUIEngine.GetListBoxLineHeight(パーツ番号);
+/* 00053ec2 */}
+
+void Ｐ＿リストボックス＿マージン設定(int パーツ番号, int 幅, int 高さ)
+/* 00053ed6 */{
+/* 00053ed6 */	GUIEngine.SetListBoxWidthMargin(パーツ番号, 幅);
+/* 00053eec */	GUIEngine.SetListBoxHeightMargin(パーツ番号, 高さ);
+/* 00053f02 */}
+
+int Ｐ＿リストボックス＿マージン幅取得(int パーツ番号)
+/* 00053f10 */{
+/* 00053f10 */	return GUIEngine.GetListBoxWidthMargin(パーツ番号);
+/* 00053f22 */}
+
+int Ｐ＿リストボックス＿マージン高さ取得(int パーツ番号)
+/* 00053f36 */{
+/* 00053f36 */	return GUIEngine.GetListBoxHeightMargin(パーツ番号);
+/* 00053f48 */}
+
+void Ｐ＿リストボックス＿表示設定(int パーツ番号, bool 表示)
+/* 00053f5c */{
+/* 00053f5c */	GUIEngine.SetListBoxShow(パーツ番号, 表示);
+/* 00053f72 */}
+
+bool Ｐ＿リストボックス＿表示設定取得(int パーツ番号)
+/* 00053f80 */{
+/* 00053f80 */	return GUIEngine.IsListBoxShow(パーツ番号);
+/* 00053f92 */}
+
+void Ｐ＿リストボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00053fa6 */{
+/* 00053fa6 */	GUIEngine.SetListBoxCGName(パーツ番号, ＣＧ名);
+/* 00053fbc */}
+
+string Ｐ＿リストボックス＿ＣＧ名取得(int パーツ番号)
+/* 00053fca */{
+/* 00053fca */	string Name;
+/* 00053fd6 */	GUIEngine.GetListBoxCGName(パーツ番号, Name);
+/* 00053fec */	return Name;
+/* 00053ff4 */}
+
+void Ｐ＿リストボックス＿スクロール位置設定(int パーツ番号, int 位置)
+/* 00054008 */{
+/* 00054008 */	GUIEngine.SetListBoxScrollPos(パーツ番号, 位置);
+/* 0005401e */}
+
+int Ｐ＿リストボックス＿スクロール位置取得(int パーツ番号)
+/* 0005402c */{
+/* 0005402c */	return GUIEngine.GetListBoxScrollPos(パーツ番号);
+/* 0005403e */}
+
+void Ｐ＿リストボックス＿アイテム追加(int パーツ番号, string テキスト)
+/* 00054052 */{
+/* 00054052 */	GUIEngine.AddListBoxItem(パーツ番号, テキスト);
+/* 00054068 */}
+
+void Ｐ＿リストボックス＿アイテム設定(int パーツ番号, int インデックス, string テキスト)
+/* 00054076 */{
+/* 00054076 */	GUIEngine.SetListBoxItem(パーツ番号, インデックス, テキスト);
+/* 00054092 */}
+
+int Ｐ＿リストボックス＿アイテム数取得(int パーツ番号)
+/* 000540a0 */{
+/* 000540a0 */	return GUIEngine.GetListBoxItemCount(パーツ番号);
+/* 000540b2 */}
+
+string Ｐ＿リストボックス＿アイテム取得(int パーツ番号, int インデックス)
+/* 000540c6 */{
+/* 000540c6 */	string Text;
+/* 000540d2 */	GUIEngine.GetListBoxItem(パーツ番号, インデックス, Text);
+/* 000540ee */	return Text;
+/* 000540f6 */}
+
+void Ｐ＿リストボックス＿アイテム削除(int パーツ番号, int インデックス)
+/* 0005410a */{
+/* 0005410a */	GUIEngine.EraseListBoxItem(パーツ番号, インデックス);
+/* 00054120 */}
+
+void Ｐ＿リストボックス＿アイテム全削除(int パーツ番号)
+/* 0005412e */{
+/* 0005412e */	GUIEngine.ClearListBoxItem(パーツ番号);
+/* 0005413e */}
+
+void Ｐ＿リストボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 0005414c */{
+/* 0005414c */	GUIEngine.SetListBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00054198 */}
+
+void Ｐ＿リストボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 000541a6 */{
+/* 000541a6 */	GUIEngine.GetListBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000541f2 */}
+
+void Ｐ＿リストボックス＿選択位置設定(int パーツ番号, int 位置)
+/* 00054200 */{
+/* 00054200 */	GUIEngine.SetListBoxSelectIndex(パーツ番号, 位置);
+/* 00054216 */}
+
+int Ｐ＿リストボックス＿選択位置取得(int パーツ番号)
+/* 00054224 */{
+/* 00054224 */	return GUIEngine.GetListBoxSelectIndex(パーツ番号);
+/* 00054236 */}
+

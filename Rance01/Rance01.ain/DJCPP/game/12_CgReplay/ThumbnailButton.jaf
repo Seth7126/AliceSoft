@@ -1,0 +1,160 @@
+ThumbnailButton::ThumbnailButton()
+/* 0007fc3e */{
+/* 0007fc46 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0007fc72 */	this.state_ = 1;
+/* 0007fc7c */	this.origin_ = 7;
+/* 0007fc86 */	this.isEnable_ = true;
+/* 0007fc90 */	this.x_ = this.y_ = this.w_ = this.h_ = 0;
+/* 0007fcc0 */	this.z_ = 5000;
+/* 0007fcca */}
+
+void ThumbnailButton::init(string thumbnailCg, bool val)
+/* 0007fcd2 */{
+/* 0007fcd2 */	this.cgThumbnail_ = thumbnailCg;
+/* 0007fcdc */	this.isEnable_ = val;
+/* 0007fce6 */	this.initParts();
+/* 0007fcee */	this.setPartsShowState();
+/* 0007fcf6 */	this.updateChildPartsShowState();
+/* 0007fcfe */}
+
+void ThumbnailButton::setParent(int parentPartsNumber)
+/* 0007fd06 */{
+/* 0007fd06 */	this.parent_.setParent(parentPartsNumber);
+/* 0007fd18 */}
+
+void ThumbnailButton::initParts()
+/* 0007fd20 */{
+/* 0007fd20 */	this.parts_[0].initAsUserStructure();
+/* 0007fd34 */	int pn = this.parts_[0].getPartsNumber();
+/* 0007fd54 */	Ｐ＿構築手順＿ＣＧ設定(pn, "システム／サムネイル／下地", 1);
+/* 0007fd6c */	if (this.isEnable_)
+/* 0007fd76 */	{
+/* 0007fd76 */		Ｐ＿構築手順＿ＣＧ部分コピー(pn, this.cgThumbnail_, 3, 3, 0, 0, 205, 154, 1);
+/* 0007fdb2 */	}
+/* 0007fdb8 */	Ｐ＿構築ビルド(pn, 1);
+/* 0007fdca */	this.w_ = this.parts_[0].getWidth();
+/* 0007fdea */	this.h_ = this.parts_[0].getHeight();
+/* 0007fe0a */	this.parts_[2].initAsPlaneImage(this.w_, this.h_, 255, 80, 0, 255);
+/* 0007fe42 */	this.parts_[2].setAlpha(120);
+/* 0007fe5c */	this.parts_[3].initAsPlaneImage(this.w_, this.h_, 255, 255, 255, 255);
+/* 0007fe94 */	this.parts_[3].setAlpha(0);
+/* 0007feae */	createPartsGroup(this.parent_, this.parts_, this.z_);
+/* 0007fec6 */}
+
+void ThumbnailButton::setPartsShowState()
+/* 0007fece */{
+/* 0007fece */	int i;
+/* 0007fed8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0007ff08 */	{
+/* 0007ff08 */		this.parts_[i].setShow(true);
+/* 0007ff22 */	}
+/* 0007ff28 */}
+
+void ThumbnailButton::update()
+/* 0007ff30 */{
+/* 0007ff30 */	if (this.w_ == 0)
+/* 0007ff3e */	{
+/* 0007ff3e */		return;
+/* 0007ff40 */	}
+/* 0007ff46 */	switch (this.state_)
+/* 0007ff58 */	{
+/* 0007ff58 */	case 0:
+/* 0007ff58 */		bool last = this.isHover_;
+/* 0007ff62 */		this.isHover_ = this.isEnable_ && this.collideWithOrigin();
+/* 0007ff9a */		this.isMouseDown_ = this.isHover_ && g_mouse.isDown(0);
+/* 0007ffdc */		if (this.isEnable_ && this.isHover_ && g_mouse.onDown(0))
+/* 00080038 */		{
+/* 00080038 */			this.runClickEffectMotion();
+/* 00080040 */		}
+/* 00080046 */		if (!last && this.isHover_)
+/* 00080076 */		{
+/* 00080076 */			g_sysSound.play(2001, false);
+/* 0008008e */		}
+/* 00080094 */		if (this.isHover_ && g_mouse.onDown(0))
+/* 000800ce */		{
+/* 000800ce */			g_sysSound.play(2002, false);
+/* 000800e6 */		}
+/* 000800ec */		break;
+/* 000800f2 */	case 1:
+/* 000800f2 */		this.isHover_ = false;
+/* 000800fc */		break;
+/* 00080102 */	}
+/* 00080102 */	this.updateChildPartsShowState();
+/* 0008010a */}
+
+bool ThumbnailButton::isHover()
+/* 00080112 */{
+/* 00080112 */	return this.isHover_;
+/* 0008011a */}
+
+bool ThumbnailButton::isShow()
+/* 00080128 */{
+/* 00080128 */	return this.state_ != 1;
+/* 0008013a */}
+
+bool ThumbnailButton::isClick()
+/* 00080148 */{
+/* 00080148 */	return this.isHover_ && g_mouse.isClickWithFocus();
+/* 0008017a */}
+
+void ThumbnailButton::setPos(int x, int y, int z)
+/* 00080188 */{
+/* 00080188 */	this.x_ = x;
+/* 00080192 */	this.y_ = y;
+/* 0008019c */	if (z != -2147483648)
+/* 000801b0 */	{
+/* 000801b0 */		this.z_ = z;
+/* 000801ba */	}
+/* 000801c0 */	this.parent_.setPos(this.x_, this.y_, this.z_);
+/* 000801de */}
+
+void ThumbnailButton::setShow(bool val)
+/* 000801e6 */{
+/* 000801e6 */	this.state_ = val ? 0 : 1;
+/* 00080210 */	this.parent_.setShow(val);
+/* 00080222 */}
+
+bool ThumbnailButton::isEnable()
+/* 0008022a */{
+/* 0008022a */	return this.isEnable_;
+/* 00080232 */}
+
+bool ThumbnailButton::collideWithOrigin()
+/* 00080240 */{
+/* 00080240 */	return AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 0008027a */}
+
+void ThumbnailButton::updateChildPartsShowState()
+/* 00080288 */{
+/* 00080288 */	int n;
+/* 00080292 */	if (this.isHover_ && g_mouse.isDown(0))
+/* 000802cc */	{
+/* 000802cc */		n = 1;
+/* 000802d6 */	}
+/* 000802dc */	else if (!this.isEnable_)
+/* 000802ea */	{
+/* 000802ea */		n = 2;
+/* 000802f4 */	}
+/* 000802fa */	this.parts_[2].setShow(this.isHover_ && !g_mouse.isDown(0));
+/* 00080346 */	this.parts_[1].setShow(this.isEnable_);
+/* 00080360 */}
+
+bool ThumbnailButton::isMotion()
+/* 00080368 */{
+/* 00080368 */	return this.parent_.isMotion();
+/* 00080376 */}
+
+void ThumbnailButton::runClickEffectMotion()
+/* 00080384 */{
+/* 00080384 */	float per = 1.4;
+/* 00080396 */	float moveX = (-(per - 1.0) * this.w_) / 2.0;
+/* 000803c4 */	float moveY = (-(per - 1.0) * this.h_) / 2.0;
+/* 000803f2 */	MotionInfomation m;
+/* 00080402 */	m.setScaling(100, per * 100.0, 1);
+/* 0008042a */	m.setMove(0, 0, moveX, moveY, 1);
+/* 00080458 */	m.setAlpha(180, 0, 0);
+/* 00080476 */	m.setTime(250, 0);
+/* 0008048e */	this.parts_[3].setShow(true);
+/* 000804a8 */	this.parts_[3].runMotion(m);
+/* 000804ca */}
+

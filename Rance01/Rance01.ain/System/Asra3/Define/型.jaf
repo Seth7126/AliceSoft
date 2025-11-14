@@ -1,0 +1,16 @@
+文字入力エリア_t::文字入力エリア_t()
+/* 00000106 */{
+/* 0000010e */	this.m_nMaxTextLengthSJIS = -1;
+/* 00000120 */}
+
+選択エリア_t::選択エリア_t()
+/* 00000128 */{
+/* 00000130 */	this.m_fBoldWeight = 0.0;
+/* 00000142 */	this.m_fSelectedBoldWeight = 0.0;
+/* 00000154 */	this.m_fUnselectableBoldWeight = 0.0;
+/* 00000166 */	this.m_nCharSpace = 0;
+/* 00000170 */	this.m_nSelectedCharSpace = 0;
+/* 0000017a */	this.m_nUnselectableCharSpace = 0;
+/* 00000184 */	this.nCursorOffsetZ = 1;
+/* 0000018e */}
+

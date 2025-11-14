@@ -1,0 +1,25 @@
+CMessageWindowModelManager::CMessageWindowModelManager()
+/* 0001e218 */{
+/* 0001e222 */}
+
+bool CMessageWindowModelManager::Init()
+/* 0001e228 */{
+/* 0001e228 */	this.m_ModelList.Alloc(40);
+/* 0001e23e */	return true;
+/* 0001e246 */}
+
+void CMessageWindowModelManager::SetZ(int Z)
+/* 0001e254 */{
+/* 0001e254 */	this.m_Z = Z;
+/* 0001e25e */}
+
+int CMessageWindowModelManager::GetZ()
+/* 0001e266 */{
+/* 0001e266 */	return this.m_Z;
+/* 0001e26e */}
+
+ref CMessageWindowModel CMessageWindowModelManager::GetMessageWindow(int MessageWindowNumber)
+/* 0001e27c */{
+/* 0001e27c */	return this.m_ModelList[MessageWindowNumber];
+/* 0001e290 */}
+

@@ -1,0 +1,270 @@
+Dialog::Dialog()
+/* 0007c78c */{
+/* 0007c796 */}
+
+void Dialog::init()
+/* 0007c79c */{
+/* 0007c79c */	this.initParts();
+/* 0007c7a4 */	this.setPartsPos();
+/* 0007c7ac */	this.setPartsShow();
+/* 0007c7b4 */	this.initButton();
+/* 0007c7bc */	this.setButtonPos();
+/* 0007c7c4 */}
+
+void Dialog::run(ref DialogInfomation di)
+/* 0007c7cc */{
+/* 0007c7cc */	this.setDialogInfomation(di);
+/* 0007c7da */	this.init();
+/* 0007c7e2 */	this.fadeIn(true);
+/* 0007c7f0 */	g_sysSound.play(2201, false);
+/* 0007c808 */}
+
+int Dialog::update()
+/* 0007c810 */{
+/* 0007c810 */	switch (this.state_)
+/* 0007c822 */	{
+/* 0007c822 */	case 1:
+/* 0007c822 */		if (!this.parent_.isMotion())
+/* 0007c836 */		{
+/* 0007c836 */			this.state_ = 2;
+/* 0007c840 */			g_sysSound.play(getDialogSound(this.caption_), false);
+/* 0007c85e */		}
+/* 0007c864 */		break;
+/* 0007c86a */	case 2:
+/* 0007c86a */		if (this.btn_.Numof() == 1)
+/* 0007c87e */		{
+/* 0007c87e */			if (g_mouse.isClick(1) || g_mouse.isClick(0))
+/* 0007c8c6 */			{
+/* 0007c8c6 */				if (this.getClickedButton() == -1)
+/* 0007c8dc */				{
+/* 0007c8dc */					g_sysSound.play(2002, false);
+/* 0007c8f4 */				}
+/* 0007c8fa */				this.fadeIn(false);
+/* 0007c908 */			}
+/* 0007c90e */		}
+/* 0007c914 */		else
+/* 0007c914 */		{
+/* 0007c914 */			if (g_mouse.isClick(1))
+/* 0007c92c */			{
+/* 0007c92c */				g_sysSound.play(2003, false);
+/* 0007c944 */				this.result_ = 1;
+/* 0007c94e */				this.fadeIn(false);
+/* 0007c95c */			}
+/* 0007c962 */			this.checkButtonClick();
+/* 0007c96a */		}
+/* 0007c96a */		break;
+/* 0007c970 */	case 3:
+/* 0007c970 */		if (!this.parent_.isMotion())
+/* 0007c984 */		{
+/* 0007c984 */			this.state_ = 0;
+/* 0007c98e */		}
+/* 0007c994 */		break;
+/* 0007c99a */	case 0:
+/* 0007c99a */		return 1;
+/* 0007c9a2 */	}
+/* 0007c9a2 */	return 0;
+/* 0007c9aa */}
+
+void Dialog::setImageName(string imageName)
+/* 0007c9b8 */{
+/* 0007c9b8 */	this.imageName_ = imageName;
+/* 0007c9c2 */}
+
+void Dialog::setChipId(string id)
+/* 0007c9ca */{
+/* 0007c9ca */	this.chipId_ = id;
+/* 0007c9d4 */}
+
+void Dialog::setCaption(string caption)
+/* 0007c9dc */{
+/* 0007c9dc */	this.caption_ = caption;
+/* 0007c9e6 */}
+
+void Dialog::setDesc(array@string desc)
+/* 0007c9ee */{
+/* 0007c9ee */	this.descText_.Free();
+/* 0007c9f8 */	int i;
+/* 0007ca02 */	for (i = 0; i < desc.Numof(); ++i)
+/* 0007ca3c */	{
+/* 0007ca3c */		this.descText_.PushBack(desc[i]);
+/* 0007ca54 */	}
+/* 0007ca5a */}
+
+void Dialog::setPartsShow()
+/* 0007ca62 */{
+/* 0007ca62 */	int i;
+/* 0007ca6c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0007ca9c */	{
+/* 0007ca9c */		this.parts_[i].setShow(true);
+/* 0007cab6 */	}
+/* 0007cabc */}
+
+void Dialog::setPartsPos()
+/* 0007cac4 */{
+/* 0007cac4 */	this.parts_[0].setPos(0, 0, -2147483648);
+/* 0007caea */	this.parts_[1].setPos(144, 592, -2147483648);
+/* 0007cb10 */	this.parts_[2].setPos(104, 560, -2147483648);
+/* 0007cb36 */	this.parts_[3].setPos(344, 560, -2147483648);
+/* 0007cb5c */	this.parts_[4].setPos(360, 592, -2147483648);
+/* 0007cb82 */	this.parts_[5].setPos(360, 610, -2147483648);
+/* 0007cba8 */	this.parts_[6].setPos(360, 628, -2147483648);
+/* 0007cbce */	this.parent_.setPos(80, -848, -2147483648);
+/* 0007cbec */}
+
+bool Dialog::isFinish()
+/* 0007cbf4 */{
+/* 0007cbf4 */	return this.state_ == 0;
+/* 0007cc06 */}
+
+void Dialog::fadeIn(bool val)
+/* 0007cc14 */{
+/* 0007cc14 */	this.partsFade_.setShow(true);
+/* 0007cc26 */	this.partsFade_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0007cc56 */	this.parent_.setShow(val);
+/* 0007cc68 */	this.fadeButton(val);
+/* 0007cc76 */	this.state_ = val ? 1 : 3;
+/* 0007cca0 */	MotionInfomation m;
+/* 0007ccb0 */	m.setTime(200, 0);
+/* 0007ccc8 */	if (val)
+/* 0007ccd4 */	{
+/* 0007ccd4 */		m.setMove(80, -848, 80, -348, 1);
+/* 0007ccfe */	}
+/* 0007cd04 */	else
+/* 0007cd04 */	{
+/* 0007cd04 */		m.setMove(80, -348, 80, -848, 1);
+/* 0007cd2e */	}
+/* 0007cd2e */	this.parent_.setShow(true);
+/* 0007cd40 */	this.parent_.runMotion(m);
+/* 0007cd5a */}
+
+void Dialog::setCaptionColorType(int type)
+/* 0007cd62 */{
+/* 0007cd62 */	this.captionColoType_ = type;
+/* 0007cd6c */}
+
+void Dialog::getColor(ref int r, ref int g, ref int b)
+/* 0007cd74 */{
+/* 0007cd74 */	if (this.captionColoType_ == 1)
+/* 0007cd82 */	{
+/* 0007cd82 */		r = 255;
+/* 0007cd92 */		g = 85;
+/* 0007cda2 */		b = 17;
+/* 0007cdb2 */	}
+/* 0007cdb8 */	else if (this.captionColoType_ == 2)
+/* 0007cdc6 */	{
+/* 0007cdc6 */		r = 255;
+/* 0007cdd6 */		g = 238;
+/* 0007cde6 */		b = 17;
+/* 0007cdf6 */	}
+/* 0007cdfc */	else
+/* 0007cdfc */	{
+/* 0007cdfc */		r = g = b = 0;
+/* 0007ce1c */	}
+/* 0007ce1c */}
+
+void Dialog::initParts()
+/* 0007ce24 */{
+/* 0007ce24 */	this.partsFade_.initAsPlaneImage(1024, 768, 0, 0, 0, 128);
+/* 0007ce54 */	this.partsFade_.setPos(0, 0, 19999);
+/* 0007ce72 */	this.parts_[0].init("システム／確認／下地", 0);
+/* 0007ce92 */	if (this.imageName_ != "")
+/* 0007cea2 */	{
+/* 0007cea2 */		this.parts_[2].init(this.imageName_, 0);
+/* 0007cec2 */	}
+/* 0007cec8 */	else if (this.chipId_ != "")
+/* 0007ced8 */	{
+/* 0007ced8 */		this.parts_[2].init("システム／確認／枠", 0);
+/* 0007cef8 */		this.parts_[1].init(getChip(this.chipId_).getImageName(), 0);
+/* 0007cf2e */	}
+/* 0007cf3a */	int r;
+/* 0007cf44 */	int g;
+/* 0007cf4e */	int b;
+/* 0007cf58 */	this.getColor(r, g, b);
+/* 0007cf78 */	this.parts_[3].initAsText(this.caption_, 30, false, 256, r, g, b);
+/* 0007cfb6 */	this.descText_.Realloc(3);
+/* 0007cfcc */	int i;
+/* 0007cfd6 */	for (i = 0; i < this.descText_.Numof(); ++i)
+/* 0007d006 */	{
+/* 0007d006 */		this.parts_[4 + i].initAsText(this.descText_[i], 20, false, 256, 0, 0, 0);
+/* 0007d054 */	}
+/* 0007d05a */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 0007d072 */}
+
+void Dialog::initButton()
+/* 0007d07a */{
+/* 0007d07a */	if (this.answerType_ == 0)
+/* 0007d088 */	{
+/* 0007d088 */		this.btn_.Alloc(1);
+/* 0007d09e */		this.btn_[0].init("システム／ボタン／幅１２８", "了解", -1);
+/* 0007d0c4 */	}
+/* 0007d0ca */	else
+/* 0007d0ca */	{
+/* 0007d0ca */		this.btn_.Alloc(2);
+/* 0007d0e0 */		this.btn_[0].init("システム／ボタン／幅１２８", "OK", -1);
+/* 0007d106 */		this.btn_[1].init("システム／ボタン／幅１２８", "キャンセル", -1);
+/* 0007d12c */	}
+/* 0007d12c */}
+
+void Dialog::setButtonPos()
+/* 0007d134 */{
+/* 0007d134 */	int c = this.btn_.Numof();
+/* 0007d146 */	int width = 128 * c + 20 * (c - 1);
+/* 0007d178 */	int i;
+/* 0007d182 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007d1b2 */	{
+/* 0007d1b2 */		this.btn_[i].setPos((528 - width / 2) + 148 * i, 460, 25000);
+/* 0007d1f8 */	}
+/* 0007d1fe */}
+
+int Dialog::getResult()
+/* 0007d206 */{
+/* 0007d206 */	return this.result_;
+/* 0007d20e */}
+
+void Dialog::fadeButton(bool val)
+/* 0007d21c */{
+/* 0007d21c */	int i;
+/* 0007d226 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007d256 */	{
+/* 0007d256 */		this.btn_[i].fadeIn(val);
+/* 0007d270 */	}
+/* 0007d276 */}
+
+void Dialog::setAnswerType(int type)
+/* 0007d27e */{
+/* 0007d27e */	this.answerType_ = type;
+/* 0007d288 */}
+
+int Dialog::getClickedButton()
+/* 0007d290 */{
+/* 0007d290 */	int i;
+/* 0007d29a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007d2ca */	{
+/* 0007d2ca */		if (this.btn_[i].isClick())
+/* 0007d2e4 */		{
+/* 0007d2e4 */			return i;
+/* 0007d2ec */		}
+/* 0007d2f2 */	}
+/* 0007d2f8 */	return -1;
+/* 0007d300 */}
+
+void Dialog::checkButtonClick()
+/* 0007d30e */{
+/* 0007d30e */	int n = this.getClickedButton();
+/* 0007d322 */	if (n != -1)
+/* 0007d336 */	{
+/* 0007d336 */		this.result_ = n;
+/* 0007d340 */		this.fadeIn(false);
+/* 0007d34e */	}
+/* 0007d354 */}
+
+void Dialog::setDialogInfomation(ref DialogInfomation di)
+/* 0007d35c */{
+/* 0007d35c */	this.setAnswerType(di.answerType);
+/* 0007d372 */	this.setCaption(di.caption);
+/* 0007d388 */	this.setCaptionColorType(di.type);
+/* 0007d39e */	this.setDesc(di.desc);
+/* 0007d3b6 */	this.setChipId(di.chipId);
+/* 0007d3cc */	this.setImageName(di.imageName);
+/* 0007d3e2 */}
+

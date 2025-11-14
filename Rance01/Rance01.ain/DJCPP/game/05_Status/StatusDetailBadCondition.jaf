@@ -1,0 +1,61 @@
+StatusDetailBadCondition::StatusDetailBadCondition()
+/* 00078a46 */{
+/* 00078a4e */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 00078a7a */}
+
+void StatusDetailBadCondition::init(string badConditionId)
+/* 00078a82 */{
+/* 00078a82 */	this.id_ = badConditionId;
+/* 00078a8c */	this.initParts();
+/* 00078a94 */}
+
+void StatusDetailBadCondition::initParts()
+/* 00078a9c */{
+/* 00078a9c */	int index = getBadConditionIndex(this.id_);
+/* 00078ab4 */	this.parts_[0].init("システム／キャンプ／状態異常", 0);
+/* 00078ad4 */	this.parts_[0].setCgRange(index * 88, 0, 88, 38);
+/* 00078b08 */	this.parts_[1].initAsCgPlaneImage("システム／キャンプ／状態異常", 255, 255, 0);
+/* 00078b34 */	this.parts_[1].setCgRange(index * 88, 0, 88, 38);
+/* 00078b68 */	this.parts_[1].setAlpha(80);
+/* 00078b82 */	createPartsGroup(this.parent_, this.parts_, 1);
+/* 00078b9a */	this.parts_[0].setShow(true);
+/* 00078bb4 */	this.parent_.setShow(true);
+/* 00078bc6 */}
+
+void StatusDetailBadCondition::setParent(int parentPartsNumber)
+/* 00078bce */{
+/* 00078bce */	this.parent_.setParent(parentPartsNumber);
+/* 00078be0 */}
+
+void StatusDetailBadCondition::update()
+/* 00078be8 */{
+/* 00078be8 */	this.isHover_ = AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 00078c2c */	if (g_mouse.isClickWithFocus() && this.isHover_)
+/* 00078c60 */	{
+/* 00078c60 */		BadCondition bc;
+/* 00078c70 */		bc = getBadConditionObject(this.id_);
+/* 00078c9c */		DialogInfomation info;
+/* 00078cac */		info.answerType = 0;
+/* 00078cc2 */		info.type = 1;
+/* 00078cd8 */		info.caption = "状態異常：%s" % bc.getName();
+/* 00078d04 */		array@string d;
+/* 00078d0e */		splitToken(d, bc.getDesc(), "|");
+/* 00078d2c */		d.Realloc(3);
+/* 00078d42 */		info.desc[0] = d[0];
+/* 00078d66 */		info.desc[1] = d[1];
+/* 00078d8a */		info.desc[2] = d[2];
+/* 00078dae */		OpenDialog(info);
+/* 00078dc6 */	}
+/* 00078dde */	this.parts_[1].setShow(this.isHover_);
+/* 00078df8 */}
+
+bool StatusDetailBadCondition::isHover()
+/* 00078e00 */{
+/* 00078e00 */	return this.isHover_;
+/* 00078e08 */}
+
+void StatusDetailBadCondition::setPos(int x, int y)
+/* 00078e16 */{
+/* 00078e16 */	this.parent_.setPos(x, y, -2147483648);
+/* 00078e34 */}
+

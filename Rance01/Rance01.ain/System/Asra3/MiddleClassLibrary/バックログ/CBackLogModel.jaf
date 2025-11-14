@@ -1,0 +1,432 @@
+CBackLogModel::CBackLogModel()
+/* 0001fbb8 */{
+/* 0001fbc0 */	this.m_BackCG = "";
+/* 0001fbcc */	this.m_nTextX = 0;
+/* 0001fbd6 */	this.m_nTextY = 0;
+/* 0001fbe0 */	this.m_nNumofTextColumn = -2147483648;
+/* 0001fbea */	this.m_nNumofTextLine = -2147483648;
+/* 0001fbf4 */	this.m_bUseTaskBar = true;
+/* 0001fbfe */	this.m_nFontSize = 20;
+/* 0001fc08 */	this.SetDefaultTextPropertyList();
+/* 0001fc10 */	this.m_nCharSpace = 0;
+/* 0001fc1a */	this.m_nLineSpace = 0;
+/* 0001fc24 */	this.m_ReturnButtonCG = "";
+/* 0001fc30 */	this.m_ReturnButtonUnderCursorCG = "";
+/* 0001fc3c */	this.m_nReturnButtonX = 740;
+/* 0001fc4e */	this.m_nReturnButtonY = 540;
+/* 0001fc60 */	this.m_ScrollBoxCG = "";
+/* 0001fc6c */	this.m_ScrollBoxUnderCursorCG = "";
+/* 0001fc78 */	this.m_nScrollBoxAreaX = 770;
+/* 0001fc8a */	this.m_nScrollBoxAreaY = 0;
+/* 0001fc94 */	this.m_nScrollBoxAreaWidth = 30;
+/* 0001fc9e */	this.m_nScrollBoxAreaHeight = 500;
+/* 0001fca8 */	this.m_UpButtonCG = "";
+/* 0001fcb4 */	this.m_UpButtonUnderCursorCG = "";
+/* 0001fcc0 */	this.m_nUpButtonX = 0;
+/* 0001fcca */	this.m_nUpButtonY = 0;
+/* 0001fcd4 */	this.m_DownButtonCG = "";
+/* 0001fce0 */	this.m_DownButtonUnderCursorCG = "";
+/* 0001fcec */	this.m_nDownButtonX = 0;
+/* 0001fcf6 */	this.m_nDownButtonY = 0;
+/* 0001fd00 */	this.m_nDecideSound = -2147483648;
+/* 0001fd0a */	this.m_nUnderCursorSound = -2147483648;
+/* 0001fd14 */	this.m_nCancelSound = -2147483648;
+/* 0001fd1e */}
+
+void CBackLogModel::SetDefaultTextPropertyList()
+/* 0001fd26 */{
+/* 0001fd26 */	this.m_TextPropertyList.Alloc(5);
+/* 0001fd3c */	this.m_TextPropertyList[0].SetType(0);
+/* 0001fd56 */	this.m_TextPropertyList[0].SetSize(this.m_nFontSize);
+/* 0001fd70 */	this.m_TextPropertyList[0].SetColor(CF_CASColor(0, 0, 0, 255));
+/* 0001fda2 */	this.m_TextPropertyList[0].SetBoldWeight(0.0);
+/* 0001fdbc */	this.m_TextPropertyList[0].SetEdgeWeight(2.0);
+/* 0001fdd6 */	this.m_TextPropertyList[0].SetEdgeColor(CF_CASColor(255, 255, 255, 255));
+/* 0001fe08 */	this.m_TextPropertyList[1].SetType(0);
+/* 0001fe22 */	this.m_TextPropertyList[1].SetSize(this.m_nFontSize);
+/* 0001fe3c */	this.m_TextPropertyList[1].SetColor(CF_CASColor(0, 0, 240, 255));
+/* 0001fe6e */	this.m_TextPropertyList[1].SetBoldWeight(0.0);
+/* 0001fe88 */	this.m_TextPropertyList[1].SetEdgeWeight(2.0);
+/* 0001fea2 */	this.m_TextPropertyList[1].SetEdgeColor(CF_CASColor(255, 255, 255, 255));
+/* 0001fed4 */	this.m_TextPropertyList[2].SetType(0);
+/* 0001feee */	this.m_TextPropertyList[2].SetSize(this.m_nFontSize);
+/* 0001ff08 */	this.m_TextPropertyList[2].SetColor(CF_CASColor(255, 160, 160, 255));
+/* 0001ff3a */	this.m_TextPropertyList[2].SetBoldWeight(0.0);
+/* 0001ff54 */	this.m_TextPropertyList[2].SetEdgeWeight(2.0);
+/* 0001ff6e */	this.m_TextPropertyList[2].SetEdgeColor(CF_CASColor(255, 255, 255, 255));
+/* 0001ffa0 */	this.m_TextPropertyList[3].SetType(0);
+/* 0001ffba */	this.m_TextPropertyList[3].SetSize(this.m_nFontSize);
+/* 0001ffd4 */	this.m_TextPropertyList[3].SetColor(CF_CASColor(240, 0, 0, 255));
+/* 00020006 */	this.m_TextPropertyList[3].SetBoldWeight(0.0);
+/* 00020020 */	this.m_TextPropertyList[3].SetEdgeWeight(2.0);
+/* 0002003a */	this.m_TextPropertyList[3].SetEdgeColor(CF_CASColor(255, 255, 255, 255));
+/* 0002006c */	this.m_TextPropertyList[4].SetType(0);
+/* 00020086 */	this.m_TextPropertyList[4].SetSize(this.m_nFontSize);
+/* 000200a0 */	this.m_TextPropertyList[4].SetColor(CF_CASColor(128, 128, 128, 255));
+/* 000200d2 */	this.m_TextPropertyList[4].SetBoldWeight(0.0);
+/* 000200ec */	this.m_TextPropertyList[4].SetEdgeWeight(2.0);
+/* 00020106 */	this.m_TextPropertyList[4].SetEdgeColor(CF_CASColor(255, 255, 255, 255));
+/* 00020138 */}
+
+void CBackLogModel::SetBackCG(string BackCG)
+/* 00020140 */{
+/* 00020140 */	this.m_BackCG = BackCG;
+/* 0002014a */}
+
+void CBackLogModel::SetTextPos(int nX, int nY)
+/* 00020152 */{
+/* 00020152 */	this.m_nTextX = nX;
+/* 0002015c */	this.m_nTextY = nY;
+/* 00020166 */}
+
+void CBackLogModel::SetNumofTextColumn(int nNumofTextColumn)
+/* 0002016e */{
+/* 0002016e */	this.m_nNumofTextColumn = nNumofTextColumn;
+/* 00020178 */}
+
+void CBackLogModel::SetNumofTextLine(int nNumofTextLine)
+/* 00020180 */{
+/* 00020180 */	this.m_nNumofTextLine = nNumofTextLine;
+/* 0002018a */}
+
+void CBackLogModel::SetUseTaskBar(bool bUseTaskBar)
+/* 00020192 */{
+/* 00020192 */	this.m_bUseTaskBar = bUseTaskBar;
+/* 0002019c */}
+
+void CBackLogModel::SetFontSize(int nFontSize)
+/* 000201a4 */{
+/* 000201a4 */	this.m_nFontSize = nFontSize;
+/* 000201ae */	int n;
+/* 000201b8 */	for (n = 0; n < this.m_TextPropertyList.Numof(); ++n)
+/* 000201e8 */	{
+/* 000201e8 */		this.m_TextPropertyList[n].SetSize(nFontSize);
+/* 00020202 */	}
+/* 00020208 */}
+
+void CBackLogModel::SetCharSpace(int nCharSpace)
+/* 00020210 */{
+/* 00020210 */	this.m_nCharSpace = nCharSpace;
+/* 0002021a */}
+
+void CBackLogModel::SetLineSpace(int nLineSpace)
+/* 00020222 */{
+/* 00020222 */	this.m_nLineSpace = nLineSpace;
+/* 0002022c */}
+
+void CBackLogModel::SetReturnButtonCG(string ReturnButtonCG)
+/* 00020234 */{
+/* 00020234 */	this.m_ReturnButtonCG = ReturnButtonCG;
+/* 0002023e */}
+
+void CBackLogModel::SetReturnButtonUnderCursorCG(string ReturnButtonUnderCursorCG)
+/* 00020246 */{
+/* 00020246 */	this.m_ReturnButtonUnderCursorCG = ReturnButtonUnderCursorCG;
+/* 00020250 */}
+
+void CBackLogModel::SetReturnButtonKeyDownCG(string ReturnButtonKeyDownCG)
+/* 00020258 */{
+/* 00020258 */	this.m_ReturnButtonKeyDownCG = ReturnButtonKeyDownCG;
+/* 00020262 */}
+
+void CBackLogModel::SetReturnButtonDisableCG(string ReturnButtonDisableCG)
+/* 0002026a */{
+/* 0002026a */	this.m_ReturnButtonDisableCG = ReturnButtonDisableCG;
+/* 00020274 */}
+
+void CBackLogModel::SetReturnButtonPos(int nX, int nY)
+/* 0002027c */{
+/* 0002027c */	this.m_nReturnButtonX = nX;
+/* 00020286 */	this.m_nReturnButtonY = nY;
+/* 00020290 */}
+
+void CBackLogModel::SetScrollBoxCG(string ScrollBoxCG)
+/* 00020298 */{
+/* 00020298 */	this.m_ScrollBoxCG = ScrollBoxCG;
+/* 000202a2 */}
+
+void CBackLogModel::SetScrollBoxUnderCursorCG(string ScrollBoxUnderCursorCG)
+/* 000202aa */{
+/* 000202aa */	this.m_ScrollBoxUnderCursorCG = ScrollBoxUnderCursorCG;
+/* 000202b4 */}
+
+void CBackLogModel::SetScrollBoxKeyDownCG(string ScrollBoxKeyDownCG)
+/* 000202bc */{
+/* 000202bc */	this.m_ScrollBoxKeyDownCG = ScrollBoxKeyDownCG;
+/* 000202c6 */}
+
+void CBackLogModel::SetScrollBoxAreaRect(int nX, int nY, int nWidth, int nHeight)
+/* 000202ce */{
+/* 000202ce */	this.m_nScrollBoxAreaX = nX;
+/* 000202d8 */	this.m_nScrollBoxAreaY = nY;
+/* 000202e2 */	this.m_nScrollBoxAreaWidth = nWidth;
+/* 000202ec */	this.m_nScrollBoxAreaHeight = nHeight;
+/* 000202f6 */}
+
+void CBackLogModel::SetUpButtonCG(string UpButtonCG)
+/* 000202fe */{
+/* 000202fe */	this.m_UpButtonCG = UpButtonCG;
+/* 00020308 */}
+
+void CBackLogModel::SetUpButtonUnderCursorCG(string UpButtonUnderCursorCG)
+/* 00020310 */{
+/* 00020310 */	this.m_UpButtonUnderCursorCG = UpButtonUnderCursorCG;
+/* 0002031a */}
+
+void CBackLogModel::SetUpButtonKeyDownCG(string UpButtonKeyDownCG)
+/* 00020322 */{
+/* 00020322 */	this.m_UpButtonKeyDownCG = UpButtonKeyDownCG;
+/* 0002032c */}
+
+void CBackLogModel::SetUpButtonDisableCG(string UpButtonDisableCG)
+/* 00020334 */{
+/* 00020334 */	this.m_UpButtonDisableCG = UpButtonDisableCG;
+/* 0002033e */}
+
+void CBackLogModel::SetUpButtonPos(int nX, int nY)
+/* 00020346 */{
+/* 00020346 */	this.m_nUpButtonX = nX;
+/* 00020350 */	this.m_nUpButtonY = nY;
+/* 0002035a */}
+
+void CBackLogModel::SetDownButtonCG(string DownButtonCG)
+/* 00020362 */{
+/* 00020362 */	this.m_DownButtonCG = DownButtonCG;
+/* 0002036c */}
+
+void CBackLogModel::SetDownButtonUnderCursorCG(string DownButtonUnderCursorCG)
+/* 00020374 */{
+/* 00020374 */	this.m_DownButtonUnderCursorCG = DownButtonUnderCursorCG;
+/* 0002037e */}
+
+void CBackLogModel::SetDownButtonKeyDownCG(string DownButtonKeyDownCG)
+/* 00020386 */{
+/* 00020386 */	this.m_DownButtonKeyDownCG = DownButtonKeyDownCG;
+/* 00020390 */}
+
+void CBackLogModel::SetDownButtonDisableCG(string DownButtonDisableCG)
+/* 00020398 */{
+/* 00020398 */	this.m_DownButtonDisableCG = DownButtonDisableCG;
+/* 000203a2 */}
+
+void CBackLogModel::SetDownButtonPos(int nX, int nY)
+/* 000203aa */{
+/* 000203aa */	this.m_nDownButtonX = nX;
+/* 000203b4 */	this.m_nDownButtonY = nY;
+/* 000203be */}
+
+string CBackLogModel::GetBackCG()
+/* 000203c6 */{
+/* 000203c6 */	return this.m_BackCG;
+/* 000203ce */}
+
+int CBackLogModel::GetTextX()
+/* 000203dc */{
+/* 000203dc */	return this.m_nTextX;
+/* 000203e4 */}
+
+int CBackLogModel::GetTextY()
+/* 000203f2 */{
+/* 000203f2 */	return this.m_nTextY;
+/* 000203fa */}
+
+int CBackLogModel::GetNumofTextColumn()
+/* 00020408 */{
+/* 00020408 */	return this.m_nNumofTextColumn;
+/* 00020410 */}
+
+int CBackLogModel::GetNumofTextLine()
+/* 0002041e */{
+/* 0002041e */	return this.m_nNumofTextLine;
+/* 00020426 */}
+
+bool CBackLogModel::GetUseTaskBar()
+/* 00020434 */{
+/* 00020434 */	return this.m_bUseTaskBar;
+/* 0002043c */}
+
+int CBackLogModel::GetFontSize()
+/* 0002044a */{
+/* 0002044a */	return this.m_nFontSize;
+/* 00020452 */}
+
+ref CASCharSpriteProperty CBackLogModel::GetTextProperty(int Type)
+/* 00020460 */{
+/* 00020460 */	return this.m_TextPropertyList[Type];
+/* 00020474 */}
+
+int CBackLogModel::GetCharSpace()
+/* 00020482 */{
+/* 00020482 */	return this.m_nCharSpace;
+/* 0002048a */}
+
+int CBackLogModel::GetLineSpace()
+/* 00020498 */{
+/* 00020498 */	return this.m_nLineSpace;
+/* 000204a0 */}
+
+string CBackLogModel::GetReturnButtonCG()
+/* 000204ae */{
+/* 000204ae */	return this.m_ReturnButtonCG;
+/* 000204b6 */}
+
+string CBackLogModel::GetReturnButtonUnderCursorCG()
+/* 000204c4 */{
+/* 000204c4 */	return this.m_ReturnButtonUnderCursorCG;
+/* 000204cc */}
+
+string CBackLogModel::GetReturnButtonKeyDownCG()
+/* 000204da */{
+/* 000204da */	return this.m_ReturnButtonKeyDownCG;
+/* 000204e2 */}
+
+string CBackLogModel::GetReturnButtonDisableCG()
+/* 000204f0 */{
+/* 000204f0 */	return this.m_ReturnButtonDisableCG;
+/* 000204f8 */}
+
+int CBackLogModel::GetReturnButtonX()
+/* 00020506 */{
+/* 00020506 */	return this.m_nReturnButtonX;
+/* 0002050e */}
+
+int CBackLogModel::GetReturnButtonY()
+/* 0002051c */{
+/* 0002051c */	return this.m_nReturnButtonY;
+/* 00020524 */}
+
+string CBackLogModel::GetScrollBoxCG()
+/* 00020532 */{
+/* 00020532 */	return this.m_ScrollBoxCG;
+/* 0002053a */}
+
+string CBackLogModel::GetScrollBoxUnderCursorCG()
+/* 00020548 */{
+/* 00020548 */	return this.m_ScrollBoxUnderCursorCG;
+/* 00020550 */}
+
+string CBackLogModel::GetScrollBoxKeyDownCG()
+/* 0002055e */{
+/* 0002055e */	return this.m_ScrollBoxKeyDownCG;
+/* 00020566 */}
+
+int CBackLogModel::GetScrollBoxAreaX()
+/* 00020574 */{
+/* 00020574 */	return this.m_nScrollBoxAreaX;
+/* 0002057c */}
+
+int CBackLogModel::GetScrollBoxAreaY()
+/* 0002058a */{
+/* 0002058a */	return this.m_nScrollBoxAreaY;
+/* 00020592 */}
+
+int CBackLogModel::GetScrollBoxAreaWidth()
+/* 000205a0 */{
+/* 000205a0 */	return this.m_nScrollBoxAreaWidth;
+/* 000205a8 */}
+
+int CBackLogModel::GetScrollBoxAreaHeight()
+/* 000205b6 */{
+/* 000205b6 */	return this.m_nScrollBoxAreaHeight;
+/* 000205be */}
+
+string CBackLogModel::GetUpButtonCG()
+/* 000205cc */{
+/* 000205cc */	return this.m_UpButtonCG;
+/* 000205d4 */}
+
+string CBackLogModel::GetUpButtonUnderCursorCG()
+/* 000205e2 */{
+/* 000205e2 */	return this.m_UpButtonUnderCursorCG;
+/* 000205ea */}
+
+string CBackLogModel::GetUpButtonKeyDownCG()
+/* 000205f8 */{
+/* 000205f8 */	return this.m_UpButtonKeyDownCG;
+/* 00020600 */}
+
+string CBackLogModel::GetUpButtonDisableCG()
+/* 0002060e */{
+/* 0002060e */	return this.m_UpButtonDisableCG;
+/* 00020616 */}
+
+int CBackLogModel::GetUpButtonX()
+/* 00020624 */{
+/* 00020624 */	return this.m_nUpButtonX;
+/* 0002062c */}
+
+int CBackLogModel::GetUpButtonY()
+/* 0002063a */{
+/* 0002063a */	return this.m_nUpButtonY;
+/* 00020642 */}
+
+string CBackLogModel::GetDownButtonCG()
+/* 00020650 */{
+/* 00020650 */	return this.m_DownButtonCG;
+/* 00020658 */}
+
+string CBackLogModel::GetDownButtonUnderCursorCG()
+/* 00020666 */{
+/* 00020666 */	return this.m_DownButtonUnderCursorCG;
+/* 0002066e */}
+
+string CBackLogModel::GetDownButtonKeyDownCG()
+/* 0002067c */{
+/* 0002067c */	return this.m_DownButtonKeyDownCG;
+/* 00020684 */}
+
+string CBackLogModel::GetDownButtonDisableCG()
+/* 00020692 */{
+/* 00020692 */	return this.m_DownButtonDisableCG;
+/* 0002069a */}
+
+int CBackLogModel::GetDownButtonX()
+/* 000206a8 */{
+/* 000206a8 */	return this.m_nDownButtonX;
+/* 000206b0 */}
+
+int CBackLogModel::GetDownButtonY()
+/* 000206be */{
+/* 000206be */	return this.m_nDownButtonY;
+/* 000206c6 */}
+
+int CBackLogModel::GetFontHeight()
+/* 000206d4 */{
+/* 000206d4 */	int FontHeight;
+/* 000206de */	if (this.m_TextPropertyList.Numof() == 5)
+/* 000206f2 */	{
+/* 000206f2 */		FontHeight = this.m_TextPropertyList[0].GetPixelHeight() + this.m_nLineSpace + this.m_nTextY;
+/* 00020722 */	}
+/* 00020728 */	return FontHeight;
+/* 00020730 */}
+
+void CBackLogModel::SetDecideSound(int nSound)
+/* 0002073e */{
+/* 0002073e */	this.m_nDecideSound = nSound;
+/* 00020748 */}
+
+void CBackLogModel::SetUnderCursorSound(int nSound)
+/* 00020750 */{
+/* 00020750 */	this.m_nUnderCursorSound = nSound;
+/* 0002075a */}
+
+void CBackLogModel::SetCancelSound(int nSound)
+/* 00020762 */{
+/* 00020762 */	this.m_nCancelSound = nSound;
+/* 0002076c */}
+
+int CBackLogModel::GetDecideSound()
+/* 00020774 */{
+/* 00020774 */	return this.m_nDecideSound;
+/* 0002077c */}
+
+int CBackLogModel::GetUnderCursorSound()
+/* 0002078a */{
+/* 0002078a */	return this.m_nUnderCursorSound;
+/* 00020792 */}
+
+int CBackLogModel::GetCancelSound()
+/* 000207a0 */{
+/* 000207a0 */	return this.m_nCancelSound;
+/* 000207a8 */}
+

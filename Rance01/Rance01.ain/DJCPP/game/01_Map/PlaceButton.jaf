@@ -1,0 +1,113 @@
+PlaceButton::PlaceButton()
+/* 0006b348 */{
+/* 0006b350 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0006b37c */}
+
+void PlaceButton::init(string placeId)
+/* 0006b384 */{
+/* 0006b384 */	this.id_ = placeId;
+/* 0006b38e */	this.pl_ <- getPlace(this.id_);
+/* 0006b3ba */	this.isSelectable_ = this.pl_.isOpen() && this.pl_.isShowCurrentTime(g_gameTime.getBlock());
+/* 0006b40a */	this.initParts();
+/* 0006b412 */}
+
+void PlaceButton::initParts()
+/* 0006b41a */{
+/* 0006b41a */	string n = this.pl_.getImageName();
+/* 0006b430 */	this.plate_.init(n);
+/* 0006b442 */	this.lightingArea_.init(n);
+/* 0006b454 */	this.setPartsPos();
+/* 0006b45c */}
+
+void PlaceButton::update()
+/* 0006b464 */{
+/* 0006b464 */	this.updateHoverState();
+/* 0006b46c */	this.updatePartsShowType();
+/* 0006b474 */	switch (this.state_)
+/* 0006b486 */	{
+/* 0006b486 */	case 1:
+/* 0006b486 */		this.state_ = 2;
+/* 0006b490 */		break;
+/* 0006b496 */	case 2:
+/* 0006b496 */		if (!this.lastHover_ && this.isHover_)
+/* 0006b4c6 */		{
+/* 0006b4c6 */			g_sysSound.play(2001, false);
+/* 0006b4de */		}
+/* 0006b4e4 */		if (g_mouse.isClickWithFocus() && this.isHover_)
+/* 0006b518 */		{
+/* 0006b518 */			g_sysSound.play(2002, false);
+/* 0006b530 */		}
+/* 0006b536 */		break;
+/* 0006b53c */	case 3:
+/* 0006b53c */		this.state_ = 0;
+/* 0006b546 */		break;
+/* 0006b54c */	case 0:
+/* 0006b54c */		break;
+/* 0006b552 */	}
+/* 0006b552 */}
+
+void PlaceButton::fadeIn(bool val, int delay)
+/* 0006b55a */{
+/* 0006b55a */	this.plate_.fadeIn(val, delay);
+/* 0006b572 */	this.lightingArea_.fadeIn(val);
+/* 0006b584 */	this.state_ = 1;
+/* 0006b58e */}
+
+bool PlaceButton::isClick()
+/* 0006b596 */{
+/* 0006b596 */	return this.isHover_ && g_mouse.isClickWithFocus();
+/* 0006b5c8 */}
+
+bool PlaceButton::isHover()
+/* 0006b5d6 */{
+/* 0006b5d6 */	this.updateHoverState();
+/* 0006b5de */	return this.isHover_;
+/* 0006b5e6 */}
+
+string PlaceButton::getId()
+/* 0006b5f4 */{
+/* 0006b5f4 */	return this.id_;
+/* 0006b5fc */}
+
+void PlaceButton::updateHoverState()
+/* 0006b60a */{
+/* 0006b60a */	this.lastHover_ = this.isHover_;
+/* 0006b61c */	this.isHover_ = this.state_ == 2 ? this.getHoverState() : false;
+/* 0006b64a */}
+
+void PlaceButton::updatePartsShowType()
+/* 0006b652 */{
+/* 0006b652 */	if (this.isSelectable_)
+/* 0006b65c */	{
+/* 0006b65c */		if (this.isHover_ && g_mouse.isDown(0))
+/* 0006b696 */		{
+/* 0006b696 */			this.setPartsShowType(1);
+/* 0006b6a4 */		}
+/* 0006b6aa */		else
+/* 0006b6aa */		{
+/* 0006b6aa */			this.setPartsShowType(0);
+/* 0006b6b8 */		}
+/* 0006b6b8 */	}
+/* 0006b6be */	else
+/* 0006b6be */	{
+/* 0006b6be */		this.setPartsShowType(2);
+/* 0006b6cc */	}
+/* 0006b6cc */}
+
+void PlaceButton::setPartsShowType(int type)
+/* 0006b6d4 */{
+/* 0006b6d4 */	this.plate_.setPartsShowType(type, this.isHover_);
+/* 0006b6ec */	this.lightingArea_.setPartsShowType(type, this.isHover_);
+/* 0006b704 */}
+
+void PlaceButton::setPartsPos()
+/* 0006b70c */{
+/* 0006b70c */	this.lightingArea_.setPos(this.pl_.getAreaX(), this.pl_.getAreaY());
+/* 0006b730 */	this.plate_.setPos(this.pl_.getX(), this.pl_.getY());
+/* 0006b754 */}
+
+bool PlaceButton::getHoverState()
+/* 0006b75c */{
+/* 0006b75c */	return this.isSelectable_ && (this.lightingArea_.isHover() || this.plate_.isHover());
+/* 0006b7b8 */}
+

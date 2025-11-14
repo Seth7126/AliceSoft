@@ -1,0 +1,187 @@
+void CSystemButtonModelList::SetButtonModel(sys_btn_fnc_t CommandFunc, int _x, int _y, int _z, string PlainCGName, string OnCursorCGName, string KeyDownCGName, bool PixelDecide)
+/* 0001c8da */{
+/* 0001c8da */	this.m_SystemButtonModelList[this.FindOrNewIndex(CommandFunc)].SetButtonModel(_x, _y, _z, PlainCGName, OnCursorCGName, KeyDownCGName, CommandFunc, PixelDecide);
+/* 0001c926 */}
+
+void CSystemButtonModelList::SetButtonModelForReminisceMode(sys_btn_fnc_t CommandFunc, string CoverCGName)
+/* 0001c92e */{
+/* 0001c92e */	this.m_SystemButtonModelList[this.FindOrNewIndex(CommandFunc)].SetButtonModelForReminisceMode(CoverCGName);
+/* 0001c950 */}
+
+void CSystemButtonModelList::SetDisableCG(sys_btn_fnc_t CommandFunc, string DisableCGName)
+/* 0001c958 */{
+/* 0001c958 */	this.m_SystemButtonModelList[this.FindOrNewIndex(CommandFunc)].SetDisableCG(DisableCGName);
+/* 0001c97a */}
+
+void CSystemButtonModelList::SetIsEnableSystemButtonFunc(sys_btn_fnc_t CommandFunc, FTIsEnableSystemButton Func)
+/* 0001c982 */{
+/* 0001c982 */	this.m_SystemButtonModelList[this.FindOrNewIndex(CommandFunc)].SetIsEnableSystemButtonFunc(Func);
+/* 0001c9a4 */}
+
+void CSystemButtonModelList::Clear()
+/* 0001c9ac */{
+/* 0001c9ac */	this.m_SystemButtonModelList.Free();
+/* 0001c9b6 */}
+
+int CSystemButtonModelList::GetButtonCount()
+/* 0001c9be */{
+/* 0001c9be */	return this.m_SystemButtonModelList.Numof();
+/* 0001c9c6 */}
+
+int CSystemButtonModelList::FindOrNewIndex(sys_btn_fnc_t CommandFunc)
+/* 0001c9d4 */{
+/* 0001c9d4 */	int _i = this.FindFunction(CommandFunc);
+/* 0001c9ee */	if (_i != -2147483648)
+/* 0001ca02 */	{
+/* 0001ca02 */		return _i;
+/* 0001ca0a */	}
+/* 0001ca10 */	this.m_SystemButtonModelList.Realloc(this.m_SystemButtonModelList.Numof() + 1);
+/* 0001ca2e */	return this.m_SystemButtonModelList.Numof() - 1;
+/* 0001ca3e */}
+
+int CSystemButtonModelList::FindFunction(sys_btn_fnc_t CommandFunc)
+/* 0001ca4c */{
+/* 0001ca4c */	int Index;
+/* 0001ca56 */	for (Index = 0; Index < this.m_SystemButtonModelList.Numof(); ++Index)
+/* 0001ca86 */	{
+/* 0001ca86 */		if (this.m_SystemButtonModelList[Index].GetFunction() == CommandFunc)
+/* 0001caa8 */		{
+/* 0001caa8 */			return Index;
+/* 0001cab0 */		}
+/* 0001cab6 */	}
+/* 0001cabc */	return -2147483648;
+/* 0001cac4 */}
+
+bool CSystemButtonModelList::IsEnable(int ButtonIndex)
+/* 0001cad2 */{
+/* 0001cad2 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cae8 */	{
+/* 0001cae8 */		return false;
+/* 0001caf0 */	}
+/* 0001caf6 */	return this.m_SystemButtonModelList[ButtonIndex].IsEnable();
+/* 0001cb0c */}
+
+sys_btn_fnc_t CSystemButtonModelList::GetFunction(int ButtonIndex)
+/* 0001cb1a */{
+/* 0001cb1a */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cb30 */	{
+/* 0001cb30 */		return NULL;
+/* 0001cb38 */	}
+/* 0001cb3e */	return this.m_SystemButtonModelList[ButtonIndex].GetFunction();
+/* 0001cb54 */}
+
+int CSystemButtonModelList::GetX(int ButtonIndex)
+/* 0001cb62 */{
+/* 0001cb62 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cb78 */	{
+/* 0001cb78 */		return -2147483648;
+/* 0001cb80 */	}
+/* 0001cb86 */	return this.m_SystemButtonModelList[ButtonIndex].GetX();
+/* 0001cb9c */}
+
+int CSystemButtonModelList::GetY(int ButtonIndex)
+/* 0001cbaa */{
+/* 0001cbaa */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cbc0 */	{
+/* 0001cbc0 */		return -2147483648;
+/* 0001cbc8 */	}
+/* 0001cbce */	return this.m_SystemButtonModelList[ButtonIndex].GetY();
+/* 0001cbe4 */}
+
+int CSystemButtonModelList::GetZ(int ButtonIndex)
+/* 0001cbf2 */{
+/* 0001cbf2 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cc08 */	{
+/* 0001cc08 */		return 1;
+/* 0001cc10 */	}
+/* 0001cc16 */	return this.m_SystemButtonModelList[ButtonIndex].GetZ();
+/* 0001cc2c */}
+
+string CSystemButtonModelList::GetPlainCGName(int ButtonIndex)
+/* 0001cc3a */{
+/* 0001cc3a */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cc50 */	{
+/* 0001cc50 */		return "";
+/* 0001cc58 */	}
+/* 0001cc5e */	return this.m_SystemButtonModelList[ButtonIndex].GetPlainCGName();
+/* 0001cc74 */}
+
+string CSystemButtonModelList::GetOnCursorCGName(int ButtonIndex)
+/* 0001cc82 */{
+/* 0001cc82 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cc98 */	{
+/* 0001cc98 */		return "";
+/* 0001cca0 */	}
+/* 0001cca6 */	return this.m_SystemButtonModelList[ButtonIndex].GetOnCursorCGName();
+/* 0001ccbc */}
+
+string CSystemButtonModelList::GetKeyDownCGName(int ButtonIndex)
+/* 0001ccca */{
+/* 0001ccca */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cce0 */	{
+/* 0001cce0 */		return "";
+/* 0001cce8 */	}
+/* 0001ccee */	return this.m_SystemButtonModelList[ButtonIndex].GetKeyDownCGName();
+/* 0001cd04 */}
+
+string CSystemButtonModelList::GetDisableCGName(int ButtonIndex)
+/* 0001cd12 */{
+/* 0001cd12 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cd28 */	{
+/* 0001cd28 */		return "";
+/* 0001cd30 */	}
+/* 0001cd36 */	return this.m_SystemButtonModelList[ButtonIndex].GetDisableCGName();
+/* 0001cd4c */}
+
+string CSystemButtonModelList::GetCoverCGName(int ButtonIndex)
+/* 0001cd5a */{
+/* 0001cd5a */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cd70 */	{
+/* 0001cd70 */		return "";
+/* 0001cd78 */	}
+/* 0001cd7e */	return this.m_SystemButtonModelList[ButtonIndex].GetCoverCGName();
+/* 0001cd94 */}
+
+bool CSystemButtonModelList::IsInvalidByReminisceMode(int ButtonIndex)
+/* 0001cda2 */{
+/* 0001cda2 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cdb8 */	{
+/* 0001cdb8 */		return false;
+/* 0001cdc0 */	}
+/* 0001cdc6 */	return this.m_SystemButtonModelList[ButtonIndex].IsInvalidByReminisceMode();
+/* 0001cddc */}
+
+bool CSystemButtonModelList::AsserteButtonIndex(int ButtonIndex)
+/* 0001cdea */{
+/* 0001cdea */	if (ButtonIndex >= 0 && ButtonIndex < this.m_SystemButtonModelList.Numof())
+/* 0001ce24 */	{
+/* 0001ce24 */		return true;
+/* 0001ce2e */	}
+/* 0001ce34 */	system.Error("ButtonIndex = %d\nm_SystemButtonModelList.Numof() = %d\n" % ButtonIndex % this.m_SystemButtonModelList.Numof());
+/* 0001ce5e */	return false;
+/* 0001ce68 */}
+
+ref CASRect CSystemButtonModelList::GetVisibleRect(sys_btn_fnc_t CommandFunc)
+/* 0001ce76 */{
+/* 0001ce76 */	return this.m_SystemButtonModelList[this.FindOrNewIndex(CommandFunc)].GetVisibleRect();
+/* 0001cea6 */}
+
+ref CASRect CSystemButtonModelList::GetVisibleRectByIndex(int ButtonIndex)
+/* 0001ceb4 */{
+/* 0001ceb4 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001ceca */	{
+/* 0001ceca */		this.m_DummyRect.Set(-2147483648, -2147483648, -2147483648, -2147483648);
+/* 0001ceee */		return this.m_DummyRect;
+/* 0001cefa */	}
+/* 0001cf00 */	return this.m_SystemButtonModelList[ButtonIndex].GetVisibleRect();
+/* 0001cf28 */}
+
+bool CSystemButtonModelList::IsPixelDecide(int ButtonIndex)
+/* 0001cf36 */{
+/* 0001cf36 */	if (!this.AsserteButtonIndex(ButtonIndex))
+/* 0001cf4c */	{
+/* 0001cf4c */		return false;
+/* 0001cf54 */	}
+/* 0001cf5a */	return this.m_SystemButtonModelList[ButtonIndex].IsPixelDecide();
+/* 0001cf70 */}
+

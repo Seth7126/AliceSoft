@@ -1,0 +1,417 @@
+SceneDungeon::SceneDungeon()
+/* 0006c5d6 */{
+/* 0006c5de */	this.playerPosY_ = 0;
+/* 0006c5e8 */}
+
+void SceneDungeon::run()
+/* 0006c5f0 */{
+/* 0006c5f0 */	this.state_ = 0;
+/* 0006c5fa */	this.timer_.reset();
+/* 0006c606 */	g_player.addEventHandler(this.onPlayerEvent);
+/* 0006c61c */	this.musicNumber_ = this.dg_.getMusicNumber();
+/* 0006c634 */	g_music.play(this.musicNumber_, 0);
+/* 0006c64c */	AutoSave();
+/* 0006c652 */	this.fadeMainObject(true);
+/* 0006c660 */}
+
+int SceneDungeon::update()
+/* 0006c668 */{
+/* 0006c668 */	checkBackLogAndScene(true);
+/* 0006c674 */	switch (this.state_)
+/* 0006c686 */	{
+/* 0006c686 */	case 0:
+/* 0006c686 */		if (g_mouse.isClick(0) || this.timer_.getTime() > 500)
+/* 0006c6d0 */		{
+/* 0006c6d0 */			this.dungeonName_.moveToTop();
+/* 0006c6dc */			this.fadeDelayedShowObject(true);
+/* 0006c6ea */			this.cardList_.setCardSelectable();
+/* 0006c6f6 */			this.chipView_.setOperatable(true);
+/* 0006c708 */			this.state_ = 1;
+/* 0006c712 */		}
+/* 0006c718 */		break;
+/* 0006c71e */	case 1:
+/* 0006c71e */		int n = this.cardList_.getClickedCard();
+/* 0006c736 */		if (n != -1)
+/* 0006c74a */		{
+/* 0006c74a */			bool isSwing = false;
+/* 0006c754 */			if (this.isRandomMove())
+/* 0006c762 */			{
+/* 0006c762 */				int rm = this.getRandomMoveTo();
+/* 0006c776 */				isSwing = true;
+/* 0006c780 */				n = rm;
+/* 0006c792 */			}
+/* 0006c798 */			this.setPlayerPosX(n, isSwing);
+/* 0006c7ac */			this.cardList_.fadeOutFrontCard(n);
+/* 0006c7be */			if (this.cardList_.isCardDown())
+/* 0006c7d0 */			{
+/* 0006c7d0 */				this.cardList_.flipCard();
+/* 0006c7dc */			}
+/* 0006c7e2 */			this.chipView_.setOperatable(false);
+/* 0006c7f4 */			this.state_ = 2;
+/* 0006c7fe */			this.timer_.reset();
+/* 0006c80a */		}
+/* 0006c810 */		break;
+/* 0006c816 */	case 2:
+/* 0006c816 */		if (g_mouse.isClick(0) || this.timer_.getTime() > 500)
+/* 0006c860 */		{
+/* 0006c860 */			this.cardList_.finalizeMotion();
+/* 0006c86c */			g_frameManager.updateFrame();
+/* 0006c878 */			this.clickedCardId_ = this.cardList_.getPlayerPosCardId();
+/* 0006c88e */			if (getCard(this.clickedCardId_).getType() == 2)
+/* 0006c8b8 */			{
+/* 0006c8b8 */				this.oneTimeFadeOut();
+/* 0006c8c0 */				break;
+/* 0006c8cc */			}
+/* 0006c8d2 */			this.runCardEvent();
+/* 0006c8da */			this.callWalkCallback();
+/* 0006c8e2 */			if (g_gameFlow.isSetNextScene())
+/* 0006c8f4 */			{
+/* 0006c8f4 */				g_sysSound.play(2030, false);
+/* 0006c90c */				this.exitScene();
+/* 0006c914 */			}
+/* 0006c91a */			else
+/* 0006c91a */			{
+/* 0006c91a */				this.showNextCard();
+/* 0006c922 */			}
+/* 0006c922 */		}
+/* 0006c92e */		break;
+/* 0006c934 */	case 6:
+/* 0006c934 */		if (this.dungeonBg_.isFinish())
+/* 0006c946 */		{
+/* 0006c946 */			this.runCardEvent();
+/* 0006c94e */			if (g_gameFlow.isSetNextScene())
+/* 0006c960 */			{
+/* 0006c960 */				return 1;
+/* 0006c968 */			}
+/* 0006c96e */			else
+/* 0006c96e */			{
+/* 0006c96e */				this.fadeMainObject(true);
+/* 0006c97c */				this.fadeDelayedShowObject(true);
+/* 0006c98a */				g_music.play(this.musicNumber_, -2147483648);
+/* 0006c9a2 */				this.state_ = 7;
+/* 0006c9ac */			}
+/* 0006c9ac */		}
+/* 0006c9b2 */		break;
+/* 0006c9b8 */	case 7:
+/* 0006c9b8 */		if (this.dungeonBg_.isFinish())
+/* 0006c9ca */		{
+/* 0006c9ca */			this.callWalkCallback();
+/* 0006c9d2 */			this.showNextCard();
+/* 0006c9da */		}
+/* 0006c9e0 */		break;
+/* 0006c9e6 */	case 4:
+/* 0006c9e6 */		if (!this.chipView_.isMotion())
+/* 0006c9fa */		{
+/* 0006c9fa */			OpenStatus(this.dg_.isReturnMapEnable());
+/* 0006ca0c */			if (g_gameFlow.isSetNextScene())
+/* 0006ca1e */			{
+/* 0006ca1e */				this.exitScene();
+/* 0006ca26 */			}
+/* 0006ca2c */			else
+/* 0006ca2c */			{
+/* 0006ca2c */				this.fadeObjectForCamp(true);
+/* 0006ca3a */				this.state_ = 5;
+/* 0006ca44 */			}
+/* 0006ca44 */		}
+/* 0006ca4a */		break;
+/* 0006ca50 */	case 5:
+/* 0006ca50 */		if (!this.chipView_.isMotion())
+/* 0006ca64 */		{
+/* 0006ca64 */			this.state_ = this.stateBeforeCamp_;
+/* 0006ca76 */		}
+/* 0006ca7c */		break;
+/* 0006ca82 */	case 3:
+/* 0006ca82 */		if (!this.cardList_.isFinishMoveFront())
+/* 0006ca96 */		{
+/* 0006ca96 */			this.cardList_.updateCardFrontPos();
+/* 0006caa2 */			this.setPlayerPosY((this.playerPosY_ + 1) % this.dg_.getLineCount());
+/* 0006cac6 */			this.cardList_.setCardSelectable();
+/* 0006cad2 */			this.chipView_.setOperatable(true);
+/* 0006cae4 */			this.state_ = 1;
+/* 0006caee */		}
+/* 0006caf4 */		break;
+/* 0006cafa */	case 8:
+/* 0006cafa */		if (this.dungeonBg_.isFinish())
+/* 0006cb0c */		{
+/* 0006cb0c */			return 1;
+/* 0006cb14 */		}
+/* 0006cb1a */		break;
+/* 0006cb20 */	}
+/* 0006cb20 */	this.checkOpenCamp();
+/* 0006cb28 */	this.checkOpenSystemMenu();
+/* 0006cb30 */	return 0;
+/* 0006cb38 */}
+
+void SceneDungeon::init(string id, int x, int y)
+/* 0006cb46 */{
+/* 0006cb46 */	this.id_ = id;
+/* 0006cb50 */	this.dg_ <- getDungeon(this.id_);
+/* 0006cb7c */	this.dg_.resetRandomCard();
+/* 0006cb88 */	this.setPlayerPosX(x, false);
+/* 0006cb9c */	this.setPlayerPosY(y);
+/* 0006cbaa */	this.initObject();
+/* 0006cbb2 */	this.initButton();
+/* 0006cbba */	this.setButtonPos();
+/* 0006cbc2 */}
+
+void SceneDungeon::initObject()
+/* 0006cbca */{
+/* 0006cbca */	this.statusView_.init(0);
+/* 0006cbdc */	this.cardList_.init(this.dg_, this.playerPosX_, this.playerPosY_);
+/* 0006cbfa */	this.chipView_.setOperatable(false);
+/* 0006cc0c */	this.dungeonName_.init(this.dg_.getPlateImageName());
+/* 0006cc24 */	this.cardRange_.init(this.playerPosX_);
+/* 0006cc36 */	this.playerView_.init();
+/* 0006cc42 */	this.dungeonBg_.init(this.dg_.getBgImageName());
+/* 0006cc5a */}
+
+void SceneDungeon::initButton()
+/* 0006cc62 */{
+/* 0006cc62 */	this.btnSystemMenu_.init("システム／ボタン／幅２００", "システムメニュー", -1);
+/* 0006cc80 */	this.btnOpenCamp_.init("システム／ボタン／幅２００", "キャンプを張る", -1);
+/* 0006cc9e */}
+
+void SceneDungeon::setButtonPos()
+/* 0006cca6 */{
+/* 0006cca6 */	this.btnSystemMenu_.setPos(16, 716, -2147483648);
+/* 0006ccc4 */	this.btnOpenCamp_.setPos(808, 716, -2147483648);
+/* 0006cce2 */}
+
+void SceneDungeon::fadeMainObject(bool val)
+/* 0006ccea */{
+/* 0006ccea */	this.fadeButton(val);
+/* 0006ccf8 */	this.statusView_.fadeIn(val);
+/* 0006cd0a */	this.chipView_.fadeIn(val);
+/* 0006cd1c */	this.gameTimeView_.fadeIn(val);
+/* 0006cd2e */	this.dungeonName_.fadeIn(val);
+/* 0006cd40 */	this.dungeonBg_.fadeIn(val);
+/* 0006cd52 */}
+
+void SceneDungeon::fadeButton(bool val)
+/* 0006cd5a */{
+/* 0006cd5a */	this.btnOpenCamp_.fadeIn(val);
+/* 0006cd6c */	this.btnSystemMenu_.fadeIn(val);
+/* 0006cd7e */}
+
+void SceneDungeon::fadeDelayedShowObject(bool val)
+/* 0006cd86 */{
+/* 0006cd86 */	if (val)
+/* 0006cd92 */	{
+/* 0006cd92 */		this.cardList_.fadeIn();
+/* 0006cd9e */	}
+/* 0006cda4 */	else
+/* 0006cda4 */	{
+/* 0006cda4 */		this.cardList_.fadeOut();
+/* 0006cdb0 */	}
+/* 0006cdb0 */	this.playerView_.fadeIn(val);
+/* 0006cdc2 */	this.cardRange_.fadeIn(val);
+/* 0006cdd4 */}
+
+void SceneDungeon::fadeObjectForCamp(bool val)
+/* 0006cddc */{
+/* 0006cddc */	this.fadeButton(val);
+/* 0006cdea */	this.chipView_.fadeIn(val);
+/* 0006cdfc */	this.playerView_.fadeIn(val);
+/* 0006ce0e */}
+
+void SceneDungeon::setPlayerPosX(int val, bool isSwing)
+/* 0006ce16 */{
+/* 0006ce16 */	this.playerPosX_ = val;
+/* 0006ce20 */	this.cardList_.setPlayerPosX(val);
+/* 0006ce32 */	this.playerView_.setDungeonPos(this.playerPosX_, isSwing);
+/* 0006ce4a */	this.cardRange_.setPlayerPos(this.playerPosX_);
+/* 0006ce5c */}
+
+void SceneDungeon::setPlayerPosY(int val)
+/* 0006ce64 */{
+/* 0006ce64 */	this.playerPosY_ = val;
+/* 0006ce6e */	this.cardList_.setPlayerPosY(val);
+/* 0006ce80 */}
+
+void SceneDungeon::checkGameOver()
+/* 0006ce88 */{
+/* 0006ce88 */	if (g_player.getHp() == 0)
+/* 0006cea2 */	{
+/* 0006cea2 */		OpenGameOver();
+/* 0006cea8 */	}
+/* 0006ceae */}
+
+void SceneDungeon::checkOpenCamp()
+/* 0006ceb6 */{
+/* 0006ceb6 */	if (this.btnOpenCamp_.isClick())
+/* 0006cec8 */	{
+/* 0006cec8 */		this.stateBeforeCamp_ = this.state_;
+/* 0006ceda */		this.fadeObjectForCamp(false);
+/* 0006cee8 */		this.state_ = 4;
+/* 0006cef2 */	}
+/* 0006cef8 */}
+
+bool SceneDungeon::isRandomMove()
+/* 0006cf00 */{
+/* 0006cf00 */	return g_player.getBadCondition("COND04") > 0;
+/* 0006cf1e */}
+
+int SceneDungeon::getRandomMoveTo()
+/* 0006cf2c */{
+/* 0006cf2c */	array@int list;
+/* 0006cf36 */	this.cardList_.getSelectableCardIndexList(list);
+/* 0006cf48 */	return list[RAND(list.Numof()) - 1];
+/* 0006cf70 */}
+
+void SceneDungeon::onPlayerEvent(int type, int val)
+/* 0006cf7e */{
+/* 0006cf7e */	if (type == 4)
+/* 0006cf8c */	{
+/* 0006cf8c */		this.cardList_.changeViewDepth();
+/* 0006cf98 */	}
+/* 0006cf9e */}
+
+void SceneDungeon::checkOpenSystemMenu()
+/* 0006cfa6 */{
+/* 0006cfa6 */	if (this.btnSystemMenu_.isClick())
+/* 0006cfb8 */	{
+/* 0006cfb8 */		OpenSystemMenu(1);
+/* 0006cfc4 */	}
+/* 0006cfca */}
+
+void SceneDungeon::callWalkCallback()
+/* 0006cfd2 */{
+/* 0006cfd2 */	string f = EX_String("ダンジョン１歩移動コールバック", "");
+/* 0006cfee */	FuncDungeonWalkCallBack fn = f;
+/* 0006d006 */	if (fn != NULL)
+/* 0006d01a */	{
+/* 0006d01a */		fn();
+/* 0006d028 */	}
+/* 0006d02e */	else
+/* 0006d02e */	{
+/* 0006d02e */		pass("ダンジョン１歩移動コールバック[%s]が見つかりませんでした" % f);
+/* 0006d048 */	}
+/* 0006d048 */	g_frameManager.updateFrame();
+/* 0006d054 */	g_music.play(this.musicNumber_, -2147483648);
+/* 0006d06c */}
+
+int SceneDungeon::callCardCallback(string cardId)
+/* 0006d074 */{
+/* 0006d074 */	this.cardCallbackPreEvent(cardId);
+/* 0006d082 */	string f = EX_String("カードコールバック", "");
+/* 0006d09e */	FuncCardCallBack fn = f;
+/* 0006d0b6 */	int r;
+/* 0006d0c0 */	if (fn != NULL)
+/* 0006d0d4 */	{
+/* 0006d0d4 */		r = fn(cardId);
+/* 0006d0f6 */	}
+/* 0006d0fc */	else
+/* 0006d0fc */	{
+/* 0006d0fc */		pass("カードコールバック[%s]が見つかりませんでした" % f);
+/* 0006d116 */	}
+/* 0006d116 */	this.cardCallbackPostEvent(cardId);
+/* 0006d124 */	return r;
+/* 0006d12c */}
+
+void SceneDungeon::cardCallbackPreEvent(string cardId)
+/* 0006d13a */{
+/* 0006d13a */	switch (getCard(cardId).getType())
+/* 0006d162 */	{
+/* 0006d162 */	case 1:
+/* 0006d162 */		g_sysSound.play(2031, false);
+/* 0006d17a */		break;
+/* 0006d180 */	case 2:
+/* 0006d180 */		break;
+/* 0006d186 */	case 3:
+/* 0006d186 */		break;
+/* 0006d18c */	case 4:
+/* 0006d18c */		this.addGetChipHandler();
+/* 0006d194 */		break;
+/* 0006d19a */	case 5:
+/* 0006d19a */		break;
+/* 0006d1a0 */	case 6:
+/* 0006d1a0 */		break;
+/* 0006d1a6 */	}
+/* 0006d1a6 */}
+
+void SceneDungeon::cardCallbackPostEvent(string cardId)
+/* 0006d1ae */{
+/* 0006d1ae */	switch (getCard(cardId).getType())
+/* 0006d1d6 */	{
+/* 0006d1d6 */	case 1:
+/* 0006d1d6 */		break;
+/* 0006d1dc */	case 2:
+/* 0006d1dc */		break;
+/* 0006d1e2 */	case 3:
+/* 0006d1e2 */		break;
+/* 0006d1e8 */	case 4:
+/* 0006d1e8 */		this.clearGetChipHandler();
+/* 0006d1f0 */		break;
+/* 0006d1f6 */	case 5:
+/* 0006d1f6 */		break;
+/* 0006d1fc */	case 6:
+/* 0006d1fc */		break;
+/* 0006d202 */	}
+/* 0006d202 */}
+
+void SceneDungeon::exitScene()
+/* 0006d20a */{
+/* 0006d20a */	this.fadeMainObject(false);
+/* 0006d218 */	this.fadeDelayedShowObject(false);
+/* 0006d226 */	●音楽停止(2000);
+/* 0006d232 */	this.state_ = 8;
+/* 0006d23c */}
+
+void SceneDungeon::oneTimeFadeOut()
+/* 0006d244 */{
+/* 0006d244 */	this.restoreState_ = this.state_;
+/* 0006d256 */	this.fadeMainObject(false);
+/* 0006d264 */	this.fadeDelayedShowObject(false);
+/* 0006d272 */	g_sysSound.play(2215, false);
+/* 0006d28a */	this.state_ = 6;
+/* 0006d294 */}
+
+string SceneDungeon::getId()
+/* 0006d29c */{
+/* 0006d29c */	return this.id_;
+/* 0006d2a4 */}
+
+void SceneDungeon::addGetChipHandler()
+/* 0006d2b2 */{
+/* 0006d2b2 */	g_onStartGetChip += this.onStartGetChip;
+/* 0006d2c2 */	g_isReadyOpenGetChip += this.isReadyOpenGetChip;
+/* 0006d2d2 */	g_onEndGetChip += this.onEndGetChip;
+/* 0006d2e2 */}
+
+void SceneDungeon::clearGetChipHandler()
+/* 0006d2ea */{
+/* 0006d2ea */	g_onStartGetChip.Clear();
+/* 0006d2f2 */	g_isReadyOpenGetChip.Clear();
+/* 0006d2fa */	g_onEndGetChip.Clear();
+/* 0006d302 */}
+
+void SceneDungeon::onStartGetChip()
+/* 0006d30a */{
+/* 0006d30a */	this.chipView_.fadeIn(false);
+/* 0006d31c */	this.playerView_.fadeIn(false);
+/* 0006d32e */}
+
+int SceneDungeon::isReadyOpenGetChip()
+/* 0006d336 */{
+/* 0006d336 */	return this.chipView_.isMotion() ? 0 : 1;
+/* 0006d35c */}
+
+void SceneDungeon::onEndGetChip()
+/* 0006d36a */{
+/* 0006d36a */	this.chipView_.fadeIn(true);
+/* 0006d37c */	this.playerView_.fadeIn(true);
+/* 0006d38e */}
+
+void SceneDungeon::runCardEvent()
+/* 0006d396 */{
+/* 0006d396 */	this.callCardCallback(this.clickedCardId_);
+/* 0006d3a6 */	this.checkGameOver();
+/* 0006d3ae */}
+
+void SceneDungeon::showNextCard()
+/* 0006d3b6 */{
+/* 0006d3b6 */	this.cardList_.roundFrontCard();
+/* 0006d3c2 */	this.cardList_.slideOtherCard();
+/* 0006d3ce */	this.state_ = 3;
+/* 0006d3d8 */}
+

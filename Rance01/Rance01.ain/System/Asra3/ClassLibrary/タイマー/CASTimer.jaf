@@ -1,0 +1,25 @@
+CASTimer::CASTimer()
+/* 00000e00 */{
+/* 00000e08 */	this.m_nHandle = g_ASTimerManager.CreateHandle();
+/* 00000e20 */}
+
+CASTimer::~CASTimer()
+/* 00000e28 */{
+/* 00000e28 */	g_ASTimerManager.ReleaseHandle(this.m_nHandle);
+/* 00000e3a */}
+
+void CASTimer::Reset()
+/* 00000e42 */{
+/* 00000e42 */	g_ASTimerManager.GetObject(this.m_nHandle).Reset();
+/* 00000e68 */}
+
+int CASTimer::Get()
+/* 00000e70 */{
+/* 00000e70 */	return g_ASTimerManager.GetObject(this.m_nHandle).Get();
+/* 00000e98 */}
+
+void CASTimer::SetPassTime(int PassTime)
+/* 00000ea6 */{
+/* 00000ea6 */	g_ASTimerManager.GetObject(this.m_nHandle).SetPassTime(PassTime);
+/* 00000ed2 */}
+

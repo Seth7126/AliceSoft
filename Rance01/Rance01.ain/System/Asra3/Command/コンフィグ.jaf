@@ -1,0 +1,24 @@
+void Ｓ＿コンフィグ()
+/* 0004b9a2 */{
+/* 0004b9a2 */	Ａ＿サウンド状態保存(false);
+/* 0004b9ae */	if (g_ConfigViewFunction != NULL)
+/* 0004b9c2 */	{
+/* 0004b9c2 */		g_ConfigViewFunction();
+/* 0004b9d0 */		SYS_システム共通セーブ();
+/* 0004b9d6 */		_g_MouseWheel._Clear();
+/* 0004b9e2 */	}
+/* 0004b9e8 */	else
+/* 0004b9e8 */	{
+/* 0004b9e8 */		SYS_OpenConfig();
+/* 0004b9ee */	}
+/* 0004b9ee */	g_MessageWindowManager.UpdateMulColor();
+/* 0004b9fa */	g_MessageWindowManager.UpdateAlpha();
+/* 0004ba06 */	g_MessageTextView.DrawAll(g_MessageTextModel);
+/* 0004ba18 */	Ａ＿サウンド状態復帰();
+/* 0004ba1e */}
+
+void Ｓ＿コンフィグ＿関数登録(FTConfigView ConfigViewFunction)
+/* 0004ba2c */{
+/* 0004ba2c */	g_ConfigViewFunction = ConfigViewFunction;
+/* 0004ba36 */}
+

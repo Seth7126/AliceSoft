@@ -1,0 +1,57 @@
+CASDebugFPS::CASDebugFPS()
+/* 000399d6 */{
+/* 000399de */	this.m_Show = false;
+/* 000399e8 */	this.m_Text.Create();
+/* 000399f4 */	this.m_TextProperty.SetSize(16);
+/* 00039a06 */	this.m_TextProperty.SetColor(CF_CASColor(255, 255, 255, 255));
+/* 00039a30 */	this.m_TextProperty.SetEdgeWeight(1.0);
+/* 00039a42 */	this.m_TextProperty.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 00039a6c */}
+
+void CASDebugFPS::SetShow(bool Show)
+/* 00039a74 */{
+/* 00039a74 */	if (this.m_Show == Show)
+/* 00039a82 */	{
+/* 00039a82 */		return;
+/* 00039a84 */	}
+/* 00039a8a */	if (!Show)
+/* 00039a98 */	{
+/* 00039a98 */		this.m_FPS = 0.0;
+/* 00039aaa */	}
+/* 00039ab0 */	this.m_Text.SetShow(Show);
+/* 00039ac2 */	this.m_Show = Show;
+/* 00039acc */}
+
+bool CASDebugFPS::GetShow()
+/* 00039ad4 */{
+/* 00039ad4 */	return this.m_Show;
+/* 00039adc */}
+
+void CASDebugFPS::Update()
+/* 00039aea */{
+/* 00039aea */	if (!this.GetShow())
+/* 00039afa */	{
+/* 00039afa */		return;
+/* 00039afc */	}
+/* 00039b02 */	int Left = this.IsShowLeft() ? 0 : AFL_View_GetWidth() - this.m_Text.GetWidth(1);
+/* 00039b42 */	this.m_Text.SetPos(Left, 0);
+/* 00039b5a */	this.m_Text.SetZByBaseZ(0, 16777216);
+/* 00039b72 */	float FPS = ChipmunkSpriteEngine.FPS_Get();
+/* 00039b88 */	if (FPS == this.m_FPS && this.m_Timer.Get() < 1000)
+/* 00039bce */	{
+/* 00039bce */		return;
+/* 00039bd0 */	}
+/* 00039bd6 */	this.m_Timer.Reset();
+/* 00039be2 */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 00039bfa */	this.m_Text.SetText("%.2f fps" % FPS, 1);
+/* 00039c20 */	this.m_FPS = FPS;
+/* 00039c32 */}
+
+bool CASDebugFPS::IsShowLeft()
+/* 00039c3a */{
+/* 00039c3a */	int MouseX = -1;
+/* 00039c4c */	int MouseY = -1;
+/* 00039c5e */	AFL_Mouse_GetPos(MouseX, MouseY);
+/* 00039c76 */	return MouseX >= AFL_View_GetWidth() / 2;
+/* 00039c90 */}
+

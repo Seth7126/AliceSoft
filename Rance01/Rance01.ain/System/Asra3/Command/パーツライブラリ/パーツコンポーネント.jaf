@@ -1,0 +1,246 @@
+void Ｐ＿フォーカス設定(int PartsNumber)
+/* 000516f4 */{
+/* 000516f4 */	GUIEngine.SetFocus(PartsNumber);
+/* 00051704 */}
+
+bool Ｐ＿フォーカス確認(int PartsNumber)
+/* 00051712 */{
+/* 00051712 */	return GUIEngine.IsFocus(PartsNumber);
+/* 00051724 */}
+
+void Ｐ＿高速再生設定(int PartsNumber, bool 高速再生)
+/* 00051738 */{
+/* 00051738 */	PARTS_SetSpeedupRateByMessageSkip(PartsNumber, 高速再生 ? 3 : 1);
+/* 00051762 */}
+
+bool Ｐ＿高速再生設定取得(int PartsNumber)
+/* 00051770 */{
+/* 00051770 */	return PARTS_GetSpeedupRateByMessageSkip(PartsNumber) != 1;
+/* 00051788 */}
+
+void Ｐ＿コマンド全削除(int PartsNumber)
+/* 0005179c */{
+/* 0005179c */	int DelegateIndex = PARTS_GetDelegateIndex(PartsNumber);
+/* 000517b4 */	g_PartsMessageManager.ReleaseFunctionSet(DelegateIndex);
+/* 000517c6 */}
+
+void Ｐ＿コマンド登録＿マウスエンター(int PartsNumber, FT_MouseEnterHandler FunctionObject)
+/* 000517d4 */{
+/* 000517d4 */	g_PartsMessageManager.AddMouseEnterFunction(PartsNumber, FunctionObject);
+/* 000517ec */}
+
+void Ｐ＿コマンド削除＿マウスエンター(int PartsNumber, FT_MouseEnterHandler FunctionObject)
+/* 000517fa */{
+/* 000517fa */	g_PartsMessageManager.EraseMouseEnterFunction(PartsNumber, FunctionObject);
+/* 00051812 */}
+
+void Ｐ＿コマンド登録＿マウス移動(int PartsNumber, FT_MouseMoveHandler FunctionObject)
+/* 00051820 */{
+/* 00051820 */	g_PartsMessageManager.AddMouseMoveFunction(PartsNumber, FunctionObject);
+/* 00051838 */}
+
+void Ｐ＿コマンド削除＿マウス移動(int PartsNumber, FT_MouseMoveHandler FunctionObject)
+/* 00051846 */{
+/* 00051846 */	g_PartsMessageManager.EraseMouseMoveFunction(PartsNumber, FunctionObject);
+/* 0005185e */}
+
+void Ｐ＿コマンド登録＿マウスリーブ(int PartsNumber, FT_MouseLeaveHandler FunctionObject)
+/* 0005186c */{
+/* 0005186c */	g_PartsMessageManager.AddMouseLeaveFunction(PartsNumber, FunctionObject);
+/* 00051884 */}
+
+void Ｐ＿コマンド削除＿マウスリーブ(int PartsNumber, FT_MouseLeaveHandler FunctionObject)
+/* 00051892 */{
+/* 00051892 */	g_PartsMessageManager.EraseMouseLeaveFunction(PartsNumber, FunctionObject);
+/* 000518aa */}
+
+void Ｐ＿コマンド登録＿マウスホイール回転(int PartsNumber, FT_MouseWheelHandler FunctionObject)
+/* 000518b8 */{
+/* 000518b8 */	g_PartsMessageManager.AddMouseWheelFunction(PartsNumber, FunctionObject);
+/* 000518d0 */}
+
+void Ｐ＿コマンド削除＿マウスホイール回転(int PartsNumber, FT_MouseWheelHandler FunctionObject)
+/* 000518de */{
+/* 000518de */	g_PartsMessageManager.EraseMouseWheelFunction(PartsNumber, FunctionObject);
+/* 000518f6 */}
+
+void Ｐ＿コマンド登録＿マウスクリック(int PartsNumber, FT_MouseClickHandler FunctionObject)
+/* 00051904 */{
+/* 00051904 */	g_PartsMessageManager.AddMouseClickFunction(PartsNumber, FunctionObject);
+/* 0005191c */}
+
+void Ｐ＿コマンド削除＿マウスクリック(int PartsNumber, FT_MouseClickHandler FunctionObject)
+/* 0005192a */{
+/* 0005192a */	g_PartsMessageManager.EraseMouseClickFunction(PartsNumber, FunctionObject);
+/* 00051942 */}
+
+void Ｐ＿コマンド登録＿マウスオン(int PartsNumber, FT_MouseOnHandler FunctionObject)
+/* 00051950 */{
+/* 00051950 */	g_PartsMessageManager.AddMouseOnFunction(PartsNumber, FunctionObject);
+/* 00051968 */}
+
+void Ｐ＿コマンド削除＿マウスオン(int PartsNumber, FT_MouseOnHandler FunctionObject)
+/* 00051976 */{
+/* 00051976 */	g_PartsMessageManager.EraseMouseOnFunction(PartsNumber, FunctionObject);
+/* 0005198e */}
+
+void Ｐ＿コマンド登録＿キー初回ダウン(int PartsNumber, FT_KeyTriggerHandler FunctionObject)
+/* 0005199c */{
+/* 0005199c */	g_PartsMessageManager.AddKeyTriggerFunction(PartsNumber, FunctionObject);
+/* 000519b4 */}
+
+void Ｐ＿コマンド削除＿キー初回ダウン(int PartsNumber, FT_KeyTriggerHandler FunctionObject)
+/* 000519c2 */{
+/* 000519c2 */	g_PartsMessageManager.EraseKeyTriggerFunction(PartsNumber, FunctionObject);
+/* 000519da */}
+
+void Ｐ＿コマンド登録＿キーダウン(int PartsNumber, FT_KeyDownHandler FunctionObject)
+/* 000519e8 */{
+/* 000519e8 */	g_PartsMessageManager.AddKeyDownFunction(PartsNumber, FunctionObject);
+/* 00051a00 */}
+
+void Ｐ＿コマンド削除＿キーダウン(int PartsNumber, FT_KeyDownHandler FunctionObject)
+/* 00051a0e */{
+/* 00051a0e */	g_PartsMessageManager.EraseKeyDownFunction(PartsNumber, FunctionObject);
+/* 00051a26 */}
+
+void Ｐ＿コマンド登録＿キープレス(int PartsNumber, FT_KeyPressHandler FunctionObject)
+/* 00051a34 */{
+/* 00051a34 */	g_PartsMessageManager.AddKeyPressFunction(PartsNumber, FunctionObject);
+/* 00051a4c */}
+
+void Ｐ＿コマンド削除＿キープレス(int PartsNumber, FT_KeyPressHandler FunctionObject)
+/* 00051a5a */{
+/* 00051a5a */	g_PartsMessageManager.EraseKeyPressFunction(PartsNumber, FunctionObject);
+/* 00051a72 */}
+
+void Ｐ＿コマンド登録＿キーアップ(int PartsNumber, FT_KeyUpHandler FunctionObject)
+/* 00051a80 */{
+/* 00051a80 */	g_PartsMessageManager.AddKeyUpFunction(PartsNumber, FunctionObject);
+/* 00051a98 */}
+
+void Ｐ＿コマンド削除＿キーアップ(int PartsNumber, FT_KeyUpHandler FunctionObject)
+/* 00051aa6 */{
+/* 00051aa6 */	g_PartsMessageManager.EraseKeyUpFunction(PartsNumber, FunctionObject);
+/* 00051abe */}
+
+void Ｐ＿コマンド登録＿ドラッグ開始(int PartsNumber, FT_DragBeginHandler FunctionObject)
+/* 00051acc */{
+/* 00051acc */	g_PartsMessageManager.AddDragBeginFunction(PartsNumber, FunctionObject);
+/* 00051ae4 */}
+
+void Ｐ＿コマンド削除＿ドラッグ開始(int PartsNumber, FT_DragBeginHandler FunctionObject)
+/* 00051af2 */{
+/* 00051af2 */	g_PartsMessageManager.EraseDragBeginFunction(PartsNumber, FunctionObject);
+/* 00051b0a */}
+
+void Ｐ＿コマンド登録＿ドラッグ中(int PartsNumber, FT_DragingHandler FunctionObject)
+/* 00051b18 */{
+/* 00051b18 */	g_PartsMessageManager.AddDragingFunction(PartsNumber, FunctionObject);
+/* 00051b30 */}
+
+void Ｐ＿コマンド削除＿ドラッグ中(int PartsNumber, FT_DragingHandler FunctionObject)
+/* 00051b3e */{
+/* 00051b3e */	g_PartsMessageManager.EraseDragingFunction(PartsNumber, FunctionObject);
+/* 00051b56 */}
+
+void Ｐ＿コマンド登録＿ドラッグ終了(int PartsNumber, FT_DragEndHandler FunctionObject)
+/* 00051b64 */{
+/* 00051b64 */	g_PartsMessageManager.AddDragEndFunction(PartsNumber, FunctionObject);
+/* 00051b7c */}
+
+void Ｐ＿コマンド削除＿ドラッグ終了(int PartsNumber, FT_DragEndHandler FunctionObject)
+/* 00051b8a */{
+/* 00051b8a */	g_PartsMessageManager.EraseDragEndFunction(PartsNumber, FunctionObject);
+/* 00051ba2 */}
+
+void Ｐ＿コマンド登録＿ドロップエンター(int PartsNumber, FT_DropEnterHandler FunctionObject)
+/* 00051bb0 */{
+/* 00051bb0 */	g_PartsMessageManager.AddDropEnterFunction(PartsNumber, FunctionObject);
+/* 00051bc8 */}
+
+void Ｐ＿コマンド削除＿ドロップエンター(int PartsNumber, FT_DropEnterHandler FunctionObject)
+/* 00051bd6 */{
+/* 00051bd6 */	g_PartsMessageManager.EraseDropEnterFunction(PartsNumber, FunctionObject);
+/* 00051bee */}
+
+void Ｐ＿コマンド登録＿ドロップ(int PartsNumber, FT_DropedHandler FunctionObject)
+/* 00051bfc */{
+/* 00051bfc */	g_PartsMessageManager.AddDropedFunction(PartsNumber, FunctionObject);
+/* 00051c14 */}
+
+void Ｐ＿コマンド削除＿ドロップ(int PartsNumber, FT_DropedHandler FunctionObject)
+/* 00051c22 */{
+/* 00051c22 */	g_PartsMessageManager.EraseDropedFunction(PartsNumber, FunctionObject);
+/* 00051c3a */}
+
+void Ｐ＿コマンド登録＿ドロップリーブ(int PartsNumber, FT_DropLeaveHandler FunctionObject)
+/* 00051c48 */{
+/* 00051c48 */	g_PartsMessageManager.AddDropLeaveFunction(PartsNumber, FunctionObject);
+/* 00051c60 */}
+
+void Ｐ＿コマンド削除＿ドロップリーブ(int PartsNumber, FT_DropLeaveHandler FunctionObject)
+/* 00051c6e */{
+/* 00051c6e */	g_PartsMessageManager.EraseDropLeaveFunction(PartsNumber, FunctionObject);
+/* 00051c86 */}
+
+void Ｐ＿コマンド登録＿フォーカス取得(int PartsNumber, FT_FocusHandler FunctionObject)
+/* 00051c94 */{
+/* 00051c94 */	g_PartsMessageManager.AddFocusFunction(PartsNumber, FunctionObject);
+/* 00051cac */}
+
+void Ｐ＿コマンド削除＿フォーカス取得(int PartsNumber, FT_FocusHandler FunctionObject)
+/* 00051cba */{
+/* 00051cba */	g_PartsMessageManager.EraseFocusFunction(PartsNumber, FunctionObject);
+/* 00051cd2 */}
+
+void Ｐ＿コマンド登録＿フォーカス紛失(int PartsNumber, FT_LostFocusHandler FunctionObject)
+/* 00051ce0 */{
+/* 00051ce0 */	g_PartsMessageManager.AddLostFocusFunction(PartsNumber, FunctionObject);
+/* 00051cf8 */}
+
+void Ｐ＿コマンド削除＿フォーカス紛失(int PartsNumber, FT_LostFocusHandler FunctionObject)
+/* 00051d06 */{
+/* 00051d06 */	g_PartsMessageManager.EraseLostFocusFunction(PartsNumber, FunctionObject);
+/* 00051d1e */}
+
+void Ｐ＿コマンド登録＿スクロール(int PartsNumber, FT_ScrollHandler FunctionObject)
+/* 00051d2c */{
+/* 00051d2c */	g_PartsMessageManager.AddScrollFunction(PartsNumber, FunctionObject);
+/* 00051d44 */}
+
+void Ｐ＿コマンド削除＿スクロール(int PartsNumber, FT_ScrollHandler FunctionObject)
+/* 00051d52 */{
+/* 00051d52 */	g_PartsMessageManager.EraseScrollFunction(PartsNumber, FunctionObject);
+/* 00051d6a */}
+
+void Ｐ＿コマンド登録＿生成(int PartsNumber, FT_CreatedHandler FunctionObject)
+/* 00051d78 */{
+/* 00051d78 */	g_PartsMessageManager.AddCreatedFunction(PartsNumber, FunctionObject);
+/* 00051d90 */}
+
+void Ｐ＿コマンド削除＿生成(int PartsNumber, FT_CreatedHandler FunctionObject)
+/* 00051d9e */{
+/* 00051d9e */	g_PartsMessageManager.EraseCreatedFunction(PartsNumber, FunctionObject);
+/* 00051db6 */}
+
+void Ｐ＿コマンド登録＿選択(int PartsNumber, FT_SelectedHandler FunctionObject)
+/* 00051dc4 */{
+/* 00051dc4 */	g_PartsMessageManager.AddSelectedFunction(PartsNumber, FunctionObject);
+/* 00051ddc */}
+
+void Ｐ＿コマンド削除＿選択(int PartsNumber, FT_SelectedHandler FunctionObject)
+/* 00051dea */{
+/* 00051dea */	g_PartsMessageManager.EraseSelectedFunction(PartsNumber, FunctionObject);
+/* 00051e02 */}
+
+void Ｐ＿コマンド登録＿変更(int PartsNumber, FT_ChangedHandler FunctionObject)
+/* 00051e10 */{
+/* 00051e10 */	g_PartsMessageManager.AddChangedFunction(PartsNumber, FunctionObject);
+/* 00051e28 */}
+
+void Ｐ＿コマンド削除＿変更(int PartsNumber, FT_ChangedHandler FunctionObject)
+/* 00051e36 */{
+/* 00051e36 */	g_PartsMessageManager.EraseChangedFunction(PartsNumber, FunctionObject);
+/* 00051e4e */}
+

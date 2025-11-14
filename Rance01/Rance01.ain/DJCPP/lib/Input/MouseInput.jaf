@@ -1,0 +1,160 @@
+MouseInput::MouseInput()
+/* 0005c13a */{
+/* 0005c142 */	this.x_ = 0;
+/* 0005c14c */	this.y_ = 0;
+/* 0005c156 */}
+
+void MouseInput::update()
+/* 0005c15e */{
+/* 0005c15e */	this.updateCursorPos();
+/* 0005c166 */	this.updateDistance();
+/* 0005c16e */	this.updateButtonState();
+/* 0005c176 */	if (this.btn_[0].onDown())
+/* 0005c190 */	{
+/* 0005c190 */		this.objectIdOnDown_ = g_gameObjectManager.getFocusedObjectId();
+/* 0005c1a8 */	}
+/* 0005c1ae */	else if (this.btn_[0].isPress())
+/* 0005c1c8 */	{
+/* 0005c1c8 */		this.objectIdOnUp_ = g_gameObjectManager.getFocusedObjectId();
+/* 0005c1e0 */	}
+/* 0005c1e6 */	this.updateWheel();
+/* 0005c1ee */}
+
+void MouseInput::updateCursorPos()
+/* 0005c1f6 */{
+/* 0005c1f6 */	this.lastX_ = this.x_;
+/* 0005c208 */	this.lastY_ = this.y_;
+/* 0005c21a */	int x;
+/* 0005c224 */	int y;
+/* 0005c22e */	AFL_Mouse_GetPos(x, y);
+/* 0005c246 */	if (x >= 0 && x <= AFL_View_GetWidth() && y >= 0 && y <= AFL_View_GetHeight())
+/* 0005c2d2 */	{
+/* 0005c2d2 */		this.x_ = x;
+/* 0005c2dc */		this.y_ = y;
+/* 0005c2e6 */	}
+/* 0005c2ec */	this.isCursorChanged_ = this.lastX_ != this.x_ || this.lastY_ != this.y_;
+/* 0005c334 */}
+
+void MouseInput::updateDistance()
+/* 0005c33c */{
+/* 0005c33c */	this.distanceX_[this.distanceIndex_] = this.x_ - this.lastX_;
+/* 0005c35a */	this.distanceY_[this.distanceIndex_] = this.y_ - this.lastY_;
+/* 0005c378 */	if (this.distanceIndex_ < 7)
+/* 0005c38c */	{
+/* 0005c38c */		++this.distanceIndex_;
+/* 0005c39c */	}
+/* 0005c3a2 */	else
+/* 0005c3a2 */	{
+/* 0005c3a2 */		this.distanceIndex_ = 0;
+/* 0005c3ac */	}
+/* 0005c3ac */}
+
+void MouseInput::updateButtonState()
+/* 0005c3b4 */{
+/* 0005c3b4 */	this.btn_[0].update(AFL_IsKeyDown(1) || AFL_IsKeyDown(13));
+/* 0005c400 */	this.btn_[1].update(AFL_IsKeyDown(2) || AFL_IsKeyDown(32));
+/* 0005c44c */}
+
+void MouseInput::updateWheel()
+/* 0005c454 */{
+/* 0005c454 */	int fw;
+/* 0005c45e */	int bk;
+/* 0005c468 */	AFL_MouseWheel_GetCount(fw, bk);
+/* 0005c47e */	AFL_MouseWheel_ClearCount();
+/* 0005c484 */	this.wheelVal_ = fw - bk;
+/* 0005c49e */}
+
+void MouseInput::setPos(int x, int y)
+/* 0005c4a6 */{
+/* 0005c4a8 */}
+
+void MouseInput::setNextMouseUpIgnore()
+/* 0005c4ae */{
+/* 0005c4ae */	this.btn_[0].setNextMouseUpIgnore();
+/* 0005c4c2 */	this.objectIdOnDown_ = -1;
+/* 0005c4d4 */}
+
+void MouseInput::forceClick(int n)
+/* 0005c4dc */{
+/* 0005c4dc */	this.btn_[n].forceClick();
+/* 0005c4f0 */}
+
+bool MouseInput::isCursorChanged()
+/* 0005c4f8 */{
+/* 0005c4f8 */	return this.isCursorChanged_;
+/* 0005c500 */}
+
+bool MouseInput::isClick(int button)
+/* 0005c50e */{
+/* 0005c50e */	return this.btn_[button].isPress();
+/* 0005c524 */}
+
+bool MouseInput::isClickWithFocus()
+/* 0005c532 */{
+/* 0005c532 */	return this.btn_[0].isPress() && this.objectIdOnDown_ == this.objectIdOnUp_ && this.objectIdOnDown_ != -1;
+/* 0005c5a2 */}
+
+bool MouseInput::isDown(int button)
+/* 0005c5b0 */{
+/* 0005c5b0 */	return this.btn_[button].isDown();
+/* 0005c5c6 */}
+
+bool MouseInput::onDown(int button)
+/* 0005c5d4 */{
+/* 0005c5d4 */	return this.btn_[button].onDown();
+/* 0005c5ea */}
+
+int MouseInput::getX()
+/* 0005c5f8 */{
+/* 0005c5f8 */	return this.x_;
+/* 0005c600 */}
+
+int MouseInput::getY()
+/* 0005c60e */{
+/* 0005c60e */	return this.y_;
+/* 0005c616 */}
+
+int MouseInput::getWheel()
+/* 0005c624 */{
+/* 0005c624 */	return this.wheelVal_;
+/* 0005c62c */}
+
+int MouseInput::getMouseXSpeedAverage()
+/* 0005c63a */{
+/* 0005c63a */	float n;
+/* 0005c64c */	int i;
+/* 0005c656 */	for (i = 0; i < this.distanceX_.Numof(); ++i)
+/* 0005c686 */	{
+/* 0005c686 */		n += this.distanceX_[i];
+/* 0005c6a2 */	}
+/* 0005c6a8 */	return n / this.distanceX_.Numof();
+/* 0005c6bc */}
+
+int MouseInput::getMouseYSpeedAverage()
+/* 0005c6ca */{
+/* 0005c6ca */	float n;
+/* 0005c6dc */	int i;
+/* 0005c6e6 */	for (i = 0; i < this.distanceY_.Numof(); ++i)
+/* 0005c716 */	{
+/* 0005c716 */		n += this.distanceY_[i];
+/* 0005c732 */	}
+/* 0005c738 */	return n / this.distanceY_.Numof();
+/* 0005c74c */}
+
+bool MouseInput::isMouseXSpeedUp()
+/* 0005c75a */{
+/* 0005c75a */	int top = this.distanceIndex_;
+/* 0005c764 */	int beforeTop = top - 1;
+/* 0005c77e */	int old = this.distanceIndex_ + 7;
+/* 0005c798 */	int beforeOld = old - 1;
+/* 0005c7b2 */	top &= 7;
+/* 0005c7c4 */	beforeTop &= 7;
+/* 0005c7d6 */	old &= 7;
+/* 0005c7e8 */	beforeOld &= 7;
+/* 0005c7fa */	if (Math.Abs(this.distanceX_[top] - this.distanceX_[beforeTop]) < Math.Abs(this.distanceX_[old] - this.distanceX_[beforeOld]))
+/* 0005c852 */	{
+/* 0005c852 */		return true;
+/* 0005c85a */	}
+/* 0005c860 */	return false;
+/* 0005c868 */}
+

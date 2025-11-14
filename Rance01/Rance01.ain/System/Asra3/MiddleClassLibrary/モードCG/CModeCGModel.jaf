@@ -1,0 +1,108 @@
+CModeCGModel::CModeCGModel()
+/* 0001f676 */{
+/* 0001f67e */	this.Clear();
+/* 0001f686 */}
+
+void CModeCGModel::Clear()
+/* 0001f68e */{
+/* 0001f68e */	this.m_CGName = "";
+/* 0001f69a */	this.m_AutoModeFlatName = "";
+/* 0001f6a6 */	this.m_nX = 0;
+/* 0001f6b0 */	this.m_nY = 0;
+/* 0001f6ba */	this.m_nZ = 0;
+/* 0001f6c4 */	this.m_bShow = false;
+/* 0001f6d8 */	this.m_CGBeginNumber = 0;
+/* 0001f6e2 */	this.m_CGCount = 0;
+/* 0001f6ec */	this.m_CGSwitchTime = 0;
+/* 0001f6f6 */}
+
+string CModeCGModel::GetCG()
+/* 0001f6fe */{
+/* 0001f6fe */	return this.m_CGName;
+/* 0001f706 */}
+
+string CModeCGModel::GetFlatName()
+/* 0001f714 */{
+/* 0001f714 */	return this.m_AutoModeFlatName;
+/* 0001f71c */}
+
+int CModeCGModel::GetX()
+/* 0001f72a */{
+/* 0001f72a */	return this.m_nX;
+/* 0001f732 */}
+
+int CModeCGModel::GetY()
+/* 0001f740 */{
+/* 0001f740 */	return this.m_nY;
+/* 0001f748 */}
+
+int CModeCGModel::GetZ()
+/* 0001f756 */{
+/* 0001f756 */	return this.m_nZ;
+/* 0001f75e */}
+
+bool CModeCGModel::GetShow()
+/* 0001f76c */{
+/* 0001f76c */	return this.m_bShow;
+/* 0001f774 */}
+
+int CModeCGModel::GetCGBeginNumber()
+/* 0001f782 */{
+/* 0001f782 */	return this.m_CGBeginNumber;
+/* 0001f78a */}
+
+int CModeCGModel::GetCGCount()
+/* 0001f798 */{
+/* 0001f798 */	return this.m_CGCount;
+/* 0001f7a0 */}
+
+int CModeCGModel::GetCGSwitchTime()
+/* 0001f7ae */{
+/* 0001f7ae */	return this.m_CGSwitchTime;
+/* 0001f7b6 */}
+
+void CModeCGModel::SetCG(string Name)
+/* 0001f7c4 */{
+/* 0001f7c4 */	this.m_CGName = Name;
+/* 0001f7ce */}
+
+void CModeCGModel::SetFlatName(string Name)
+/* 0001f7d6 */{
+/* 0001f7d6 */	this.m_AutoModeFlatName = Name;
+/* 0001f7e0 */}
+
+void CModeCGModel::SetX(int _nX)
+/* 0001f7e8 */{
+/* 0001f7e8 */	this.m_nX = _nX;
+/* 0001f7f2 */}
+
+void CModeCGModel::SetY(int _nY)
+/* 0001f7fa */{
+/* 0001f7fa */	this.m_nY = _nY;
+/* 0001f804 */}
+
+void CModeCGModel::SetZ(int _nZ)
+/* 0001f80c */{
+/* 0001f80c */	this.m_nZ = _nZ;
+/* 0001f816 */}
+
+void CModeCGModel::SetShow(bool _bShow)
+/* 0001f81e */{
+/* 0001f81e */	this.m_bShow = _bShow;
+/* 0001f828 */}
+
+void CModeCGModel::SetCGBeginNumber(int Number)
+/* 0001f830 */{
+/* 0001f830 */	this.m_CGBeginNumber = Number;
+/* 0001f83a */}
+
+void CModeCGModel::SetCGCount(int Count)
+/* 0001f842 */{
+/* 0001f842 */	this.m_CGCount = Count;
+/* 0001f84c */}
+
+void CModeCGModel::SetCGSwitchTime(int Time)
+/* 0001f854 */{
+/* 0001f854 */	this.m_CGSwitchTime = Time;
+/* 0001f85e */}
+

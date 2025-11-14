@@ -1,0 +1,146 @@
+SceneTitle::SceneTitle()
+/* 0007f2c4 */{
+/* 0007f2cc */	this.clicked_ = -1;
+/* 0007f2de */}
+
+int SceneTitle::update()
+/* 0007f2e6 */{
+/* 0007f2e6 */	switch (this.state_)
+/* 0007f2f8 */	{
+/* 0007f2f8 */	case 0:
+/* 0007f2f8 */		if (!this.parent_.isMotion())
+/* 0007f30c */		{
+/* 0007f30c */			this.fadeButton(true);
+/* 0007f31a */			this.state_ = 1;
+/* 0007f324 */		}
+/* 0007f32a */		break;
+/* 0007f330 */	case 1:
+/* 0007f330 */		this.checkButtonClick();
+/* 0007f338 */		break;
+/* 0007f33e */	case 2:
+/* 0007f33e */		if (!this.parent_.isMotion())
+/* 0007f352 */		{
+/* 0007f352 */			this.state_ = 3;
+/* 0007f35c */		}
+/* 0007f362 */		break;
+/* 0007f368 */	case 3:
+/* 0007f368 */		return 1;
+/* 0007f370 */	}
+/* 0007f370 */	return 0;
+/* 0007f378 */}
+
+void SceneTitle::run()
+/* 0007f386 */{
+/* 0007f386 */	this.init();
+/* 0007f38e */	g_music.play(2, -2147483648);
+/* 0007f3a6 */	this.fadeIn(true);
+/* 0007f3b4 */}
+
+void SceneTitle::fadeIn(bool val)
+/* 0007f3bc */{
+/* 0007f3bc */	MotionInfomation m;
+/* 0007f3cc */	if (val)
+/* 0007f3d8 */	{
+/* 0007f3d8 */		m.setTime(800, 0);
+/* 0007f3f0 */		m.setAlpha(0, 255, 0);
+/* 0007f40e */	}
+/* 0007f414 */	else
+/* 0007f414 */	{
+/* 0007f414 */		m.setTime(350, 0);
+/* 0007f42c */		m.setAlpha(255, 0, 0);
+/* 0007f44a */		g_music.fadeOut(2000);
+/* 0007f45c */	}
+/* 0007f45c */	this.parent_.runMotion(m);
+/* 0007f476 */	if (!val)
+/* 0007f484 */	{
+/* 0007f484 */		this.fadeButton(val);
+/* 0007f492 */	}
+/* 0007f498 */	this.state_ = val ? 0 : 2;
+/* 0007f4c2 */}
+
+void SceneTitle::init()
+/* 0007f4ca */{
+/* 0007f4ca */	this.initButton();
+/* 0007f4d2 */	this.parts_[0].init("イベント／アリス／メインメニュー", 0);
+/* 0007f4f2 */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 0007f50a */	this.setPartsShow();
+/* 0007f512 */	this.setButtonPos();
+/* 0007f51a */}
+
+void SceneTitle::setPartsShow()
+/* 0007f522 */{
+/* 0007f522 */	int i;
+/* 0007f52c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0007f55c */	{
+/* 0007f55c */		this.parts_[i].setShow(true);
+/* 0007f576 */	}
+/* 0007f57c */	this.parent_.setShow(true);
+/* 0007f58e */}
+
+void SceneTitle::initButton()
+/* 0007f596 */{
+/* 0007f596 */	array@string caption;
+/* 0007f5a0 */	caption.PushBack("ゲーム開始");
+/* 0007f5b0 */	caption.PushBack("ロード");
+/* 0007f5c0 */	caption.PushBack("オートセーブから再開");
+/* 0007f5d0 */	caption.PushBack("マニュアル");
+/* 0007f5e0 */	caption.PushBack("CG鑑賞");
+/* 0007f5f0 */	caption.PushBack("回想");
+/* 0007f600 */	caption.PushBack("音楽");
+/* 0007f610 */	caption.PushBack("コンフィグ");
+/* 0007f620 */	caption.PushBack("アンケート");
+/* 0007f630 */	caption.PushBack("アリスの館");
+/* 0007f640 */	caption.PushBack("終了");
+/* 0007f650 */	int i;
+/* 0007f65a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007f68a */	{
+/* 0007f68a */		this.btn_[i].init("システム／ボタン／幅２００", caption[i], -1);
+/* 0007f6b8 */	}
+/* 0007f6be */}
+
+void SceneTitle::checkButtonClick()
+/* 0007f6c6 */{
+/* 0007f6c6 */	this.clicked_ = this.getClickedButton();
+/* 0007f6da */	if (this.clicked_ != -1)
+/* 0007f6ee */	{
+/* 0007f6ee */		this.fadeIn(false);
+/* 0007f6fc */	}
+/* 0007f702 */}
+
+int SceneTitle::getClickedButton()
+/* 0007f70a */{
+/* 0007f70a */	int i;
+/* 0007f714 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007f744 */	{
+/* 0007f744 */		if (this.btn_[i].isClick())
+/* 0007f75e */		{
+/* 0007f75e */			return i;
+/* 0007f766 */		}
+/* 0007f76c */	}
+/* 0007f772 */	return -1;
+/* 0007f77a */}
+
+void SceneTitle::setButtonPos()
+/* 0007f788 */{
+/* 0007f788 */	int span = 21;
+/* 0007f79a */	int i;
+/* 0007f7a4 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007f7d4 */	{
+/* 0007f7d4 */		this.btn_[i].setPos(80 + (i % 4) * (span + 200), 580 + (i / 4) * 50, -2147483648);
+/* 0007f832 */	}
+/* 0007f838 */}
+
+void SceneTitle::fadeButton(bool val)
+/* 0007f840 */{
+/* 0007f840 */	int i;
+/* 0007f84a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007f87a */	{
+/* 0007f87a */		this.btn_[i].fadeIn(val);
+/* 0007f894 */	}
+/* 0007f89a */}
+
+int SceneTitle::getClicked()
+/* 0007f8a2 */{
+/* 0007f8a2 */	return this.clicked_;
+/* 0007f8aa */}
+

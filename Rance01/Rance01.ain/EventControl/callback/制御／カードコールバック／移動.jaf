@@ -1,0 +1,133 @@
+bool 制御／カードコールバック／移動(string id)
+/* 000a2f60 */{
+/* 000a2f60 */	switch (id)
+/* 000a2f72 */	{
+/* 000a2f72 */	case "CARD601":
+/* 000a2f72 */		制御／移動／マップ("MAP01");
+/* 000a2f7e */		break;
+/* 000a2f84 */	case "CARD602":
+/* 000a2f84 */		hideGameObject();
+/* 000a2f8a */		制御／辺境／盗賊団();
+/* 000a2f90 */		restoreGameObject();
+/* 000a2f96 */		if (EV("辺境／盗賊団／初回", -2147483648) || EV("辺境／盗賊団／戦闘前", -2147483648))
+/* 000a2fde */		{
+/* 000a2fde */			制御／移動／ダンジョン("DUNG02", 1, 0);
+/* 000a2ff6 */		}
+/* 000a2ffc */		else
+/* 000a2ffc */		{
+/* 000a2ffc */			return false;
+/* 000a3004 */		}
+/* 000a3004 */		break;
+/* 000a300a */	case "CARD603":
+/* 000a300a */		break;
+/* 000a3010 */	case "CARD604":
+/* 000a3010 */		制御／移動／ダンジョン("DUNG13", 2, 0);
+/* 000a3028 */		break;
+/* 000a302e */	case "CARD605":
+/* 000a302e */		制御／移動／ダンジョン("DUNG01", 1, 5);
+/* 000a3046 */		break;
+/* 000a304c */	case "CARD606":
+/* 000a304c */		制御／移動／ダンジョン("DUNG03", 0, 0);
+/* 000a3064 */		break;
+/* 000a306a */	case "CARD607":
+/* 000a306a */		制御／移動／ダンジョン("DUNG02", 0, 5);
+/* 000a3082 */		break;
+/* 000a3088 */	case "CARD608":
+/* 000a3088 */		制御／移動／マップ("MAP01");
+/* 000a3094 */		break;
+/* 000a309a */	case "CARD609":
+/* 000a309a */		hideGameObject();
+/* 000a30a0 */		制御／屋敷／城下町へ();
+/* 000a30a6 */		restoreGameObject();
+/* 000a30ac */		制御／移動／マップ("MAP01");
+/* 000a30b8 */		break;
+/* 000a30be */	case "CARD610":
+/* 000a30be */		hideGameObject();
+/* 000a30c4 */		制御／屋敷／二階へ();
+/* 000a30ca */		restoreGameObject();
+/* 000a30d0 */		if (EV("屋敷／二階へ／戦闘後", -2147483648))
+/* 000a30e8 */		{
+/* 000a30e8 */			制御／移動／ダンジョン("DUNG06", 4, 0);
+/* 000a3100 */		}
+/* 000a3106 */		else
+/* 000a3106 */		{
+/* 000a3106 */			return false;
+/* 000a310e */		}
+/* 000a310e */		break;
+/* 000a3114 */	case "CARD611":
+/* 000a3114 */		hideGameObject();
+/* 000a311a */		制御／屋敷／地下一階へ();
+/* 000a3120 */		restoreGameObject();
+/* 000a3126 */		if (EV("屋敷／地下一階へ／初回", -2147483648))
+/* 000a313e */		{
+/* 000a313e */			制御／移動／ダンジョン("DUNG07", 0, 0);
+/* 000a3156 */		}
+/* 000a315c */		else
+/* 000a315c */		{
+/* 000a315c */			return false;
+/* 000a3164 */		}
+/* 000a3164 */		break;
+/* 000a316a */	case "CARD612":
+/* 000a316a */		制御／移動／ダンジョン("DUNG05", 4, 2);
+/* 000a3182 */		break;
+/* 000a3188 */	case "CARD613":
+/* 000a3188 */		制御／移動／ダンジョン("DUNG05", 0, 0);
+/* 000a31a0 */		break;
+/* 000a31a6 */	case "CARD614":
+/* 000a31a6 */		hideGameObject();
+/* 000a31ac */		制御／屋敷／下水道へ();
+/* 000a31b2 */		restoreGameObject();
+/* 000a31b8 */		if (EV("屋敷／下水道へ／解放後", -2147483648))
+/* 000a31d0 */		{
+/* 000a31d0 */			制御／移動／ダンジョン("DUNG08", 4, 0);
+/* 000a31e8 */		}
+/* 000a31ee */		else
+/* 000a31ee */		{
+/* 000a31ee */			return false;
+/* 000a31f6 */		}
+/* 000a31f6 */		break;
+/* 000a31fc */	case "CARD615":
+/* 000a31fc */		制御／移動／ダンジョン("DUNG07", 4, 6);
+/* 000a3214 */		break;
+/* 000a321a */	case "CARD616":
+/* 000a321a */		hideGameObject();
+/* 000a3220 */		制御／下水道／城地下へ();
+/* 000a3226 */		restoreGameObject();
+/* 000a322c */		制御／移動／ダンジョン("DUNG09", 0, 0);
+/* 000a3244 */		break;
+/* 000a324a */	case "CARD617":
+/* 000a324a */		hideGameObject();
+/* 000a3250 */		制御／城地下／城内へ();
+/* 000a3256 */		restoreGameObject();
+/* 000a325c */		制御／移動／マップ("MAP02");
+/* 000a3268 */		break;
+/* 000a326e */	case "CARD618":
+/* 000a326e */		制御／移動／ダンジョン("DUNG08", 0, 1);
+/* 000a3286 */		break;
+/* 000a328c */	case "CARD619":
+/* 000a328c */		hideGameObject();
+/* 000a3292 */		制御／城地下／遺跡へ();
+/* 000a3298 */		restoreGameObject();
+/* 000a329e */		制御／移動／ダンジョン("DUNG10", 3, 0);
+/* 000a32b6 */		break;
+/* 000a32bc */	case "CARD620":
+/* 000a32bc */		break;
+/* 000a32c2 */	case "CARD621":
+/* 000a32c2 */		hideGameObject();
+/* 000a32c8 */		制御／遺跡／光へ();
+/* 000a32ce */		restoreGameObject();
+/* 000a32d4 */		break;
+/* 000a32da */	case "CARD622":
+/* 000a32da */		制御／移動／マップ("MAP02");
+/* 000a32e6 */		break;
+/* 000a32ec */	case "CARD623":
+/* 000a32ec */		break;
+/* 000a32f2 */	case "CARD624":
+/* 000a32f2 */		制御／移動／ダンジョン("DUNG01", 2, 30);
+/* 000a330a */		break;
+/* 000a3310 */	default:
+/* 000a3310 */		break;
+/* 000a3316 */	}
+/* 000a3316 */	return true;
+/* 000a331e */}
+

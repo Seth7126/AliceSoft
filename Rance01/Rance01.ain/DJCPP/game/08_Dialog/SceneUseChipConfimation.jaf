@@ -1,0 +1,58 @@
+SceneUseChipConfimation::SceneUseChipConfimation()
+/* 0007d9f4 */{
+/* 0007d9fc */	this.isDungeon_ = true;
+/* 0007da06 */}
+
+void SceneUseChipConfimation::run(string chipId)
+/* 0007da0e */{
+/* 0007da0e */	this.id_ = chipId;
+/* 0007da18 */	this.init();
+/* 0007da20 */	this.fadeObject(true);
+/* 0007da2e */	this.confirmation_.run();
+/* 0007da3a */	this.state_ = 0;
+/* 0007da44 */}
+
+int SceneUseChipConfimation::getResult()
+/* 0007da4c */{
+/* 0007da4c */	return this.result_;
+/* 0007da54 */}
+
+void SceneUseChipConfimation::init()
+/* 0007da62 */{
+/* 0007da62 */	this.confirmation_.init(this.id_);
+/* 0007da74 */}
+
+int SceneUseChipConfimation::update()
+/* 0007da7c */{
+/* 0007da7c */	switch (this.state_)
+/* 0007da8e */	{
+/* 0007da8e */	case 0:
+/* 0007da8e */		if (!this.confirmation_.isMotion())
+/* 0007daa2 */		{
+/* 0007daa2 */			this.state_ = 1;
+/* 0007daac */		}
+/* 0007dab2 */		break;
+/* 0007dab8 */	case 1:
+/* 0007dab8 */		if (this.confirmation_.isConfirmed())
+/* 0007daca */		{
+/* 0007daca */			this.fadeObject(false);
+/* 0007dad8 */			this.state_ = 2;
+/* 0007dae2 */		}
+/* 0007dae8 */		break;
+/* 0007daee */	case 2:
+/* 0007daee */		if (!this.confirmation_.isMotion())
+/* 0007db02 */		{
+/* 0007db02 */			this.result_ = this.confirmation_.getSelection();
+/* 0007db1a */			this.state_ = 3;
+/* 0007db24 */		}
+/* 0007db2a */		break;
+/* 0007db30 */	case 3:
+/* 0007db30 */		return 1;
+/* 0007db38 */	}
+/* 0007db38 */	return 0;
+/* 0007db40 */}
+
+void SceneUseChipConfimation::fadeObject(bool val)
+/* 0007db4e */{
+/* 0007db50 */}
+

@@ -1,0 +1,123 @@
+EnquiteCharacterGroup::EnquiteCharacterGroup()
+/* 0008a45a */{
+/* 0008a462 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0008a484 */}
+
+void EnquiteCharacterGroup::init(string groupCaption, array@string image, array@string name)
+/* 0008a48c */{
+/* 0008a48c */	this.caption_ = groupCaption;
+/* 0008a496 */	this.parent_.initAsDummy();
+/* 0008a4a2 */	this.checkBox_.Alloc(image.Numof());
+/* 0008a4c2 */	int i;
+/* 0008a4cc */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a4fc */	{
+/* 0008a4fc */		this.checkBox_[i].initAsImage(image[i], name[i]);
+/* 0008a52c */		this.checkBox_[i].setParent(this.parent_.getPartsNumber());
+/* 0008a54c */	}
+/* 0008a552 */	this.setCheckBoxPos();
+/* 0008a55a */	this.partsCaption_.initAsText(groupCaption, 24, false, 256, 255, 255, 255);
+/* 0008a590 */	this.partsCaption_.setPos(50, 0, -2147483648);
+/* 0008a5ae */	this.partsCaption_.setParent(this.parent_.getPartsNumber());
+/* 0008a5c6 */	this.partsCaption_.setShow(true);
+/* 0008a5d8 */	this.parent_.setShow(true);
+/* 0008a5ea */	this.parent_.setPos(0, 100, 5000);
+/* 0008a608 */	this.revertCheckedState();
+/* 0008a610 */}
+
+void EnquiteCharacterGroup::setCheckBoxPos()
+/* 0008a618 */{
+/* 0008a618 */	int i;
+/* 0008a622 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a652 */	{
+/* 0008a652 */		int x = 50 + (i % 7) * 134;
+/* 0008a67c */		int y = 36 + (i / 7) * 138;
+/* 0008a6a6 */		this.checkBox_[i].setPos(x, y);
+/* 0008a6c6 */	}
+/* 0008a6cc */}
+
+void EnquiteCharacterGroup::update()
+/* 0008a6d4 */{
+/* 0008a6d4 */	int n = this.getClickedIndex();
+/* 0008a6e8 */	if (n != -1)
+/* 0008a6fc */	{
+/* 0008a6fc */		this.setCheck(n);
+/* 0008a70a */	}
+/* 0008a710 */}
+
+void EnquiteCharacterGroup::setCheck(int index)
+/* 0008a718 */{
+/* 0008a718 */	this.checkBox_[index].setCheck(!this.checkBox_[index].isChecked());
+/* 0008a744 */	this.onUpdateCheckState();
+/* 0008a74c */	this.saveEnquite();
+/* 0008a754 */}
+
+int EnquiteCharacterGroup::getClickedIndex()
+/* 0008a75c */{
+/* 0008a75c */	int i;
+/* 0008a766 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a796 */	{
+/* 0008a796 */		if (this.checkBox_[i].isClick())
+/* 0008a7b0 */		{
+/* 0008a7b0 */			return i;
+/* 0008a7b8 */		}
+/* 0008a7be */	}
+/* 0008a7c4 */	return -1;
+/* 0008a7cc */}
+
+int EnquiteCharacterGroup::getSelected()
+/* 0008a7da */{
+/* 0008a7da */	int i;
+/* 0008a7e4 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a814 */	{
+/* 0008a814 */		if (this.checkBox_[i].isChecked())
+/* 0008a82e */		{
+/* 0008a82e */			return i;
+/* 0008a836 */		}
+/* 0008a83c */	}
+/* 0008a842 */	return -1;
+/* 0008a84a */}
+
+bool EnquiteCharacterGroup::isChecked(int index)
+/* 0008a858 */{
+/* 0008a858 */	if (index >= 0 && index < this.checkBox_.Numof())
+/* 0008a892 */	{
+/* 0008a892 */		return this.checkBox_[index].isChecked();
+/* 0008a8a8 */	}
+/* 0008a8ae */	return false;
+/* 0008a8b6 */}
+
+int EnquiteCharacterGroup::getHeight()
+/* 0008a8c4 */{
+/* 0008a8c4 */	return this.height_;
+/* 0008a8cc */}
+
+void EnquiteCharacterGroup::setYPos(int yPos)
+/* 0008a8da */{
+/* 0008a8da */	this.parent_.setPos(-2147483648, yPos, -2147483648);
+/* 0008a8f8 */}
+
+void EnquiteCharacterGroup::onUpdateCheckState()
+/* 0008a900 */{
+/* 0008a900 */	this.partsCaption_.setMultiColorValue(200, 255, 128);
+/* 0008a91e */}
+
+void EnquiteCharacterGroup::saveEnquite()
+/* 0008a926 */{
+/* 0008a926 */	int i;
+/* 0008a930 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008a960 */	{
+/* 0008a960 */		g_globalGameFlag.setInt("アンケート／%s／%s" % this.caption_ % this.checkBox_[i].getCaption(), this.isChecked(i) ? 1 : 0);
+/* 0008a9c2 */	}
+/* 0008a9c8 */}
+
+void EnquiteCharacterGroup::revertCheckedState()
+/* 0008a9d0 */{
+/* 0008a9d0 */	int i;
+/* 0008a9da */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 0008aa0a */	{
+/* 0008aa0a */		int n = g_globalGameFlag.getInt("アンケート／%s／%s" % this.caption_ % this.checkBox_[i].getCaption());
+/* 0008aa52 */		this.checkBox_[i].setCheck(n == 1);
+/* 0008aa76 */		this.onUpdateCheckState();
+/* 0008aa7e */	}
+/* 0008aa84 */}
+

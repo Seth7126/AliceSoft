@@ -1,0 +1,152 @@
+void シナリオテスト()
+/* 0008de60 */{
+/* 0008de60 */	stfunc.Alloc(EX_Width("シナリオテストデータ"));
+/* 0008de7c */	int i;
+/* 0008de86 */	for (i = 0; i < stfunc.Numof(); ++i)
+/* 0008deb6 */	{
+/* 0008deb6 */		stfunc[i].funcName = EX_AString("シナリオテストデータ", i, "");
+/* 0008dee8 */		splitToken(stfunc[i].categoryList, stfunc[i].funcName, "／");
+/* 0008df20 */	}
+/* 0008df26 */	array@string ct;
+/* 0008df30 */	array@string allfunc;
+/* 0008df3a */	array@string lv;
+/* 0008df44 */	while (true)
+/* 0008df50 */	{
+/* 0008df50 */		getCategolizedList(ct, allfunc, lv);
+/* 0008df6a */		string head = createLevelHeader(lv);
+/* 0008df82 */		if (allfunc.Numof() > 135)
+/* 0008dfa0 */		{
+/* 0008dfa0 */			string split;
+/* 0008dfac */			split = シナリオテスト選択肢(ct, head);
+/* 0008dfca */			if (split == "")
+/* 0008dfda */			{
+/* 0008dfda */				if (lv.Empty())
+/* 0008dfea */				{
+/* 0008dfea */					return;
+/* 0008dfec */				}
+/* 0008dff2 */				lv.PopBack();
+/* 0008dffc */			}
+/* 0008e002 */			else if (findSameFuncName(head + split))
+/* 0008e01c */			{
+/* 0008e01c */				AdvFunc fn = head + split;
+/* 0008e03c */				updateScenarioTestHistory(head + split);
+/* 0008e050 */				fn();
+/* 0008e05e */			}
+/* 0008e064 */			else
+/* 0008e064 */			{
+/* 0008e064 */				lv.PushBack(split);
+/* 0008e06e */			}
+/* 0008e06e */		}
+/* 0008e074 */		else
+/* 0008e074 */		{
+/* 0008e074 */			string result;
+/* 0008e080 */			result = シナリオテスト選択肢(allfunc, "");
+/* 0008e09e */			if (result == "")
+/* 0008e0ae */			{
+/* 0008e0ae */				if (lv.Empty())
+/* 0008e0be */				{
+/* 0008e0be */					return;
+/* 0008e0c0 */				}
+/* 0008e0c6 */				lv.PopBack();
+/* 0008e0d0 */			}
+/* 0008e0d6 */			else
+/* 0008e0d6 */			{
+/* 0008e0d6 */				AdvFunc fn = result;
+/* 0008e0ee */				updateScenarioTestHistory(result);
+/* 0008e0fa */				fn();
+/* 0008e108 */			}
+/* 0008e108 */		}
+/* 0008e108 */	}
+/* 0008e10e */}
+
+bool findSameFuncName(string r)
+/* 0008e11c */{
+/* 0008e11c */	int i;
+/* 0008e126 */	for (i = 0; i < stfunc.Numof(); ++i)
+/* 0008e156 */	{
+/* 0008e156 */		if (stfunc[i].funcName == r)
+/* 0008e17a */		{
+/* 0008e17a */			return true;
+/* 0008e182 */		}
+/* 0008e188 */	}
+/* 0008e18e */	return false;
+/* 0008e196 */}
+
+string createLevelHeader(array@string lv)
+/* 0008e1aa */{
+/* 0008e1aa */	string result;
+/* 0008e1b6 */	int i;
+/* 0008e1c0 */	for (i = 0; i < lv.Numof(); ++i)
+/* 0008e1fa */	{
+/* 0008e1fa */		result = result + lv[i] + "／";
+/* 0008e222 */	}
+/* 0008e228 */	return result;
+/* 0008e230 */}
+
+string シナリオテスト選択肢(array@string list, string head)
+/* 0008e244 */{
+/* 0008e244 */	int i;
+/* 0008e24e */	for (i = 0; i < list.Numof(); ++i)
+/* 0008e288 */	{
+/* 0008e288 */		選択肢(i, head + list[i], 0);
+/* 0008e2b0 */	}
+/* 0008e2b6 */	int r = テスト選択();
+/* 0008e2c8 */	if (r != -1)
+/* 0008e2dc */	{
+/* 0008e2dc */		return list[r];
+/* 0008e2ec */	}
+/* 0008e2f2 */	return "";
+/* 0008e2fa */}
+
+void getCategolizedList(ref array@string resultCategorized, ref array@string resultAllFunc, array@string level)
+/* 0008e30e */{
+/* 0008e30e */	resultCategorized.Free();
+/* 0008e318 */	resultAllFunc.Free();
+/* 0008e322 */	int depth = level.Numof();
+/* 0008e33e */	int i;
+/* 0008e348 */	for (i = 0; i < stfunc.Numof(); ++i)
+/* 0008e378 */	{
+/* 0008e378 */		if (depth >= stfunc[i].categoryList.Numof())
+/* 0008e3a2 */		{
+/* 0008e3a2 */			continue;
+/* 0008e3a8 */		}
+/* 0008e3ae */		bool isOk = true;
+/* 0008e3b8 */		int j;
+/* 0008e3c2 */		for (j = 0; j < level.Numof(); ++j)
+/* 0008e3fc */		{
+/* 0008e3fc */			if (stfunc[i].categoryList[j] != level[j])
+/* 0008e430 */			{
+/* 0008e430 */				isOk = false;
+/* 0008e43a */			}
+/* 0008e440 */		}
+/* 0008e446 */		if (isOk)
+/* 0008e452 */		{
+/* 0008e452 */			string ct = stfunc[i].categoryList[depth];
+/* 0008e476 */			if (resultCategorized.Find(0, resultCategorized.Numof(), ct) == -1)
+/* 0008e4b0 */			{
+/* 0008e4b0 */				resultCategorized.PushBack(ct);
+/* 0008e4ba */			}
+/* 0008e4c0 */			resultAllFunc.PushBack(stfunc[i].funcName);
+/* 0008e4e0 */		}
+/* 0008e4e6 */	}
+/* 0008e4ec */}
+
+void updateScenarioTestHistory(string func)
+/* 0008e4fa */{
+/* 0008e4fa */	int r = g_lastViewScenario.Find(0, g_lastViewScenario.Numof(), func);
+/* 0008e528 */	if (r != -1)
+/* 0008e53c */	{
+/* 0008e53c */		g_lastViewScenario.Erase(r);
+/* 0008e54e */		g_lastViewScenario.Insert(0, func);
+/* 0008e564 */	}
+/* 0008e56a */	else
+/* 0008e56a */	{
+/* 0008e56a */		g_lastViewScenario.Insert(0, func);
+/* 0008e580 */		if (g_lastViewScenario.Numof() > 10)
+/* 0008e594 */		{
+/* 0008e594 */			g_lastViewScenario.PopBack();
+/* 0008e59e */		}
+/* 0008e5a4 */	}
+/* 0008e5a4 */	共有セーブ();
+/* 0008e5aa */}
+

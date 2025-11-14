@@ -1,0 +1,298 @@
+void SYS_テスト選択(ref SYS_選択_result_t result)
+/* 00044d4e */{
+/* 00044d4e */	result.fnc = NULL;
+/* 00044d64 */	result.値 = 0;
+/* 00044d7a */	if (_選択肢.Empty())
+/* 00044d8a */	{
+/* 00044d8a */		SYS_ERROR("選択肢が登録されていない", 0);
+/* 00044d9c */		return;
+/* 00044d9e */	}
+/* 00044da4 */	array@選択肢_t SelectItemList;
+/* 00044dae */	SelectItemList.Alloc(_選択肢.Numof());
+/* 00044dc4 */	SelectItemList.Copy(0, _選択肢, 0, _選択肢.Numof());
+/* 00044de8 */	_選択肢.Free();
+/* 00044df2 */	int i;
+/* 00044dfc */	int max_x;
+/* 00044e06 */	int max_y;
+/* 00044e10 */	int x0 = 2;
+/* 00044e1a */	int y0 = 2;
+/* 00044e24 */	int x = x0;
+/* 00044e36 */	int y = y0;
+/* 00044e48 */	array@CASParts item;
+/* 00044e52 */	item.Alloc(SelectItemList.Numof());
+/* 00044e72 */	CASCharSpriteProperty TextProperty;
+/* 00044e82 */	TextProperty.SetType(g_テスト選択肢_フォント種類);
+/* 00044e94 */	TextProperty.SetSize(g_テスト選択肢_フォントサイズ);
+/* 00044ea6 */	TextProperty.SetColor(CF_CASColor(192, 192, 192, 255));
+/* 00044ed0 */	CASCharSpriteProperty SelectedTextProperty;
+/* 00044ee0 */	SelectedTextProperty.SetType(g_テスト選択肢_フォント種類);
+/* 00044ef2 */	SelectedTextProperty.SetSize(g_テスト選択肢_フォントサイズ);
+/* 00044f04 */	SelectedTextProperty.SetColor(CF_CASColor(255, 255, 255, 255));
+/* 00044f2e */	array@CASRect ItemRectList;
+/* 00044f38 */	ItemRectList.Alloc(SelectItemList.Numof());
+/* 00044f58 */	int MaxTextPartsWidth;
+/* 00044f62 */	int MaxTextPartsHeight;
+/* 00044f6c */	for (i = 0; i < item.Numof(); ++i)
+/* 00044fa6 */	{
+/* 00044fa6 */		item[i].Create();
+/* 00044fba */		item[i].SetFontProperty(TextProperty, 1);
+/* 00044fda */		item[i].SetFontProperty(SelectedTextProperty, 2);
+/* 00044ffa */		item[i].SetText(SelectItemList[i].テキスト, 1);
+/* 0004502a */		item[i].SetText(SelectItemList[i].テキスト, 2);
+/* 0004505a */		if (MaxTextPartsWidth < item[i].GetWidth(1))
+/* 00045082 */		{
+/* 00045082 */			MaxTextPartsWidth = item[i].GetWidth(1);
+/* 000450a8 */		}
+/* 000450ae */		if (MaxTextPartsHeight < item[i].GetHeight(1))
+/* 000450d6 */		{
+/* 000450d6 */			MaxTextPartsHeight = item[i].GetHeight(1);
+/* 000450fc */		}
+/* 00045102 */	}
+/* 00045108 */	int NumofY = (AFL_View_GetHeight() - y0) / (MaxTextPartsHeight + 1);
+/* 00045132 */	for (i = 0; i < SelectItemList.Numof(); ++i)
+/* 0004516c */	{
+/* 0004516c */		if (x > max_x)
+/* 00045180 */		{
+/* 00045180 */			max_x = x;
+/* 00045192 */		}
+/* 00045198 */		if (y > max_y)
+/* 000451ac */		{
+/* 000451ac */			max_y = y;
+/* 000451be */		}
+/* 000451c4 */		item[i].SetPos(x, y);
+/* 000451e4 */		item[i].SetZByBaseZ(1, 45056);
+/* 00045204 */		ItemRectList[i].Set(x, y, MaxTextPartsWidth, MaxTextPartsHeight);
+/* 00045230 */		y += MaxTextPartsHeight + 1;
+/* 0004524a */		if (y + MaxTextPartsHeight + 1 > AFL_View_GetHeight())
+/* 0004526e */		{
+/* 0004526e */			x += MaxTextPartsWidth + 1;
+/* 00045288 */			y = y0;
+/* 0004529a */		}
+/* 000452a0 */	}
+/* 000452a6 */	CASParts BaseParts;
+/* 000452b6 */	BaseParts.Create();
+/* 000452c2 */	Ｐ＿構築手順＿初期化(BaseParts.GetPartsNumber(), 1);
+/* 000452da */	Ｐ＿構築手順＿作成(BaseParts.GetPartsNumber(), max_x + MaxTextPartsWidth, max_y + MaxTextPartsHeight, 1);
+/* 0004530e */	Ｐ＿構築手順＿色塗り(BaseParts.GetPartsNumber(), 0, 0, max_x + MaxTextPartsWidth, max_y + MaxTextPartsHeight, 0, 64, 32, 255, 1);
+/* 00045366 */	Ｐ＿構築ビルド(BaseParts.GetPartsNumber(), 1);
+/* 0004537e */	BaseParts.SetPos(1, 1);
+/* 00045396 */	BaseParts.SetZByBaseZ(0, 45056);
+/* 000453ae */	array@CASClick ClickList;
+/* 000453b8 */	ClickList.Alloc(SelectItemList.Numof());
+/* 000453d8 */	for (i = 0; i < ClickList.Numof(); ++i)
+/* 00045412 */	{
+/* 00045412 */		if (SelectItemList[i].キーコード == 0)
+/* 00045436 */		{
+/* 00045436 */			continue;
+/* 0004543c */		}
+/* 00045442 */		ClickList[i].Init(SelectItemList[i].キーコード, true);
+/* 00045472 */	}
+/* 00045478 */	CASClick LButtonClick;
+/* 00045488 */	CASClick RButtonClick;
+/* 00045498 */	CASClick ReturnKeyClick;
+/* 000454a8 */	CASClick EscapeKeyClick;
+/* 000454b8 */	CASClick UpKeyClick;
+/* 000454c8 */	CASClick DownKeyClick;
+/* 000454d8 */	CASClick LeftKeyClick;
+/* 000454e8 */	CASClick RightKeyClick;
+/* 000454f8 */	LButtonClick.Init(1, true);
+/* 00045510 */	RButtonClick.Init(2, true);
+/* 00045528 */	ReturnKeyClick.Init(13, true);
+/* 00045540 */	EscapeKeyClick.Init(27, true);
+/* 00045558 */	UpKeyClick.Init(38, true);
+/* 00045570 */	DownKeyClick.Init(40, true);
+/* 00045588 */	LeftKeyClick.Init(37, true);
+/* 000455a0 */	RightKeyClick.Init(39, true);
+/* 000455b8 */	CASJoyClickAssignedKey OKJoyClick;
+/* 000455c8 */	CASJoyClickAssignedKey UpJoyClick;
+/* 000455d8 */	CASJoyClickAssignedKey DownJoyClick;
+/* 000455e8 */	CASJoyClickAssignedKey LeftJoyClick;
+/* 000455f8 */	CASJoyClickAssignedKey RightJoyClick;
+/* 00045608 */	OKJoyClick.Init(4, true);
+/* 00045620 */	UpJoyClick.Init(2, true);
+/* 00045638 */	DownJoyClick.Init(3, true);
+/* 00045650 */	LeftJoyClick.Init(0, true);
+/* 00045668 */	RightJoyClick.Init(1, true);
+/* 00045680 */	bool MouseSelectMode = true;
+/* 0004568a */	int SelectIndex = -1;
+/* 0004569c */	int sel = -1;
+/* 000456ae */	int PrevMouseX;
+/* 000456b8 */	int PrevMouseY;
+/* 000456c2 */	AFL_Mouse_GetPos(PrevMouseX, PrevMouseY);
+/* 000456da */	for (; ; )
+/* 000456da */	{
+/* 000456da */		_g_MouseWheel._Update(true);
+/* 000456ec */		int MouseX;
+/* 000456f6 */		int MouseY;
+/* 00045700 */		AFL_Mouse_GetPos(MouseX, MouseY);
+/* 00045718 */		if (MouseX != PrevMouseX || MouseY != PrevMouseY)
+/* 00045758 */		{
+/* 00045758 */			MouseSelectMode = true;
+/* 00045762 */		}
+/* 00045768 */		PrevMouseX = MouseX;
+/* 0004577a */		PrevMouseY = MouseY;
+/* 0004578c */		if (MouseSelectMode)
+/* 00045798 */		{
+/* 00045798 */			SelectIndex = -1;
+/* 000457aa */			for (i = 0; i < ItemRectList.Numof(); ++i)
+/* 000457e4 */			{
+/* 000457e4 */				if (ItemRectList[i].IsIn(MouseX, MouseY))
+/* 0004580a */				{
+/* 0004580a */					SelectIndex = i;
+/* 0004581c */					break;
+/* 00045822 */				}
+/* 00045828 */			}
+/* 0004582e */		}
+/* 00045834 */		bool UpKeyPress = UpKeyClick.IsKeyPress(-2147483648);
+/* 00045852 */		bool DownKeyPress = DownKeyClick.IsKeyPress(-2147483648);
+/* 00045870 */		bool LeftKeyPress = LeftKeyClick.IsKeyPress(-2147483648);
+/* 0004588e */		bool RightKeyPress = RightKeyClick.IsKeyPress(-2147483648);
+/* 000458ac */		bool UpJoyPress = UpJoyClick.IsKeyPress();
+/* 000458c4 */		bool DownJoyPress = DownJoyClick.IsKeyPress();
+/* 000458dc */		bool LeftJoyPress = LeftJoyClick.IsKeyPress();
+/* 000458f4 */		bool RightJoyPress = RightJoyClick.IsKeyPress();
+/* 0004590c */		if (UpKeyPress || UpJoyPress)
+/* 0004593c */		{
+/* 0004593c */			if (MouseSelectMode)
+/* 00045948 */			{
+/* 00045948 */				MouseSelectMode = false;
+/* 00045952 */				if (SelectIndex == -1)
+/* 00045966 */				{
+/* 00045966 */					SelectIndex = 0;
+/* 00045970 */				}
+/* 00045976 */				else if (--SelectIndex < 0)
+/* 00045992 */				{
+/* 00045992 */					SelectIndex = 0;
+/* 0004599c */				}
+/* 000459a2 */			}
+/* 000459a8 */			else if (--SelectIndex < 0)
+/* 000459c4 */			{
+/* 000459c4 */				SelectIndex = 0;
+/* 000459ce */			}
+/* 000459d4 */		}
+/* 000459da */		if (DownKeyPress || DownJoyPress)
+/* 00045a0a */		{
+/* 00045a0a */			if (MouseSelectMode)
+/* 00045a16 */			{
+/* 00045a16 */				MouseSelectMode = false;
+/* 00045a20 */				if (SelectIndex == -1)
+/* 00045a34 */				{
+/* 00045a34 */					SelectIndex = 0;
+/* 00045a3e */				}
+/* 00045a44 */				else if (++SelectIndex >= item.Numof())
+/* 00045a6a */				{
+/* 00045a6a */					SelectIndex = item.Numof() - 1;
+/* 00045a8e */				}
+/* 00045a94 */			}
+/* 00045a9a */			else if (++SelectIndex >= item.Numof())
+/* 00045ac0 */			{
+/* 00045ac0 */				SelectIndex = item.Numof() - 1;
+/* 00045ae4 */			}
+/* 00045aea */		}
+/* 00045af0 */		if (LeftKeyPress || LeftJoyPress)
+/* 00045b20 */		{
+/* 00045b20 */			if (MouseSelectMode)
+/* 00045b2c */			{
+/* 00045b2c */				MouseSelectMode = false;
+/* 00045b36 */				if (SelectIndex == -1)
+/* 00045b4a */				{
+/* 00045b4a */					SelectIndex = 0;
+/* 00045b54 */				}
+/* 00045b5a */				else
+/* 00045b5a */				{
+/* 00045b5a */					SelectIndex -= NumofY;
+/* 00045b6c */					if (SelectIndex < 0)
+/* 00045b7a */					{
+/* 00045b7a */						SelectIndex = 0;
+/* 00045b84 */					}
+/* 00045b8a */				}
+/* 00045b8a */			}
+/* 00045b90 */			else
+/* 00045b90 */			{
+/* 00045b90 */				SelectIndex -= NumofY;
+/* 00045ba2 */				if (SelectIndex < 0)
+/* 00045bb0 */				{
+/* 00045bb0 */					SelectIndex = 0;
+/* 00045bba */				}
+/* 00045bc0 */			}
+/* 00045bc0 */		}
+/* 00045bc6 */		if (RightKeyPress || RightJoyPress)
+/* 00045bf6 */		{
+/* 00045bf6 */			if (MouseSelectMode)
+/* 00045c02 */			{
+/* 00045c02 */				MouseSelectMode = false;
+/* 00045c0c */				if (SelectIndex == -1)
+/* 00045c20 */				{
+/* 00045c20 */					SelectIndex = 0;
+/* 00045c2a */				}
+/* 00045c30 */				else
+/* 00045c30 */				{
+/* 00045c30 */					SelectIndex += NumofY;
+/* 00045c42 */					if (SelectIndex >= item.Numof())
+/* 00045c60 */					{
+/* 00045c60 */						SelectIndex = item.Numof() - 1;
+/* 00045c84 */					}
+/* 00045c8a */				}
+/* 00045c8a */			}
+/* 00045c90 */			else
+/* 00045c90 */			{
+/* 00045c90 */				SelectIndex += NumofY;
+/* 00045ca2 */				if (SelectIndex >= item.Numof())
+/* 00045cc0 */				{
+/* 00045cc0 */					SelectIndex = item.Numof() - 1;
+/* 00045ce4 */				}
+/* 00045cea */			}
+/* 00045cea */		}
+/* 00045cf0 */		for (i = 0; i < ClickList.Numof(); ++i)
+/* 00045d2a */		{
+/* 00045d2a */			if (ClickList[i].IsClick(-2147483648))
+/* 00045d4a */			{
+/* 00045d4a */				sel = i;
+/* 00045d5c */				break;
+/* 00045d62 */			}
+/* 00045d68 */		}
+/* 00045d6e */		if (i < ClickList.Numof() && sel != -1)
+/* 00045db8 */		{
+/* 00045db8 */			break;
+/* 00045dbe */		}
+/* 00045dc4 */		sel = SelectIndex;
+/* 00045dd6 */		if (LButtonClick.IsClick(sel) && sel != -1)
+/* 00045e1a */		{
+/* 00045e1a */			break;
+/* 00045e20 */		}
+/* 00045e26 */		if (ReturnKeyClick.IsClick(sel) && sel != -1)
+/* 00045e6a */		{
+/* 00045e6a */			break;
+/* 00045e70 */		}
+/* 00045e76 */		if (OKJoyClick.IsClick(sel) && sel != -1)
+/* 00045eba */		{
+/* 00045eba */			break;
+/* 00045ec0 */		}
+/* 00045ec6 */		if (RButtonClick.IsClick(-2147483648))
+/* 00045ede */		{
+/* 00045ede */			result.値 = -1;
+/* 00045ef4 */			return;
+/* 00045ef6 */		}
+/* 00045efc */		if (EscapeKeyClick.IsClick(-2147483648))
+/* 00045f14 */		{
+/* 00045f14 */			BaseParts.SetShow(false);
+/* 00045f26 */			for (i = 0; i < item.Numof(); ++i)
+/* 00045f60 */			{
+/* 00045f60 */				item[i].SetShow(false);
+/* 00045f7a */			}
+/* 00045f80 */			Ｓ＿コンフィグ();
+/* 00045f86 */			BaseParts.SetShow(true);
+/* 00045f98 */			for (i = 0; i < item.Numof(); ++i)
+/* 00045fd2 */			{
+/* 00045fd2 */				item[i].SetShow(true);
+/* 00045fec */			}
+/* 00045ff2 */		}
+/* 00045ff8 */		for (i = 0; i < item.Numof(); ++i)
+/* 00046032 */		{
+/* 00046032 */			item[i].SetState(i == SelectIndex ? 2 : 1);
+/* 0004606c */		}
+/* 00046072 */		AFL_View_Update(true);
+/* 0004607e */	}
+/* 00046084 */	result.値 = SelectItemList[sel].番号;
+/* 000460aa */}
+

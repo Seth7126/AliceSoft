@@ -1,0 +1,132 @@
+SceneAward::SceneAward()
+/* 0008c286 */{
+/* 0008c290 */}
+
+void SceneAward::run()
+/* 0008c296 */{
+/* 0008c296 */	this.init();
+/* 0008c29e */	this.fadeIn(true);
+/* 0008c2ac */}
+
+int SceneAward::update()
+/* 0008c2b4 */{
+/* 0008c2b4 */	g_gameObjectManager.update();
+/* 0008c2c0 */	switch (this.state_)
+/* 0008c2d2 */	{
+/* 0008c2d2 */	case 0:
+/* 0008c2d2 */		if (!this.parent_.isMotion())
+/* 0008c2e6 */		{
+/* 0008c2e6 */			this.state_ = 1;
+/* 0008c2f0 */		}
+/* 0008c2f6 */		break;
+/* 0008c2fc */	case 1:
+/* 0008c2fc */		if (g_mouse.isClick(0) || g_mouse.isClick(1))
+/* 0008c344 */		{
+/* 0008c344 */			if (g_mouse.isClick(1))
+/* 0008c35c */			{
+/* 0008c35c */				g_sysSound.play(2003, false);
+/* 0008c374 */			}
+/* 0008c37a */			else
+/* 0008c37a */			{
+/* 0008c37a */				g_sysSound.play(2002, false);
+/* 0008c392 */			}
+/* 0008c392 */			this.fadeIn(false);
+/* 0008c3a0 */		}
+/* 0008c3a6 */		break;
+/* 0008c3ac */	case 2:
+/* 0008c3ac */		if (!this.parent_.isMotion())
+/* 0008c3c0 */		{
+/* 0008c3c0 */			this.state_ = 3;
+/* 0008c3ca */		}
+/* 0008c3d0 */		break;
+/* 0008c3d6 */	case 3:
+/* 0008c3d6 */		return 1;
+/* 0008c3de */		break;
+/* 0008c3e4 */	}
+/* 0008c3e4 */	return 0;
+/* 0008c3ec */}
+
+void SceneAward::init()
+/* 0008c3fa */{
+/* 0008c3fa */	this.initParts();
+/* 0008c402 */	this.setPartsPos();
+/* 0008c40a */	this.setPartsShow();
+/* 0008c412 */}
+
+void SceneAward::initParts()
+/* 0008c41a */{
+/* 0008c41a */	this.parts_[0].init("システム／表彰状／下地", 0);
+/* 0008c43a */	this.initTextParts(1, "最低クリアレベル");
+/* 0008c44e */	this.initTextParts(2, "最低クリア日数");
+/* 0008c462 */	this.initTextParts(3, "最短豪遊クリア日数");
+/* 0008c476 */	this.initTextParts(4, "%d" % g_globalGameFlag.getInt("表彰状／最低クリアレベル"));
+/* 0008c4a4 */	this.initTextParts(5, "%d" % g_globalGameFlag.getInt("表彰状／最低クリア日数"));
+/* 0008c4d2 */	this.initTextParts(6, "%d" % g_globalGameFlag.getInt("表彰状／最短豪遊クリア日数"));
+/* 0008c500 */	int i;
+/* 0008c50a */	for (i = 0; i < 10; ++i)
+/* 0008c534 */	{
+/* 0008c534 */		this.parts_[7 + i].init("システム／表彰状／スタンプ", 0);
+/* 0008c55c */		this.parts_[7 + i].setCgRange(i * 40, 0, 40, 40);
+/* 0008c598 */	}
+/* 0008c59e */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 0008c5b6 */	this.parent_.setPos(16, 0, -2147483648);
+/* 0008c5d4 */}
+
+void SceneAward::initTextParts(int partsIndex, string val)
+/* 0008c5dc */{
+/* 0008c5dc */	this.parts_[partsIndex].initAsText(val, 26, false, 256, 0, 0, 0);
+/* 0008c61a */}
+
+void SceneAward::setPartsPos()
+/* 0008c622 */{
+/* 0008c622 */	int i;
+/* 0008c62c */	for (i = 0; i < 3; ++i)
+/* 0008c656 */	{
+/* 0008c656 */		this.parts_[1 + i].setPos(112, 352 + i * 40, -2147483648);
+/* 0008c694 */	}
+/* 0008c69a */	for (i = 0; i < 3; ++i)
+/* 0008c6c4 */	{
+/* 0008c6c4 */		this.parts_[4 + i].setPos(399, 352 + i * 40, -2147483648);
+/* 0008c702 */		this.parts_[4 + i].setOrigin(9);
+/* 0008c724 */	}
+/* 0008c72a */	for (i = 0; i < 10; ++i)
+/* 0008c754 */	{
+/* 0008c754 */		this.parts_[i + 7].setPos(160 + (i % 5) * 44, 468 + (i / 5) * 44, -2147483648);
+/* 0008c7b2 */	}
+/* 0008c7b8 */}
+
+void SceneAward::setPartsShow()
+/* 0008c7c0 */{
+/* 0008c7c0 */	int i;
+/* 0008c7ca */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008c7fa */	{
+/* 0008c7fa */		this.parts_[i].setShow(true);
+/* 0008c814 */	}
+/* 0008c81a */	if (g_globalGameFlag.getInt("表彰状／最短豪遊クリア日数") == 0)
+/* 0008c83a */	{
+/* 0008c83a */		this.parts_[3].setShow(false);
+/* 0008c854 */		this.parts_[6].setShow(false);
+/* 0008c86e */	}
+/* 0008c874 */	for (i = 0; i < 10; ++i)
+/* 0008c89e */	{
+/* 0008c89e */		this.parts_[i + 7].setShow(g_globalGameFlag.getInt("表彰状／スタンプ[%d]" % i) == 1);
+/* 0008c8e4 */	}
+/* 0008c8ea */}
+
+void SceneAward::fadeIn(bool val)
+/* 0008c8f2 */{
+/* 0008c8f2 */	this.parent_.setShow(true);
+/* 0008c904 */	MotionInfomation m;
+/* 0008c914 */	m.setTime(400, 0);
+/* 0008c92c */	if (val)
+/* 0008c938 */	{
+/* 0008c938 */		m.setMove(16, -768, 16, 0, 1);
+/* 0008c962 */	}
+/* 0008c968 */	else
+/* 0008c968 */	{
+/* 0008c968 */		m.setMove(16, 0, 16, -768, 1);
+/* 0008c992 */	}
+/* 0008c992 */	this.parent_.runMotion(m);
+/* 0008c9ac */	this.state_ = val ? 0 : 2;
+/* 0008c9d6 */}
+

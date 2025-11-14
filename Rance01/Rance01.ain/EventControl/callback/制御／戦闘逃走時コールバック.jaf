@@ -1,0 +1,9 @@
+void 制御／戦闘逃走時コールバック(string id)
+/* 000a3ee2 */{
+/* 000a3ee2 */	int lostGold;
+/* 000a3eec */	lostGold = (制御／所持金確認() * 5) / 100;
+/* 000a3f0e */	string monsterName;
+/* 000a3f1a */	monsterName = getMonster(id).getName();
+/* 000a3f40 */	return;
+/* 000a3f42 */}
+

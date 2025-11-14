@@ -1,0 +1,83 @@
+DungeonName::DungeonName()
+/* 0006f1a8 */{
+/* 0006f1b0 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006f1d2 */}
+
+void DungeonName::init(string imageName)
+/* 0006f1da */{
+/* 0006f1da */	this.name_ = imageName;
+/* 0006f1e4 */	this.initParts();
+/* 0006f1ec */	this.setPartsOrigin();
+/* 0006f1f4 */	this.setPartsShow();
+/* 0006f1fc */	this.parent_.setPos(352, 300, -2147483648);
+/* 0006f21a */}
+
+void DungeonName::initParts()
+/* 0006f222 */{
+/* 0006f222 */	this.parts_[0].init(this.name_, 0);
+/* 0006f242 */	createPartsGroup(this.parent_, this.parts_, 2500);
+/* 0006f25a */}
+
+void DungeonName::setPartsOrigin()
+/* 0006f262 */{
+/* 0006f262 */	int i;
+/* 0006f26c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006f29c */	{
+/* 0006f29c */		this.parts_[i].setOrigin(7);
+/* 0006f2b6 */	}
+/* 0006f2bc */}
+
+void DungeonName::setPartsShow()
+/* 0006f2c4 */{
+/* 0006f2c4 */	int i;
+/* 0006f2ce */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006f2fe */	{
+/* 0006f2fe */		this.parts_[i].setShow(true);
+/* 0006f318 */	}
+/* 0006f31e */}
+
+void DungeonName::update()
+/* 0006f326 */{
+/* 0006f326 */	switch (this.state_)
+/* 0006f338 */	{
+/* 0006f338 */	case 1:
+/* 0006f338 */		if (!this.parent_.isMotion())
+/* 0006f34c */		{
+/* 0006f34c */			this.state_ = 3;
+/* 0006f356 */		}
+/* 0006f35c */		break;
+/* 0006f362 */	case 4:
+/* 0006f362 */		if (!this.parent_.isMotion())
+/* 0006f376 */		{
+/* 0006f376 */			this.state_ = 0;
+/* 0006f380 */		}
+/* 0006f386 */		break;
+/* 0006f38c */	case 3:
+/* 0006f38c */		break;
+/* 0006f392 */	}
+/* 0006f392 */}
+
+void DungeonName::fadeIn(bool val)
+/* 0006f39a */{
+/* 0006f39a */	this.parent_.setShow(true);
+/* 0006f3ac */	this.state_ = val ? 1 : 4;
+/* 0006f3d6 */	MotionInfomation m;
+/* 0006f3e6 */	m = getStandardMotion(val ? 0 : 1);
+/* 0006f41a */	if (val)
+/* 0006f426 */	{
+/* 0006f426 */		m.setTime(1000, 0);
+/* 0006f43e */	}
+/* 0006f444 */	this.parent_.runMotion(m);
+/* 0006f45e */}
+
+void DungeonName::moveToTop()
+/* 0006f466 */{
+/* 0006f466 */	array@MotionInfomation m[2];
+/* 0006f47c */	m[0].setTime(400, 0);
+/* 0006f49c */	m[0].setAlpha(255, 0, 0);
+/* 0006f4c2 */	m[1].setTime(400, 0);
+/* 0006f4e2 */	m[1].setMove(352, 12, 352, 12, 1);
+/* 0006f514 */	m[1].setAlpha(0, 255, 0);
+/* 0006f53a */	this.parent_.runMotionArray(m);
+/* 0006f54c */}
+

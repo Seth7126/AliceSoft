@@ -1,0 +1,5 @@
+bool Ａ＿フラット存在確認(string ファイル名)
+/* 00056ff2 */{
+/* 00056ff2 */	return GUIEngine.Parts_ExistsFlatFile(ファイル名);
+/* 00057004 */}
+

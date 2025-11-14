@@ -1,0 +1,111 @@
+void SYS_バックシーン登録()
+/* 00043008 */{
+/* 00043008 */	if (!g_bバックシーン登録可能)
+/* 00043016 */	{
+/* 00043016 */		return;
+/* 00043018 */	}
+/* 0004301e */	if (!g_MessageWindowStatusManager.IsExistActiveMessageWindow())
+/* 00043032 */	{
+/* 00043032 */		return;
+/* 00043034 */	}
+/* 0004303a */	g_SystemButtonViewList.Hide();
+/* 00043046 */	画面保管_t ADVScene;
+/* 00043056 */	SYS_画面レイアウト保管(ADVScene);
+/* 00043062 */	g_SystemButtonViewList.Show();
+/* 0004306e */	if (g_ADVSceneList.Numof() >= 500)
+/* 00043082 */	{
+/* 00043082 */		g_ADVSceneList.Erase(0);
+/* 00043094 */	}
+/* 0004309a */	g_ADVSceneList.PushBack(ADVScene);
+/* 000430a4 */}
+
+int SYS_GetNumofADVScene()
+/* 000430b2 */{
+/* 000430b2 */	return g_ADVSceneList.Numof();
+/* 000430ba */}
+
+bool SYS_GetADVScene(int nIndex, ref 画面保管_t ADVScene)
+/* 000430ce */{
+/* 000430ce */	if (nIndex < 0 || nIndex >= g_ADVSceneList.Numof())
+/* 00043108 */	{
+/* 00043108 */		return false;
+/* 00043110 */	}
+/* 00043116 */	ADVScene = g_ADVSceneList[nIndex];
+/* 0004312a */	return true;
+/* 00043132 */}
+
+bool SYS_BackScene_Play(int nChannel, BackSE_t NowData, BackSE_t PrevData)
+/* 00043146 */{
+/* 00043146 */	if (!KiwiSoundEngine.Sound_IsPlay(nChannel) || NowData.bStop != PrevData.bStop)
+/* 0004319a */	{
+/* 0004319a */		SYS_PlayBackSE(PrevData.Group, PrevData.PlayList);
+/* 000431be */		return true;
+/* 000431c6 */	}
+/* 000431cc */	return false;
+/* 000431d4 */}
+
+void SYS_BackScene_PlayBackSE(array@BackSE_t SoundList)
+/* 000431e8 */{
+/* 000431e8 */	int Count;
+/* 000431f2 */	for (Count = 10; Count < 999; ++Count)
+/* 0004321c */	{
+/* 0004321c */		BackSE_t NowData;
+/* 0004322c */		NowData = SYS_GetBackSE(Count);
+/* 00043248 */		if (NowData.FadeChannel < 10)
+/* 00043264 */		{
+/* 00043264 */			break;
+/* 00043270 */		}
+/* 00043276 */		int Index = SoundList.Find(0, SoundList.Numof(), NowData, &SYS_SearchBackSE_Group);
+/* 000432ae */		if (Index == -1)
+/* 000432c2 */		{
+/* 000432c2 */			if (Count == 10)
+/* 000432d0 */			{
+/* 000432d0 */				Ａ＿擬音終了();
+/* 000432d6 */			}
+/* 000432dc */			else
+/* 000432dc */			{
+/* 000432dc */				Ａ＿背景音声終了(NowData.Group);
+/* 000432f0 */			}
+/* 000432f0 */			continue;
+/* 000432fc */		}
+/* 00043302 */		BackSE_t PrevData;
+/* 00043312 */		PrevData = SoundList[Index];
+/* 00043326 */		if (PrevData.bStop)
+/* 0004333a */		{
+/* 0004333a */			if (Count == 10)
+/* 00043348 */			{
+/* 00043348 */				Ａ＿擬音終了();
+/* 0004334e */			}
+/* 00043354 */			else
+/* 00043354 */			{
+/* 00043354 */				Ａ＿背景音声終了(NowData.Group);
+/* 00043368 */			}
+/* 00043368 */			continue;
+/* 0004337a */		}
+/* 00043380 */		int NowNumof = NowData.PlayList.Numof();
+/* 000433a0 */		int PrevNumof = PrevData.PlayList.Numof();
+/* 000433c0 */		if (NowNumof == PrevNumof)
+/* 000433d4 */		{
+/* 000433d4 */			if (SYS_CheckSoundList(NowData.PlayList, PrevData.PlayList))
+/* 00043400 */			{
+/* 00043400 */				if (NowData.bStop && !PrevData.bStop)
+/* 00043442 */				{
+/* 00043442 */					SYS_PlayBackSE(PrevData.Group, PrevData.PlayList);
+/* 00043466 */				}
+/* 0004346c */				continue;
+/* 0004347e */			}
+/* 00043484 */			else
+/* 00043484 */			{
+/* 00043484 */				SYS_PlayBackSE(PrevData.Group, PrevData.PlayList);
+/* 000434a8 */				continue;
+/* 000434ba */			}
+/* 000434ba */		}
+/* 000434c0 */		else
+/* 000434c0 */		{
+/* 000434c0 */			SYS_PlayBackSE(PrevData.Group, PrevData.PlayList);
+/* 000434e4 */			continue;
+/* 000434f6 */		}
+/* 000434f6 */		SYS_BackScene_Play(Count, NowData, PrevData);
+/* 00043520 */	}
+/* 00043532 */}
+

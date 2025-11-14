@@ -1,0 +1,121 @@
+float CASMatrix::det2x2(float a1, float a2, float b1, float b2)
+/* 00010a28 */{
+/* 00010a28 */	return a1 * b2 - b1 * a2;
+/* 00010a48 */}
+
+float CASMatrix::det3x3(float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3)
+/* 00010a56 */{
+/* 00010a56 */	return (a1 * this.det2x2(b2, b3, c2, c3) - b1 * this.det2x2(a2, a3, c2, c3)) + c1 * this.det2x2(a2, a3, b2, b3);
+/* 00010ad4 */}
+
+void CASMatrix::Set(float a11, float a12, float a13, float a14, float a21, float a22, float a23, float a24, float a31, float a32, float a33, float a34, float a41, float a42, float a43, float a44)
+/* 00010ae2 */{
+/* 00010ae2 */	this.m[0][0] = a11;
+/* 00010b00 */	this.m[0][1] = a12;
+/* 00010b1e */	this.m[0][2] = a13;
+/* 00010b3c */	this.m[0][3] = a14;
+/* 00010b5a */	this.m[1][0] = a21;
+/* 00010b78 */	this.m[1][1] = a22;
+/* 00010b96 */	this.m[1][2] = a23;
+/* 00010bb4 */	this.m[1][3] = a24;
+/* 00010bd2 */	this.m[2][0] = a31;
+/* 00010bf0 */	this.m[2][1] = a32;
+/* 00010c0e */	this.m[2][2] = a33;
+/* 00010c2c */	this.m[2][3] = a34;
+/* 00010c4a */	this.m[3][0] = a41;
+/* 00010c68 */	this.m[3][1] = a42;
+/* 00010c86 */	this.m[3][2] = a43;
+/* 00010ca4 */	this.m[3][3] = a44;
+/* 00010cc2 */}
+
+void CASMatrix::SetMove(float fX, float fY, float fZ)
+/* 00010cca */{
+/* 00010cca */	this.Set(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, fX, fY, fZ, 1.0);
+/* 00010d32 */}
+
+void CASMatrix::SetScale(float fX, float fY, float fZ)
+/* 00010d3a */{
+/* 00010d3a */	this.Set(fX, 0.0, 0.0, 0.0, 0.0, fY, 0.0, 0.0, 0.0, 0.0, fZ, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 00010da2 */}
+
+void CASMatrix::SetRotH(float fAngle)
+/* 00010daa */{
+/* 00010daa */	float fCos = Math.Cos(fAngle);
+/* 00010dc6 */	float fSin = Math.Sin(fAngle);
+/* 00010de2 */	this.Set(fCos, 0.0, -fSin, 0.0, 0.0, 1.0, 0.0, 0.0, fSin, 0.0, fCos, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 00010e4c */}
+
+void CASMatrix::SetRotP(float fAngle)
+/* 00010e54 */{
+/* 00010e54 */	float fCos = Math.Cos(fAngle);
+/* 00010e70 */	float fSin = Math.Sin(fAngle);
+/* 00010e8c */	this.Set(1.0, 0.0, 0.0, 0.0, 0.0, fCos, fSin, 0.0, 0.0, -fSin, fCos, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 00010ef6 */}
+
+void CASMatrix::SetRotB(float fAngle)
+/* 00010efe */{
+/* 00010efe */	float fCos = Math.Cos(fAngle);
+/* 00010f1a */	float fSin = Math.Sin(fAngle);
+/* 00010f36 */	this.Set(fCos, fSin, 0.0, 0.0, -fSin, fCos, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 00010fa0 */}
+
+void CASMatrix::MulMatrix(CASMatrix a)
+/* 00010fa8 */{
+/* 00010fa8 */	CASMatrix b;
+/* 00010fb8 */	b = this;
+/* 00010fd0 */	this.m[0][0] = b.m[0][0] * a.m[0][0] + b.m[0][1] * a.m[1][0] + b.m[0][2] * a.m[2][0] + b.m[0][3] * a.m[3][0];
+/* 000110e6 */	this.m[0][1] = b.m[0][0] * a.m[0][1] + b.m[0][1] * a.m[1][1] + b.m[0][2] * a.m[2][1] + b.m[0][3] * a.m[3][1];
+/* 000111fc */	this.m[0][2] = b.m[0][0] * a.m[0][2] + b.m[0][1] * a.m[1][2] + b.m[0][2] * a.m[2][2] + b.m[0][3] * a.m[3][2];
+/* 00011312 */	this.m[0][3] = b.m[0][0] * a.m[0][3] + b.m[0][1] * a.m[1][3] + b.m[0][2] * a.m[2][3] + b.m[0][3] * a.m[3][3];
+/* 00011428 */	this.m[1][0] = b.m[1][0] * a.m[0][0] + b.m[1][1] * a.m[1][0] + b.m[1][2] * a.m[2][0] + b.m[1][3] * a.m[3][0];
+/* 0001153e */	this.m[1][1] = b.m[1][0] * a.m[0][1] + b.m[1][1] * a.m[1][1] + b.m[1][2] * a.m[2][1] + b.m[1][3] * a.m[3][1];
+/* 00011654 */	this.m[1][2] = b.m[1][0] * a.m[0][2] + b.m[1][1] * a.m[1][2] + b.m[1][2] * a.m[2][2] + b.m[1][3] * a.m[3][2];
+/* 0001176a */	this.m[1][3] = b.m[1][0] * a.m[0][3] + b.m[1][1] * a.m[1][3] + b.m[1][2] * a.m[2][3] + b.m[1][3] * a.m[3][3];
+/* 00011880 */	this.m[2][0] = b.m[2][0] * a.m[0][0] + b.m[2][1] * a.m[1][0] + b.m[2][2] * a.m[2][0] + b.m[2][3] * a.m[3][0];
+/* 00011996 */	this.m[2][1] = b.m[2][0] * a.m[0][1] + b.m[2][1] * a.m[1][1] + b.m[2][2] * a.m[2][1] + b.m[2][3] * a.m[3][1];
+/* 00011aac */	this.m[2][2] = b.m[2][0] * a.m[0][2] + b.m[2][1] * a.m[1][2] + b.m[2][2] * a.m[2][2] + b.m[2][3] * a.m[3][2];
+/* 00011bc2 */	this.m[2][3] = b.m[2][0] * a.m[0][3] + b.m[2][1] * a.m[1][3] + b.m[2][2] * a.m[2][3] + b.m[2][3] * a.m[3][3];
+/* 00011cd8 */	this.m[3][0] = b.m[3][0] * a.m[0][0] + b.m[3][1] * a.m[1][0] + b.m[3][2] * a.m[2][0] + b.m[3][3] * a.m[3][0];
+/* 00011dee */	this.m[3][1] = b.m[3][0] * a.m[0][1] + b.m[3][1] * a.m[1][1] + b.m[3][2] * a.m[2][1] + b.m[3][3] * a.m[3][1];
+/* 00011f04 */	this.m[3][2] = b.m[3][0] * a.m[0][2] + b.m[3][1] * a.m[1][2] + b.m[3][2] * a.m[2][2] + b.m[3][3] * a.m[3][2];
+/* 0001201a */	this.m[3][3] = b.m[3][0] * a.m[0][3] + b.m[3][1] * a.m[1][3] + b.m[3][2] * a.m[2][3] + b.m[3][3] * a.m[3][3];
+/* 00012130 */}
+
+void CASMatrix::GetInverse(ref CASMatrix Result)
+/* 00012138 */{
+/* 00012138 */	float a11 = this.det3x3(this.m[1][1], this.m[2][1], this.m[3][1], this.m[1][2], this.m[2][2], this.m[3][2], this.m[1][3], this.m[2][3], this.m[3][3]);
+/* 00012212 */	float a21 = -this.det3x3(this.m[1][0], this.m[2][0], this.m[3][0], this.m[1][2], this.m[2][2], this.m[3][2], this.m[1][3], this.m[2][3], this.m[3][3]);
+/* 000122ee */	float a31 = this.det3x3(this.m[1][0], this.m[2][0], this.m[3][0], this.m[1][1], this.m[2][1], this.m[3][1], this.m[1][3], this.m[2][3], this.m[3][3]);
+/* 000123c8 */	float a41 = -this.det3x3(this.m[1][0], this.m[2][0], this.m[3][0], this.m[1][1], this.m[2][1], this.m[3][1], this.m[1][2], this.m[2][2], this.m[3][2]);
+/* 000124a4 */	float a12 = -this.det3x3(this.m[0][1], this.m[2][1], this.m[3][1], this.m[0][2], this.m[2][2], this.m[3][2], this.m[0][3], this.m[2][3], this.m[3][3]);
+/* 00012580 */	float a22 = this.det3x3(this.m[0][0], this.m[2][0], this.m[3][0], this.m[0][2], this.m[2][2], this.m[3][2], this.m[0][3], this.m[2][3], this.m[3][3]);
+/* 0001265a */	float a32 = -this.det3x3(this.m[0][0], this.m[2][0], this.m[3][0], this.m[0][1], this.m[2][1], this.m[3][1], this.m[0][3], this.m[2][3], this.m[3][3]);
+/* 00012736 */	float a42 = this.det3x3(this.m[0][0], this.m[2][0], this.m[3][0], this.m[0][1], this.m[2][1], this.m[3][1], this.m[0][2], this.m[2][2], this.m[3][2]);
+/* 00012810 */	float a13 = this.det3x3(this.m[0][1], this.m[1][1], this.m[3][1], this.m[0][2], this.m[1][2], this.m[3][2], this.m[0][3], this.m[1][3], this.m[3][3]);
+/* 000128ea */	float a23 = -this.det3x3(this.m[0][0], this.m[1][0], this.m[3][0], this.m[0][2], this.m[1][2], this.m[3][2], this.m[0][3], this.m[1][3], this.m[3][3]);
+/* 000129c6 */	float a33 = this.det3x3(this.m[0][0], this.m[1][0], this.m[3][0], this.m[0][1], this.m[1][1], this.m[3][1], this.m[0][3], this.m[1][3], this.m[3][3]);
+/* 00012aa0 */	float a43 = -this.det3x3(this.m[0][0], this.m[1][0], this.m[3][0], this.m[0][1], this.m[1][1], this.m[3][1], this.m[0][2], this.m[1][2], this.m[3][2]);
+/* 00012b7c */	float a14 = -this.det3x3(this.m[0][1], this.m[1][1], this.m[2][1], this.m[0][2], this.m[1][2], this.m[2][2], this.m[0][3], this.m[1][3], this.m[2][3]);
+/* 00012c58 */	float a24 = this.det3x3(this.m[0][0], this.m[1][0], this.m[2][0], this.m[0][2], this.m[1][2], this.m[2][2], this.m[0][3], this.m[1][3], this.m[2][3]);
+/* 00012d32 */	float a34 = -this.det3x3(this.m[0][0], this.m[1][0], this.m[2][0], this.m[0][1], this.m[1][1], this.m[2][1], this.m[0][3], this.m[1][3], this.m[2][3]);
+/* 00012e0e */	float a44 = this.det3x3(this.m[0][0], this.m[1][0], this.m[2][0], this.m[0][1], this.m[1][1], this.m[2][1], this.m[0][2], this.m[1][2], this.m[2][2]);
+/* 00012ee8 */	float det = this.m[0][0] * a11 + this.m[0][1] * a21 + this.m[0][2] * a31 + this.m[0][3] * a41;
+/* 00012f72 */	float oodet = 1 / det;
+/* 00012f92 */	Result.m[0][0] = a11 * oodet;
+/* 00012fc0 */	Result.m[1][0] = a21 * oodet;
+/* 00012fee */	Result.m[2][0] = a31 * oodet;
+/* 0001301c */	Result.m[3][0] = a41 * oodet;
+/* 0001304a */	Result.m[0][1] = a12 * oodet;
+/* 00013078 */	Result.m[1][1] = a22 * oodet;
+/* 000130a6 */	Result.m[2][1] = a32 * oodet;
+/* 000130d4 */	Result.m[3][1] = a42 * oodet;
+/* 00013102 */	Result.m[0][2] = a13 * oodet;
+/* 00013130 */	Result.m[1][2] = a23 * oodet;
+/* 0001315e */	Result.m[2][2] = a33 * oodet;
+/* 0001318c */	Result.m[3][2] = a43 * oodet;
+/* 000131ba */	Result.m[0][3] = a14 * oodet;
+/* 000131e8 */	Result.m[1][3] = a24 * oodet;
+/* 00013216 */	Result.m[2][3] = a34 * oodet;
+/* 00013244 */	Result.m[3][3] = a44 * oodet;
+/* 00013272 */}
+

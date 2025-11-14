@@ -1,0 +1,166 @@
+ShopChipStockView::ShopChipStockView()
+/* 0007a0c0 */{
+/* 0007a0c8 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0007a0ea */	this.state_ = 0;
+/* 0007a0f4 */	this.clickedChipIndex_ = -1;
+/* 0007a106 */}
+
+void ShopChipStockView::init(ref ShopChipStock instance, int yPos)
+/* 0007a10e */{
+/* 0007a10e */	this.instance_ <- instance;
+/* 0007a12a */	this.pageCount_ = getChipGroupCount(this.instance_.getCount());
+/* 0007a148 */	this.bg_.init(this.ss_.getPage, false, -1, this.pageCount_, 0);
+/* 0007a17a */	this.ss_.init(112, 840, 88, this.pageCount_);
+/* 0007a19e */	this.initChip();
+/* 0007a1a6 */	this.setChipPosition();
+/* 0007a1ae */	this.initButton();
+/* 0007a1b6 */	this.createDummyDepository();
+/* 0007a1be */	this.indicatorList_.init(this.depDummy_, 256);
+/* 0007a1d6 */	this.indicatorList_.setParent(this.bg_.getParentPartsNumber());
+/* 0007a1ee */}
+
+void ShopChipStockView::updateLRButtonState()
+/* 0007a1f6 */{
+/* 0007a1f8 */}
+
+void ShopChipStockView::initButton()
+/* 0007a1fe */{
+/* 0007a1fe */	this.btnScroll_.init(this.ss_, false);
+/* 0007a216 */	this.btnScroll_.setParent(this.bg_.getParentPartsNumber());
+/* 0007a22e */}
+
+void ShopChipStockView::update()
+/* 0007a236 */{
+/* 0007a236 */	switch (this.state_)
+/* 0007a248 */	{
+/* 0007a248 */	case 1:
+/* 0007a248 */		this.clickedChipIndex_ = -1;
+/* 0007a25a */		if (!this.bg_.isMotion())
+/* 0007a26e */		{
+/* 0007a26e */			this.state_ = 2;
+/* 0007a278 */		}
+/* 0007a27e */		break;
+/* 0007a284 */	case 2:
+/* 0007a284 */		if (this.indicatorList_.getClickedGroup() != -1)
+/* 0007a29e */		{
+/* 0007a29e */			this.jumpPage(this.indicatorList_.getClickedGroup());
+/* 0007a2b2 */		}
+/* 0007a2b8 */		if (g_mouse.getWheel() != 0 && this.indicatorList_.isHover())
+/* 0007a2fc */		{
+/* 0007a2fc */			this.ss_.scrollPage(g_mouse.getWheel() < 0);
+/* 0007a31e */		}
+/* 0007a324 */		this.indicatorList_.setFloatingPage(this.ss_.getFloatingPage());
+/* 0007a33c */		this.clickedChipIndex_ = this.getClickedChipIndex();
+/* 0007a350 */		break;
+/* 0007a356 */	case 3:
+/* 0007a356 */		this.clickedChipIndex_ = -1;
+/* 0007a368 */		if (!this.bg_.isMotion())
+/* 0007a37c */		{
+/* 0007a37c */			this.state_ = 0;
+/* 0007a386 */		}
+/* 0007a38c */		break;
+/* 0007a392 */	case 0:
+/* 0007a392 */		this.clickedChipIndex_ = -1;
+/* 0007a3a4 */		break;
+/* 0007a3aa */	}
+/* 0007a3aa */}
+
+void ShopChipStockView::fadeIn(bool val, int time)
+/* 0007a3b2 */{
+/* 0007a3b2 */	this.ss_.fadeWithMotion(val, getSwipeScrollerChipBaseFadeMotion(val, false, this.ss_.getXPos(), this.ss_.getYPos()));
+/* 0007a3ee */	this.bg_.fadeIn(val);
+/* 0007a400 */	this.indicatorList_.fadeIn(val);
+/* 0007a412 */	if (val)
+/* 0007a41e */	{
+/* 0007a41e */		this.setChipShow(val);
+/* 0007a42c */	}
+/* 0007a432 */	this.state_ = val ? 1 : 3;
+/* 0007a45c */}
+
+void ShopChipStockView::fadeInFast()
+/* 0007a464 */{
+/* 0007a464 */	this.fadeIn(true, 150);
+/* 0007a478 */	this.state_ = 1;
+/* 0007a482 */}
+
+void ShopChipStockView::initChip()
+/* 0007a48a */{
+/* 0007a48a */	this.chip_.Free();
+/* 0007a494 */	this.chip_.Alloc(this.instance_.getCount());
+/* 0007a4b0 */	int i;
+/* 0007a4ba */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 0007a4ea */	{
+/* 0007a4ea */		this.chip_[i].init(this.instance_.getInstance(i));
+/* 0007a51e */		this.chip_[i].setParent(this.ss_.getParentPartsNumber());
+/* 0007a53e */	}
+/* 0007a54a */}
+
+void ShopChipStockView::jumpPage(int pg)
+/* 0007a552 */{
+/* 0007a552 */	this.ss_.jumpPage(pg);
+/* 0007a564 */}
+
+int ShopChipStockView::getClickedChipIndex()
+/* 0007a56c */{
+/* 0007a56c */	int i;
+/* 0007a576 */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 0007a5a6 */	{
+/* 0007a5a6 */		if (this.chip_[i].isClick())
+/* 0007a5c0 */		{
+/* 0007a5c0 */			return i;
+/* 0007a5c8 */		}
+/* 0007a5ce */	}
+/* 0007a5d4 */	return -1;
+/* 0007a5dc */}
+
+int ShopChipStockView::getClickedIndex()
+/* 0007a5ea */{
+/* 0007a5ea */	return this.clickedChipIndex_;
+/* 0007a5f2 */}
+
+void ShopChipStockView::setChipPosition()
+/* 0007a600 */{
+/* 0007a600 */	int i;
+/* 0007a60a */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 0007a63a */	{
+/* 0007a63a */		this.chip_[i].setPos(getChipXPos(i), 40);
+/* 0007a660 */	}
+/* 0007a666 */}
+
+void ShopChipStockView::setChipShow(bool val)
+/* 0007a66e */{
+/* 0007a66e */	int i;
+/* 0007a678 */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 0007a6a8 */	{
+/* 0007a6a8 */		this.chip_[i].setShow(val);
+/* 0007a6c2 */	}
+/* 0007a6c8 */}
+
+int getChipXPos(int index)
+/* 0007a6d0 */{
+/* 0007a6d0 */	int n = index % 7;
+/* 0007a6ea */	int group = index / 7;
+/* 0007a704 */	return 184 + n * 96 + group * 840 + 40;
+/* 0007a734 */}
+
+void ShopChipStockView::createDummyDepository()
+/* 0007a748 */{
+/* 0007a748 */	this.depDummy_.setSize(this.instance_.getCount());
+/* 0007a760 */	int i;
+/* 0007a76a */	for (i = 0; i < this.instance_.getCount(); ++i)
+/* 0007a7a0 */	{
+/* 0007a7a0 */		this.depDummy_.add(this.instance_.getInstance(i).getId(), false);
+/* 0007a7d8 */	}
+/* 0007a7e4 */}
+
+void ShopChipStockView::setOperatable(bool val)
+/* 0007a7ec */{
+/* 0007a7ec */	this.ss_.lockScroll(!val);
+/* 0007a802 */	int i;
+/* 0007a80c */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 0007a83c */	{
+/* 0007a83c */		this.chip_[i].setOperatable(val);
+/* 0007a856 */	}
+/* 0007a85c */	this.btnScroll_.setEnable(val);
+/* 0007a86e */}
+

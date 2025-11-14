@@ -1,0 +1,115 @@
+CSystemButtonModel::CSystemButtonModel()
+/* 0001cf84 */{
+/* 0001cf8c */	this.m_X = -2147483648;
+/* 0001cf96 */	this.m_Y = -2147483648;
+/* 0001cfa0 */	this.m_Z = 1;
+/* 0001cfaa */	this.m_FunctionObject = NULL;
+/* 0001cfb4 */	this.m_InvalidByReminisceMode = false;
+/* 0001cfbe */	this.m_PixelDecide = true;
+/* 0001cfc8 */	this.m_VisibleRect.Set(-2147483648, -2147483648, -2147483648, -2147483648);
+/* 0001cfec */}
+
+void CSystemButtonModel::SetButtonModel(int X, int Y, int Z, string PlainCGName, string OnCursorCGName, string KeyDownCGName, sys_btn_fnc_t CommandFunc, bool PixelDecide)
+/* 0001cff4 */{
+/* 0001cff4 */	this.m_X = X;
+/* 0001cffe */	this.m_Y = Y;
+/* 0001d008 */	this.m_Z = Z;
+/* 0001d012 */	this.m_PlainCGName = PlainCGName;
+/* 0001d01c */	this.m_OnCursorCGName = OnCursorCGName;
+/* 0001d026 */	this.m_KeyDownCGName = KeyDownCGName;
+/* 0001d030 */	this.m_FunctionObject = CommandFunc;
+/* 0001d03a */	this.m_PixelDecide = PixelDecide;
+/* 0001d044 */}
+
+void CSystemButtonModel::SetButtonModelForReminisceMode(string CoverCGName)
+/* 0001d04c */{
+/* 0001d04c */	this.m_CoverCGName = CoverCGName;
+/* 0001d056 */	this.m_InvalidByReminisceMode = true;
+/* 0001d060 */}
+
+void CSystemButtonModel::SetDisableCG(string CGName)
+/* 0001d068 */{
+/* 0001d068 */	this.m_DisableCGName = CGName;
+/* 0001d072 */}
+
+void CSystemButtonModel::SetIsEnableSystemButtonFunc(FTIsEnableSystemButton Func)
+/* 0001d07a */{
+/* 0001d07a */	this.m_IsEnableSystemButtonFunc = Func;
+/* 0001d084 */}
+
+bool CSystemButtonModel::IsEnable()
+/* 0001d08c */{
+/* 0001d08c */	if (this.m_IsEnableSystemButtonFunc != NULL)
+/* 0001d09a */	{
+/* 0001d09a */		if (!this.m_IsEnableSystemButtonFunc())
+/* 0001d0b0 */		{
+/* 0001d0b0 */			return false;
+/* 0001d0b8 */		}
+/* 0001d0be */	}
+/* 0001d0c4 */	if (_g_回想中 && this.m_InvalidByReminisceMode)
+/* 0001d0f2 */	{
+/* 0001d0f2 */		return false;
+/* 0001d0fa */	}
+/* 0001d100 */	return true;
+/* 0001d108 */}
+
+sys_btn_fnc_t CSystemButtonModel::GetFunction()
+/* 0001d116 */{
+/* 0001d116 */	return this.m_FunctionObject;
+/* 0001d11e */}
+
+int CSystemButtonModel::GetX()
+/* 0001d12c */{
+/* 0001d12c */	return this.m_X;
+/* 0001d134 */}
+
+int CSystemButtonModel::GetY()
+/* 0001d142 */{
+/* 0001d142 */	return this.m_Y;
+/* 0001d14a */}
+
+int CSystemButtonModel::GetZ()
+/* 0001d158 */{
+/* 0001d158 */	return this.m_Z;
+/* 0001d160 */}
+
+string CSystemButtonModel::GetPlainCGName()
+/* 0001d16e */{
+/* 0001d16e */	return this.m_PlainCGName;
+/* 0001d176 */}
+
+string CSystemButtonModel::GetOnCursorCGName()
+/* 0001d184 */{
+/* 0001d184 */	return this.m_OnCursorCGName;
+/* 0001d18c */}
+
+string CSystemButtonModel::GetKeyDownCGName()
+/* 0001d19a */{
+/* 0001d19a */	return this.m_KeyDownCGName;
+/* 0001d1a2 */}
+
+string CSystemButtonModel::GetDisableCGName()
+/* 0001d1b0 */{
+/* 0001d1b0 */	return this.m_DisableCGName;
+/* 0001d1b8 */}
+
+string CSystemButtonModel::GetCoverCGName()
+/* 0001d1c6 */{
+/* 0001d1c6 */	return this.m_CoverCGName;
+/* 0001d1ce */}
+
+bool CSystemButtonModel::IsInvalidByReminisceMode()
+/* 0001d1dc */{
+/* 0001d1dc */	return this.m_InvalidByReminisceMode;
+/* 0001d1e4 */}
+
+ref CASRect CSystemButtonModel::GetVisibleRect()
+/* 0001d1f2 */{
+/* 0001d1f2 */	return this.m_VisibleRect;
+/* 0001d1fe */}
+
+bool CSystemButtonModel::IsPixelDecide()
+/* 0001d20c */{
+/* 0001d20c */	return this.m_PixelDecide;
+/* 0001d214 */}
+

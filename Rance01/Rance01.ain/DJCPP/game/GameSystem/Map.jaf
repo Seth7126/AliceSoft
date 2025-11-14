@@ -1,0 +1,51 @@
+void Map::reload()
+/* 0008f110 */{
+/* 0008f110 */	this.loadValue();
+/* 0008f118 */}
+
+void Map::loadValue()
+/* 0008f120 */{
+/* 0008f120 */	this.setName(EX_SA2String("マップデータ", this.id_, "name", ""));
+/* 0008f146 */	this.setImageName(0, EX_SA2String("マップデータ", this.id_, "imageName_morning", ""));
+/* 0008f172 */	this.setImageName(1, EX_SA2String("マップデータ", this.id_, "imageName_noon", ""));
+/* 0008f19e */	this.setImageName(2, EX_SA2String("マップデータ", this.id_, "imageName_night", ""));
+/* 0008f1ca */}
+
+string Map::getId()
+/* 0008f1d2 */{
+/* 0008f1d2 */	return this.id_;
+/* 0008f1da */}
+
+string Map::getName()
+/* 0008f1e8 */{
+/* 0008f1e8 */	return this.name_;
+/* 0008f1f0 */}
+
+string Map::getImageName(int type)
+/* 0008f1fe */{
+/* 0008f1fe */	if (type >= 0 && type < 3)
+/* 0008f232 */	{
+/* 0008f232 */		return this.imageName_[type];
+/* 0008f242 */	}
+/* 0008f248 */	return "";
+/* 0008f250 */}
+
+void Map::setId(string id)
+/* 0008f25e */{
+/* 0008f25e */	this.id_ = id;
+/* 0008f268 */	this.loadValue();
+/* 0008f270 */}
+
+void Map::setName(string val)
+/* 0008f278 */{
+/* 0008f278 */	this.name_ = val;
+/* 0008f282 */}
+
+void Map::setImageName(int type, string val)
+/* 0008f28a */{
+/* 0008f28a */	if (type >= 0 && type < 3)
+/* 0008f2be */	{
+/* 0008f2be */		this.imageName_[type] = val;
+/* 0008f2d2 */	}
+/* 0008f2d8 */}
+

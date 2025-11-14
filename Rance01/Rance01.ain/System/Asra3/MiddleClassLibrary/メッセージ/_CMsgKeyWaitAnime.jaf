@@ -1,0 +1,110 @@
+void _CMsgKeyWaitAnime::_Init(ref CMessageWindowModel _area_data)
+/* 0001b666 */{
+/* 0001b666 */	this.m_MessageWindowModel = _area_data;
+/* 0001b676 */	this._m_show = true;
+/* 0001b680 */	this._Create();
+/* 0001b688 */	this._SetShow(false, SYS_Ｍ送モード取得());
+/* 0001b69c */}
+
+void _CMsgKeyWaitAnime::_Create()
+/* 0001b6a4 */{
+/* 0001b6a4 */	if (this._IsIdentity())
+/* 0001b6b2 */	{
+/* 0001b6b2 */		return;
+/* 0001b6b4 */	}
+/* 0001b6ba */	this.m_Parts.Release();
+/* 0001b6c6 */	string FlatName = this.m_MessageWindowModel.GetKeyWaitMarkFlatName();
+/* 0001b6dc */	if (!FlatName.Empty())
+/* 0001b6ea */	{
+/* 0001b6ea */		this.m_Parts.Create();
+/* 0001b6f6 */		this.m_Parts.SetFlat(FlatName);
+/* 0001b708 */	}
+/* 0001b70e */	else if (this.m_MessageWindowModel.マーク枚数 != 0)
+/* 0001b72a */	{
+/* 0001b72a */		this.m_Parts.Create();
+/* 0001b736 */		this.m_Parts.SetLoopCG(this.m_MessageWindowModel.基準ＣＧ名, this.m_MessageWindowModel.開始番号, this.m_MessageWindowModel.マーク枚数, this.m_MessageWindowModel.マーク速度, 1);
+/* 0001b780 */	}
+/* 0001b786 */	this._m_n_created_基準ＣＧ名 = this.m_MessageWindowModel.基準ＣＧ名;
+/* 0001b79a */	this._m_n_created_開始番号 = this.m_MessageWindowModel.開始番号;
+/* 0001b7b4 */	this._m_n_created_マーク枚数 = this.m_MessageWindowModel.マーク枚数;
+/* 0001b7ce */	this.m_CreatedFlatName = this.m_MessageWindowModel.GetKeyWaitMarkFlatName();
+/* 0001b7e4 */}
+
+bool _CMsgKeyWaitAnime::_IsIdentity()
+/* 0001b7ec */{
+/* 0001b7ec */	if (this._m_n_created_基準ＣＧ名 != this.m_MessageWindowModel.基準ＣＧ名)
+/* 0001b808 */	{
+/* 0001b808 */		return false;
+/* 0001b810 */	}
+/* 0001b816 */	if (this._m_n_created_開始番号 != this.m_MessageWindowModel.開始番号)
+/* 0001b832 */	{
+/* 0001b832 */		return false;
+/* 0001b83a */	}
+/* 0001b840 */	if (this._m_n_created_マーク枚数 != this.m_MessageWindowModel.マーク枚数)
+/* 0001b85c */	{
+/* 0001b85c */		return false;
+/* 0001b864 */	}
+/* 0001b86a */	if (this.m_CreatedFlatName != this.m_MessageWindowModel.GetKeyWaitMarkFlatName())
+/* 0001b884 */	{
+/* 0001b884 */		return false;
+/* 0001b88c */	}
+/* 0001b892 */	return true;
+/* 0001b89a */}
+
+void _CMsgKeyWaitAnime::_Delete()
+/* 0001b8a8 */{
+/* 0001b8a8 */	this.m_Parts.Release();
+/* 0001b8b4 */	this._m_n_created_基準ＣＧ名 = "";
+/* 0001b8c0 */	this._m_n_created_開始番号 = 0;
+/* 0001b8ca */	this._m_n_created_マーク枚数 = 0;
+/* 0001b8d4 */	this.m_CreatedFlatName = "";
+/* 0001b8e0 */}
+
+void _CMsgKeyWaitAnime::_UpdatePos(int nTextEndX, int nTextEndY)
+/* 0001b8e8 */{
+/* 0001b8e8 */	int x = g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).GetX();
+/* 0001b920 */	int y = g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).GetY();
+/* 0001b958 */	int z = g_MessageWindowModelManager.GetZ() + g_MessageWindowManager.GetShowingMaxOffsetZ() + 2;
+/* 0001b986 */	if (this.m_MessageWindowModel.マークＸフラグ == 1)
+/* 0001b9a2 */	{
+/* 0001b9a2 */		x += nTextEndX;
+/* 0001b9b4 */	}
+/* 0001b9ba */	if (this.m_MessageWindowModel.マークＹフラグ == 1)
+/* 0001b9d6 */	{
+/* 0001b9d6 */		y += nTextEndY;
+/* 0001b9e8 */	}
+/* 0001b9ee */	x += this.m_MessageWindowModel.マークＸ;
+/* 0001ba08 */	y += this.m_MessageWindowModel.マークＹ;
+/* 0001ba22 */	if (this.m_Parts.IsExist())
+/* 0001ba34 */	{
+/* 0001ba34 */		this.m_Parts.SetPos(x, y);
+/* 0001ba4c */		this.m_Parts.SetZ(z);
+/* 0001ba5e */	}
+/* 0001ba64 */}
+
+void _CMsgKeyWaitAnime::_SetShow(bool _show, int nMessageMode)
+/* 0001ba6c */{
+/* 0001ba6c */	bool IsShowParts = _show && nMessageMode == 1001;
+/* 0001baa6 */	if (this.m_Parts.IsExist() && !this.m_Parts.IsShow() && IsShowParts)
+/* 0001bb08 */	{
+/* 0001bb08 */		if (!this.m_CreatedFlatName.Empty())
+/* 0001bb16 */		{
+/* 0001bb16 */			this.m_Parts.BackFlatBeginFrame();
+/* 0001bb22 */		}
+/* 0001bb28 */		else if (this.m_MessageWindowModel.マーク枚数 != 0)
+/* 0001bb44 */		{
+/* 0001bb44 */			this.m_Parts.SetLoopCG(this.m_MessageWindowModel.基準ＣＧ名, this.m_MessageWindowModel.開始番号, this.m_MessageWindowModel.マーク枚数, this.m_MessageWindowModel.マーク速度, 1);
+/* 0001bb8e */		}
+/* 0001bb94 */	}
+/* 0001bb9a */	this._m_show = _show;
+/* 0001bba4 */	if (this.m_Parts.IsExist())
+/* 0001bbb6 */	{
+/* 0001bbb6 */		this.m_Parts.SetShow(IsShowParts);
+/* 0001bbc8 */	}
+/* 0001bbce */}
+
+bool _CMsgKeyWaitAnime::IsShow()
+/* 0001bbd6 */{
+/* 0001bbd6 */	return this._m_show;
+/* 0001bbde */}
+

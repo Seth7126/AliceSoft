@@ -1,0 +1,39 @@
+GlobalGameTimer::GlobalGameTimer()
+/* 0006104e */{
+/* 00061056 */	this.timer_.Reset();
+/* 00061062 */	this.scaling_ = 1.0;
+/* 00061074 */	this.lastTime_ = 0;
+/* 0006107e */}
+
+void GlobalGameTimer::update()
+/* 00061086 */{
+/* 00061086 */	this.gameLocalTime_ += Math.Min(160, Math.Max(1, this.timer_.Get() * this.getScaling()));
+/* 000610d0 */	this.timer_.Reset();
+/* 000610dc */}
+
+int GlobalGameTimer::getTime()
+/* 000610e4 */{
+/* 000610e4 */	return this.gameLocalTime_;
+/* 000610ec */}
+
+void GlobalGameTimer::setTimeScaling(float val)
+/* 000610fa */{
+/* 000610fa */	this.scaling_ = val;
+/* 0006110c */}
+
+void GlobalGameTimer::setGlobalScaling(float val)
+/* 00061114 */{
+/* 00061114 */	g_common_globalTimeScaling = val;
+/* 00061126 */	共有セーブ();
+/* 0006112c */}
+
+float GlobalGameTimer::getScaling()
+/* 00061134 */{
+/* 00061134 */	return g_common_globalTimeScaling * this.scaling_;
+/* 00061144 */}
+
+float GlobalGameTimer::getGlobalScaling()
+/* 00061152 */{
+/* 00061152 */	return g_common_globalTimeScaling;
+/* 0006115a */}
+

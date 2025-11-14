@@ -1,0 +1,252 @@
+CConfigUIDebugTab::CConfigUIDebugTab()
+/* 0002b148 */{
+/* 0002b152 */}
+
+CConfigUIDebugTab::~CConfigUIDebugTab()
+/* 0002b158 */{
+/* 0002b15a */}
+
+void CConfigUIDebugTab::Create()
+/* 0002b160 */{
+/* 0002b160 */	this.CreateUI();
+/* 0002b168 */}
+
+void CConfigUIDebugTab::Release()
+/* 0002b170 */{
+/* 0002b170 */	AFL_Parts_EraseChangedEvent(this.m_ShowVideoMemorySizeCheckBox, this.ChangedCheckShowVideoMemorySize);
+/* 0002b186 */	AFL_Parts_EraseChangedEvent(this.m_ShowBackVoicePlayingCheckBox, this.ChangedCheckShowBackVoicePlaying);
+/* 0002b19c */	AFL_Parts_EraseChangedEvent(this.m_ShowGimicSEPlayingCheckBox, this.ChangedCheckShowGimicSEPlaying);
+/* 0002b1b2 */	AFL_Parts_EraseChangedEvent(this.m_ShowVoicePlayingCheckBox, this.ChangedCheckShowVoicePlaying);
+/* 0002b1c8 */	AFL_Parts_EraseChangedEvent(this.m_ShowFillCheckBox, this.ChangedCheckShowFill);
+/* 0002b1de */	AFL_Parts_EraseChangedEvent(this.m_ShowMemoryCheckBox, this.ChangedCheckShowMemory);
+/* 0002b1f4 */	this.m_AntiAliasingComboBox.Release();
+/* 0002b200 */	AFL_Parts_EraseChangedEvent(this.m_Direct3DModeCheckBox, this.ChangedCheckDirect3DMode);
+/* 0002b216 */	AFL_Parts_EraseChangedEvent(this.m_ShowFPSCheckBox, this.ChangedCheckShowFPS);
+/* 0002b22c */	PARTS_Release(this.m_ShowVideoMemorySizeCheckBox);
+/* 0002b238 */	PARTS_Release(this.m_ShowBackVoicePlayingCheckBox);
+/* 0002b244 */	PARTS_Release(this.m_ShowGimicSEPlayingCheckBox);
+/* 0002b250 */	PARTS_Release(this.m_ShowVoicePlayingCheckBox);
+/* 0002b25c */	PARTS_Release(this.m_ShowFillCheckBox);
+/* 0002b268 */	PARTS_Release(this.m_ShowMemoryCheckBox);
+/* 0002b274 */	PARTS_Release(this.m_AntiAliasingLabel);
+/* 0002b280 */	PARTS_Release(this.m_Direct3DModeCheckBox);
+/* 0002b28c */	PARTS_Release(this.m_ShowFPSCheckBox);
+/* 0002b298 */	PARTS_Release(this.m_BG);
+/* 0002b2a4 */	this.m_ShowVideoMemorySizeCheckBox = 0;
+/* 0002b2ae */	this.m_ShowBackVoicePlayingCheckBox = 0;
+/* 0002b2b8 */	this.m_ShowGimicSEPlayingCheckBox = 0;
+/* 0002b2c2 */	this.m_ShowVoicePlayingCheckBox = 0;
+/* 0002b2cc */	this.m_ShowFillCheckBox = 0;
+/* 0002b2d6 */	this.m_ShowMemoryCheckBox = 0;
+/* 0002b2e0 */	this.m_AntiAliasingLabel = 0;
+/* 0002b2ea */	this.m_Direct3DModeCheckBox = 0;
+/* 0002b2f4 */	this.m_ShowFPSCheckBox = 0;
+/* 0002b2fe */	this.m_BG = 0;
+/* 0002b308 */}
+
+void CConfigUIDebugTab::CreateUI()
+/* 0002b310 */{
+/* 0002b310 */	this.Release();
+/* 0002b318 */	this.CreateBG();
+/* 0002b320 */	this.CreateShowFPSCheckBox();
+/* 0002b328 */	this.CreateDirect3DModeCheckBox();
+/* 0002b330 */	this.CreateAntiAliasingLabel();
+/* 0002b338 */	this.CreateAntiAliasingComboBox();
+/* 0002b340 */	this.CreateShowMemoryCheckBox();
+/* 0002b348 */	this.CreateShowFillCheckBox();
+/* 0002b350 */	this.CreateShowVoicePlayingCheckBox();
+/* 0002b358 */	this.CreateShowGimicSEPlayingCheckBox();
+/* 0002b360 */	this.CreateShowBackVoicePlayingCheckBox();
+/* 0002b368 */	this.CreateShowVideoMemorySizeCheckBox();
+/* 0002b370 */}
+
+void CConfigUIDebugTab::CreateBG()
+/* 0002b378 */{
+/* 0002b378 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002b38a */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002b39c */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002b3b4 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002b3d2 */}
+
+void CConfigUIDebugTab::CreateShowFPSCheckBox()
+/* 0002b3da */{
+/* 0002b3da */	this.m_ShowFPSCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002b3ec */	Ｐ＿チェックボックス＿座標設定(this.m_ShowFPSCheckBox, 50, 100);
+/* 0002b404 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowFPSCheckBox, 100);
+/* 0002b416 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowFPSCheckBox, 24, 24);
+/* 0002b42e */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowFPSCheckBox, "ＦＰＳ表示");
+/* 0002b440 */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowFPSCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002b488 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowFPSCheckBox, AFL_Config_GetShowFPS());
+/* 0002b49a */	AFL_Parts_AddChangedEvent(this.m_ShowFPSCheckBox, this.ChangedCheckShowFPS);
+/* 0002b4b0 */}
+
+void CConfigUIDebugTab::CreateDirect3DModeCheckBox()
+/* 0002b4b8 */{
+/* 0002b4b8 */	this.m_Direct3DModeCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002b4ca */	Ｐ＿チェックボックス＿座標設定(this.m_Direct3DModeCheckBox, 50, 130);
+/* 0002b4e2 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_Direct3DModeCheckBox, 100);
+/* 0002b4f4 */	Ｐ＿チェックボックス＿サイズ設定(this.m_Direct3DModeCheckBox, 24, 24);
+/* 0002b50c */	Ｐ＿チェックボックス＿テキスト設定(this.m_Direct3DModeCheckBox, "Direct3Dモード");
+/* 0002b51e */	Ｐ＿チェックボックス＿フォント設定(this.m_Direct3DModeCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002b566 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_Direct3DModeCheckBox, AFL_Config_GetDirect3DMode());
+/* 0002b578 */	AFL_Parts_AddChangedEvent(this.m_Direct3DModeCheckBox, this.ChangedCheckDirect3DMode);
+/* 0002b58e */}
+
+void CConfigUIDebugTab::CreateAntiAliasingLabel()
+/* 0002b596 */{
+/* 0002b596 */	this.m_AntiAliasingLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002b5a8 */	Ｐ＿ラベル＿座標設定(this.m_AntiAliasingLabel, 130, 160);
+/* 0002b5c0 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_AntiAliasingLabel, 100);
+/* 0002b5d2 */	Ｐ＿ラベル＿テキスト設定(this.m_AntiAliasingLabel, "Direct3D アンチエイリアシングモード");
+/* 0002b5e4 */	Ｐ＿ラベル＿フォント設定(this.m_AntiAliasingLabel, 0, 16, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002b62c */}
+
+void CConfigUIDebugTab::CreateAntiAliasingComboBox()
+/* 0002b634 */{
+/* 0002b634 */	CASCharSpriteProperty Font;
+/* 0002b644 */	Font.SetType(0);
+/* 0002b656 */	Font.SetSize(16);
+/* 0002b668 */	Font.SetColor(CF_CASColor(0, 0, 0, 255));
+/* 0002b692 */	Font.SetBoldWeight(0.0);
+/* 0002b6a4 */	Font.SetEdgeWeight(0.0);
+/* 0002b6b6 */	Font.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 0002b6e0 */	this.m_AntiAliasingComboBox.Create();
+/* 0002b6ec */	this.m_AntiAliasingComboBox.SetPos(130, 190);
+/* 0002b704 */	this.m_AntiAliasingComboBox.SetZ(100);
+/* 0002b716 */	this.m_AntiAliasingComboBox.SetSize(250, 24);
+/* 0002b72e */	this.m_AntiAliasingComboBox.SetLineHeight(24);
+/* 0002b740 */	this.m_AntiAliasingComboBox.SetBoxHeight(120);
+/* 0002b752 */	this.m_AntiAliasingComboBox.SetMarginForBox(3, 3);
+/* 0002b76a */	this.m_AntiAliasingComboBox.SetMarginForList(3, 3);
+/* 0002b782 */	this.m_AntiAliasingComboBox.SetFontPropertyForBox(Font);
+/* 0002b794 */	this.m_AntiAliasingComboBox.SetFontPropertyForList(Font);
+/* 0002b7a6 */	this.m_AntiAliasingComboBox.Select(0);
+/* 0002b7b8 */	this.m_AntiAliasingComboBox.ClearItem();
+/* 0002b7c4 */	this.m_AntiAliasingComboBox.AddItem("なし");
+/* 0002b7d6 */	this.m_AntiAliasingComboBox.AddItem("２ｘ");
+/* 0002b7e8 */	this.m_AntiAliasingComboBox.AddItem("４ｘ");
+/* 0002b7fa */	this.m_AntiAliasingComboBox.AddItem("８ｘ");
+/* 0002b80c */	this.m_AntiAliasingComboBox.AddItem("１６ｘ");
+/* 0002b81e */	int AntiAliasingMode = SystemService.GetAntiAliasingMode();
+/* 0002b834 */	this.m_AntiAliasingComboBox.Select(AntiAliasingMode);
+/* 0002b846 */	this.m_AntiAliasingComboBox.AddSelectedEvent(this.SelectedAntiAliasing);
+/* 0002b85c */}
+
+void CConfigUIDebugTab::CreateShowMemoryCheckBox()
+/* 0002b864 */{
+/* 0002b864 */	this.m_ShowMemoryCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002b876 */	Ｐ＿チェックボックス＿座標設定(this.m_ShowMemoryCheckBox, 50, 220);
+/* 0002b88e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowMemoryCheckBox, 100);
+/* 0002b8a0 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowMemoryCheckBox, 24, 24);
+/* 0002b8b8 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowMemoryCheckBox, "メモリ使用量表示　　　　Ｍ：現在使用サイズ／最大使用サイズ　共にＭＢ");
+/* 0002b8ca */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowMemoryCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002b912 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowMemoryCheckBox, AFL_Config_GetShowMemorySize());
+/* 0002b924 */	AFL_Parts_AddChangedEvent(this.m_ShowMemoryCheckBox, this.ChangedCheckShowMemory);
+/* 0002b93a */}
+
+void CConfigUIDebugTab::CreateShowFillCheckBox()
+/* 0002b942 */{
+/* 0002b942 */	this.m_ShowFillCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002b954 */	Ｐ＿チェックボックス＿座標設定(this.m_ShowFillCheckBox, 50, 250);
+/* 0002b96c */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowFillCheckBox, 100);
+/* 0002b97e */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowFillCheckBox, 24, 24);
+/* 0002b996 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowFillCheckBox, "フィルレート表示　　　　Ｆ：現在使用サイズ／最大使用サイズ　共にＭＢ");
+/* 0002b9a8 */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowFillCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002b9f0 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowFillCheckBox, AFL_Config_GetShowFillRate());
+/* 0002ba02 */	AFL_Parts_AddChangedEvent(this.m_ShowFillCheckBox, this.ChangedCheckShowFill);
+/* 0002ba18 */}
+
+void CConfigUIDebugTab::CreateShowVoicePlayingCheckBox()
+/* 0002ba20 */{
+/* 0002ba20 */	this.m_ShowVoicePlayingCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002ba32 */	Ｐ＿チェックボックス＿座標設定(this.m_ShowVoicePlayingCheckBox, 50, 280);
+/* 0002ba4a */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowVoicePlayingCheckBox, 100);
+/* 0002ba5c */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowVoicePlayingCheckBox, 24, 24);
+/* 0002ba74 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowVoicePlayingCheckBox, "音声再生中表示");
+/* 0002ba86 */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowVoicePlayingCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002bace */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowVoicePlayingCheckBox, g_DebugVoicePlaying.IsShow());
+/* 0002bae6 */	AFL_Parts_AddChangedEvent(this.m_ShowVoicePlayingCheckBox, this.ChangedCheckShowVoicePlaying);
+/* 0002bafc */}
+
+void CConfigUIDebugTab::CreateShowGimicSEPlayingCheckBox()
+/* 0002bb04 */{
+/* 0002bb04 */	this.m_ShowGimicSEPlayingCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002bb16 */	Ｐ＿チェックボックス＿座標設定(this.m_ShowGimicSEPlayingCheckBox, 50, 310);
+/* 0002bb2e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowGimicSEPlayingCheckBox, 100);
+/* 0002bb40 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowGimicSEPlayingCheckBox, 24, 24);
+/* 0002bb58 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowGimicSEPlayingCheckBox, "擬音再生中表示");
+/* 0002bb6a */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowGimicSEPlayingCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002bbb2 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowGimicSEPlayingCheckBox, g_DebugGimicSEPlaying.IsShow());
+/* 0002bbca */	AFL_Parts_AddChangedEvent(this.m_ShowGimicSEPlayingCheckBox, this.ChangedCheckShowGimicSEPlaying);
+/* 0002bbe0 */}
+
+void CConfigUIDebugTab::CreateShowBackVoicePlayingCheckBox()
+/* 0002bbe8 */{
+/* 0002bbe8 */	this.m_ShowBackVoicePlayingCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002bbfa */	Ｐ＿チェックボックス＿座標設定(this.m_ShowBackVoicePlayingCheckBox, 50, 340);
+/* 0002bc12 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowBackVoicePlayingCheckBox, 100);
+/* 0002bc24 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowBackVoicePlayingCheckBox, 24, 24);
+/* 0002bc3c */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowBackVoicePlayingCheckBox, "背景音声再生中表示");
+/* 0002bc4e */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowBackVoicePlayingCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002bc96 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowBackVoicePlayingCheckBox, g_DebugBackVoicePlaying.IsShow());
+/* 0002bcae */	AFL_Parts_AddChangedEvent(this.m_ShowBackVoicePlayingCheckBox, this.ChangedCheckShowBackVoicePlaying);
+/* 0002bcc4 */}
+
+void CConfigUIDebugTab::CreateShowVideoMemorySizeCheckBox()
+/* 0002bccc */{
+/* 0002bccc */	this.m_ShowVideoMemorySizeCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002bcde */	Ｐ＿チェックボックス＿座標設定(this.m_ShowVideoMemorySizeCheckBox, 50, 370);
+/* 0002bcf6 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_ShowVideoMemorySizeCheckBox, 100);
+/* 0002bd08 */	Ｐ＿チェックボックス＿サイズ設定(this.m_ShowVideoMemorySizeCheckBox, 24, 24);
+/* 0002bd20 */	Ｐ＿チェックボックス＿テキスト設定(this.m_ShowVideoMemorySizeCheckBox, "ビデオメモリ使用量表示　Ｖ：現在使用サイズ／最大使用サイズ　共にＭＢ");
+/* 0002bd32 */	Ｐ＿チェックボックス＿フォント設定(this.m_ShowVideoMemorySizeCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002bd7a */	Ｐ＿チェックボックス＿チェック状態設定(this.m_ShowVideoMemorySizeCheckBox, AFL_Config_GetShowVideoMemorySize());
+/* 0002bd8c */	AFL_Parts_AddChangedEvent(this.m_ShowVideoMemorySizeCheckBox, this.ChangedCheckShowVideoMemorySize);
+/* 0002bda2 */}
+
+void CConfigUIDebugTab::ChangedCheckShowFPS(int Number)
+/* 0002bdaa */{
+/* 0002bdaa */	AFL_Config_SetShowFPS(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowFPSCheckBox));
+/* 0002bdbc */}
+
+void CConfigUIDebugTab::ChangedCheckDirect3DMode(int Number)
+/* 0002bdc4 */{
+/* 0002bdc4 */	AFL_Config_SetDirect3DMode(Ｐ＿チェックボックス＿チェック状態取得(this.m_Direct3DModeCheckBox));
+/* 0002bdd6 */}
+
+void CConfigUIDebugTab::SelectedAntiAliasing(int Number, int Selected)
+/* 0002bdde */{
+/* 0002bdde */	int SelectedIndex = this.m_AntiAliasingComboBox.SelectedIndex();
+/* 0002bdf6 */	SystemService.SetAntiAliasingMode(SelectedIndex);
+/* 0002be08 */}
+
+void CConfigUIDebugTab::ChangedCheckShowMemory(int Number)
+/* 0002be10 */{
+/* 0002be10 */	AFL_Config_SetShowMemorySize(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowMemoryCheckBox));
+/* 0002be22 */}
+
+void CConfigUIDebugTab::ChangedCheckShowFill(int Number)
+/* 0002be2a */{
+/* 0002be2a */	AFL_Config_SetShowFillRate(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowFillCheckBox));
+/* 0002be3c */}
+
+void CConfigUIDebugTab::ChangedCheckShowVoicePlaying(int Number)
+/* 0002be44 */{
+/* 0002be44 */	g_DebugVoicePlaying.SetShow(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowVoicePlayingCheckBox));
+/* 0002be5c */}
+
+void CConfigUIDebugTab::ChangedCheckShowGimicSEPlaying(int Number)
+/* 0002be64 */{
+/* 0002be64 */	g_DebugGimicSEPlaying.SetShow(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowGimicSEPlayingCheckBox));
+/* 0002be7c */}
+
+void CConfigUIDebugTab::ChangedCheckShowBackVoicePlaying(int Number)
+/* 0002be84 */{
+/* 0002be84 */	g_DebugBackVoicePlaying.SetShow(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowBackVoicePlayingCheckBox));
+/* 0002be9c */}
+
+void CConfigUIDebugTab::ChangedCheckShowVideoMemorySize(int Number)
+/* 0002bea4 */{
+/* 0002bea4 */	AFL_Config_SetShowVideoMemorySize(Ｐ＿チェックボックス＿チェック状態取得(this.m_ShowVideoMemorySizeCheckBox));
+/* 0002beb6 */}
+

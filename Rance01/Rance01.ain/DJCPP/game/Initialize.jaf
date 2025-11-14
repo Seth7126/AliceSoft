@@ -1,0 +1,173 @@
+void initGame()
+/* 00097700 */{
+/* 00097700 */	initAttribute();
+/* 00097706 */	initChip();
+/* 0009770c */	initMonster();
+/* 00097712 */	initMap();
+/* 00097718 */	initPlace();
+/* 0009771e */	initCard();
+/* 00097724 */	initDungeon();
+/* 0009772a */	initSkill();
+/* 00097730 */	initBadCondition();
+/* 00097736 */	initAdv();
+/* 0009773c */	initMusic();
+/* 00097742 */	g_globalGameFlag.setGlobalMode(true);
+/* 00097754 */	g_enquiteLog.init("アンケート条件");
+/* 00097766 */	Ｓ＿コンフィグ＿関数登録(&OpenConfig);
+/* 00097772 */	g_hallucination <- new Hallucination;
+/* 0009779a */	g_advSelection <- new AdvSelection;
+/* 000977c2 */	FuncGameInitialize fn = EX_String("ゲーム初期化コールバック", "");
+/* 000977e6 */	if (fn != NULL)
+/* 000977fa */	{
+/* 000977fa */		fn();
+/* 00097808 */	}
+/* 0009780e */	else
+/* 0009780e */	{
+/* 0009780e */		testGameInit();
+/* 00097814 */	}
+/* 00097814 */}
+
+void initChip()
+/* 00097822 */{
+/* 00097822 */	int count = EX_Height("チップデータ");
+/* 0009783a */	g_chip.Free();
+/* 00097844 */	g_chip.Alloc(count);
+/* 0009785a */	int i;
+/* 00097864 */	for (i = 0; i < count; ++i)
+/* 00097894 */	{
+/* 00097894 */		g_chip[i].setId(EX_A2String("チップデータ", 0, i, ""));
+/* 000978c6 */	}
+/* 000978cc */}
+
+void initCard()
+/* 000978da */{
+/* 000978da */	int count = EX_Height("カードデータ");
+/* 000978f2 */	g_card.Free();
+/* 000978fc */	g_card.Alloc(count);
+/* 00097912 */	int i;
+/* 0009791c */	for (i = 0; i < count; ++i)
+/* 0009794c */	{
+/* 0009794c */		g_card[i].setId(EX_A2String("カードデータ", 0, i, ""));
+/* 0009797e */	}
+/* 00097984 */}
+
+void initAttribute()
+/* 00097992 */{
+/* 00097992 */	int count = EX_Height("属性データ");
+/* 000979aa */	g_attribute.Free();
+/* 000979b4 */	g_attribute.Alloc(count);
+/* 000979ca */	int i;
+/* 000979d4 */	for (i = 0; i < count; ++i)
+/* 00097a04 */	{
+/* 00097a04 */		g_attribute[i].setId(EX_A2String("属性データ", 0, i, ""));
+/* 00097a36 */	}
+/* 00097a3c */}
+
+void initMonster()
+/* 00097a4a */{
+/* 00097a4a */	int count = EX_Height("モンスターデータ");
+/* 00097a62 */	g_monster.Free();
+/* 00097a6c */	g_monster.Alloc(count);
+/* 00097a82 */	int i;
+/* 00097a8c */	for (i = 0; i < count; ++i)
+/* 00097abc */	{
+/* 00097abc */		g_monster[i].setId(EX_A2String("モンスターデータ", 0, i, ""));
+/* 00097aee */	}
+/* 00097af4 */}
+
+void initMap()
+/* 00097b02 */{
+/* 00097b02 */	int count = EX_Height("マップデータ");
+/* 00097b1a */	g_map.Free();
+/* 00097b24 */	g_map.Alloc(count);
+/* 00097b3a */	int i;
+/* 00097b44 */	for (i = 0; i < count; ++i)
+/* 00097b74 */	{
+/* 00097b74 */		g_map[i].setId(EX_A2String("マップデータ", 0, i, ""));
+/* 00097ba6 */	}
+/* 00097bac */}
+
+void initPlace()
+/* 00097bba */{
+/* 00097bba */	int count = EX_Height("場所データ");
+/* 00097bd2 */	g_place.Free();
+/* 00097bdc */	g_place.Alloc(count);
+/* 00097bf2 */	int i;
+/* 00097bfc */	for (i = 0; i < count; ++i)
+/* 00097c2c */	{
+/* 00097c2c */		g_place[i].setId(EX_A2String("場所データ", 0, i, ""));
+/* 00097c5e */	}
+/* 00097c64 */}
+
+void initDungeon()
+/* 00097c72 */{
+/* 00097c72 */	int count = EX_Height("ダンジョンデータ");
+/* 00097c8a */	g_dungeon.Free();
+/* 00097c94 */	g_dungeon.Alloc(count);
+/* 00097caa */	int i;
+/* 00097cb4 */	for (i = 0; i < count; ++i)
+/* 00097ce4 */	{
+/* 00097ce4 */		g_dungeon[i].setId(EX_A2String("ダンジョンデータ", 0, i, ""));
+/* 00097d16 */	}
+/* 00097d1c */}
+
+void testGameInit()
+/* 00097d2a */{
+/* 00097d2a */	g_player.setLevel(1);
+/* 00097d3c */	g_player.setMaxLevel(99);
+/* 00097d4e */	g_player.setExp(0);
+/* 00097d60 */	g_player.setMaxHp(100);
+/* 00097d72 */	g_player.setHp(100);
+/* 00097d84 */	g_player.setLuck(15);
+/* 00097d96 */	g_player.setMaxChipCount(9);
+/* 00097da8 */	g_player.setMaxChipCountDepository(30);
+/* 00097dba */	g_player.setGold(0);
+/* 00097dcc */	int i;
+/* 00097dd6 */	for (i = 0; i < g_player.getMaxChipCount() - 5; ++i)
+/* 00097e14 */	{
+/* 00097e14 */		g_chipDepository[0].add(g_chip[i % g_chip.Numof()].getId(), true);
+/* 00097e4a */	}
+/* 00097e50 */	for (i = 0; i < g_player.getMaxChipCountDepository() - 5; ++i)
+/* 00097e8e */	{
+/* 00097e8e */		g_chipDepository[1].add(g_chip[i % g_chip.Numof()].getId(), true);
+/* 00097ec4 */	}
+/* 00097eca */}
+
+void initMusic()
+/* 00097ed8 */{
+/* 00097ed8 */	g_music.addHandlerFunc("savePlayedMusic");
+/* 00097eea */}
+
+void initSkill()
+/* 00097ef8 */{
+/* 00097ef8 */	int count = EX_Height("スキルデータ");
+/* 00097f10 */	g_skill.Free();
+/* 00097f1a */	g_skill.Alloc(count);
+/* 00097f30 */	int i;
+/* 00097f3a */	for (i = 0; i < count; ++i)
+/* 00097f6a */	{
+/* 00097f6a */		g_skill[i].setId(EX_A2String("スキルデータ", 0, i, ""));
+/* 00097f9c */	}
+/* 00097fa2 */}
+
+void initBadCondition()
+/* 00097fb0 */{
+/* 00097fb0 */	int count = EX_Height("状態異常データ");
+/* 00097fc8 */	g_badCondition.Free();
+/* 00097fd2 */	g_badCondition.Alloc(count);
+/* 00097fe8 */	int i;
+/* 00097ff2 */	for (i = 0; i < count; ++i)
+/* 00098022 */	{
+/* 00098022 */		g_badCondition[i].setId(EX_A2String("状態異常データ", 0, i, ""));
+/* 00098054 */	}
+/* 0009805a */}
+
+void savePlayedMusic(int number)
+/* 00098068 */{
+/* 00098068 */	if (number == 0)
+/* 00098076 */	{
+/* 00098076 */		return;
+/* 00098078 */	}
+/* 0009807e */	g_globalGameFlag.addValue("音楽再生[%s]" % g_musicInfoManager.getNameFromMusicNumber(number), 1);
+/* 000980b0 */}
+

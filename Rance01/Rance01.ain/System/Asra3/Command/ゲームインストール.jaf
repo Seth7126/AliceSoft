@@ -1,0 +1,5 @@
+bool ゲームインストール確認(string ゲーム名)
+/* 0004e0e4 */{
+/* 0004e0e4 */	return InstallInfo.IsInstalledGame(ゲーム名);
+/* 0004e0f6 */}
+

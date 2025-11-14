@@ -1,0 +1,176 @@
+void Ｓ＿バックログ()
+/* 0004c602 */{
+/* 0004c602 */	g_MessageWindowManager.HideAll();
+/* 0004c60e */	SYS_StopVoiceBySkipMessage();
+/* 0004c614 */	効果音(0);
+/* 0004c620 */	bool bPrev既読スキップモードマーク表示許可 = SYS_スキップモードマーク表示許可フラグ取得();
+/* 0004c632 */	bool bPrevオートモードマーク表示許可 = SYS_オートモードマーク表示許可フラグ取得();
+/* 0004c644 */	既読スキップモードマーク表示許可設定(false);
+/* 0004c650 */	オートモードマーク表示許可設定(false);
+/* 0004c65c */	CBackLogView BackLogView;
+/* 0004c66c */	BackLogView.Run(g_BackLogModel);
+/* 0004c686 */	既読スキップモードマーク表示許可設定(bPrev既読スキップモードマーク表示許可);
+/* 0004c698 */	オートモードマーク表示許可設定(bPrevオートモードマーク表示許可);
+/* 0004c6a4 */	SYS_StopVoiceBySkipMessage();
+/* 0004c6aa */	効果音(0);
+/* 0004c6b6 */	g_MessageWindowManager.ShowAll();
+/* 0004c6c2 */	AFL_View_Update(true);
+/* 0004c6ce */}
+
+void バックログ登録(string Text)
+/* 0004c6dc */{
+/* 0004c6dc */	AnteaterADVEngine.ADVLogList_AddText(Text, g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 0004c6f8 */	AnteaterADVEngine.ADVLogList_AddNewLine();
+/* 0004c702 */}
+
+bool バックログ登録制御(bool _on)
+/* 0004c710 */{
+/* 0004c710 */	bool r = AnteaterADVEngine.ADVLogList_IsEnable();
+/* 0004c726 */	AnteaterADVEngine.ADVLogList_SetEnable(_on);
+/* 0004c736 */	return r;
+/* 0004c73e */}
+
+void バックログ画面＿背景ＣＧ(string BackCG)
+/* 0004c752 */{
+/* 0004c752 */	g_BackLogModel.SetBackCG(BackCG);
+/* 0004c764 */}
+
+void バックログ画面＿テキスト位置(int nX, int nY)
+/* 0004c772 */{
+/* 0004c772 */	g_BackLogModel.SetTextPos(nX, nY);
+/* 0004c78a */}
+
+void バックログ画面＿テキスト行数(int nNumofTextLine)
+/* 0004c798 */{
+/* 0004c798 */	g_BackLogModel.SetNumofTextLine(nNumofTextLine);
+/* 0004c7aa */}
+
+void バックログ画面＿テキスト桁数(int nNumofTextColumn)
+/* 0004c7b8 */{
+/* 0004c7b8 */	g_BackLogModel.SetNumofTextColumn(nNumofTextColumn);
+/* 0004c7ca */}
+
+void バックログ画面＿テキスト文字サイズ(int nFontSize)
+/* 0004c7d8 */{
+/* 0004c7d8 */	g_BackLogModel.SetFontSize(nFontSize);
+/* 0004c7ea */}
+
+void バックログ画面＿テキスト通常プロパティ設定(int FontType, int ColorR, int ColorG, int ColorB, float BoldWeight, int EdgeR, int EdgeG, int EdgeB, float EdgeWeight)
+/* 0004c7f8 */{
+/* 0004c7f8 */	ref CASCharSpriteProperty TextProprety = g_BackLogModel.GetTextProperty(0);
+/* 0004c834 */	TextProprety.SetType(FontType);
+/* 0004c846 */	TextProprety.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 0004c870 */	TextProprety.SetBoldWeight(BoldWeight);
+/* 0004c882 */	TextProprety.SetEdgeWeight(EdgeWeight);
+/* 0004c894 */	TextProprety.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 0004c8be */}
+
+void バックログ画面＿テキスト通常オンカーソルプロパティ設定(int FontType, int ColorR, int ColorG, int ColorB, float BoldWeight, int EdgeR, int EdgeG, int EdgeB, float EdgeWeight)
+/* 0004c8cc */{
+/* 0004c8cc */	ref CASCharSpriteProperty TextProprety = g_BackLogModel.GetTextProperty(4);
+/* 0004c908 */	TextProprety.SetType(FontType);
+/* 0004c91a */	TextProprety.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 0004c944 */	TextProprety.SetBoldWeight(BoldWeight);
+/* 0004c956 */	TextProprety.SetEdgeWeight(EdgeWeight);
+/* 0004c968 */	TextProprety.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 0004c992 */}
+
+void バックログ画面＿テキスト音声ありプロパティ設定(int FontType, int ColorR, int ColorG, int ColorB, float BoldWeight, int EdgeR, int EdgeG, int EdgeB, float EdgeWeight)
+/* 0004c9a0 */{
+/* 0004c9a0 */	ref CASCharSpriteProperty TextProprety = g_BackLogModel.GetTextProperty(1);
+/* 0004c9dc */	TextProprety.SetType(FontType);
+/* 0004c9ee */	TextProprety.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 0004ca18 */	TextProprety.SetBoldWeight(BoldWeight);
+/* 0004ca2a */	TextProprety.SetEdgeWeight(EdgeWeight);
+/* 0004ca3c */	TextProprety.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 0004ca66 */}
+
+void バックログ画面＿テキスト音声ありオンカーソルプロパティ設定(int FontType, int ColorR, int ColorG, int ColorB, float BoldWeight, int EdgeR, int EdgeG, int EdgeB, float EdgeWeight)
+/* 0004ca74 */{
+/* 0004ca74 */	ref CASCharSpriteProperty TextProprety = g_BackLogModel.GetTextProperty(2);
+/* 0004cab0 */	TextProprety.SetType(FontType);
+/* 0004cac2 */	TextProprety.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 0004caec */	TextProprety.SetBoldWeight(BoldWeight);
+/* 0004cafe */	TextProprety.SetEdgeWeight(EdgeWeight);
+/* 0004cb10 */	TextProprety.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 0004cb3a */}
+
+void バックログ画面＿テキスト音声再生中プロパティ設定(int FontType, int ColorR, int ColorG, int ColorB, float BoldWeight, int EdgeR, int EdgeG, int EdgeB, float EdgeWeight)
+/* 0004cb48 */{
+/* 0004cb48 */	ref CASCharSpriteProperty TextProprety = g_BackLogModel.GetTextProperty(3);
+/* 0004cb84 */	TextProprety.SetType(FontType);
+/* 0004cb96 */	TextProprety.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 0004cbc0 */	TextProprety.SetBoldWeight(BoldWeight);
+/* 0004cbd2 */	TextProprety.SetEdgeWeight(EdgeWeight);
+/* 0004cbe4 */	TextProprety.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 0004cc0e */}
+
+void バックログ画面＿テキスト字間隔設定(int nCharSpace)
+/* 0004cc1c */{
+/* 0004cc1c */	g_BackLogModel.SetCharSpace(nCharSpace);
+/* 0004cc2e */}
+
+void バックログ画面＿テキスト行間隔設定(int nLineSpace)
+/* 0004cc3c */{
+/* 0004cc3c */	g_BackLogModel.SetLineSpace(nLineSpace);
+/* 0004cc4e */}
+
+void バックログ画面＿タスクバー使用(bool bUseTaskBar)
+/* 0004cc5c */{
+/* 0004cc5c */	g_BackLogModel.SetUseTaskBar(bUseTaskBar);
+/* 0004cc6e */}
+
+void バックログ画面＿戻るボタン(string CG, string UnderCursorCG, string KeyDownCG, string DisableCG, int nX, int nY)
+/* 0004cc7c */{
+/* 0004cc7c */	g_BackLogModel.SetReturnButtonCG(CG);
+/* 0004cc8e */	g_BackLogModel.SetReturnButtonUnderCursorCG(UnderCursorCG);
+/* 0004cca0 */	g_BackLogModel.SetReturnButtonKeyDownCG(KeyDownCG);
+/* 0004ccb2 */	g_BackLogModel.SetReturnButtonDisableCG(DisableCG);
+/* 0004ccc4 */	g_BackLogModel.SetReturnButtonPos(nX, nY);
+/* 0004ccdc */}
+
+void バックログ画面＿スクロールボックスＣＧ(string CG, string UnderCursorCG, string KeyDownCG, string DisableCG)
+/* 0004ccea */{
+/* 0004ccea */	g_BackLogModel.SetScrollBoxCG(CG);
+/* 0004ccfc */	g_BackLogModel.SetScrollBoxUnderCursorCG(UnderCursorCG);
+/* 0004cd0e */	g_BackLogModel.SetScrollBoxKeyDownCG(KeyDownCG);
+/* 0004cd20 */}
+
+void バックログ画面＿スクロールボックス領域(int nX, int nY, int nWidth, int nHeight)
+/* 0004cd2e */{
+/* 0004cd2e */	g_BackLogModel.SetScrollBoxAreaRect(nX, nY, nWidth, nHeight);
+/* 0004cd52 */}
+
+void バックログ画面＿アップボタン(string CG, string UnderCursorCG, string KeyDownCG, string DisableCG, int nX, int nY)
+/* 0004cd60 */{
+/* 0004cd60 */	g_BackLogModel.SetUpButtonCG(CG);
+/* 0004cd72 */	g_BackLogModel.SetUpButtonUnderCursorCG(UnderCursorCG);
+/* 0004cd84 */	g_BackLogModel.SetUpButtonKeyDownCG(KeyDownCG);
+/* 0004cd96 */	g_BackLogModel.SetUpButtonDisableCG(DisableCG);
+/* 0004cda8 */	g_BackLogModel.SetUpButtonPos(nX, nY);
+/* 0004cdc0 */}
+
+void バックログ画面＿ダウンボタン(string CG, string UnderCursorCG, string KeyDownCG, string DisableCG, int nX, int nY)
+/* 0004cdce */{
+/* 0004cdce */	g_BackLogModel.SetDownButtonCG(CG);
+/* 0004cde0 */	g_BackLogModel.SetDownButtonUnderCursorCG(UnderCursorCG);
+/* 0004cdf2 */	g_BackLogModel.SetDownButtonKeyDownCG(KeyDownCG);
+/* 0004ce04 */	g_BackLogModel.SetDownButtonDisableCG(DisableCG);
+/* 0004ce16 */	g_BackLogModel.SetDownButtonPos(nX, nY);
+/* 0004ce2e */}
+
+void バックログ画面＿決定音(int nSound)
+/* 0004ce3c */{
+/* 0004ce3c */	g_BackLogModel.SetDecideSound(nSound);
+/* 0004ce4e */}
+
+void バックログ画面＿カーソル音(int nSound)
+/* 0004ce5c */{
+/* 0004ce5c */	g_BackLogModel.SetUnderCursorSound(nSound);
+/* 0004ce6e */}
+
+void バックログ画面＿キャンセル音(int nSound)
+/* 0004ce7c */{
+/* 0004ce7c */	g_BackLogModel.SetCancelSound(nSound);
+/* 0004ce8e */}
+

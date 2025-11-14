@@ -1,0 +1,399 @@
+CConfigUISlider::CConfigUISlider()
+/* 00032294 */{
+/* 0003229c */	this.Create();
+/* 000322a4 */}
+
+CConfigUISlider::~CConfigUISlider()
+/* 000322ac */{
+/* 000322ac */	this.Release();
+/* 000322b4 */}
+
+bool CConfigUISlider::IsExist()
+/* 000322bc */{
+/* 000322bc */	return this.m_SliderNumber != 0 && this.m_InitializeButton != 0 && this.m_ScrollBar != 0;
+/* 00032314 */}
+
+void CConfigUISlider::Create()
+/* 00032322 */{
+/* 00032322 */	this.Release();
+/* 0003232a */	this.m_SliderNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0003233c */	this.m_InitializeButton = PARTS_GetFreeSystemPartsNumber();
+/* 0003234e */	this.m_ScrollBar = PARTS_GetFreeSystemPartsNumber();
+/* 00032360 */	AFL_Parts_AddMouseClickEvent(this.m_InitializeButton, this.InitializeButtonClickEvent);
+/* 00032376 */	AFL_Parts_AddScrollEvent(this.m_ScrollBar, this.ScrollEvent);
+/* 0003238c */}
+
+void CConfigUISlider::Release()
+/* 00032394 */{
+/* 00032394 */	this.m_ChangedRateEvent.Clear();
+/* 0003239c */	this.m_InitializeButtonClickEvent.Clear();
+/* 000323a4 */	PARTS_Release(this.m_ScrollBar);
+/* 000323b0 */	PARTS_Release(this.m_InitializeButton);
+/* 000323bc */	PARTS_Release(this.m_SliderNumber);
+/* 000323c8 */	this.m_SliderNumber = 0;
+/* 000323d2 */	this.m_InitializeButton = 0;
+/* 000323dc */	this.m_ScrollBar = 0;
+/* 000323e6 */}
+
+void CConfigUISlider::SetButtonPos(int PosX, int PosY)
+/* 000323ee */{
+/* 000323ee */	Ｐ＿ボタン＿座標設定(this.m_InitializeButton, PosX, PosY);
+/* 00032406 */}
+
+void CConfigUISlider::SetButtonZ(int PosZ)
+/* 0003240e */{
+/* 0003240e */	Ｐ＿ボタン＿Ｚ座標設定(this.m_InitializeButton, PosZ);
+/* 00032420 */}
+
+int CConfigUISlider::GetButtonX()
+/* 00032428 */{
+/* 00032428 */	return Ｐ＿ボタン＿Ｘ座標取得(this.m_InitializeButton);
+/* 00032436 */}
+
+int CConfigUISlider::GetButtonY()
+/* 00032444 */{
+/* 00032444 */	return Ｐ＿ボタン＿Ｙ座標取得(this.m_InitializeButton);
+/* 00032452 */}
+
+int CConfigUISlider::GetButtonZ()
+/* 00032460 */{
+/* 00032460 */	return Ｐ＿ボタン＿Ｚ座標取得(this.m_InitializeButton);
+/* 0003246e */}
+
+void CConfigUISlider::SetButtonSize(int Width, int Height)
+/* 0003247c */{
+/* 0003247c */	Ｐ＿ボタン＿サイズ設定(this.m_InitializeButton, Width, Height);
+/* 00032494 */}
+
+int CConfigUISlider::GetButtonWidth()
+/* 0003249c */{
+/* 0003249c */	return Ｐ＿ボタン＿幅取得(this.m_InitializeButton);
+/* 000324aa */}
+
+int CConfigUISlider::GetButtonHeight()
+/* 000324b8 */{
+/* 000324b8 */	return Ｐ＿ボタン＿高さ取得(this.m_InitializeButton);
+/* 000324c6 */}
+
+void CConfigUISlider::SetButtonShow(bool Show)
+/* 000324d4 */{
+/* 000324d4 */	Ｐ＿ボタン＿表示設定(this.m_InitializeButton, Show);
+/* 000324e6 */}
+
+bool CConfigUISlider::IsButtonShow()
+/* 000324ee */{
+/* 000324ee */	return Ｐ＿ボタン＿表示設定取得(this.m_InitializeButton);
+/* 000324fc */}
+
+void CConfigUISlider::SetButtonDrag(bool Drag)
+/* 0003250a */{
+/* 0003250a */	Ｐ＿ボタン＿ドラッグ設定(this.m_InitializeButton, Drag);
+/* 0003251c */}
+
+bool CConfigUISlider::IsButtonDrag()
+/* 00032524 */{
+/* 00032524 */	return Ｐ＿ボタン＿ドラッグ設定取得(this.m_InitializeButton);
+/* 00032532 */}
+
+void CConfigUISlider::SetButtonEnable(bool Enable)
+/* 00032540 */{
+/* 00032540 */	Ｐ＿ボタン＿有効設定(this.m_InitializeButton, Enable);
+/* 00032552 */}
+
+bool CConfigUISlider::IsButtonEnable()
+/* 0003255a */{
+/* 0003255a */	return Ｐ＿ボタン＿有効設定取得(this.m_InitializeButton);
+/* 00032568 */}
+
+void CConfigUISlider::SetButtonPixelDecide(bool PixelDecide)
+/* 00032576 */{
+/* 00032576 */	Ｐ＿ボタン＿ピクセル判定設定(this.m_InitializeButton, PixelDecide);
+/* 00032588 */}
+
+bool CConfigUISlider::IsButtonPixelDecide()
+/* 00032590 */{
+/* 00032590 */	return Ｐ＿ボタン＿ピクセル判定設定取得(this.m_InitializeButton);
+/* 0003259e */}
+
+void CConfigUISlider::SetButtonColor(int Red, int Green, int Blue)
+/* 000325ac */{
+/* 000325ac */	Ｐ＿ボタン＿色設定(this.m_InitializeButton, Red, Green, Blue);
+/* 000325ca */}
+
+int CConfigUISlider::GetButtonR()
+/* 000325d2 */{
+/* 000325d2 */	return Ｐ＿ボタン＿赤色取得(this.m_InitializeButton);
+/* 000325e0 */}
+
+int CConfigUISlider::GetButtonG()
+/* 000325ee */{
+/* 000325ee */	return Ｐ＿ボタン＿緑色取得(this.m_InitializeButton);
+/* 000325fc */}
+
+int CConfigUISlider::GetButtonB()
+/* 0003260a */{
+/* 0003260a */	return Ｐ＿ボタン＿青色取得(this.m_InitializeButton);
+/* 00032618 */}
+
+void CConfigUISlider::SetButtonFontProperty(ref CASCharSpriteProperty FontProperty)
+/* 00032626 */{
+/* 00032626 */	CASColor Color;
+/* 00032636 */	Color = FontProperty.GetColor();
+/* 00032652 */	CASColor EdgeColor;
+/* 00032662 */	EdgeColor = FontProperty.GetEdgeColor();
+/* 0003267e */	Ｐ＿ボタン＿フォント設定(this.m_InitializeButton, FontProperty.GetType(), FontProperty.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), FontProperty.GetBoldWeight(), FontProperty.GetEdgeWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB());
+/* 00032702 */}
+
+void CConfigUISlider::GetButtonFontProperty(ref CASCharSpriteProperty FontProperty)
+/* 0003270a */{
+/* 0003270a */	int Type;
+/* 00032714 */	int Size;
+/* 0003271e */	int ColorR;
+/* 00032728 */	int ColorG;
+/* 00032732 */	int ColorB;
+/* 0003273c */	int EdgeR;
+/* 00032746 */	int EdgeG;
+/* 00032750 */	int EdgeB;
+/* 0003275a */	float Bold;
+/* 0003276c */	float Edge;
+/* 0003277e */	Ｐ＿ボタン＿フォント取得(this.m_InitializeButton, Type, Size, ColorR, ColorG, ColorB, Bold, Edge, EdgeR, EdgeG, EdgeB);
+/* 000327da */	FontProperty.SetType(Type);
+/* 000327ec */	FontProperty.SetSize(Size);
+/* 000327fe */	FontProperty.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 00032828 */	FontProperty.SetBoldWeight(Bold);
+/* 0003283a */	FontProperty.SetEdgeWeight(Edge);
+/* 0003284c */	FontProperty.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 00032876 */}
+
+void CConfigUISlider::SetButtonOnCursorSoundNumber(int SoundNo)
+/* 0003287e */{
+/* 0003287e */	Ｐ＿ボタン＿オンカーソル効果音番号設定(this.m_InitializeButton, SoundNo);
+/* 00032890 */}
+
+void CConfigUISlider::SetButtonClickSoundNumber(int SoundNo)
+/* 00032898 */{
+/* 00032898 */	Ｐ＿ボタン＿クリック効果音番号設定(this.m_InitializeButton, SoundNo);
+/* 000328aa */}
+
+int CConfigUISlider::GetButtonOnCursorSoundNumber()
+/* 000328b2 */{
+/* 000328b2 */	return Ｐ＿ボタン＿オンカーソル効果音番号取得(this.m_InitializeButton);
+/* 000328c0 */}
+
+int CConfigUISlider::GetButtonClickSoundNumber()
+/* 000328ce */{
+/* 000328ce */	return Ｐ＿ボタン＿クリック効果音番号取得(this.m_InitializeButton);
+/* 000328dc */}
+
+void CConfigUISlider::SetButtonCGName(string CGName)
+/* 000328ea */{
+/* 000328ea */	Ｐ＿ボタン＿ＣＧ名設定(this.m_InitializeButton, CGName);
+/* 000328fc */}
+
+string CConfigUISlider::GetButtonCGName()
+/* 00032904 */{
+/* 00032904 */	return Ｐ＿ボタン＿ＣＧ名取得(this.m_InitializeButton);
+/* 00032912 */}
+
+void CConfigUISlider::SetButtonText(string Text)
+/* 00032920 */{
+/* 00032920 */	Ｐ＿ボタン＿テキスト設定(this.m_InitializeButton, Text);
+/* 00032932 */}
+
+string CConfigUISlider::GetButtonText()
+/* 0003293a */{
+/* 0003293a */	return Ｐ＿ボタン＿テキスト取得(this.m_InitializeButton);
+/* 00032948 */}
+
+void CConfigUISlider::SetHScrollbarPos(int PosX, int PosY)
+/* 00032956 */{
+/* 00032956 */	Ｐ＿横スクロールバー＿座標設定(this.m_ScrollBar, PosX, PosY);
+/* 0003296e */}
+
+void CConfigUISlider::SetHScrollbarZ(int PosZ)
+/* 00032976 */{
+/* 00032976 */	Ｐ＿横スクロールバー＿Ｚ座標設定(this.m_ScrollBar, PosZ);
+/* 00032988 */}
+
+int CConfigUISlider::GetHScrollbarX()
+/* 00032990 */{
+/* 00032990 */	return Ｐ＿横スクロールバー＿Ｘ座標取得(this.m_ScrollBar);
+/* 0003299e */}
+
+int CConfigUISlider::GetHScrollbarY()
+/* 000329ac */{
+/* 000329ac */	return Ｐ＿横スクロールバー＿Ｙ座標取得(this.m_ScrollBar);
+/* 000329ba */}
+
+int CConfigUISlider::GetHScrollbarZ()
+/* 000329c8 */{
+/* 000329c8 */	return Ｐ＿横スクロールバー＿Ｚ座標取得(this.m_ScrollBar);
+/* 000329d6 */}
+
+void CConfigUISlider::SetHScrollbarShow(bool Show)
+/* 000329e4 */{
+/* 000329e4 */	Ｐ＿横スクロールバー＿表示設定(this.m_ScrollBar, Show);
+/* 000329f6 */}
+
+bool CConfigUISlider::IsHScrollbarShow()
+/* 000329fe */{
+/* 000329fe */	return Ｐ＿横スクロールバー＿表示設定取得(this.m_ScrollBar);
+/* 00032a0c */}
+
+void CConfigUISlider::SetHScrollbarOnCursorSoundNumber(int Number)
+/* 00032a1a */{
+/* 00032a1a */	Ｐ＿横スクロールバー＿オンカーソル効果音番号設定(this.m_ScrollBar, Number);
+/* 00032a2c */}
+
+void CConfigUISlider::SetHScrollbarClickSoundNumber(int Number)
+/* 00032a34 */{
+/* 00032a34 */	Ｐ＿横スクロールバー＿クリック効果音番号設定(this.m_ScrollBar, Number);
+/* 00032a46 */}
+
+int CConfigUISlider::GetHScrollbarOnCursorSoundNumber()
+/* 00032a4e */{
+/* 00032a4e */	return Ｐ＿横スクロールバー＿オンカーソル効果音番号取得(this.m_ScrollBar);
+/* 00032a5c */}
+
+int CConfigUISlider::GetHScrollbarClickSoundNumber()
+/* 00032a6a */{
+/* 00032a6a */	return Ｐ＿横スクロールバー＿クリック効果音番号取得(this.m_ScrollBar);
+/* 00032a78 */}
+
+void CConfigUISlider::SetHScrollbarWidth(int Width)
+/* 00032a86 */{
+/* 00032a86 */	Ｐ＿横スクロールバー＿幅設定(this.m_ScrollBar, Width);
+/* 00032a98 */}
+
+void CConfigUISlider::SetHScrollbarHeight(int Height)
+/* 00032aa0 */{
+/* 00032aa0 */	Ｐ＿横スクロールバー＿高さ設定(this.m_ScrollBar, Height);
+/* 00032ab2 */}
+
+void CConfigUISlider::SetHScrollbarLeftWidth(int Width)
+/* 00032aba */{
+/* 00032aba */	Ｐ＿横スクロールバー＿左ボタン幅設定(this.m_ScrollBar, Width);
+/* 00032acc */}
+
+void CConfigUISlider::SetHScrollbarRightWidth(int Width)
+/* 00032ad4 */{
+/* 00032ad4 */	Ｐ＿横スクロールバー＿右ボタン幅設定(this.m_ScrollBar, Width);
+/* 00032ae6 */}
+
+int CConfigUISlider::GetHScrollbarWidth()
+/* 00032aee */{
+/* 00032aee */	return Ｐ＿横スクロールバー＿幅取得(this.m_ScrollBar);
+/* 00032afc */}
+
+int CConfigUISlider::GetHScrollbarHeight()
+/* 00032b0a */{
+/* 00032b0a */	return Ｐ＿横スクロールバー＿高さ取得(this.m_ScrollBar);
+/* 00032b18 */}
+
+int CConfigUISlider::GetHScrollbarLeftWidth()
+/* 00032b26 */{
+/* 00032b26 */	return Ｐ＿横スクロールバー＿左ボタン幅取得(this.m_ScrollBar);
+/* 00032b34 */}
+
+int CConfigUISlider::GetHScrollbarRightWidth()
+/* 00032b42 */{
+/* 00032b42 */	return Ｐ＿横スクロールバー＿右ボタン幅取得(this.m_ScrollBar);
+/* 00032b50 */}
+
+void CConfigUISlider::SetHScrollbarTotalSize(int TotalSize)
+/* 00032b5e */{
+/* 00032b5e */	Ｐ＿横スクロールバー＿全体量設定(this.m_ScrollBar, TotalSize);
+/* 00032b70 */}
+
+void CConfigUISlider::SetHScrollbarViewSize(int ViewSize)
+/* 00032b78 */{
+/* 00032b78 */	Ｐ＿横スクロールバー＿表示量設定(this.m_ScrollBar, ViewSize);
+/* 00032b8a */}
+
+void CConfigUISlider::SetHScrollbarScrollPos(int ScrollPos)
+/* 00032b92 */{
+/* 00032b92 */	Ｐ＿横スクロールバー＿スクロール位置設定(this.m_ScrollBar, ScrollPos);
+/* 00032ba4 */}
+
+void CConfigUISlider::SetHScrollbarMoveSizeByButton(int Size)
+/* 00032bac */{
+/* 00032bac */	Ｐ＿横スクロールバー＿ボタンクリック移動量設定(this.m_ScrollBar, Size);
+/* 00032bbe */}
+
+int CConfigUISlider::GetHScrollbarTotalSize()
+/* 00032bc6 */{
+/* 00032bc6 */	return Ｐ＿横スクロールバー＿全体量取得(this.m_ScrollBar);
+/* 00032bd4 */}
+
+int CConfigUISlider::GetHScrollbarViewSize()
+/* 00032be2 */{
+/* 00032be2 */	return Ｐ＿横スクロールバー＿表示量取得(this.m_ScrollBar);
+/* 00032bf0 */}
+
+int CConfigUISlider::GetHScrollbarScrollPos()
+/* 00032bfe */{
+/* 00032bfe */	return Ｐ＿横スクロールバー＿スクロール位置取得(this.m_ScrollBar);
+/* 00032c0c */}
+
+int CConfigUISlider::GetHScrollbarMoveSizeByButton()
+/* 00032c1a */{
+/* 00032c1a */	return Ｐ＿横スクロールバー＿ボタンクリック移動量取得(this.m_ScrollBar);
+/* 00032c28 */}
+
+void CConfigUISlider::SetHScrollbarCGName(string CGName)
+/* 00032c36 */{
+/* 00032c36 */	Ｐ＿横スクロールバー＿ＣＧ名設定(this.m_ScrollBar, CGName);
+/* 00032c48 */}
+
+string CConfigUISlider::GetHScrollbarCGName()
+/* 00032c50 */{
+/* 00032c50 */	return Ｐ＿横スクロールバー＿ＣＧ名取得(this.m_ScrollBar);
+/* 00032c5e */}
+
+float CConfigUISlider::GetRate()
+/* 00032c6c */{
+/* 00032c6c */	float ScrollPos = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_ScrollBar);
+/* 00032c86 */	float TotalSize = Ｐ＿横スクロールバー＿全体量取得(this.m_ScrollBar);
+/* 00032ca0 */	float ViewSize = Ｐ＿横スクロールバー＿表示量取得(this.m_ScrollBar);
+/* 00032cba */	return ScrollPos / (TotalSize - ViewSize);
+/* 00032cd2 */}
+
+void CConfigUISlider::SetRate(float Rate)
+/* 00032ce0 */{
+/* 00032ce0 */	float TotalSize = Ｐ＿横スクロールバー＿全体量取得(this.m_ScrollBar);
+/* 00032cfa */	float ViewSize = Ｐ＿横スクロールバー＿表示量取得(this.m_ScrollBar);
+/* 00032d14 */	Ｐ＿横スクロールバー＿スクロール位置設定(this.m_ScrollBar, (TotalSize - ViewSize) * Rate);
+/* 00032d38 */	this.m_ChangedRateEvent(this.m_SliderNumber);
+/* 00032d5a */}
+
+void CConfigUISlider::SetEnable(bool Enable)
+/* 00032d62 */{
+/* 00032d62 */	Ｐ＿ボタン＿有効設定(this.m_InitializeButton, Enable);
+/* 00032d74 */	Ｐ＿横スクロールバー＿表示設定(this.m_ScrollBar, Enable);
+/* 00032d86 */}
+
+int CConfigUISlider::GetPartsNumber()
+/* 00032d8e */{
+/* 00032d8e */	return this.m_SliderNumber;
+/* 00032d96 */}
+
+void CConfigUISlider::AddInitializeButtonClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00032da4 */{
+/* 00032da4 */	this.m_InitializeButtonClickEvent += DelegateObject;
+/* 00032db6 */}
+
+void CConfigUISlider::AddChangeRateEvent(DG_ChangedHandler DelegateObject)
+/* 00032dbe */{
+/* 00032dbe */	this.m_ChangedRateEvent += DelegateObject;
+/* 00032dd0 */}
+
+void CConfigUISlider::InitializeButtonClickEvent(int PartsNumber, int MouseX, int MouseY)
+/* 00032dd8 */{
+/* 00032dd8 */	this.m_InitializeButtonClickEvent(this.m_SliderNumber, MouseX, MouseY);
+/* 00032e06 */}
+
+void CConfigUISlider::ScrollEvent(int PartsNumber, int ScrollPos)
+/* 00032e0e */{
+/* 00032e0e */	this.m_ChangedRateEvent(this.m_SliderNumber);
+/* 00032e30 */}
+

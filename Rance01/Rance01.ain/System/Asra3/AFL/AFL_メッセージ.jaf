@@ -1,0 +1,15 @@
+void AFL_SetInvalidateFrameSkipWhileMessageSkip(bool bInvalidateFrameSkipWhileMessageSkip)
+/* 0005760c */{
+/* 0005760c */	ChipmunkSpriteEngine.SYSTEM_SetInvalidateFrameSkipWhileMessageSkip(bInvalidateFrameSkipWhileMessageSkip);
+/* 0005761c */}
+
+bool AFL_GetInvalidateFrameSkipWhileMessageSkip()
+/* 0005762a */{
+/* 0005762a */	return ChipmunkSpriteEngine.SYSTEM_GetInvalidateFrameSkipWhileMessageSkip();
+/* 00057636 */}
+
+void AFL_SetDrawMessageCharFunction(FTDrawMessageChar DrawMessageCharFunction)
+/* 0005764a */{
+/* 0005764a */	g_DrawMessageCharFunction = DrawMessageCharFunction;
+/* 00057654 */}
+

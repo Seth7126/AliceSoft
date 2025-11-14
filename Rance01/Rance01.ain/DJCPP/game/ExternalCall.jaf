@@ -1,0 +1,540 @@
+void RunSceneModal(DG_SceneUpdateMethod dgUpdate)
+/* 000980c4 */{
+/* 000980c4 */	while (true)
+/* 000980d0 */	{
+/* 000980d0 */		g_frameManager.updateFrame();
+/* 000980dc */		g_gameObjectManager.update();
+/* 000980e8 */		if (dgUpdate() != 0)
+/* 00098112 */		{
+/* 00098112 */			break;
+/* 00098118 */		}
+/* 0009811e */	}
+/* 00098124 */}
+
+void OnStartExternalCall(int sleepMode)
+/* 00098132 */{
+/* 00098132 */	g_viewModeManager.set(false);
+/* 00098144 */	if (sleepMode == 0)
+/* 00098152 */	{
+/* 00098152 */		g_gameObjectManager.sleep(true);
+/* 00098164 */	}
+/* 0009816a */	else
+/* 0009816a */	{
+/* 0009816a */		g_gameObjectManager.halfSleep(true);
+/* 0009817c */	}
+/* 0009817c */	g_frameManager.updateFrame();
+/* 00098188 */}
+
+void OnEndExternalCall(int sleepMode)
+/* 00098196 */{
+/* 00098196 */	if (sleepMode == 0)
+/* 000981a4 */	{
+/* 000981a4 */		g_gameObjectManager.sleep(false);
+/* 000981b6 */	}
+/* 000981bc */	else
+/* 000981bc */	{
+/* 000981bc */		g_gameObjectManager.halfSleep(false);
+/* 000981ce */	}
+/* 000981ce */	g_viewModeManager.restore();
+/* 000981da */	AFL_View_Update(true);
+/* 000981e6 */}
+
+void hideGameObject()
+/* 000981f4 */{
+/* 000981f4 */	g_hallucination.getPos(g_hallcinationX, g_hallcinationY);
+/* 00098210 */	g_hallucination.setPos(-500, 0);
+/* 00098228 */	g_gameObjectManager.sleepWithAsraFade(true);
+/* 0009823a */}
+
+void restoreGameObject()
+/* 00098248 */{
+/* 00098248 */	g_gameObjectManager.sleepWithAsraFade(false);
+/* 0009825a */	g_hallucination.setPos(g_hallcinationX, g_hallcinationY);
+/* 00098272 */}
+
+string OpenMap(string mapId)
+/* 00098280 */{
+/* 00098280 */	OnStartExternalCall(0);
+/* 0009828c */	string r;
+/* 00098298 */	SceneMap scene;
+/* 000982a8 */	scene.init(mapId);
+/* 000982ba */	scene.run();
+/* 000982c6 */	RunSceneModal(scene.update);
+/* 000982da */	r = scene.getSelectedPlaceId();
+/* 000982f0 */	OnEndExternalCall(0);
+/* 00098302 */	return r;
+/* 0009830a */}
+
+void OpenDungeon(string dungeonId, int x, int y)
+/* 0009831e */{
+/* 0009831e */	OnStartExternalCall(0);
+/* 0009832a */	SceneDungeon dungeon;
+/* 0009833a */	dungeon.init(dungeonId, x, y);
+/* 00098358 */	dungeon.run();
+/* 00098364 */	RunSceneModal(dungeon.update);
+/* 00098378 */	OnEndExternalCall(0);
+/* 0009838a */}
+
+void AddAdvSelection(int number, string label)
+/* 00098398 */{
+/* 00098398 */	g_advSelection.add(number, label, false);
+/* 000983b6 */}
+
+int OpenAdvSelection()
+/* 000983c4 */{
+/* 000983c4 */	●枠消去();
+/* 000983ca */	int result;
+/* 000983d4 */	SceneAdvSelection scene;
+/* 000983e4 */	array@SelectionItem item;
+/* 000983ee */	g_advSelection.getItemList(item);
+/* 00098400 */	scene.run(item);
+/* 00098412 */	RunSceneModal(scene.update);
+/* 00098426 */	result = scene.getResult();
+/* 0009843e */	item.Free();
+/* 00098448 */	g_advSelection.clear();
+/* 0009845a */	return result;
+/* 00098462 */}
+
+void OpenDepository()
+/* 00098476 */{
+/* 00098476 */	g_globalGameFlag.addValue("倉庫を開いた", 1);
+/* 0009848e */	●枠消去();
+/* 00098494 */	OnStartExternalCall(0);
+/* 000984a0 */	SceneDepository scene;
+/* 000984b0 */	scene.init();
+/* 000984bc */	scene.run();
+/* 000984c8 */	RunSceneModal(scene.update);
+/* 000984dc */	OnEndExternalCall(0);
+/* 000984e8 */}
+
+void OpenShop(int shopStockIndex)
+/* 000984f6 */{
+/* 000984f6 */	g_globalGameFlag.addValue("お店を開いた", 1);
+/* 0009850e */	●枠消去();
+/* 00098514 */	OnStartExternalCall(0);
+/* 00098520 */	SceneShop scene;
+/* 00098530 */	scene.init(shopStockIndex);
+/* 00098542 */	scene.run();
+/* 0009854e */	RunSceneModal(scene.update);
+/* 00098562 */	OnEndExternalCall(0);
+/* 00098574 */}
+
+void OpenBattle(string monsterId, string imageName)
+/* 00098582 */{
+/* 00098582 */	g_globalGameFlag.addValue("戦闘回数", 1);
+/* 0009859a */	int x;
+/* 000985a4 */	int y;
+/* 000985ae */	g_hallucination.getPos(x, y);
+/* 000985ca */	OnStartExternalCall(0);
+/* 000985d6 */	int result;
+/* 000985e0 */	SceneBattle btl_;
+/* 000985f0 */	btl_.init(monsterId, imageName);
+/* 00098608 */	btl_.run();
+/* 00098614 */	RunSceneModal(btl_.update);
+/* 00098628 */	result = btl_.getBattleResult();
+/* 00098640 */	OnEndExternalCall(0);
+/* 00098652 */	if (result == 2)
+/* 00098660 */	{
+/* 00098660 */		OpenGameOver();
+/* 00098666 */	}
+/* 0009866c */	else if (result == 3)
+/* 0009867a */	{
+/* 0009867a */		onBattleEscape();
+/* 00098680 */	}
+/* 00098686 */	string n = EX_String("戦闘終了時コールバック", "");
+/* 000986a2 */	if (n != "")
+/* 000986b2 */	{
+/* 000986b2 */		FuncBattleEndCallBack fn = n;
+/* 000986ca */		if (fn != NULL)
+/* 000986de */		{
+/* 000986de */			g_viewModeManager.set(true);
+/* 000986f0 */			fn(monsterId);
+/* 00098706 */			●枠消去();
+/* 0009870c */			g_viewModeManager.restore();
+/* 00098718 */		}
+/* 0009871e */	}
+/* 00098724 */	g_hallucination.setPos(x, y);
+/* 0009873c */}
+
+void onBattleEscape()
+/* 0009874a */{
+/* 0009874a */	g_player.addGold(-getLostGold());
+/* 0009875e */	g_gameFlow.setNextMap("MAP01");
+/* 00098770 */}
+
+DialogInfomation getEscapeDialogInfomation(string monsterName)
+/* 0009877e */{
+/* 0009877e */	DialogInfomation info;
+/* 0009878e */	info.answerType = 1;
+/* 000987a4 */	info.type = 1;
+/* 000987ba */	info.caption = "確認";
+/* 000987ce */	info.desc[0] = "%dGOLDを%sに投げつけて" % getLostGold() % monsterName;
+/* 0009880a */	info.desc[1] = "その隙に急いで城下町にもどります。";
+/* 00098826 */	info.desc[2] = "よろしいですか？";
+/* 00098842 */	return info;
+/* 00098852 */}
+
+int getLostGold()
+/* 00098866 */{
+/* 00098866 */	return (g_player.getGold() * 5) / 100;
+/* 00098884 */}
+
+void testEscape()
+/* 00098898 */{
+/* 00098898 */	DialogInfomation info;
+/* 000988a8 */	info.type = 1;
+/* 000988be */	info.imageName = "システム／ダイアログ／金喪失";
+/* 000988d2 */	info.caption = "%dGOLDを失った！" % 10;
+/* 000988f8 */	OpenDialog(info);
+/* 00098906 */}
+
+void getDisposableChipList(ref array@int disposable)
+/* 00098914 */{
+/* 00098914 */	disposable.Free();
+/* 0009891e */	int i;
+/* 00098928 */	for (i = 0; i < g_chipDepository[0].getCount(); ++i)
+/* 00098966 */	{
+/* 00098966 */		string id = g_chipDepository[0].getInstance(i).getId();
+/* 0009899e */		if (!getChip(id).isDepositoryDisable())
+/* 000989c2 */		{
+/* 000989c2 */			disposable.PushBack(i);
+/* 000989d2 */		}
+/* 000989d8 */	}
+/* 000989ea */}
+
+void openDialogChipLost(string id)
+/* 000989f8 */{
+/* 000989f8 */	DialogInfomation info;
+/* 00098a08 */	info.type = 1;
+/* 00098a1e */	info.chipId = id;
+/* 00098a32 */	info.caption = "所持チップ喪失のお知らせ";
+/* 00098a46 */	info.desc[0] = "%sを" % getChip(id).getName();
+/* 00098a8a */	info.desc[1] = "失った！";
+/* 00098aa6 */	OpenDialog(info);
+/* 00098ab4 */}
+
+void OpenGameOver()
+/* 00098ac2 */{
+/* 00098ac2 */	g_globalGameFlag.addValue("ゲームオーバーがコールされた", 1);
+/* 00098ada */	hideGameObject();
+/* 00098ae0 */	FuncGameOverCallBack fn = EX_String("ゲームオーバー時コールバック", "");
+/* 00098b04 */	if (fn != NULL)
+/* 00098b18 */	{
+/* 00098b18 */		fn();
+/* 00098b26 */	}
+/* 00098b2c */	system.Reset();
+/* 00098b32 */}
+
+int OpenDialog(ref DialogInfomation di)
+/* 00098b40 */{
+/* 00098b40 */	addBackLogDialogInfo(di);
+/* 00098b4c */	OnStartExternalCall(1);
+/* 00098b58 */	int result;
+/* 00098b62 */	Dialog dialog;
+/* 00098b72 */	dialog.run(di);
+/* 00098b84 */	RunSceneModal(dialog.update);
+/* 00098b98 */	result = dialog.getResult();
+/* 00098bb0 */	OnEndExternalCall(1);
+/* 00098bc2 */	return result;
+/* 00098bca */}
+
+int OpenEnquiteAgreementDialog()
+/* 00098bde */{
+/* 00098bde */	OnStartExternalCall(1);
+/* 00098bea */	int result;
+/* 00098bf4 */	EnquiteAgreementDialog dialog;
+/* 00098c04 */	dialog.run();
+/* 00098c10 */	RunSceneModal(dialog.update);
+/* 00098c24 */	result = dialog.getResult();
+/* 00098c3c */	OnEndExternalCall(1);
+/* 00098c4e */	return result;
+/* 00098c56 */}
+
+void addBackLogDialogInfo(ref DialogInfomation di)
+/* 00098c6a */{
+/* 00098c6a */	バックログ登録("【ダイアログ】");
+/* 00098c76 */	バックログ登録(di.caption);
+/* 00098c8a */	int i;
+/* 00098c94 */	for (i = 0; i < di.desc.Numof(); ++i)
+/* 00098cd2 */	{
+/* 00098cd2 */		if (di.desc[i] != "")
+/* 00098cf6 */		{
+/* 00098cf6 */			バックログ登録(di.desc[i]);
+/* 00098d12 */		}
+/* 00098d18 */	}
+/* 00098d1e */	バックログ登録("");
+/* 00098d2a */}
+
+void OpenGetChipDialog(string id, bool isDungeon)
+/* 00098d38 */{
+/* 00098d38 */	g_onStartGetChip();
+/* 00098d54 */	waitReadyOpenGetChipDialog();
+/* 00098d5a */	g_gameObjectManager.halfSleep(true);
+/* 00098d6c */	SceneGetChipConfimation scene;
+/* 00098d7c */	scene.run(id, isDungeon);
+/* 00098d94 */	RunSceneModal(scene.update);
+/* 00098da8 */	g_gameObjectManager.halfSleep(false);
+/* 00098dc0 */	g_onEndGetChip();
+/* 00098ddc */}
+
+void waitReadyOpenGetChipDialog()
+/* 00098dea */{
+/* 00098dea */	if (g_isReadyOpenGetChip.Numof() == 0)
+/* 00098e00 */	{
+/* 00098e00 */		return;
+/* 00098e02 */	}
+/* 00098e08 */	while (true)
+/* 00098e14 */	{
+/* 00098e14 */		if (g_isReadyOpenGetChip() != 0)
+/* 00098e3e */		{
+/* 00098e3e */			break;
+/* 00098e44 */		}
+/* 00098e4a */		g_gameObjectManager.update();
+/* 00098e56 */		g_frameManager.updateFrame();
+/* 00098e62 */	}
+/* 00098e68 */}
+
+int OpenTitle()
+/* 00098e76 */{
+/* 00098e76 */	SceneTitle scene;
+/* 00098e86 */	scene.run();
+/* 00098e92 */	RunSceneModal(scene.update);
+/* 00098ea6 */	return scene.getClicked();
+/* 00098eb4 */}
+
+void OpenSave()
+/* 00098ec8 */{
+/* 00098ec8 */	SceneSave scene;
+/* 00098ed8 */	scene.run();
+/* 00098ee4 */	RunSceneModal(scene.update);
+/* 00098ef8 */}
+
+void OpenLoad()
+/* 00098f06 */{
+/* 00098f06 */	SceneLoad scene;
+/* 00098f16 */	scene.run();
+/* 00098f22 */	RunSceneModal(scene.update);
+/* 00098f36 */}
+
+void OpenCgView()
+/* 00098f44 */{
+/* 00098f44 */	SceneCg scene;
+/* 00098f54 */	scene.run();
+/* 00098f60 */	RunSceneModal(scene.update);
+/* 00098f74 */}
+
+void OpenReplayView()
+/* 00098f82 */{
+/* 00098f82 */	SceneReplay scene;
+/* 00098f92 */	scene.run();
+/* 00098f9e */	RunSceneModal(scene.update);
+/* 00098fb2 */}
+
+void OpenMusic()
+/* 00098fc0 */{
+/* 00098fc0 */	SceneMusic scene;
+/* 00098fd0 */	scene.run();
+/* 00098fdc */	RunSceneModal(scene.update);
+/* 00098ff0 */}
+
+void OpenEnquite()
+/* 00098ffe */{
+/* 00098ffe */	if (OpenEnquiteAgreementDialog() != 0)
+/* 00099012 */	{
+/* 00099012 */		return;
+/* 00099014 */	}
+/* 0009901a */	SceneEnquite scene;
+/* 0009902a */	scene.run();
+/* 00099036 */	RunSceneModal(scene.update);
+/* 0009904a */}
+
+void OpenConfig()
+/* 0009905e */{
+/* 0009905e */	OnStartExternalCall(1);
+/* 0009906a */	SceneConfig scene;
+/* 0009907a */	scene.run();
+/* 00099086 */	RunSceneModal(scene.update);
+/* 0009909a */	OnEndExternalCall(1);
+/* 000990ac */}
+
+void OpenStatistics()
+/* 000990ba */{
+/* 000990ba */	OnStartExternalCall(0);
+/* 000990c6 */	SceneStatistics scene;
+/* 000990d6 */	scene.run();
+/* 000990e2 */	RunSceneModal(scene.update);
+/* 000990f6 */	OnEndExternalCall(0);
+/* 00099108 */}
+
+void OpenSystemMenu(int type)
+/* 00099116 */{
+/* 00099116 */	array@int list;
+/* 00099120 */	getSystemMenuList(list, type);
+/* 00099132 */	OnStartExternalCall(1);
+/* 0009913e */	int result;
+/* 00099148 */	SystemMenu menu;
+/* 00099158 */	menu.run(list);
+/* 0009916a */	RunSceneModal(menu.update);
+/* 0009917e */	result = menu.getResult();
+/* 00099196 */	OnEndExternalCall(1);
+/* 000991a8 */	runSystemMenuFunction(result);
+/* 000991b4 */}
+
+void runSystemMenuFunction(int result)
+/* 000991c2 */{
+/* 000991c2 */	switch (result)
+/* 000991d4 */	{
+/* 000991d4 */	case 0:
+/* 000991d4 */		Ｓ＿オート();
+/* 000991da */		break;
+/* 000991e0 */	case 1:
+/* 000991e0 */		Ｓ＿既読スキップ();
+/* 000991e6 */		break;
+/* 000991ec */	case 2:
+/* 000991ec */		Ｓ＿バックログ();
+/* 000991f2 */		break;
+/* 000991f8 */	case 3:
+/* 000991f8 */		Ｓ＿バックシーン();
+/* 000991fe */		break;
+/* 00099204 */	case 4:
+/* 00099204 */		Ｓ＿コンフィグ();
+/* 0009920a */		break;
+/* 00099210 */	case 5:
+/* 00099210 */		g_globalGameFlag.addValue("マニュアルを開いた", 1);
+/* 00099228 */		Ａ＿プレイングマニュアル表示();
+/* 0009922e */		break;
+/* 00099234 */	}
+/* 00099234 */}
+
+void OpenStatus(bool isShowExitToTownMap)
+/* 00099242 */{
+/* 00099242 */	OnStartExternalCall(1);
+/* 0009924e */	SceneStatus scene;
+/* 0009925e */	scene.run(isShowExitToTownMap);
+/* 00099270 */	RunSceneModal(scene.update);
+/* 00099284 */	OnEndExternalCall(1);
+/* 00099296 */}
+
+void ResetBet(int index)
+/* 000992a4 */{
+/* 000992a4 */	int i;
+/* 000992ae */	for (i = 0; i < g_chipDepository[index].getCount(); ++i)
+/* 000992ec */	{
+/* 000992ec */		g_chipDepository[index].getInstance(i).setBet(false);
+/* 00099320 */	}
+/* 0009932c */}
+
+void AutoSave()
+/* 0009933a */{
+/* 0009933a */	g_saveManager.autoSave();
+/* 00099346 */}
+
+void LoadAutoSave()
+/* 00099354 */{
+/* 00099354 */	g_saveManager.loadAutoSave();
+/* 00099360 */}
+
+int getitemDropPer()
+/* 0009936e */{
+/* 0009936e */	return 10;
+/* 00099376 */}
+
+void getSystemMenuList(ref array@int list, int type)
+/* 0009938a */{
+/* 0009938a */	list.Free();
+/* 00099394 */	if (type == 0)
+/* 000993a2 */	{
+/* 000993a2 */		list.PushBack(0);
+/* 000993b2 */		list.PushBack(1);
+/* 000993c2 */	}
+/* 000993c8 */	list.PushBack(2);
+/* 000993d8 */	list.PushBack(3);
+/* 000993e8 */	list.PushBack(4);
+/* 000993f8 */	list.PushBack(5);
+/* 00099408 */	list.PushBack(6);
+/* 00099418 */}
+
+void ReleaseAutoAndSkip()
+/* 00099426 */{
+/* 00099426 */	if (AFL_Config_GetReleaseAutoModeInSelectMenu())
+/* 00099432 */	{
+/* 00099432 */		オートモード解除();
+/* 00099438 */	}
+/* 0009943e */	if (AFL_Config_GetReleaseMessageSkipInSelectMenu())
+/* 0009944a */	{
+/* 0009944a */		既読スキップモード解除();
+/* 00099450 */	}
+/* 00099456 */}
+
+void OpenChipInfomation(string id)
+/* 00099464 */{
+/* 00099464 */	OnStartExternalCall(1);
+/* 00099470 */	SceneChipInfomation scene;
+/* 00099480 */	scene.run(id);
+/* 00099492 */	RunSceneModal(scene.update);
+/* 000994a6 */	OnEndExternalCall(1);
+/* 000994b8 */}
+
+bool OpenUseChipConfimation(string chipId)
+/* 000994c6 */{
+/* 000994c6 */	OnStartExternalCall(1);
+/* 000994d2 */	int result;
+/* 000994dc */	SceneUseChipConfimation scene;
+/* 000994ec */	scene.run(chipId);
+/* 000994fe */	RunSceneModal(scene.update);
+/* 00099512 */	result = scene.getResult();
+/* 0009952a */	OnEndExternalCall(1);
+/* 0009953c */	return result == 0;
+/* 0009954e */}
+
+void OpenEnding()
+/* 00099562 */{
+/* 00099562 */	オートモードマーク表示許可設定(false);
+/* 0009956e */	既読スキップモードマーク表示許可設定(false);
+/* 0009957a */	OnStartExternalCall(0);
+/* 00099586 */	SceneEnding scene;
+/* 00099596 */	scene.run();
+/* 000995a2 */	RunSceneModal(scene.update);
+/* 000995b6 */	OnEndExternalCall(0);
+/* 000995c8 */	オートモードマーク表示許可設定(true);
+/* 000995d4 */	既読スキップモードマーク表示許可設定(true);
+/* 000995e0 */}
+
+void OpenChipCollection()
+/* 000995ee */{
+/* 000995ee */	OnStartExternalCall(1);
+/* 000995fa */	SceneChipCollection scene;
+/* 0009960a */	scene.run();
+/* 00099616 */	RunSceneModal(scene.update);
+/* 0009962a */	OnEndExternalCall(1);
+/* 0009963c */}
+
+void OpenMonsterCollection()
+/* 0009964a */{
+/* 0009964a */	OnStartExternalCall(1);
+/* 00099656 */	SceneMonsterCollection scene;
+/* 00099666 */	scene.run();
+/* 00099672 */	RunSceneModal(scene.update);
+/* 00099686 */	OnEndExternalCall(1);
+/* 00099698 */}
+
+void OpenAward()
+/* 000996a6 */{
+/* 000996a6 */	OnStartExternalCall(1);
+/* 000996b2 */	SceneAward scene;
+/* 000996c2 */	scene.run();
+/* 000996ce */	RunSceneModal(scene.update);
+/* 000996e2 */	OnEndExternalCall(1);
+/* 000996f4 */}
+
+bool OpenFreeInputDialog(ref string result)
+/* 00099702 */{
+/* 00099702 */	string n;
+/* 0009970e */	OnStartExternalCall(1);
+/* 0009971a */	FreeInputDialog scene;
+/* 0009972a */	scene.run();
+/* 00099736 */	RunSceneModal(scene.update);
+/* 0009974a */	OnEndExternalCall(1);
+/* 0009975c */	return true;
+/* 00099764 */}
+

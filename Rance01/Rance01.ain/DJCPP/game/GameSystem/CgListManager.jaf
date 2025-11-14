@@ -1,0 +1,83 @@
+CgListManager::CgListManager()
+/* 00093cda */{
+/* 00093ce2 */	this.loadCgList();
+/* 00093cea */}
+
+void CgListManager::getThumbnailCgList(ref array@string result)
+/* 00093cf2 */{
+/* 00093cf2 */	result.Free();
+/* 00093cfc */	int i;
+/* 00093d06 */	for (i = 0; i < this.cgList_.Numof(); ++i)
+/* 00093d36 */	{
+/* 00093d36 */		result.PushBack(this.cgList_[i].thumbnailCgName);
+/* 00093d56 */	}
+/* 00093d5c */}
+
+void CgListManager::getCgList(ref array@string result, int index, bool isShownCgOnly)
+/* 00093d64 */{
+/* 00093d64 */	if (index >= 0 && index < this.cgList_.Numof())
+/* 00093d9e */	{
+/* 00093d9e */		int count = this.cgList_[index].cgName.Numof();
+/* 00093dc6 */		int i;
+/* 00093dd0 */		for (i = 0; i < count; ++i)
+/* 00093e00 */		{
+/* 00093e00 */			if (isShownCgOnly)
+/* 00093e0c */			{
+/* 00093e0c */				if (ＣＧモード確認(this.cgList_[index].cgName[i]))
+/* 00093e36 */				{
+/* 00093e36 */					result.PushBack(this.cgList_[index].cgName[i]);
+/* 00093e5e */				}
+/* 00093e64 */			}
+/* 00093e6a */			else
+/* 00093e6a */			{
+/* 00093e6a */				result.PushBack(this.cgList_[index].cgName[i]);
+/* 00093e92 */			}
+/* 00093e92 */		}
+/* 00093e98 */	}
+/* 00093e9e */}
+
+void CgListManager::loadCgList()
+/* 00093ea6 */{
+/* 00093ea6 */	array@string node;
+/* 00093eb0 */	EX_GetNodeNameList("CgList", node);
+/* 00093ec2 */	this.cgList_.Alloc(node.Numof());
+/* 00093ee2 */	int i;
+/* 00093eec */	for (i = 0; i < node.Numof(); ++i)
+/* 00093f26 */	{
+/* 00093f26 */		int j;
+/* 00093f30 */		this.cgList_[i].thumbnailCgName = node[i];
+/* 00093f54 */		while (true)
+/* 00093f60 */		{
+/* 00093f60 */			string r = EX_AString("CgList.%s.CgName" % node[i], j, "");
+/* 00093f98 */			if (r == "")
+/* 00093fa8 */			{
+/* 00093fa8 */				break;
+/* 00093fae */			}
+/* 00093fb4 */			this.cgList_[i].cgName.PushBack(r);
+/* 00093fd0 */			++j;
+/* 00093fd6 */		}
+/* 00093fdc */	}
+/* 00093fe2 */}
+
+int CgListManager::getCount()
+/* 00093fea */{
+/* 00093fea */	return this.cgList_.Numof();
+/* 00093ff2 */}
+
+bool CgListManager::isEnableCgMode(int index)
+/* 00094000 */{
+/* 00094000 */	if (index >= 0 && index < this.cgList_.Numof())
+/* 0009403a */	{
+/* 0009403a */		int count = this.cgList_[index].cgName.Numof();
+/* 00094062 */		int i;
+/* 0009406c */		for (i = 0; i < count; ++i)
+/* 0009409c */		{
+/* 0009409c */			if (ＣＧモード確認(this.cgList_[index].cgName[i]))
+/* 000940c6 */			{
+/* 000940c6 */				return true;
+/* 000940ce */			}
+/* 000940d4 */		}
+/* 000940da */	}
+/* 000940e0 */	return false;
+/* 000940e8 */}
+

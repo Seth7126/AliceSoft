@@ -1,0 +1,30 @@
+void AFL_LogViewer_OpenViewer()
+/* 0005822a */{
+/* 0005822a */	CrayfishLogViewer.OpenViewer();
+/* 00058236 */}
+
+void AFL_LogViewer_CloseViewer()
+/* 00058244 */{
+/* 00058244 */	CrayfishLogViewer.CloseViewer();
+/* 00058250 */}
+
+bool AFL_LogViewer_IsOpenedViewer()
+/* 0005825e */{
+/* 0005825e */	return CrayfishLogViewer.IsOpenedViewer();
+/* 0005826a */}
+
+void AFL_LogViewer_SetWindowTitleName(string WindowTitleName)
+/* 0005827e */{
+/* 0005827e */	CrayfishLogViewer.SetWindowTitleName(WindowTitleName);
+/* 0005828e */}
+
+void AFL_LogViewer_AddText(string Text)
+/* 0005829c */{
+/* 0005829c */	CrayfishLogViewer.AddText(Text);
+/* 000582ae */}
+
+void AFL_LogViewer_ClearText()
+/* 000582bc */{
+/* 000582bc */	CrayfishLogViewer.ClearText();
+/* 000582c8 */}
+

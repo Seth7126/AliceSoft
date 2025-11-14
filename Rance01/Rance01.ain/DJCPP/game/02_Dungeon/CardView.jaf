@@ -1,0 +1,318 @@
+CardView::CardView()
+/* 0006d600 */{
+/* 0006d608 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0006d634 */	this.isSelectable_ = true;
+/* 0006d63e */}
+
+void CardView::update()
+/* 0006d646 */{
+/* 0006d646 */	bool last = this.isHover_;
+/* 0006d650 */	this.updateHoverState();
+/* 0006d658 */	switch (this.state_)
+/* 0006d66a */	{
+/* 0006d66a */	case 1:
+/* 0006d66a */		if (!this.parent_.isMotion())
+/* 0006d67e */		{
+/* 0006d67e */			this.state_ = 2;
+/* 0006d688 */		}
+/* 0006d68e */		break;
+/* 0006d694 */	case 5:
+/* 0006d694 */		if (!this.parent_.isMotion())
+/* 0006d6a8 */		{
+/* 0006d6a8 */			this.state_ = 0;
+/* 0006d6b2 */		}
+/* 0006d6b8 */		break;
+/* 0006d6be */	case 2:
+/* 0006d6be */		if (last != this.isHover_)
+/* 0006d6d2 */		{
+/* 0006d6d2 */			this.setPartsVisible();
+/* 0006d6da */		}
+/* 0006d6e0 */		if (!last && this.isHover_)
+/* 0006d710 */		{
+/* 0006d710 */			g_sysSound.play(2001, false);
+/* 0006d728 */		}
+/* 0006d72e */		if (g_mouse.isClickWithFocus() && this.isHover_)
+/* 0006d762 */		{
+/* 0006d762 */			g_sysSound.play(2002, false);
+/* 0006d77a */		}
+/* 0006d780 */		break;
+/* 0006d786 */	case 3:
+/* 0006d786 */		if (this.timer_.getTime() < 200)
+/* 0006d7a0 */		{
+/* 0006d7a0 */			this.setAbstructPosition(this.x_, motion(0, this.toY_ + 1.0, this.toY_, this.timer_.getTime() / 200.0));
+/* 0006d7e8 */		}
+/* 0006d7ee */		else
+/* 0006d7ee */		{
+/* 0006d7ee */			this.setAbstructPosition(this.x_, this.toY_);
+/* 0006d802 */			this.state_ = 2;
+/* 0006d80c */		}
+/* 0006d80c */		break;
+/* 0006d812 */	case 4:
+/* 0006d812 */		if (!this.parts_[0].isMotion())
+/* 0006d82e */		{
+/* 0006d82e */			this.isCardDown_ = false;
+/* 0006d838 */			this.setPartsVisible();
+/* 0006d840 */			this.state_ = 2;
+/* 0006d84a */		}
+/* 0006d850 */		break;
+/* 0006d856 */	}
+/* 0006d856 */}
+
+void CardView::init(string id, int lighted, int depth)
+/* 0006d85e */{
+/* 0006d85e */	this.instance_ <- getCard(id);
+/* 0006d88a */	this.lightRange_ = lighted;
+/* 0006d894 */	this.viewDepthMax_ = 5;
+/* 0006d8a6 */	this.id_ = id;
+/* 0006d8b0 */	this.dungeonDepth_ = depth;
+/* 0006d8ba */	this.initParts();
+/* 0006d8c2 */	this.setPartsOrigin();
+/* 0006d8ca */	this.updatePartsShowState();
+/* 0006d8d2 */}
+
+void CardView::initParts()
+/* 0006d8da */{
+/* 0006d8da */	this.parts_.Free();
+/* 0006d8e4 */	this.parts_.Alloc(3);
+/* 0006d8fa */	this.parts_[0].initAsUserStructure();
+/* 0006d90e */	int pn = this.parts_[0].getPartsNumber();
+/* 0006d92e */	Ｐ＿構築手順＿ＣＧ設定(pn, this.instance_.getImageName(), 1);
+/* 0006d94c */	if (this.instance_.getRankImageName() != "")
+/* 0006d966 */	{
+/* 0006d966 */		Ｐ＿構築手順＿ＣＧ部分ブレンド(pn, this.instance_.getRankImageName(), 0, 0, 0, 0, 76, 34, 1);
+/* 0006d9a8 */	}
+/* 0006d9ae */	if (this.instance_.getName() != "")
+/* 0006d9c8 */	{
+/* 0006d9c8 */		int w;
+/* 0006d9d2 */		int h;
+/* 0006d9dc */		getTextSize(w, h, this.instance_.getName(), 20, 256, true, -1);
+/* 0006da16 */		CASCharSpriteProperty prop;
+/* 0006da26 */		prop = getCharSpriteProperty(20, true, 256, 255, 255, 255);
+/* 0006da60 */		Ｐ＿構築手順＿テキストブレンド(pn, (150 - w) / 2, (240 - h) / 2, this.instance_.getName(), prop, -1, 0, 1);
+/* 0006dac4 */	}
+/* 0006dad0 */	Ｐ＿構築ビルド(pn, 1);
+/* 0006dae2 */	this.parts_[1].init("カード／裏", 0);
+/* 0006db02 */	this.parts_[2].initAsCgPlaneImage("カード／裏", 255, 255, 0);
+/* 0006db2e */	this.parts_[2].setAlpha(128);
+/* 0006db48 */	createPartsGroup(this.parent_, this.parts_, 2500);
+/* 0006db60 */}
+
+void CardView::setPartsOrigin()
+/* 0006db68 */{
+/* 0006db68 */	int i;
+/* 0006db72 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006dba2 */	{
+/* 0006dba2 */		this.parts_[i].setOrigin(5);
+/* 0006dbbc */	}
+/* 0006dbc2 */}
+
+void CardView::setPartsVisible()
+/* 0006dbca */{
+/* 0006dbca */	this.parts_[0].setShow(!this.isCardDown_);
+/* 0006dbe8 */	this.parts_[1].setShow(this.isCardDown_);
+/* 0006dc02 */	this.parts_[2].setShow(this.isHover_);
+/* 0006dc1c */}
+
+int CardView::getPartsAlpha()
+/* 0006dc24 */{
+/* 0006dc24 */	if (0 <= this.y_ && this.y_ < this.viewDepthMax_)
+/* 0006dc6c */	{
+/* 0006dc6c */		return 255;
+/* 0006dc74 */	}
+/* 0006dc7a */	else if (this.y_ < 0.0)
+/* 0006dc8e */	{
+/* 0006dc8e */		float alpha = 1.0 - Math.MinF(1.0, -this.y_);
+/* 0006dcba */		return alpha * 256.0;
+/* 0006dccc */	}
+/* 0006dcd2 */	else
+/* 0006dcd2 */	{
+/* 0006dcd2 */		float alpha = 1.0 - Math.MinF(1.0, this.y_ - this.viewDepthMax_);
+/* 0006dd06 */		return alpha * 256.0;
+/* 0006dd18 */	}
+/* 0006dd18 */	return 0;
+/* 0006dd20 */}
+
+void CardView::setPartsLighting()
+/* 0006dd2e */{
+/* 0006dd2e */	if (0 <= this.y_ && this.y_ < this.viewDepthMax_)
+/* 0006dd76 */	{
+/* 0006dd76 */		int n = (1.0 - this.y_ / Math.MaxF(this.lightRange_, 0.0)) * 256.0;
+/* 0006ddb4 */		this.parent_.setMultiColorValue(n, n, n);
+/* 0006ddd2 */	}
+/* 0006ddd8 */	else if (this.y_ < 0.0)
+/* 0006ddec */	{
+/* 0006ddec */		this.parent_.setMultiColorValue(255, 255, 255);
+/* 0006de0a */	}
+/* 0006de10 */	else
+/* 0006de10 */	{
+/* 0006de10 */		this.parent_.setMultiColorValue(0, 0, 0);
+/* 0006de2e */	}
+/* 0006de2e */}
+
+void CardView::setShow(bool val)
+/* 0006de36 */{
+/* 0006de36 */	this.parent_.setShow(val);
+/* 0006de48 */}
+
+void CardView::setSelectable(bool val)
+/* 0006de50 */{
+/* 0006de50 */	this.isSelectable_ = val;
+/* 0006de5a */	this.setPartsVisible();
+/* 0006de62 */}
+
+void CardView::setLighted(int lighted)
+/* 0006de6a */{
+/* 0006de6a */	this.lightRange_ = lighted;
+/* 0006de74 */	this.setPartsLighting();
+/* 0006de7c */}
+
+void CardView::setCardDown(bool val)
+/* 0006de84 */{
+/* 0006de84 */	this.isCardDown_ = val;
+/* 0006de8e */	this.setPartsVisible();
+/* 0006de96 */}
+
+void CardView::setAbstructPosition(float x, float y)
+/* 0006de9e */{
+/* 0006de9e */	this.x_ = x;
+/* 0006deb0 */	this.y_ = y;
+/* 0006dec2 */	this.updatePartsShowState();
+/* 0006deca */}
+
+void CardView::fadeIn(bool val, int delayTime)
+/* 0006ded2 */{
+/* 0006ded2 */	this.parent_.setShow(true);
+/* 0006dee4 */	int x = this.calcXPos();
+/* 0006def8 */	int y = this.calcYPos();
+/* 0006df0c */	int alpha = this.getPartsAlpha();
+/* 0006df20 */	array@MotionInfomation m[2];
+/* 0006df36 */	if (val)
+/* 0006df42 */	{
+/* 0006df42 */		m[0].setTime(delayTime, 0);
+/* 0006df62 */		m[0].setAlpha(0, 0, 0);
+/* 0006df88 */		m[1].setMove(x, y - 100, x, y, 1);
+/* 0006dfc2 */		m[1].setAlpha(0, alpha, 0);
+/* 0006dfe8 */	}
+/* 0006dfee */	else
+/* 0006dfee */	{
+/* 0006dfee */		m[0].setTime(delayTime, 0);
+/* 0006e00e */		m[0].setAlpha(alpha, alpha, 0);
+/* 0006e034 */		m[1].setAlpha(alpha, 0, 0);
+/* 0006e05a */	}
+/* 0006e05a */	this.parent_.runMotionArray(m);
+/* 0006e06c */	this.state_ = val ? 1 : 5;
+/* 0006e096 */}
+
+void CardView::flip()
+/* 0006e09e */{
+/* 0006e09e */	this.state_ = 4;
+/* 0006e0a8 */	this.parts_[0].setShow(true);
+/* 0006e0c2 */	this.parts_[1].setShow(true);
+/* 0006e0dc */	this.parts_[2].setShow(false);
+/* 0006e0f6 */	this.parts_[0].runMotion(this.getFlipMotion(180, 360));
+/* 0006e11e */	this.parts_[1].runMotion(this.getFlipMotion(0, 180));
+/* 0006e146 */}
+
+void CardView::moveFront()
+/* 0006e14e */{
+/* 0006e14e */	this.toY_ = this.y_ - 1.0;
+/* 0006e168 */	this.parent_.finalizeMotion();
+/* 0006e174 */	this.state_ = 3;
+/* 0006e17e */	this.timer_.reset();
+/* 0006e18a */}
+
+bool CardView::isClick()
+/* 0006e192 */{
+/* 0006e192 */	return this.isHover_ && g_mouse.isClickWithFocus();
+/* 0006e1c4 */}
+
+bool CardView::isCardDown()
+/* 0006e1d2 */{
+/* 0006e1d2 */	return this.isCardDown_;
+/* 0006e1da */}
+
+string CardView::getId()
+/* 0006e1e8 */{
+/* 0006e1e8 */	return this.id_;
+/* 0006e1f0 */}
+
+bool CardView::isMotion()
+/* 0006e1fe */{
+/* 0006e1fe */	return this.state_ == 4 || this.state_ == 3;
+/* 0006e23c */}
+
+bool CardView::isHover()
+/* 0006e24a */{
+/* 0006e24a */	this.updateHoverState();
+/* 0006e252 */	return this.isHover_;
+/* 0006e25a */}
+
+void CardView::updatePartsShowState()
+/* 0006e268 */{
+/* 0006e268 */	this.setPartsVisible();
+/* 0006e270 */	this.parent_.setPos(this.calcXPos(), this.calcYPos(), this.calcZPos());
+/* 0006e294 */	this.parent_.setScaling(this.calcScaling());
+/* 0006e2a8 */	this.setPartsLighting();
+/* 0006e2b0 */	this.parent_.setAlpha(this.getPartsAlpha());
+/* 0006e2c4 */}
+
+MotionInfomation CardView::getFlipMotion(int start, int end)
+/* 0006e2cc */{
+/* 0006e2cc */	MotionInfomation m;
+/* 0006e2dc */	m.setYFlip(start, end, 0);
+/* 0006e2fa */	m.setTime(150, 0);
+/* 0006e312 */	m.setSoundNumber(2032);
+/* 0006e324 */	return m;
+/* 0006e334 */}
+
+void CardView::updateHoverState()
+/* 0006e342 */{
+/* 0006e342 */	this.isHover_ = this.y_ == 0.0 && this.isSelectable_ && this.state_ == 2 && this.isPartsHover();
+/* 0006e3cc */}
+
+bool CardView::isPartsHover()
+/* 0006e3d4 */{
+/* 0006e3d4 */	int x = g_mouse.getX();
+/* 0006e3ec */	int y = g_mouse.getY();
+/* 0006e404 */	return AFL_Parts_IsPointIn(this.parts_[1].getPartsNumber(), x, y, 1) || AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), x, y, 1);
+/* 0006e47e */}
+
+float CardView::getWidth()
+/* 0006e48c */{
+/* 0006e48c */	return (160.0 * this.calcScaling()) / 100.0;
+/* 0006e4a6 */}
+
+int CardView::calcXPos()
+/* 0006e4b4 */{
+/* 0006e4b4 */	return 512.0 + this.x_ * this.getWidth();
+/* 0006e4d0 */}
+
+int CardView::calcYPos()
+/* 0006e4de */{
+/* 0006e4de */	return 350.0 - this.y_ * 40.0;
+/* 0006e4f8 */}
+
+int CardView::calcZPos()
+/* 0006e506 */{
+/* 0006e506 */	if (this.y_ >= 0.0)
+/* 0006e51a */	{
+/* 0006e51a */		return 2500 + int(-this.y_) * 10;
+/* 0006e536 */	}
+/* 0006e53c */	return 2500 + int(-this.y_ + 1.0) * 10;
+/* 0006e560 */}
+
+float CardView::calcScaling()
+/* 0006e56e */{
+/* 0006e56e */	return 100.0 - this.y_ * 10.0;
+/* 0006e586 */}
+
+void CardView::finalizeMotion()
+/* 0006e594 */{
+/* 0006e594 */	this.parent_.finalizeMotion();
+/* 0006e5a0 */}
+
+bool CardView::isFinishMoveFront()
+/* 0006e5a8 */{
+/* 0006e5a8 */	return this.state_ != 3;
+/* 0006e5ba */}
+

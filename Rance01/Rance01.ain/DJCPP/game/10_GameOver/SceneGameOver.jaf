@@ -1,0 +1,55 @@
+SceneGameOver::SceneGameOver()
+/* 0007f0da */{
+/* 0007f0e4 */}
+
+int SceneGameOver::update()
+/* 0007f0ea */{
+/* 0007f0ea */	switch (this.state_)
+/* 0007f0fc */	{
+/* 0007f0fc */	case 0:
+/* 0007f0fc */		if (!this.parts_[1].isMotion())
+/* 0007f118 */		{
+/* 0007f118 */			this.state_ = 1;
+/* 0007f122 */		}
+/* 0007f128 */		break;
+/* 0007f12e */	case 1:
+/* 0007f12e */		if (g_mouse.isClick(0))
+/* 0007f146 */		{
+/* 0007f146 */			this.state_ = 2;
+/* 0007f150 */			this.parts_[1].runMotion(getStandardMotion(0));
+/* 0007f170 */		}
+/* 0007f176 */		break;
+/* 0007f17c */	case 2:
+/* 0007f17c */		if (!this.parts_[1].isMotion())
+/* 0007f198 */		{
+/* 0007f198 */			this.state_ = 3;
+/* 0007f1a2 */		}
+/* 0007f1a8 */		break;
+/* 0007f1ae */	case 3:
+/* 0007f1ae */		return 1;
+/* 0007f1b6 */	}
+/* 0007f1b6 */	return 0;
+/* 0007f1be */}
+
+void SceneGameOver::runModal()
+/* 0007f1cc */{
+/* 0007f1cc */	this.init();
+/* 0007f1d4 */	this.parts_[1].runMotion(getStandardMotion(1));
+/* 0007f1f4 */	this.state_ = 0;
+/* 0007f1fe */	while (true)
+/* 0007f20a */	{
+/* 0007f20a */		if (this.update() != 0)
+/* 0007f220 */		{
+/* 0007f220 */			break;
+/* 0007f226 */		}
+/* 0007f22c */		g_frameManager.updateFrame();
+/* 0007f238 */	}
+/* 0007f23e */}
+
+void SceneGameOver::init()
+/* 0007f246 */{
+/* 0007f246 */	this.parts_[0].init("システム／ゲームオーバー", 0);
+/* 0007f266 */	this.parts_[1].initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 0007f29e */	createPartsGroup(this.parent_, this.parts_, 8000);
+/* 0007f2b6 */}
+

@@ -1,0 +1,44 @@
+void SYS_PlayTime_Update()
+/* 00042e78 */{
+/* 00042e78 */	int CurrentTime = SYS_PlayTime_GetCurremt();
+/* 00042e8a */	if (g_PrevPlayTime == CurrentTime)
+/* 00042e9e */	{
+/* 00042e9e */		return;
+/* 00042ea0 */	}
+/* 00042ea6 */	if (!g_PausePlayTimeCounter)
+/* 00042eb4 */	{
+/* 00042eb4 */		g_PlayMinuteTime += 1;
+/* 00042ec6 */		SYS_TotalPlayTime_SetMinuteTime(SYS_TotalPlayTime_GetMinuteTime() + 1);
+/* 00042eda */	}
+/* 00042ee0 */	g_PrevPlayTime = CurrentTime;
+/* 00042eea */}
+
+int SYS_PlayTime_GetCurremt()
+/* 00042ef8 */{
+/* 00042ef8 */	int Hour;
+/* 00042f02 */	int Minute;
+/* 00042f0c */	int Second;
+/* 00042f16 */	SystemService.GetTime(Hour, Minute, Second);
+/* 00042f38 */	return Hour * 60 + Minute;
+/* 00042f50 */}
+
+void SYS_PlayTime_Reset()
+/* 00042f64 */{
+/* 00042f64 */	g_PrevPlayTime = SYS_PlayTime_GetCurremt();
+/* 00042f76 */}
+
+int SYS_TotalPlayTime_GetMinuteTime()
+/* 00042f84 */{
+/* 00042f84 */	int MinuteTime;
+/* 00042f8e */	if (!CommonSystemData.GetDataInt("Asra_TotalPlayTime", MinuteTime))
+/* 00042fae */	{
+/* 00042fae */		SYS_TotalPlayTime_SetMinuteTime(0);
+/* 00042fba */	}
+/* 00042fc0 */	return MinuteTime;
+/* 00042fc8 */}
+
+void SYS_TotalPlayTime_SetMinuteTime(int MinuteTime)
+/* 00042fdc */{
+/* 00042fdc */	CommonSystemData.SetDataInt("Asra_TotalPlayTime", MinuteTime);
+/* 00042ff4 */}
+

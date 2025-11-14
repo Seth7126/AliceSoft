@@ -1,0 +1,154 @@
+ref Attribute getAttribute(string id)
+/* 0009208c */{
+/* 0009208c */	int i;
+/* 00092096 */	for (i = 0; i < g_attribute.Numof(); ++i)
+/* 000920c6 */	{
+/* 000920c6 */		if (g_attribute[i].getId() == id)
+/* 000920e8 */		{
+/* 000920e8 */			return g_attribute[i];
+/* 000920fc */		}
+/* 00092102 */	}
+/* 00092108 */	stop("属性:[%s] は見つかりませんでした。" % id);
+/* 00092122 */	return NULL;
+/* 0009212a */}
+
+ref Card getCard(string id)
+/* 0009213e */{
+/* 0009213e */	int i;
+/* 00092148 */	for (i = 0; i < g_card.Numof(); ++i)
+/* 00092178 */	{
+/* 00092178 */		if (g_card[i].getId() == id)
+/* 0009219a */		{
+/* 0009219a */			return g_card[i];
+/* 000921ae */		}
+/* 000921b4 */	}
+/* 000921ba */	stop("カード:[%s] は見つかりませんでした。" % id);
+/* 000921d4 */	return NULL;
+/* 000921dc */}
+
+ref Chip getChip(string id)
+/* 000921f0 */{
+/* 000921f0 */	int i;
+/* 000921fa */	for (i = 0; i < g_chip.Numof(); ++i)
+/* 0009222a */	{
+/* 0009222a */		if (g_chip[i].getId() == id)
+/* 0009224c */		{
+/* 0009224c */			return g_chip[i];
+/* 00092260 */		}
+/* 00092266 */	}
+/* 0009226c */	stop("チップ:[%s] は見つかりませんでした。" % id);
+/* 00092286 */	return NULL;
+/* 0009228e */}
+
+ref Dungeon getDungeon(string id)
+/* 000922a2 */{
+/* 000922a2 */	int i;
+/* 000922ac */	for (i = 0; i < g_dungeon.Numof(); ++i)
+/* 000922dc */	{
+/* 000922dc */		if (g_dungeon[i].getId() == id)
+/* 000922fe */		{
+/* 000922fe */			return g_dungeon[i];
+/* 00092312 */		}
+/* 00092318 */	}
+/* 0009231e */	stop("ダンジョン:[%s] は見つかりませんでした。" % id);
+/* 00092338 */	return NULL;
+/* 00092340 */}
+
+ref Map getMap(string id)
+/* 00092354 */{
+/* 00092354 */	int i;
+/* 0009235e */	for (i = 0; i < g_map.Numof(); ++i)
+/* 0009238e */	{
+/* 0009238e */		if (g_map[i].getId() == id)
+/* 000923b0 */		{
+/* 000923b0 */			return g_map[i];
+/* 000923c4 */		}
+/* 000923ca */	}
+/* 000923d0 */	stop("マップ:[%s] は見つかりませんでした。" % id);
+/* 000923ea */	return NULL;
+/* 000923f2 */}
+
+ref Monster getMonster(string id)
+/* 00092406 */{
+/* 00092406 */	int i;
+/* 00092410 */	for (i = 0; i < g_monster.Numof(); ++i)
+/* 00092440 */	{
+/* 00092440 */		if (g_monster[i].getId() == id)
+/* 00092462 */		{
+/* 00092462 */			return g_monster[i];
+/* 00092476 */		}
+/* 0009247c */	}
+/* 00092482 */	stop("モンスター:[%s] は見つかりませんでした。" % id);
+/* 0009249c */	return NULL;
+/* 000924a4 */}
+
+ref Place getPlace(string id)
+/* 000924b8 */{
+/* 000924b8 */	int i;
+/* 000924c2 */	for (i = 0; i < g_place.Numof(); ++i)
+/* 000924f2 */	{
+/* 000924f2 */		if (g_place[i].getId() == id)
+/* 00092514 */		{
+/* 00092514 */			return g_place[i];
+/* 00092528 */		}
+/* 0009252e */	}
+/* 00092534 */	stop("場所:[%s] は見つかりませんでした。" % id);
+/* 0009254e */	return NULL;
+/* 00092556 */}
+
+ref Skill getSkill(string id)
+/* 0009256a */{
+/* 0009256a */	int i;
+/* 00092574 */	for (i = 0; i < g_skill.Numof(); ++i)
+/* 000925a4 */	{
+/* 000925a4 */		if (g_skill[i].getId() == id)
+/* 000925c6 */		{
+/* 000925c6 */			return g_skill[i];
+/* 000925da */		}
+/* 000925e0 */	}
+/* 000925e6 */	stop("スキル:[%s] は見つかりませんでした。" % id);
+/* 00092600 */	return NULL;
+/* 00092608 */}
+
+ref BadCondition getBadConditionObject(string id)
+/* 0009261c */{
+/* 0009261c */	int i;
+/* 00092626 */	for (i = 0; i < g_badCondition.Numof(); ++i)
+/* 00092656 */	{
+/* 00092656 */		if (g_badCondition[i].getId() == id)
+/* 00092678 */		{
+/* 00092678 */			return g_badCondition[i];
+/* 0009268c */		}
+/* 00092692 */	}
+/* 00092698 */	stop("状態異常:[%s] は見つかりませんでした。" % id);
+/* 000926b2 */	return NULL;
+/* 000926ba */}
+
+int getBadConditionIndex(string id)
+/* 000926ce */{
+/* 000926ce */	int i;
+/* 000926d8 */	for (i = 0; i < g_badCondition.Numof(); ++i)
+/* 00092708 */	{
+/* 00092708 */		if (g_badCondition[i].getId() == id)
+/* 0009272a */		{
+/* 0009272a */			return i;
+/* 00092732 */		}
+/* 00092738 */	}
+/* 0009273e */	stop("状態異常:[%s] は見つかりませんでした。" % id);
+/* 00092758 */	return -1;
+/* 00092760 */}
+
+int getSkillIndex(string id)
+/* 00092774 */{
+/* 00092774 */	int i;
+/* 0009277e */	for (i = 0; i < g_skill.Numof(); ++i)
+/* 000927ae */	{
+/* 000927ae */		if (g_skill[i].getId() == id)
+/* 000927d0 */		{
+/* 000927d0 */			return i;
+/* 000927d8 */		}
+/* 000927de */	}
+/* 000927e4 */	stop("スキル:[%s] は見つかりませんでした。" % id);
+/* 000927fe */	return -1;
+/* 00092806 */}
+

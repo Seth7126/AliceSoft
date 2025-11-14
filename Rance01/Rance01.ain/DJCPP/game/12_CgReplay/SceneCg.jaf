@@ -1,0 +1,192 @@
+SceneCg::SceneCg()
+/* 000804d8 */{
+/* 000804e0 */	this.clicked_ = -1;
+/* 000804f2 */}
+
+int SceneCg::update()
+/* 000804fa */{
+/* 000804fa */	switch (this.state_)
+/* 0008050c */	{
+/* 0008050c */	case 0:
+/* 0008050c */		if (!this.parent_.isMotion())
+/* 00080520 */		{
+/* 00080520 */			this.state_ = 1;
+/* 0008052a */		}
+/* 00080530 */		break;
+/* 00080536 */	case 1:
+/* 00080536 */		this.checkButtonClick();
+/* 0008053e */		this.checkJumpButton();
+/* 00080546 */		this.btnJump_.setSelectedButton(roundOff(this.ss_.getFloatingPage()));
+/* 00080564 */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 000805a6 */		{
+/* 000805a6 */			if (g_mouse.isClick(1))
+/* 000805be */			{
+/* 000805be */				g_sysSound.play(2003, false);
+/* 000805d6 */			}
+/* 000805dc */			this.fadeIn(false);
+/* 000805ea */		}
+/* 000805f0 */		break;
+/* 000805f6 */	case 2:
+/* 000805f6 */		if (this.swipeView_.isFinish())
+/* 00080608 */		{
+/* 00080608 */			this.showThumbnailButton(true);
+/* 00080616 */			this.fadeIn(true);
+/* 00080624 */			this.swipeView_ <- NULL;
+/* 0008063c */		}
+/* 00080642 */		break;
+/* 00080648 */	case 3:
+/* 00080648 */		if (!this.parent_.isMotion())
+/* 0008065c */		{
+/* 0008065c */			if (this.clicked_ == -1)
+/* 00080670 */			{
+/* 00080670 */				this.state_ = 4;
+/* 0008067a */			}
+/* 00080680 */			else
+/* 00080680 */			{
+/* 00080680 */				this.showThumbnailButton(false);
+/* 0008068e */				array@string list;
+/* 00080698 */				g_cgListManager.getCgList(list, this.clicked_, true);
+/* 000806b6 */				g_globalGameFlag.addValue("ＣＧ再生／%s" % list[0], 1);
+/* 000806e4 */				this.swipeView_ <- new CgSwipeView;
+/* 0008070c */				this.swipeView_.init(list);
+/* 00080720 */				this.swipeView_.run();
+/* 0008072c */				this.state_ = 2;
+/* 00080746 */			}
+/* 00080746 */		}
+/* 0008074c */		break;
+/* 00080752 */	case 4:
+/* 00080752 */		return 1;
+/* 0008075a */	}
+/* 0008075a */	return 0;
+/* 00080762 */}
+
+void SceneCg::run()
+/* 00080770 */{
+/* 00080770 */	this.init();
+/* 00080778 */	this.fadeIn(true);
+/* 00080786 */}
+
+void SceneCg::init()
+/* 0008078e */{
+/* 0008078e */	this.initButton();
+/* 00080796 */	this.showThumbnailButton(true);
+/* 000807a4 */	this.parts_[0].init("システム／ＣＧ／下地", 0);
+/* 000807c4 */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 000807dc */	int count = (this.btnThumbnail_.Numof() + 11) / 12;
+/* 000807fe */	this.ss_.init(768, 1024, 0, count);
+/* 00080822 */	this.btnJump_.init(count);
+/* 00080834 */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 00080852 */	this.btnExit_.setPos(868, 688, -2147483648);
+/* 00080870 */	this.setPartsShow();
+/* 00080878 */	this.setButtonPos();
+/* 00080880 */	this.setButtonParent();
+/* 00080888 */}
+
+void SceneCg::initButton()
+/* 00080890 */{
+/* 00080890 */	this.btnThumbnail_.Alloc(g_cgListManager.getCount());
+/* 000808ac */	array@string list;
+/* 000808b6 */	g_cgListManager.getThumbnailCgList(list);
+/* 000808c8 */	int i;
+/* 000808d2 */	for (i = 0; i < this.btnThumbnail_.Numof(); ++i)
+/* 00080902 */	{
+/* 00080902 */		this.btnThumbnail_[i].init(list[i], g_cgListManager.isEnableCgMode(i));
+/* 00080936 */	}
+/* 0008093c */}
+
+void SceneCg::setPartsShow()
+/* 00080944 */{
+/* 00080944 */	int i;
+/* 0008094e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0008097e */	{
+/* 0008097e */		this.parts_[i].setShow(true);
+/* 00080998 */	}
+/* 0008099e */	this.parent_.setShow(true);
+/* 000809b0 */}
+
+void SceneCg::setButtonPos()
+/* 000809b8 */{
+/* 000809b8 */	int i;
+/* 000809c2 */	for (i = 0; i < this.btnThumbnail_.Numof(); ++i)
+/* 000809f2 */	{
+/* 000809f2 */		int g = i / 12;
+/* 00080a0c */		int n = i % 12;
+/* 00080a26 */		this.btnThumbnail_[i].setPos(42 + (n % 4) * 243 + g * 1024, 130 + (n / 4) * 184, -2147483648);
+/* 00080a8c */	}
+/* 00080a92 */}
+
+void SceneCg::setButtonParent()
+/* 00080a9a */{
+/* 00080a9a */	int i;
+/* 00080aa4 */	for (i = 0; i < this.btnThumbnail_.Numof(); ++i)
+/* 00080ad4 */	{
+/* 00080ad4 */		this.btnThumbnail_[i].setParent(this.ss_.getParentPartsNumber());
+/* 00080af4 */	}
+/* 00080afa */}
+
+void SceneCg::checkButtonClick()
+/* 00080b02 */{
+/* 00080b02 */	this.clicked_ = this.getClickedButton();
+/* 00080b16 */	if (this.clicked_ != -1)
+/* 00080b2a */	{
+/* 00080b2a */		this.fadeIn(false);
+/* 00080b38 */	}
+/* 00080b3e */}
+
+int SceneCg::getClickedButton()
+/* 00080b46 */{
+/* 00080b46 */	int i;
+/* 00080b50 */	for (i = 0; i < this.btnThumbnail_.Numof(); ++i)
+/* 00080b80 */	{
+/* 00080b80 */		if (this.btnThumbnail_[i].isClick())
+/* 00080b9a */		{
+/* 00080b9a */			return i;
+/* 00080ba2 */		}
+/* 00080ba8 */	}
+/* 00080bae */	return -1;
+/* 00080bb6 */}
+
+void SceneCg::fadeIn(bool val)
+/* 00080bc4 */{
+/* 00080bc4 */	MotionInfomation m;
+/* 00080bd4 */	if (val)
+/* 00080be0 */	{
+/* 00080be0 */		m.setTime(300, 0);
+/* 00080bf8 */		m.setAlpha(0, 255, 0);
+/* 00080c16 */	}
+/* 00080c1c */	else
+/* 00080c1c */	{
+/* 00080c1c */		m.setTime(300, 0);
+/* 00080c34 */		m.setAlpha(255, 0, 0);
+/* 00080c52 */	}
+/* 00080c52 */	this.parent_.runMotion(m);
+/* 00080c6c */	this.ss_.fadeIn(val);
+/* 00080c7e */	this.showThumbnailButton(val);
+/* 00080c8c */	this.btnExit_.fadeIn(val);
+/* 00080c9e */	this.btnJump_.fadeIn(val);
+/* 00080cb0 */	this.state_ = val ? 0 : 3;
+/* 00080cda */}
+
+void SceneCg::showThumbnailButton(bool val)
+/* 00080ce2 */{
+/* 00080ce2 */	int i;
+/* 00080cec */	for (i = 0; i < this.btnThumbnail_.Numof(); ++i)
+/* 00080d1c */	{
+/* 00080d1c */		this.btnThumbnail_[i].setShow(val);
+/* 00080d36 */	}
+/* 00080d3c */}
+
+int SceneCg::getClicked()
+/* 00080d44 */{
+/* 00080d44 */	return this.clicked_;
+/* 00080d4c */}
+
+void SceneCg::checkJumpButton()
+/* 00080d5a */{
+/* 00080d5a */	int n = this.btnJump_.getClickedButton();
+/* 00080d72 */	if (n != -1)
+/* 00080d86 */	{
+/* 00080d86 */		this.ss_.jumpPage(n);
+/* 00080d98 */	}
+/* 00080d9e */}
+

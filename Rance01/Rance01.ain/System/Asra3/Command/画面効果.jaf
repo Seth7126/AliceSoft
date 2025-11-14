@@ -1,0 +1,69 @@
+void 全表示(int 効果番号, int 効果時間)
+/* 0004aaa4 */{
+/* 0004aaa4 */	SYS_画面更新(効果番号, 効果時間, _全表示効果番号, _全表示効果時間);
+/* 0004aac2 */}
+
+void Ａ＿画面トランジション終了待ち(int 効果番号, int 効果時間)
+/* 0004aad0 */{
+/* 0004aad0 */	if (効果番号 < 0)
+/* 0004aade */	{
+/* 0004aade */		効果番号 = _全表示効果番号;
+/* 0004aaf0 */	}
+/* 0004aaf6 */	if (効果時間 < 0)
+/* 0004ab04 */	{
+/* 0004ab04 */		効果時間 = _全表示効果時間;
+/* 0004ab16 */	}
+/* 0004ab1c */	if (効果番号 == 0 || 効果時間 <= 0)
+/* 0004ab5c */	{
+/* 0004ab5c */		AFL_View_Update(true);
+/* 0004ab68 */		return;
+/* 0004ab6a */	}
+/* 0004ab70 */	SYS_効果番号チェック(効果番号);
+/* 0004ab7e */	ChipmunkSpriteEngine.TRANS_Begin(効果番号);
+/* 0004ab90 */	CASTimer Timer;
+/* 0004aba0 */	Timer.Reset();
+/* 0004abac */	for (; ; )
+/* 0004abac */	{
+/* 0004abac */		int nTime = Timer.Get();
+/* 0004abc4 */		if (nTime >= 効果時間)
+/* 0004abd8 */		{
+/* 0004abd8 */			break;
+/* 0004abde */		}
+/* 0004abe4 */		float fRate = float(nTime) / float(効果時間);
+/* 0004ac02 */		SYS_View_Update(false, true, fRate);
+/* 0004ac1a */	}
+/* 0004ac20 */	ChipmunkSpriteEngine.TRANS_End();
+/* 0004ac2c */	AFL_View_Update(true);
+/* 0004ac38 */}
+
+void 全消去()
+/* 0004ac46 */{
+/* 0004ac46 */	PARTS_ReleaseAllPartsWithoutSystem();
+/* 0004ac4c */	字枠セット(0, -2147483648);
+/* 0004ac5e */}
+
+void 画面揺らし(int 横振幅, int 縦振幅, int 効果時間)
+/* 0004ac6c */{
+/* 0004ac6c */	if (!SYS_全文スキップ中確認() && !SYS_スキップ中確認())
+/* 0004aca0 */	{
+/* 0004aca0 */		SYS_画面揺らし(横振幅, 縦振幅, 効果時間);
+/* 0004acb8 */	}
+/* 0004acbe */}
+
+void Ａ＿画面揺らし終了待ち(int 横振幅, int 縦振幅, int 効果時間)
+/* 0004accc */{
+/* 0004accc */	SYS_画面揺らし終了待ち(横振幅, 縦振幅, 効果時間);
+/* 0004ace4 */}
+
+void 文字表示後画面揺らし(int 横振幅, int 縦振幅, int 効果時間)
+/* 0004acf2 */{
+/* 0004acf2 */	_文字表示後画面揺らし横 = 横振幅;
+/* 0004acfc */	_文字表示後画面揺らし縦 = 縦振幅;
+/* 0004ad06 */	_文字表示後画面揺らし時 = 効果時間;
+/* 0004ad10 */}
+
+void 全画面色(int Ｒ, int Ｇ, int Ｂ)
+/* 0004ad1e */{
+/* 0004ad1e */	SYS_全画面色(Ｒ, Ｇ, Ｂ);
+/* 0004ad36 */}
+

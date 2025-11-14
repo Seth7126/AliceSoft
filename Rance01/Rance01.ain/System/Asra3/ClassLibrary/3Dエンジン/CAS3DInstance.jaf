@@ -1,0 +1,966 @@
+CAS3DInstance::CAS3DInstance()
+/* 0000b508 */{
+/* 0000b510 */	this.m_InstanceNumber = -1;
+/* 0000b522 */}
+
+CAS3DInstance::~CAS3DInstance()
+/* 0000b52a */{
+/* 0000b52a */	this.Release();
+/* 0000b532 */}
+
+bool CAS3DInstance::Create(ref CAS3DLayer Layer)
+/* 0000b53a */{
+/* 0000b53a */	this.Release();
+/* 0000b542 */	this.m_InstanceNumber = Layer.CreateInstance();
+/* 0000b55a */	if (this.m_InstanceNumber == -1)
+/* 0000b56e */	{
+/* 0000b56e */		return false;
+/* 0000b576 */	}
+/* 0000b57c */	this.m_Layer <- Layer;
+/* 0000b598 */	return true;
+/* 0000b5a0 */}
+
+void CAS3DInstance::Release()
+/* 0000b5ae */{
+/* 0000b5ae */	if (this.m_InstanceNumber != -1)
+/* 0000b5c2 */	{
+/* 0000b5c2 */		SealEngine.ReleaseInstance(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000b5e0 */		this.m_InstanceNumber = -1;
+/* 0000b5f2 */	}
+/* 0000b5f8 */	this.m_Layer <- NULL;
+/* 0000b610 */}
+
+int CAS3DInstance::GetInstance()
+/* 0000b618 */{
+/* 0000b618 */	return this.m_InstanceNumber;
+/* 0000b620 */}
+
+bool CAS3DInstance::SetType(int nType)
+/* 0000b62e */{
+/* 0000b62e */	SealEngine.SetInstanceType(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nType);
+/* 0000b652 */	return true;
+/* 0000b65a */}
+
+bool CAS3DInstance::Save(string FileName)
+/* 0000b668 */{
+/* 0000b668 */	return SealEngine.SaveInstance(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, FileName);
+/* 0000b68c */}
+
+bool CAS3DInstance::Load(string Name)
+/* 0000b69a */{
+/* 0000b69a */	return SealEngine.LoadInstance(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Name);
+/* 0000b6be */}
+
+bool CAS3DInstance::IsExistData(string Name)
+/* 0000b6cc */{
+/* 0000b6cc */	return SealEngine.IsExistInstanceData(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Name);
+/* 0000b6f0 */}
+
+string CAS3DInstance::GetName()
+/* 0000b6fe */{
+/* 0000b6fe */	string Name;
+/* 0000b70a */	if (!SealEngine.GetInstanceName(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Name))
+/* 0000b734 */	{
+/* 0000b734 */		return "";
+/* 0000b73c */	}
+/* 0000b742 */	return Name;
+/* 0000b74a */}
+
+bool CAS3DInstance::SetPos(float fX, float fY, float fZ)
+/* 0000b758 */{
+/* 0000b758 */	return SealEngine.SetInstancePos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fX, fY, fZ);
+/* 0000b788 */}
+
+bool CAS3DInstance::SetPosX(float fX)
+/* 0000b796 */{
+/* 0000b796 */	return this.SetPos(fX, this.GetPosY(), this.GetPosZ());
+/* 0000b7b6 */}
+
+bool CAS3DInstance::SetPosY(float fY)
+/* 0000b7c4 */{
+/* 0000b7c4 */	return this.SetPos(this.GetPosX(), fY, this.GetPosZ());
+/* 0000b7e4 */}
+
+bool CAS3DInstance::SetPosZ(float fZ)
+/* 0000b7f2 */{
+/* 0000b7f2 */	return this.SetPos(this.GetPosX(), this.GetPosY(), fZ);
+/* 0000b812 */}
+
+float CAS3DInstance::GetPosX()
+/* 0000b820 */{
+/* 0000b820 */	float X;
+/* 0000b832 */	float Y;
+/* 0000b844 */	float Z;
+/* 0000b856 */	if (!SealEngine.GetInstancePos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, X, Y, Z))
+/* 0000b892 */	{
+/* 0000b892 */		return 0.0;
+/* 0000b89a */	}
+/* 0000b8a0 */	return X;
+/* 0000b8a8 */}
+
+float CAS3DInstance::GetPosY()
+/* 0000b8b6 */{
+/* 0000b8b6 */	float X;
+/* 0000b8c8 */	float Y;
+/* 0000b8da */	float Z;
+/* 0000b8ec */	if (!SealEngine.GetInstancePos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, X, Y, Z))
+/* 0000b928 */	{
+/* 0000b928 */		return 0.0;
+/* 0000b930 */	}
+/* 0000b936 */	return Y;
+/* 0000b93e */}
+
+float CAS3DInstance::GetPosZ()
+/* 0000b94c */{
+/* 0000b94c */	float X;
+/* 0000b95e */	float Y;
+/* 0000b970 */	float Z;
+/* 0000b982 */	if (!SealEngine.GetInstancePos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, X, Y, Z))
+/* 0000b9be */	{
+/* 0000b9be */		return 0.0;
+/* 0000b9c6 */	}
+/* 0000b9cc */	return Z;
+/* 0000b9d4 */}
+
+bool CAS3DInstance::SetAngle(float fAngle)
+/* 0000b9e2 */{
+/* 0000b9e2 */	return SealEngine.SetInstanceAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fAngle);
+/* 0000ba06 */}
+
+bool CAS3DInstance::SetAngleP(float fAngleP)
+/* 0000ba14 */{
+/* 0000ba14 */	return SealEngine.SetInstanceAngleP(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fAngleP);
+/* 0000ba38 */}
+
+bool CAS3DInstance::SetAngleB(float fAngleB)
+/* 0000ba46 */{
+/* 0000ba46 */	return SealEngine.SetInstanceAngleB(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fAngleB);
+/* 0000ba6a */}
+
+float CAS3DInstance::GetAngle()
+/* 0000ba78 */{
+/* 0000ba78 */	float Angle;
+/* 0000ba8a */	if (!SealEngine.GetInstanceAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Angle))
+/* 0000bab6 */	{
+/* 0000bab6 */		return 0.0;
+/* 0000babe */	}
+/* 0000bac4 */	return Angle;
+/* 0000bacc */}
+
+float CAS3DInstance::GetAngleP()
+/* 0000bada */{
+/* 0000bada */	float AngleP;
+/* 0000baec */	if (!SealEngine.GetInstanceAngleP(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, AngleP))
+/* 0000bb18 */	{
+/* 0000bb18 */		return 0.0;
+/* 0000bb20 */	}
+/* 0000bb26 */	return AngleP;
+/* 0000bb2e */}
+
+float CAS3DInstance::GetAngleB()
+/* 0000bb3c */{
+/* 0000bb3c */	float AngleB;
+/* 0000bb4e */	if (!SealEngine.GetInstanceAngleB(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, AngleB))
+/* 0000bb7a */	{
+/* 0000bb7a */		return 0.0;
+/* 0000bb82 */	}
+/* 0000bb88 */	return AngleB;
+/* 0000bb90 */}
+
+bool CAS3DInstance::SetScale(float fScale)
+/* 0000bb9e */{
+/* 0000bb9e */	SealEngine.SetInstanceScaleX(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fScale);
+/* 0000bbc2 */	SealEngine.SetInstanceScaleY(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fScale);
+/* 0000bbe6 */	SealEngine.SetInstanceScaleZ(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fScale);
+/* 0000bc0a */	return true;
+/* 0000bc12 */}
+
+float CAS3DInstance::GetScale()
+/* 0000bc20 */{
+/* 0000bc20 */	return SealEngine.GetInstanceScaleX(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000bc3e */}
+
+bool CAS3DInstance::SetZBias(float fZBias)
+/* 0000bc4c */{
+/* 0000bc4c */	return SealEngine.SetInstanceZBias(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fZBias);
+/* 0000bc70 */}
+
+float CAS3DInstance::GetZBias()
+/* 0000bc7e */{
+/* 0000bc7e */	return SealEngine.GetInstanceZBias(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000bc9c */}
+
+bool CAS3DInstance::SetVertexPos(int nIndex, float fX, float fY, float fZ)
+/* 0000bcaa */{
+/* 0000bcaa */	return SealEngine.SetInstanceVertexPos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nIndex, fX, fY, fZ);
+/* 0000bce0 */}
+
+bool CAS3DInstance::SetVertexUV(int Index, float U, float V)
+/* 0000bcee */{
+/* 0000bcee */	return SealEngine.SetInstanceVertexUV(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, U, V);
+/* 0000bd1e */}
+
+bool CAS3DInstance::SetDiffuse(float fR, float fG, float fB)
+/* 0000bd2c */{
+/* 0000bd2c */	return SealEngine.SetInstanceDiffuse(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fR, fG, fB);
+/* 0000bd5c */}
+
+bool CAS3DInstance::GetDiffuse(ref float ColorR, ref float ColorG, ref float ColorB)
+/* 0000bd6a */{
+/* 0000bd6a */	return SealEngine.GetInstanceDiffuse(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, ColorR, ColorG, ColorB);
+/* 0000bd9a */}
+
+bool CAS3DInstance::SetAmbient(float Red, float Green, float Blue)
+/* 0000bda8 */{
+/* 0000bda8 */	return SealEngine.SetInstanceAmbient(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Red, Green, Blue);
+/* 0000bdd8 */}
+
+bool CAS3DInstance::GetAmbient(ref float ColorR, ref float ColorG, ref float ColorB)
+/* 0000bde6 */{
+/* 0000bde6 */	return SealEngine.GetInstanceAmbient(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, ColorR, ColorG, ColorB);
+/* 0000be16 */}
+
+bool CAS3DInstance::SetGlobeDiffuse(float fR, float fG, float fB)
+/* 0000be24 */{
+/* 0000be24 */	return SealEngine.SetInstanceGlobeDiffuse(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fR, fG, fB);
+/* 0000be54 */}
+
+bool CAS3DInstance::SetSpecular(float fSpecular)
+/* 0000be62 */{
+/* 0000be62 */	return SealEngine.SetInstanceSpecular(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fSpecular);
+/* 0000be86 */}
+
+bool CAS3DInstance::SetAlpha(float Alpha)
+/* 0000be94 */{
+/* 0000be94 */	return SealEngine.SetInstanceAlpha(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Alpha);
+/* 0000beb8 */}
+
+float CAS3DInstance::GetAlpha()
+/* 0000bec6 */{
+/* 0000bec6 */	float Alpha;
+/* 0000bed8 */	if (!SealEngine.GetInstanceAlpha(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Alpha))
+/* 0000bf04 */	{
+/* 0000bf04 */		return 0.0;
+/* 0000bf0c */	}
+/* 0000bf12 */	return Alpha;
+/* 0000bf1a */}
+
+bool CAS3DInstance::SetGrayscaleRate(float GrayscaleRate)
+/* 0000bf28 */{
+/* 0000bf28 */	return SealEngine.SetInstanceGrayscaleRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, GrayscaleRate);
+/* 0000bf4c */}
+
+float CAS3DInstance::GetGrayscaleRate()
+/* 0000bf5a */{
+/* 0000bf5a */	float GrayscaleRate;
+/* 0000bf6c */	if (!SealEngine.GetInstanceGrayscaleRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, GrayscaleRate))
+/* 0000bf98 */	{
+/* 0000bf98 */		return 0.0;
+/* 0000bfa0 */	}
+/* 0000bfa6 */	return GrayscaleRate;
+/* 0000bfae */}
+
+bool CAS3DInstance::SetAttenuationNear(float fNear)
+/* 0000bfbc */{
+/* 0000bfbc */	return SealEngine.SetInstanceAttenuationNear(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fNear);
+/* 0000bfe0 */}
+
+bool CAS3DInstance::SetAttenuationFar(float fFar)
+/* 0000bfee */{
+/* 0000bfee */	return SealEngine.SetInstanceAttenuationFar(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fFar);
+/* 0000c012 */}
+
+bool CAS3DInstance::SetShow(bool bFlag)
+/* 0000c020 */{
+/* 0000c020 */	SealEngine.SetInstanceDraw(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000c044 */	return true;
+/* 0000c04c */}
+
+bool CAS3DInstance::IsShow()
+/* 0000c05a */{
+/* 0000c05a */	return SealEngine.GetInstanceDraw(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c078 */}
+
+bool CAS3DInstance::SetDrawShadow(bool bFlag)
+/* 0000c086 */{
+/* 0000c086 */	return SealEngine.SetInstanceDrawShadow(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000c0aa */}
+
+bool CAS3DInstance::SetDrawBackShadow(bool bFlag)
+/* 0000c0b8 */{
+/* 0000c0b8 */	return SealEngine.SetInstanceDrawBackShadow(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000c0dc */}
+
+bool CAS3DInstance::SetMakeShadow(bool bFlag)
+/* 0000c0ea */{
+/* 0000c0ea */	SealEngine.SetInstanceDrawMakeShadow(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000c10e */	return true;
+/* 0000c116 */}
+
+bool CAS3DInstance::SetDrawBump(bool bFlag)
+/* 0000c124 */{
+/* 0000c124 */	SealEngine.SetInstanceDrawBump(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000c148 */	return true;
+/* 0000c150 */}
+
+bool CAS3DInstance::GetDrawShadow()
+/* 0000c15e */{
+/* 0000c15e */	return SealEngine.GetInstanceDrawShadow(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c17c */}
+
+bool CAS3DInstance::GetDrawBackShadow()
+/* 0000c18a */{
+/* 0000c18a */	return SealEngine.GetInstanceDrawBackShadow(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c1a8 */}
+
+bool CAS3DInstance::GetDrawMakeShadow()
+/* 0000c1b6 */{
+/* 0000c1b6 */	return SealEngine.GetInstanceDrawMakeShadow(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c1d4 */}
+
+bool CAS3DInstance::GetDrawBump()
+/* 0000c1e2 */{
+/* 0000c1e2 */	return SealEngine.GetInstanceDrawBump(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c200 */}
+
+bool CAS3DInstance::SetDrawParam(int DrawParam, int Value)
+/* 0000c20e */{
+/* 0000c20e */	return SealEngine.SetInstanceDrawParam(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, DrawParam, Value);
+/* 0000c238 */}
+
+int CAS3DInstance::GetMotionState()
+/* 0000c246 */{
+/* 0000c246 */	return SealEngine.GetInstanceMotionState(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c264 */}
+
+float CAS3DInstance::GetMotionFrame()
+/* 0000c272 */{
+/* 0000c272 */	return SealEngine.GetInstanceMotionFrame(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c290 */}
+
+bool CAS3DInstance::LoadMotion(string Name)
+/* 0000c29e */{
+/* 0000c29e */	return SealEngine.LoadInstanceMotion(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Name);
+/* 0000c2c2 */}
+
+bool CAS3DInstance::SetMotionFrame(float fFrame)
+/* 0000c2d0 */{
+/* 0000c2d0 */	SealEngine.SetInstanceMotionFrame(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fFrame);
+/* 0000c2f4 */	return true;
+/* 0000c2fc */}
+
+bool CAS3DInstance::SetMotionState(int nState)
+/* 0000c30a */{
+/* 0000c30a */	SealEngine.SetInstanceMotionState(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nState);
+/* 0000c32e */	return true;
+/* 0000c336 */}
+
+bool CAS3DInstance::SetMotionFrameRange(float fBeginFrame, float fEndFrame)
+/* 0000c344 */{
+/* 0000c344 */	SealEngine.SetInstanceMotionFrameRange(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fBeginFrame, fEndFrame);
+/* 0000c36e */	return true;
+/* 0000c376 */}
+
+bool CAS3DInstance::SetMotionLoopFrameRange(float fBeginFrame, float fEndFrame)
+/* 0000c384 */{
+/* 0000c384 */	SealEngine.SetInstanceMotionLoopFrameRange(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fBeginFrame, fEndFrame);
+/* 0000c3ae */	return true;
+/* 0000c3b6 */}
+
+bool CAS3DInstance::LoadNextMotion(string Name)
+/* 0000c3c4 */{
+/* 0000c3c4 */	return SealEngine.LoadInstanceNextMotion(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Name);
+/* 0000c3e8 */}
+
+bool CAS3DInstance::SetNextMotionState(int nState)
+/* 0000c3f6 */{
+/* 0000c3f6 */	return SealEngine.SetInstanceNextMotionState(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nState);
+/* 0000c41a */}
+
+bool CAS3DInstance::SetNextMotionFrame(float fFrame)
+/* 0000c428 */{
+/* 0000c428 */	return SealEngine.SetInstanceNextMotionFrame(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fFrame);
+/* 0000c44c */}
+
+bool CAS3DInstance::SetNextMotionFrameRange(float fBeginFrame, float fEndFrame)
+/* 0000c45a */{
+/* 0000c45a */	return SealEngine.SetInstanceNextMotionFrameRange(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fBeginFrame, fEndFrame);
+/* 0000c484 */}
+
+bool CAS3DInstance::SetNextMotionLoopFrameRange(float fBeginFrame, float fEndFrame)
+/* 0000c492 */{
+/* 0000c492 */	return SealEngine.SetInstanceNextMotionLoopFrameRange(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fBeginFrame, fEndFrame);
+/* 0000c4bc */}
+
+bool CAS3DInstance::SetMotionBlendRate(float fRate)
+/* 0000c4ca */{
+/* 0000c4ca */	return SealEngine.SetInstanceMotionBlendRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fRate);
+/* 0000c4ee */}
+
+bool CAS3DInstance::SetMotionBlend(bool bMotionBlend)
+/* 0000c4fc */{
+/* 0000c4fc */	return SealEngine.SetInstanceMotionBlend(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bMotionBlend);
+/* 0000c520 */}
+
+bool CAS3DInstance::IsMotionBlend()
+/* 0000c52e */{
+/* 0000c52e */	return SealEngine.IsInstanceMotionBlend(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c54c */}
+
+bool CAS3DInstance::GetMotionBlendPutTime()
+/* 0000c55a */{
+/* 0000c55a */	return SealEngine.GetInstanceMotionBlendPutTime(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c578 */}
+
+bool CAS3DInstance::SetMotionBlendPutTime(bool bFlag)
+/* 0000c586 */{
+/* 0000c586 */	return SealEngine.SetInstanceMotionBlendPutTime(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000c5aa */}
+
+bool CAS3DInstance::SwapMotion()
+/* 0000c5b8 */{
+/* 0000c5b8 */	return SealEngine.SwapInstanceMotion(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c5d6 */}
+
+bool CAS3DInstance::FreeNextMotion()
+/* 0000c5e4 */{
+/* 0000c5e4 */	return SealEngine.FreeInstanceNextMotion(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c602 */}
+
+int CAS3DInstance::GetNumofMaterial()
+/* 0000c610 */{
+/* 0000c610 */	return SealEngine.GetInstanceNumofMaterial(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c62e */}
+
+bool CAS3DInstance::GetMaterialName(int nNum, ref string Name)
+/* 0000c63c */{
+/* 0000c63c */	return SealEngine.GetInstanceMaterialName(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nNum, Name);
+/* 0000c666 */}
+
+float CAS3DInstance::GetMaterialParam(int nMaterial, int nType)
+/* 0000c674 */{
+/* 0000c674 */	return SealEngine.GetInstanceMaterialParam(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nMaterial, nType);
+/* 0000c69e */}
+
+bool CAS3DInstance::SetMaterialParam(int nMaterial, int nType, float fParam)
+/* 0000c6ac */{
+/* 0000c6ac */	return SealEngine.SetInstanceMaterialParam(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nMaterial, nType, fParam);
+/* 0000c6dc */}
+
+bool CAS3DInstance::SaveAddMaterialData()
+/* 0000c6ea */{
+/* 0000c6ea */	return SealEngine.SaveInstanceAddMaterialData(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c708 */}
+
+bool CAS3DInstance::SetPointPos(int nIndex, float fX, float fY, float fZ)
+/* 0000c716 */{
+/* 0000c716 */	return SealEngine.SetInstancePointPos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nIndex, fX, fY, fZ);
+/* 0000c74c */}
+
+bool CAS3DInstance::GetPointPos(int nIndex, ref float pfX, ref float pfY, ref float pfZ)
+/* 0000c75a */{
+/* 0000c75a */	return SealEngine.GetInstancePointPos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nIndex, pfX, pfY, pfZ);
+/* 0000c790 */}
+
+bool CAS3DInstance::SetColumnPos(float fX, float fY, float fZ)
+/* 0000c79e */{
+/* 0000c79e */	return SealEngine.SetInstanceColumnPos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fX, fY, fZ);
+/* 0000c7ce */}
+
+bool CAS3DInstance::SetColumnHeight(float fHeight)
+/* 0000c7dc */{
+/* 0000c7dc */	return SealEngine.SetInstanceColumnHeight(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fHeight);
+/* 0000c800 */}
+
+bool CAS3DInstance::SetColumnRadius(float fRadius)
+/* 0000c80e */{
+/* 0000c80e */	return SealEngine.SetInstanceColumnRadius(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fRadius);
+/* 0000c832 */}
+
+bool CAS3DInstance::SetColumnAngle(float fAngle)
+/* 0000c840 */{
+/* 0000c840 */	return SealEngine.SetInstanceColumnAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fAngle);
+/* 0000c864 */}
+
+bool CAS3DInstance::SetColumnAngleP(float fAngleP)
+/* 0000c872 */{
+/* 0000c872 */	return SealEngine.SetInstanceColumnAngleP(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fAngleP);
+/* 0000c896 */}
+
+bool CAS3DInstance::SetColumnAngleB(float fAngleB)
+/* 0000c8a4 */{
+/* 0000c8a4 */	return SealEngine.SetInstanceColumnAngleB(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fAngleB);
+/* 0000c8c8 */}
+
+bool CAS3DInstance::GetColumnPos(ref float fX, ref float fY, ref float fZ)
+/* 0000c8d6 */{
+/* 0000c8d6 */	return SealEngine.GetInstanceColumnPos(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fX, fY, fZ);
+/* 0000c906 */}
+
+float CAS3DInstance::GetColumnHeight()
+/* 0000c914 */{
+/* 0000c914 */	return SealEngine.GetInstanceColumnHeight(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c932 */}
+
+float CAS3DInstance::GetColumnRadius()
+/* 0000c940 */{
+/* 0000c940 */	return SealEngine.GetInstanceColumnRadius(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c95e */}
+
+float CAS3DInstance::GetColumnAngle()
+/* 0000c96c */{
+/* 0000c96c */	return SealEngine.GetInstanceColumnAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c98a */}
+
+float CAS3DInstance::GetColumnAngleP()
+/* 0000c998 */{
+/* 0000c998 */	return SealEngine.GetInstanceColumnAngleP(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c9b6 */}
+
+float CAS3DInstance::GetColumnAngleB()
+/* 0000c9c4 */{
+/* 0000c9c4 */	return SealEngine.GetInstanceColumnAngleB(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000c9e2 */}
+
+bool CAS3DInstance::GetDrawColumn()
+/* 0000c9f0 */{
+/* 0000c9f0 */	return SealEngine.GetInstanceDrawColumn(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000ca0e */}
+
+bool CAS3DInstance::SetDrawColumn(bool bDraw)
+/* 0000ca1c */{
+/* 0000ca1c */	return SealEngine.SetInstanceDrawColumn(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bDraw);
+/* 0000ca40 */}
+
+bool CAS3DInstance::SetTarget(int nIndex, int nTarget)
+/* 0000ca4e */{
+/* 0000ca4e */	return SealEngine.SetInstanceTarget(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nIndex, nTarget);
+/* 0000ca78 */}
+
+int CAS3DInstance::GetTarget(int nIndex)
+/* 0000ca86 */{
+/* 0000ca86 */	return SealEngine.GetInstanceTarget(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nIndex);
+/* 0000caaa */}
+
+float CAS3DInstance::GetFPS()
+/* 0000cab8 */{
+/* 0000cab8 */	return SealEngine.GetInstanceFPS(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000cad6 */}
+
+bool CAS3DInstance::SetFPS(float fFPS)
+/* 0000cae4 */{
+/* 0000cae4 */	return SealEngine.SetInstanceFPS(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fFPS);
+/* 0000cb08 */}
+
+int CAS3DInstance::GetNumofBone()
+/* 0000cb16 */{
+/* 0000cb16 */	return SealEngine.GetInstanceNumofBone(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000cb34 */}
+
+bool CAS3DInstance::GetBoneName(int BoneIndex, ref string pIName)
+/* 0000cb42 */{
+/* 0000cb42 */	return SealEngine.GetInstanceBoneName(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, pIName);
+/* 0000cb6c */}
+
+bool CAS3DInstance::GetBoneParentIndex(int BoneIndex, ref int pParentBoneIndex)
+/* 0000cb7a */{
+/* 0000cb7a */	return SealEngine.GetInstanceBoneParentIndex(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, pParentBoneIndex);
+/* 0000cba4 */}
+
+int CAS3DInstance::GetBoneIndex(string pIName)
+/* 0000cbb2 */{
+/* 0000cbb2 */	return SealEngine.GetInstanceBoneIndex(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, pIName);
+/* 0000cbd6 */}
+
+bool CAS3DInstance::TransLocalPosToWorldPosByBone(int nBone, CASVector3D OffsetPos, ref CASVector3D ResultPos)
+/* 0000cbe4 */{
+/* 0000cbe4 */	float X;
+/* 0000cbf6 */	float Y;
+/* 0000cc08 */	float Z;
+/* 0000cc1a */	if (!SealEngine.TransInstanceLocalPosToWorldPosByBone(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nBone, OffsetPos.GetX(), OffsetPos.GetY(), OffsetPos.GetZ(), X, Y, Z))
+/* 0000cc80 */	{
+/* 0000cc80 */		return false;
+/* 0000cc88 */	}
+/* 0000cc8e */	ResultPos.Set(X, Y, Z);
+/* 0000ccac */	return true;
+/* 0000ccb4 */}
+
+bool CAS3DInstance::SaveBoneFile()
+/* 0000ccc2 */{
+/* 0000ccc2 */	return SealEngine.SaveBoneFile(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000cce0 */}
+
+bool CAS3DInstance::IsBoneCanIK(int BoneIndex)
+/* 0000ccee */{
+/* 0000ccee */	return SealEngine.IsBoneCanIK(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex);
+/* 0000cd12 */}
+
+bool CAS3DInstance::SetBoneCanIK(int BoneIndex, bool CanIK)
+/* 0000cd20 */{
+/* 0000cd20 */	return SealEngine.SetBoneCanIK(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, CanIK);
+/* 0000cd4a */}
+
+bool CAS3DInstance::GetBoneEulerAngle(int BoneIndex, ref CASVector3D EulerAngle)
+/* 0000cd58 */{
+/* 0000cd58 */	float X;
+/* 0000cd6a */	float Y;
+/* 0000cd7c */	float Z;
+/* 0000cd8e */	if (!SealEngine.GetBoneEulerAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, X, Y, Z))
+/* 0000cdd0 */	{
+/* 0000cdd0 */		return false;
+/* 0000cdd8 */	}
+/* 0000cdde */	EulerAngle.Set(X, Y, Z);
+/* 0000cdfc */	return true;
+/* 0000ce04 */}
+
+bool CAS3DInstance::GetBoneMinEulerAngle(int BoneIndex, ref CASVector3D EulerAngle)
+/* 0000ce12 */{
+/* 0000ce12 */	float X;
+/* 0000ce24 */	float Y;
+/* 0000ce36 */	float Z;
+/* 0000ce48 */	if (!SealEngine.GetBoneMinEulerAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, X, Y, Z))
+/* 0000ce8a */	{
+/* 0000ce8a */		return false;
+/* 0000ce92 */	}
+/* 0000ce98 */	EulerAngle.Set(X, Y, Z);
+/* 0000ceb6 */	return true;
+/* 0000cebe */}
+
+bool CAS3DInstance::GetBoneMaxEulerAngle(int BoneIndex, ref CASVector3D EulerAngle)
+/* 0000cecc */{
+/* 0000cecc */	float X;
+/* 0000cede */	float Y;
+/* 0000cef0 */	float Z;
+/* 0000cf02 */	if (!SealEngine.GetBoneMaxEulerAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, X, Y, Z))
+/* 0000cf44 */	{
+/* 0000cf44 */		return false;
+/* 0000cf4c */	}
+/* 0000cf52 */	EulerAngle.Set(X, Y, Z);
+/* 0000cf70 */	return true;
+/* 0000cf78 */}
+
+bool CAS3DInstance::SetBoneMinEulerAngle(int BoneIndex, CASVector3D EulerAngle)
+/* 0000cf86 */{
+/* 0000cf86 */	return SealEngine.SetBoneMinEulerAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, EulerAngle.GetX(), EulerAngle.GetY(), EulerAngle.GetZ());
+/* 0000cfce */}
+
+bool CAS3DInstance::SetBoneMaxEulerAngle(int BoneIndex, CASVector3D EulerAngle)
+/* 0000cfdc */{
+/* 0000cfdc */	return SealEngine.SetBoneMaxEulerAngle(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, EulerAngle.GetX(), EulerAngle.GetY(), EulerAngle.GetZ());
+/* 0000d024 */}
+
+bool CAS3DInstance::SetBoneMass(int BoneIndex, float Mass)
+/* 0000d032 */{
+/* 0000d032 */	return SealEngine.SetBoneMass(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, Mass);
+/* 0000d05c */}
+
+bool CAS3DInstance::SetBoneAirResistance(int BoneIndex, float AirResistance)
+/* 0000d06a */{
+/* 0000d06a */	return SealEngine.SetBoneAirResistance(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, AirResistance);
+/* 0000d094 */}
+
+bool CAS3DInstance::SetBoneRestitutionCoefficient(int BoneIndex, float RestitutionCoefficient)
+/* 0000d0a2 */{
+/* 0000d0a2 */	return SealEngine.SetBoneRestitutionCoefficient(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex, RestitutionCoefficient);
+/* 0000d0cc */}
+
+float CAS3DInstance::GetBoneMass(int BoneIndex)
+/* 0000d0da */{
+/* 0000d0da */	return SealEngine.GetBoneMass(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex);
+/* 0000d0fe */}
+
+float CAS3DInstance::GetBoneAirResistance(int BoneIndex)
+/* 0000d10c */{
+/* 0000d10c */	return SealEngine.GetBoneAirResistance(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex);
+/* 0000d130 */}
+
+float CAS3DInstance::GetBoneRestitutionCoefficient(int BoneIndex)
+/* 0000d13e */{
+/* 0000d13e */	return SealEngine.GetBoneRestitutionCoefficient(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneIndex);
+/* 0000d162 */}
+
+int CAS3DInstance::GetNumofBoneCollisionShapeList()
+/* 0000d170 */{
+/* 0000d170 */	return SealEngine.GetNumofBoneCollisionShapeList(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d18e */}
+
+int CAS3DInstance::GetBoneCollisionShapeType(int Index)
+/* 0000d19c */{
+/* 0000d19c */	return SealEngine.GetBoneCollisionShapeType(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index);
+/* 0000d1c0 */}
+
+bool CAS3DInstance::GetBoneCollisionShapePoint(int Index, ref CASVector3D Point)
+/* 0000d1ce */{
+/* 0000d1ce */	float X;
+/* 0000d1e0 */	float Y;
+/* 0000d1f2 */	float Z;
+/* 0000d204 */	if (!SealEngine.GetBoneCollisionShapePoint(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, X, Y, Z))
+/* 0000d246 */	{
+/* 0000d246 */		return false;
+/* 0000d24e */	}
+/* 0000d254 */	Point.Set(X, Y, Z);
+/* 0000d272 */	return true;
+/* 0000d27a */}
+
+bool CAS3DInstance::GetBoneCollisionShapePoint2(int Index, ref CASVector3D Point)
+/* 0000d288 */{
+/* 0000d288 */	float X;
+/* 0000d29a */	float Y;
+/* 0000d2ac */	float Z;
+/* 0000d2be */	if (!SealEngine.GetBoneCollisionShapePoint2(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, X, Y, Z))
+/* 0000d300 */	{
+/* 0000d300 */		return false;
+/* 0000d308 */	}
+/* 0000d30e */	Point.Set(X, Y, Z);
+/* 0000d32c */	return true;
+/* 0000d334 */}
+
+float CAS3DInstance::GetBoneCollisionShapeRadius(int Index)
+/* 0000d342 */{
+/* 0000d342 */	return SealEngine.GetBoneCollisionShapeRadius(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index);
+/* 0000d366 */}
+
+int CAS3DInstance::GetBoneCollisionShapeLinkedBoneIndex(int Index)
+/* 0000d374 */{
+/* 0000d374 */	return SealEngine.GetBoneCollisionShapeLinkedBoneIndex(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index);
+/* 0000d398 */}
+
+bool CAS3DInstance::SetBoneCollisionShapeType(int Index, int Type)
+/* 0000d3a6 */{
+/* 0000d3a6 */	return SealEngine.SetBoneCollisionShapeType(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, Type);
+/* 0000d3d0 */}
+
+bool CAS3DInstance::SetBoneCollisionShapePoint(int Index, CASVector3D Point)
+/* 0000d3de */{
+/* 0000d3de */	return SealEngine.SetBoneCollisionShapePoint(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, Point.GetX(), Point.GetY(), Point.GetZ());
+/* 0000d426 */}
+
+bool CAS3DInstance::SetBoneCollisionShapePoint2(int Index, CASVector3D Point)
+/* 0000d434 */{
+/* 0000d434 */	return SealEngine.SetBoneCollisionShapePoint2(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, Point.GetX(), Point.GetY(), Point.GetZ());
+/* 0000d47c */}
+
+bool CAS3DInstance::SetBoneCollisionShapeRadius(int Index, float Radius)
+/* 0000d48a */{
+/* 0000d48a */	return SealEngine.SetBoneCollisionShapeRadius(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, Radius);
+/* 0000d4b4 */}
+
+bool CAS3DInstance::SetBoneCollisionShapeLinkedBoneIndex(int Index, int BoneIndex)
+/* 0000d4c2 */{
+/* 0000d4c2 */	return SealEngine.SetBoneCollisionShapeLinkedBoneIndex(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index, BoneIndex);
+/* 0000d4ec */}
+
+bool CAS3DInstance::AddBoneCollisionShape()
+/* 0000d4fa */{
+/* 0000d4fa */	return SealEngine.AddBoneCollisionShape(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d518 */}
+
+bool CAS3DInstance::EraseBoneCollisionShape(int Index)
+/* 0000d526 */{
+/* 0000d526 */	return SealEngine.EraseBoneCollisionShape(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Index);
+/* 0000d54a */}
+
+int CAS3DInstance::GetNumofPolygon()
+/* 0000d558 */{
+/* 0000d558 */	return SealEngine.GetInstanceNumofPolygon(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d576 */}
+
+int CAS3DInstance::GetNumofVertex()
+/* 0000d584 */{
+/* 0000d584 */	return SealEngine.GetInstanceNumofVertex(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d5a2 */}
+
+int CAS3DInstance::GetNumofNormal()
+/* 0000d5b0 */{
+/* 0000d5b0 */	return SealEngine.GetInstanceNumofNormal(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d5ce */}
+
+int CAS3DInstance::GetNumofMesh()
+/* 0000d5dc */{
+/* 0000d5dc */	return SealEngine.GetInstanceNumofMesh(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d5fa */}
+
+bool CAS3DInstance::GetMeshName(int MeshNumber, ref string pIName)
+/* 0000d608 */{
+/* 0000d608 */	return SealEngine.GetInstanceMeshName(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, MeshNumber, pIName);
+/* 0000d632 */}
+
+int CAS3DInstance::GetMeshMaterialIndex(int MeshNumber)
+/* 0000d640 */{
+/* 0000d640 */	return SealEngine.GetInstanceMeshMaterialIndex(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, MeshNumber);
+/* 0000d664 */}
+
+int CAS3DInstance::GetMeshMaterialID(int MeshNumber)
+/* 0000d672 */{
+/* 0000d672 */	return SealEngine.GetInstanceMeshMaterialID(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, MeshNumber);
+/* 0000d696 */}
+
+int CAS3DInstance::GetMeshNumofPolygon(int MeshNumber)
+/* 0000d6a4 */{
+/* 0000d6a4 */	return SealEngine.GetInstanceMeshNumofPolygon(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, MeshNumber);
+/* 0000d6c8 */}
+
+bool CAS3DInstance::IsMeshAlphaBlending(int MeshNumber)
+/* 0000d6d6 */{
+/* 0000d6d6 */	return SealEngine.IsInstanceMeshAlphaBlending(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, MeshNumber);
+/* 0000d6fa */}
+
+int CAS3DInstance::GetTextureMemorySize()
+/* 0000d708 */{
+/* 0000d708 */	return SealEngine.GetInstanceTextureMemorySize(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d726 */}
+
+string CAS3DInstance::GetInfoText()
+/* 0000d734 */{
+/* 0000d734 */	string Text;
+/* 0000d740 */	SealEngine.GetInstanceInfoText(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Text);
+/* 0000d762 */	return Text;
+/* 0000d76a */}
+
+string CAS3DInstance::GetMaterialInfoText()
+/* 0000d778 */{
+/* 0000d778 */	string Text;
+/* 0000d784 */	SealEngine.GetInstanceMaterialInfoText(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Text);
+/* 0000d7a6 */	return Text;
+/* 0000d7ae */}
+
+bool CAS3DInstance::CalcHeightDetection(float X, float Z, ref float Height)
+/* 0000d7bc */{
+/* 0000d7bc */	return SealEngine.CalcInstanceHeightDetection(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, X, Z, Height);
+/* 0000d7ec */}
+
+float CAS3DInstance::GetSoftFogEdgeLength()
+/* 0000d7fa */{
+/* 0000d7fa */	return SealEngine.GetInstanceSoftFogEdgeLength(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d818 */}
+
+bool CAS3DInstance::SetSoftFogEdgeLength(float fLength)
+/* 0000d826 */{
+/* 0000d826 */	return SealEngine.SetInstanceSoftFogEdgeLength(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fLength);
+/* 0000d84a */}
+
+float CAS3DInstance::GetShadowVolumeBoneRadius()
+/* 0000d858 */{
+/* 0000d858 */	return SealEngine.GetInstanceShadowVolumeBoneRadius(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d876 */}
+
+bool CAS3DInstance::SetShadowVolumeBoneRadius(float fRadius)
+/* 0000d884 */{
+/* 0000d884 */	return SealEngine.SetInstanceShadowVolumeBoneRadius(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fRadius);
+/* 0000d8a8 */}
+
+bool CAS3DInstance::LoadLightParam()
+/* 0000d8b6 */{
+/* 0000d8b6 */	return SealEngine.LoadInstanceLightParam(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d8d4 */}
+
+bool CAS3DInstance::StoreLightParam()
+/* 0000d8e2 */{
+/* 0000d8e2 */	return SealEngine.StoreInstanceLightParam(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d900 */}
+
+bool CAS3DInstance::GetDebugDrawShadowVolume()
+/* 0000d90e */{
+/* 0000d90e */	return SealEngine.GetInstanceDebugDrawShadowVolume(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000d92c */}
+
+bool CAS3DInstance::SetDebugDrawShadowVolume(bool bFlag)
+/* 0000d93a */{
+/* 0000d93a */	return SealEngine.SetInstanceDebugDrawShadowVolume(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, bFlag);
+/* 0000d95e */}
+
+bool CAS3DInstance::CreateDebugBoneList(ref CAS3DInstance BoneInstance, int OnCursorIndex, int SelectedIndex)
+/* 0000d96c */{
+/* 0000d96c */	return SealEngine.CreateInstanceDebugBoneList(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneInstance.m_InstanceNumber, OnCursorIndex, SelectedIndex);
+/* 0000d9a4 */}
+
+bool CAS3DInstance::CreateDebugBoneCollision(ref CAS3DInstance BoneInstance, int OnCursorIndex, int SelectedIndex)
+/* 0000d9b2 */{
+/* 0000d9b2 */	return SealEngine.CreateInstanceDebugBoneCollision(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, BoneInstance.m_InstanceNumber, OnCursorIndex, SelectedIndex);
+/* 0000d9ea */}
+
+bool CAS3DInstance::SaveEffect()
+/* 0000d9f8 */{
+/* 0000d9f8 */	return SealEngine.SaveEffect(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000da16 */}
+
+bool CAS3DInstance::GetEffectFrameRange(ref int pnBeginFrame, ref int pnEndFrame)
+/* 0000da24 */{
+/* 0000da24 */	return SealEngine.GetEffectFrameRange(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, pnBeginFrame, pnEndFrame);
+/* 0000da4e */}
+
+bool CAS3DInstance::SetSpecularReflectRate(float fRate)
+/* 0000da5c */{
+/* 0000da5c */	return SealEngine.SetInstanceSpecularReflectRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fRate);
+/* 0000da80 */}
+
+bool CAS3DInstance::SetFresnelReflectRate(float fRate)
+/* 0000da8e */{
+/* 0000da8e */	return SealEngine.SetInstanceFresnelReflectRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, fRate);
+/* 0000dab2 */}
+
+float CAS3DInstance::GetSpecularReflectRate()
+/* 0000dac0 */{
+/* 0000dac0 */	return SealEngine.GetInstanceSpecularReflectRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000dade */}
+
+float CAS3DInstance::GetFresnelReflectRate()
+/* 0000daec */{
+/* 0000daec */	return SealEngine.GetInstanceFresnelReflectRate(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000db0a */}
+
+bool CAS3DInstance::CalcIntersectEyeVector(int ViewX, int ViewY, ref float X, ref float Y, ref float Z)
+/* 0000db18 */{
+/* 0000db18 */	return SealEngine.CalcIntersectEyeVec(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, ViewX, ViewY, X, Y, Z);
+/* 0000db54 */}
+
+float CAS3DInstance::Calc2DDetectionHeight(float X, float Z)
+/* 0000db62 */{
+/* 0000db62 */	return SealEngine.CalcInstance2DDetectionHeight(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, X, Z);
+/* 0000db8c */}
+
+bool CAS3DInstance::CalcInstance2DDetection(float X0, float Y0, float Z0, float X1, float Y1, float Z1, ref float X2, ref float Y2, ref float Z2, float Radius)
+/* 0000db9a */{
+/* 0000db9a */	return SealEngine.CalcInstance2DDetection(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, X0, Y0, Z0, X1, Y1, Z1, X2, Y2, Z2, Radius);
+/* 0000dbf4 */}
+
+bool CAS3DInstance::FindInstancePath(float StartX, float StartY, float StartZ, float GoalX, float GoalY, float GoalZ)
+/* 0000dc02 */{
+/* 0000dc02 */	return SealEngine.FindInstancePath(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, StartX, StartY, StartZ, GoalX, GoalY, GoalZ);
+/* 0000dc44 */}
+
+bool CAS3DInstance::CalcPathFinderIntersectEyeVec(int nMouseX, int nMouseY, ref float pfX, ref float pfY, ref float pfZ)
+/* 0000dc52 */{
+/* 0000dc52 */	return SealEngine.CalcPathFinderIntersectEyeVec(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, nMouseX, nMouseY, pfX, pfY, pfZ);
+/* 0000dc8e */}
+
+bool CAS3DInstance::OptimizePathLine()
+/* 0000dc9c */{
+/* 0000dc9c */	return SealEngine.OptimizeInstancePathLine(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000dcba */}
+
+bool CAS3DInstance::GetPathLine(ref array@float pIXArray, ref array@float pIYArray, ref array@float pIZArray)
+/* 0000dcc8 */{
+/* 0000dcc8 */	return SealEngine.GetInstancePathLine(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, pIXArray, pIYArray, pIZArray);
+/* 0000dcf8 */}
+
+bool CAS3DInstance::CreateInstancePathLineList(ref CAS3DInstance PathInstance)
+/* 0000dd06 */{
+/* 0000dd06 */	return SealEngine.CreateInstancePathLineList(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, PathInstance.GetInstance());
+/* 0000dd30 */}
+
+bool CAS3DInstance::ClearLineList()
+/* 0000dd3e */{
+/* 0000dd3e */	return SealEngine.ClearLineList(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber);
+/* 0000dd5c */}
+
+bool CAS3DInstance::AddLineList(CASVector3D Pos1, CASVector3D Pos2)
+/* 0000dd6a */{
+/* 0000dd6a */	return SealEngine.AddLineList(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Pos1.GetX(), Pos1.GetY(), Pos1.GetZ(), 16777215, Pos2.GetX(), Pos2.GetY(), Pos2.GetZ(), 16777215);
+/* 0000dddc */}
+
+bool CAS3DInstance::AddColorLineList(CASVector3D Pos1, int Color1, CASVector3D Pos2, int Color2)
+/* 0000ddea */{
+/* 0000ddea */	return SealEngine.AddLineList(this.m_Layer.GetPluginNumber(), this.m_InstanceNumber, Pos1.GetX(), Pos1.GetY(), Pos1.GetZ(), Color1, Pos2.GetX(), Pos2.GetY(), Pos2.GetZ(), Color2);
+/* 0000de5c */}
+

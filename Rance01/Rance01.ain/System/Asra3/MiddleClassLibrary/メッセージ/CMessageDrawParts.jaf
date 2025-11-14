@@ -1,0 +1,129 @@
+CMessageDrawParts::CMessageDrawParts()
+/* 00017506 */{
+/* 0001750e */	this.m_bFixed = false;
+/* 00017518 */	this.m_PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0001752a */}
+
+CMessageDrawParts::~CMessageDrawParts()
+/* 00017532 */{
+/* 00017532 */	if (this.m_PartsNumber == -1)
+/* 00017546 */	{
+/* 00017546 */		return;
+/* 00017548 */	}
+/* 0001754e */	PARTS_Release(this.m_PartsNumber);
+/* 0001755a */	this.m_PartsNumber = -1;
+/* 0001756c */}
+
+void CMessageDrawParts::SetCharSprite(int nTime, int MessageWindowNumber)
+/* 00017574 */{
+/* 00017574 */	this.m_MessageWindowNumber = MessageWindowNumber;
+/* 0001757e */	this.m_nTime = nTime;
+/* 00017588 */	this.m_bFixed = false;
+/* 00017592 */}
+
+void CMessageDrawParts::SetFixed()
+/* 0001759a */{
+/* 0001759a */	this.m_bFixed = true;
+/* 000175a4 */	Ｐ＿アルファ値設定(this.m_PartsNumber, 255);
+/* 000175b6 */}
+
+int CMessageDrawParts::GetTime()
+/* 000175be */{
+/* 000175be */	return this.m_nTime;
+/* 000175c6 */}
+
+int CMessageDrawParts::GetMessageWindowNumber()
+/* 000175d4 */{
+/* 000175d4 */	return this.m_MessageWindowNumber;
+/* 000175dc */}
+
+bool CMessageDrawParts::IsFixed()
+/* 000175ea */{
+/* 000175ea */	return this.m_bFixed;
+/* 000175f2 */}
+
+void CMessageDrawParts::SetAlphaRate(int AlphaRate)
+/* 00017600 */{
+/* 00017600 */	Ｐ＿アルファ値設定(this.m_PartsNumber, AlphaRate);
+/* 00017612 */}
+
+int CMessageDrawParts::GetAlphaRate()
+/* 0001761a */{
+/* 0001761a */	return Ｐ＿アルファ値取得(this.m_PartsNumber);
+/* 00017628 */}
+
+void CMessageDrawParts::SetPos(int X, int Y)
+/* 00017636 */{
+/* 00017636 */	Ｐ＿座標設定(this.m_PartsNumber, X, Y);
+/* 0001764e */}
+
+void CMessageDrawParts::SetZ(int Z)
+/* 00017656 */{
+/* 00017656 */	Ｐ＿Ｚ座標設定(this.m_PartsNumber, Z);
+/* 00017668 */}
+
+void CMessageDrawParts::SetShow(bool Show)
+/* 00017670 */{
+/* 00017670 */	Ｐ＿表示設定(this.m_PartsNumber, Show);
+/* 00017682 */}
+
+void CMessageDrawParts::UpdateZByMessageWindowZChanged()
+/* 0001768a */{
+/* 0001768a */	int Z = g_MessageWindowModelManager.GetZ() + g_MessageWindowManager.GetOffsetZ(this.m_MessageWindowNumber) + 1;
+/* 000176be */	Ｐ＿Ｚ座標設定(this.m_PartsNumber, Z);
+/* 000176d0 */}
+
+void CMessageDrawParts::SetText(string Text)
+/* 000176d8 */{
+/* 000176d8 */	Ｐ＿テキスト設定(this.m_PartsNumber, Text, 1);
+/* 000176f0 */}
+
+void CMessageDrawParts::SetFontProperty(ref CASCharSpriteProperty Property)
+/* 000176f8 */{
+/* 000176f8 */	CASColor Color;
+/* 00017708 */	Color = Property.GetColor();
+/* 00017724 */	CASColor EdgeColor;
+/* 00017734 */	EdgeColor = Property.GetEdgeColor();
+/* 00017750 */	this.SetFont(Property.GetType());
+/* 00017764 */	this.SetFontSize(Property.GetSize());
+/* 00017778 */	this.SetFontBoldWeight(Property.GetBoldWeight());
+/* 0001778c */	this.SetFontEdgeWeight(Property.GetEdgeWeight());
+/* 000177a0 */	this.SetFontColor(Color.GetR(), Color.GetG(), Color.GetB());
+/* 000177cc */	this.SetFontEdgeColor(EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB());
+/* 000177f8 */}
+
+void CMessageDrawParts::SetFont(int Type)
+/* 00017800 */{
+/* 00017800 */	Ｐ＿フォント種類設定(this.m_PartsNumber, Type, 1);
+/* 00017818 */}
+
+void CMessageDrawParts::SetFontSize(int Size)
+/* 00017820 */{
+/* 00017820 */	Ｐ＿フォントサイズ設定(this.m_PartsNumber, Size, 1);
+/* 00017838 */}
+
+void CMessageDrawParts::SetFontBoldWeight(float Weight)
+/* 00017840 */{
+/* 00017840 */	Ｐ＿フォント太字幅設定(this.m_PartsNumber, Weight, 1);
+/* 00017858 */}
+
+void CMessageDrawParts::SetFontEdgeWeight(float Weight)
+/* 00017860 */{
+/* 00017860 */	Ｐ＿フォント縁取り幅設定(this.m_PartsNumber, Weight, 1);
+/* 00017878 */}
+
+void CMessageDrawParts::SetFontColor(int ColorR, int ColorG, int ColorB)
+/* 00017880 */{
+/* 00017880 */	Ｐ＿フォント色設定(this.m_PartsNumber, ColorR, ColorG, ColorB, 1);
+/* 000178a4 */}
+
+void CMessageDrawParts::SetFontEdgeColor(int ColorR, int ColorG, int ColorB)
+/* 000178ac */{
+/* 000178ac */	Ｐ＿フォント縁取り色設定(this.m_PartsNumber, ColorR, ColorG, ColorB, 1);
+/* 000178d0 */}
+
+void CMessageDrawParts::SetFontCharSpace(int Space)
+/* 000178d8 */{
+/* 000178d8 */	Ｐ＿テキスト字間隔設定(this.m_PartsNumber, Space, 1);
+/* 000178f0 */}
+

@@ -1,0 +1,28 @@
+sact_text_metrics_t::sact_text_metrics_t()
+/* 0000000c */{
+/* 00000014 */	this.nColorR = 255;
+/* 0000001e */	this.nColorG = 255;
+/* 00000028 */	this.nColorB = 255;
+/* 00000032 */	this.nSize = 16;
+/* 0000003c */	this.nWeight = 0;
+/* 00000046 */	this.nFace = 0;
+/* 00000050 */	this.nShadowPixelL = 0;
+/* 0000005a */	this.nShadowPixelU = 0;
+/* 00000064 */	this.nShadowPixelR = 0;
+/* 0000006e */	this.nShadowPixelD = 0;
+/* 00000078 */	this.nShadowColorR = 0;
+/* 00000082 */	this.nShadowColorG = 0;
+/* 0000008c */	this.nShadowColorB = 0;
+/* 00000096 */}
+
+cg_metrics_t::cg_metrics_t()
+/* 0000009e */{
+/* 000000a6 */	this.nWidth = 0;
+/* 000000b0 */	this.nHeight = 0;
+/* 000000ba */	this.nBpp = 0;
+/* 000000c4 */	this.nPixelPitch = 0;
+/* 000000ce */	this.nAlphaPitch = 0;
+/* 000000d8 */	this.bExistPixel = 0;
+/* 000000e2 */	this.bExistAlpha = 0;
+/* 000000ec */}
+

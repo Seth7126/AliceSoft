@@ -1,0 +1,103 @@
+GameObject::GameObject()
+/* 0006142c */{
+/* 00061434 */	this.isNonSleep_ = false;
+/* 0006143e */	this.sleepLevel_ = 0;
+/* 00061448 */}
+
+bool GameObject::isAlive()
+/* 00061450 */{
+/* 00061450 */	return this.update_.Numof() != 0;
+/* 00061466 */}
+
+void GameObject::setNonSleepObject(bool val)
+/* 00061474 */{
+/* 00061474 */	this.isNonSleep_ = val;
+/* 0006147e */}
+
+bool GameObject::isNonSleepObject()
+/* 00061486 */{
+/* 00061486 */	return this.isNonSleep_;
+/* 0006148e */}
+
+void GameObject::addSleepLevel()
+/* 0006149c */{
+/* 0006149c */	if (this.isNonSleep_)
+/* 000614a6 */	{
+/* 000614a6 */		return;
+/* 000614a8 */	}
+/* 000614ae */	++this.sleepLevel_;
+/* 000614be */}
+
+void GameObject::decSleepLevel()
+/* 000614c6 */{
+/* 000614c6 */	if (this.isNonSleep_)
+/* 000614d0 */	{
+/* 000614d0 */		return;
+/* 000614d2 */	}
+/* 000614d8 */	this.sleepLevel_ = Math.Max(this.sleepLevel_ - 1, 0);
+/* 00061502 */}
+
+bool GameObject::isSleep()
+/* 0006150a */{
+/* 0006150a */	return this.sleepLevel_ > 0;
+/* 00061516 */}
+
+void GameObject::setId(int id)
+/* 00061524 */{
+/* 00061524 */	this.id_ = id;
+/* 0006152e */}
+
+void GameObject::setUpdateMethod(DG_UpdateMethod cbUpdate)
+/* 00061536 */{
+/* 00061536 */	this.update_ = cbUpdate;
+/* 00061548 */}
+
+void GameObject::setFocusedMethod(DG_FocusedMethod cbFocused)
+/* 00061550 */{
+/* 00061550 */	this.focused_ = cbFocused;
+/* 00061562 */}
+
+void GameObject::setSleepLevel(int val)
+/* 0006156a */{
+/* 0006156a */	this.sleepLevel_ = Math.Max(0, val);
+/* 0006158c */}
+
+int GameObject::getId()
+/* 00061594 */{
+/* 00061594 */	return this.id_;
+/* 0006159c */}
+
+int GameObject::getSleepLevel()
+/* 000615aa */{
+/* 000615aa */	return this.sleepLevel_;
+/* 000615b2 */}
+
+bool GameObject::callUpdateMethod()
+/* 000615c0 */{
+/* 000615c0 */	if (this.update_.Numof() != 0)
+/* 000615d8 */	{
+/* 000615d8 */		this.update_();
+/* 000615f4 */		return true;
+/* 000615fc */	}
+/* 00061602 */	return false;
+/* 0006160a */}
+
+bool GameObject::callFocuedMethod()
+/* 00061618 */{
+/* 00061618 */	if (this.focused_.Numof() != 0)
+/* 00061630 */	{
+/* 00061630 */		return this.focused_();
+/* 0006164e */	}
+/* 00061654 */	return false;
+/* 0006165c */}
+
+void GameObject::setObjectName(string val)
+/* 0006166a */{
+/* 0006166a */	this.objectName_ = val;
+/* 00061674 */}
+
+string GameObject::getObjectName()
+/* 0006167c */{
+/* 0006167c */	return this.objectName_;
+/* 00061684 */}
+

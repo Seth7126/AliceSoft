@@ -1,0 +1,158 @@
+void 制御／カードコールバック／回復(string id)
+/* 000a27de */{
+/* 000a27de */	switch (id)
+/* 000a27f0 */	{
+/* 000a27f0 */	case "CARD501":
+/* 000a27f0 */	case "CARD505":
+/* 000a27f0 */	case "CARD513":
+/* 000a27f0 */	case "CARD521":
+/* 000a27f0 */		int nowHp;
+/* 000a27fa */		int afterHp;
+/* 000a2804 */		int val;
+/* 000a280e */		nowHp = g_player.getHp();
+/* 000a2826 */		val = (g_player.getMaxHp() * (RAND(3) * 10)) / 100;
+/* 000a285c */		g_player.addHp(val);
+/* 000a286e */		afterHp = g_player.getHp();
+/* 000a2886 */		string maxInfo;
+/* 000a2892 */		if (afterHp == g_player.getMaxHp())
+/* 000a28ac */		{
+/* 000a28ac */			maxInfo = "(最大HP)";
+/* 000a28b8 */		}
+/* 000a28be */		else
+/* 000a28be */		{
+/* 000a28be */			maxInfo = "";
+/* 000a28ca */		}
+/* 000a28ca */		DialogInfomation info;
+/* 000a28da */		info.type = 2;
+/* 000a28f0 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000a2904 */		info.caption = "休憩スポットを発見した！";
+/* 000a2918 */		info.desc[0] = "HPが%d点回復した！" % val;
+/* 000a2946 */		info.desc[1] = "現在HP:%d → %d%s" % nowHp % afterHp % maxInfo;
+/* 000a2990 */		info.desc[2] = "リフレッシュしたところで冒険再開だ。";
+/* 000a29ac */		OpenDialog(info);
+/* 000a29ba */		break;
+/* 000a29c6 */	case "CARD509":
+/* 000a29c6 */		int nowHp;
+/* 000a29d0 */		int afterHp;
+/* 000a29da */		int val;
+/* 000a29e4 */		nowHp = g_player.getHp();
+/* 000a29fc */		val = (g_player.getMaxHp() * (RAND(3) * 10)) / 100;
+/* 000a2a32 */		g_player.addHp(val);
+/* 000a2a44 */		afterHp = g_player.getHp();
+/* 000a2a5c */		string maxInfo;
+/* 000a2a68 */		if (afterHp == g_player.getMaxHp())
+/* 000a2a82 */		{
+/* 000a2a82 */			maxInfo = "(最大HP)";
+/* 000a2a8e */		}
+/* 000a2a94 */		else
+/* 000a2a94 */		{
+/* 000a2a94 */			maxInfo = "";
+/* 000a2aa0 */		}
+/* 000a2aa0 */		DialogInfomation info;
+/* 000a2ab0 */		info.type = 2;
+/* 000a2ac6 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000a2ada */		info.caption = "うまそうな饅頭を食った！";
+/* 000a2aee */		info.desc[0] = "HPが%d点回復した！" % val;
+/* 000a2b1c */		info.desc[1] = "現在HP:%d → %d%s" % nowHp % afterHp % maxInfo;
+/* 000a2b66 */		info.desc[2] = "ちょっと酸っぱかったが合格点だ。";
+/* 000a2b82 */		OpenDialog(info);
+/* 000a2b90 */		break;
+/* 000a2b9c */	case "CARD504":
+/* 000a2b9c */		hideGameObject();
+/* 000a2ba2 */		if (!EV("ミ／辺境／初回", -2147483648))
+/* 000a2bbc */		{
+/* 000a2bbc */			ミ／辺境／初回();
+/* 000a2bc2 */		}
+/* 000a2bc8 */		else
+/* 000a2bc8 */		{
+/* 000a2bc8 */			ミ／辺境();
+/* 000a2bce */		}
+/* 000a2bce */		restoreGameObject();
+/* 000a2bd4 */		制御／ＨＰ増減／固定(1200, "");
+/* 000a2be6 */		break;
+/* 000a2bec */	case "CARD512":
+/* 000a2bec */		hideGameObject();
+/* 000a2bf2 */		if (!EV("ミ／墓地／初回", -2147483648))
+/* 000a2c0c */		{
+/* 000a2c0c */			ミ／墓地／初回();
+/* 000a2c12 */		}
+/* 000a2c18 */		else
+/* 000a2c18 */		{
+/* 000a2c18 */			ミ／墓地();
+/* 000a2c1e */		}
+/* 000a2c1e */		restoreGameObject();
+/* 000a2c24 */		制御／ＨＰ増減／固定(1200, "");
+/* 000a2c36 */		break;
+/* 000a2c3c */	case "CARD516":
+/* 000a2c3c */		hideGameObject();
+/* 000a2c42 */		if (!EV("ミ／屋敷／初回", -2147483648))
+/* 000a2c5c */		{
+/* 000a2c5c */			ミ／屋敷／初回();
+/* 000a2c62 */		}
+/* 000a2c68 */		else
+/* 000a2c68 */		{
+/* 000a2c68 */			ミ／屋敷();
+/* 000a2c6e */		}
+/* 000a2c6e */		restoreGameObject();
+/* 000a2c74 */		制御／ＨＰ増減／固定(1200, "");
+/* 000a2c86 */		break;
+/* 000a2c8c */	case "CARD520":
+/* 000a2c8c */		hideGameObject();
+/* 000a2c92 */		if (!EV("ミ／下水道／初回", -2147483648))
+/* 000a2cac */		{
+/* 000a2cac */			ミ／下水道／初回();
+/* 000a2cb2 */		}
+/* 000a2cb8 */		else
+/* 000a2cb8 */		{
+/* 000a2cb8 */			ミ／下水道();
+/* 000a2cbe */		}
+/* 000a2cbe */		restoreGameObject();
+/* 000a2cc4 */		制御／ＨＰ増減／固定(1200, "");
+/* 000a2cd6 */		break;
+/* 000a2cdc */	case "CARD502":
+/* 000a2cdc */	case "CARD510":
+/* 000a2cdc */	case "CARD518":
+/* 000a2cdc */	case "CARD522":
+/* 000a2cdc */		DialogInfomation info;
+/* 000a2cec */		info.type = 2;
+/* 000a2d02 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000a2d16 */		info.caption = "強制接収の魔法陣を踏んだ！";
+/* 000a2d2a */		info.desc[0] = "不思議な力に包まれて、";
+/* 000a2d46 */		info.desc[1] = "しばらくモンスターから宝箱が出易くなった。";
+/* 000a2d62 */		info.desc[2] = "ゴーゴー！";
+/* 000a2d7e */		OpenDialog(info);
+/* 000a2d8c */		g_player.setBadCondition("COND08", 7);
+/* 000a2da4 */		break;
+/* 000a2db0 */	case "CARD503":
+/* 000a2db0 */	case "CARD506":
+/* 000a2db0 */	case "CARD511":
+/* 000a2db0 */	case "CARD514":
+/* 000a2db0 */	case "CARD523":
+/* 000a2db0 */		DialogInfomation info;
+/* 000a2dc0 */		info.type = 2;
+/* 000a2dd6 */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000a2dea */		info.caption = "身体づくりの魔法陣を踏んだ！";
+/* 000a2dfe */		info.desc[0] = "不思議な力に包まれて、";
+/* 000a2e1a */		info.desc[1] = "しばらく得られる経験が増えるようになった。";
+/* 000a2e36 */		info.desc[2] = "ゴーゴー！";
+/* 000a2e52 */		OpenDialog(info);
+/* 000a2e60 */		g_player.setBadCondition("COND07", 7);
+/* 000a2e78 */		break;
+/* 000a2e84 */	case "CARD515":
+/* 000a2e84 */	case "CARD519":
+/* 000a2e84 */	case "CARD524":
+/* 000a2e84 */		DialogInfomation info;
+/* 000a2e94 */		info.type = 2;
+/* 000a2eaa */		info.imageName = "システム／ダイアログ／経験値獲得";
+/* 000a2ebe */		info.caption = "臨戦態勢の魔法陣を踏んだ！";
+/* 000a2ed2 */		info.desc[0] = "不思議な力に包まれて、";
+/* 000a2eee */		info.desc[1] = "クールタイムがリセットされた。";
+/* 000a2f0a */		info.desc[2] = "ゴーゴー！";
+/* 000a2f26 */		OpenDialog(info);
+/* 000a2f34 */		制御／クールタイム初期化();
+/* 000a2f3a */		break;
+/* 000a2f46 */	default:
+/* 000a2f46 */		break;
+/* 000a2f4c */	}
+/* 000a2f4c */}
+

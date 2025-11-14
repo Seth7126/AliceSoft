@@ -1,0 +1,1182 @@
+CBackLogView::CBackLogView()
+/* 000207bc */{
+/* 000207c4 */	this.m_LineSpace = 0;
+/* 000207ce */	this.m_ButtonStartDelay = 200;
+/* 000207d8 */	this.m_Redraw = true;
+/* 000207e2 */	this.m_Playing = false;
+/* 000207ec */}
+
+CBackLogView::~CBackLogView()
+/* 000207f4 */{
+/* 000207f4 */	this.m_ScrollBoxPartsList.Free();
+/* 000207fe */	this.m_BackParts.Release();
+/* 0002080a */}
+
+void CBackLogView::Run(CBackLogModel BackLogModel)
+/* 00020812 */{
+/* 00020812 */	this.m_BackLogModel = BackLogModel;
+/* 00020822 */	this.prepare();
+/* 0002082a */	if (this.m_LogTextList.Numof() <= 0)
+/* 0002083e */	{
+/* 0002083e */		return;
+/* 00020840 */	}
+/* 00020846 */	this.view();
+/* 0002084e */}
+
+void CBackLogView::prepare()
+/* 00020856 */{
+/* 00020856 */	this.m_LineSpace = this.m_BackLogModel.GetLineSpace();
+/* 0002086e */	this.CreateBacklogTextList();
+/* 00020876 */	if (this.m_BackLogModel.GetNumofTextLine() != -2147483648)
+/* 00020890 */	{
+/* 00020890 */		this.m_LinesPerPage = this.m_BackLogModel.GetNumofTextLine();
+/* 000208a8 */	}
+/* 000208ae */	else
+/* 000208ae */	{
+/* 000208ae */		this.m_LinesPerPage = AFL_View_GetHeight() / this.m_BackLogModel.GetFontHeight();
+/* 000208ce */	}
+/* 000208ce */	if (this.m_LinesPerPage < 0)
+/* 000208e2 */	{
+/* 000208e2 */		this.m_LinesPerPage = 0;
+/* 000208ec */	}
+/* 000208f2 */	this.m_ScrollTotalLines = this.m_LogTextList.Numof() - this.m_LinesPerPage;
+/* 0002090c */	if (this.m_ScrollTotalLines < 0)
+/* 00020920 */	{
+/* 00020920 */		this.m_ScrollTotalLines = 0;
+/* 0002092a */	}
+/* 00020930 */	this.CreateBackSprite();
+/* 00020938 */	this.CreateReturnButtonSprite();
+/* 00020940 */	this.CreateScrollBoxSprite();
+/* 00020948 */	this.CreateUpButtonSprite();
+/* 00020950 */	this.CreateDownButtonSprite();
+/* 00020958 */}
+
+void CBackLogView::CreateBackSprite()
+/* 00020960 */{
+/* 00020960 */	string BackCG = this.m_BackLogModel.GetBackCG();
+/* 00020976 */	this.m_BackParts.Create();
+/* 00020982 */	if (!BackCG.Empty())
+/* 00020990 */	{
+/* 00020990 */		this.m_BackParts.SetCG(BackCG, 1);
+/* 000209a8 */	}
+/* 000209ae */	else
+/* 000209ae */	{
+/* 000209ae */		int nWidth = AFL_View_GetWidth();
+/* 000209c0 */		int nHeight = AFL_View_GetHeight();
+/* 000209d2 */		Ｐ＿構築手順＿初期化(this.m_BackParts.GetPartsNumber(), 1);
+/* 000209ea */		Ｐ＿構築手順＿作成(this.m_BackParts.GetPartsNumber(), nWidth, nHeight, 1);
+/* 00020a0e */		Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 0, 0, nWidth, nHeight, 255, 255, 255, 160, 1);
+/* 00020a56 */		Ｐ＿構築ビルド(this.m_BackParts.GetPartsNumber(), 1);
+/* 00020a6e */	}
+/* 00020a6e */	this.m_BackParts.SetPos(0, 0);
+/* 00020a86 */	this.m_BackParts.SetZByBaseZ(0, 34816);
+/* 00020a9e */	this.m_BackParts.SetShow(true);
+/* 00020ab0 */}
+
+void CBackLogView::CreateReturnButtonSprite()
+/* 00020ab8 */{
+/* 00020ab8 */	this.m_ExitButtonList.Alloc(4);
+/* 00020ace */	int n;
+/* 00020ad8 */	for (n = 0; n < this.m_ExitButtonList.Numof(); ++n)
+/* 00020b08 */	{
+/* 00020b08 */		this.m_ExitButtonList[n].Create();
+/* 00020b1c */	}
+/* 00020b22 */	if (!this.m_BackLogModel.GetReturnButtonCG().Empty())
+/* 00020b38 */	{
+/* 00020b38 */		this.m_ExitButtonList[0].SetCG(this.m_BackLogModel.GetReturnButtonCG(), 1);
+/* 00020b5e */		this.m_ExitButtonList[1].SetCG(this.m_BackLogModel.GetReturnButtonUnderCursorCG(), 1);
+/* 00020b84 */		this.m_ExitButtonList[2].SetCG(this.m_BackLogModel.GetReturnButtonKeyDownCG(), 1);
+/* 00020baa */		this.m_ExitButtonList[3].SetCG(this.m_BackLogModel.GetReturnButtonDisableCG(), 1);
+/* 00020bd0 */	}
+/* 00020bd6 */	else
+/* 00020bd6 */	{
+/* 00020bd6 */		int Width = 60;
+/* 00020be0 */		int Height = 30;
+/* 00020bea */		CASCharSpriteProperty FontProperty;
+/* 00020bfa */		FontProperty.SetEdgeWeight(1.0);
+/* 00020c0c */		int TextX = (Width - FontProperty.GetPixelWidth() * 2) / 2;
+/* 00020c3c */		int TextY = (Height - FontProperty.GetPixelHeight()) / 2;
+/* 00020c64 */		for (n = 0; n < this.m_ExitButtonList.Numof(); ++n)
+/* 00020c94 */		{
+/* 00020c94 */			int ColorR;
+/* 00020c9e */			int ColorG;
+/* 00020ca8 */			int ColorB;
+/* 00020cb2 */			switch (n)
+/* 00020cc4 */			{
+/* 00020cc4 */			case 0:
+/* 00020cc4 */				ColorR = 192;
+/* 00020cce */				ColorG = 192;
+/* 00020cd8 */				ColorB = 192;
+/* 00020ce2 */				break;
+/* 00020ce8 */			case 1:
+/* 00020ce8 */				ColorR = 224;
+/* 00020cf2 */				ColorG = 224;
+/* 00020cfc */				ColorB = 255;
+/* 00020d06 */				break;
+/* 00020d0c */			case 2:
+/* 00020d0c */				ColorR = 255;
+/* 00020d16 */				ColorG = 224;
+/* 00020d20 */				ColorB = 224;
+/* 00020d2a */				break;
+/* 00020d30 */			case 3:
+/* 00020d30 */				ColorR = 64;
+/* 00020d3a */				ColorG = 64;
+/* 00020d44 */				ColorB = 64;
+/* 00020d4e */				break;
+/* 00020d54 */			}
+/* 00020d54 */			Ｐ＿構築手順＿初期化(this.m_ExitButtonList[n].GetPartsNumber(), 1);
+/* 00020d74 */			Ｐ＿構築手順＿作成(this.m_ExitButtonList[n].GetPartsNumber(), Width, Height, 1);
+/* 00020da0 */			Ｐ＿構築手順＿色塗り(this.m_ExitButtonList[n].GetPartsNumber(), 0, 0, Width, Height, ColorR, ColorG, ColorB, -1, 1);
+/* 00020df0 */			Ｐ＿構築手順＿テキストブレンド(this.m_ExitButtonList[n].GetPartsNumber(), TextX, TextY, "戻る", FontProperty, 0, 0, 1);
+/* 00020e3c */			Ｐ＿構築ビルド(this.m_ExitButtonList[n].GetPartsNumber(), 1);
+/* 00020e5c */		}
+/* 00020e62 */	}
+/* 00020e68 */	for (n = 0; n < this.m_ExitButtonList.Numof(); ++n)
+/* 00020e98 */	{
+/* 00020e98 */		this.m_ExitButtonList[n].SetPos(this.m_BackLogModel.GetReturnButtonX(), this.m_BackLogModel.GetReturnButtonY());
+/* 00020ec4 */		this.m_ExitButtonList[n].SetZByBaseZ(7, 34816);
+/* 00020ee4 */		this.m_ExitButtonList[n].SetShow(false);
+/* 00020efe */	}
+/* 00020f04 */	this.m_ExitButtonState = 0;
+/* 00020f0e */	this.m_ExitButtonList[0].SetShow(true);
+/* 00020f28 */}
+
+void CBackLogView::CreateScrollBoxSprite()
+/* 00020f30 */{
+/* 00020f30 */	this.m_ScrollBoxPartsList.Alloc(4);
+/* 00020f46 */	int n;
+/* 00020f50 */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 00020f80 */	{
+/* 00020f80 */		this.m_ScrollBoxPartsList[n].Create();
+/* 00020f94 */	}
+/* 00020f9a */	if (!this.m_BackLogModel.GetScrollBoxCG().Empty())
+/* 00020fb0 */	{
+/* 00020fb0 */		this.m_ScrollBoxPartsList[0].SetCG(this.m_BackLogModel.GetScrollBoxCG(), 1);
+/* 00020fd6 */		this.m_ScrollBoxPartsList[1].SetCG(this.m_BackLogModel.GetScrollBoxUnderCursorCG(), 1);
+/* 00020ffc */		this.m_ScrollBoxPartsList[2].SetCG(this.m_BackLogModel.GetScrollBoxKeyDownCG(), 1);
+/* 00021022 */		this.m_ScrollBoxPartsList[3].SetCG("", 1);
+/* 00021042 */	}
+/* 00021048 */	else
+/* 00021048 */	{
+/* 00021048 */		int Width = 30;
+/* 00021052 */		int Height = 40;
+/* 0002105c */		for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 0002108c */		{
+/* 0002108c */			int ColorR;
+/* 00021096 */			int ColorG;
+/* 000210a0 */			int ColorB;
+/* 000210aa */			switch (n)
+/* 000210bc */			{
+/* 000210bc */			case 0:
+/* 000210bc */				ColorR = 192;
+/* 000210c6 */				ColorG = 192;
+/* 000210d0 */				ColorB = 192;
+/* 000210da */				break;
+/* 000210e0 */			case 1:
+/* 000210e0 */				ColorR = 224;
+/* 000210ea */				ColorG = 224;
+/* 000210f4 */				ColorB = 255;
+/* 000210fe */				break;
+/* 00021104 */			case 2:
+/* 00021104 */				ColorR = 255;
+/* 0002110e */				ColorG = 224;
+/* 00021118 */				ColorB = 224;
+/* 00021122 */				break;
+/* 00021128 */			case 3:
+/* 00021128 */				ColorR = 64;
+/* 00021132 */				ColorG = 64;
+/* 0002113c */				ColorB = 64;
+/* 00021146 */				break;
+/* 0002114c */			}
+/* 0002114c */			Ｐ＿構築手順＿初期化(this.m_ScrollBoxPartsList[n].GetPartsNumber(), 1);
+/* 0002116c */			Ｐ＿構築手順＿作成(this.m_ScrollBoxPartsList[n].GetPartsNumber(), Width, Height, 1);
+/* 00021198 */			Ｐ＿構築手順＿色塗り(this.m_ScrollBoxPartsList[n].GetPartsNumber(), 0, 0, Width, Height, ColorR, ColorG, ColorB, -1, 1);
+/* 000211e8 */			Ｐ＿構築ビルド(this.m_ScrollBoxPartsList[n].GetPartsNumber(), 1);
+/* 00021208 */		}
+/* 0002120e */	}
+/* 0002120e */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 0002123e */	{
+/* 0002123e */		this.m_ScrollBoxPartsList[n].SetPos(this.m_BackLogModel.GetScrollBoxAreaX(), this.m_BackLogModel.GetScrollBoxAreaY());
+/* 0002126a */		this.m_ScrollBoxPartsList[n].SetZByBaseZ(8, 34816);
+/* 0002128a */		this.m_ScrollBoxPartsList[n].SetShow(false);
+/* 000212a4 */	}
+/* 000212aa */	this.m_ScrollBoxState = 0;
+/* 000212b4 */	this.m_ScrollBoxShow = true;
+/* 000212be */	this.m_ScrollBoxPartsList[0].SetShow(true);
+/* 000212d8 */}
+
+void CBackLogView::CreateUpButtonSprite()
+/* 000212e0 */{
+/* 000212e0 */	if (this.m_BackLogModel.GetUpButtonCG().Empty())
+/* 000212f4 */	{
+/* 000212f4 */		return;
+/* 000212f6 */	}
+/* 000212fc */	this.m_UpButtonPartsList.Alloc(4);
+/* 00021312 */	int n;
+/* 0002131c */	for (n = 0; n < this.m_UpButtonPartsList.Numof(); ++n)
+/* 0002134c */	{
+/* 0002134c */		this.m_UpButtonPartsList[n].Create();
+/* 00021360 */	}
+/* 00021366 */	this.m_UpButtonPartsList[0].SetCG(this.m_BackLogModel.GetUpButtonCG(), 1);
+/* 0002138c */	this.m_UpButtonPartsList[1].SetCG(this.m_BackLogModel.GetUpButtonUnderCursorCG(), 1);
+/* 000213b2 */	this.m_UpButtonPartsList[2].SetCG(this.m_BackLogModel.GetUpButtonKeyDownCG(), 1);
+/* 000213d8 */	this.m_UpButtonPartsList[3].SetCG(this.m_BackLogModel.GetUpButtonDisableCG(), 1);
+/* 000213fe */	for (n = 0; n < this.m_UpButtonPartsList.Numof(); ++n)
+/* 0002142e */	{
+/* 0002142e */		this.m_UpButtonPartsList[n].SetPos(this.m_BackLogModel.GetUpButtonX(), this.m_BackLogModel.GetUpButtonY());
+/* 0002145a */		this.m_UpButtonPartsList[n].SetZByBaseZ(9, 34816);
+/* 0002147a */		this.m_UpButtonPartsList[n].SetShow(false);
+/* 00021494 */	}
+/* 0002149a */	this.m_UpButtonState = 0;
+/* 000214a4 */	this.m_UpButtonPartsList[0].SetShow(true);
+/* 000214be */}
+
+void CBackLogView::CreateDownButtonSprite()
+/* 000214c6 */{
+/* 000214c6 */	if (this.m_BackLogModel.GetDownButtonCG().Empty())
+/* 000214da */	{
+/* 000214da */		return;
+/* 000214dc */	}
+/* 000214e2 */	this.m_DownButtonPartsList.Alloc(4);
+/* 000214f8 */	int n;
+/* 00021502 */	for (n = 0; n < this.m_DownButtonPartsList.Numof(); ++n)
+/* 00021532 */	{
+/* 00021532 */		this.m_DownButtonPartsList[n].Create();
+/* 00021546 */	}
+/* 0002154c */	this.m_DownButtonPartsList[0].SetCG(this.m_BackLogModel.GetDownButtonCG(), 1);
+/* 00021572 */	this.m_DownButtonPartsList[1].SetCG(this.m_BackLogModel.GetDownButtonUnderCursorCG(), 1);
+/* 00021598 */	this.m_DownButtonPartsList[2].SetCG(this.m_BackLogModel.GetDownButtonKeyDownCG(), 1);
+/* 000215be */	this.m_DownButtonPartsList[3].SetCG(this.m_BackLogModel.GetDownButtonDisableCG(), 1);
+/* 000215e4 */	for (n = 0; n < this.m_DownButtonPartsList.Numof(); ++n)
+/* 00021614 */	{
+/* 00021614 */		this.m_DownButtonPartsList[n].SetPos(this.m_BackLogModel.GetDownButtonX(), this.m_BackLogModel.GetDownButtonY());
+/* 00021640 */		this.m_DownButtonPartsList[n].SetZByBaseZ(9, 34816);
+/* 00021660 */		this.m_DownButtonPartsList[n].SetShow(false);
+/* 0002167a */	}
+/* 00021680 */	this.m_DownButtonState = 0;
+/* 0002168a */	this.m_DownButtonPartsList[0].SetShow(true);
+/* 000216a4 */}
+
+void CBackLogView::GetIndexRange(int Index, ref int Begin, ref int End)
+/* 000216ac */{
+/* 000216ac */	SBackLogViewText sld;
+/* 000216bc */	Begin = 0;
+/* 000216cc */	int i;
+/* 000216d6 */	for (i = Index; i >= 0; --i)
+/* 00021708 */	{
+/* 00021708 */		sld = this.GetBacklog(i);
+/* 00021726 */		if (sld.m_Separator)
+/* 0002173a */		{
+/* 0002173a */			Begin = i + 1;
+/* 00021752 */			break;
+/* 00021758 */		}
+/* 0002175e */	}
+/* 00021764 */	End = Index + 1;
+/* 0002177c */	int Numof = this.m_LogTextList.Numof();
+/* 0002178e */	for (i = Index; i < Numof; ++i)
+/* 000217c6 */	{
+/* 000217c6 */		sld = this.GetBacklog(i);
+/* 000217e4 */		if (sld.m_Separator)
+/* 000217f8 */		{
+/* 000217f8 */			End = i;
+/* 00021808 */			break;
+/* 0002180e */		}
+/* 00021814 */	}
+/* 0002181a */}
+
+void CBackLogView::CreateTextSprite(ref CASParts TextSprite, ref CASRect VoiceDecideRect, int MsgLogIndex, int X, int Y, int CurBegin, int CurEnd, int CurVoice, int PlayingBegin, int PlayingEnd, int PlayingVoice, ref int Height)
+/* 00021822 */{
+/* 00021822 */	SBackLogViewText BackLogViewText;
+/* 00021832 */	BackLogViewText = this.GetBacklog(MsgLogIndex);
+/* 00021850 */	int nTextPropertyIndex;
+/* 0002185a */	if (PlayingVoice && MsgLogIndex >= PlayingBegin && MsgLogIndex < PlayingEnd)
+/* 000218be */	{
+/* 000218be */		nTextPropertyIndex = 3;
+/* 000218c8 */	}
+/* 000218ce */	else if (CurVoice && MsgLogIndex >= CurBegin && MsgLogIndex < CurEnd)
+/* 00021932 */	{
+/* 00021932 */		nTextPropertyIndex = 2;
+/* 0002193c */	}
+/* 00021942 */	else if (!BackLogViewText.VoiceNumberList.Empty())
+/* 00021958 */	{
+/* 00021958 */		nTextPropertyIndex = 1;
+/* 00021962 */	}
+/* 00021968 */	else
+/* 00021968 */	{
+/* 00021968 */		nTextPropertyIndex = 0;
+/* 00021972 */	}
+/* 00021972 */	ref CASCharSpriteProperty TextProperty = this.m_BackLogModel.GetTextProperty(nTextPropertyIndex);
+/* 000219ae */	int PixelWidth = TextProperty.GetPixelHeight();
+/* 000219c6 */	int PixelHeight = TextProperty.GetPixelHeight();
+/* 000219de */	int TextLineWidth;
+/* 000219e8 */	int TextLineHeight = PixelHeight;
+/* 000219fa */	if (this.m_BackLogModel.GetNumofTextColumn() != -2147483648)
+/* 00021a14 */	{
+/* 00021a14 */		TextLineWidth = this.m_BackLogModel.GetNumofTextColumn() * (PixelWidth + this.m_BackLogModel.GetCharSpace());
+/* 00021a42 */	}
+/* 00021a48 */	else
+/* 00021a48 */	{
+/* 00021a48 */		TextLineWidth = AFL_View_GetWidth() + -17;
+/* 00021a62 */	}
+/* 00021a62 */	int nOffsetX = this.m_BackLogModel.GetTextX();
+/* 00021a7a */	int nOffsetY = this.m_BackLogModel.GetTextY();
+/* 00021a92 */	TextSprite.Create();
+/* 00021a9e */	TextSprite.SetPos(X + nOffsetX, Y + nOffsetY);
+/* 00021ac6 */	TextSprite.SetZByBaseZ(1, 34816);
+/* 00021ade */	TextSprite.SetFontCharSpace(this.m_BackLogModel.GetCharSpace(), 1);
+/* 00021afc */	int nTotalLines = this.m_LogTextList.Numof();
+/* 00021b0e */	if (MsgLogIndex >= 0 && MsgLogIndex < nTotalLines)
+/* 00021b48 */	{
+/* 00021b48 */		SBackLogViewText log_data;
+/* 00021b58 */		log_data = this.GetBacklog(MsgLogIndex);
+/* 00021b76 */		if (!log_data.m_Separator)
+/* 00021b8c */		{
+/* 00021b8c */			TextSprite.SetFontProperty(TextProperty, 1);
+/* 00021ba4 */			TextSprite.SetText(log_data.m_Text, 1);
+/* 00021bc4 */			VoiceDecideRect.Set(X + nOffsetX, Y + nOffsetY, TextLineWidth, TextLineHeight + this.m_LineSpace);
+/* 00021c00 */		}
+/* 00021c06 */	}
+/* 00021c12 */	Height = PixelHeight;
+/* 00021c22 */}
+
+void CBackLogView::Draw(int New, int Old, int CurrentIndex, int nVoicePlayingIndex, bool bVoicePlaying)
+/* 00021c2a */{
+/* 00021c2a */	int CurBegin;
+/* 00021c34 */	int CurEnd;
+/* 00021c3e */	this.GetIndexRange(CurrentIndex, CurBegin, CurEnd);
+/* 00021c5c */	SBackLogViewText sldCur;
+/* 00021c6c */	sldCur = this.GetBacklog(CurrentIndex);
+/* 00021c8a */	bool CurVoice = !sldCur.VoiceNumberList.Empty();
+/* 00021ca8 */	int PlayingBegin;
+/* 00021cb2 */	int PlayingEnd;
+/* 00021cbc */	if (bVoicePlaying)
+/* 00021cc8 */	{
+/* 00021cc8 */		this.GetIndexRange(nVoicePlayingIndex, PlayingBegin, PlayingEnd);
+/* 00021ce6 */	}
+/* 00021cec */	this.m_TextPartsList.Alloc(this.m_LinesPerPage);
+/* 00021d02 */	this.m_VoiceDecideRectList.Alloc(this.m_LinesPerPage);
+/* 00021d18 */	int Y;
+/* 00021d22 */	int n;
+/* 00021d2c */	for (n = 0; n < this.m_TextPartsList.Numof(); ++n)
+/* 00021d5c */	{
+/* 00021d5c */		int X;
+/* 00021d66 */		int Height;
+/* 00021d70 */		this.CreateTextSprite(this.m_TextPartsList[n], this.m_VoiceDecideRectList[n], New + n, X, Y, CurBegin, CurEnd, CurVoice, PlayingBegin, PlayingEnd, bVoicePlaying, Height);
+/* 00021dda */		Y += Height + this.m_LineSpace;
+/* 00021df4 */	}
+/* 00021dfa */}
+
+bool CBackLogView::PlayVoice(ref array@int VoiceNumberList)
+/* 00021e02 */{
+/* 00021e02 */	if (VoiceNumberList.Empty())
+/* 00021e12 */	{
+/* 00021e12 */		return false;
+/* 00021e1a */	}
+/* 00021e20 */	this.m_PlayingVoiceNumberList.Alloc(VoiceNumberList.Numof());
+/* 00021e40 */	this.m_PlayingVoiceNumberList.Copy(0, VoiceNumberList, 0, VoiceNumberList.Numof());
+/* 00021e6e */	this.m_PlayingVoiceIndex = 0;
+/* 00021e78 */	SYS_StopVoice();
+/* 00021e7e */	SYS_PlayVoice(this.m_PlayingVoiceNumberList[this.m_PlayingVoiceIndex]);
+/* 00021e92 */	this.m_Playing = true;
+/* 00021e9c */	return true;
+/* 00021ea4 */}
+
+bool CBackLogView::CheckPlayingVoice()
+/* 00021eb2 */{
+/* 00021eb2 */	if (!this.m_Playing)
+/* 00021ec0 */	{
+/* 00021ec0 */		return false;
+/* 00021ec8 */	}
+/* 00021ece */	if (!SYS_IsPlayVoice())
+/* 00021edc */	{
+/* 00021edc */		if (this.m_PlayingVoiceIndex + 1 >= this.m_PlayingVoiceNumberList.Numof())
+/* 00021ef8 */		{
+/* 00021ef8 */			this.m_Playing = false;
+/* 00021f02 */			this.m_PlayingVoiceNumberList.Free();
+/* 00021f0c */			this.m_PlayingVoiceIndex = 0;
+/* 00021f16 */			return true;
+/* 00021f1e */		}
+/* 00021f24 */		this.m_PlayingVoiceIndex++;
+/* 00021f38 */		SYS_PlayVoice(this.m_PlayingVoiceNumberList[this.m_PlayingVoiceIndex]);
+/* 00021f4c */	}
+/* 00021f52 */	return false;
+/* 00021f5a */}
+
+void CBackLogView::view()
+/* 00021f68 */{
+/* 00021f68 */	float ViewTextLine = this.m_LogTextList.Numof() - this.m_LinesPerPage;
+/* 00021f84 */	if (ViewTextLine < 0.0)
+/* 00021f98 */	{
+/* 00021f98 */		ViewTextLine = 0.0;
+/* 00021faa */	}
+/* 00021fb0 */	bool bDelay = false;
+/* 00021fba */	bool bDelayOn = false;
+/* 00021fc4 */	int IndexOld = -1;
+/* 00021fd6 */	float New;
+/* 00021fe8 */	int nDelta;
+/* 00021ff2 */	bool DragThumb = false;
+/* 00021ffc */	int nDragThumbY;
+/* 00022006 */	int nDragMouseY;
+/* 00022010 */	int nVoicePlayingIndex;
+/* 0002201a */	bool bVoicePlaying = false;
+/* 00022024 */	int OldCurBegin;
+/* 0002202e */	int OldCurEnd;
+/* 00022038 */	float OldViewTextLine = -1.0;
+/* 0002204a */	int n;
+/* 00022054 */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 00022084 */	{
+/* 00022084 */		this.m_ScrollBoxPartsList[n].SetPos(this.m_BackLogModel.GetScrollBoxAreaX(), (this.m_BackLogModel.GetScrollBoxAreaY() + this.m_BackLogModel.GetScrollBoxAreaHeight()) - this.m_ScrollBoxPartsList[n].GetHeight(1));
+/* 000220da */	}
+/* 000220e0 */	CASClick LButtonClick;
+/* 000220f0 */	CASClick RButtonClick;
+/* 00022100 */	CASClick SpaceKeyClick;
+/* 00022110 */	CASClick EscapeKeyClick;
+/* 00022120 */	LButtonClick.Init(1, true);
+/* 00022138 */	RButtonClick.Init(2, true);
+/* 00022150 */	SpaceKeyClick.Init(32, true);
+/* 00022168 */	EscapeKeyClick.Init(27, true);
+/* 00022180 */	this.m_ExitButtonLButtonClick.Init(1, true);
+/* 00022198 */	CASClick UpKeyPress;
+/* 000221a8 */	CASClick DownKeyPress;
+/* 000221b8 */	CASClick PageUpKeyPress;
+/* 000221c8 */	CASClick PageDownKeyPress;
+/* 000221d8 */	CASClick UpKeyClick;
+/* 000221e8 */	CASClick DownKeyClick;
+/* 000221f8 */	CASClick PageUpKeyClick;
+/* 00022208 */	CASClick PageDownKeyClick;
+/* 00022218 */	CASClick EnterKeyClick;
+/* 00022228 */	UpKeyPress.Init(38, true);
+/* 00022240 */	DownKeyPress.Init(40, true);
+/* 00022258 */	PageUpKeyPress.Init(33, true);
+/* 00022270 */	PageDownKeyPress.Init(34, true);
+/* 00022288 */	UpKeyClick.Init(38, true);
+/* 000222a0 */	DownKeyClick.Init(40, true);
+/* 000222b8 */	PageUpKeyClick.Init(33, true);
+/* 000222d0 */	PageDownKeyClick.Init(34, true);
+/* 000222e8 */	EnterKeyClick.Init(13, true);
+/* 00022300 */	CASJoyClickAssignedKey UpJoyPress;
+/* 00022310 */	CASJoyClickAssignedKey DownJoyPress;
+/* 00022320 */	CASJoyClickAssignedKey PageUpJoyPress;
+/* 00022330 */	CASJoyClickAssignedKey PageDownJoyPress;
+/* 00022340 */	CASJoyClickAssignedKey UpJoyClick;
+/* 00022350 */	CASJoyClickAssignedKey DownJoyClick;
+/* 00022360 */	CASJoyClickAssignedKey PageUpJoyClick;
+/* 00022370 */	CASJoyClickAssignedKey PageDownJoyClick;
+/* 00022380 */	CASJoyClickAssignedKey JoyCancelClick;
+/* 00022390 */	CASJoyClickAssignedKey JoyOkClick;
+/* 000223a0 */	UpJoyPress.Init(9, true);
+/* 000223b8 */	DownJoyPress.Init(10, true);
+/* 000223d0 */	PageUpJoyPress.Init(11, true);
+/* 000223e8 */	PageDownJoyPress.Init(12, true);
+/* 00022400 */	UpJoyClick.Init(9, true);
+/* 00022418 */	DownJoyClick.Init(10, true);
+/* 00022430 */	PageUpJoyClick.Init(11, true);
+/* 00022448 */	PageDownJoyClick.Init(12, true);
+/* 00022460 */	JoyCancelClick.Init(5, true);
+/* 00022478 */	JoyOkClick.Init(4, true);
+/* 00022490 */	int Focus;
+/* 0002249a */	int KeyDownObject;
+/* 000224a4 */	for (; ; )
+/* 000224a4 */	{
+/* 000224a4 */		_g_MouseWheel._Update(true);
+/* 000224b6 */		if (this.m_Redraw)
+/* 000224c0 */		{
+/* 000224c0 */			this.Draw(ViewTextLine, OldViewTextLine, IndexOld, nVoicePlayingIndex, bVoicePlaying);
+/* 000224ea */			this.m_Redraw = false;
+/* 000224f4 */			OldViewTextLine = ViewTextLine;
+/* 00022506 */			AFL_View_Update(true);
+/* 00022512 */			if (bDelay && !bDelayOn)
+/* 00022544 */			{
+/* 00022544 */				int nStartTime = system.GetTime();
+/* 00022556 */				while (system.GetTime() - nStartTime < this.m_ButtonStartDelay)
+/* 00022572 */				{
+/* 00022572 */					if (!LButtonClick.IsKeyDown())
+/* 00022586 */					{
+/* 00022586 */						break;
+/* 0002258c */					}
+/* 00022592 */					AFL_View_Update(true);
+/* 0002259e */				}
+/* 000225a4 */				bDelayOn = true;
+/* 000225ae */			}
+/* 000225b4 */		}
+/* 000225ba */		else
+/* 000225ba */		{
+/* 000225ba */			AFL_View_Update(true);
+/* 000225c6 */		}
+/* 000225c6 */		nDelta = 0;
+/* 000225d0 */		float nPrevViewTextLine = ViewTextLine;
+/* 000225e2 */		if (_g_MouseWheel.GetBackCount() > 0 && int(ViewTextLine) >= this.m_ScrollTotalLines)
+/* 0002262a */		{
+/* 0002262a */			break;
+/* 00022630 */		}
+/* 00022636 */		nDelta += _g_MouseWheel._GetDelta() * 3;
+/* 00022656 */		if (!this.CheckReturnButton(DragThumb))
+/* 0002266c */		{
+/* 0002266c */			break;
+/* 00022672 */		}
+/* 00022678 */		this.UpdateScrollBox(DragThumb, LButtonClick.IsKeyDown());
+/* 00022692 */		this.UpdateUpButton(ViewTextLine, DragThumb, LButtonClick.IsKeyDown());
+/* 000226b4 */		this.UpdateDownButton(ViewTextLine, DragThumb, LButtonClick.IsKeyDown());
+/* 000226d6 */		int Index = this.get_index_at_mouse_pos(ViewTextLine);
+/* 000226f2 */		if (DragThumb)
+/* 000226fe */		{
+/* 000226fe */			Index = -1;
+/* 00022710 */		}
+/* 00022716 */		if (Index != IndexOld)
+/* 0002272a */		{
+/* 0002272a */			int CurBegin;
+/* 00022734 */			int CurEnd;
+/* 0002273e */			this.GetIndexRange(Index, CurBegin, CurEnd);
+/* 0002275c */			if (CurBegin != OldCurBegin || CurEnd != OldCurEnd)
+/* 0002279c */			{
+/* 0002279c */				SBackLogViewText sldCur;
+/* 000227ac */				sldCur = this.GetBacklog(Index);
+/* 000227ca */				if (!sldCur.VoiceNumberList.Empty())
+/* 000227e0 */				{
+/* 000227e0 */					this.PlayOnCursorSound();
+/* 000227e8 */				}
+/* 000227ee */			}
+/* 000227fa */			IndexOld = Index;
+/* 0002280c */			this.m_Redraw = true;
+/* 00022816 */			OldCurBegin = CurBegin;
+/* 00022828 */			OldCurEnd = CurEnd;
+/* 0002283a */		}
+/* 00022840 */		if (UpKeyClick.IsKeyTrigger())
+/* 00022852 */		{
+/* 00022852 */			Focus = 10;
+/* 0002285c */		}
+/* 00022862 */		if (DownKeyClick.IsKeyTrigger())
+/* 00022874 */		{
+/* 00022874 */			Focus = 11;
+/* 0002287e */		}
+/* 00022884 */		if (PageUpKeyClick.IsKeyTrigger())
+/* 00022896 */		{
+/* 00022896 */			Focus = 12;
+/* 000228a0 */		}
+/* 000228a6 */		if (PageDownKeyClick.IsKeyTrigger())
+/* 000228b8 */		{
+/* 000228b8 */			Focus = 13;
+/* 000228c2 */		}
+/* 000228c8 */		if (UpJoyClick.IsKeyTrigger())
+/* 000228da */		{
+/* 000228da */			Focus = 20;
+/* 000228e4 */		}
+/* 000228ea */		if (DownJoyClick.IsKeyTrigger())
+/* 000228fc */		{
+/* 000228fc */			Focus = 21;
+/* 00022906 */		}
+/* 0002290c */		if (PageUpJoyClick.IsKeyTrigger())
+/* 0002291e */		{
+/* 0002291e */			Focus = 22;
+/* 00022928 */		}
+/* 0002292e */		if (PageDownJoyClick.IsKeyTrigger())
+/* 00022940 */		{
+/* 00022940 */			Focus = 23;
+/* 0002294a */		}
+/* 00022950 */		if (UpKeyPress.IsKeyPress(-2147483648) && Focus == 10)
+/* 0002298e */		{
+/* 0002298e */			nDelta -= 1;
+/* 00022998 */		}
+/* 0002299e */		if (DownKeyPress.IsKeyPress(-2147483648) && Focus == 11)
+/* 000229dc */		{
+/* 000229dc */			if (int(ViewTextLine) >= this.m_ScrollTotalLines)
+/* 000229f2 */			{
+/* 000229f2 */				while (AFL_IsKeyDown(40))
+/* 00022a04 */				{
+/* 00022a04 */					AFL_View_Update(true);
+/* 00022a10 */				}
+/* 00022a16 */				break;
+/* 00022a22 */			}
+/* 00022a28 */			nDelta += 1;
+/* 00022a3a */		}
+/* 00022a40 */		if (UpJoyPress.IsKeyPress() && Focus == 20)
+/* 00022a78 */		{
+/* 00022a78 */			nDelta -= 1;
+/* 00022a82 */		}
+/* 00022a88 */		if (DownJoyPress.IsKeyPress() && Focus == 21)
+/* 00022ac0 */		{
+/* 00022ac0 */			nDelta += 1;
+/* 00022ad2 */		}
+/* 00022ad8 */		if (PageUpKeyPress.IsKeyPress(-2147483648) && Focus == 12)
+/* 00022b16 */		{
+/* 00022b16 */			nDelta -= this.m_LinesPerPage - 1;
+/* 00022b30 */		}
+/* 00022b36 */		if (PageDownKeyPress.IsKeyPress(-2147483648) && Focus == 13)
+/* 00022b74 */		{
+/* 00022b74 */			nDelta += this.m_LinesPerPage - 1;
+/* 00022b8e */		}
+/* 00022b94 */		if (PageUpJoyPress.IsKeyPress() && Focus == 22)
+/* 00022bcc */		{
+/* 00022bcc */			nDelta -= this.m_LinesPerPage - 1;
+/* 00022be6 */		}
+/* 00022bec */		if (PageDownJoyPress.IsKeyPress() && Focus == 23)
+/* 00022c24 */		{
+/* 00022c24 */			nDelta += this.m_LinesPerPage - 1;
+/* 00022c3e */		}
+/* 00022c44 */		if (RButtonClick.IsClick(-2147483648))
+/* 00022c5c */		{
+/* 00022c5c */			break;
+/* 00022c68 */		}
+/* 00022c6e */		if (SpaceKeyClick.IsClick(-2147483648))
+/* 00022c86 */		{
+/* 00022c86 */			break;
+/* 00022c92 */		}
+/* 00022c98 */		if (EscapeKeyClick.IsClick(-2147483648))
+/* 00022cb0 */		{
+/* 00022cb0 */			break;
+/* 00022cbc */		}
+/* 00022cc2 */		if (JoyCancelClick.IsClick(-2147483648))
+/* 00022cda */		{
+/* 00022cda */			break;
+/* 00022ce6 */		}
+/* 00022cec */		if (LButtonClick.IsKeyDown() || JoyOkClick.IsClick(-2147483648) || EnterKeyClick.IsClick(-2147483648))
+/* 00022d5e */		{
+/* 00022d5e */			nDelta = 0;
+/* 00022d68 */			if (DragThumb)
+/* 00022d74 */			{
+/* 00022d74 */				this.UpdateScrollPosByMousePos(ViewTextLine);
+/* 00022d84 */			}
+/* 00022d8a */			else if (this.IsScrollBoxAreaUnderCursor() && (KeyDownObject == 0 || KeyDownObject == 1))
+/* 00022df0 */			{
+/* 00022df0 */				this.PlayDecideSound();
+/* 00022df8 */				DragThumb = true;
+/* 00022e02 */				this.BeginDragScrollBox();
+/* 00022e0a */				this.UpdateScrollPosByMousePos(ViewTextLine);
+/* 00022e1a */				KeyDownObject = 1;
+/* 00022e24 */			}
+/* 00022e2a */			else if (!DragThumb && this.IsUpButtonUnderCursor() && (KeyDownObject == 0 || KeyDownObject == 2))
+/* 00022eb6 */			{
+/* 00022eb6 */				if (!bDelay)
+/* 00022ec4 */				{
+/* 00022ec4 */					this.PlayDecideSound();
+/* 00022ecc */				}
+/* 00022ed2 */				bDelay = true;
+/* 00022edc */				nDelta -= 1;
+/* 00022ee6 */				KeyDownObject = 2;
+/* 00022ef0 */			}
+/* 00022ef6 */			else if (!DragThumb && this.IsDownButtonUnderCursor() && (KeyDownObject == 0 || KeyDownObject == 3))
+/* 00022f82 */			{
+/* 00022f82 */				if (!bDelay)
+/* 00022f90 */				{
+/* 00022f90 */					this.PlayDecideSound();
+/* 00022f98 */				}
+/* 00022f9e */				bDelay = true;
+/* 00022fa8 */				nDelta += 1;
+/* 00022fba */				KeyDownObject = 3;
+/* 00022fc4 */			}
+/* 00022fca */			else if (Index >= 0)
+/* 00022fd8 */			{
+/* 00022fd8 */				SBackLogViewText sld;
+/* 00022fe8 */				sld = this.GetBacklog(Index);
+/* 00023006 */				if (this.PlayVoice(sld.VoiceNumberList))
+/* 00023022 */				{
+/* 00023022 */					bVoicePlaying = true;
+/* 0002302c */					nVoicePlayingIndex = Index;
+/* 0002303e */					this.m_Redraw = true;
+/* 00023048 */				}
+/* 0002304e */			}
+/* 0002305a */		}
+/* 00023060 */		else
+/* 00023060 */		{
+/* 00023060 */			bDelay = false;
+/* 0002306a */			bDelayOn = false;
+/* 00023074 */			DragThumb = false;
+/* 0002307e */			KeyDownObject = 0;
+/* 00023088 */		}
+/* 00023088 */		this.CheckShiftCKey(ViewTextLine);
+/* 00023098 */		ViewTextLine += nDelta;
+/* 000230ac */		this.ClipScrollPos(ViewTextLine);
+/* 000230bc */		if (!DragThumb && nPrevViewTextLine != ViewTextLine)
+/* 000230f6 */		{
+/* 000230f6 */			this.UpdateScrollBoxPosByViewTextLine(ViewTextLine);
+/* 00023104 */		}
+/* 0002310a */		if (nPrevViewTextLine != ViewTextLine)
+/* 0002311e */		{
+/* 0002311e */			this.m_Redraw = true;
+/* 00023128 */		}
+/* 0002312e */		if (this.CheckPlayingVoice())
+/* 0002313c */		{
+/* 0002313c */			bVoicePlaying = false;
+/* 00023146 */			this.m_Redraw = true;
+/* 00023150 */		}
+/* 00023156 */	}
+/* 0002315c */	this.PlayCancelSound();
+/* 00023164 */}
+
+bool CBackLogView::IsScrollBoxAreaUnderCursor()
+/* 0002316c */{
+/* 0002316c */	int X;
+/* 00023176 */	int Y;
+/* 00023180 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 0002319e */	{
+/* 0002319e */		return false;
+/* 000231a6 */	}
+/* 000231ac */	if (X >= this.m_BackLogModel.GetScrollBoxAreaX() && X < this.m_BackLogModel.GetScrollBoxAreaX() + this.m_BackLogModel.GetScrollBoxAreaWidth() && Y >= this.m_BackLogModel.GetScrollBoxAreaY() && Y < this.m_BackLogModel.GetScrollBoxAreaY() + this.m_BackLogModel.GetScrollBoxAreaHeight())
+/* 00023278 */	{
+/* 00023278 */		return true;
+/* 00023280 */	}
+/* 00023286 */	return false;
+/* 0002328e */}
+
+void CBackLogView::BeginDragScrollBox()
+/* 0002329c */{
+/* 0002329c */	if (this.m_ScrollBoxPartsList.Empty())
+/* 000232a6 */	{
+/* 000232a6 */		return;
+/* 000232a8 */	}
+/* 000232ae */	int X;
+/* 000232b8 */	int Y;
+/* 000232c2 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 000232e0 */	{
+/* 000232e0 */		return;
+/* 000232e2 */	}
+/* 000232e8 */	this.m_PrevDragScrollBoxMouseY = Y;
+/* 000232f2 */	this.m_OffsetInScrollBoxY = Y - this.m_ScrollBoxPartsList[0].GetY();
+/* 0002331a */	if (this.m_OffsetInScrollBoxY < 0 || this.m_OffsetInScrollBoxY >= this.m_ScrollBoxPartsList[0].GetHeight(1))
+/* 0002336e */	{
+/* 0002336e */		this.m_OffsetInScrollBoxY = this.m_ScrollBoxPartsList[0].GetHeight(1) / 2;
+/* 0002339c */		this.m_PrevDragScrollBoxMouseY = -1;
+/* 000233ae */	}
+/* 000233b4 */}
+
+void CBackLogView::UpdateScrollPosByMousePos(ref float ViewTextLine)
+/* 000233bc */{
+/* 000233bc */	if (this.m_ScrollBoxPartsList.Empty())
+/* 000233c6 */	{
+/* 000233c6 */		return;
+/* 000233c8 */	}
+/* 000233ce */	int X;
+/* 000233d8 */	int Y;
+/* 000233e2 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00023400 */	{
+/* 00023400 */		return;
+/* 00023402 */	}
+/* 00023408 */	if (this.m_PrevDragScrollBoxMouseY == Y)
+/* 00023416 */	{
+/* 00023416 */		return;
+/* 00023418 */	}
+/* 0002341e */	int nOffsetY = Y - this.m_OffsetInScrollBoxY;
+/* 00023438 */	if (nOffsetY < this.m_BackLogModel.GetScrollBoxAreaY())
+/* 00023452 */	{
+/* 00023452 */		nOffsetY = this.m_BackLogModel.GetScrollBoxAreaY();
+/* 0002346a */	}
+/* 00023470 */	else if (nOffsetY >= (this.m_BackLogModel.GetScrollBoxAreaY() + this.m_BackLogModel.GetScrollBoxAreaHeight()) - this.m_ScrollBoxPartsList[0].GetHeight(1))
+/* 000234b4 */	{
+/* 000234b4 */		nOffsetY = (this.m_BackLogModel.GetScrollBoxAreaY() + this.m_BackLogModel.GetScrollBoxAreaHeight()) - this.m_ScrollBoxPartsList[0].GetHeight(1);
+/* 000234f6 */	}
+/* 000234fc */	int n;
+/* 00023506 */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 00023536 */	{
+/* 00023536 */		this.m_ScrollBoxPartsList[n].SetPos(this.m_BackLogModel.GetScrollBoxAreaX(), nOffsetY);
+/* 0002355c */	}
+/* 00023562 */	int ScrollBoxHeight = this.m_ScrollBoxPartsList[0].GetHeight(1);
+/* 00023588 */	ViewTextLine = float(this.m_ScrollTotalLines * (nOffsetY - this.m_BackLogModel.GetScrollBoxAreaY())) / float(this.m_BackLogModel.GetScrollBoxAreaHeight() - ScrollBoxHeight);
+/* 000235cc */	this.ClipScrollPos(ViewTextLine);
+/* 000235da */	this.m_PrevDragScrollBoxMouseY = Y;
+/* 000235e4 */}
+
+void CBackLogView::UpdateScrollBoxPosByViewTextLine(float ViewTextLine)
+/* 000235ec */{
+/* 000235ec */	if (this.m_ScrollBoxPartsList.Empty())
+/* 000235f6 */	{
+/* 000235f6 */		return;
+/* 000235f8 */	}
+/* 000235fe */	int ScrollBoxY = this.m_BackLogModel.GetScrollBoxAreaY() + ((this.m_BackLogModel.GetScrollBoxAreaHeight() - this.m_ScrollBoxPartsList[0].GetHeight(1)) * ViewTextLine) / this.m_ScrollTotalLines;
+/* 00023660 */	int n;
+/* 0002366a */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 0002369a */	{
+/* 0002369a */		this.m_ScrollBoxPartsList[n].SetPos(this.m_BackLogModel.GetScrollBoxAreaX(), ScrollBoxY);
+/* 000236c0 */	}
+/* 000236c6 */}
+
+void CBackLogView::UpdateScrollBox(bool Dragging, bool LButtonDown)
+/* 000236ce */{
+/* 000236ce */	bool OnCursor = this.IsMouseCursorInRectScrollBox();
+/* 000236e2 */	if (!Dragging && OnCursor && this.m_ScrollBoxState == 0)
+/* 0002373a */	{
+/* 0002373a */		this.PlayOnCursorSound();
+/* 00023742 */	}
+/* 00023748 */	if (Dragging)
+/* 00023754 */	{
+/* 00023754 */		this.m_ScrollBoxState = 2;
+/* 0002375e */	}
+/* 00023764 */	else
+/* 00023764 */	{
+/* 00023764 */		this.m_ScrollBoxState = this.GetButtonState(OnCursor, LButtonDown);
+/* 00023784 */	}
+/* 00023784 */	this.SetShowScrollBox(this.m_ScrollBoxShow);
+/* 00023792 */}
+
+bool CBackLogView::IsMouseCursorInRectScrollBox()
+/* 0002379a */{
+/* 0002379a */	int X;
+/* 000237a4 */	int Y;
+/* 000237ae */	if (!AFL_Mouse_GetPos(X, Y))
+/* 000237cc */	{
+/* 000237cc */		return false;
+/* 000237d4 */	}
+/* 000237da */	int n;
+/* 000237e4 */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 00023814 */	{
+/* 00023814 */		Ｐ＿ピクセル判定設定(this.m_ScrollBoxPartsList[n].GetPartsNumber(), false);
+/* 00023834 */		if (AFL_Parts_IsPointIn(this.m_ScrollBoxPartsList[n].GetPartsNumber(), X, Y, 1))
+/* 00023866 */		{
+/* 00023866 */			return true;
+/* 0002386e */		}
+/* 00023874 */	}
+/* 0002387a */	return false;
+/* 00023882 */}
+
+void CBackLogView::SetShowScrollBox(bool Show)
+/* 00023890 */{
+/* 00023890 */	int n;
+/* 0002389a */	for (n = 0; n < this.m_ScrollBoxPartsList.Numof(); ++n)
+/* 000238ca */	{
+/* 000238ca */		this.m_ScrollBoxPartsList[n].SetShow(Show && this.m_ScrollBoxState == n);
+/* 0002390c */	}
+/* 00023912 */	this.m_ScrollBoxShow = Show;
+/* 0002391c */}
+
+int CBackLogView::GetButtonState(bool OnCursor, bool LButtonDown)
+/* 00023924 */{
+/* 00023924 */	if (OnCursor)
+/* 00023930 */	{
+/* 00023930 */		if (LButtonDown)
+/* 0002393c */		{
+/* 0002393c */			return 2;
+/* 00023944 */		}
+/* 0002394a */		return 1;
+/* 00023952 */	}
+/* 00023958 */	return 0;
+/* 00023960 */}
+
+bool CBackLogView::CheckReturnButton(bool Dragging)
+/* 0002396e */{
+/* 0002396e */	bool OnCursor = !Dragging && this.IsMouseCursorInRectExitButton();
+/* 000239aa */	if (OnCursor && this.m_ExitButtonState == 0)
+/* 000239dc */	{
+/* 000239dc */		this.PlayOnCursorSound();
+/* 000239e4 */	}
+/* 000239ea */	this.m_ExitButtonState = this.GetButtonState(OnCursor, this.m_ExitButtonLButtonClick.IsKeyDown());
+/* 00023a10 */	int n;
+/* 00023a1a */	for (n = 0; n < this.m_ExitButtonList.Numof(); ++n)
+/* 00023a4a */	{
+/* 00023a4a */		this.m_ExitButtonList[n].SetShow(this.m_ExitButtonState == n);
+/* 00023a6e */	}
+/* 00023a74 */	if (this.m_ExitButtonLButtonClick.IsClick(OnCursor ? 1 : 0) && OnCursor)
+/* 00023ac8 */	{
+/* 00023ac8 */		return false;
+/* 00023ad0 */	}
+/* 00023ad6 */	return true;
+/* 00023ade */}
+
+bool CBackLogView::IsMouseCursorInRectExitButton()
+/* 00023aec */{
+/* 00023aec */	int X;
+/* 00023af6 */	int Y;
+/* 00023b00 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00023b1e */	{
+/* 00023b1e */		return false;
+/* 00023b26 */	}
+/* 00023b2c */	int n;
+/* 00023b36 */	for (n = 0; n < this.m_ExitButtonList.Numof(); ++n)
+/* 00023b66 */	{
+/* 00023b66 */		Ｐ＿ピクセル判定設定(this.m_ExitButtonList[n].GetPartsNumber(), false);
+/* 00023b86 */		if (AFL_Parts_IsPointIn(this.m_ExitButtonList[n].GetPartsNumber(), X, Y, 1))
+/* 00023bb8 */		{
+/* 00023bb8 */			return true;
+/* 00023bc0 */		}
+/* 00023bc6 */	}
+/* 00023bcc */	return false;
+/* 00023bd4 */}
+
+bool CBackLogView::IsUpButtonUnderCursor()
+/* 00023be2 */{
+/* 00023be2 */	if (this.m_BackLogModel.GetUpButtonCG().Empty())
+/* 00023bf6 */	{
+/* 00023bf6 */		return false;
+/* 00023bfe */	}
+/* 00023c04 */	int X;
+/* 00023c0e */	int Y;
+/* 00023c18 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00023c36 */	{
+/* 00023c36 */		return false;
+/* 00023c3e */	}
+/* 00023c44 */	int n;
+/* 00023c4e */	for (n = 0; n < this.m_UpButtonPartsList.Numof(); ++n)
+/* 00023c7e */	{
+/* 00023c7e */		Ｐ＿ピクセル判定設定(this.m_UpButtonPartsList[n].GetPartsNumber(), false);
+/* 00023c9e */		if (AFL_Parts_IsPointIn(this.m_UpButtonPartsList[n].GetPartsNumber(), X, Y, 1))
+/* 00023cd0 */		{
+/* 00023cd0 */			return true;
+/* 00023cd8 */		}
+/* 00023cde */	}
+/* 00023ce4 */	return false;
+/* 00023cec */}
+
+void CBackLogView::UpdateUpButton(int ViewTextLine, bool Dragging, bool LButtonDown)
+/* 00023cfa */{
+/* 00023cfa */	if (this.m_BackLogModel.GetUpButtonCG().Empty())
+/* 00023d0e */	{
+/* 00023d0e */		return;
+/* 00023d10 */	}
+/* 00023d16 */	if (ViewTextLine <= 0)
+/* 00023d24 */	{
+/* 00023d24 */		this.m_UpButtonState = 3;
+/* 00023d2e */	}
+/* 00023d34 */	else if (Dragging)
+/* 00023d40 */	{
+/* 00023d40 */		this.m_UpButtonState = 0;
+/* 00023d4a */	}
+/* 00023d50 */	else
+/* 00023d50 */	{
+/* 00023d50 */		bool OnCursor = this.IsUpButtonUnderCursor();
+/* 00023d64 */		if (OnCursor && this.m_UpButtonState == 0)
+/* 00023d96 */		{
+/* 00023d96 */			this.PlayOnCursorSound();
+/* 00023d9e */		}
+/* 00023da4 */		this.m_UpButtonState = this.GetButtonState(OnCursor, LButtonDown);
+/* 00023dc4 */	}
+/* 00023dc4 */	int n;
+/* 00023dce */	for (n = 0; n < this.m_UpButtonPartsList.Numof(); ++n)
+/* 00023dfe */	{
+/* 00023dfe */		this.m_UpButtonPartsList[n].SetShow(n == this.m_UpButtonState);
+/* 00023e22 */	}
+/* 00023e28 */}
+
+bool CBackLogView::IsDownButtonUnderCursor()
+/* 00023e30 */{
+/* 00023e30 */	if (this.m_BackLogModel.GetDownButtonCG().Empty())
+/* 00023e44 */	{
+/* 00023e44 */		return false;
+/* 00023e4c */	}
+/* 00023e52 */	int X;
+/* 00023e5c */	int Y;
+/* 00023e66 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00023e84 */	{
+/* 00023e84 */		return false;
+/* 00023e8c */	}
+/* 00023e92 */	int n;
+/* 00023e9c */	for (n = 0; n < this.m_DownButtonPartsList.Numof(); ++n)
+/* 00023ecc */	{
+/* 00023ecc */		Ｐ＿ピクセル判定設定(this.m_DownButtonPartsList[n].GetPartsNumber(), false);
+/* 00023eec */		if (AFL_Parts_IsPointIn(this.m_DownButtonPartsList[n].GetPartsNumber(), X, Y, 1))
+/* 00023f1e */		{
+/* 00023f1e */			return true;
+/* 00023f26 */		}
+/* 00023f2c */	}
+/* 00023f32 */	return false;
+/* 00023f3a */}
+
+void CBackLogView::UpdateDownButton(int ViewTextLine, bool Dragging, bool LButtonDown)
+/* 00023f48 */{
+/* 00023f48 */	if (this.m_BackLogModel.GetDownButtonCG().Empty())
+/* 00023f5c */	{
+/* 00023f5c */		return;
+/* 00023f5e */	}
+/* 00023f64 */	if (ViewTextLine >= this.m_ScrollTotalLines)
+/* 00023f78 */	{
+/* 00023f78 */		this.m_DownButtonState = 3;
+/* 00023f82 */	}
+/* 00023f88 */	else if (Dragging)
+/* 00023f94 */	{
+/* 00023f94 */		this.m_DownButtonState = 0;
+/* 00023f9e */	}
+/* 00023fa4 */	else
+/* 00023fa4 */	{
+/* 00023fa4 */		bool OnCursor = this.IsDownButtonUnderCursor();
+/* 00023fb8 */		if (OnCursor && this.m_DownButtonState == 0)
+/* 00023fea */		{
+/* 00023fea */			this.PlayOnCursorSound();
+/* 00023ff2 */		}
+/* 00023ff8 */		this.m_DownButtonState = this.GetButtonState(OnCursor, LButtonDown);
+/* 00024018 */	}
+/* 00024018 */	int n;
+/* 00024022 */	for (n = 0; n < this.m_DownButtonPartsList.Numof(); ++n)
+/* 00024052 */	{
+/* 00024052 */		this.m_DownButtonPartsList[n].SetShow(n == this.m_DownButtonState);
+/* 00024076 */	}
+/* 0002407c */}
+
+int CBackLogView::get_index_at_mouse_pos(int Top)
+/* 00024084 */{
+/* 00024084 */	int X;
+/* 0002408e */	int Y;
+/* 00024098 */	if (!AFL_Mouse_GetPos(X, Y))
+/* 000240b6 */	{
+/* 000240b6 */		return -1;
+/* 000240be */	}
+/* 000240c4 */	int n;
+/* 000240ce */	for (n = 0; n < this.m_VoiceDecideRectList.Numof(); ++n)
+/* 000240fe */	{
+/* 000240fe */		if (this.m_VoiceDecideRectList[n].IsIn(X, Y))
+/* 00024124 */		{
+/* 00024124 */			return Top + n;
+/* 00024134 */		}
+/* 0002413a */	}
+/* 00024140 */	return -1;
+/* 00024148 */}
+
+void CBackLogView::CreateBacklogTextList()
+/* 00024156 */{
+/* 00024156 */	this.m_LogTextList.Free();
+/* 00024160 */	int NumofADVLog = AnteaterADVEngine.ADVLogList_GetNumofADVLog();
+/* 00024176 */	int i;
+/* 00024180 */	for (i = 0; i < NumofADVLog; ++i)
+/* 000241b0 */	{
+/* 000241b0 */		this.AddBacklogText(i);
+/* 000241be */	}
+/* 000241c4 */}
+
+void CBackLogView::AddBacklogText(int ADVLog)
+/* 000241cc */{
+/* 000241cc */	int NumofVoice = AnteaterADVEngine.ADVLogList_GetNumofADVLogVoice(ADVLog);
+/* 000241e8 */	array@int VoiceNumberList;
+/* 000241f2 */	int VoiceIndex;
+/* 000241fc */	for (VoiceIndex = 0; VoiceIndex < NumofVoice; ++VoiceIndex)
+/* 0002422c */	{
+/* 0002422c */		int VoiceNumber = AnteaterADVEngine.ADVLogList_GetADVLogVoice(ADVLog, VoiceIndex);
+/* 0002424e */		VoiceNumberList.PushBack(VoiceNumber);
+/* 0002425e */	}
+/* 00024264 */	int NumofText = AnteaterADVEngine.ADVLogList_GetNumofADVLogText(ADVLog);
+/* 00024280 */	int i;
+/* 0002428a */	for (i = 0; i < NumofText; ++i)
+/* 000242ba */	{
+/* 000242ba */		SBackLogViewText BackLogViewText;
+/* 000242ca */		AnteaterADVEngine.ADVLogList_GetADVLogText(ADVLog, i, BackLogViewText.m_Text);
+/* 000242ee */		BackLogViewText.VoiceNumberList.Alloc(VoiceNumberList.Numof());
+/* 00024312 */		BackLogViewText.VoiceNumberList.Copy(0, VoiceNumberList, 0, VoiceNumberList.Numof());
+/* 00024344 */		this.m_LogTextList.PushBack(BackLogViewText);
+/* 0002434e */	}
+/* 0002435a */	SBackLogViewText SeparatorData;
+/* 0002436a */	SeparatorData.m_Separator = true;
+/* 00024380 */	this.m_LogTextList.PushBack(SeparatorData);
+/* 0002438a */}
+
+SBackLogViewText CBackLogView::GetBacklog(int Num)
+/* 00024392 */{
+/* 00024392 */	if (Num < 0 || Num >= this.m_LogTextList.Numof())
+/* 000243cc */	{
+/* 000243cc */		SBackLogViewText DummyData;
+/* 000243dc */		return DummyData;
+/* 000243ec */	}
+/* 000243f8 */	return this.m_LogTextList[Num];
+/* 0002440c */}
+
+void CBackLogView::PlayDecideSound()
+/* 0002441a */{
+/* 0002441a */	if (this.m_BackLogModel.GetDecideSound() == -2147483648)
+/* 00024434 */	{
+/* 00024434 */		return;
+/* 00024436 */	}
+/* 0002443c */	システム効果音(this.m_BackLogModel.GetDecideSound());
+/* 0002444e */}
+
+void CBackLogView::PlayOnCursorSound()
+/* 00024456 */{
+/* 00024456 */	if (this.m_BackLogModel.GetUnderCursorSound() == -2147483648)
+/* 00024470 */	{
+/* 00024470 */		return;
+/* 00024472 */	}
+/* 00024478 */	システム効果音(this.m_BackLogModel.GetUnderCursorSound());
+/* 0002448a */}
+
+void CBackLogView::PlayCancelSound()
+/* 00024492 */{
+/* 00024492 */	if (this.m_BackLogModel.GetCancelSound() == -2147483648)
+/* 000244ac */	{
+/* 000244ac */		return;
+/* 000244ae */	}
+/* 000244b4 */	システム効果音(this.m_BackLogModel.GetCancelSound());
+/* 000244c6 */}
+
+void CBackLogView::ClipScrollPos(ref float ScrollPos)
+/* 000244ce */{
+/* 000244ce */	if (ScrollPos < 0.0)
+/* 000244e4 */	{
+/* 000244e4 */		ScrollPos = 0.0;
+/* 000244f4 */	}
+/* 000244fa */	else if (int(ScrollPos) > this.m_ScrollTotalLines)
+/* 00024512 */	{
+/* 00024512 */		ScrollPos = this.m_ScrollTotalLines;
+/* 00024524 */	}
+/* 0002452a */}
+
+void CBackLogView::CheckShiftCKey(int ViewTextLine)
+/* 00024532 */{
+/* 00024532 */	if (!system.IsDebugMode())
+/* 00024540 */	{
+/* 00024540 */		return;
+/* 00024542 */	}
+/* 00024548 */	if (AFL_IsKeyDown(16) && AFL_IsKeyDown(67))
+/* 00024584 */	{
+/* 00024584 */		this.m_ShiftCKeyDown = true;
+/* 0002458e */	}
+/* 00024594 */	else if (this.m_ShiftCKeyDown)
+/* 0002459e */	{
+/* 0002459e */		this.m_ShiftCKeyDown = false;
+/* 000245a8 */		this.DebugOutputMessageText(ViewTextLine);
+/* 000245b6 */		this.DebugMessageTextToClipboard(ViewTextLine);
+/* 000245c4 */	}
+/* 000245ca */}
+
+void CBackLogView::DebugOutputMessageText(int ViewTextLineIndex)
+/* 000245d2 */{
+/* 000245d2 */	if (!system.IsDebugMode())
+/* 000245e0 */	{
+/* 000245e0 */		return;
+/* 000245e2 */	}
+/* 000245e8 */	system.Output("--------MessageBegin--------\n");
+/* 000245f6 */	int TotalLines = this.m_LogTextList.Numof();
+/* 00024608 */	int Index;
+/* 00024612 */	for (Index = 0; Index < this.m_TextPartsList.Numof(); ++Index)
+/* 00024642 */	{
+/* 00024642 */		int LogIndex = ViewTextLineIndex + Index;
+/* 0002465c */		if (LogIndex >= 0 && LogIndex < TotalLines)
+/* 00024696 */		{
+/* 00024696 */			SBackLogViewText LogData;
+/* 000246a6 */			LogData = this.GetBacklog(LogIndex);
+/* 000246c4 */			if (LogData.m_Separator)
+/* 000246d8 */			{
+/* 000246d8 */				system.Output("\n");
+/* 000246e6 */			}
+/* 000246ec */			else
+/* 000246ec */			{
+/* 000246ec */				system.Output(LogData.m_Text + "\n");
+/* 0002470a */			}
+/* 0002470a */		}
+/* 00024716 */	}
+/* 0002471c */	system.Output("--------MessageEnd----------\n");
+/* 0002472a */}
+
+void CBackLogView::DebugMessageTextToClipboard(int ViewTextLineIndex)
+/* 00024732 */{
+/* 00024732 */	if (!system.IsDebugMode())
+/* 00024740 */	{
+/* 00024740 */		return;
+/* 00024742 */	}
+/* 00024748 */	string Text;
+/* 00024754 */	Text += "--------MessageBegin--------\r\n";
+/* 00024764 */	int TotalLines = this.m_LogTextList.Numof();
+/* 00024776 */	int Index;
+/* 00024780 */	for (Index = 0; Index < this.m_TextPartsList.Numof(); ++Index)
+/* 000247b0 */	{
+/* 000247b0 */		int LogIndex = ViewTextLineIndex + Index;
+/* 000247ca */		if (LogIndex >= 0 && LogIndex < TotalLines)
+/* 00024804 */		{
+/* 00024804 */			SBackLogViewText LogData;
+/* 00024814 */			LogData = this.GetBacklog(LogIndex);
+/* 00024832 */			if (LogData.m_Separator)
+/* 00024846 */			{
+/* 00024846 */				Text += "\n";
+/* 00024856 */			}
+/* 0002485c */			else
+/* 0002485c */			{
+/* 0002485c */				Text += LogData.m_Text + "\r\n";
+/* 0002487c */			}
+/* 0002487c */		}
+/* 00024888 */	}
+/* 0002488e */	Text += "--------MessageEnd----------\r\n";
+/* 0002489e */	SYS_Clipboard_SetText(Text);
+/* 000248aa */}
+

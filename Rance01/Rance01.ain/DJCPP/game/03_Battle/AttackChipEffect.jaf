@@ -1,0 +1,192 @@
+AttackChipEffect::AttackChipEffect()
+/* 000733e0 */{
+/* 000733e8 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0007340a */}
+
+void AttackChipEffect::init(ref array@string chipImageName, bool isPlayer, bool isCritical)
+/* 00073412 */{
+/* 00073412 */	this.isPlayer_ = isPlayer;
+/* 0007341c */	this.isCritical_ = isCritical;
+/* 00073426 */	this.initChipImage(chipImageName);
+/* 00073434 */	this.partsEffect_.init("仮／集中線／" + (this.isPlayer_ ? "敵" : "味方"), 0);
+/* 0007346a */	this.partsEffect_.setPos(-2147483648, -2147483648, 3500);
+/* 00073488 */}
+
+void AttackChipEffect::initChipImage(ref array@string chipImageName)
+/* 00073490 */{
+/* 00073490 */	this.partsChip_.Alloc(chipImageName.Numof());
+/* 000734b0 */	int i;
+/* 000734ba */	for (i = 0; i < this.partsChip_.Numof(); ++i)
+/* 000734ea */	{
+/* 000734ea */		int x;
+/* 000734f4 */		int y;
+/* 000734fe */		this.getChipFadeInFromPos(x, y, this.isPlayer_, i);
+/* 00073522 */		this.partsChip_[i].init(chipImageName[i], 0);
+/* 0007354a */		this.partsChip_[i].setPos(x, y, 4500);
+/* 00073570 */		this.partsChip_[i].setOrigin(5);
+/* 0007358a */	}
+/* 00073590 */}
+
+void AttackChipEffect::getChipAttackToPos(ref int x, ref int y, bool isPlayer)
+/* 00073598 */{
+/* 00073598 */	x = isPlayer ? 640 : 200;
+/* 000735c0 */	y = isPlayer ? 200 : 400;
+/* 000735e8 */}
+
+void AttackChipEffect::fadeIn(bool val)
+/* 000735f0 */{
+/* 000735f0 */	if (val)
+/* 000735fc */	{
+/* 000735fc */		int i;
+/* 00073606 */		for (i = 0; i < this.partsChip_.Numof(); ++i)
+/* 00073636 */		{
+/* 00073636 */			array@MotionInfomation m;
+/* 00073640 */			this.createFadeInMotion(m, i, this.partsChip_.Numof());
+/* 0007365a */			this.partsChip_[i].setShow(true);
+/* 00073674 */			this.partsChip_[i].runMotionArray(m);
+/* 0007368e */			this.state_ = 1;
+/* 000736a2 */		}
+/* 000736a8 */	}
+/* 000736ae */	else
+/* 000736ae */	{
+/* 000736ae */		if (this.state_ == 4)
+/* 000736bc */		{
+/* 000736bc */			return;
+/* 000736be */		}
+/* 000736c4 */		int i;
+/* 000736ce */		for (i = 0; i < this.partsChip_.Numof(); ++i)
+/* 000736fe */		{
+/* 000736fe */			this.partsChip_[i].runMotion(getStandardMotion(val ? 0 : 1));
+/* 00073736 */		}
+/* 0007373c */	}
+/* 0007373c */}
+
+void AttackChipEffect::createFadeInMotion(ref array@MotionInfomation m, int index, int count)
+/* 00073744 */{
+/* 00073744 */	m.Alloc(2);
+/* 0007375a */	int x;
+/* 00073764 */	int y;
+/* 0007376e */	this.getChipFadeInToPos(x, y, this.isPlayer_, index);
+/* 00073792 */	int span = Math.Min(1500 / count, 100 * index);
+/* 000737c4 */	m[0].setTime(span, 0);
+/* 000737e4 */	m[1].setTime(150, 0);
+/* 00073804 */	m[1].setMoveTo(x, y, 1);
+/* 0007382a */}
+
+void AttackChipEffect::attack()
+/* 00073832 */{
+/* 00073832 */	this.setChipAttackMotion();
+/* 0007383a */	this.setEffectMotion();
+/* 00073842 */	this.state_ = 3;
+/* 0007384c */}
+
+void AttackChipEffect::setChipAttackMotion()
+/* 00073854 */{
+/* 00073854 */	array@MotionInfomation m[3];
+/* 0007386a */	int toX;
+/* 00073874 */	int toY;
+/* 0007387e */	this.getChipAttackToPos(toX, toY, this.isPlayer_);
+/* 0007389c */	m[1].setTime(150, 0);
+/* 000738bc */	m[1].setSoundNumber(2070);
+/* 000738d6 */	m[2].setScaling(70, 500, 0);
+/* 000738fc */	m[2].setTime(100, 0);
+/* 0007391c */	m[2].setAlpha(255, 0, 0);
+/* 00073942 */	int i;
+/* 0007394c */	for (i = 0; i < this.partsChip_.Numof(); ++i)
+/* 0007397c */	{
+/* 0007397c */		m[0].setTime(i * 100, 0);
+/* 000739a4 */		m[1].setMoveTo(toX + RAND(100), toY + RAND(100), 1);
+/* 000739e6 */		m[1].setXFlip(0, 80, 1);
+/* 00073a0c */		m[1].setScaling(100, 70, 0);
+/* 00073a32 */		bool useCritical = this.isCritical_ && i == this.partsChip_.Numof() - 1;
+/* 00073a78 */		m[2].setSoundNumber(this.getHitSoundNumber(useCritical));
+/* 00073a9a */		this.partsChip_[i].runMotionArray(m);
+/* 00073ab4 */	}
+/* 00073aba */}
+
+void AttackChipEffect::setEffectMotion()
+/* 00073ac2 */{
+/* 00073ac2 */	array@MotionInfomation m;
+/* 00073acc */	m.Alloc(this.partsChip_.Numof() + 1);
+/* 00073aea */	m[0].setTime(150, 0);
+/* 00073b0a */	m[0].setAlpha(0, 0, 0);
+/* 00073b30 */	int i;
+/* 00073b3a */	for (i = 0; i < this.partsChip_.Numof(); ++i)
+/* 00073b6a */	{
+/* 00073b6a */		bool isLast = i == this.partsChip_.Numof() - 1;
+/* 00073b8e */		m[i + 1].setTime(isLast ? 500 : 100, 0);
+/* 00073bce */		m[i + 1].setAlpha(255, isLast ? 0 : 128, 0);
+/* 00073c14 */	}
+/* 00073c1a */	this.partsEffect_.setShow(true);
+/* 00073c2c */	this.partsEffect_.runMotionArray(m);
+/* 00073c3e */}
+
+void AttackChipEffect::update()
+/* 00073c46 */{
+/* 00073c46 */	switch (this.state_)
+/* 00073c58 */	{
+/* 00073c58 */	case 0:
+/* 00073c58 */		break;
+/* 00073c5e */	case 1:
+/* 00073c5e */		if (this.partsChip_.Numof() == 0 || !this.partsChip_[this.partsChip_.Numof() - 1].isMotion())
+/* 00073cae */		{
+/* 00073cae */			this.state_ = 2;
+/* 00073cb8 */		}
+/* 00073cbe */		break;
+/* 00073cc4 */	case 2:
+/* 00073cc4 */		break;
+/* 00073cca */	case 3:
+/* 00073cca */		if (this.partsChip_.Numof() == 0 || !this.partsChip_[this.partsChip_.Numof() - 1].isMotion())
+/* 00073d1a */		{
+/* 00073d1a */			this.state_ = 4;
+/* 00073d24 */		}
+/* 00073d2a */		break;
+/* 00073d30 */	case 4:
+/* 00073d30 */		break;
+/* 00073d36 */	}
+/* 00073d36 */}
+
+void AttackChipEffect::getChipFadeInFromPos(ref int x, ref int y, bool isPlayer, int index)
+/* 00073d3e */{
+/* 00073d3e */	x = isPlayer ? 140 : 740;
+/* 00073d66 */	y = isPlayer ? 440 : 340;
+/* 00073d8e */	x += isPlayer ? -300 : 300;
+/* 00073db6 */}
+
+void AttackChipEffect::getChipFadeInToPos(ref int x, ref int y, bool isPlayer, int index)
+/* 00073dbe */{
+/* 00073dbe */	x = isPlayer ? 140 : 740;
+/* 00073de6 */	y = isPlayer ? 440 : 340;
+/* 00073e0e */	if (isPlayer)
+/* 00073e1a */	{
+/* 00073e1a */		x += (this.partsChip_.Numof() - index - 1) * 40;
+/* 00073e42 */	}
+/* 00073e48 */	else
+/* 00073e48 */	{
+/* 00073e48 */		x += index * 70;
+/* 00073e60 */	}
+/* 00073e60 */}
+
+bool AttackChipEffect::isMotion()
+/* 00073e68 */{
+/* 00073e68 */	if (this.partsChip_.Numof() > 0)
+/* 00073e7c */	{
+/* 00073e7c */		return this.partsChip_[this.partsChip_.Numof() - 1].isMotion();
+/* 00073e9a */	}
+/* 00073ea0 */	return false;
+/* 00073ea8 */}
+
+int AttackChipEffect::getHitSoundNumber(bool isUseCritical)
+/* 00073eb6 */{
+/* 00073eb6 */	if (isUseCritical)
+/* 00073ec2 */	{
+/* 00073ec2 */		return this.isPlayer_ ? 2122 : 2125;
+/* 00073ee0 */	}
+/* 00073ee6 */	return this.isPlayer_ ? 2121 : 2124;
+/* 00073f04 */}
+
+void AttackChipEffect::setCritical(bool isCritical)
+/* 00073f12 */{
+/* 00073f12 */	this.isCritical_ = isCritical;
+/* 00073f1c */}
+

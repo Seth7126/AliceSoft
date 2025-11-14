@@ -1,0 +1,55 @@
+ConfigSampleMessage::ConfigSampleMessage()
+/* 0008670a */{
+/* 00086712 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00086734 */}
+
+void ConfigSampleMessage::setPos(int x, int y)
+/* 0008673c */{
+/* 0008673c */	this.parent_.setPos(x, y, -2147483648);
+/* 0008675a */}
+
+void ConfigSampleMessage::update()
+/* 00086762 */{
+/* 00086762 */	bool now = AFL_Config_GetShowSampleMessage();
+/* 00086774 */	if (now != this.last_)
+/* 00086788 */	{
+/* 00086788 */		this.timer_.Reset();
+/* 00086794 */	}
+/* 0008679a */	this.last_ = now;
+/* 000867a4 */	this.setChildPartsShowState();
+/* 000867ac */}
+
+void ConfigSampleMessage::init()
+/* 000867b4 */{
+/* 000867b4 */	string msg = "これはサンプルメッセージです。";
+/* 000867c0 */	this.parts_.Alloc(msg.Length());
+/* 000867da */	int i;
+/* 000867e4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00086814 */	{
+/* 00086814 */		this.parts_[i].initAsText(msg.GetPart(i, 1), 30, false, 256, 255, 255, 255);
+/* 00086860 */		this.parts_[i].setPos(i * 25, 0, -2147483648);
+/* 0008688e */	}
+/* 00086894 */	createPartsGroup(this.parent_, this.parts_, 0);
+/* 000868ac */	this.parent_.setShow(true);
+/* 000868be */}
+
+void ConfigSampleMessage::setChildPartsShowState()
+/* 000868c6 */{
+/* 000868c6 */	int showCount = AFL_Config_GetSampleMessageTextByElapsedTime(this.timer_.Get()).Length();
+/* 000868e6 */	int i;
+/* 000868f0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00086920 */	{
+/* 00086920 */		this.parts_[i].setShow(i < showCount && AFL_Config_GetShowSampleMessage());
+/* 00086968 */	}
+/* 0008696e */}
+
+void ConfigSampleMessage::setParent(int parentPartsNumber)
+/* 00086976 */{
+/* 00086976 */	this.parent_.setParent(parentPartsNumber);
+/* 00086988 */}
+
+void ConfigSampleMessage::setShow(bool val)
+/* 00086990 */{
+/* 00086990 */	this.parent_.setShow(val);
+/* 000869a2 */}
+

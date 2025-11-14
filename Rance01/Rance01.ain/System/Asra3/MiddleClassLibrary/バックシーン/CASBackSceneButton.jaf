@@ -1,0 +1,172 @@
+CASBackSceneButton::CASBackSceneButton()
+/* 00025464 */{
+/* 0002546e */}
+
+void CASBackSceneButton::CreateCGButton(string KeyUpCG, string KeyDownCG, string KeyUpOnCursorCG, string KeyDownOnCursorCG, string DisableCG)
+/* 00025474 */{
+/* 00025474 */	this.m_PartsList.Alloc(5);
+/* 0002548a */	int n;
+/* 00025494 */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 000254c4 */	{
+/* 000254c4 */		this.m_PartsList[n].Create();
+/* 000254d8 */		this.m_PartsList[n].SetShow(false);
+/* 000254f2 */	}
+/* 000254f8 */	this.m_PartsList[0].SetCG(KeyUpCG, 1);
+/* 00025518 */	this.m_PartsList[1].SetCG(KeyDownCG, 1);
+/* 00025538 */	this.m_PartsList[2].SetCG(KeyUpOnCursorCG, 1);
+/* 00025558 */	this.m_PartsList[3].SetCG(KeyDownOnCursorCG, 1);
+/* 00025578 */	this.m_PartsList[4].SetCG(DisableCG, 1);
+/* 00025598 */	this.m_PartsList[0].SetShow(true);
+/* 000255b2 */	this.m_bKeyDown = false;
+/* 000255bc */	this.m_bOnCursor = false;
+/* 000255c6 */	this.m_Show = true;
+/* 000255d0 */	this.m_bEnable = true;
+/* 000255da */	this.m_State = 0;
+/* 000255e4 */}
+
+void CASBackSceneButton::Release()
+/* 000255ec */{
+/* 000255ec */	this.m_PartsList.Free();
+/* 000255f6 */}
+
+void CASBackSceneButton::SetPos(int nX, int nY)
+/* 000255fe */{
+/* 000255fe */	int n;
+/* 00025608 */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 00025638 */	{
+/* 00025638 */		this.m_PartsList[n].SetPos(nX, nY);
+/* 00025658 */	}
+/* 0002565e */}
+
+void CASBackSceneButton::SetZ(int nZ)
+/* 00025666 */{
+/* 00025666 */	int n;
+/* 00025670 */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 000256a0 */	{
+/* 000256a0 */		this.m_PartsList[n].SetZ(nZ);
+/* 000256ba */	}
+/* 000256c0 */}
+
+void CASBackSceneButton::SetZByBaseZ(int nZ, int BaseZ)
+/* 000256c8 */{
+/* 000256c8 */	int n;
+/* 000256d2 */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 00025702 */	{
+/* 00025702 */		this.m_PartsList[n].SetZByBaseZ(nZ, BaseZ);
+/* 00025722 */	}
+/* 00025728 */}
+
+void CASBackSceneButton::SetShow(bool Show)
+/* 00025730 */{
+/* 00025730 */	int n;
+/* 0002573a */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 0002576a */	{
+/* 0002576a */		this.m_PartsList[n].SetShow(Show && n == this.m_State ? true : false);
+/* 000257c8 */	}
+/* 000257ce */	this.m_Show = Show;
+/* 000257d8 */}
+
+void CASBackSceneButton::SetEnable(bool bEnable)
+/* 000257e0 */{
+/* 000257e0 */	this.m_bEnable = bEnable;
+/* 000257ea */	if (!bEnable)
+/* 000257f8 */	{
+/* 000257f8 */		this.m_State = 4;
+/* 00025802 */		this.SetShow(this.m_Show);
+/* 00025810 */	}
+/* 00025816 */}
+
+bool CASBackSceneButton::IsEnable()
+/* 0002581e */{
+/* 0002581e */	return this.m_bEnable;
+/* 00025826 */}
+
+int CASBackSceneButton::GetWidth()
+/* 00025834 */{
+/* 00025834 */	if (this.m_PartsList.Empty())
+/* 0002583e */	{
+/* 0002583e */		return 0;
+/* 00025846 */	}
+/* 0002584c */	return this.m_PartsList[0].GetWidth(1);
+/* 00025868 */}
+
+int CASBackSceneButton::GetHeight()
+/* 00025876 */{
+/* 00025876 */	if (this.m_PartsList.Empty())
+/* 00025880 */	{
+/* 00025880 */		return 0;
+/* 00025888 */	}
+/* 0002588e */	return this.m_PartsList[0].GetHeight(1);
+/* 000258aa */}
+
+void CASBackSceneButton::UpdateState(bool CheckOnCursor)
+/* 000258b8 */{
+/* 000258b8 */	bool bKeyDown = AFL_IsKeyDown(1);
+/* 000258d0 */	bool bOnCursor = CheckOnCursor && this.IsMouseCursorIn();
+/* 0002590a */	if (!this.m_bEnable)
+/* 00025918 */	{
+/* 00025918 */		this.m_State = 4;
+/* 00025922 */	}
+/* 00025928 */	else if (bKeyDown && bOnCursor)
+/* 00025958 */	{
+/* 00025958 */		this.m_State = 3;
+/* 00025962 */	}
+/* 00025968 */	else if (!bKeyDown && bOnCursor)
+/* 0002599a */	{
+/* 0002599a */		this.m_State = 2;
+/* 000259a4 */	}
+/* 000259aa */	else
+/* 000259aa */	{
+/* 000259aa */		this.m_State = 0;
+/* 000259b4 */	}
+/* 000259b4 */	this.SetShow(this.m_Show);
+/* 000259c2 */}
+
+bool CASBackSceneButton::IsMouseCursorIn()
+/* 000259ca */{
+/* 000259ca */	if (!this.m_bEnable)
+/* 000259d8 */	{
+/* 000259d8 */		return false;
+/* 000259e0 */	}
+/* 000259e6 */	int X;
+/* 000259f0 */	int Y;
+/* 000259fa */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00025a18 */	{
+/* 00025a18 */		return false;
+/* 00025a20 */	}
+/* 00025a26 */	int n;
+/* 00025a30 */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 00025a60 */	{
+/* 00025a60 */		Ｐ＿ピクセル判定設定(this.m_PartsList[n].GetPartsNumber(), true);
+/* 00025a80 */		if (AFL_Parts_IsPointIn(this.m_PartsList[n].GetPartsNumber(), X, Y, 1))
+/* 00025ab2 */		{
+/* 00025ab2 */			return true;
+/* 00025aba */		}
+/* 00025ac0 */	}
+/* 00025ac6 */	return false;
+/* 00025ace */}
+
+bool CASBackSceneButton::IsMouseCursorInRect()
+/* 00025adc */{
+/* 00025adc */	if (!this.m_bEnable)
+/* 00025aea */	{
+/* 00025aea */		return false;
+/* 00025af2 */	}
+/* 00025af8 */	int X;
+/* 00025b02 */	int Y;
+/* 00025b0c */	if (!AFL_Mouse_GetPos(X, Y))
+/* 00025b2a */	{
+/* 00025b2a */		return false;
+/* 00025b32 */	}
+/* 00025b38 */	int n;
+/* 00025b42 */	for (n = 0; n < this.m_PartsList.Numof(); ++n)
+/* 00025b72 */	{
+/* 00025b72 */		Ｐ＿ピクセル判定設定(this.m_PartsList[n].GetPartsNumber(), false);
+/* 00025b92 */		if (AFL_Parts_IsPointIn(this.m_PartsList[n].GetPartsNumber(), X, Y, 1))
+/* 00025bc4 */		{
+/* 00025bc4 */			return true;
+/* 00025bcc */		}
+/* 00025bd2 */	}
+/* 00025bd8 */	return false;
+/* 00025be0 */}
+

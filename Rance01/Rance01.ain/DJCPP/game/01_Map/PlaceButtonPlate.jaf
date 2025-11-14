@@ -1,0 +1,86 @@
+PlaceButtonPlate::PlaceButtonPlate()
+/* 0006bb06 */{
+/* 0006bb0e */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006bb30 */}
+
+void PlaceButtonPlate::setPos(int x, int y)
+/* 0006bb38 */{
+/* 0006bb38 */	this.x_ = x + this.w_;
+/* 0006bb52 */	this.y_ = y + this.h_ / 2;
+/* 0006bb74 */	this.parent_.setPos(this.x_, this.y_, -2147483648);
+/* 0006bb92 */}
+
+void PlaceButtonPlate::init(string imageName)
+/* 0006bb9a */{
+/* 0006bb9a */	this.initParts(imageName);
+/* 0006bba8 */	this.setPartsOrigin();
+/* 0006bbb0 */	this.setSubPartsShowState();
+/* 0006bbb8 */}
+
+void PlaceButtonPlate::initParts(string imageName)
+/* 0006bbc0 */{
+/* 0006bbc0 */	this.parts_[0].init("システム／場所／名札／" + imageName, 0);
+/* 0006bbe8 */	this.w_ = this.parts_[0].getWidth() / 3;
+/* 0006bc10 */	this.h_ = this.parts_[0].getHeight();
+/* 0006bc30 */	this.parts_[1].initAsCgPlaneImage("システム／場所／名札／" + imageName, 255, 80, 0);
+/* 0006bc64 */	this.parts_[1].setAlpha(180);
+/* 0006bc7e */	this.parts_[1].setCgRange(0, 0, this.w_, this.h_);
+/* 0006bcaa */	createPartsGroup(this.parent_, this.parts_, 1300);
+/* 0006bcc2 */}
+
+void PlaceButtonPlate::setPartsOrigin()
+/* 0006bcca */{
+/* 0006bcca */	int i;
+/* 0006bcd4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0006bd04 */	{
+/* 0006bd04 */		this.parts_[i].setOrigin(6);
+/* 0006bd1e */	}
+/* 0006bd24 */	this.parent_.setOrigin(6);
+/* 0006bd36 */}
+
+void PlaceButtonPlate::setSubPartsShowState()
+/* 0006bd3e */{
+/* 0006bd3e */	this.parts_[0].setShow(true);
+/* 0006bd58 */	this.parts_[1].setShow(false);
+/* 0006bd72 */}
+
+void PlaceButtonPlate::setPartsShowType(int type, bool hover)
+/* 0006bd7a */{
+/* 0006bd7a */	this.parts_[0].setCgRange(this.w_ * type, 0, this.w_, this.h_);
+/* 0006bdae */	this.parts_[1].setShow(hover);
+/* 0006bdc8 */}
+
+void PlaceButtonPlate::fadeIn(bool val, int delay)
+/* 0006bdd0 */{
+/* 0006bdd0 */	this.parent_.setShow(true);
+/* 0006bde2 */	if (val)
+/* 0006bdee */	{
+/* 0006bdee */		array@MotionInfomation m[3];
+/* 0006be04 */		m[0].setTime(delay * 40, 0);
+/* 0006be2c */		m[0].setAlpha(0, 0, 0);
+/* 0006be52 */		m[1].setTime(300 + RAND(200), 0);
+/* 0006be80 */		m[1].setAlpha(0, 255, 0);
+/* 0006bea6 */		m[1].setMove(this.x_ - 200, this.y_, this.x_ + 10, this.y_, 1);
+/* 0006bee8 */		m[1].setScaling(130, 102, 0);
+/* 0006bf0e */		m[1].setYFlip(150, 20, 1);
+/* 0006bf34 */		m[2].setYFlip(20, 0, 0);
+/* 0006bf5a */		m[2].setTime(300 + RAND(300), 0);
+/* 0006bf88 */		m[2].setScaling(102, 100, 0);
+/* 0006bfae */		m[2].setMoveTo(this.x_, this.y_, 2);
+/* 0006bfd4 */		this.parent_.runMotionArray(m);
+/* 0006bff0 */	}
+/* 0006bff6 */	else
+/* 0006bff6 */	{
+/* 0006bff6 */		this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0006c026 */	}
+/* 0006c026 */}
+
+void PlaceButtonPlate::update()
+/* 0006c02e */{
+/* 0006c030 */}
+
+bool PlaceButtonPlate::isHover()
+/* 0006c036 */{
+/* 0006c036 */	return AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 0006c070 */}
+

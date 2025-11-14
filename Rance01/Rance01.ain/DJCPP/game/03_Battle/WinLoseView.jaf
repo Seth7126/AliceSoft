@@ -1,0 +1,100 @@
+WinLoseView::WinLoseView()
+/* 00074a40 */{
+/* 00074a48 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00074a6a */}
+
+void WinLoseView::init()
+/* 00074a72 */{
+/* 00074a72 */	this.initParts();
+/* 00074a7a */	this.setPartsPos();
+/* 00074a82 */	this.setPartsShow();
+/* 00074a8a */}
+
+void WinLoseView::update()
+/* 00074a92 */{
+/* 00074a92 */	switch (this.state_)
+/* 00074aa4 */	{
+/* 00074aa4 */	case 0:
+/* 00074aa4 */		break;
+/* 00074aaa */	case 1:
+/* 00074aaa */		if (this.isMotionFinish())
+/* 00074ab8 */		{
+/* 00074ab8 */			this.state_ = 2;
+/* 00074ac2 */		}
+/* 00074ac8 */		break;
+/* 00074ace */	case 2:
+/* 00074ace */		if (g_mouse.isClick(0))
+/* 00074ae6 */		{
+/* 00074ae6 */			this.fadeIn(false);
+/* 00074af4 */		}
+/* 00074afa */		break;
+/* 00074b00 */	case 3:
+/* 00074b00 */		if (this.isMotionFinish())
+/* 00074b0e */		{
+/* 00074b0e */			this.state_ = 0;
+/* 00074b18 */		}
+/* 00074b1e */		break;
+/* 00074b24 */	}
+/* 00074b24 */}
+
+void WinLoseView::fadeIn(bool val)
+/* 00074b2c */{
+/* 00074b2c */	if (this.isIgnoreFadeMotion(val))
+/* 00074b40 */	{
+/* 00074b40 */		return;
+/* 00074b42 */	}
+/* 00074b48 */	this.state_ = val ? 1 : 3;
+/* 00074b72 */	this.parent_.setShow(true);
+/* 00074b84 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 00074bb4 */}
+
+void WinLoseView::run(bool isWin)
+/* 00074bbc */{
+/* 00074bbc */	this.isWin_ = isWin;
+/* 00074bc6 */	this.init();
+/* 00074bce */	this.fadeIn(true);
+/* 00074bdc */}
+
+bool WinLoseView::isIgnoreFadeMotion(bool val)
+/* 00074be4 */{
+/* 00074be4 */	if (val && (this.state_ == 1 || this.state_ == 2))
+/* 00074c48 */	{
+/* 00074c48 */		return true;
+/* 00074c50 */	}
+/* 00074c56 */	else if (!val && (this.state_ == 3 || this.state_ == 0))
+/* 00074cbc */	{
+/* 00074cbc */		return true;
+/* 00074cc4 */	}
+/* 00074cca */	return false;
+/* 00074cd2 */}
+
+bool WinLoseView::isMotionFinish()
+/* 00074ce0 */{
+/* 00074ce0 */	return !this.parent_.isMotion();
+/* 00074cf2 */}
+
+void WinLoseView::initParts()
+/* 00074d00 */{
+/* 00074d00 */	this.parts_[0].init(this.isWin_ ? "システム／戦闘／勝ち" : "システム／戦闘／負け", 0);
+/* 00074d36 */	createPartsGroup(this.parent_, this.parts_, 20000);
+/* 00074d4e */}
+
+void WinLoseView::setPartsPos()
+/* 00074d56 */{
+/* 00074d56 */	this.parent_.setPos(0, 0, -2147483648);
+/* 00074d74 */}
+
+bool WinLoseView::isFinish()
+/* 00074d7c */{
+/* 00074d7c */	return this.state_ == 0;
+/* 00074d8e */}
+
+void WinLoseView::setPartsShow()
+/* 00074d9c */{
+/* 00074d9c */	int i;
+/* 00074da6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00074dd6 */	{
+/* 00074dd6 */		this.parts_[i].setShow(true);
+/* 00074df0 */	}
+/* 00074df6 */}
+

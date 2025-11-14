@@ -1,0 +1,177 @@
+SceneEnquite::SceneEnquite()
+/* 000884be */{
+/* 000884c8 */}
+
+void SceneEnquite::createSendingParts(string caption)
+/* 000884ce */{
+/* 000884ce */	this.partsSendBg_.initAsPlaneImage(1024, 768, 0, 0, 0, 200);
+/* 000884fe */	this.partsSendCaption_.initAsText(caption, 30, false, 256, 255, 255, 255);
+/* 00088534 */	this.partsSendBg_.setOrigin(5);
+/* 00088546 */	this.partsSendCaption_.setOrigin(5);
+/* 00088558 */	this.partsSendBg_.setPos(512, 384, 20000);
+/* 00088576 */	this.partsSendCaption_.setPos(512, 384, 20001);
+/* 00088594 */	this.partsSendBg_.setShow(true);
+/* 000885a6 */	this.partsSendCaption_.setShow(true);
+/* 000885b8 */}
+
+void SceneEnquite::hideSendingParts()
+/* 000885c0 */{
+/* 000885c0 */	this.partsSendBg_.setShow(false);
+/* 000885d2 */	this.partsSendCaption_.setShow(false);
+/* 000885e4 */}
+
+void SceneEnquite::run()
+/* 000885ec */{
+/* 000885ec */	this.init();
+/* 000885f4 */	this.fadeButton(true);
+/* 00088602 */}
+
+void SceneEnquite::init()
+/* 0008860a */{
+/* 0008860a */	this.pageName_.PushBack("アンケートページ１");
+/* 0008861a */	this.pageName_.PushBack("アンケートページ２");
+/* 0008862a */	this.pageName_.PushBack("アンケートページ３");
+/* 0008863a */	this.pageName_.PushBack("アンケートページ４");
+/* 0008864a */	this.partsBg_.init("システム／アンケート／下地", 0);
+/* 00088662 */	this.partsBg_.setShow(true);
+/* 00088674 */	this.btnPrev_.init("システム／ボタン／幅１２８", "<前のページ", -1);
+/* 00088692 */	this.btnNext_.init("システム／ボタン／幅１２８", "次のページ>", -1);
+/* 000886b0 */	this.btnPrev_.setPos(28, 688, -2147483648);
+/* 000886ce */	this.btnNext_.setPos(178, 688, -2147483648);
+/* 000886ec */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 0008870a */	this.btnExit_.setPos(868, 688, -2147483648);
+/* 00088728 */	this.btnFreeInput_.init("システム／ボタン／幅４００", "自由記入欄を開く", -1);
+/* 00088746 */	this.btnFreeInput_.setPos(312, 340, -2147483648);
+/* 00088764 */	this.btnSendEnquite_.init("システム／ボタン／幅４００", "アンケートを送信する", -1);
+/* 00088782 */	this.btnSendEnquite_.setPos(312, 388, -2147483648);
+/* 000887a0 */	this.initPartsPage();
+/* 000887a8 */	this.changePage(0);
+/* 000887b6 */}
+
+int SceneEnquite::update()
+/* 000887be */{
+/* 000887be */	if (this.btnPrev_.isClick())
+/* 000887d0 */	{
+/* 000887d0 */		this.changePage(this.currentPage_ - 1);
+/* 000887e6 */	}
+/* 000887ec */	if (this.btnNext_.isClick())
+/* 000887fe */	{
+/* 000887fe */		this.changePage(this.currentPage_ + 1);
+/* 00088814 */	}
+/* 0008881a */	if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 0008885c */	{
+/* 0008885c */		if (g_mouse.isClick(1))
+/* 00088874 */		{
+/* 00088874 */			g_sysSound.play(2003, false);
+/* 0008888c */		}
+/* 00088892 */		return 1;
+/* 0008889a */	}
+/* 000888a0 */	if (this.btnFreeInput_.isClick())
+/* 000888b2 */	{
+/* 000888b2 */		string result;
+/* 000888be */		OpenFreeInputDialog(result);
+/* 000888cc */	}
+/* 000888d2 */	if (this.btnSendEnquite_.isClick())
+/* 000888e4 */	{
+/* 000888e4 */		this.createSendingParts("送信しています。しばらくお待ちください。(右クリックでキャンセル)");
+/* 000888f2 */		this.sender_.createId();
+/* 00088900 */		bool r = this.sender_.send();
+/* 00088918 */		this.hideSendingParts();
+/* 00088920 */		DialogInfomation info;
+/* 00088930 */		if (!r)
+/* 0008893e */		{
+/* 0008893e */			info.type = 2;
+/* 00088954 */			info.caption = "送信に失敗しました。";
+/* 00088968 */			info.desc[0] = "情報の送信に失敗しました。";
+/* 00088984 */			info.desc[1] = "あとでもう１度お試しください。";
+/* 000889a0 */		}
+/* 000889a6 */		else
+/* 000889a6 */		{
+/* 000889a6 */			info.type = 2;
+/* 000889bc */			info.caption = "アンケートを送信しました。";
+/* 000889d0 */			info.desc[0] = "送信完了しました。";
+/* 000889ec */			info.desc[1] = "ご協力いただき、ありがとうございます。";
+/* 00088a08 */		}
+/* 00088a08 */		OpenDialog(info);
+/* 00088a16 */		if (r)
+/* 00088a22 */		{
+/* 00088a22 */			return 1;
+/* 00088a2a */		}
+/* 00088a30 */	}
+/* 00088a3c */	return 0;
+/* 00088a44 */}
+
+void SceneEnquite::changePage(int page)
+/* 00088a52 */{
+/* 00088a52 */	page = Math.Max(0, Math.Min(5, page));
+/* 00088a84 */	this.currentPage_ = page;
+/* 00088a8e */	if (0 <= this.currentPage_ && this.currentPage_ < this.pageName_.Numof())
+/* 00088ace */	{
+/* 00088ace */		this.page_ <- new EnquitePage;
+/* 00088af6 */		this.page_.init(this.pageName_[this.currentPage_]);
+/* 00088b10 */	}
+/* 00088b1c */	else
+/* 00088b1c */	{
+/* 00088b1c */		this.page_ <- NULL;
+/* 00088b34 */	}
+/* 00088b34 */	if (this.currentPage_ == 4)
+/* 00088b42 */	{
+/* 00088b42 */		this.pageCharacter_ <- new EnquiteCharacterPage;
+/* 00088b6a */		this.pageCharacter_.init();
+/* 00088b76 */	}
+/* 00088b82 */	else
+/* 00088b82 */	{
+/* 00088b82 */		this.pageCharacter_ <- NULL;
+/* 00088b9a */	}
+/* 00088b9a */	if (this.currentPage_ == 5)
+/* 00088ba8 */	{
+/* 00088ba8 */		this.btnFreeInput_.setShow(true);
+/* 00088bba */		this.btnSendEnquite_.setShow(true);
+/* 00088bcc */		this.btnSendEnquite_.setEnable(isEnquiteAllAnswered());
+/* 00088bde */	}
+/* 00088be4 */	else
+/* 00088be4 */	{
+/* 00088be4 */		this.btnFreeInput_.setShow(false);
+/* 00088bf6 */		this.btnSendEnquite_.setShow(false);
+/* 00088c08 */	}
+/* 00088c08 */	this.setPageNumber(this.currentPage_);
+/* 00088c16 */	this.setMoveButtonEnable();
+/* 00088c1e */}
+
+void SceneEnquite::setMoveButtonEnable()
+/* 00088c26 */{
+/* 00088c26 */	this.btnPrev_.setEnable(0 < this.currentPage_);
+/* 00088c42 */	this.btnNext_.setEnable(this.currentPage_ < 5);
+/* 00088c5e */}
+
+void SceneEnquite::fadeButton(bool val)
+/* 00088c66 */{
+/* 00088c66 */	this.btnPrev_.fadeIn(val);
+/* 00088c78 */	this.btnNext_.fadeIn(val);
+/* 00088c8a */	this.btnExit_.fadeIn(val);
+/* 00088c9c */}
+
+void SceneEnquite::initPartsPage()
+/* 00088ca4 */{
+/* 00088ca4 */	NumberPartsInfomation n;
+/* 00088cb4 */	n.setSameWidth(30);
+/* 00088cc6 */	this.partsCurrentPage_.initAsNumber("システム／数字／幅３０／白", n);
+/* 00088cde */	this.partsMaxPage_.initAsNumber("システム／数字／幅３０／白", n);
+/* 00088cf6 */	this.partsCurrentPage_.setPos(860, 84, 5000);
+/* 00088d14 */	this.partsMaxPage_.setPos(920, 84, 5000);
+/* 00088d32 */	this.partsCurrentPage_.setShow(true);
+/* 00088d44 */	this.partsMaxPage_.setShow(true);
+/* 00088d56 */}
+
+void SceneEnquite::setPageNumber(int page)
+/* 00088d5e */{
+/* 00088d5e */	this.partsCurrentPage_.setNumber(page + 1);
+/* 00088d78 */	this.partsMaxPage_.setNumber(6);
+/* 00088d8a */}
+
+bool isEnquiteAllAnswered()
+/* 00088d92 */{
+/* 00088d92 */	bool val = g_globalGameFlag.getInt("アンケート／Q01.アンケートを答えている時点でのクリア状況を教えてください。") == 0 || g_globalGameFlag.getInt("アンケート／Q02.購入したバージョンを教えてください") == 0 || g_globalGameFlag.getInt("アンケート／Q03.あなたの年齢を教えてください") == 0 || g_globalGameFlag.getInt("アンケート／Q04.あなたの性別を教えてください") == 0 || g_globalGameFlag.getInt("アンケート／Q05.あなたのエロゲー歴はどれぐらいですか？") == 0 || g_globalGameFlag.getInt("アンケート／Q06.過去にアリスソフトのゲームを何本プレイしたことがありますか？") == 0 || g_globalGameFlag.getInt("アンケート／Q07.この商品の総合評価") == 0 || g_globalGameFlag.getInt("アンケート／Q08.原画について、絵柄やデザインの品質はどうでしたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q09.ＣＧについて、塗りの品質はどうでしたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q10.ゲームシステムについて、どう感じましたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q11.ゲームのバランスや難易度について、どう感じましたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q12.操作性について、どう感じましたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q13.ストーリーやキャラクターの会話について、どう感じましたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q14.エロシーンのシナリオについて、どう感じましたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q15.音楽について、どう感じましたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q16.このゲームをはじめて知ったきっかけを教えてください") == 0 || g_globalGameFlag.getInt("アンケート／Q18.このゲームのボリュームはどうでしたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q19.このゲームの難易度はどうでしたか？") == 0 || g_globalGameFlag.getInt("アンケート／Q20.今回のリメイク版の元となった元のランス－光を求めて－をプレイした事がありますか？") == 0 || g_globalGameFlag.getInt("アンケート／Q21.えろげー、ちょうどいいなぁと思うクリアまでのプレイ時間はどのくらいですか？") == 0;
+/* 000891e2 */	return !val;
+/* 000891ee */}
+

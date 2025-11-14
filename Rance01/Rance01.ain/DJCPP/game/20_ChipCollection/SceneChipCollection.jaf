@@ -1,0 +1,121 @@
+void SceneChipCollection::run()
+/* 0008ce54 */{
+/* 0008ce54 */	this.init();
+/* 0008ce5c */	this.fadeIn(true);
+/* 0008ce6a */}
+
+void SceneChipCollection::init()
+/* 0008ce72 */{
+/* 0008ce72 */	this.partsBg_.init("システム／汎用／下地", 0);
+/* 0008ce8a */	this.partsBg_.setPos(0, 0, 4100);
+/* 0008cea8 */	int count = (g_chip.Numof() + 39) / 40;
+/* 0008ceca */	this.ss_.init(768, 1024, 0, count);
+/* 0008ceee */	this.btn_.init(count);
+/* 0008cf00 */	this.btnExit_.init("システム／ボタン／幅１２８", "閉じる", -1);
+/* 0008cf1e */	this.btnExit_.setPos(868, 688, -2147483648);
+/* 0008cf3c */	this.inst_.Alloc(g_chip.Numof() - 1);
+/* 0008cf5a */	this.view_.Alloc(g_chip.Numof() - 1);
+/* 0008cf78 */	int i;
+/* 0008cf82 */	for (i = 0; i < this.inst_.Numof(); ++i)
+/* 0008cfb2 */	{
+/* 0008cfb2 */		this.inst_[i].init(g_chip[i].getId());
+/* 0008cfda */	}
+/* 0008cfe0 */	int xspan = 40;
+/* 0008cff2 */	int width = xspan + 80;
+/* 0008d00c */	int yspan = 32;
+/* 0008d01e */	int height = yspan + 80;
+/* 0008d038 */	for (i = 0; i < this.inst_.Numof(); ++i)
+/* 0008d068 */	{
+/* 0008d068 */		int g = i / 40;
+/* 0008d082 */		int n = i % 40;
+/* 0008d09c */		bool isGet = g_globalGameFlag.getInt("チップ取得：%s" % this.inst_[i].getId()) > 0;
+/* 0008d0e0 */		if (isGet)
+/* 0008d0ec */		{
+/* 0008d0ec */			this.view_.Realloc(this.view_.Numof() + 1);
+/* 0008d10a */			int index = this.view_.Numof() - 1;
+/* 0008d124 */			this.view_[index].init(this.inst_[i], 0);
+/* 0008d14c */			this.view_[index].setShow(true);
+/* 0008d166 */			this.view_[index].setPos(90 + (n % 8) * width + g * 1024, 160 + (n / 8) * height);
+/* 0008d1c6 */			this.view_[index].setParent(this.ss_.getParentPartsNumber());
+/* 0008d1e6 */		}
+/* 0008d1ec */		else
+/* 0008d1ec */		{
+/* 0008d1ec */			this.partsNotGet_.Realloc(this.partsNotGet_.Numof() + 1);
+/* 0008d20a */			int index = this.partsNotGet_.Numof() - 1;
+/* 0008d224 */			this.partsNotGet_[index].init("システム／チップエリア／選択可能", 0);
+/* 0008d244 */			this.partsNotGet_[index].setShow(true);
+/* 0008d25e */			this.partsNotGet_[index].setCgRange(184, 0, 92, 92);
+/* 0008d28a */			this.partsNotGet_[index].setAlpha(128);
+/* 0008d2a4 */			this.partsNotGet_[index].setOrigin(5);
+/* 0008d2be */			this.partsNotGet_[index].setPos(90 + (n % 8) * width + g * 1024, 160 + (n / 8) * height, -2147483648);
+/* 0008d324 */			this.partsNotGet_[index].setParent(this.ss_.getParentPartsNumber());
+/* 0008d344 */		}
+/* 0008d344 */	}
+/* 0008d34a */}
+
+int SceneChipCollection::update()
+/* 0008d352 */{
+/* 0008d352 */	switch (this.state_)
+/* 0008d364 */	{
+/* 0008d364 */	case 1:
+/* 0008d364 */		if (!this.ss_.isMotion())
+/* 0008d378 */		{
+/* 0008d378 */			this.state_ = 2;
+/* 0008d382 */		}
+/* 0008d388 */		break;
+/* 0008d38e */	case 2:
+/* 0008d38e */		this.checkChipClicked();
+/* 0008d396 */		this.checkJumpButtonClicked();
+/* 0008d39e */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 0008d3e0 */		{
+/* 0008d3e0 */			if (g_mouse.isClick(1))
+/* 0008d3f8 */			{
+/* 0008d3f8 */				g_sysSound.play(2003, false);
+/* 0008d410 */			}
+/* 0008d416 */			this.fadeIn(false);
+/* 0008d424 */		}
+/* 0008d42a */		break;
+/* 0008d430 */	case 3:
+/* 0008d430 */		if (!this.ss_.isMotion())
+/* 0008d444 */		{
+/* 0008d444 */			this.state_ = 0;
+/* 0008d44e */		}
+/* 0008d454 */		break;
+/* 0008d45a */	case 0:
+/* 0008d45a */		return 1;
+/* 0008d462 */	}
+/* 0008d462 */	return 0;
+/* 0008d46a */}
+
+void SceneChipCollection::fadeIn(bool val)
+/* 0008d478 */{
+/* 0008d478 */	this.btnExit_.fadeIn(val);
+/* 0008d48a */	this.btn_.fadeIn(val);
+/* 0008d49c */	this.ss_.fadeIn(val);
+/* 0008d4ae */	this.partsBg_.setShow(true);
+/* 0008d4c0 */	this.partsBg_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0008d4f0 */	this.state_ = val ? 1 : 3;
+/* 0008d51a */}
+
+void SceneChipCollection::checkChipClicked()
+/* 0008d522 */{
+/* 0008d522 */	int i;
+/* 0008d52c */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0008d55c */	{
+/* 0008d55c */		if (this.view_[i].isClick())
+/* 0008d576 */		{
+/* 0008d576 */			OpenChipInfomation(this.view_[i].getId());
+/* 0008d590 */		}
+/* 0008d596 */	}
+/* 0008d59c */}
+
+void SceneChipCollection::checkJumpButtonClicked()
+/* 0008d5a4 */{
+/* 0008d5a4 */	int n = this.btn_.getClickedButton();
+/* 0008d5bc */	if (n != -1)
+/* 0008d5d0 */	{
+/* 0008d5d0 */		this.ss_.jumpPage(n);
+/* 0008d5e2 */	}
+/* 0008d5e8 */	this.btn_.setSelectedButton(roundOff(this.ss_.getFloatingPage()));
+/* 0008d606 */}
+

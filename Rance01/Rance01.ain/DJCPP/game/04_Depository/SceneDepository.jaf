@@ -1,0 +1,72 @@
+SceneDepository::SceneDepository()
+/* 00075e1a */{
+/* 00075e24 */}
+
+void SceneDepository::init()
+/* 00075e2a */{
+/* 00075e2a */	this.partsBg_.initAsPlaneImage(1024, 768, 64, 64, 128, 255);
+/* 00075e5a */	this.partsBg_.setPos(0, 0, 1);
+/* 00075e78 */	int i;
+/* 00075e82 */	for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 00075eb2 */	{
+/* 00075eb2 */		this.arranger_[i].init(i, i == 0, true, false);
+/* 00075ee8 */	}
+/* 00075eee */	this.btnExit_.init("システム／ボタン／幅２００", "押入れを閉じる", -1);
+/* 00075f0c */	this.btnExit_.setPos(808, 716, -2147483648);
+/* 00075f2a */}
+
+void SceneDepository::run()
+/* 00075f32 */{
+/* 00075f32 */	int i;
+/* 00075f3c */	for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 00075f6c */	{
+/* 00075f6c */		this.arranger_[i].setActive(true);
+/* 00075f86 */	}
+/* 00075f8c */	this.fadeObject(true);
+/* 00075f9a */}
+
+int SceneDepository::update()
+/* 00075fa2 */{
+/* 00075fa2 */	switch (this.state_)
+/* 00075fb4 */	{
+/* 00075fb4 */	case 0:
+/* 00075fb4 */		if (!this.arranger_[0].isMotion())
+/* 00075fd0 */		{
+/* 00075fd0 */			this.state_ = 1;
+/* 00075fda */		}
+/* 00075fe0 */		break;
+/* 00075fe6 */	case 1:
+/* 00075fe6 */		if (g_mouse.isClick(1) || this.btnExit_.isClick())
+/* 00076028 */		{
+/* 00076028 */			if (g_mouse.isClick(1))
+/* 00076040 */			{
+/* 00076040 */				g_sysSound.play(2003, false);
+/* 00076058 */			}
+/* 0007605e */			this.state_ = 2;
+/* 00076068 */			this.fadeObject(false);
+/* 00076076 */		}
+/* 0007607c */		break;
+/* 00076082 */	case 2:
+/* 00076082 */		if (!this.arranger_[0].isMotion())
+/* 0007609e */		{
+/* 0007609e */			this.state_ = 3;
+/* 000760a8 */		}
+/* 000760ae */		break;
+/* 000760b4 */	case 3:
+/* 000760b4 */		ResetBet(0);
+/* 000760c0 */		ResetBet(1);
+/* 000760cc */		return 1;
+/* 000760d4 */	}
+/* 000760d4 */	return 0;
+/* 000760dc */}
+
+void SceneDepository::fadeObject(bool val)
+/* 000760ea */{
+/* 000760ea */	int i;
+/* 000760f4 */	for (i = 0; i < this.arranger_.Numof(); ++i)
+/* 00076124 */	{
+/* 00076124 */		this.arranger_[i].fadeIn(val);
+/* 0007613e */	}
+/* 00076144 */	this.btnExit_.fadeIn(val);
+/* 00076156 */}
+

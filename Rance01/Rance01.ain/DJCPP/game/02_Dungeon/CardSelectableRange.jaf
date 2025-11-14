@@ -1,0 +1,115 @@
+CardSelectableRange::CardSelectableRange()
+/* 0006febe */{
+/* 0006fec6 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0006fee8 */}
+
+void CardSelectableRange::init(int x)
+/* 0006fef0 */{
+/* 0006fef0 */	this.parts_[0].init("システム／ダンジョン／選択／左", 0);
+/* 0006ff10 */	this.parts_[1].init("システム／ダンジョン／選択／右", 0);
+/* 0006ff30 */	int i;
+/* 0006ff3a */	for (i = 0; i < 3; ++i)
+/* 0006ff64 */	{
+/* 0006ff64 */		this.parts_[2 + i].init("システム／ダンジョン／選択／矢印", 0);
+/* 0006ff8c */	}
+/* 0006ff92 */	createPartsGroup(this.parent_, this.parts_, 2600);
+/* 0006ffaa */	this.setPartsShow();
+/* 0006ffb2 */	this.setPlayerPos(x);
+/* 0006ffc0 */}
+
+void CardSelectableRange::setPartsShow()
+/* 0006ffc8 */{
+/* 0006ffc8 */	int i;
+/* 0006ffd2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00070002 */	{
+/* 00070002 */		this.parts_[i].setShow(true);
+/* 0007001c */	}
+/* 00070022 */}
+
+void CardSelectableRange::setPlayerPos(int x)
+/* 0007002a */{
+/* 0007002a */	int left = Math.Max(0, x - 1);
+/* 00070054 */	int right = Math.Min(4, x + 1);
+/* 0007007e */	this.parts_[0].setPos(100 + left * 160, 215, -2147483648);
+/* 000700b4 */	this.parts_[1].setPos(192 + right * 160, 215, -2147483648);
+/* 000700ea */	int i;
+/* 000700f4 */	int n;
+/* 000700fe */	i = left;
+/* 00070110 */	for (n = 0; i <= right; ++i, ++n)
+/* 00070146 */	{
+/* 00070146 */		this.parts_[2 + n].setPos(180 + 160 * i + 12, 218, -2147483648);
+/* 0007018c */		this.parts_[2 + n].setOrigin(5);
+/* 000701ae */	}
+/* 000701b4 */	if (n == 2)
+/* 000701c2 */	{
+/* 000701c2 */		this.parts_[4].setPos(-100, 0, -2147483648);
+/* 000701e8 */	}
+/* 000701ee */}
+
+void CardSelectableRange::update()
+/* 000701f6 */{
+/* 000701f6 */	switch (this.state_)
+/* 00070208 */	{
+/* 00070208 */	case 0:
+/* 00070208 */		break;
+/* 0007020e */	case 1:
+/* 0007020e */		if (!this.parent_.isMotion())
+/* 00070222 */		{
+/* 00070222 */			this.state_ = 2;
+/* 0007022c */		}
+/* 00070232 */		break;
+/* 00070238 */	case 2:
+/* 00070238 */		this.updatePartsBlink();
+/* 00070240 */		break;
+/* 00070246 */	case 3:
+/* 00070246 */		if (!this.parent_.isMotion())
+/* 0007025a */		{
+/* 0007025a */			this.state_ = 0;
+/* 00070264 */		}
+/* 0007026a */		break;
+/* 00070270 */	}
+/* 00070270 */}
+
+void CardSelectableRange::updatePartsBlink()
+/* 00070278 */{
+/* 00070278 */	int time = 1200;
+/* 00070282 */	float r = float(this.timer_.getTime() % time) / float(time);
+/* 000702ae */	int n = (1 - r) * 128.0;
+/* 000702d8 */	int i;
+/* 000702e2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00070312 */	{
+/* 00070312 */		this.parts_[i].setAddColorValue(n, n, n);
+/* 00070338 */	}
+/* 0007033e */	float scale = (1 - r) * 50.0 + 100.0;
+/* 0007036e */	for (i = 0; i < 3; ++i)
+/* 00070398 */	{
+/* 00070398 */		this.parts_[2 + i].setScaling(scale);
+/* 000703ba */	}
+/* 000703c0 */}
+
+void CardSelectableRange::fadeIn(bool val)
+/* 000703c8 */{
+/* 000703c8 */	if (this.isIgnoreFadeMotion(val))
+/* 000703dc */	{
+/* 000703dc */		return;
+/* 000703de */	}
+/* 000703e4 */	this.state_ = val ? 1 : 3;
+/* 0007040e */	this.parent_.setShow(true);
+/* 00070420 */	MotionInfomation m;
+/* 00070430 */	m = getStandardMotion(val ? 0 : 1);
+/* 00070464 */	this.parent_.runMotion(m);
+/* 0007047e */}
+
+bool CardSelectableRange::isIgnoreFadeMotion(bool val)
+/* 00070486 */{
+/* 00070486 */	if (val && (this.state_ == 1 || this.state_ == 2))
+/* 000704ea */	{
+/* 000704ea */		return true;
+/* 000704f2 */	}
+/* 000704f8 */	else if (!val && (this.state_ == 0 || this.state_ == 3))
+/* 0007055e */	{
+/* 0007055e */		return true;
+/* 00070566 */	}
+/* 0007056c */	return false;
+/* 00070574 */}
+

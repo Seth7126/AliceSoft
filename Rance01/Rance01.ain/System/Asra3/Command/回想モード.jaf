@@ -1,0 +1,15 @@
+void 回想登録(int _登録番号)
+/* 0004baa2 */{
+/* 0004baa2 */	PassRegister.RegistNumber(1, _登録番号);
+/* 0004baba */}
+
+bool 回想確認(int _登録番号)
+/* 0004bac8 */{
+/* 0004bac8 */	return PassRegister.ExistNumber(1, _登録番号);
+/* 0004bae0 */}
+
+bool 回想モード実行中確認()
+/* 0004baf4 */{
+/* 0004baf4 */	return _g_回想中;
+/* 0004bafc */}
+

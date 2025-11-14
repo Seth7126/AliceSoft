@@ -1,0 +1,221 @@
+StatusView::StatusView()
+/* 0007701c */{
+/* 00077024 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00077046 */	g_player.addEventHandler(this.onEvent);
+/* 0007705c */}
+
+void StatusView::init(int offsetY)
+/* 00077064 */{
+/* 00077064 */	this.offsetY_ = offsetY;
+/* 0007706e */	this.initParts();
+/* 00077076 */	this.setPartsPos();
+/* 0007707e */	this.setPartsOrigin();
+/* 00077086 */	this.setPartsShow();
+/* 0007708e */	this.updatePartsNumber();
+/* 00077096 */	this.initBadCondition();
+/* 0007709e */	this.hpView_.init();
+/* 000770aa */	this.hpView_.setOffsetY(this.offsetY_);
+/* 000770bc */	this.parent_.setPos(-48, 18 + this.offsetY_, -2147483648);
+/* 000770e2 */}
+
+StatusView::~StatusView()
+/* 000770ea */{
+/* 000770ea */	g_hallucination.setPos(-500, 0);
+/* 00077102 */}
+
+void StatusView::initParts()
+/* 0007710a */{
+/* 0007710a */	this.parts_[0].init("システム／ステータス／下地", 0);
+/* 0007712a */	NumberPartsInfomation num;
+/* 0007713a */	num.setSameWidth(18);
+/* 0007714c */	this.parts_[1].initAsNumber("システム／数字／幅１８／白", num);
+/* 0007716c */	this.parts_[2].initAsNumber("システム／数字／幅１８／白", num);
+/* 0007718c */	this.parts_[3].initAsNumber("システム／数字／幅１８／白", num);
+/* 000771ac */	this.parts_[4].initAsNumber("システム／数字／幅１８／白", num);
+/* 000771cc */	createPartsGroup(this.parent_, this.parts_, 6000);
+/* 000771e4 */}
+
+void StatusView::setPartsPos()
+/* 000771ec */{
+/* 000771ec */	this.parts_[1].setPos(100, 146, -2147483648);
+/* 00077212 */	this.parts_[2].setPos(100, 206, -2147483648);
+/* 00077238 */	this.parts_[3].setPos(100, 250, -2147483648);
+/* 0007725e */	this.parts_[4].setPos(100, 294, -2147483648);
+/* 00077284 */	this.parent_.setPos(-48, 18, 6000);
+/* 000772a2 */}
+
+void StatusView::setPartsOrigin()
+/* 000772aa */{
+/* 000772aa */	this.parts_[1].setOrigin(8);
+/* 000772c4 */	this.parts_[2].setOrigin(8);
+/* 000772de */	this.parts_[3].setOrigin(8);
+/* 000772f8 */	this.parts_[4].setOrigin(8);
+/* 00077312 */}
+
+void StatusView::setPartsShow()
+/* 0007731a */{
+/* 0007731a */	int i;
+/* 00077324 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00077354 */	{
+/* 00077354 */		this.parts_[i].setShow(true);
+/* 0007736e */	}
+/* 00077374 */}
+
+void StatusView::update()
+/* 0007737c */{
+/* 0007737c */	switch (this.state_)
+/* 0007738e */	{
+/* 0007738e */	case 1:
+/* 0007738e */		if (!this.parent_.isMotion())
+/* 000773a2 */		{
+/* 000773a2 */			this.state_ = 2;
+/* 000773ac */		}
+/* 000773b2 */		break;
+/* 000773b8 */	case 2:
+/* 000773b8 */		this.eraseHideBadCondition();
+/* 000773c0 */		break;
+/* 000773c6 */	case 3:
+/* 000773c6 */		if (!this.parent_.isMotion())
+/* 000773da */		{
+/* 000773da */			this.parent_.setShow(false);
+/* 000773ec */			this.state_ = 0;
+/* 000773f6 */		}
+/* 000773fc */		break;
+/* 00077402 */	case 0:
+/* 00077402 */		break;
+/* 00077408 */	}
+/* 00077408 */}
+
+void StatusView::onEvent(int type, int value)
+/* 00077410 */{
+/* 00077410 */	if (type == 5)
+/* 0007741e */	{
+/* 0007741e */		this.addBadCondition(g_player.getLastAddedBadCondition());
+/* 00077432 */	}
+/* 00077438 */	else if (type == 6)
+/* 00077446 */	{
+/* 00077446 */		this.eraseBadCondition(g_player.getLastErasedBadCondition());
+/* 0007745a */	}
+/* 00077460 */	else
+/* 00077460 */	{
+/* 00077460 */		this.updatePartsNumber();
+/* 00077468 */	}
+/* 00077468 */}
+
+void StatusView::fadeIn(bool val)
+/* 00077470 */{
+/* 00077470 */	if (val)
+/* 0007747c */	{
+/* 0007747c */		if (this.state_ == 3 || this.state_ == 0)
+/* 000774bc */		{
+/* 000774bc */			this.state_ = 1;
+/* 000774c6 */			this.parent_.setShow(true);
+/* 000774d8 */			MotionInfomation m;
+/* 000774e8 */			m.setAlpha(0, 255, 0);
+/* 00077506 */			m.setYFlip(90, 0, 3);
+/* 00077524 */			m.setTime(400, 0);
+/* 0007753c */			this.parent_.runMotion(m);
+/* 00077556 */		}
+/* 00077562 */	}
+/* 00077568 */	else if (this.state_ == 1 || this.state_ == 2)
+/* 000775a8 */	{
+/* 000775a8 */		this.state_ = 3;
+/* 000775b2 */		this.parent_.setShow(true);
+/* 000775c4 */		MotionInfomation m;
+/* 000775d4 */		m.setAlpha(255, 0, 0);
+/* 000775f2 */		m.setYFlip(0, 90, 3);
+/* 00077610 */		m.setTime(300, 0);
+/* 00077628 */		this.parent_.runMotion(m);
+/* 00077642 */	}
+/* 0007764e */	this.hpView_.fadeIn(val);
+/* 00077660 */	int i;
+/* 0007766a */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 0007769a */	{
+/* 0007769a */		this.badCondition_[i].fadeIn(val);
+/* 000776b4 */	}
+/* 000776ba */}
+
+void StatusView::updatePartsNumber()
+/* 000776c2 */{
+/* 000776c2 */	this.parts_[1].setNumber(g_player.getLuck());
+/* 000776e2 */	this.parts_[2].setNumber(g_player.getLevel());
+/* 00077702 */	this.parts_[3].setNumber(g_player.getExp());
+/* 00077722 */	this.parts_[4].setNumber(g_player.getGold());
+/* 00077742 */}
+
+void StatusView::initBadCondition()
+/* 0007774a */{
+/* 0007774a */	array@string list;
+/* 00077754 */	g_player.getBadConditionList(list);
+/* 00077766 */	int i;
+/* 00077770 */	for (i = 0; i < list.Numof(); ++i)
+/* 000777aa */	{
+/* 000777aa */		this.addBadCondition(list[i]);
+/* 000777c0 */	}
+/* 000777c6 */}
+
+void StatusView::addBadCondition(string id)
+/* 000777ce */{
+/* 000777ce */	array@int list;
+/* 000777d8 */	list.PushBack(0);
+/* 000777e8 */	list.PushBack(250);
+/* 000777f8 */	int i;
+/* 00077802 */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 00077832 */	{
+/* 00077832 */		list.PushBack(this.badCondition_[i].getInsideYPos());
+/* 00077850 */	}
+/* 00077856 */	this.badCondition_.Realloc(this.badCondition_.Numof() + 1);
+/* 00077874 */	int index = this.badCondition_.Numof() - 1;
+/* 0007788e */	this.badCondition_[index].init(id);
+/* 000778a8 */	this.badCondition_[index].setOffsetY(this.offsetY_);
+/* 000778c2 */	this.badCondition_[index].setInsideYPos(getBadConditionOffset(list));
+/* 000778e2 */	this.badCondition_[index].fadeIn(true);
+/* 000778fc */}
+
+void StatusView::eraseBadCondition(string id)
+/* 00077904 */{
+/* 00077904 */	int i;
+/* 0007790e */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 0007793e */	{
+/* 0007793e */		if (this.badCondition_[i].getType() == id)
+/* 00077960 */		{
+/* 00077960 */			this.badCondition_[i].fadeIn(false);
+/* 0007797a */			return;
+/* 0007797c */		}
+/* 00077982 */	}
+/* 00077988 */}
+
+void StatusView::eraseHideBadCondition()
+/* 00077990 */{
+/* 00077990 */	int i;
+/* 0007799a */	while (i < this.badCondition_.Numof())
+/* 000779ae */	{
+/* 000779ae */		if (this.badCondition_[i].isHide())
+/* 000779c8 */		{
+/* 000779c8 */			this.badCondition_.Erase(i);
+/* 000779da */		}
+/* 000779e0 */		else
+/* 000779e0 */		{
+/* 000779e0 */			++i;
+/* 000779e6 */		}
+/* 000779e6 */	}
+/* 000779ec */}
+
+int getBadConditionOffset(ref array@int list)
+/* 000779f4 */{
+/* 000779f4 */	int max;
+/* 000779fe */	int index = -1;
+/* 00077a10 */	list.Sort();
+/* 00077a20 */	int i;
+/* 00077a2a */	for (i = 0; i < list.Numof() - 1; ++i)
+/* 00077a6c */	{
+/* 00077a6c */		if (list[i + 1] - list[i] > max)
+/* 00077aa0 */		{
+/* 00077aa0 */			max = list[i + 1] - list[i];
+/* 00077ad2 */			index = i;
+/* 00077ae4 */		}
+/* 00077aea */	}
+/* 00077af0 */	int r = list[index] + RAND(max - 60) + 30;
+/* 00077b28 */	return r;
+/* 00077b30 */}
+

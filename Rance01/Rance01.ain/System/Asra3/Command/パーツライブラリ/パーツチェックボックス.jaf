@@ -1,0 +1,147 @@
+void Ｐ＿チェックボックス＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 000527fe */{
+/* 000527fe */	GUIEngine.SetCheckBoxPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 0005281a */}
+
+void Ｐ＿チェックボックス＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 00052828 */{
+/* 00052828 */	GUIEngine.SetCheckBoxZ(パーツ番号, _Ｚ座標);
+/* 0005283e */}
+
+int Ｐ＿チェックボックス＿Ｘ座標取得(int パーツ番号)
+/* 0005284c */{
+/* 0005284c */	return GUIEngine.GetCheckBoxX(パーツ番号);
+/* 0005285e */}
+
+int Ｐ＿チェックボックス＿Ｙ座標取得(int パーツ番号)
+/* 00052872 */{
+/* 00052872 */	return GUIEngine.GetCheckBoxY(パーツ番号);
+/* 00052884 */}
+
+int Ｐ＿チェックボックス＿Ｚ座標取得(int パーツ番号)
+/* 00052898 */{
+/* 00052898 */	return GUIEngine.GetCheckBoxZ(パーツ番号);
+/* 000528aa */}
+
+void Ｐ＿チェックボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 000528be */{
+/* 000528be */	GUIEngine.SetCheckBoxWidth(パーツ番号, 幅);
+/* 000528d4 */	GUIEngine.SetCheckBoxHeight(パーツ番号, 高さ);
+/* 000528ea */}
+
+int Ｐ＿チェックボックス＿幅取得(int パーツ番号)
+/* 000528f8 */{
+/* 000528f8 */	return GUIEngine.GetCheckBoxWidth(パーツ番号);
+/* 0005290a */}
+
+int Ｐ＿チェックボックス＿高さ取得(int パーツ番号)
+/* 0005291e */{
+/* 0005291e */	return GUIEngine.GetCheckBoxHeight(パーツ番号);
+/* 00052930 */}
+
+void Ｐ＿チェックボックス＿表示設定(int パーツ番号, bool 表示)
+/* 00052944 */{
+/* 00052944 */	GUIEngine.SetCheckBoxShow(パーツ番号, 表示);
+/* 0005295a */}
+
+bool Ｐ＿チェックボックス＿表示設定取得(int パーツ番号)
+/* 00052968 */{
+/* 00052968 */	return GUIEngine.IsCheckBoxShow(パーツ番号);
+/* 0005297a */}
+
+void Ｐ＿チェックボックス＿ドラッグ設定(int パーツ番号, bool ドラッグ)
+/* 0005298e */{
+/* 0005298e */	GUIEngine.SetCheckBoxDrag(パーツ番号, ドラッグ);
+/* 000529a4 */}
+
+bool Ｐ＿チェックボックス＿ドラッグ設定取得(int パーツ番号)
+/* 000529b2 */{
+/* 000529b2 */	return GUIEngine.IsCheckBoxDrag(パーツ番号);
+/* 000529c4 */}
+
+void Ｐ＿チェックボックス＿チェック状態設定(int パーツ番号, bool チェック)
+/* 000529d8 */{
+/* 000529d8 */	GUIEngine.CheckBoxChecked(パーツ番号, チェック);
+/* 000529ee */}
+
+bool Ｐ＿チェックボックス＿チェック状態取得(int パーツ番号)
+/* 000529fc */{
+/* 000529fc */	return GUIEngine.IsCheckBoxChecked(パーツ番号);
+/* 00052a0e */}
+
+void Ｐ＿チェックボックス＿色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00052a22 */{
+/* 00052a22 */	GUIEngine.SetCheckBoxR(パーツ番号, 赤);
+/* 00052a38 */	GUIEngine.SetCheckBoxG(パーツ番号, 緑);
+/* 00052a4e */	GUIEngine.SetCheckBoxB(パーツ番号, 青);
+/* 00052a64 */}
+
+int Ｐ＿チェックボックス＿赤色取得(int パーツ番号)
+/* 00052a72 */{
+/* 00052a72 */	return GUIEngine.GetCheckBoxR(パーツ番号);
+/* 00052a84 */}
+
+int Ｐ＿チェックボックス＿緑色取得(int パーツ番号)
+/* 00052a98 */{
+/* 00052a98 */	return GUIEngine.GetCheckBoxG(パーツ番号);
+/* 00052aaa */}
+
+int Ｐ＿チェックボックス＿青色取得(int パーツ番号)
+/* 00052abe */{
+/* 00052abe */	return GUIEngine.GetCheckBoxB(パーツ番号);
+/* 00052ad0 */}
+
+void Ｐ＿チェックボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, float 縁取り幅, int 縁取り赤, int 縁取り緑, int 縁取り青)
+/* 00052ae4 */{
+/* 00052ae4 */	GUIEngine.SetCheckBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00052b30 */}
+
+void Ｐ＿チェックボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref float 縁取り幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青)
+/* 00052b3e */{
+/* 00052b3e */	GUIEngine.GetCheckBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00052b8a */}
+
+void Ｐ＿チェックボックス＿オンカーソル効果音番号設定(int パーツ番号, int サウンド番号)
+/* 00052b98 */{
+/* 00052b98 */	GUIEngine.SetCheckBoxOnCursorSoundNumber(パーツ番号, サウンド番号);
+/* 00052bae */}
+
+void Ｐ＿チェックボックス＿クリック効果音番号設定(int パーツ番号, int サウンド番号)
+/* 00052bbc */{
+/* 00052bbc */	GUIEngine.SetCheckBoxClickSoundNumber(パーツ番号, サウンド番号);
+/* 00052bd2 */}
+
+int Ｐ＿チェックボックス＿オンカーソル効果音番号取得(int パーツ番号)
+/* 00052be0 */{
+/* 00052be0 */	return GUIEngine.GetCheckBoxOnCursorSoundNumber(パーツ番号);
+/* 00052bf2 */}
+
+int Ｐ＿チェックボックス＿クリック効果音番号取得(int パーツ番号)
+/* 00052c06 */{
+/* 00052c06 */	return GUIEngine.GetCheckBoxClickSoundNumber(パーツ番号);
+/* 00052c18 */}
+
+void Ｐ＿チェックボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00052c2c */{
+/* 00052c2c */	GUIEngine.SetCheckBoxCGName(パーツ番号, ＣＧ名);
+/* 00052c42 */}
+
+string Ｐ＿チェックボックス＿ＣＧ名取得(int パーツ番号)
+/* 00052c50 */{
+/* 00052c50 */	string Name;
+/* 00052c5c */	GUIEngine.GetCheckBoxCGName(パーツ番号, Name);
+/* 00052c72 */	return Name;
+/* 00052c7a */}
+
+void Ｐ＿チェックボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 00052c8e */{
+/* 00052c8e */	GUIEngine.SetCheckBoxText(パーツ番号, テキスト);
+/* 00052ca4 */}
+
+string Ｐ＿チェックボックス＿テキスト取得(int パーツ番号)
+/* 00052cb2 */{
+/* 00052cb2 */	string Text;
+/* 00052cbe */	GUIEngine.GetCheckBoxText(パーツ番号, Text);
+/* 00052cd4 */	return Text;
+/* 00052cdc */}
+

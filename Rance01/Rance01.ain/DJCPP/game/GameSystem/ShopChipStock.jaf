@@ -1,0 +1,53 @@
+void ShopChipStock::add(string id, int discountPer)
+/* 0009029e */{
+/* 0009029e */	int n = this.find(id);
+/* 000902b8 */	if (n == -1)
+/* 000902cc */	{
+/* 000902cc */		ShopChipInstance c;
+/* 000902dc */		c.setId(id);
+/* 000902ee */		c.setDiscountPer(discountPer);
+/* 00090300 */		this.chip_.PushBack(c);
+/* 0009030a */		this.chip_.Sort(&ShopChipSortFunction);
+/* 0009031a */	}
+/* 00090326 */	else
+/* 00090326 */	{
+/* 00090326 */		this.chip_[n].setDiscountPer(discountPer);
+/* 00090340 */	}
+/* 00090340 */}
+
+void ShopChipStock::erase(string id)
+/* 00090348 */{
+/* 00090348 */	int n = this.find(id);
+/* 00090362 */	if (n != -1)
+/* 00090376 */	{
+/* 00090376 */		this.chip_.Erase(n);
+/* 00090388 */	}
+/* 0009038e */}
+
+int ShopChipStock::getCount()
+/* 00090396 */{
+/* 00090396 */	return this.chip_.Numof();
+/* 0009039e */}
+
+ref ShopChipInstance ShopChipStock::getInstance(int index)
+/* 000903ac */{
+/* 000903ac */	if (index >= 0 && index < this.chip_.Numof())
+/* 000903e6 */	{
+/* 000903e6 */		return this.chip_[index];
+/* 000903fa */	}
+/* 00090400 */	return NULL;
+/* 00090408 */}
+
+int ShopChipStock::find(string id)
+/* 00090416 */{
+/* 00090416 */	int i;
+/* 00090420 */	for (i = 0; i < this.chip_.Numof(); ++i)
+/* 00090450 */	{
+/* 00090450 */		if (this.chip_[i].getId() == id)
+/* 00090472 */		{
+/* 00090472 */			return i;
+/* 0009047a */		}
+/* 00090480 */	}
+/* 00090486 */	return -1;
+/* 0009048e */}
+

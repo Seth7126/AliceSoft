@@ -1,0 +1,584 @@
+bool SYS_追加セーブ(int 番号, string ゲーム時間文字列, string コメント)
+/* 00043546 */{
+/* 00043546 */	セーブ２_t a;
+/* 00043556 */	AFL_GetTime(a.sys年, a.sys月, a.sys日, a.sys曜, a.sys時, a.sys分, a.sys秒);
+/* 000435b0 */	a.ゲーム時間文字列 = ゲーム時間文字列;
+/* 000435c4 */	a.コメント = コメント;
+/* 000435d8 */	a.PlayMinuteTime = AFL_PlayTime_GetMinuteTime();
+/* 000435ee */	string フルパスファイル名 = system.GetSaveFolderName() + "\\" + SYS_追加セーブファイル名(番号);
+/* 00043614 */	if (!VSFile.OpenForWrite(フルパスファイル名))
+/* 0004362c */	{
+/* 0004362c */		return false;
+/* 00043634 */	}
+/* 0004363a */	if (!VSFile.WriteInt(a.sys年))
+/* 0004365a */	{
+/* 0004365a */		return false;
+/* 00043662 */	}
+/* 00043668 */	if (!VSFile.WriteInt(a.sys月))
+/* 00043688 */	{
+/* 00043688 */		return false;
+/* 00043690 */	}
+/* 00043696 */	if (!VSFile.WriteInt(a.sys日))
+/* 000436b6 */	{
+/* 000436b6 */		return false;
+/* 000436be */	}
+/* 000436c4 */	if (!VSFile.WriteInt(a.sys曜))
+/* 000436e4 */	{
+/* 000436e4 */		return false;
+/* 000436ec */	}
+/* 000436f2 */	if (!VSFile.WriteInt(a.sys時))
+/* 00043712 */	{
+/* 00043712 */		return false;
+/* 0004371a */	}
+/* 00043720 */	if (!VSFile.WriteInt(a.sys分))
+/* 00043740 */	{
+/* 00043740 */		return false;
+/* 00043748 */	}
+/* 0004374e */	if (!VSFile.WriteInt(a.sys秒))
+/* 0004376e */	{
+/* 0004376e */		return false;
+/* 00043776 */	}
+/* 0004377c */	if (!VSFile.WriteString(a.ゲーム時間文字列))
+/* 0004379c */	{
+/* 0004379c */		return false;
+/* 000437a4 */	}
+/* 000437aa */	if (!VSFile.WriteString(a.コメント))
+/* 000437ca */	{
+/* 000437ca */		return false;
+/* 000437d2 */	}
+/* 000437d8 */	if (!VSFile.WriteInt(a.PlayMinuteTime))
+/* 000437f8 */	{
+/* 000437f8 */		return false;
+/* 00043800 */	}
+/* 00043806 */	if (!VSFile.Close())
+/* 00043818 */	{
+/* 00043818 */		return false;
+/* 00043820 */	}
+/* 00043826 */	return true;
+/* 0004382e */}
+
+bool SYS_追加ロード(int nSaveNum, ref セーブ２_t Data)
+/* 00043842 */{
+/* 00043842 */	if (!SYS_セーブファイル存在(nSaveNum))
+/* 00043856 */	{
+/* 00043856 */		return false;
+/* 0004385e */	}
+/* 00043864 */	string フルパスファイル名 = system.GetSaveFolderName() + "\\" + SYS_追加セーブファイル名(nSaveNum);
+/* 0004388a */	if (!VSFile.OpenForRead(フルパスファイル名))
+/* 000438a2 */	{
+/* 000438a2 */		return false;
+/* 000438aa */	}
+/* 000438b0 */	if (!VSFile.ReadInt(Data.sys年))
+/* 000438ce */	{
+/* 000438ce */		return false;
+/* 000438d6 */	}
+/* 000438dc */	if (!VSFile.ReadInt(Data.sys月))
+/* 000438fa */	{
+/* 000438fa */		return false;
+/* 00043902 */	}
+/* 00043908 */	if (!VSFile.ReadInt(Data.sys日))
+/* 00043926 */	{
+/* 00043926 */		return false;
+/* 0004392e */	}
+/* 00043934 */	if (!VSFile.ReadInt(Data.sys曜))
+/* 00043952 */	{
+/* 00043952 */		return false;
+/* 0004395a */	}
+/* 00043960 */	if (!VSFile.ReadInt(Data.sys時))
+/* 0004397e */	{
+/* 0004397e */		return false;
+/* 00043986 */	}
+/* 0004398c */	if (!VSFile.ReadInt(Data.sys分))
+/* 000439aa */	{
+/* 000439aa */		return false;
+/* 000439b2 */	}
+/* 000439b8 */	if (!VSFile.ReadInt(Data.sys秒))
+/* 000439d6 */	{
+/* 000439d6 */		return false;
+/* 000439de */	}
+/* 000439e4 */	if (!VSFile.ReadString(Data.ゲーム時間文字列))
+/* 00043a04 */	{
+/* 00043a04 */		return false;
+/* 00043a0c */	}
+/* 00043a12 */	if (!VSFile.ReadString(Data.コメント))
+/* 00043a32 */	{
+/* 00043a32 */		return false;
+/* 00043a3a */	}
+/* 00043a40 */	if (!VSFile.ReadInt(Data.PlayMinuteTime))
+/* 00043a5e */	{
+/* 00043a5e */		return false;
+/* 00043a66 */	}
+/* 00043a6c */	if (!VSFile.Close())
+/* 00043a7e */	{
+/* 00043a7e */		return false;
+/* 00043a86 */	}
+/* 00043a8c */	return true;
+/* 00043a94 */}
+
+string SYS_セーブファイル名(int _番号)
+/* 00043aa8 */{
+/* 00043aa8 */	string Prefix = EX_String("Ｅ＿セーブファイル名＿接頭語", "");
+/* 00043ac4 */	switch (_番号)
+/* 00043ad6 */	{
+/* 00043ad6 */	case -1:
+/* 00043ad6 */		return Prefix + "QC.asd";
+/* 00043ae6 */	case -2:
+/* 00043ae6 */		return "<memory>TempSelect_" + Prefix + ".asd";
+/* 00043afe */	case -3:
+/* 00043afe */		return "<memory>BackSelect1_" + Prefix + ".asd";
+/* 00043b16 */	case -4:
+/* 00043b16 */		return "<memory>BackSelect2_" + Prefix + ".asd";
+/* 00043b2e */	case -5:
+/* 00043b2e */		return "<memory>MemoryMode_" + Prefix + ".asd";
+/* 00043b46 */	case -6:
+/* 00043b46 */		return "SystemSuspend.asd";
+/* 00043b4e */	}
+/* 00043b4e */	return Prefix + "%02d.asd" % _番号;
+/* 00043b6c */}
+
+string SYS_追加セーブファイル名(int _番号)
+/* 00043b80 */{
+/* 00043b80 */	string Prefix = EX_String("Ｅ＿セーブファイル名＿接頭語", "");
+/* 00043b9c */	switch (_番号)
+/* 00043bae */	{
+/* 00043bae */	case -1:
+/* 00043bae */		return Prefix + "QC.vsf";
+/* 00043bbe */	case -2:
+/* 00043bbe */		return Prefix + "TempSelect.vsf";
+/* 00043bce */	case -3:
+/* 00043bce */		return Prefix + "BackSelect1.vsf";
+/* 00043bde */	case -4:
+/* 00043bde */		return Prefix + "BackSelect2.vsf";
+/* 00043bee */	case -5:
+/* 00043bee */		return Prefix + "MemoryMode.vsf";
+/* 00043bfe */	case -6:
+/* 00043bfe */		return "SystemSuspend.vsf";
+/* 00043c06 */	}
+/* 00043c06 */	return Prefix + "%02d.vsf" % _番号;
+/* 00043c24 */}
+
+bool SYS_セーブファイル番号チェック(int SaveNumber)
+/* 00043c38 */{
+/* 00043c38 */	if (SaveNumber >= 0)
+/* 00043c46 */	{
+/* 00043c46 */		return true;
+/* 00043c4e */	}
+/* 00043c54 */	switch (SaveNumber)
+/* 00043c66 */	{
+/* 00043c66 */	case -6:
+/* 00043c66 */	case -5:
+/* 00043c66 */	case -4:
+/* 00043c66 */	case -3:
+/* 00043c66 */	case -2:
+/* 00043c66 */	case -1:
+/* 00043c66 */		return true;
+/* 00043c6e */	}
+/* 00043c6e */	return false;
+/* 00043c76 */}
+
+bool SYS_セーブファイル存在(int _セーブ番号)
+/* 00043c8a */{
+/* 00043c8a */	if (!SYS_セーブファイル番号チェック(_セーブ番号))
+/* 00043c9e */	{
+/* 00043c9e */		return false;
+/* 00043ca6 */	}
+/* 00043cac */	if (!system.ExistSaveFile(SYS_セーブファイル名(_セーブ番号)))
+/* 00043cc6 */	{
+/* 00043cc6 */		return false;
+/* 00043cce */	}
+/* 00043cd4 */	if (!system.ExistSaveFile(SYS_追加セーブファイル名(_セーブ番号)))
+/* 00043cee */	{
+/* 00043cee */		return false;
+/* 00043cf6 */	}
+/* 00043cfc */	return true;
+/* 00043d04 */}
+
+bool SYS_セーブファイルコピー(int nDestNum, int nSrcNum)
+/* 00043d18 */{
+/* 00043d18 */	if (!system.CopySaveFile(SYS_セーブファイル名(nDestNum), SYS_セーブファイル名(nSrcNum)))
+/* 00043d3e */	{
+/* 00043d3e */		return false;
+/* 00043d46 */	}
+/* 00043d4c */	if (!system.CopySaveFile(SYS_追加セーブファイル名(nDestNum), SYS_追加セーブファイル名(nSrcNum)))
+/* 00043d72 */	{
+/* 00043d72 */		return false;
+/* 00043d7a */	}
+/* 00043d80 */	return true;
+/* 00043d88 */}
+
+void SYS_セーブファイル削除(int nNum)
+/* 00043d9c */{
+/* 00043d9c */	system.DeleteSaveFile(SYS_セーブファイル名(nNum));
+/* 00043db0 */	system.DeleteSaveFile(SYS_追加セーブファイル名(nNum));
+/* 00043dc4 */}
+
+void SYS_最終セーブ番号更新(int nNum)
+/* 00043dd2 */{
+/* 00043dd2 */	_最終セーブ番号 = nNum;
+/* 00043ddc */}
+
+int SYS_最終セーブ番号取得()
+/* 00043dea */{
+/* 00043dea */	return _最終セーブ番号;
+/* 00043df2 */}
+
+bool SYS_セーブ実行(int 番号, string ゲーム時間文字列, string コメント)
+/* 00043e06 */{
+/* 00043e06 */	if (!AnteaterADVEngine.ADVLogList_Save(g_ADVLogListForSaveData))
+/* 00043e1e */	{
+/* 00043e1e */		system.Error("バックログ用メモリの保存に失敗しました");
+/* 00043e2c */	}
+/* 00043e32 */	array@int PartsLibraryData;
+/* 00043e3c */	if (!PARTS_Save(PartsLibraryData))
+/* 00043e50 */	{
+/* 00043e50 */		system.Error("パーツライブラリの保存に失敗しました");
+/* 00043e5e */	}
+/* 00043e64 */	SYS_共有セーブ();
+/* 00043e6c */	SYS_システム共通セーブ();
+/* 00043e72 */	string セーブファイル名 = SYS_セーブファイル名(番号);
+/* 00043e88 */	string 追加セーブファイル名 = SYS_追加セーブファイル名(番号);
+/* 00043e9e */	g_ASTimerManager.UpdateCurrentTime();
+/* 00043eaa */	int nSucceeded;
+/* 00043eb4 */	bool bSaved = system.ResumeSave(SYS_セーブキー(), セーブファイル名, nSucceeded) != 0;
+/* 00043ee4 */	if (bSaved)
+/* 00043ef0 */	{
+/* 00043ef0 */		if (nSucceeded != 0)
+/* 00043f04 */		{
+/* 00043f04 */			if (!SYS_追加セーブ(番号, ゲーム時間文字列, コメント))
+/* 00043f24 */			{
+/* 00043f24 */				system.Error("追加セーブファイル\n【 %s 】\nの保存に失敗しました" % SYS_追加セーブファイル名(番号));
+/* 00043f46 */			}
+/* 00043f4c */		}
+/* 00043f52 */		else
+/* 00043f52 */		{
+/* 00043f52 */			system.MsgBox("セーブファイル\n【 %s 】\nの保存に失敗しました" % セーブファイル名);
+/* 00043f6e */		}
+/* 00043f6e */	}
+/* 00043f74 */	else
+/* 00043f74 */	{
+/* 00043f74 */		SYS_セーブ実行_ロード後復帰処理(PartsLibraryData);
+/* 00043f80 */	}
+/* 00043f80 */	SYS_セーブ実行_セーブロード後共通復帰処理();
+/* 00043f86 */	return bSaved;
+/* 00043f8e */}
+
+void SYS_セーブ実行_ロード後復帰処理(ref array@int PartsLibraryData)
+/* 00043fa2 */{
+/* 00043fa2 */	if (!g_bBeginSelect)
+/* 00043fb0 */	{
+/* 00043fb0 */		SYS_セーブファイル削除(-2);
+/* 00043fbc */	}
+/* 00043fc2 */	SYS_セーブファイル削除(-3);
+/* 00043fce */	SYS_セーブファイル削除(-4);
+/* 00043fda */	g_bCanReturnBackSelect = false;
+/* 00043fe4 */	SYS_DeleteSuspendSaveFile();
+/* 00043fea */	if (g_ADVLogListForSaveData.Empty())
+/* 00043ffa */	{
+/* 00043ffa */		AnteaterADVEngine.ADVLogList_Clear();
+/* 00044004 */	}
+/* 0004400a */	else if (!AnteaterADVEngine.ADVLogList_Load(g_ADVLogListForSaveData))
+/* 00044022 */	{
+/* 00044022 */		system.Error("バックログ用メモリの復帰に失敗しました");
+/* 00044030 */	}
+/* 00044036 */	SYS_クイックセーブファイル存在フラグ更新();
+/* 0004403c */	ChipmunkSpriteEngine.SP_DeleteAll();
+/* 00044048 */	ChipmunkSpriteEngine.KeepPreviousView_SetMode(g_KeepPreviousViewMode);
+/* 0004405a */	SYS_共有ロード();
+/* 00044062 */	SYS_システム共通ロード();
+/* 00044068 */	if (!PARTS_Load(PartsLibraryData))
+/* 0004407c */	{
+/* 0004407c */		system.Error("パーツライブラリの読み込みに失敗しました");
+/* 0004408a */	}
+/* 00044090 */	g_MessageWindowManager.Update(g_MessageWindowStatusManager);
+/* 000440a2 */	g_MessageTextView.DrawAll(g_MessageTextModel);
+/* 000440b4 */	SYS_セーブ実行_音楽復帰();
+/* 000440ba */	SYS_セーブ実行_ループ効果音復帰();
+/* 000440c0 */	SYS_擬音復帰();
+/* 000440c6 */	SYS_背景音声復帰();
+/* 000440cc */	_g_Ｍ送ホイール確認時刻 = -2147483648;
+/* 000440d6 */	SYS_スキップモード設定(false, true);
+/* 000440e8 */	SYS_オート設定(false, true);
+/* 000440fa */	g_ASTimerManager.Rebuild();
+/* 00044106 */	SYS_PlayTime_Reset();
+/* 0004410c */}
+
+void SYS_セーブ実行_セーブロード後共通復帰処理()
+/* 0004411a */{
+/* 0004411a */	g_ADVLogListForSaveData.Free();
+/* 00044124 */	g_ADVSceneListForSaveData.Free();
+/* 0004412e */}
+
+void SYS_セーブ実行_音楽復帰()
+/* 0004413c */{
+/* 0004413c */	int PrevBGMNumber = _音楽;
+/* 0004414e */	int PrevPause = _一時停止中;
+/* 00044160 */	int PrevBGMVolume = g_BGMVolume;
+/* 00044172 */	_音楽 = -2147483648;
+/* 0004417c */	音楽(0, -1, -1);
+/* 00044194 */	SYS_PlayBGM(PrevBGMNumber, 0, 1, _音楽効果時間, PrevBGMVolume);
+/* 000441b8 */	if (PrevPause)
+/* 000441c4 */	{
+/* 000441c4 */		Ａ＿音楽一時停止();
+/* 000441ca */	}
+/* 000441d0 */}
+
+void SYS_セーブ実行_ループ効果音復帰()
+/* 000441de */{
+/* 000441de */	int nNewループ効果音 = _ループ効果音;
+/* 000441f0 */	ループ効果音(0, -1, -1);
+/* 00044208 */	ループ効果音ボリューム(_ループ効果音ボリューム);
+/* 00044214 */	if (nNewループ効果音 != 0)
+/* 00044228 */	{
+/* 00044228 */		ループ効果音(nNewループ効果音, -1, -1);
+/* 00044240 */	}
+/* 00044246 */}
+
+void SYS_擬音復帰()
+/* 00044254 */{
+/* 00044254 */	BackSE_t Result;
+/* 00044264 */	Result = SYS_GetBackSE(10);
+/* 00044280 */	if (!Result.bStop)
+/* 00044296 */	{
+/* 00044296 */		SYS_PlayBackSE(SYS_SOUNDGROUP_GIMICSE(), Result.PlayList);
+/* 000442b2 */	}
+/* 000442b8 */}
+
+void SYS_背景音声復帰()
+/* 000442c6 */{
+/* 000442c6 */	int Count;
+/* 000442d0 */	for (Count = 11; Count < 999; ++Count)
+/* 000442fa */	{
+/* 000442fa */		BackSE_t Result;
+/* 0004430a */		Result = SYS_GetBackSE(Count);
+/* 00044326 */		if (Result.FadeChannel < 11)
+/* 00044342 */		{
+/* 00044342 */			break;
+/* 0004434e */		}
+/* 00044354 */		if (!Result.bStop)
+/* 0004436a */		{
+/* 0004436a */			SYS_PlayBackSE(Result.Group, Result.PlayList);
+/* 0004438e */		}
+/* 00044394 */	}
+/* 000443a0 */}
+
+bool SYS_状態セーブ(int nTypeNum, string ゲーム時間文字列, string コメント)
+/* 000443ae */{
+/* 000443ae */	画面保管_t t;
+/* 000443be */	SYS_画面保管(t);
+/* 000443ca */	SYS_選択肢非表示();
+/* 000443d0 */	bool bPrevShowMsgKeyWaitAnime = SYS_キー待ちマーク表示状態取得();
+/* 000443e2 */	if (bPrevShowMsgKeyWaitAnime)
+/* 000443ee */	{
+/* 000443ee */		SYS_キー待ちマーク表示設定(false);
+/* 000443fa */	}
+/* 00044400 */	bool QuickSaved = nTypeNum == -1;
+/* 0004441c */	bool SuspendSaved = nTypeNum == -6;
+/* 00044438 */	bool bSaved = false;
+/* 00044442 */	if ((QuickSaved || SuspendSaved) && g_bBeginSelect && g_bInSelect && SYS_セーブファイル存在(-2))
+/* 000444e4 */	{
+/* 000444e4 */		if (!SYS_セーブファイルコピー(nTypeNum, -2))
+/* 000444fe */		{
+/* 000444fe */			system.Error("クイックセーブでの選択肢テンポラリセーブファイルからのコピーに失敗しました");
+/* 0004450c */		}
+/* 00044512 */		bSaved = true;
+/* 0004451c */	}
+/* 00044522 */	else
+/* 00044522 */	{
+/* 00044522 */		bSaved = SYS_セーブ実行(nTypeNum, ゲーム時間文字列, コメント);
+/* 00044546 */	}
+/* 00044546 */	g_bExistQuickSaveFile = g_bExistQuickSaveFile || QuickSaved;
+/* 0004457e */	bool bPlayVoice = bSaved ? false : true;
+/* 000445a8 */	SYS_画面復帰(t, bPlayVoice);
+/* 000445ba */	if (g_MessageWindowStatusManager.IsExistActiveMessageWindow())
+/* 000445cc */	{
+/* 000445cc */		g_SystemButtonViewList.SetMessageWindowNumber(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 000445e4 */		g_SystemButtonViewList.Update();
+/* 000445f0 */	}
+/* 000445f6 */	SYS_選択肢表示();
+/* 000445fc */	g_MessageTextView.DrawAll(g_MessageTextModel);
+/* 0004460e */	SYS_キー待ちマーク表示設定(bPrevShowMsgKeyWaitAnime);
+/* 0004461a */	return bSaved;
+/* 00044622 */}
+
+void SYS_ロード実行(int 番号)
+/* 00044636 */{
+/* 00044636 */	SYS_共有セーブ();
+/* 0004463e */	SYS_システム共通セーブ();
+/* 00044644 */	SYS_セーブファイルコピー(-2, 番号);
+/* 00044658 */	SYS_StopVoice();
+/* 0004465e */	SYS_擬音停止();
+/* 00044664 */	SYS_背景音声停止();
+/* 0004466a */	SYS_StopSE();
+/* 00044670 */	PARTS_StopSoundWithoutSystemsound();
+/* 00044676 */	system.ResumeLoad(SYS_セーブキー(), SYS_セーブファイル名(番号));
+/* 0004468e */	system.Error("ロードに失敗しました");
+/* 0004469c */}
+
+void SYS_擬音停止()
+/* 000446aa */{
+/* 000446aa */	Ａ＿擬音終了();
+/* 000446b0 */}
+
+void SYS_背景音声停止()
+/* 000446be */{
+/* 000446be */	int Count;
+/* 000446c8 */	for (Count = 11; Count < 999; ++Count)
+/* 000446f2 */	{
+/* 000446f2 */		BackSE_t Result;
+/* 00044702 */		Result = SYS_GetBackSE(Count);
+/* 0004471e */		if (Result.FadeChannel < 11)
+/* 0004473a */		{
+/* 0004473a */			break;
+/* 00044746 */		}
+/* 0004474c */		Ａ＿背景音声終了(Result.Group);
+/* 00044760 */	}
+/* 0004476c */}
+
+int SYS_共有セーブ()
+/* 0004477a */{
+/* 0004477a */	int num;
+/* 00044784 */	string セーブキー = SYS_セーブキー();
+/* 00044794 */	string 共有データファイル名 = SYS_共有データファイル名();
+/* 000447a4 */	string 共有データグループ名 = SYS_共有データグループ名();
+/* 000447b4 */	int ok = system.GroupSave(セーブキー, 共有データファイル名, 共有データグループ名, num);
+/* 000447e0 */	if (!ok)
+/* 000447ee */	{
+/* 000447ee */		system.Error("セーブファイル【 %s 】\nの保存に失敗しました" % 共有データファイル名);
+/* 0004480a */		return -1;
+/* 00044812 */	}
+/* 00044818 */	return num;
+/* 00044820 */}
+
+int SYS_共有ロード()
+/* 00044834 */{
+/* 00044834 */	int num;
+/* 0004483e */	string セーブキー = SYS_セーブキー();
+/* 0004484e */	string 共有データファイル名 = SYS_共有データファイル名();
+/* 0004485e */	string 共有データグループ名 = SYS_共有データグループ名();
+/* 0004486e */	if (!system.ExistSaveFile(共有データファイル名))
+/* 00044882 */	{
+/* 00044882 */		return 0;
+/* 0004488a */	}
+/* 00044890 */	int ok = system.GroupLoad(セーブキー, 共有データファイル名, 共有データグループ名, num);
+/* 000448bc */	if (!ok)
+/* 000448ca */	{
+/* 000448ca */		system.Error("セーブファイル【 %s 】\nの読み込みに失敗しました" % 共有データファイル名);
+/* 000448e6 */		return -1;
+/* 000448ee */	}
+/* 000448f4 */	return num;
+/* 000448fc */}
+
+void SYS_システム共通セーブ()
+/* 00044910 */{
+/* 00044910 */	int num;
+/* 0004491a */	string セーブキー = SYS_セーブキー();
+/* 0004492a */	string システム共通データファイル名 = SYS_システム共通データファイル名();
+/* 0004493a */	string システム共通データグループ名 = SYS_システム共通データグループ名();
+/* 0004494a */	int ok = system.GroupSave(セーブキー, システム共通データファイル名, システム共通データグループ名, num);
+/* 00044976 */	if (!ok)
+/* 00044984 */	{
+/* 00044984 */		system.Error("セーブファイル【 %s 】\nの保存に失敗しました" % システム共通データファイル名);
+/* 000449a0 */	}
+/* 000449a6 */}
+
+void SYS_システム共通ロード()
+/* 000449b4 */{
+/* 000449b4 */	int num;
+/* 000449be */	string セーブキー = SYS_セーブキー();
+/* 000449ce */	string システム共通データファイル名 = SYS_システム共通データファイル名();
+/* 000449de */	string システム共通データグループ名 = SYS_システム共通データグループ名();
+/* 000449ee */	if (!system.ExistSaveFile(システム共通データファイル名))
+/* 00044a02 */	{
+/* 00044a02 */		return;
+/* 00044a04 */	}
+/* 00044a0a */	int ok = system.GroupLoad(セーブキー, システム共通データファイル名, システム共通データグループ名, num);
+/* 00044a36 */	if (!ok)
+/* 00044a44 */	{
+/* 00044a44 */		system.Error("セーブファイル【 %s 】\nの読み込みに失敗しました" % システム共通データファイル名);
+/* 00044a60 */	}
+/* 00044a66 */}
+
+void SYS_クイックセーブファイル存在フラグ更新()
+/* 00044a74 */{
+/* 00044a74 */	g_bExistQuickSaveFile = system.ExistSaveFile(SYS_セーブファイル名(-1));
+/* 00044a94 */}
+
+bool SYS_ゲームセーブ(int SaveNumber, string TimeInGame, string Comment)
+/* 00044aa2 */{
+/* 00044aa2 */	SYS_最終セーブ番号更新(SaveNumber);
+/* 00044aae */	bool Saved = false;
+/* 00044ab8 */	if (g_bBeginSelect && g_bInSelect && SYS_セーブファイル存在(-2))
+/* 00044b12 */	{
+/* 00044b12 */		SYS_システム共通セーブ();
+/* 00044b18 */		if (!SYS_セーブファイルコピー(SaveNumber, -2))
+/* 00044b32 */		{
+/* 00044b32 */			system.Error("セーブでの選択肢テンポラリセーブファイルからのコピーに失敗しました");
+/* 00044b40 */		}
+/* 00044b46 */		if (!SYS_追加セーブ(SaveNumber, TimeInGame, Comment))
+/* 00044b66 */		{
+/* 00044b66 */			system.Error("追加セーブに失敗しました");
+/* 00044b74 */		}
+/* 00044b7a */		Saved = true;
+/* 00044b84 */	}
+/* 00044b8a */	else
+/* 00044b8a */	{
+/* 00044b8a */		Saved = SYS_セーブ実行(SaveNumber, TimeInGame, Comment);
+/* 00044bae */	}
+/* 00044bae */	return Saved;
+/* 00044bb6 */}
+
+void SYS_ゲームロード(int SaveNumber)
+/* 00044bca */{
+/* 00044bca */	SYS_ロード実行(SaveNumber);
+/* 00044bd6 */}
+
+string SYS_GameSave_GetThumbnailFileName(int SaveNumber)
+/* 00044be4 */{
+/* 00044be4 */	return "Thumb%04d.qnt" % SaveNumber;
+/* 00044bfa */}
+
+string SYS_セーブキー()
+/* 00044c0e */{
+/* 00044c0e */	return "仮キー名";
+/* 00044c16 */}
+
+string SYS_共有データファイル名()
+/* 00044c2a */{
+/* 00044c2a */	return EX_String("Ｅ＿セーブファイル名＿接頭語", "") + "AFCommon.asd";
+/* 00044c46 */}
+
+string SYS_共有データグループ名()
+/* 00044c5a */{
+/* 00044c5a */	return "共有データ";
+/* 00044c62 */}
+
+string SYS_システム共通データファイル名()
+/* 00044c76 */{
+/* 00044c76 */	return EX_String("Ｅ＿セーブファイル名＿接頭語", "") + "AFSystemCommon.asd";
+/* 00044c92 */}
+
+string SYS_システム共通データグループ名()
+/* 00044ca6 */{
+/* 00044ca6 */	return "システム共通データ";
+/* 00044cae */}
+
+bool SYS_IsSystemSuspended()
+/* 00044cc2 */{
+/* 00044cc2 */	return system.ExistSaveFile(SYS_セーブファイル名(-6));
+/* 00044cd8 */}
+
+void SYS_SystemSuspend()
+/* 00044cec */{
+/* 00044cec */	SYS_状態セーブ(-6, _ゲーム時間, "");
+/* 00044d06 */}
+
+void SYS_SystemResume()
+/* 00044d14 */{
+/* 00044d14 */	SYS_ロード実行(-6);
+/* 00044d20 */}
+
+void SYS_DeleteSuspendSaveFile()
+/* 00044d2e */{
+/* 00044d2e */	SYS_セーブファイル削除(-6);
+/* 00044d3a */}
+

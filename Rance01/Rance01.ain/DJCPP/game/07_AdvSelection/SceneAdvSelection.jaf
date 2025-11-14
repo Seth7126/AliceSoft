@@ -1,0 +1,274 @@
+SceneAdvSelection::SceneAdvSelection()
+/* 0007bba0 */{
+/* 0007bba8 */	this.selectedSubGroup_ = -1;
+/* 0007bbba */	this.state_ = 1;
+/* 0007bbc4 */}
+
+void SceneAdvSelection::init()
+/* 0007bbcc */{
+/* 0007bbcc */	this.selectedSubGroup_ = -1;
+/* 0007bbde */	this.initGroupButton();
+/* 0007bbe6 */	this.initSubGroupButton();
+/* 0007bbee */	this.initBg();
+/* 0007bbf6 */	this.btnSystemMenu_.init("システム／ボタン／メニュー", "", -1);
+/* 0007bc14 */	this.btnSystemMenu_.setPos(16, 716, 5000);
+/* 0007bc32 */}
+
+void SceneAdvSelection::initGroupButton()
+/* 0007bc3a */{
+/* 0007bc3a */	this.btnCategory_.Alloc(5);
+/* 0007bc50 */	array@string category;
+/* 0007bc5a */	category.PushBack("目");
+/* 0007bc6a */	category.PushBack("口");
+/* 0007bc7a */	category.PushBack("手");
+/* 0007bc8a */	category.PushBack("竿");
+/* 0007bc9a */	category.PushBack("足");
+/* 0007bcaa */	int i;
+/* 0007bcb4 */	for (i = 0; i < this.btnCategory_.Numof(); ++i)
+/* 0007bce4 */	{
+/* 0007bce4 */		this.btnCategory_[i].init("システム／ボタン／選択肢／" + category[i], "");
+/* 0007bd14 */		this.btnCategory_[i].setPos(16, 128 + i * 80, -2147483648);
+/* 0007bd4a */	}
+/* 0007bd50 */}
+
+void SceneAdvSelection::initSubGroupButton()
+/* 0007bd58 */{
+/* 0007bd58 */	this.btnSubGroup_.Alloc(this.item_.Numof());
+/* 0007bd6e */	int i;
+/* 0007bd78 */	for (i = 0; i < this.btnSubGroup_.Numof(); ++i)
+/* 0007bda8 */	{
+/* 0007bda8 */		int g = this.item_[i].id / 100;
+/* 0007bdd2 */		int n = this.item_[i].position;
+/* 0007bdf4 */		this.btnSubGroup_[i].init("システム／ボタン／幅４００", this.item_[i].name);
+/* 0007be24 */		this.btnSubGroup_[i].setPos(104, 128 + (g - 1) * 80 + 56 * n, -2147483648);
+/* 0007be72 */		this.btnSubGroup_[i].setShow(false);
+/* 0007be8c */	}
+/* 0007be92 */}
+
+int SceneAdvSelection::update()
+/* 0007be9a */{
+/* 0007be9a */	switch (this.state_)
+/* 0007beac */	{
+/* 0007beac */	case 1:
+/* 0007beac */		checkBackLogAndScene(false);
+/* 0007beb8 */		int n = this.getCategoryButtonClicked();
+/* 0007becc */		if (n != -1)
+/* 0007bee0 */		{
+/* 0007bee0 */			this.selectedSubGroup_ = n;
+/* 0007beea */			this.setCategoryButtonSelected(n);
+/* 0007bef8 */			this.hideSubGroupButton();
+/* 0007bf00 */			this.fadeInSubGroupButton(n + 1, false);
+/* 0007bf1c */		}
+/* 0007bf22 */		this.clickedButton_ = this.getButtonClicked();
+/* 0007bf36 */		if (this.clickedButton_ != -1)
+/* 0007bf4a */		{
+/* 0007bf4a */			this.fadeObject(false);
+/* 0007bf58 */			this.state_ = 2;
+/* 0007bf62 */		}
+/* 0007bf68 */		if (g_mouse.isClick(1))
+/* 0007bf80 */		{
+/* 0007bf80 */			g_sysSound.play(2003, false);
+/* 0007bf98 */			this.hideSubGroupButton();
+/* 0007bfa0 */			this.hideCategoryButton();
+/* 0007bfa8 */			this.btnSystemMenu_.setShow(false);
+/* 0007bfba */			this.state_ = 3;
+/* 0007bfc4 */		}
+/* 0007bfca */		this.checkSystemMenuClick();
+/* 0007bfd2 */		this.updateAutoModeMark();
+/* 0007bfda */		this.updateSkipModeMark();
+/* 0007bfe2 */		break;
+/* 0007bfe8 */	case 3:
+/* 0007bfe8 */		if (g_mouse.isClick(0) || g_mouse.isClick(1))
+/* 0007c030 */		{
+/* 0007c030 */			this.fadeCategoryButton(true, true);
+/* 0007c044 */			this.fadeInSubGroupButton(this.selectedSubGroup_ + 1, true);
+/* 0007c060 */			this.btnSystemMenu_.setShow(true);
+/* 0007c072 */			this.state_ = 1;
+/* 0007c07c */		}
+/* 0007c082 */		break;
+/* 0007c088 */	case 2:
+/* 0007c088 */		if (!this.partsBg_.isMotion())
+/* 0007c09c */		{
+/* 0007c09c */			this.result_ = this.item_[this.clickedButton_].id;
+/* 0007c0be */			this.clear();
+/* 0007c0c6 */			return 1;
+/* 0007c0ce */		}
+/* 0007c0d4 */		break;
+/* 0007c0da */	}
+/* 0007c0da */	return 0;
+/* 0007c0e2 */}
+
+void SceneAdvSelection::run(ref array@SelectionItem item)
+/* 0007c0f0 */{
+/* 0007c0f0 */	this.item_.Free();
+/* 0007c0fa */	this.item_.Alloc(item.Numof());
+/* 0007c11a */	this.item_.Copy(0, item, 0, item.Numof());
+/* 0007c148 */	this.init();
+/* 0007c150 */	this.fadeObject(true);
+/* 0007c15e */	ReleaseAutoAndSkip();
+/* 0007c164 */	this.state_ = 1;
+/* 0007c16e */}
+
+int SceneAdvSelection::getResult()
+/* 0007c176 */{
+/* 0007c176 */	return this.result_;
+/* 0007c17e */}
+
+void SceneAdvSelection::clear()
+/* 0007c18c */{
+/* 0007c18c */	this.btnCategory_.Free();
+/* 0007c196 */	this.btnSubGroup_.Free();
+/* 0007c1a0 */	this.item_.Free();
+/* 0007c1aa */	this.partsBg_.release();
+/* 0007c1b6 */}
+
+int SceneAdvSelection::getButtonClicked()
+/* 0007c1be */{
+/* 0007c1be */	int i;
+/* 0007c1c8 */	for (i = 0; i < this.btnSubGroup_.Numof(); ++i)
+/* 0007c1f8 */	{
+/* 0007c1f8 */		if (this.btnSubGroup_[i].isClick())
+/* 0007c212 */		{
+/* 0007c212 */			return i;
+/* 0007c21a */		}
+/* 0007c220 */	}
+/* 0007c226 */	return -1;
+/* 0007c22e */}
+
+int SceneAdvSelection::getCategoryButtonClicked()
+/* 0007c23c */{
+/* 0007c23c */	int i;
+/* 0007c246 */	for (i = 0; i < this.btnCategory_.Numof(); ++i)
+/* 0007c276 */	{
+/* 0007c276 */		if (this.btnCategory_[i].isClick())
+/* 0007c290 */		{
+/* 0007c290 */			return i;
+/* 0007c298 */		}
+/* 0007c29e */	}
+/* 0007c2a4 */	return -1;
+/* 0007c2ac */}
+
+void SceneAdvSelection::fadeCategoryButton(bool val, bool immediately)
+/* 0007c2ba */{
+/* 0007c2ba */	int i;
+/* 0007c2c4 */	for (i = 0; i < this.btnCategory_.Numof(); ++i)
+/* 0007c2f4 */	{
+/* 0007c2f4 */		if (immediately)
+/* 0007c300 */		{
+/* 0007c300 */			this.btnCategory_[i].setShow(val);
+/* 0007c31a */		}
+/* 0007c320 */		else
+/* 0007c320 */		{
+/* 0007c320 */			this.btnCategory_[i].fadeIn(val, 0, i);
+/* 0007c346 */		}
+/* 0007c346 */	}
+/* 0007c34c */}
+
+void SceneAdvSelection::fadeInSubGroupButton(int group, bool immediately)
+/* 0007c354 */{
+/* 0007c354 */	int i;
+/* 0007c35e */	int itemCount;
+/* 0007c368 */	for (i = 0; i < this.btnSubGroup_.Numof(); ++i)
+/* 0007c398 */	{
+/* 0007c398 */		if (this.item_[i].id / 100 == group)
+/* 0007c3c4 */		{
+/* 0007c3c4 */			if (immediately)
+/* 0007c3d0 */			{
+/* 0007c3d0 */				this.btnSubGroup_[i].setShow(true);
+/* 0007c3ea */			}
+/* 0007c3f0 */			else
+/* 0007c3f0 */			{
+/* 0007c3f0 */				this.btnSubGroup_[i].fadeIn(true, 1, itemCount);
+/* 0007c416 */			}
+/* 0007c416 */			++itemCount;
+/* 0007c41c */		}
+/* 0007c422 */	}
+/* 0007c428 */}
+
+void SceneAdvSelection::hideSubGroupButton()
+/* 0007c430 */{
+/* 0007c430 */	int i;
+/* 0007c43a */	for (i = 0; i < this.btnSubGroup_.Numof(); ++i)
+/* 0007c46a */	{
+/* 0007c46a */		this.btnSubGroup_[i].setShow(false);
+/* 0007c484 */	}
+/* 0007c48a */}
+
+void SceneAdvSelection::hideCategoryButton()
+/* 0007c492 */{
+/* 0007c492 */	int i;
+/* 0007c49c */	for (i = 0; i < this.btnCategory_.Numof(); ++i)
+/* 0007c4cc */	{
+/* 0007c4cc */		this.btnCategory_[i].setShow(false);
+/* 0007c4e6 */	}
+/* 0007c4ec */}
+
+void SceneAdvSelection::fadeOutSubGroupButton()
+/* 0007c4f4 */{
+/* 0007c4f4 */	int i;
+/* 0007c4fe */	for (i = 0; i < this.btnSubGroup_.Numof(); ++i)
+/* 0007c52e */	{
+/* 0007c52e */		this.btnSubGroup_[i].fadeIn(false, 1, 0);
+/* 0007c554 */	}
+/* 0007c55a */}
+
+void SceneAdvSelection::setCategoryButtonSelected(int btnIndex)
+/* 0007c562 */{
+/* 0007c562 */	int i;
+/* 0007c56c */	for (i = 0; i < this.btnCategory_.Numof(); ++i)
+/* 0007c59c */	{
+/* 0007c59c */		this.btnCategory_[i].setSelected(i == btnIndex);
+/* 0007c5c0 */	}
+/* 0007c5c6 */}
+
+void SceneAdvSelection::initBg()
+/* 0007c5ce */{
+/* 0007c5ce */	this.partsBg_.initAsPlaneImage(1024, 768, 0, 0, 0, 128);
+/* 0007c5fe */	this.partsBg_.setPos(0, 0, 9000);
+/* 0007c61c */}
+
+void SceneAdvSelection::fadeObject(bool val)
+/* 0007c624 */{
+/* 0007c624 */	this.partsBg_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0007c654 */	this.fadeCategoryButton(val, false);
+/* 0007c668 */	this.btnSystemMenu_.fadeIn(val);
+/* 0007c67a */	if (!val)
+/* 0007c688 */	{
+/* 0007c688 */		this.fadeOutSubGroupButton();
+/* 0007c690 */	}
+/* 0007c696 */}
+
+void SceneAdvSelection::checkSystemMenuClick()
+/* 0007c69e */{
+/* 0007c69e */	if (this.btnSystemMenu_.isClick())
+/* 0007c6b0 */	{
+/* 0007c6b0 */		OpenSystemMenu(0);
+/* 0007c6bc */	}
+/* 0007c6c2 */}
+
+void SceneAdvSelection::updateAutoModeMark()
+/* 0007c6ca */{
+/* 0007c6ca */	if (Ａ＿オートモード中確認())
+/* 0007c6d6 */	{
+/* 0007c6d6 */		SYS_オートモードマーク作成(g_MessageWindowModelManager.GetMessageWindow(1));
+/* 0007c6fc */		_g_AutoModeCGList.SetShow(true);
+/* 0007c70e */	}
+/* 0007c71a */	else
+/* 0007c71a */	{
+/* 0007c71a */		SYS_オートモードマーク非表示();
+/* 0007c720 */	}
+/* 0007c720 */}
+
+void SceneAdvSelection::updateSkipModeMark()
+/* 0007c728 */{
+/* 0007c728 */	if (SYS_スキップモード確認())
+/* 0007c734 */	{
+/* 0007c734 */		SYS_スキップモードマーク作成(g_MessageWindowModelManager.GetMessageWindow(1));
+/* 0007c75a */		_g_MsgSkipModeCGList.SetShow(true);
+/* 0007c76c */	}
+/* 0007c778 */	else
+/* 0007c778 */	{
+/* 0007c778 */		SYS_スキップモードマーク非表示();
+/* 0007c77e */	}
+/* 0007c77e */}
+

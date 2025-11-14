@@ -1,0 +1,133 @@
+SoundInfomation::SoundInfomation()
+/* 00060946 */{
+/* 0006094e */	this.playStartTime = this.number = -1;
+/* 0006096a */}
+
+SystemSound::SystemSound()
+/* 00060972 */{
+/* 0006097a */	this.timer_.Reset();
+/* 00060986 */}
+
+void SystemSound::play(int number, bool reuse)
+/* 0006098e */{
+/* 0006098e */	if (!KiwiSoundEngine.Sound_IsExist(number))
+/* 000609a6 */	{
+/* 000609a6 */		return;
+/* 000609a8 */	}
+/* 000609ae */	if (!reuse)
+/* 000609bc */	{
+/* 000609bc */		int passed = this.getPassedTimeFromLastPlay(number);
+/* 000609d6 */		if (passed == -1 || passed > 50)
+/* 00060a10 */		{
+/* 00060a10 */			this.innerPlay(this.getEmptyChannel(), number);
+/* 00060a26 */		}
+/* 00060a2c */	}
+/* 00060a32 */	else
+/* 00060a32 */	{
+/* 00060a32 */		int ch = this.getPreparedSoundChannel(number);
+/* 00060a4c */		if (ch == -1)
+/* 00060a60 */		{
+/* 00060a60 */			this.innerPlay(this.getEmptyChannel(), number);
+/* 00060a76 */		}
+/* 00060a7c */		else
+/* 00060a7c */		{
+/* 00060a7c */			this.innerPlay(ch, number);
+/* 00060a90 */		}
+/* 00060a90 */	}
+/* 00060a90 */}
+
+void SystemSound::stopSound(int number)
+/* 00060a98 */{
+/* 00060a98 */	int i;
+/* 00060aa2 */	for (i = 0; i < 5; ++i)
+/* 00060acc */	{
+/* 00060acc */		if (this.info_[i].number == number || number == -1)
+/* 00060b1c */		{
+/* 00060b1c */			KiwiSoundEngine.Sound_Stop(i + 10000);
+/* 00060b36 */		}
+/* 00060b3c */	}
+/* 00060b42 */}
+
+void SystemSound::playVoice(int number)
+/* 00060b4a */{
+/* 00060b4a */	if (number < 0)
+/* 00060b58 */	{
+/* 00060b58 */		return;
+/* 00060b5a */	}
+/* 00060b60 */	if (!KiwiSoundEngine.Sound_IsExist(number))
+/* 00060b78 */	{
+/* 00060b78 */		return;
+/* 00060b7a */	}
+/* 00060b80 */	this.innerPlay(5, number);
+/* 00060b94 */}
+
+int SystemSound::getPassedTimeFromLastPlay(int number)
+/* 00060b9c */{
+/* 00060b9c */	int latest = -1;
+/* 00060bae */	int i;
+/* 00060bb8 */	for (i = 0; i < 5; ++i)
+/* 00060be2 */	{
+/* 00060be2 */		if (this.info_[i].number == number && KiwiSoundEngine.Sound_IsPlay(i + 10000))
+/* 00060c3c */		{
+/* 00060c3c */			latest = Math.Max(this.info_[i].playStartTime, latest);
+/* 00060c6e */		}
+/* 00060c74 */	}
+/* 00060c7a */	if (latest == -1)
+/* 00060c8e */	{
+/* 00060c8e */		return -1;
+/* 00060c96 */	}
+/* 00060c9c */	return this.timer_.Get() - latest;
+/* 00060cb2 */}
+
+int SystemSound::getEmptyChannel()
+/* 00060cc0 */{
+/* 00060cc0 */	int i;
+/* 00060cca */	for (i = 0; i < 5; ++i)
+/* 00060cf4 */	{
+/* 00060cf4 */		if (!KiwiSoundEngine.Sound_IsPlay(i + 10000))
+/* 00060d14 */		{
+/* 00060d14 */			return i;
+/* 00060d1c */		}
+/* 00060d22 */	}
+/* 00060d28 */	return this.getOldestChannel();
+/* 00060d32 */}
+
+int SystemSound::getOldestChannel()
+/* 00060d40 */{
+/* 00060d40 */	int ch;
+/* 00060d4a */	int time = this.timer_.Get();
+/* 00060d62 */	int i;
+/* 00060d6c */	for (i = 0; i < 5; ++i)
+/* 00060d96 */	{
+/* 00060d96 */		if (this.info_[i].playStartTime != -1 && time > this.info_[i].playStartTime)
+/* 00060df6 */		{
+/* 00060df6 */			time = this.info_[i].playStartTime;
+/* 00060e18 */			ch = i;
+/* 00060e2a */		}
+/* 00060e30 */	}
+/* 00060e36 */	return ch;
+/* 00060e3e */}
+
+void SystemSound::innerPlay(int ch, int number)
+/* 00060e4c */{
+/* 00060e4c */	this.info_[ch].playStartTime = this.timer_.Get();
+/* 00060e70 */	this.info_[ch].number = number;
+/* 00060e8e */	int kiwiCh = ch + 10000;
+/* 00060ea8 */	KiwiSoundEngine.Sound_Unprepare(kiwiCh);
+/* 00060eba */	KiwiSoundEngine.Sound_Prepare(kiwiCh, number);
+/* 00060ed2 */	KiwiSoundEngine.Sound_Play(kiwiCh);
+/* 00060ee4 */}
+
+int SystemSound::getPreparedSoundChannel(int number)
+/* 00060eec */{
+/* 00060eec */	int i;
+/* 00060ef6 */	for (i = 0; i < 5; ++i)
+/* 00060f20 */	{
+/* 00060f20 */		if (this.info_[i].number == number)
+/* 00060f44 */		{
+/* 00060f44 */			return i;
+/* 00060f4c */		}
+/* 00060f52 */	}
+/* 00060f58 */	return -1;
+/* 00060f60 */}
+

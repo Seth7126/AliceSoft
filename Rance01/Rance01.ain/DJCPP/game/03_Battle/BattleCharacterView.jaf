@@ -1,0 +1,174 @@
+BattleCharacterView::BattleCharacterView()
+/* 00071e46 */{
+/* 00071e4e */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00071e70 */}
+
+void BattleCharacterView::init(ref Monster instance)
+/* 00071e78 */{
+/* 00071e78 */	this.instance_ <- instance;
+/* 00071e94 */	this.isPlayer_ = this.instance_ === NULL;
+/* 00071eb0 */	this.initParts();
+/* 00071eb8 */}
+
+void BattleCharacterView::initParts()
+/* 00071ec0 */{
+/* 00071ec0 */	string cg = this.getBaseCgName();
+/* 00071ed2 */	this.parts_[0].init(cg, 0);
+/* 00071ef2 */	this.parts_[1].initAsCgPlaneImage(cg, 255, 64, 0);
+/* 00071f1e */	this.parts_[1].setAlpha(128);
+/* 00071f38 */	this.parts_[2].initAsCgPlaneImage(cg, 255, 255, 255);
+/* 00071f64 */	this.parts_[0].setShow(true);
+/* 00071f7e */	createPartsGroup(this.parent_, this.parts_, 3100 + (this.isPlayer_ ? 50 : 0));
+/* 00071fb4 */	this.setPartsPos(cg);
+/* 00071fc2 */}
+
+string BattleCharacterView::getBaseCgName()
+/* 00071fca */{
+/* 00071fca */	return this.isPlayer_ ? "_モンスター／ランス.png" : "_%s" % this.instance_.getImageName();
+/* 00071ffc */}
+
+void BattleCharacterView::setPartsPos(string cgName)
+/* 0007200a */{
+/* 0007200a */	int x = EX_SA2Int("モンスターオフセット", cgName, "x", 0);
+/* 00072034 */	int y = EX_SA2Int("モンスターオフセット", cgName, "y", 0);
+/* 0007205e */	int i;
+/* 00072068 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00072098 */	{
+/* 00072098 */		this.parts_[i].setPos(x, y, -2147483648);
+/* 000720be */	}
+/* 000720c4 */	int x;
+/* 000720ce */	int y;
+/* 000720d8 */	this.getCharacterStartPos(x, y, this.isPlayer_);
+/* 000720f6 */	this.parent_.setPos(x, y, -2147483648);
+/* 00072114 */}
+
+void BattleCharacterView::getCharacterStartPos(ref int x, ref int y, bool isPlayer)
+/* 0007211c */{
+/* 0007211c */	x = isPlayer ? -500 : 400;
+/* 00072144 */	y = isPlayer ? 115 : -333;
+/* 0007216c */}
+
+void BattleCharacterView::getCharacterFadeInPos(ref int x, ref int y, bool isPlayer)
+/* 00072174 */{
+/* 00072174 */	x = isPlayer ? -100 : 0;
+/* 0007219c */	y = isPlayer ? 115 : -333;
+/* 000721c4 */}
+
+void BattleCharacterView::fadeIn(bool val)
+/* 000721cc */{
+/* 000721cc */	if (val)
+/* 000721d8 */	{
+/* 000721d8 */		if (this.state_ == 2 || this.state_ == 1)
+/* 00072218 */		{
+/* 00072218 */			return;
+/* 0007221a */		}
+/* 00072220 */	}
+/* 00072226 */	else if (this.state_ == 0 || this.state_ == 4)
+/* 00072266 */	{
+/* 00072266 */		return;
+/* 00072268 */	}
+/* 0007226e */	MotionInfomation m;
+/* 0007227e */	m.setTime(300, 0);
+/* 00072296 */	int x;
+/* 000722a0 */	int y;
+/* 000722aa */	if (val)
+/* 000722b6 */	{
+/* 000722b6 */		m.setAlpha(0, 255, 0);
+/* 000722d4 */		this.getCharacterFadeInPos(x, y, this.isPlayer_);
+/* 000722f2 */		this.state_ = 1;
+/* 000722fc */	}
+/* 00072302 */	else
+/* 00072302 */	{
+/* 00072302 */		m.setAlpha(255, 0, 0);
+/* 00072320 */		this.getCharacterStartPos(x, y, this.isPlayer_);
+/* 0007233e */		this.state_ = 4;
+/* 00072348 */	}
+/* 00072348 */	m.setMoveTo(x, y, 1);
+/* 00072366 */	this.parent_.setShow(true);
+/* 00072378 */	this.parent_.runMotion(m);
+/* 00072392 */}
+
+void BattleCharacterView::down()
+/* 0007239a */{
+/* 0007239a */	MotionInfomation m;
+/* 000723aa */	m.setTime(1000, 0);
+/* 000723c2 */	m.setAlpha(255, 0, 0);
+/* 000723e0 */	m.setSoundNumber(2127);
+/* 000723f2 */	this.parts_[0].setShow(false);
+/* 0007240c */	this.parts_[2].setShow(true);
+/* 00072426 */	this.parent_.runMotion(m);
+/* 00072440 */	this.state_ = 4;
+/* 0007244a */}
+
+void BattleCharacterView::update()
+/* 00072452 */{
+/* 00072452 */	switch (this.state_)
+/* 00072464 */	{
+/* 00072464 */	case 1:
+/* 00072464 */		if (!this.parent_.isMotion())
+/* 00072478 */		{
+/* 00072478 */			this.state_ = 2;
+/* 00072482 */		}
+/* 00072488 */		break;
+/* 0007248e */	case 2:
+/* 0007248e */		this.updatePartsShowState();
+/* 00072496 */		break;
+/* 0007249c */	case 3:
+/* 0007249c */		if (!this.parent_.isMotion())
+/* 000724b0 */		{
+/* 000724b0 */			this.parts_[0].setAddColorValue(0, 0, 0);
+/* 000724d6 */			this.state_ = 2;
+/* 000724e0 */		}
+/* 000724e6 */		break;
+/* 000724ec */	case 4:
+/* 000724ec */		if (!this.parent_.isMotion())
+/* 00072500 */		{
+/* 00072500 */			this.state_ = 0;
+/* 0007250a */		}
+/* 00072510 */		break;
+/* 00072516 */	case 0:
+/* 00072516 */		break;
+/* 0007251c */	}
+/* 0007251c */}
+
+void BattleCharacterView::updatePartsShowState()
+/* 00072524 */{
+/* 00072524 */	if (this.isPlayer_)
+/* 0007252e */	{
+/* 0007252e */		return;
+/* 00072530 */	}
+/* 00072536 */	float r = float(this.instance_.getHp()) / float(this.instance_.getMaxHp());
+/* 00072560 */	if (this.lastRatio_ != r)
+/* 00072574 */	{
+/* 00072574 */		this.lastRatio_ = r;
+/* 00072586 */		if (0 < r && r < 0.3)
+/* 000725cc */		{
+/* 000725cc */			this.parts_[1].setShow(true);
+/* 000725e6 */			LoopMotionInfomation m;
+/* 000725f6 */			m.set(2, 96, 192, r <= 0.1 ? 1000 : 3000, 0);
+/* 00072640 */			this.parts_[1].setLoopMotion(m);
+/* 0007265a */			this.parts_[1].setActiveLoopMotion(true);
+/* 00072674 */			this.parts_[1].setShow(true);
+/* 0007268e */		}
+/* 0007269a */		else
+/* 0007269a */		{
+/* 0007269a */			this.parts_[1].setShow(false);
+/* 000726b4 */		}
+/* 000726b4 */	}
+/* 000726ba */}
+
+void BattleCharacterView::shake()
+/* 000726c2 */{
+/* 000726c2 */	MotionInfomation m;
+/* 000726d2 */	m.setTime(300, 0);
+/* 000726ea */	m.setShakeLevel(50, 50, 0);
+/* 00072708 */	this.parent_.runMotion(m);
+/* 00072722 */	this.parts_[0].setAddColorValue(128, 0, 0);
+/* 00072748 */	this.state_ = 3;
+/* 00072752 */}
+
+bool BattleCharacterView::isMotion()
+/* 0007275a */{
+/* 0007275a */	return this.parent_.isMotion();
+/* 00072768 */}
+

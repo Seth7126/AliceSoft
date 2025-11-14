@@ -1,0 +1,83 @@
+BattleResultBonus::BattleResultBonus()
+/* 0007543a */{
+/* 00075442 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 00075464 */}
+
+void BattleResultBonus::init(string name, int val)
+/* 0007546c */{
+/* 0007546c */	this.val_ = val;
+/* 00075476 */	this.initParts(name);
+/* 00075484 */	this.setPartsPos();
+/* 0007548c */	this.setPartsShow();
+/* 00075494 */}
+
+void BattleResultBonus::initParts(string name)
+/* 0007549c */{
+/* 0007549c */	this.parts_[0].initAsText(name, 24, false, 256, 0, 0, 0);
+/* 000754da */	NumberPartsInfomation n;
+/* 000754ea */	n.setSameWidth(18);
+/* 000754fc */	this.parts_[1].initAsNumber("システム／数字／幅１８／白", n);
+/* 0007551c */	createPartsGroup(this.parent_, this.parts_, 1);
+/* 00075534 */}
+
+void BattleResultBonus::setPartsPos()
+/* 0007553c */{
+/* 0007553c */	this.parts_[1].setOrigin(9);
+/* 00075556 */	this.parts_[1].setPos(288, 0, -2147483648);
+/* 0007557c */}
+
+void BattleResultBonus::setPartsShow()
+/* 00075584 */{
+/* 00075584 */	int i;
+/* 0007558e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 000755be */	{
+/* 000755be */		this.parts_[i].setShow(true);
+/* 000755d8 */	}
+/* 000755de */}
+
+void BattleResultBonus::setParent(int parentPartsNumber)
+/* 000755e6 */{
+/* 000755e6 */	this.parent_.setParent(parentPartsNumber);
+/* 000755f8 */}
+
+void BattleResultBonus::fadeIn(bool val, int delay)
+/* 00075600 */{
+/* 00075600 */	array@MotionInfomation m[2];
+/* 00075616 */	m[0].setTime(delay, 0);
+/* 00075636 */	m[0].setAlpha(0, 0, 0);
+/* 0007565c */	m[1].setAlpha(255, 255, 0);
+/* 00075682 */	if (val)
+/* 0007568e */	{
+/* 0007568e */		this.countUpNumber(delay);
+/* 0007569c */	}
+/* 000756a2 */	this.parent_.setShow(true);
+/* 000756b4 */	this.parent_.runMotionArray(m);
+/* 000756c6 */}
+
+void BattleResultBonus::countUpNumber(int delay)
+/* 000756ce */{
+/* 000756ce */	array@MotionInfomation m[2];
+/* 000756e4 */	m[0].setTime(delay, 0);
+/* 00075704 */	m[1].setNumberMove(0, this.val_, 0);
+/* 0007572a */	m[1].setLoopSoundNumber(502);
+/* 00075744 */	this.parts_[1].setShow(true);
+/* 0007575e */	this.parts_[1].runMotionArray(m);
+/* 00075778 */}
+
+void BattleResultBonus::setPos(int x, int y)
+/* 00075780 */{
+/* 00075780 */	this.x_ = x;
+/* 0007578a */	this.y_ = y;
+/* 00075794 */	this.parent_.setPos(this.x_, this.y_, -2147483648);
+/* 000757b2 */}
+
+void BattleResultBonus::update()
+/* 000757ba */{
+/* 000757bc */}
+
+void BattleResultBonus::finalize()
+/* 000757c2 */{
+/* 000757c2 */	this.parent_.finalizeMotion();
+/* 000757ce */	this.parts_[1].finalizeMotion();
+/* 000757e2 */}
+

@@ -1,0 +1,445 @@
+CConfigUIWindowTab::CConfigUIWindowTab()
+/* 00030b26 */{
+/* 00030b30 */}
+
+CConfigUIWindowTab::~CConfigUIWindowTab()
+/* 00030b36 */{
+/* 00030b38 */}
+
+void CConfigUIWindowTab::Create()
+/* 00030b3e */{
+/* 00030b3e */	this.CreateUI();
+/* 00030b46 */	PARTS_AddUpdateEvent(this.UpdateWindowMode);
+/* 00030b56 */}
+
+void CConfigUIWindowTab::Release()
+/* 00030b5e */{
+/* 00030b5e */	AFL_Parts_EraseMouseClickEvent(this.m_ResetWindowButton, this.MouseClick);
+/* 00030b74 */	AFL_Parts_EraseMouseLeaveEvent(this.m_OverFrameRateSleepCheckBox, this.MouseLeave);
+/* 00030b8a */	AFL_Parts_EraseMouseLeaveEvent(this.m_MinimizeByFullScreenInactiveCheckBox, this.MouseLeave);
+/* 00030ba0 */	AFL_Parts_EraseMouseLeaveEvent(this.m_WaitVSyncCheckBox, this.MouseLeave);
+/* 00030bb6 */	AFL_Parts_EraseMouseLeaveEvent(this.m_BicubicScalingCheckBox, this.MouseLeave);
+/* 00030bcc */	AFL_Parts_EraseMouseLeaveEvent(this.m_DefaultScalingCheckBox, this.MouseLeave);
+/* 00030be2 */	AFL_Parts_EraseMouseLeaveEvent(this.m_FixRateCheckBox, this.MouseLeave);
+/* 00030bf8 */	AFL_Parts_EraseMouseEnterEvent(this.m_OverFrameRateSleepCheckBox, this.MouseEnter);
+/* 00030c0e */	AFL_Parts_EraseMouseEnterEvent(this.m_MinimizeByFullScreenInactiveCheckBox, this.MouseEnter);
+/* 00030c24 */	AFL_Parts_EraseMouseEnterEvent(this.m_WaitVSyncCheckBox, this.MouseEnter);
+/* 00030c3a */	AFL_Parts_EraseMouseEnterEvent(this.m_BicubicScalingCheckBox, this.MouseEnter);
+/* 00030c50 */	AFL_Parts_EraseMouseEnterEvent(this.m_DefaultScalingCheckBox, this.MouseEnter);
+/* 00030c66 */	AFL_Parts_EraseMouseEnterEvent(this.m_FixRateCheckBox, this.MouseEnter);
+/* 00030c7c */	AFL_Parts_EraseChangedEvent(this.m_OverFrameRateSleepCheckBox, this.ChangedCheckOverFrameRateSleep);
+/* 00030c92 */	AFL_Parts_EraseChangedEvent(this.m_SleepByInactiveCheckBox, this.ChangedCheckSleepByInactive);
+/* 00030ca8 */	AFL_Parts_EraseChangedEvent(this.m_MinimizeByFullScreenInactiveCheckBox, this.ChangedCheckMinimizeByFullScreenInactive);
+/* 00030cbe */	AFL_Parts_EraseChangedEvent(this.m_RecordPosSizeCheckBox, this.ChangedCheckRecordPosSize);
+/* 00030cd4 */	AFL_Parts_EraseChangedEvent(this.m_WaitVSyncCheckBox, this.ChangedCheckWaitVSync);
+/* 00030cea */	AFL_Parts_EraseChangedEvent(this.m_BicubicScalingCheckBox, this.ChangedCheckBicubicScaling);
+/* 00030d00 */	AFL_Parts_EraseChangedEvent(this.m_DefaultScalingCheckBox, this.ChangedCheckDefaultScaling);
+/* 00030d16 */	AFL_Parts_EraseChangedEvent(this.m_FixRateCheckBox, this.ChangedCheckFixRate);
+/* 00030d2c */	AFL_Parts_EraseChangedEvent(this.m_DefaultRateCheckBox, this.ChangedCheckDefaultRate);
+/* 00030d42 */	AFL_Parts_EraseChangedEvent(this.m_FullModeCheckBox, this.ChangedCheckFullMode);
+/* 00030d58 */	AFL_Parts_EraseChangedEvent(this.m_WindowModeCheckBox, this.ChangedCheckWindowMode);
+/* 00030d6e */	PARTS_EraseUpdateEvent(this.UpdateWindowMode);
+/* 00030d7e */	this.m_ScalingTypeRadioButton.Clear();
+/* 00030d8a */	this.m_FullModeRateRadioButton.Clear();
+/* 00030d96 */	this.m_WindowModeRadioButton.Clear();
+/* 00030da2 */	PARTS_Release(this.m_ResetWindowButton);
+/* 00030dae */	PARTS_Release(this.m_TextLabel);
+/* 00030dba */	PARTS_Release(this.m_TextBG);
+/* 00030dc6 */	PARTS_Release(this.m_OverFrameRateSleepCheckBox);
+/* 00030dd2 */	PARTS_Release(this.m_SleepByInactiveCheckBox);
+/* 00030dde */	PARTS_Release(this.m_MinimizeByFullScreenInactiveCheckBox);
+/* 00030dea */	PARTS_Release(this.m_RecordPosSizeCheckBox);
+/* 00030df6 */	PARTS_Release(this.m_WaitVSyncCheckBox);
+/* 00030e02 */	PARTS_Release(this.m_BicubicScalingCheckBox);
+/* 00030e0e */	PARTS_Release(this.m_DefaultScalingCheckBox);
+/* 00030e1a */	PARTS_Release(this.m_ScalingTypeLabel);
+/* 00030e26 */	PARTS_Release(this.m_FixRateCheckBox);
+/* 00030e32 */	PARTS_Release(this.m_DefaultRateCheckBox);
+/* 00030e3e */	PARTS_Release(this.m_FullModeRateLabel);
+/* 00030e4a */	PARTS_Release(this.m_FullModeCheckBox);
+/* 00030e56 */	PARTS_Release(this.m_WindowModeCheckBox);
+/* 00030e62 */	PARTS_Release(this.m_BG);
+/* 00030e6e */	this.m_ResetWindowButton = 0;
+/* 00030e78 */	this.m_TextLabel = 0;
+/* 00030e82 */	this.m_TextBG = 0;
+/* 00030e8c */	this.m_OverFrameRateSleepCheckBox = 0;
+/* 00030e96 */	this.m_SleepByInactiveCheckBox = 0;
+/* 00030ea0 */	this.m_MinimizeByFullScreenInactiveCheckBox = 0;
+/* 00030eaa */	this.m_RecordPosSizeCheckBox = 0;
+/* 00030eb4 */	this.m_WaitVSyncCheckBox = 0;
+/* 00030ebe */	this.m_BicubicScalingCheckBox = 0;
+/* 00030ec8 */	this.m_DefaultScalingCheckBox = 0;
+/* 00030ed2 */	this.m_ScalingTypeLabel = 0;
+/* 00030edc */	this.m_FixRateCheckBox = 0;
+/* 00030ee6 */	this.m_DefaultRateCheckBox = 0;
+/* 00030ef0 */	this.m_FullModeRateLabel = 0;
+/* 00030efa */	this.m_FullModeCheckBox = 0;
+/* 00030f04 */	this.m_WindowModeCheckBox = 0;
+/* 00030f0e */	this.m_BG = 0;
+/* 00030f18 */}
+
+void CConfigUIWindowTab::CreateUI()
+/* 00030f20 */{
+/* 00030f20 */	this.Release();
+/* 00030f28 */	this.CreateBG();
+/* 00030f30 */	this.CreateWindowModeCheckBox();
+/* 00030f38 */	this.CreateFullModeCheckBox();
+/* 00030f40 */	this.CreateFullModeRateLabel();
+/* 00030f48 */	this.CreateDefaultRateCheckBox();
+/* 00030f50 */	this.CreateFixRateCheckBox();
+/* 00030f58 */	this.CreateScalingTypeLabel();
+/* 00030f60 */	this.CreateDefaultScalingCheckBox();
+/* 00030f68 */	this.CreateBicubicScalingCheckBox();
+/* 00030f70 */	this.CreateWaitVSyncCheckBox();
+/* 00030f78 */	this.CreateRecordPosSizeCheckBox();
+/* 00030f80 */	this.CreateMinimizeByFullScreenInactiveCheckBox();
+/* 00030f88 */	this.CreateSleepByInactiveCheckBox();
+/* 00030f90 */	this.CreateOverFrameRateSleepCheckBox();
+/* 00030f98 */	this.CreateTextBG();
+/* 00030fa0 */	this.CreateTextLabel();
+/* 00030fa8 */	this.CreateResetButton();
+/* 00030fb0 */	this.m_WindowModeRadioButton.AddCheckBox(this.m_WindowModeCheckBox);
+/* 00030fc2 */	this.m_WindowModeRadioButton.AddCheckBox(this.m_FullModeCheckBox);
+/* 00030fd4 */	this.m_FullModeRateRadioButton.AddCheckBox(this.m_DefaultRateCheckBox);
+/* 00030fe6 */	this.m_FullModeRateRadioButton.AddCheckBox(this.m_FixRateCheckBox);
+/* 00030ff8 */	this.m_ScalingTypeRadioButton.AddCheckBox(this.m_DefaultScalingCheckBox);
+/* 0003100a */	this.m_ScalingTypeRadioButton.AddCheckBox(this.m_BicubicScalingCheckBox);
+/* 0003101c */}
+
+void CConfigUIWindowTab::CreateBG()
+/* 00031024 */{
+/* 00031024 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 00031036 */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 00031048 */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 00031060 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0003107e */}
+
+void CConfigUIWindowTab::CreateWindowModeCheckBox()
+/* 00031086 */{
+/* 00031086 */	this.m_WindowModeCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 00031098 */	Ｐ＿チェックボックス＿座標設定(this.m_WindowModeCheckBox, 50, 100);
+/* 000310b0 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_WindowModeCheckBox, 100);
+/* 000310c2 */	Ｐ＿チェックボックス＿サイズ設定(this.m_WindowModeCheckBox, 24, 24);
+/* 000310da */	Ｐ＿チェックボックス＿テキスト設定(this.m_WindowModeCheckBox, "ウィンドウ");
+/* 000310ec */	Ｐ＿チェックボックス＿フォント設定(this.m_WindowModeCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031134 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_WindowModeCheckBox, AFL_Config_GetWindowMode());
+/* 00031146 */	AFL_Parts_AddChangedEvent(this.m_WindowModeCheckBox, this.ChangedCheckWindowMode);
+/* 0003115c */}
+
+void CConfigUIWindowTab::CreateFullModeCheckBox()
+/* 00031164 */{
+/* 00031164 */	this.m_FullModeCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 00031176 */	Ｐ＿チェックボックス＿座標設定(this.m_FullModeCheckBox, 50, 130);
+/* 0003118e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_FullModeCheckBox, 100);
+/* 000311a0 */	Ｐ＿チェックボックス＿サイズ設定(this.m_FullModeCheckBox, 24, 24);
+/* 000311b8 */	Ｐ＿チェックボックス＿テキスト設定(this.m_FullModeCheckBox, "フルスクリーン");
+/* 000311ca */	Ｐ＿チェックボックス＿フォント設定(this.m_FullModeCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031212 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_FullModeCheckBox, !AFL_Config_GetWindowMode());
+/* 00031228 */	AFL_Parts_AddChangedEvent(this.m_FullModeCheckBox, this.ChangedCheckFullMode);
+/* 0003123e */}
+
+void CConfigUIWindowTab::CreateFullModeRateLabel()
+/* 00031246 */{
+/* 00031246 */	this.m_FullModeRateLabel = PARTS_GetFreeSystemPartsNumber();
+/* 00031258 */	Ｐ＿ラベル＿座標設定(this.m_FullModeRateLabel, 50, 190);
+/* 00031270 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_FullModeRateLabel, 100);
+/* 00031282 */	Ｐ＿ラベル＿テキスト設定(this.m_FullModeRateLabel, "フルスクリーン時の画面比率");
+/* 00031294 */	Ｐ＿ラベル＿フォント設定(this.m_FullModeRateLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 000312dc */}
+
+void CConfigUIWindowTab::CreateDefaultRateCheckBox()
+/* 000312e4 */{
+/* 000312e4 */	this.m_DefaultRateCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 000312f6 */	Ｐ＿チェックボックス＿座標設定(this.m_DefaultRateCheckBox, 50, 220);
+/* 0003130e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_DefaultRateCheckBox, 100);
+/* 00031320 */	Ｐ＿チェックボックス＿サイズ設定(this.m_DefaultRateCheckBox, 24, 24);
+/* 00031338 */	Ｐ＿チェックボックス＿テキスト設定(this.m_DefaultRateCheckBox, "標準");
+/* 0003134a */	Ｐ＿チェックボックス＿フォント設定(this.m_DefaultRateCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031392 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_DefaultRateCheckBox, AFL_Config_GetAspectRatio() == 0);
+/* 000313ae */	AFL_Parts_AddChangedEvent(this.m_DefaultRateCheckBox, this.ChangedCheckDefaultRate);
+/* 000313c4 */}
+
+void CConfigUIWindowTab::CreateFixRateCheckBox()
+/* 000313cc */{
+/* 000313cc */	this.m_FixRateCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 000313de */	Ｐ＿チェックボックス＿座標設定(this.m_FixRateCheckBox, 50, 250);
+/* 000313f6 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_FixRateCheckBox, 100);
+/* 00031408 */	Ｐ＿チェックボックス＿サイズ設定(this.m_FixRateCheckBox, 24, 24);
+/* 00031420 */	Ｐ＿チェックボックス＿テキスト設定(this.m_FixRateCheckBox, "固定");
+/* 00031432 */	Ｐ＿チェックボックス＿フォント設定(this.m_FixRateCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0003147a */	Ｐ＿チェックボックス＿チェック状態設定(this.m_FixRateCheckBox, AFL_Config_GetAspectRatio() == 1);
+/* 00031496 */	AFL_Parts_AddChangedEvent(this.m_FixRateCheckBox, this.ChangedCheckFixRate);
+/* 000314ac */	AFL_Parts_AddMouseEnterEvent(this.m_FixRateCheckBox, this.MouseEnter);
+/* 000314c2 */	AFL_Parts_AddMouseLeaveEvent(this.m_FixRateCheckBox, this.MouseLeave);
+/* 000314d8 */}
+
+void CConfigUIWindowTab::CreateScalingTypeLabel()
+/* 000314e0 */{
+/* 000314e0 */	this.m_ScalingTypeLabel = PARTS_GetFreeSystemPartsNumber();
+/* 000314f2 */	Ｐ＿ラベル＿座標設定(this.m_ScalingTypeLabel, 50, 310);
+/* 0003150a */	Ｐ＿ラベル＿Ｚ座標設定(this.m_ScalingTypeLabel, 100);
+/* 0003151c */	Ｐ＿ラベル＿テキスト設定(this.m_ScalingTypeLabel, "拡大方法");
+/* 0003152e */	Ｐ＿ラベル＿フォント設定(this.m_ScalingTypeLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 00031576 */}
+
+void CConfigUIWindowTab::CreateDefaultScalingCheckBox()
+/* 0003157e */{
+/* 0003157e */	this.m_DefaultScalingCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 00031590 */	Ｐ＿チェックボックス＿座標設定(this.m_DefaultScalingCheckBox, 50, 340);
+/* 000315a8 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_DefaultScalingCheckBox, 100);
+/* 000315ba */	Ｐ＿チェックボックス＿サイズ設定(this.m_DefaultScalingCheckBox, 24, 24);
+/* 000315d2 */	Ｐ＿チェックボックス＿テキスト設定(this.m_DefaultScalingCheckBox, "標準");
+/* 000315e4 */	Ｐ＿チェックボックス＿フォント設定(this.m_DefaultScalingCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0003162c */	Ｐ＿チェックボックス＿チェック状態設定(this.m_DefaultScalingCheckBox, AFL_Config_GetScalingType() == 0);
+/* 00031648 */	AFL_Parts_AddChangedEvent(this.m_DefaultScalingCheckBox, this.ChangedCheckDefaultScaling);
+/* 0003165e */	AFL_Parts_AddMouseEnterEvent(this.m_DefaultScalingCheckBox, this.MouseEnter);
+/* 00031674 */	AFL_Parts_AddMouseLeaveEvent(this.m_DefaultScalingCheckBox, this.MouseLeave);
+/* 0003168a */}
+
+void CConfigUIWindowTab::CreateBicubicScalingCheckBox()
+/* 00031692 */{
+/* 00031692 */	this.m_BicubicScalingCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 000316a4 */	Ｐ＿チェックボックス＿座標設定(this.m_BicubicScalingCheckBox, 50, 370);
+/* 000316bc */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_BicubicScalingCheckBox, 100);
+/* 000316ce */	Ｐ＿チェックボックス＿サイズ設定(this.m_BicubicScalingCheckBox, 24, 24);
+/* 000316e6 */	Ｐ＿チェックボックス＿テキスト設定(this.m_BicubicScalingCheckBox, "バイキュービック");
+/* 000316f8 */	Ｐ＿チェックボックス＿フォント設定(this.m_BicubicScalingCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031740 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_BicubicScalingCheckBox, AFL_Config_GetScalingType() == 1);
+/* 0003175c */	AFL_Parts_AddChangedEvent(this.m_BicubicScalingCheckBox, this.ChangedCheckBicubicScaling);
+/* 00031772 */	AFL_Parts_AddMouseEnterEvent(this.m_BicubicScalingCheckBox, this.MouseEnter);
+/* 00031788 */	AFL_Parts_AddMouseLeaveEvent(this.m_BicubicScalingCheckBox, this.MouseLeave);
+/* 0003179e */}
+
+void CConfigUIWindowTab::CreateWaitVSyncCheckBox()
+/* 000317a6 */{
+/* 000317a6 */	this.m_WaitVSyncCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 000317b8 */	Ｐ＿チェックボックス＿座標設定(this.m_WaitVSyncCheckBox, 50, 430);
+/* 000317d0 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_WaitVSyncCheckBox, 100);
+/* 000317e2 */	Ｐ＿チェックボックス＿サイズ設定(this.m_WaitVSyncCheckBox, 24, 24);
+/* 000317fa */	Ｐ＿チェックボックス＿テキスト設定(this.m_WaitVSyncCheckBox, "垂直同期を待ち、ちらつきをを抑える");
+/* 0003180c */	Ｐ＿チェックボックス＿フォント設定(this.m_WaitVSyncCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031854 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_WaitVSyncCheckBox, AFL_Config_GetWaitVSync());
+/* 00031866 */	AFL_Parts_AddChangedEvent(this.m_WaitVSyncCheckBox, this.ChangedCheckWaitVSync);
+/* 0003187c */	AFL_Parts_AddMouseEnterEvent(this.m_WaitVSyncCheckBox, this.MouseEnter);
+/* 00031892 */	AFL_Parts_AddMouseLeaveEvent(this.m_WaitVSyncCheckBox, this.MouseLeave);
+/* 000318a8 */}
+
+void CConfigUIWindowTab::CreateRecordPosSizeCheckBox()
+/* 000318b0 */{
+/* 000318b0 */	this.m_RecordPosSizeCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 000318c2 */	Ｐ＿チェックボックス＿座標設定(this.m_RecordPosSizeCheckBox, 50, 460);
+/* 000318da */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_RecordPosSizeCheckBox, 100);
+/* 000318ec */	Ｐ＿チェックボックス＿サイズ設定(this.m_RecordPosSizeCheckBox, 24, 24);
+/* 00031904 */	Ｐ＿チェックボックス＿テキスト設定(this.m_RecordPosSizeCheckBox, "ウィンドウの位置とサイズを、次回起動時に復元する");
+/* 00031916 */	Ｐ＿チェックボックス＿フォント設定(this.m_RecordPosSizeCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0003195e */	Ｐ＿チェックボックス＿チェック状態設定(this.m_RecordPosSizeCheckBox, AFL_Config_GetRecordPosSize());
+/* 00031970 */	AFL_Parts_AddChangedEvent(this.m_RecordPosSizeCheckBox, this.ChangedCheckRecordPosSize);
+/* 00031986 */}
+
+void CConfigUIWindowTab::CreateMinimizeByFullScreenInactiveCheckBox()
+/* 0003198e */{
+/* 0003198e */	this.m_MinimizeByFullScreenInactiveCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 000319a0 */	Ｐ＿チェックボックス＿座標設定(this.m_MinimizeByFullScreenInactiveCheckBox, 50, 490);
+/* 000319b8 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_MinimizeByFullScreenInactiveCheckBox, 100);
+/* 000319ca */	Ｐ＿チェックボックス＿サイズ設定(this.m_MinimizeByFullScreenInactiveCheckBox, 24, 24);
+/* 000319e2 */	Ｐ＿チェックボックス＿テキスト設定(this.m_MinimizeByFullScreenInactiveCheckBox, "フルスクリーン時に非アクティブで最小化する");
+/* 000319f4 */	Ｐ＿チェックボックス＿フォント設定(this.m_MinimizeByFullScreenInactiveCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031a3c */	Ｐ＿チェックボックス＿チェック状態設定(this.m_MinimizeByFullScreenInactiveCheckBox, AFL_Config_GetMinimizeByFullScreenInactive());
+/* 00031a4e */	AFL_Parts_AddChangedEvent(this.m_MinimizeByFullScreenInactiveCheckBox, this.ChangedCheckMinimizeByFullScreenInactive);
+/* 00031a64 */	AFL_Parts_AddMouseEnterEvent(this.m_MinimizeByFullScreenInactiveCheckBox, this.MouseEnter);
+/* 00031a7a */	AFL_Parts_AddMouseLeaveEvent(this.m_MinimizeByFullScreenInactiveCheckBox, this.MouseLeave);
+/* 00031a90 */}
+
+void CConfigUIWindowTab::CreateSleepByInactiveCheckBox()
+/* 00031a98 */{
+/* 00031a98 */	this.m_SleepByInactiveCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 00031aaa */	Ｐ＿チェックボックス＿座標設定(this.m_SleepByInactiveCheckBox, 50, 520);
+/* 00031ac2 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_SleepByInactiveCheckBox, 100);
+/* 00031ad4 */	Ｐ＿チェックボックス＿サイズ設定(this.m_SleepByInactiveCheckBox, 24, 24);
+/* 00031aec */	Ｐ＿チェックボックス＿テキスト設定(this.m_SleepByInactiveCheckBox, "非アクティブ時にＣＰＵ使用率を下げる");
+/* 00031afe */	Ｐ＿チェックボックス＿フォント設定(this.m_SleepByInactiveCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031b46 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_SleepByInactiveCheckBox, AFL_Config_GetSleepByInactive());
+/* 00031b58 */	AFL_Parts_AddChangedEvent(this.m_SleepByInactiveCheckBox, this.ChangedCheckSleepByInactive);
+/* 00031b6e */}
+
+void CConfigUIWindowTab::CreateOverFrameRateSleepCheckBox()
+/* 00031b76 */{
+/* 00031b76 */	this.m_OverFrameRateSleepCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 00031b88 */	Ｐ＿チェックボックス＿座標設定(this.m_OverFrameRateSleepCheckBox, 50, 550);
+/* 00031ba0 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_OverFrameRateSleepCheckBox, 100);
+/* 00031bb2 */	Ｐ＿チェックボックス＿サイズ設定(this.m_OverFrameRateSleepCheckBox, 24, 24);
+/* 00031bca */	Ｐ＿チェックボックス＿テキスト設定(this.m_OverFrameRateSleepCheckBox, "過剰な描画処理を抑えＣＰＵ使用率を下げる");
+/* 00031bdc */	Ｐ＿チェックボックス＿フォント設定(this.m_OverFrameRateSleepCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031c24 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_OverFrameRateSleepCheckBox, AFL_Config_GetOverFrameRateSleep());
+/* 00031c36 */	AFL_Parts_AddChangedEvent(this.m_OverFrameRateSleepCheckBox, this.ChangedCheckOverFrameRateSleep);
+/* 00031c4c */	AFL_Parts_AddMouseEnterEvent(this.m_OverFrameRateSleepCheckBox, this.MouseEnter);
+/* 00031c62 */	AFL_Parts_AddMouseLeaveEvent(this.m_OverFrameRateSleepCheckBox, this.MouseLeave);
+/* 00031c78 */}
+
+void CConfigUIWindowTab::CreateTextBG()
+/* 00031c80 */{
+/* 00031c80 */	this.m_TextBG = PARTS_GetFreeSystemPartsNumber();
+/* 00031c92 */	Ｐ＿ＣＧボックス＿座標設定(this.m_TextBG, 500, 100);
+/* 00031caa */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_TextBG, 5);
+/* 00031cbc */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_TextBG, 500, 300);
+/* 00031cd4 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_TextBG, 70, 70, 70);
+/* 00031cf2 */}
+
+void CConfigUIWindowTab::CreateTextLabel()
+/* 00031cfa */{
+/* 00031cfa */	this.m_TextLabel = PARTS_GetFreeSystemPartsNumber();
+/* 00031d0c */	Ｐ＿ラベル＿座標設定(this.m_TextLabel, 520, 120);
+/* 00031d24 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_TextLabel, 100);
+/* 00031d36 */	Ｐ＿ラベル＿フォント設定(this.m_TextLabel, 0, 16, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 00031d7e */}
+
+void CConfigUIWindowTab::CreateResetButton()
+/* 00031d86 */{
+/* 00031d86 */	this.m_ResetWindowButton = PARTS_GetFreeSystemPartsNumber();
+/* 00031d98 */	Ｐ＿ボタン＿座標設定(this.m_ResetWindowButton, 200, 610);
+/* 00031db0 */	Ｐ＿ボタン＿Ｚ座標設定(this.m_ResetWindowButton, 10);
+/* 00031dc2 */	Ｐ＿ボタン＿サイズ設定(this.m_ResetWindowButton, 300, 30);
+/* 00031dda */	Ｐ＿ボタン＿フォント設定(this.m_ResetWindowButton, 0, 16, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 00031e22 */	Ｐ＿ボタン＿テキスト設定(this.m_ResetWindowButton, "ウィンドウの位置とサイズを初期化");
+/* 00031e34 */	AFL_Parts_AddMouseClickEvent(this.m_ResetWindowButton, this.MouseClick);
+/* 00031e4a */}
+
+void CConfigUIWindowTab::ChangedCheckWindowMode(int Number)
+/* 00031e52 */{
+/* 00031e52 */	AFL_Config_SetWindowMode(Ｐ＿チェックボックス＿チェック状態取得(this.m_WindowModeCheckBox));
+/* 00031e64 */}
+
+void CConfigUIWindowTab::ChangedCheckFullMode(int Number)
+/* 00031e6c */{
+/* 00031e6c */	AFL_Config_SetWindowMode(!Ｐ＿チェックボックス＿チェック状態取得(this.m_FullModeCheckBox));
+/* 00031e82 */}
+
+void CConfigUIWindowTab::UpdateWindowMode(int PassedTime)
+/* 00031e8a */{
+/* 00031e8a */	Ｐ＿チェックボックス＿チェック状態設定(this.m_WindowModeCheckBox, AFL_Config_GetWindowMode());
+/* 00031e9c */	Ｐ＿チェックボックス＿チェック状態設定(this.m_FullModeCheckBox, !AFL_Config_GetWindowMode());
+/* 00031eb2 */}
+
+void CConfigUIWindowTab::ChangedCheckDefaultRate(int Number)
+/* 00031eba */{
+/* 00031eba */	if (!Ｐ＿チェックボックス＿チェック状態取得(this.m_DefaultRateCheckBox))
+/* 00031ece */	{
+/* 00031ece */		return;
+/* 00031ed0 */	}
+/* 00031ed6 */	AFL_Config_SetAspectRatio(0);
+/* 00031ee2 */}
+
+void CConfigUIWindowTab::ChangedCheckFixRate(int Number)
+/* 00031eea */{
+/* 00031eea */	if (!Ｐ＿チェックボックス＿チェック状態取得(this.m_FixRateCheckBox))
+/* 00031efe */	{
+/* 00031efe */		return;
+/* 00031f00 */	}
+/* 00031f06 */	AFL_Config_SetAspectRatio(1);
+/* 00031f12 */}
+
+void CConfigUIWindowTab::ChangedCheckDefaultScaling(int Number)
+/* 00031f1a */{
+/* 00031f1a */	if (!Ｐ＿チェックボックス＿チェック状態取得(this.m_DefaultScalingCheckBox))
+/* 00031f2e */	{
+/* 00031f2e */		return;
+/* 00031f30 */	}
+/* 00031f36 */	AFL_Config_SetScalingType(0);
+/* 00031f42 */}
+
+void CConfigUIWindowTab::ChangedCheckBicubicScaling(int Number)
+/* 00031f4a */{
+/* 00031f4a */	if (!Ｐ＿チェックボックス＿チェック状態取得(this.m_BicubicScalingCheckBox))
+/* 00031f5e */	{
+/* 00031f5e */		return;
+/* 00031f60 */	}
+/* 00031f66 */	AFL_Config_SetScalingType(1);
+/* 00031f72 */}
+
+void CConfigUIWindowTab::ChangedCheckWaitVSync(int Number)
+/* 00031f7a */{
+/* 00031f7a */	AFL_Config_SetWaitVSync(Ｐ＿チェックボックス＿チェック状態取得(this.m_WaitVSyncCheckBox));
+/* 00031f8c */}
+
+void CConfigUIWindowTab::ChangedCheckRecordPosSize(int Number)
+/* 00031f94 */{
+/* 00031f94 */	AFL_Config_SetRecordPosSize(Ｐ＿チェックボックス＿チェック状態取得(this.m_RecordPosSizeCheckBox));
+/* 00031fa6 */}
+
+void CConfigUIWindowTab::ChangedCheckMinimizeByFullScreenInactive(int Number)
+/* 00031fae */{
+/* 00031fae */	AFL_Config_SetMinimizeByFullScreenInactive(Ｐ＿チェックボックス＿チェック状態取得(this.m_MinimizeByFullScreenInactiveCheckBox));
+/* 00031fc0 */}
+
+void CConfigUIWindowTab::ChangedCheckSleepByInactive(int Number)
+/* 00031fc8 */{
+/* 00031fc8 */	AFL_Config_SetSleepByInactive(Ｐ＿チェックボックス＿チェック状態取得(this.m_SleepByInactiveCheckBox));
+/* 00031fda */}
+
+void CConfigUIWindowTab::ChangedCheckOverFrameRateSleep(int Number)
+/* 00031fe2 */{
+/* 00031fe2 */	AFL_Config_SetOverFrameRateSleep(Ｐ＿チェックボックス＿チェック状態取得(this.m_OverFrameRateSleepCheckBox));
+/* 00031ff4 */}
+
+void CConfigUIWindowTab::MouseEnter(int Number, int MouseX, int MouseY)
+/* 00031ffc */{
+/* 00031ffc */	string Text;
+/* 00032008 */	if (Number == this.m_FixRateCheckBox)
+/* 0003201c */	{
+/* 0003201c */		Text = "ゲーム画面の比率と同じでないディスプレイでも、\n";
+/* 00032028 */		Text += "フルスクリーン時に画面比率を維持します。\n\n";
+/* 00032038 */		Text += "この機能を使うにはDirect3Dが正常に動作する\n";
+/* 00032048 */		Text += "ビデオカードが必要です。";
+/* 00032058 */	}
+/* 0003205e */	else if (Number == this.m_DefaultScalingCheckBox)
+/* 00032072 */	{
+/* 00032072 */		Text = "【フルスクリーン時の画面比率が標準のとき】\n";
+/* 0003207e */		Text += "フルスクリーン時はディスプレイの拡大機能が\n";
+/* 0003208e */		Text += "使用されます。ウィンドウモードは、\n";
+/* 0003209e */		Text += "バイリニアフィルタリングが適応されます。\n\n";
+/* 000320ae */		Text += "【フルスクリーン時の画面比率が固定のとき】\n";
+/* 000320be */		Text += "バイリニアフィルタリングが適応されます。";
+/* 000320ce */	}
+/* 000320d4 */	else if (Number == this.m_BicubicScalingCheckBox)
+/* 000320e8 */	{
+/* 000320e8 */		Text = "「標準」よりもシャープで綺麗な画質になります。\n\n";
+/* 000320f4 */		Text += "フルスクリーン時の画面比率が固定のときと、\n";
+/* 00032104 */		Text += "ウィンドウモード時のみ、この機能が使用されます。\n\n";
+/* 00032114 */		Text += "使用するにはシェーダモデル３．０に対応した\n";
+/* 00032124 */		Text += "ビデオカードが必要です";
+/* 00032134 */	}
+/* 0003213a */	else if (Number == this.m_WaitVSyncCheckBox)
+/* 0003214e */	{
+/* 0003214e */		Text = "画面更新時に垂直同期を待つことで、\n";
+/* 0003215a */		Text += "画面のちらつきを抑えることができます。";
+/* 0003216a */	}
+/* 00032170 */	else if (Number == this.m_MinimizeByFullScreenInactiveCheckBox)
+/* 00032184 */	{
+/* 00032184 */		Text = "オフにすることで、マルチディスプレイ環境に\n";
+/* 00032190 */		Text += "おいて、フルスクリーン時にほかの\n";
+/* 000321a0 */		Text += "ディスプレイ上のウィンドウを\n";
+/* 000321b0 */		Text += "アクティブにしたときに、ゲーム側のウィンドウが\n";
+/* 000321c0 */		Text += "最小されないようにします。";
+/* 000321d0 */	}
+/* 000321d6 */	else if (Number == this.m_OverFrameRateSleepCheckBox)
+/* 000321ea */	{
+/* 000321ea */		Text = "画面更新頻度を適度に抑え、\n";
+/* 000321f6 */		Text += "ＣＰＵ使用率を下げます\n\n";
+/* 00032206 */		Text += "なお、自動的に動作クロックを\n";
+/* 00032216 */		Text += "下げる機能を持つＣＰＵを\n";
+/* 00032226 */		Text += "使用している場合は、タスクマネージャ上での\n";
+/* 00032236 */		Text += "ＣＰＵ使用率の値が下がらない場合がありかす。";
+/* 00032246 */	}
+/* 0003224c */	Ｐ＿ラベル＿テキスト設定(this.m_TextLabel, Text);
+/* 0003225e */}
+
+void CConfigUIWindowTab::MouseLeave(int Number, int MouseX, int MouseY)
+/* 00032266 */{
+/* 00032266 */	Ｐ＿ラベル＿テキスト設定(this.m_TextLabel, "");
+/* 00032278 */}
+
+void CConfigUIWindowTab::MouseClick(int Number, int MouseX, int MouseY)
+/* 00032280 */{
+/* 00032280 */	AFL_Config_InitMainWindowPosAndSize();
+/* 00032286 */}
+

@@ -1,0 +1,350 @@
+SceneConfig::SceneConfig()
+/* 0008370a */{
+/* 00083712 */	this.page_ = -1;
+/* 00083724 */}
+
+int SceneConfig::update()
+/* 0008372c */{
+/* 0008372c */	switch (this.state_)
+/* 0008373e */	{
+/* 0008373e */	case 0:
+/* 0008373e */		if (!this.parent_.isMotion())
+/* 00083752 */		{
+/* 00083752 */			this.state_ = 1;
+/* 0008375c */		}
+/* 00083762 */		break;
+/* 00083768 */	case 1:
+/* 00083768 */		this.checkJumpButton();
+/* 00083770 */		this.checkSysButtonClick();
+/* 00083778 */		if (g_mouse.isClick(1) || this.btnSystem_[2].isClick())
+/* 000837c2 */		{
+/* 000837c2 */			if (g_mouse.isClick(1))
+/* 000837da */			{
+/* 000837da */				g_sysSound.play(2003, false);
+/* 000837f2 */			}
+/* 000837f8 */			this.fadeIn(false);
+/* 00083806 */		}
+/* 0008380c */		this.updateManualText();
+/* 00083814 */		break;
+/* 0008381a */	case 2:
+/* 0008381a */		if (!this.parent_.isMotion())
+/* 0008382e */		{
+/* 0008382e */			this.state_ = 3;
+/* 00083838 */		}
+/* 0008383e */		break;
+/* 00083844 */	case 3:
+/* 00083844 */		return 1;
+/* 0008384c */	}
+/* 0008384c */	return 0;
+/* 00083854 */}
+
+void SceneConfig::run()
+/* 00083862 */{
+/* 00083862 */	this.init();
+/* 0008386a */	this.fadeIn(true);
+/* 00083878 */}
+
+void SceneConfig::init()
+/* 00083880 */{
+/* 00083880 */	this.parts_[0].init("システム／コンフィグ／下地", 0);
+/* 000838a0 */	this.parts_[0].setShow(true);
+/* 000838ba */	createPartsGroup(this.parent_, this.parts_, 1000);
+/* 000838d2 */	this.parent_.setZBasePos(38912);
+/* 000838e4 */	this.initJumpButton();
+/* 000838ec */	this.initSysButton();
+/* 000838f4 */	this.initConfigDescription();
+/* 000838fc */	this.initConfigSampleMessage();
+/* 00083904 */	this.changePage(0);
+/* 00083912 */}
+
+void SceneConfig::fadeIn(bool val)
+/* 0008391a */{
+/* 0008391a */	this.fadeButton(val);
+/* 00083928 */	this.parent_.setShow(true);
+/* 0008393a */	if (val)
+/* 00083946 */	{
+/* 00083946 */		this.parent_.runMotion(getStandardMotion(0));
+/* 0008395e */		this.state_ = 0;
+/* 00083968 */	}
+/* 0008396e */	else
+/* 0008396e */	{
+/* 0008396e */		this.parent_.runMotion(getStandardMotion(1));
+/* 00083986 */		this.state_ = 2;
+/* 00083990 */	}
+/* 00083990 */}
+
+void SceneConfig::initJumpButton()
+/* 00083998 */{
+/* 00083998 */	array@string list;
+/* 000839a2 */	list.PushBack("システム／コンフィグ／タブ／メッセージ速度");
+/* 000839b2 */	list.PushBack("システム／コンフィグ／タブ／メッセージ");
+/* 000839c2 */	list.PushBack("システム／コンフィグ／タブ／メッセージウィンドウ");
+/* 000839d2 */	list.PushBack("システム／コンフィグ／タブ／サウンド");
+/* 000839e2 */	list.PushBack("システム／コンフィグ／タブ／入力");
+/* 000839f2 */	list.PushBack("システム／コンフィグ／タブ／ウィンドウ");
+/* 00083a02 */	list.PushBack("システム／コンフィグ／タブ／ゲーム");
+/* 00083a12 */	int i;
+/* 00083a1c */	for (i = 0; i < this.btnJump_.Numof(); ++i)
+/* 00083a4c */	{
+/* 00083a4c */		this.btnJump_[i].init(list[i], "", -1);
+/* 00083a7a */		this.btnJump_[i].setBaseZ(38912);
+/* 00083a94 */	}
+/* 00083a9a */	this.btnJump_[0].setPos(27, 40, -2147483648);
+/* 00083ac0 */	this.btnJump_[1].setPos(167, 40, -2147483648);
+/* 00083ae6 */	this.btnJump_[2].setPos(307, 40, -2147483648);
+/* 00083b0c */	this.btnJump_[3].setPos(447, 40, -2147483648);
+/* 00083b32 */	this.btnJump_[4].setPos(587, 40, -2147483648);
+/* 00083b58 */	this.btnJump_[5].setPos(727, 40, -2147483648);
+/* 00083b7e */	this.btnJump_[6].setPos(867, 40, -2147483648);
+/* 00083ba4 */}
+
+void SceneConfig::initSysButton()
+/* 00083bac */{
+/* 00083bac */	array@string list;
+/* 00083bb6 */	list.PushBack("ゲームを終了する");
+/* 00083bc6 */	list.PushBack("タイトル画面に戻る");
+/* 00083bd6 */	list.PushBack("ゲームに戻る");
+/* 00083be6 */	int i;
+/* 00083bf0 */	for (i = 0; i < this.btnSystem_.Numof(); ++i)
+/* 00083c20 */	{
+/* 00083c20 */		this.btnSystem_[i].init("システム／ボタン／幅２００", list[i], -1);
+/* 00083c4e */		this.btnSystem_[i].setPos(336 + i * 220, 688, -2147483648);
+/* 00083c84 */		this.btnSystem_[i].setBaseZ(38912);
+/* 00083c9e */	}
+/* 00083ca4 */}
+
+void SceneConfig::fadeButton(bool val)
+/* 00083cac */{
+/* 00083cac */	int i;
+/* 00083cb6 */	for (i = 0; i < this.btnJump_.Numof(); ++i)
+/* 00083ce6 */	{
+/* 00083ce6 */		this.btnJump_[i].fadeIn(val);
+/* 00083d00 */	}
+/* 00083d06 */	for (i = 0; i < this.btnSystem_.Numof(); ++i)
+/* 00083d36 */	{
+/* 00083d36 */		this.btnSystem_[i].fadeIn(val);
+/* 00083d50 */	}
+/* 00083d56 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00083d86 */	{
+/* 00083d86 */		this.checkBox_[i].fadeIn(val);
+/* 00083da0 */	}
+/* 00083da6 */	for (i = 0; i < this.slider_.Numof(); ++i)
+/* 00083dd6 */	{
+/* 00083dd6 */		this.slider_[i].fadeIn(val);
+/* 00083df0 */	}
+/* 00083df6 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00083e26 */	{
+/* 00083e26 */		this.btn_[i].fadeIn(val);
+/* 00083e40 */	}
+/* 00083e46 */}
+
+void SceneConfig::resetConfigCheckBox(int page)
+/* 00083e4e */{
+/* 00083e4e */	int count = EX_Height("ConfigCheckBox");
+/* 00083e66 */	this.checkBox_.Free();
+/* 00083e70 */	int i;
+/* 00083e7a */	for (i = 0; i < count; ++i)
+/* 00083eaa */	{
+/* 00083eaa */		string id = EX_A2String("ConfigCheckBox", 0, i, "");
+/* 00083ed2 */		string name = EX_SA2String("ConfigCheckBox", id, "name", "");
+/* 00083efa */		string setFunc = EX_SA2String("ConfigCheckBox", id, "setFunc", "");
+/* 00083f22 */		string getFunc = EX_SA2String("ConfigCheckBox", id, "getFunc", "");
+/* 00083f4a */		int x = EX_SA2Int("ConfigCheckBox", id, "x", 0);
+/* 00083f74 */		int y = EX_SA2Int("ConfigCheckBox", id, "y", 0);
+/* 00083f9e */		int manualId = EX_SA2Int("ConfigCheckBox", id, "manualId", 0);
+/* 00083fc8 */		if (page * 976 <= x && x < 48 + (page + 1) * 976)
+/* 00084028 */		{
+/* 00084028 */			int index = this.checkBox_.Numof();
+/* 0008403a */			this.checkBox_.Realloc(this.checkBox_.Numof() + 1);
+/* 00084058 */			this.checkBox_[index].init(name, setFunc, getFunc, manualId);
+/* 00084084 */			this.checkBox_[index].setPos(x - page * 976, y, -2147483648);
+/* 000840ba */			this.checkBox_[index].setParent(this.parent_.getPartsNumber());
+/* 000840da */		}
+/* 000840e0 */	}
+/* 000840e6 */}
+
+void SceneConfig::resetConfigSlider(int page)
+/* 000840ee */{
+/* 000840ee */	int count = EX_Height("ConfigSlider");
+/* 00084106 */	this.slider_.Free();
+/* 00084110 */	int i;
+/* 0008411a */	for (i = 0; i < count; ++i)
+/* 0008414a */	{
+/* 0008414a */		string id = EX_A2String("ConfigSlider", 0, i, "");
+/* 00084172 */		string caption = EX_SA2String("ConfigSlider", id, "caption", "");
+/* 0008419a */		string setFunc = EX_SA2String("ConfigSlider", id, "setFunc", "");
+/* 000841c2 */		string getFunc = EX_SA2String("ConfigSlider", id, "getFunc", "");
+/* 000841ea */		int x = EX_SA2Int("ConfigSlider", id, "x", 0);
+/* 00084214 */		int y = EX_SA2Int("ConfigSlider", id, "y", 0);
+/* 0008423e */		int captionWidth = EX_SA2Int("ConfigSlider", id, "captionWidth", 0);
+/* 00084268 */		if (page * 976 <= x && x < 48 + (page + 1) * 976)
+/* 000842c8 */		{
+/* 000842c8 */			int index = this.slider_.Numof();
+/* 000842da */			this.slider_.Realloc(this.slider_.Numof() + 1);
+/* 000842f8 */			this.slider_[index].init(caption, captionWidth, "システム／コンフィグ／スクロール／横／ボックス", setFunc, getFunc);
+/* 0008432a */			this.slider_[index].setPos(x - page * 976, y);
+/* 0008435a */			this.slider_[index].setParent(this.parent_.getPartsNumber());
+/* 0008437a */		}
+/* 00084380 */	}
+/* 00084386 */}
+
+void SceneConfig::resetConfigColorSelector(int page)
+/* 0008438e */{
+/* 0008438e */	int count = EX_Height("ConfigColorSelector");
+/* 000843a6 */	this.selector_.Free();
+/* 000843b0 */	int i;
+/* 000843ba */	for (i = 0; i < count; ++i)
+/* 000843ea */	{
+/* 000843ea */		string id = EX_A2String("ConfigColorSelector", 0, i, "");
+/* 00084412 */		string caption = EX_SA2String("ConfigColorSelector", id, "caption", "");
+/* 0008443a */		string setFunc = EX_SA2String("ConfigColorSelector", id, "setFunc", "");
+/* 00084462 */		string getFunc = EX_SA2String("ConfigColorSelector", id, "getFunc", "");
+/* 0008448a */		string colorFunc = EX_SA2String("ConfigColorSelector", id, "colorFunc", "");
+/* 000844b2 */		int x = EX_SA2Int("ConfigColorSelector", id, "x", 0);
+/* 000844dc */		int y = EX_SA2Int("ConfigColorSelector", id, "y", 0);
+/* 00084506 */		if (page * 976 <= x && x < 48 + (page + 1) * 976)
+/* 00084566 */		{
+/* 00084566 */			int index = this.selector_.Numof();
+/* 00084578 */			this.selector_.Realloc(this.selector_.Numof() + 1);
+/* 00084596 */			this.selector_[i].init(caption, setFunc, getFunc, colorFunc);
+/* 000845c2 */			this.selector_[i].setPos(x - page * 976, y);
+/* 000845f2 */			this.selector_[i].setParent(this.parent_.getPartsNumber());
+/* 00084612 */		}
+/* 00084618 */	}
+/* 0008461e */}
+
+void SceneConfig::resetConfigButton(int page)
+/* 00084626 */{
+/* 00084626 */	int count = EX_Height("ConfigButton");
+/* 0008463e */	this.btn_.Free();
+/* 00084648 */	int i;
+/* 00084652 */	for (i = 0; i < count; ++i)
+/* 00084682 */	{
+/* 00084682 */		string id = EX_A2String("ConfigButton", 0, i, "");
+/* 000846aa */		string caption = EX_SA2String("ConfigButton", id, "caption", "");
+/* 000846d2 */		string image = EX_SA2String("ConfigButton", id, "imageName", "");
+/* 000846fa */		string btnFunc = EX_SA2String("ConfigButton", id, "clickFunc", "");
+/* 00084722 */		int x = EX_SA2Int("ConfigButton", id, "x", 0);
+/* 0008474c */		int y = EX_SA2Int("ConfigButton", id, "y", 0);
+/* 00084776 */		if (page * 976 <= x && x < 48 + (page + 1) * 976)
+/* 000847d6 */		{
+/* 000847d6 */			int index = this.btn_.Numof();
+/* 000847e8 */			this.btn_.Realloc(this.btn_.Numof() + 1);
+/* 00084806 */			this.btn_[index].init(image, caption, btnFunc);
+/* 0008482c */			this.btn_[index].setPos(x - page * 976, y, -2147483648);
+/* 00084862 */			this.btn_[index].setParent(this.parent_.getPartsNumber());
+/* 00084882 */		}
+/* 00084888 */	}
+/* 0008488e */}
+
+bool SceneConfig::isHoverSlider()
+/* 00084896 */{
+/* 00084896 */	int i;
+/* 000848a0 */	for (i = 0; i < this.slider_.Numof(); ++i)
+/* 000848d0 */	{
+/* 000848d0 */		if (this.slider_[i].isHover())
+/* 000848ea */		{
+/* 000848ea */			return true;
+/* 000848f2 */		}
+/* 000848f8 */	}
+/* 000848fe */	return false;
+/* 00084906 */}
+
+void SceneConfig::checkJumpButton()
+/* 00084914 */{
+/* 00084914 */	int n = -1;
+/* 00084926 */	int i;
+/* 00084930 */	for (i = 0; i < this.btnJump_.Numof(); ++i)
+/* 00084960 */	{
+/* 00084960 */		if (this.btnJump_[i].isClick())
+/* 0008497a */		{
+/* 0008497a */			n = i;
+/* 0008498c */			break;
+/* 00084992 */		}
+/* 00084998 */	}
+/* 0008499e */	if (n != -1)
+/* 000849b2 */	{
+/* 000849b2 */		this.changePage(n);
+/* 000849c0 */	}
+/* 000849c6 */	if (g_mouse.getWheel() > 0)
+/* 000849e0 */	{
+/* 000849e0 */		this.changePage(this.page_ - 1);
+/* 000849f6 */	}
+/* 000849fc */	else if (g_mouse.getWheel() < 0)
+/* 00084a16 */	{
+/* 00084a16 */		this.changePage(this.page_ + 1);
+/* 00084a2c */	}
+/* 00084a32 */}
+
+void SceneConfig::changePage(int page)
+/* 00084a3a */{
+/* 00084a3a */	page = Math.Min(Math.Max(0, page), 6);
+/* 00084a6c */	if (this.page_ == page)
+/* 00084a7a */	{
+/* 00084a7a */		return;
+/* 00084a7c */	}
+/* 00084a82 */	this.page_ = page;
+/* 00084a8c */	this.resetConfigCheckBox(this.page_);
+/* 00084a9a */	this.resetConfigSlider(this.page_);
+/* 00084aa8 */	this.resetConfigButton(this.page_);
+/* 00084ab6 */	this.resetConfigColorSelector(this.page_);
+/* 00084ac4 */	this.showSubItem(this.page_);
+/* 00084ad2 */	this.updateJumpButtonSelected(this.page_);
+/* 00084ae0 */	this.fadeButton(true);
+/* 00084aee */}
+
+void SceneConfig::updateJumpButtonSelected(int n)
+/* 00084af6 */{
+/* 00084af6 */	int i;
+/* 00084b00 */	for (i = 0; i < this.btnJump_.Numof(); ++i)
+/* 00084b30 */	{
+/* 00084b30 */		this.btnJump_[i].setSelected(n == i);
+/* 00084b54 */	}
+/* 00084b5a */}
+
+void SceneConfig::updateManualText()
+/* 00084b62 */{
+/* 00084b62 */	int mn = -1;
+/* 00084b74 */	int i;
+/* 00084b7e */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 00084bae */	{
+/* 00084bae */		if (this.checkBox_[i].isHover())
+/* 00084bc8 */		{
+/* 00084bc8 */			mn = this.checkBox_[i].getManualTextId();
+/* 00084be8 */		}
+/* 00084bee */	}
+/* 00084bf4 */	this.description_.setManualTextId(mn);
+/* 00084c06 */}
+
+void SceneConfig::initConfigDescription()
+/* 00084c0e */{
+/* 00084c0e */	this.description_.init(EX_String("ConfigDescription.background", ""), EX_Int("ConfigDescription.textSize", 0), EX_Int("ConfigDescription.lineHeight", 0), EX_Int("ConfigDescription.spanX", 0), EX_Int("ConfigDescription.spanY", 0), EX_Int("ConfigDescription.lineLength", 0));
+/* 00084c86 */	this.description_.setPos(EX_Int("ConfigDescription.x", 0) - 4880, EX_Int("ConfigDescription.y", 0));
+/* 00084cbe */	this.description_.setParent(this.parent_.getPartsNumber());
+/* 00084cd6 */}
+
+void SceneConfig::initConfigSampleMessage()
+/* 00084cde */{
+/* 00084cde */	this.sampleMessage_.init();
+/* 00084cea */	this.sampleMessage_.setPos(48, 500);
+/* 00084d02 */	this.sampleMessage_.setParent(this.parent_.getPartsNumber());
+/* 00084d1a */}
+
+void SceneConfig::showSubItem(int page)
+/* 00084d22 */{
+/* 00084d22 */	this.sampleMessage_.setShow(page == 0);
+/* 00084d3e */	this.description_.setShow(page == 5);
+/* 00084d5a */}
+
+void SceneConfig::checkSysButtonClick()
+/* 00084d62 */{
+/* 00084d62 */	if (this.btnSystem_[1].isClick())
+/* 00084d7c */	{
+/* 00084d7c */		タイトルに戻る();
+/* 00084d82 */	}
+/* 00084d88 */	if (this.btnSystem_[0].isClick())
+/* 00084da2 */	{
+/* 00084da2 */		ゲーム終了();
+/* 00084da8 */	}
+/* 00084dae */}
+

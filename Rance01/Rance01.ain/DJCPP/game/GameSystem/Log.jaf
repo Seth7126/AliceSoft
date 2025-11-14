@@ -1,0 +1,41 @@
+void Log::set(string text, int type)
+/* 00092820 */{
+/* 00092820 */	this.time_ = this.getTimeText();
+/* 00092832 */	this.text_ = text;
+/* 0009283c */	this.callStack_ = getFuncStack(5);
+/* 00092852 */	this.type_ = type;
+/* 0009285c */}
+
+string Log::getTimeText()
+/* 00092864 */{
+/* 00092864 */	int y;
+/* 0009286e */	int m;
+/* 00092878 */	int d;
+/* 00092882 */	int w;
+/* 0009288c */	int hr;
+/* 00092896 */	int min;
+/* 000928a0 */	int sec;
+/* 000928aa */	AFL_GetTime(y, m, d, w, hr, min, sec);
+/* 000928e8 */	return "%02d:%02d:%02d" % hr % min % sec;
+/* 0009291a */}
+
+string Log::getText()
+/* 00092928 */{
+/* 00092928 */	return this.text_;
+/* 00092930 */}
+
+string Log::getTime()
+/* 0009293e */{
+/* 0009293e */	return this.time_;
+/* 00092946 */}
+
+string Log::getCallStack()
+/* 00092954 */{
+/* 00092954 */	return this.callStack_;
+/* 0009295c */}
+
+int Log::getType()
+/* 0009296a */{
+/* 0009296a */	return this.type_;
+/* 00092972 */}
+

@@ -1,0 +1,61 @@
+ChipInstance::ChipInstance()
+/* 00090106 */{
+/* 0009010e */	this.isBet_ = false;
+/* 00090118 */	this.id_ = "";
+/* 00090124 */	this.timeRemain_ = 0;
+/* 0009012e */}
+
+void ChipInstance::init(string id)
+/* 00090136 */{
+/* 00090136 */	this.id_ = id;
+/* 00090140 */}
+
+void ChipInstance::setTimeRemain(int val)
+/* 00090148 */{
+/* 00090148 */	this.timeRemain_ = Math.Max(0, val);
+/* 0009016a */	this.callEventHandler(0);
+/* 00090178 */}
+
+void ChipInstance::decTimeRemain(int val)
+/* 00090180 */{
+/* 00090180 */	this.timeRemain_ = Math.Max(0, this.timeRemain_ - val);
+/* 000901aa */	this.callEventHandler(0);
+/* 000901b8 */}
+
+void ChipInstance::setBet(bool val)
+/* 000901c0 */{
+/* 000901c0 */	if (this.timeRemain_ == 0)
+/* 000901ce */	{
+/* 000901ce */		this.isBet_ = val;
+/* 000901d8 */		this.callEventHandler(1);
+/* 000901e6 */	}
+/* 000901ec */}
+
+string ChipInstance::getId()
+/* 000901f4 */{
+/* 000901f4 */	return this.id_;
+/* 000901fc */}
+
+int ChipInstance::getTimeRemain()
+/* 0009020a */{
+/* 0009020a */	return this.timeRemain_;
+/* 00090212 */}
+
+void ChipInstance::addEventHandler(DG_ChipInstanceEvent handler)
+/* 00090220 */{
+/* 00090220 */	this.handler_ += handler;
+/* 00090232 */}
+
+void ChipInstance::callEventHandler(int type)
+/* 0009023a */{
+/* 0009023a */	if (this.handler_.Numof() != 0)
+/* 00090252 */	{
+/* 00090252 */		this.handler_(type);
+/* 00090274 */	}
+/* 0009027a */}
+
+bool ChipInstance::isBet()
+/* 00090282 */{
+/* 00090282 */	return this.isBet_;
+/* 0009028a */}
+

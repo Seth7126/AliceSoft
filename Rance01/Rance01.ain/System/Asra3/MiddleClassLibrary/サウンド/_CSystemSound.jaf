@@ -1,0 +1,52 @@
+_CSystemSound::_CSystemSound()
+/* 000375e0 */{
+/* 000375e8 */	this.m_ch[0]._SetChannel(4);
+/* 00037602 */	this.m_ch[1]._SetChannel(5);
+/* 0003761c */	this.m_ch[2]._SetChannel(6);
+/* 00037636 */	this.m_ch[3]._SetChannel(7);
+/* 00037650 */	this.m_ch[4]._SetChannel(8);
+/* 0003766a */	this.m_ch[5]._SetChannel(9);
+/* 00037684 */	this.m_index = 0;
+/* 0003768e */}
+
+void _CSystemSound::_Play(int _snd)
+/* 00037696 */{
+/* 00037696 */	if (_snd < 0)
+/* 000376a4 */	{
+/* 000376a4 */		return;
+/* 000376a6 */	}
+/* 000376ac */	if (!KiwiSoundEngine.Sound_IsExist(_snd))
+/* 000376c4 */	{
+/* 000376c4 */		SYS_ERROR("効果音[%d]ロード失敗\n" % _snd, 0);
+/* 000376e4 */		return;
+/* 000376e6 */	}
+/* 000376ec */	this.m_ch[this.m_index]._Prepare(_snd);
+/* 00037708 */	this.m_ch[this.m_index]._Play();
+/* 0003771c */	if (++this.m_index >= this.m_ch.Numof())
+/* 00037738 */	{
+/* 00037738 */		this.m_index = 0;
+/* 00037742 */	}
+/* 00037748 */}
+
+void _CSystemSound::_ClearCache()
+/* 00037750 */{
+/* 00037750 */	int _i;
+/* 0003775a */	for (_i = 0; _i < this.m_ch.Numof(); ++_i)
+/* 0003778a */	{
+/* 0003778a */		this.m_ch[_i]._Unprepare();
+/* 0003779e */	}
+/* 000377a4 */}
+
+bool _CSystemSound::IsPlay()
+/* 000377ac */{
+/* 000377ac */	int n;
+/* 000377b6 */	for (n = 0; n < this.m_ch.Numof(); ++n)
+/* 000377e6 */	{
+/* 000377e6 */		if (this.m_ch[n].IsPlay())
+/* 00037800 */		{
+/* 00037800 */			return true;
+/* 00037808 */		}
+/* 0003780e */	}
+/* 00037814 */	return false;
+/* 0003781c */}
+

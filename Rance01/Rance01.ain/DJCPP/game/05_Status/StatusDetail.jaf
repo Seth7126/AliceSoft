@@ -1,0 +1,189 @@
+StatusDetail::StatusDetail()
+/* 00076484 */{
+/* 0007648c */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000764ae */	g_hallucination.getPos(this.lhx_, this.lhy_);
+/* 000764ca */	g_hallucination.setPos(400, -112);
+/* 000764e2 */}
+
+StatusDetail::~StatusDetail()
+/* 000764ea */{
+/* 000764ea */	g_hallucination.setPos(this.lhx_, this.lhy_);
+/* 00076502 */}
+
+void StatusDetail::init()
+/* 0007650a */{
+/* 0007650a */	g_chipDepository[0].addEventHandler(this.onEvent);
+/* 00076528 */	this.initParts();
+/* 00076530 */	this.initPartsSkill();
+/* 00076538 */	this.initPartsBadCondition();
+/* 00076540 */	this.initPartsMemo();
+/* 00076548 */	this.setPartsShow();
+/* 00076550 */	this.setPartsPos();
+/* 00076558 */	this.setNumberValue();
+/* 00076560 */}
+
+void StatusDetail::initParts()
+/* 00076568 */{
+/* 00076568 */	this.parts_[0].init("システム／キャンプ／下地", 0);
+/* 00076588 */	NumberPartsInfomation n;
+/* 00076598 */	n.setSameWidth(30);
+/* 000765aa */	this.parts_[1].initAsNumber("システム／数字／幅３０／白", n);
+/* 000765ca */	this.parts_[2].initAsNumber("システム／数字／幅３０／白", n);
+/* 000765ea */	this.parts_[3].initAsNumber("システム／数字／幅３０／白", n);
+/* 0007660a */	this.parts_[4].initAsNumber("システム／数字／幅３０／白", n);
+/* 0007662a */	n.setSameWidth(18);
+/* 0007663c */	this.parts_[5].initAsNumber("システム／数字／幅１８／白", n);
+/* 0007665c */	this.parts_[6].initAsNumber("システム／数字／幅１８／白", n);
+/* 0007667c */	this.parts_[7].initAsNumber("システム／数字／幅１８／白", n);
+/* 0007669c */	this.parts_[8].initAsNumber("システム／数字／幅１８／白", n);
+/* 000766bc */	createPartsGroup(this.parent_, this.parts_, 7000);
+/* 000766d4 */}
+
+void StatusDetail::initPartsSkill()
+/* 000766dc */{
+/* 000766dc */	array@string list;
+/* 000766e6 */	g_player.getSkillList(list);
+/* 000766f8 */	this.skill_.Alloc(list.Numof());
+/* 00076718 */	int i;
+/* 00076722 */	for (i = 0; i < list.Numof(); ++i)
+/* 0007675c */	{
+/* 0007675c */		this.skill_[i].init(list[i]);
+/* 0007677e */		this.skill_[i].setParent(this.parent_.getPartsNumber());
+/* 0007679e */	}
+/* 000767a4 */}
+
+void StatusDetail::initPartsBadCondition()
+/* 000767ac */{
+/* 000767ac */	array@string list;
+/* 000767b6 */	g_player.getBadConditionList(list);
+/* 000767c8 */	this.badCondition_.Alloc(list.Numof());
+/* 000767e8 */	int i;
+/* 000767f2 */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 00076822 */	{
+/* 00076822 */		this.badCondition_[i].init(list[i]);
+/* 00076844 */		this.badCondition_[i].setParent(this.parent_.getPartsNumber());
+/* 00076864 */	}
+/* 0007686a */}
+
+void StatusDetail::initPartsMemo()
+/* 00076872 */{
+/* 00076872 */	array@string memo;
+/* 0007687c */	splitToken(memo, g_gameFlagMap.getString("俺のメモ"), "|");
+/* 000768a0 */	this.partsMemo_.Alloc(memo.Numof());
+/* 000768c0 */	int i;
+/* 000768ca */	for (i = 0; i < this.partsMemo_.Numof(); ++i)
+/* 000768fa */	{
+/* 000768fa */		this.partsMemo_[i].initAsText(memo[i], 20, false, 256, 0, 0, 0);
+/* 00076940 */		this.partsMemo_[i].setParent(this.parent_.getPartsNumber());
+/* 00076960 */	}
+/* 00076966 */}
+
+void StatusDetail::setPartsPos()
+/* 0007696e */{
+/* 0007696e */	int i;
+/* 00076978 */	for (i = 1; i < this.parts_.Numof(); ++i)
+/* 000769a8 */	{
+/* 000769a8 */		this.parts_[i].setOrigin(8);
+/* 000769c2 */	}
+/* 000769c8 */	this.parts_[1].setPos(368, 396, -2147483648);
+/* 000769ee */	this.parts_[2].setPos(494, 396, -2147483648);
+/* 00076a14 */	this.parts_[3].setPos(642, 396, -2147483648);
+/* 00076a3a */	this.parts_[4].setPos(768, 396, -2147483648);
+/* 00076a60 */	this.parts_[5].setPos(493, 500, -2147483648);
+/* 00076a86 */	this.parts_[6].setPos(623, 500, -2147483648);
+/* 00076aac */	this.parts_[7].setPos(726, 500, -2147483648);
+/* 00076ad2 */	this.parts_[8].setPos(780, 500, -2147483648);
+/* 00076af8 */	for (i = 0; i < this.skill_.Numof(); ++i)
+/* 00076b28 */	{
+/* 00076b28 */		this.skill_[i].setPos(416 + (i % 5) * 88, 540 + (i / 5) * 38);
+/* 00076b78 */	}
+/* 00076b7e */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 00076bae */	{
+/* 00076bae */		this.badCondition_[i].setPos(416 + (i % 5) * 88, 628 + (i / 5) * 38);
+/* 00076bfe */	}
+/* 00076c04 */	for (i = 0; i < this.partsMemo_.Numof(); ++i)
+/* 00076c34 */	{
+/* 00076c34 */		this.partsMemo_[i].setPos(416, 716 + i * 20, -2147483648);
+/* 00076c6a */	}
+/* 00076c70 */}
+
+void StatusDetail::setNumberValue()
+/* 00076c78 */{
+/* 00076c78 */	this.parts_[1].setNumber(g_player.getLevel());
+/* 00076c98 */	this.parts_[2].setNumber(g_player.getHp());
+/* 00076cb8 */	this.parts_[3].setNumber(g_player.getMaxHp());
+/* 00076cd8 */	this.parts_[4].setNumber(g_player.getLuck());
+/* 00076cf8 */	this.parts_[5].setNumber(g_player.getExp());
+/* 00076d18 */	this.parts_[6].setNumber(g_player.getGold());
+/* 00076d38 */	this.parts_[7].setNumber(g_chipDepository[0].getCount());
+/* 00076d60 */	this.parts_[8].setNumber(g_chipDepository[0].getSize());
+/* 00076d88 */}
+
+void StatusDetail::setPartsShow()
+/* 00076d90 */{
+/* 00076d90 */	int i;
+/* 00076d9a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00076dca */	{
+/* 00076dca */		this.parts_[i].setShow(true);
+/* 00076de4 */	}
+/* 00076dea */	for (i = 0; i < this.partsMemo_.Numof(); ++i)
+/* 00076e1a */	{
+/* 00076e1a */		this.partsMemo_[i].setShow(true);
+/* 00076e34 */	}
+/* 00076e3a */	this.parent_.setShow(true);
+/* 00076e4c */}
+
+void StatusDetail::fadeIn(bool val)
+/* 00076e54 */{
+/* 00076e54 */	MotionInfomation m;
+/* 00076e64 */	if (val)
+/* 00076e70 */	{
+/* 00076e70 */		m.setTime(300, 0);
+/* 00076e88 */		m.setMove(80, -848, 80, -348, 1);
+/* 00076eb2 */	}
+/* 00076eb8 */	else
+/* 00076eb8 */	{
+/* 00076eb8 */		m.setTime(150, 0);
+/* 00076ed0 */		m.setMove(80, -348, 80, -848, 1);
+/* 00076efa */	}
+/* 00076efa */	this.parent_.runMotion(m);
+/* 00076f14 */	this.state_ = val ? 1 : 3;
+/* 00076f3e */	if (val)
+/* 00076f4a */	{
+/* 00076f4a */		g_sysSound.play(2201, false);
+/* 00076f62 */	}
+/* 00076f68 */}
+
+void StatusDetail::update()
+/* 00076f70 */{
+/* 00076f70 */	switch (this.state_)
+/* 00076f82 */	{
+/* 00076f82 */	case 1:
+/* 00076f82 */		if (!this.parent_.isMotion())
+/* 00076f96 */		{
+/* 00076f96 */			this.state_ = 2;
+/* 00076fa0 */		}
+/* 00076fa6 */		break;
+/* 00076fac */	case 2:
+/* 00076fac */		break;
+/* 00076fb2 */	case 3:
+/* 00076fb2 */		if (!this.parent_.isMotion())
+/* 00076fc6 */		{
+/* 00076fc6 */			this.state_ = 0;
+/* 00076fd0 */		}
+/* 00076fd6 */		break;
+/* 00076fdc */	case 0:
+/* 00076fdc */		break;
+/* 00076fe2 */	}
+/* 00076fe2 */}
+
+bool StatusDetail::isMotion()
+/* 00076fea */{
+/* 00076fea */	return this.parent_.isMotion();
+/* 00076ff8 */}
+
+void StatusDetail::onEvent(int type, int value)
+/* 00077006 */{
+/* 00077006 */	this.setNumberValue();
+/* 0007700e */}
+

@@ -1,0 +1,399 @@
+CConfigUI3DTab::CConfigUI3DTab()
+/* 00029be2 */{
+/* 00029bea */	this.LoadSetting();
+/* 00029bf2 */}
+
+CConfigUI3DTab::~CConfigUI3DTab()
+/* 00029bfa */{
+/* 00029bfa */	this.SaveSetting();
+/* 00029c02 */}
+
+void CConfigUI3DTab::Create()
+/* 00029c0a */{
+/* 00029c0a */	this.CreateUI();
+/* 00029c12 */}
+
+void CConfigUI3DTab::Release()
+/* 00029c1a */{
+/* 00029c1a */	AFL_Parts_EraseSelectedEvent(this.m_SubList, this.SelectedSubList);
+/* 00029c30 */	AFL_Parts_EraseSelectedEvent(this.m_MainList, this.SelectedMainList);
+/* 00029c46 */	PARTS_Release(this.m_TextLabel);
+/* 00029c52 */	PARTS_Release(this.m_TextBG);
+/* 00029c5e */	PARTS_Release(this.m_SubList);
+/* 00029c6a */	PARTS_Release(this.m_MainList);
+/* 00029c76 */	PARTS_Release(this.m_BG);
+/* 00029c82 */	this.m_TextLabel = 0;
+/* 00029c8c */	this.m_TextBG = 0;
+/* 00029c96 */	this.m_SubList = 0;
+/* 00029ca0 */	this.m_MainList = 0;
+/* 00029caa */	this.m_BG = 0;
+/* 00029cb4 */}
+
+void CConfigUI3DTab::CreateUI()
+/* 00029cbc */{
+/* 00029cbc */	this.Release();
+/* 00029cc4 */	this.CreateBG();
+/* 00029ccc */	this.CreateMainList();
+/* 00029cd4 */	this.CreateSubList();
+/* 00029cdc */	this.CreateTextBG();
+/* 00029ce4 */	this.CreateTextLabel();
+/* 00029cec */	Ｐ＿リストボックス＿選択位置設定(this.m_MainList, 0);
+/* 00029cfe */	this.SelectedMainList(this.m_SubList, 0);
+/* 00029d12 */}
+
+void CConfigUI3DTab::CreateBG()
+/* 00029d1a */{
+/* 00029d1a */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 00029d2c */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 00029d3e */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 00029d56 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 00029d74 */}
+
+void CConfigUI3DTab::CreateMainList()
+/* 00029d7c */{
+/* 00029d7c */	this.m_MainList = PARTS_GetFreeSystemPartsNumber();
+/* 00029d8e */	Ｐ＿リストボックス＿座標設定(this.m_MainList, 50, 100);
+/* 00029da6 */	Ｐ＿リストボックス＿Ｚ座標設定(this.m_MainList, 300);
+/* 00029db8 */	Ｐ＿リストボックス＿サイズ設定(this.m_MainList, 300, 550);
+/* 00029dd0 */	Ｐ＿リストボックス＿行サイズ設定(this.m_MainList, 24);
+/* 00029de2 */	Ｐ＿リストボックス＿マージン設定(this.m_MainList, 8, 2);
+/* 00029dfa */	Ｐ＿リストボックス＿フォント設定(this.m_MainList, 0, 30, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 00029e42 */	Ｐ＿リストボックス＿アイテム全削除(this.m_MainList);
+/* 00029e4e */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "描画モード");
+/* 00029e60 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "ライティング");
+/* 00029e72 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "アンチエイリアシング");
+/* 00029e84 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "シャドウ");
+/* 00029e96 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "シャドウマップ解像度");
+/* 00029ea8 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "テクスチャ解像度");
+/* 00029eba */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "テクスチャフィルタリング");
+/* 00029ecc */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "バンプマッピング");
+/* 00029ede */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "ブルーム");
+/* 00029ef0 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "グレア");
+/* 00029f02 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "フォグ");
+/* 00029f14 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "スペキュラー");
+/* 00029f26 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "ソフトフォグエッジ");
+/* 00029f38 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "アンビエントオクルージョン");
+/* 00029f4a */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "頂点処理");
+/* 00029f5c */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "ライトマップ");
+/* 00029f6e */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "エッジ");
+/* 00029f80 */	Ｐ＿リストボックス＿アイテム追加(this.m_MainList, "被写界深度エフェクト");
+/* 00029f92 */	AFL_Parts_AddSelectedEvent(this.m_MainList, this.SelectedMainList);
+/* 00029fa8 */}
+
+void CConfigUI3DTab::CreateSubList()
+/* 00029fb0 */{
+/* 00029fb0 */	this.m_SubList = PARTS_GetFreeSystemPartsNumber();
+/* 00029fc2 */	Ｐ＿リストボックス＿座標設定(this.m_SubList, 360, 100);
+/* 00029fda */	Ｐ＿リストボックス＿Ｚ座標設定(this.m_SubList, 300);
+/* 00029fec */	Ｐ＿リストボックス＿サイズ設定(this.m_SubList, 540, 270);
+/* 0002a004 */	Ｐ＿リストボックス＿行サイズ設定(this.m_SubList, 20);
+/* 0002a016 */	Ｐ＿リストボックス＿マージン設定(this.m_SubList, 8, 2);
+/* 0002a02e */	Ｐ＿リストボックス＿フォント設定(this.m_SubList, 0, 30, 0, 0, 0, 0.0, 0.0, 0, 0, 0);
+/* 0002a076 */	Ｐ＿リストボックス＿アイテム全削除(this.m_SubList);
+/* 0002a082 */	Ｐ＿リストボックス＿選択位置設定(this.m_SubList, -1);
+/* 0002a094 */	AFL_Parts_AddSelectedEvent(this.m_SubList, this.SelectedSubList);
+/* 0002a0aa */}
+
+void CConfigUI3DTab::CreateTextBG()
+/* 0002a0b2 */{
+/* 0002a0b2 */	this.m_TextBG = PARTS_GetFreeSystemPartsNumber();
+/* 0002a0c4 */	Ｐ＿ＣＧボックス＿座標設定(this.m_TextBG, 360, 380);
+/* 0002a0dc */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_TextBG, 5);
+/* 0002a0ee */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_TextBG, 540, 270);
+/* 0002a106 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_TextBG, 70, 70, 70);
+/* 0002a124 */}
+
+void CConfigUI3DTab::CreateTextLabel()
+/* 0002a12c */{
+/* 0002a12c */	this.m_TextLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002a13e */	Ｐ＿ラベル＿座標設定(this.m_TextLabel, 380, 400);
+/* 0002a156 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_TextLabel, 100);
+/* 0002a168 */	Ｐ＿ラベル＿フォント設定(this.m_TextLabel, 0, 16, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002a1b0 */}
+
+void CConfigUI3DTab::SelectedMainList(int Number, int Selected)
+/* 0002a1b8 */{
+/* 0002a1b8 */	string Text;
+/* 0002a1c4 */	Ｐ＿リストボックス＿アイテム全削除(this.m_SubList);
+/* 0002a1d0 */	Ｐ＿リストボックス＿選択位置設定(this.m_SubList, -1);
+/* 0002a1e2 */	switch (Selected)
+/* 0002a1f4 */	{
+/* 0002a1f4 */	case 0:
+/* 0002a1f4 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "ソフトウェア");
+/* 0002a206 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "シェーダなし");
+/* 0002a218 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "シェーダあり");
+/* 0002a22a */		Text += "「ソフトウェア」はDirect3Dを使わずに３Ｄ描画を\n";
+/* 0002a23a */		Text += "おこないます。\n\n";
+/* 0002a24a */		Text += "「シェーダあり」はシェーダモデル2.0以上に対応した\n";
+/* 0002a25a */		Text += "ビデオカードが必要です。";
+/* 0002a26a */		break;
+/* 0002a270 */	case 1:
+/* 0002a270 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a282 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a294 */		break;
+/* 0002a29a */	case 2:
+/* 0002a29a */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a2ac */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "２ｘ");
+/* 0002a2be */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "４ｘ");
+/* 0002a2d0 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "８ｘ");
+/* 0002a2e2 */		Text += "ポリゴンのエッジをなめらかにします。\n\n";
+/* 0002a2f2 */		Text += "ビデオカードが対応している必要があります。";
+/* 0002a302 */		break;
+/* 0002a308 */	case 3:
+/* 0002a308 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a31a */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "低画質");
+/* 0002a32c */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "中画質");
+/* 0002a33e */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "高画質");
+/* 0002a350 */		Text += "「なし」にすると影を描画しなくなります。\n\n";
+/* 0002a360 */		Text += "「低画質」以上は、シェーダモデル2.0以上と\n";
+/* 0002a370 */		Text += "浮動小数点テクスチャに対応したビデオカードが\n";
+/* 0002a380 */		Text += "必要です。\n";
+/* 0002a390 */		break;
+/* 0002a396 */	case 4:
+/* 0002a396 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "最高画質");
+/* 0002a3a8 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "高画質");
+/* 0002a3ba */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "中画質");
+/* 0002a3cc */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "低画質");
+/* 0002a3de */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "最低画質");
+/* 0002a3f0 */		Text += "より上の設定をおこなうと影描画の画質が\n";
+/* 0002a400 */		Text += "向上しますが、ＶＲＡＭの消費量が多くなります。\n\n";
+/* 0002a410 */		Text += "ビデオカードによっては、上位の設定ほど\n";
+/* 0002a420 */		Text += "対応していない場合があります。\n";
+/* 0002a430 */		break;
+/* 0002a436 */	case 5:
+/* 0002a436 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "最高画質");
+/* 0002a448 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "高画質");
+/* 0002a45a */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "中画質");
+/* 0002a46c */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "低画質");
+/* 0002a47e */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "最低画質");
+/* 0002a490 */		Text += "より下の設定をおこなうとＶＲＡＭの消費量が\n";
+/* 0002a4a0 */		Text += "少なくなりますが、画質が低下します。\n";
+/* 0002a4b0 */		Text += "ビデオカードによっては、上位の設定ほど\n";
+/* 0002a4c0 */		Text += "対応していない場合があります。\n";
+/* 0002a4d0 */		break;
+/* 0002a4d6 */	case 6:
+/* 0002a4d6 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "最近点フィルタ");
+/* 0002a4e8 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "双線形補間フィルタ");
+/* 0002a4fa */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "異方性フィルタ　次数　４");
+/* 0002a50c */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "異方性フィルタ　次数　８");
+/* 0002a51e */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "異方性フィルタ　次数１６");
+/* 0002a530 */		Text += "次数が高いほど画質が向上します。\n";
+/* 0002a540 */		Text += "ビデオカードによっては、上位の設定ほど\n";
+/* 0002a550 */		Text += "対応していない場合があります。\n";
+/* 0002a560 */		break;
+/* 0002a566 */	case 7:
+/* 0002a566 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a578 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "バンプマッピング");
+/* 0002a58a */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "パララクスマッピング");
+/* 0002a59c */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "レリーフマッピング");
+/* 0002a5ae */		Text += "凸凹を強調します。\n";
+/* 0002a5be */		Text += "「バンプマッピング」以上は、シェーダモデル2.0\n";
+/* 0002a5ce */		Text += "以上が必要です。\n";
+/* 0002a5de */		Text += "「レリーフマッピング」以上は、シェーダモデル3.0\n";
+/* 0002a5ee */		Text += "以上が必要です。\n";
+/* 0002a5fe */		break;
+/* 0002a604 */	case 8:
+/* 0002a604 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a616 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a628 */		Text += "自己発光の輝きを描画します。\n";
+/* 0002a638 */		Text += "シェーダモデル2.0以上に対応した\n";
+/* 0002a648 */		Text += "ビデオカードが必要です。\n";
+/* 0002a658 */		break;
+/* 0002a65e */	case 9:
+/* 0002a65e */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a670 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a682 */		Text += "明るい部分の輝きを描画します。\n";
+/* 0002a692 */		Text += "シェーダモデル2.0以上に対応した\n";
+/* 0002a6a2 */		Text += "ビデオカードが必要です。\n";
+/* 0002a6b2 */		break;
+/* 0002a6b8 */	case 10:
+/* 0002a6b8 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a6ca */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a6dc */		Text += "霧や空気感を描画します。\n";
+/* 0002a6ec */		Text += "シェーダモデル2.0以上に対応したビデオカード\n";
+/* 0002a6fc */		Text += "であればより綺麗に描画されます。\n";
+/* 0002a70c */		break;
+/* 0002a712 */	case 11:
+/* 0002a712 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a724 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a736 */		Text += "光の反射を描画します。\n";
+/* 0002a746 */		Text += "シェーダモデル2.0以上に対応した\n";
+/* 0002a756 */		Text += "ビデオカードが必要です。\n";
+/* 0002a766 */		break;
+/* 0002a76c */	case 12:
+/* 0002a76c */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a77e */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a790 */		Text += "アルファブレンディングされるビルボード等の\n";
+/* 0002a7a0 */		Text += "ポリゴン交差部分をぼかします。\n";
+/* 0002a7b0 */		Text += "シェーダモデル2.0以上に対応した\n";
+/* 0002a7c0 */		Text += "ビデオカードが必要です。\n";
+/* 0002a7d0 */		break;
+/* 0002a7d6 */	case 13:
+/* 0002a7d6 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a7e8 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a7fa */		Text += "光が届きにくい部分を暗くします。\n";
+/* 0002a80a */		Text += "シェーダモデル3.0以上に対応した\n";
+/* 0002a81a */		Text += "ビデオカードが必要です。\n";
+/* 0002a82a */		break;
+/* 0002a830 */	case 14:
+/* 0002a830 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "ソフトウェア");
+/* 0002a842 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "マルチスレッド");
+/* 0002a854 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "ハードウェア");
+/* 0002a866 */		Text += "頂点ブレンディングの処理方法を設定します。\n";
+/* 0002a876 */		Text += "シェーダモデル2.0に対応しているビデオカード\n";
+/* 0002a886 */		Text += "であれば、「ハードウェア」にすることで\n";
+/* 0002a896 */		Text += "最も高速になる可能性が高いです。\n";
+/* 0002a8a6 */		break;
+/* 0002a8ac */	case 15:
+/* 0002a8ac */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "使用しない");
+/* 0002a8be */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "使用する");
+/* 0002a8d0 */		Text += "影を焼き込みます。\n";
+/* 0002a8e0 */		Text += "描画モードが「ソフトウェア」の場合は\n";
+/* 0002a8f0 */		Text += "未対応です。\n";
+/* 0002a900 */		break;
+/* 0002a906 */	case 16:
+/* 0002a906 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "描画しない");
+/* 0002a918 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "描画する（キャラのみ）");
+/* 0002a92a */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "描画する");
+/* 0002a93c */		Text += "エッジを描画します。\n";
+/* 0002a94c */		break;
+/* 0002a952 */	case 17:
+/* 0002a952 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "なし");
+/* 0002a964 */		Ｐ＿リストボックス＿アイテム追加(this.m_SubList, "あり");
+/* 0002a976 */		Text += "被写界深度フィルタを使用します。\n";
+/* 0002a986 */		break;
+/* 0002a98c */	}
+/* 0002a98c */	Ｐ＿リストボックス＿選択位置設定(this.m_SubList, this.m_SelectList[Selected]);
+/* 0002a9a6 */	Ｐ＿ラベル＿テキスト設定(this.m_TextLabel, Text);
+/* 0002a9b8 */}
+
+void CConfigUI3DTab::SelectedSubList(int Number, int Selected)
+/* 0002a9c0 */{
+/* 0002a9c0 */	int Type = Ｐ＿リストボックス＿選択位置取得(this.m_MainList);
+/* 0002a9d8 */	if (Type >= 0 && Type < this.m_SelectList.Numof())
+/* 0002aa12 */	{
+/* 0002aa12 */		this.m_SelectList[Type] = Selected;
+/* 0002aa28 */	}
+/* 0002aa2e */	this.SetReignSetting(Type, Selected);
+/* 0002aa42 */}
+
+void CConfigUI3DTab::LoadSetting()
+/* 0002aa4a */{
+/* 0002aa4a */	this.m_SelectList.Alloc(18);
+/* 0002aa60 */	CAS3DSetting ReignSetting;
+/* 0002aa70 */	ReignSetting.Load();
+/* 0002aa7e */	this.m_SelectList[0] = ReignSetting.GetRenderMode();
+/* 0002aa9a */	this.m_SelectList[1] = ReignSetting.GetLightingMode();
+/* 0002aab6 */	this.m_SelectList[2] = ReignSetting.GetAntiAliasingMode();
+/* 0002aad2 */	this.m_SelectList[3] = ReignSetting.GetShadowMode();
+/* 0002aaee */	this.m_SelectList[4] = ReignSetting.GetShadowMapResolutionLevel();
+/* 0002ab0a */	this.m_SelectList[5] = ReignSetting.GetTextureResolutionLevel();
+/* 0002ab26 */	this.m_SelectList[6] = ReignSetting.GetTextureFilterMode();
+/* 0002ab42 */	this.m_SelectList[7] = ReignSetting.GetBumpMode();
+/* 0002ab5e */	this.m_SelectList[8] = ReignSetting.GetBloomMode();
+/* 0002ab7a */	this.m_SelectList[9] = ReignSetting.GetGlareMode();
+/* 0002ab96 */	this.m_SelectList[10] = ReignSetting.GetFogMode();
+/* 0002abb2 */	this.m_SelectList[11] = ReignSetting.GetSpecularMode();
+/* 0002abce */	this.m_SelectList[12] = ReignSetting.GetSoftFogEdgeMode();
+/* 0002abea */	this.m_SelectList[13] = ReignSetting.GetSSAOMode();
+/* 0002ac06 */	this.m_SelectList[14] = ReignSetting.GetVertexBlendMode();
+/* 0002ac22 */	this.m_SelectList[15] = ReignSetting.GetLightMapMode();
+/* 0002ac3e */	this.m_SelectList[16] = ReignSetting.GetEdge();
+/* 0002ac5a */	this.m_SelectList[17] = ReignSetting.GetDOFMode();
+/* 0002ac76 */}
+
+void CConfigUI3DTab::SaveSetting()
+/* 0002ac7e */{
+/* 0002ac7e */	CAS3DSetting ReignSetting;
+/* 0002ac8e */	ReignSetting.Load();
+/* 0002ac9c */	ReignSetting.SetRenderMode(this.m_SelectList[0]);
+/* 0002acb6 */	ReignSetting.SetLightingMode(this.m_SelectList[1]);
+/* 0002acd0 */	ReignSetting.SetAntiAliasingMode(this.m_SelectList[2]);
+/* 0002acea */	ReignSetting.SetShadowMode(this.m_SelectList[3]);
+/* 0002ad04 */	ReignSetting.SetShadowMapResolutionLevel(this.m_SelectList[4]);
+/* 0002ad1e */	ReignSetting.SetTextureResolutionLevel(this.m_SelectList[5]);
+/* 0002ad38 */	ReignSetting.SetTextureFilterMode(this.m_SelectList[6]);
+/* 0002ad52 */	ReignSetting.SetBumpMode(this.m_SelectList[7]);
+/* 0002ad6c */	ReignSetting.SetBloomMode(this.m_SelectList[8]);
+/* 0002ad86 */	ReignSetting.SetGlareMode(this.m_SelectList[9]);
+/* 0002ada0 */	ReignSetting.SetFogMode(this.m_SelectList[10]);
+/* 0002adba */	ReignSetting.SetSpecularMode(this.m_SelectList[11]);
+/* 0002add4 */	ReignSetting.SetSoftFogEdgeMode(this.m_SelectList[12]);
+/* 0002adee */	ReignSetting.SetSSAOMode(this.m_SelectList[13]);
+/* 0002ae08 */	ReignSetting.SetVertexBlendMode(this.m_SelectList[14]);
+/* 0002ae22 */	ReignSetting.SetLightMapMode(this.m_SelectList[15]);
+/* 0002ae3c */	ReignSetting.SetEdge(this.m_SelectList[16]);
+/* 0002ae56 */	ReignSetting.SetDOFMode(this.m_SelectList[17]);
+/* 0002ae70 */	ReignSetting.Save();
+/* 0002ae7e */}
+
+void CConfigUI3DTab::SetReignSetting(int nType, int nSelect)
+/* 0002ae86 */{
+/* 0002ae86 */	int NumofPlugin = SealEngine.GetNumofPlugin();
+/* 0002ae9c */	int Plugin;
+/* 0002aea6 */	for (Plugin = 0; Plugin < NumofPlugin; ++Plugin)
+/* 0002aed6 */	{
+/* 0002aed6 */		if (!SealEngine.IsExistPlugin(Plugin))
+/* 0002aeee */		{
+/* 0002aeee */			continue;
+/* 0002aef4 */		}
+/* 0002aefa */		switch (nType)
+/* 0002af0c */		{
+/* 0002af0c */		case 0:
+/* 0002af0c */			SealEngine.SetRenderMode(Plugin, nSelect);
+/* 0002af24 */			break;
+/* 0002af2a */		case 1:
+/* 0002af2a */			SealEngine.SetDrawOption(Plugin, 1, nSelect);
+/* 0002af48 */			break;
+/* 0002af4e */		case 2:
+/* 0002af4e */			SystemService.SetAntiAliasingMode(nSelect);
+/* 0002af60 */			break;
+/* 0002af66 */		case 3:
+/* 0002af66 */			SealEngine.SetShadowMode(Plugin, nSelect);
+/* 0002af7e */			break;
+/* 0002af84 */		case 4:
+/* 0002af84 */			SealEngine.SetShadowMapResolutionLevel(Plugin, nSelect);
+/* 0002af9c */			break;
+/* 0002afa2 */		case 5:
+/* 0002afa2 */			SealEngine.SetTextureResolutionLevel(Plugin, nSelect);
+/* 0002afba */			break;
+/* 0002afc0 */		case 6:
+/* 0002afc0 */			SealEngine.SetTextureFilterMode(Plugin, nSelect);
+/* 0002afd8 */			break;
+/* 0002afde */		case 7:
+/* 0002afde */			SealEngine.SetBumpMode(Plugin, nSelect);
+/* 0002aff6 */			break;
+/* 0002affc */		case 8:
+/* 0002affc */			SealEngine.SetBloomMode(Plugin, nSelect);
+/* 0002b014 */			break;
+/* 0002b01a */		case 9:
+/* 0002b01a */			SealEngine.SetGlareMode(Plugin, nSelect);
+/* 0002b032 */			break;
+/* 0002b038 */		case 10:
+/* 0002b038 */			SealEngine.SetFogMode(Plugin, nSelect);
+/* 0002b050 */			break;
+/* 0002b056 */		case 11:
+/* 0002b056 */			SealEngine.SetSpecularMode(Plugin, nSelect);
+/* 0002b06e */			break;
+/* 0002b074 */		case 12:
+/* 0002b074 */			SealEngine.SetSoftFogEdgeMode(Plugin, nSelect);
+/* 0002b08c */			break;
+/* 0002b092 */		case 13:
+/* 0002b092 */			SealEngine.SetSSAOMode(Plugin, nSelect);
+/* 0002b0aa */			break;
+/* 0002b0b0 */		case 14:
+/* 0002b0b0 */			SealEngine.SetVertexBlendMode(Plugin, nSelect);
+/* 0002b0c8 */			break;
+/* 0002b0ce */		case 15:
+/* 0002b0ce */			SealEngine.SetLightMapMode(Plugin, nSelect);
+/* 0002b0e6 */			break;
+/* 0002b0ec */		case 16:
+/* 0002b0ec */			SealEngine.SetDrawOption(Plugin, 0, nSelect);
+/* 0002b10a */			break;
+/* 0002b110 */		case 17:
+/* 0002b110 */			SealEngine.SetDrawOption(Plugin, 2, nSelect);
+/* 0002b12e */			break;
+/* 0002b134 */		}
+/* 0002b134 */	}
+/* 0002b13a */}
+

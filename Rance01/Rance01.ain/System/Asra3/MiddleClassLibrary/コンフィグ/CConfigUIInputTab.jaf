@@ -1,0 +1,388 @@
+CConfigUIInputTab::CConfigUIInputTab()
+/* 0002bec4 */{
+/* 0002bece */}
+
+CConfigUIInputTab::~CConfigUIInputTab()
+/* 0002bed4 */{
+/* 0002bed6 */}
+
+void CConfigUIInputTab::Create()
+/* 0002bedc */{
+/* 0002bedc */	this.CreateUI();
+/* 0002bee4 */}
+
+void CConfigUIInputTab::Release()
+/* 0002beec */{
+/* 0002beec */	AFL_Parts_EraseChangedEvent(this.m_CloseGameConfirmCheckBox, this.ChangedCheckCloseGameConfirm);
+/* 0002bf02 */	AFL_Parts_EraseChangedEvent(this.m_BackToTitleConfirmCheckBox, this.ChangedCheckBackToTitleConfirm);
+/* 0002bf18 */	AFL_Parts_EraseChangedEvent(this.m_LoadConfirmCheckBox, this.ChangedCheckLoadConfirm);
+/* 0002bf2e */	AFL_Parts_EraseChangedEvent(this.m_SaveConfirmCheckBox, this.ChangedCheckSaveConfirm);
+/* 0002bf44 */	AFL_Parts_EraseChangedEvent(this.m_QuickLoadConfirmCheckBox, this.ChangedCheckQuickLoadConfirm);
+/* 0002bf5a */	AFL_Parts_EraseChangedEvent(this.m_QuickSaveConfirmCheckBox, this.ChangedCheckQuickSaveConfirm);
+/* 0002bf70 */	AFL_Parts_EraseChangedEvent(this.m_BackSceneCheckBox, this.ChangedCheckBackScene);
+/* 0002bf86 */	AFL_Parts_EraseChangedEvent(this.m_BackLogCheckBox, this.ChangedCheckBackLog);
+/* 0002bf9c */	AFL_Parts_EraseChangedEvent(this.m_HideStepMessageMouseCursorCheckBox, this.ChangedCheckHideStepMessageMouseCursor);
+/* 0002bfb2 */	AFL_Parts_EraseChangedEvent(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, this.ChangedCheckHideKeyOrJoypadInputMouseCursor);
+/* 0002bfc8 */	AFL_Parts_EraseChangedEvent(this.m_HideUnmoveMouseCursorCheckBox, this.ChangedCheckHideUnmoveMouseCursor);
+/* 0002bfde */	this.m_UpRollMouseWheelRadioButton.Clear();
+/* 0002bfea */	this.m_MoveMouseCursorSpeedComboBox.Release();
+/* 0002bff6 */	PARTS_Release(this.m_MoveMouseCursorSpeedLabel);
+/* 0002c002 */	PARTS_Release(this.m_CloseGameConfirmCheckBox);
+/* 0002c00e */	PARTS_Release(this.m_BackToTitleConfirmCheckBox);
+/* 0002c01a */	PARTS_Release(this.m_LoadConfirmCheckBox);
+/* 0002c026 */	PARTS_Release(this.m_SaveConfirmCheckBox);
+/* 0002c032 */	PARTS_Release(this.m_QuickLoadConfirmCheckBox);
+/* 0002c03e */	PARTS_Release(this.m_QuickSaveConfirmCheckBox);
+/* 0002c04a */	PARTS_Release(this.m_BackSceneCheckBox);
+/* 0002c056 */	PARTS_Release(this.m_BackLogCheckBox);
+/* 0002c062 */	PARTS_Release(this.m_UpRollMouseWheelLabel);
+/* 0002c06e */	PARTS_Release(this.m_HideStepMessageMouseCursorCheckBox);
+/* 0002c07a */	PARTS_Release(this.m_HideKeyOrJoypadInputMouseCursorCheckBox);
+/* 0002c086 */	PARTS_Release(this.m_HideUnmoveMouseCursorCheckBox);
+/* 0002c092 */	PARTS_Release(this.m_ShowMouseCursorLabel);
+/* 0002c09e */	PARTS_Release(this.m_BG);
+/* 0002c0aa */	this.m_MoveMouseCursorSpeedLabel = 0;
+/* 0002c0b4 */	this.m_CloseGameConfirmCheckBox = 0;
+/* 0002c0be */	this.m_BackToTitleConfirmCheckBox = 0;
+/* 0002c0c8 */	this.m_LoadConfirmCheckBox = 0;
+/* 0002c0d2 */	this.m_SaveConfirmCheckBox = 0;
+/* 0002c0dc */	this.m_QuickLoadConfirmCheckBox = 0;
+/* 0002c0e6 */	this.m_QuickSaveConfirmCheckBox = 0;
+/* 0002c0f0 */	this.m_BackSceneCheckBox = 0;
+/* 0002c0fa */	this.m_BackLogCheckBox = 0;
+/* 0002c104 */	this.m_UpRollMouseWheelLabel = 0;
+/* 0002c10e */	this.m_HideStepMessageMouseCursorCheckBox = 0;
+/* 0002c118 */	this.m_HideKeyOrJoypadInputMouseCursorCheckBox = 0;
+/* 0002c122 */	this.m_HideUnmoveMouseCursorCheckBox = 0;
+/* 0002c12c */	this.m_ShowMouseCursorLabel = 0;
+/* 0002c136 */	this.m_BG = 0;
+/* 0002c140 */}
+
+void CConfigUIInputTab::CreateUI()
+/* 0002c148 */{
+/* 0002c148 */	this.Release();
+/* 0002c150 */	this.CreateBG();
+/* 0002c158 */	this.CreateShowMouseCursorLabel();
+/* 0002c160 */	this.CreateHideUnmoveMouseCursorCheckBox();
+/* 0002c168 */	this.CreateHideKeyOrJoypadInputMouseCursorCheckBox();
+/* 0002c170 */	this.CreateHideStepMessageMouseCursorCheckBox();
+/* 0002c178 */	this.CreateUpRollMouseWheelLabel();
+/* 0002c180 */	this.CreateBackLogCheckBox();
+/* 0002c188 */	this.CreateBackSceneCheckBox();
+/* 0002c190 */	this.CreateQuickSaveConfirmCheckBox();
+/* 0002c198 */	this.CreateQuickLoadConfirmCheckBox();
+/* 0002c1a0 */	this.CreateSaveConfirmCheckBox();
+/* 0002c1a8 */	this.CreateLoadConfirmCheckBox();
+/* 0002c1b0 */	this.CreateBackToTitleConfirmCheckBox();
+/* 0002c1b8 */	this.CreateCloseGameConfirmCheckBox();
+/* 0002c1c0 */	this.CreateMoveMouseCursorSpeedLabel();
+/* 0002c1c8 */	this.CreateMoveMouseCursorSpeedComboBox();
+/* 0002c1d0 */}
+
+void CConfigUIInputTab::CreateBG()
+/* 0002c1d8 */{
+/* 0002c1d8 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002c1ea */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002c1fc */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002c214 */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002c232 */}
+
+void CConfigUIInputTab::CreateShowMouseCursorLabel()
+/* 0002c23a */{
+/* 0002c23a */	this.m_ShowMouseCursorLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002c24c */	Ｐ＿ラベル＿座標設定(this.m_ShowMouseCursorLabel, 50, 100);
+/* 0002c264 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_ShowMouseCursorLabel, 100);
+/* 0002c276 */	Ｐ＿ラベル＿テキスト設定(this.m_ShowMouseCursorLabel, "マウスカーソルの表示");
+/* 0002c288 */	Ｐ＿ラベル＿フォント設定(this.m_ShowMouseCursorLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 0002c2d0 */}
+
+void CConfigUIInputTab::CreateHideUnmoveMouseCursorCheckBox()
+/* 0002c2d8 */{
+/* 0002c2d8 */	this.m_HideUnmoveMouseCursorCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c2ea */	Ｐ＿チェックボックス＿座標設定(this.m_HideUnmoveMouseCursorCheckBox, 50, 130);
+/* 0002c302 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_HideUnmoveMouseCursorCheckBox, 100);
+/* 0002c314 */	Ｐ＿チェックボックス＿サイズ設定(this.m_HideUnmoveMouseCursorCheckBox, 24, 24);
+/* 0002c32c */	Ｐ＿チェックボックス＿テキスト設定(this.m_HideUnmoveMouseCursorCheckBox, "一定時間マウスカーソルが動かなければ、非表示にする");
+/* 0002c33e */	Ｐ＿チェックボックス＿フォント設定(this.m_HideUnmoveMouseCursorCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c386 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_HideUnmoveMouseCursorCheckBox, AFL_Config_GetHideUnmoveMouseCursor());
+/* 0002c398 */	AFL_Parts_AddChangedEvent(this.m_HideUnmoveMouseCursorCheckBox, this.ChangedCheckHideUnmoveMouseCursor);
+/* 0002c3ae */}
+
+void CConfigUIInputTab::CreateHideKeyOrJoypadInputMouseCursorCheckBox()
+/* 0002c3b6 */{
+/* 0002c3b6 */	this.m_HideKeyOrJoypadInputMouseCursorCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c3c8 */	Ｐ＿チェックボックス＿座標設定(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, 50, 160);
+/* 0002c3e0 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, 100);
+/* 0002c3f2 */	Ｐ＿チェックボックス＿サイズ設定(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, 24, 24);
+/* 0002c40a */	Ｐ＿チェックボックス＿テキスト設定(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, "キーボード（・ジョイパッド）の入力があれば、非表示にする");
+/* 0002c41c */	Ｐ＿チェックボックス＿フォント設定(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c464 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, AFL_Config_GetHideKeyOrJoypadInputMouseCursor());
+/* 0002c476 */	AFL_Parts_AddChangedEvent(this.m_HideKeyOrJoypadInputMouseCursorCheckBox, this.ChangedCheckHideKeyOrJoypadInputMouseCursor);
+/* 0002c48c */}
+
+void CConfigUIInputTab::CreateHideStepMessageMouseCursorCheckBox()
+/* 0002c494 */{
+/* 0002c494 */	this.m_HideStepMessageMouseCursorCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c4a6 */	Ｐ＿チェックボックス＿座標設定(this.m_HideStepMessageMouseCursorCheckBox, 50, 190);
+/* 0002c4be */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_HideStepMessageMouseCursorCheckBox, 100);
+/* 0002c4d0 */	Ｐ＿チェックボックス＿サイズ設定(this.m_HideStepMessageMouseCursorCheckBox, 24, 24);
+/* 0002c4e8 */	Ｐ＿チェックボックス＿テキスト設定(this.m_HideStepMessageMouseCursorCheckBox, "メッセージを進めた時に非表示にする");
+/* 0002c4fa */	Ｐ＿チェックボックス＿フォント設定(this.m_HideStepMessageMouseCursorCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c542 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_HideStepMessageMouseCursorCheckBox, AFL_Config_GetHideStepMessageMouseCursor());
+/* 0002c554 */	AFL_Parts_AddChangedEvent(this.m_HideStepMessageMouseCursorCheckBox, this.ChangedCheckHideStepMessageMouseCursor);
+/* 0002c56a */}
+
+void CConfigUIInputTab::CreateUpRollMouseWheelLabel()
+/* 0002c572 */{
+/* 0002c572 */	this.m_UpRollMouseWheelLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002c584 */	Ｐ＿ラベル＿座標設定(this.m_UpRollMouseWheelLabel, 50, 240);
+/* 0002c59c */	Ｐ＿ラベル＿Ｚ座標設定(this.m_UpRollMouseWheelLabel, 100);
+/* 0002c5ae */	Ｐ＿ラベル＿テキスト設定(this.m_UpRollMouseWheelLabel, "マウスホイール↑回転");
+/* 0002c5c0 */	Ｐ＿ラベル＿フォント設定(this.m_UpRollMouseWheelLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 0002c608 */}
+
+void CConfigUIInputTab::CreateBackLogCheckBox()
+/* 0002c610 */{
+/* 0002c610 */	this.m_BackLogCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c622 */	Ｐ＿チェックボックス＿座標設定(this.m_BackLogCheckBox, 50, 270);
+/* 0002c63a */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_BackLogCheckBox, 100);
+/* 0002c64c */	Ｐ＿チェックボックス＿サイズ設定(this.m_BackLogCheckBox, 24, 24);
+/* 0002c664 */	Ｐ＿チェックボックス＿テキスト設定(this.m_BackLogCheckBox, "バックログ");
+/* 0002c676 */	Ｐ＿チェックボックス＿フォント設定(this.m_BackLogCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c6be */	this.m_UpRollMouseWheelRadioButton.AddCheckBox(this.m_BackLogCheckBox);
+/* 0002c6d0 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_BackLogCheckBox, AFL_Config_GetWheelForward() == 0);
+/* 0002c6ec */	AFL_Parts_AddChangedEvent(this.m_BackLogCheckBox, this.ChangedCheckBackLog);
+/* 0002c702 */}
+
+void CConfigUIInputTab::CreateBackSceneCheckBox()
+/* 0002c70a */{
+/* 0002c70a */	this.m_BackSceneCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c71c */	Ｐ＿チェックボックス＿座標設定(this.m_BackSceneCheckBox, 50, 300);
+/* 0002c734 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_BackSceneCheckBox, 100);
+/* 0002c746 */	Ｐ＿チェックボックス＿サイズ設定(this.m_BackSceneCheckBox, 24, 24);
+/* 0002c75e */	Ｐ＿チェックボックス＿テキスト設定(this.m_BackSceneCheckBox, "バックシーン");
+/* 0002c770 */	Ｐ＿チェックボックス＿フォント設定(this.m_BackSceneCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c7b8 */	this.m_UpRollMouseWheelRadioButton.AddCheckBox(this.m_BackSceneCheckBox);
+/* 0002c7ca */	Ｐ＿チェックボックス＿チェック状態設定(this.m_BackSceneCheckBox, AFL_Config_GetWheelForward() == 1);
+/* 0002c7e6 */	AFL_Parts_AddChangedEvent(this.m_BackSceneCheckBox, this.ChangedCheckBackScene);
+/* 0002c7fc */}
+
+void CConfigUIInputTab::CreateQuickSaveConfirmCheckBox()
+/* 0002c804 */{
+/* 0002c804 */	this.m_QuickSaveConfirmCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c816 */	Ｐ＿チェックボックス＿座標設定(this.m_QuickSaveConfirmCheckBox, 50, 360);
+/* 0002c82e */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_QuickSaveConfirmCheckBox, 100);
+/* 0002c840 */	Ｐ＿チェックボックス＿サイズ設定(this.m_QuickSaveConfirmCheckBox, 24, 24);
+/* 0002c858 */	Ｐ＿チェックボックス＿テキスト設定(this.m_QuickSaveConfirmCheckBox, "クイックセーブ時に確認をおこなう");
+/* 0002c86a */	Ｐ＿チェックボックス＿フォント設定(this.m_QuickSaveConfirmCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c8b2 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_QuickSaveConfirmCheckBox, AFL_Config_GetQuickSaveConfirm());
+/* 0002c8c4 */	AFL_Parts_AddChangedEvent(this.m_QuickSaveConfirmCheckBox, this.ChangedCheckQuickSaveConfirm);
+/* 0002c8da */}
+
+void CConfigUIInputTab::CreateQuickLoadConfirmCheckBox()
+/* 0002c8e2 */{
+/* 0002c8e2 */	this.m_QuickLoadConfirmCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c8f4 */	Ｐ＿チェックボックス＿座標設定(this.m_QuickLoadConfirmCheckBox, 50, 390);
+/* 0002c90c */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_QuickLoadConfirmCheckBox, 100);
+/* 0002c91e */	Ｐ＿チェックボックス＿サイズ設定(this.m_QuickLoadConfirmCheckBox, 24, 24);
+/* 0002c936 */	Ｐ＿チェックボックス＿テキスト設定(this.m_QuickLoadConfirmCheckBox, "クイックロード時に確認をおこなう");
+/* 0002c948 */	Ｐ＿チェックボックス＿フォント設定(this.m_QuickLoadConfirmCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002c990 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_QuickLoadConfirmCheckBox, AFL_Config_GetQuickLoadConfirm());
+/* 0002c9a2 */	AFL_Parts_AddChangedEvent(this.m_QuickLoadConfirmCheckBox, this.ChangedCheckQuickLoadConfirm);
+/* 0002c9b8 */}
+
+void CConfigUIInputTab::CreateSaveConfirmCheckBox()
+/* 0002c9c0 */{
+/* 0002c9c0 */	this.m_SaveConfirmCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002c9d2 */	Ｐ＿チェックボックス＿座標設定(this.m_SaveConfirmCheckBox, 50, 420);
+/* 0002c9ea */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_SaveConfirmCheckBox, 100);
+/* 0002c9fc */	Ｐ＿チェックボックス＿サイズ設定(this.m_SaveConfirmCheckBox, 24, 24);
+/* 0002ca14 */	Ｐ＿チェックボックス＿テキスト設定(this.m_SaveConfirmCheckBox, "セーブ時に確認をおこなう");
+/* 0002ca26 */	Ｐ＿チェックボックス＿フォント設定(this.m_SaveConfirmCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002ca6e */	Ｐ＿チェックボックス＿チェック状態設定(this.m_SaveConfirmCheckBox, AFL_Config_GetSaveConfirm());
+/* 0002ca80 */	AFL_Parts_AddChangedEvent(this.m_SaveConfirmCheckBox, this.ChangedCheckSaveConfirm);
+/* 0002ca96 */}
+
+void CConfigUIInputTab::CreateLoadConfirmCheckBox()
+/* 0002ca9e */{
+/* 0002ca9e */	this.m_LoadConfirmCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002cab0 */	Ｐ＿チェックボックス＿座標設定(this.m_LoadConfirmCheckBox, 50, 450);
+/* 0002cac8 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_LoadConfirmCheckBox, 100);
+/* 0002cada */	Ｐ＿チェックボックス＿サイズ設定(this.m_LoadConfirmCheckBox, 24, 24);
+/* 0002caf2 */	Ｐ＿チェックボックス＿テキスト設定(this.m_LoadConfirmCheckBox, "ロード時に確認をおこなう");
+/* 0002cb04 */	Ｐ＿チェックボックス＿フォント設定(this.m_LoadConfirmCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002cb4c */	Ｐ＿チェックボックス＿チェック状態設定(this.m_LoadConfirmCheckBox, AFL_Config_GetLoadConfirm());
+/* 0002cb5e */	AFL_Parts_AddChangedEvent(this.m_LoadConfirmCheckBox, this.ChangedCheckLoadConfirm);
+/* 0002cb74 */}
+
+void CConfigUIInputTab::CreateBackToTitleConfirmCheckBox()
+/* 0002cb7c */{
+/* 0002cb7c */	this.m_BackToTitleConfirmCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002cb8e */	Ｐ＿チェックボックス＿座標設定(this.m_BackToTitleConfirmCheckBox, 50, 480);
+/* 0002cba6 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_BackToTitleConfirmCheckBox, 100);
+/* 0002cbb8 */	Ｐ＿チェックボックス＿サイズ設定(this.m_BackToTitleConfirmCheckBox, 24, 24);
+/* 0002cbd0 */	Ｐ＿チェックボックス＿テキスト設定(this.m_BackToTitleConfirmCheckBox, "タイトル画面に戻る時に確認をおこなう");
+/* 0002cbe2 */	Ｐ＿チェックボックス＿フォント設定(this.m_BackToTitleConfirmCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002cc2a */	Ｐ＿チェックボックス＿チェック状態設定(this.m_BackToTitleConfirmCheckBox, AFL_Config_GetBackToTitleConfirm());
+/* 0002cc3c */	AFL_Parts_AddChangedEvent(this.m_BackToTitleConfirmCheckBox, this.ChangedCheckBackToTitleConfirm);
+/* 0002cc52 */}
+
+void CConfigUIInputTab::CreateCloseGameConfirmCheckBox()
+/* 0002cc5a */{
+/* 0002cc5a */	this.m_CloseGameConfirmCheckBox = PARTS_GetFreeSystemPartsNumber();
+/* 0002cc6c */	Ｐ＿チェックボックス＿座標設定(this.m_CloseGameConfirmCheckBox, 50, 510);
+/* 0002cc84 */	Ｐ＿チェックボックス＿Ｚ座標設定(this.m_CloseGameConfirmCheckBox, 100);
+/* 0002cc96 */	Ｐ＿チェックボックス＿サイズ設定(this.m_CloseGameConfirmCheckBox, 24, 24);
+/* 0002ccae */	Ｐ＿チェックボックス＿テキスト設定(this.m_CloseGameConfirmCheckBox, "ゲームを終了する時に確認をおこなう");
+/* 0002ccc0 */	Ｐ＿チェックボックス＿フォント設定(this.m_CloseGameConfirmCheckBox, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002cd08 */	Ｐ＿チェックボックス＿チェック状態設定(this.m_CloseGameConfirmCheckBox, AFL_Config_GetCloseGameConfirm());
+/* 0002cd1a */	AFL_Parts_AddChangedEvent(this.m_CloseGameConfirmCheckBox, this.ChangedCheckCloseGameConfirm);
+/* 0002cd30 */}
+
+void CConfigUIInputTab::CreateMoveMouseCursorSpeedLabel()
+/* 0002cd38 */{
+/* 0002cd38 */	this.m_MoveMouseCursorSpeedLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002cd4a */	Ｐ＿ラベル＿座標設定(this.m_MoveMouseCursorSpeedLabel, 50, 570);
+/* 0002cd62 */	Ｐ＿ラベル＿Ｚ座標設定(this.m_MoveMouseCursorSpeedLabel, 100);
+/* 0002cd74 */	Ｐ＿ラベル＿テキスト設定(this.m_MoveMouseCursorSpeedLabel, "マウスカーソルの自動移動");
+/* 0002cd86 */	Ｐ＿ラベル＿フォント設定(this.m_MoveMouseCursorSpeedLabel, 0, 22, 255, 150, 150, 0.0, 1.0, 0, 0, 0);
+/* 0002cdce */}
+
+void CConfigUIInputTab::CreateMoveMouseCursorSpeedComboBox()
+/* 0002cdd6 */{
+/* 0002cdd6 */	CASCharSpriteProperty Font;
+/* 0002cde6 */	Font.SetType(0);
+/* 0002cdf8 */	Font.SetSize(16);
+/* 0002ce0a */	Font.SetColor(CF_CASColor(0, 0, 0, 255));
+/* 0002ce34 */	Font.SetBoldWeight(0.0);
+/* 0002ce46 */	Font.SetEdgeWeight(0.0);
+/* 0002ce58 */	Font.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 0002ce82 */	this.m_MoveMouseCursorSpeedComboBox.Create();
+/* 0002ce8e */	this.m_MoveMouseCursorSpeedComboBox.SetPos(50, 600);
+/* 0002cea6 */	this.m_MoveMouseCursorSpeedComboBox.SetZ(100);
+/* 0002ceb8 */	this.m_MoveMouseCursorSpeedComboBox.SetSize(250, 24);
+/* 0002ced0 */	this.m_MoveMouseCursorSpeedComboBox.SetLineHeight(24);
+/* 0002cee2 */	this.m_MoveMouseCursorSpeedComboBox.SetBoxHeight(120);
+/* 0002cef4 */	this.m_MoveMouseCursorSpeedComboBox.SetMarginForBox(3, 3);
+/* 0002cf0c */	this.m_MoveMouseCursorSpeedComboBox.SetMarginForList(3, 3);
+/* 0002cf24 */	this.m_MoveMouseCursorSpeedComboBox.SetFontPropertyForBox(Font);
+/* 0002cf36 */	this.m_MoveMouseCursorSpeedComboBox.SetFontPropertyForList(Font);
+/* 0002cf48 */	this.m_MoveMouseCursorSpeedComboBox.Select(0);
+/* 0002cf5a */	this.m_MoveMouseCursorSpeedComboBox.ClearItem();
+/* 0002cf66 */	this.m_MoveMouseCursorSpeedComboBox.AddItem("移動しない");
+/* 0002cf78 */	this.m_MoveMouseCursorSpeedComboBox.AddItem("低速");
+/* 0002cf8a */	this.m_MoveMouseCursorSpeedComboBox.AddItem("中速");
+/* 0002cf9c */	this.m_MoveMouseCursorSpeedComboBox.AddItem("高速");
+/* 0002cfae */	this.m_MoveMouseCursorSpeedComboBox.AddItem("瞬間移動");
+/* 0002cfc0 */	int Speed = AFL_Config_GetMoveMouseCursorSpeed();
+/* 0002cfd2 */	int SelectIndex;
+/* 0002cfdc */	switch (Speed)
+/* 0002cfee */	{
+/* 0002cfee */	case -1:
+/* 0002cfee */		SelectIndex = 0;
+/* 0002cff8 */		break;
+/* 0002cffe */	case 2:
+/* 0002cffe */		SelectIndex = 1;
+/* 0002d008 */		break;
+/* 0002d00e */	case 5:
+/* 0002d00e */		SelectIndex = 2;
+/* 0002d018 */		break;
+/* 0002d01e */	case 8:
+/* 0002d01e */		SelectIndex = 3;
+/* 0002d028 */		break;
+/* 0002d02e */	case 0:
+/* 0002d02e */		SelectIndex = 4;
+/* 0002d038 */		break;
+/* 0002d03e */	}
+/* 0002d03e */	this.m_MoveMouseCursorSpeedComboBox.Select(SelectIndex);
+/* 0002d050 */	this.m_MoveMouseCursorSpeedComboBox.AddSelectedEvent(this.SelectedMoveMouseCursorSpeed);
+/* 0002d066 */}
+
+void CConfigUIInputTab::ChangedCheckHideUnmoveMouseCursor(int Number)
+/* 0002d06e */{
+/* 0002d06e */	AFL_Config_SetHideUnmoveMouseCursor(Ｐ＿チェックボックス＿チェック状態取得(this.m_HideUnmoveMouseCursorCheckBox));
+/* 0002d080 */}
+
+void CConfigUIInputTab::ChangedCheckHideKeyOrJoypadInputMouseCursor(int Number)
+/* 0002d088 */{
+/* 0002d088 */	AFL_Config_SetHideKeyOrJoypadInputMouseCursor(Ｐ＿チェックボックス＿チェック状態取得(this.m_HideKeyOrJoypadInputMouseCursorCheckBox));
+/* 0002d09a */}
+
+void CConfigUIInputTab::ChangedCheckHideStepMessageMouseCursor(int Number)
+/* 0002d0a2 */{
+/* 0002d0a2 */	AFL_Config_SetHideStepMessageMouseCursor(Ｐ＿チェックボックス＿チェック状態取得(this.m_HideStepMessageMouseCursorCheckBox));
+/* 0002d0b4 */}
+
+void CConfigUIInputTab::ChangedCheckBackLog(int Number)
+/* 0002d0bc */{
+/* 0002d0bc */	if (!Ｐ＿チェックボックス＿チェック状態取得(this.m_BackLogCheckBox))
+/* 0002d0d0 */	{
+/* 0002d0d0 */		return;
+/* 0002d0d2 */	}
+/* 0002d0d8 */	AFL_Config_SetWheelForward(0);
+/* 0002d0e4 */}
+
+void CConfigUIInputTab::ChangedCheckBackScene(int Number)
+/* 0002d0ec */{
+/* 0002d0ec */	if (!Ｐ＿チェックボックス＿チェック状態取得(this.m_BackSceneCheckBox))
+/* 0002d100 */	{
+/* 0002d100 */		return;
+/* 0002d102 */	}
+/* 0002d108 */	AFL_Config_SetWheelForward(1);
+/* 0002d114 */}
+
+void CConfigUIInputTab::ChangedCheckQuickSaveConfirm(int Number)
+/* 0002d11c */{
+/* 0002d11c */	AFL_Config_SetQuickSaveConfirm(Ｐ＿チェックボックス＿チェック状態取得(this.m_QuickSaveConfirmCheckBox));
+/* 0002d12e */}
+
+void CConfigUIInputTab::ChangedCheckQuickLoadConfirm(int Number)
+/* 0002d136 */{
+/* 0002d136 */	AFL_Config_SetQuickLoadConfirm(Ｐ＿チェックボックス＿チェック状態取得(this.m_QuickLoadConfirmCheckBox));
+/* 0002d148 */}
+
+void CConfigUIInputTab::ChangedCheckSaveConfirm(int Number)
+/* 0002d150 */{
+/* 0002d150 */	AFL_Config_SetSaveConfirm(Ｐ＿チェックボックス＿チェック状態取得(this.m_SaveConfirmCheckBox));
+/* 0002d162 */}
+
+void CConfigUIInputTab::ChangedCheckLoadConfirm(int Number)
+/* 0002d16a */{
+/* 0002d16a */	AFL_Config_SetLoadConfirm(Ｐ＿チェックボックス＿チェック状態取得(this.m_LoadConfirmCheckBox));
+/* 0002d17c */}
+
+void CConfigUIInputTab::ChangedCheckBackToTitleConfirm(int Number)
+/* 0002d184 */{
+/* 0002d184 */	AFL_Config_SetBackToTitleConfirm(Ｐ＿チェックボックス＿チェック状態取得(this.m_BackToTitleConfirmCheckBox));
+/* 0002d196 */}
+
+void CConfigUIInputTab::ChangedCheckCloseGameConfirm(int Number)
+/* 0002d19e */{
+/* 0002d19e */	AFL_Config_SetCloseGameConfirm(Ｐ＿チェックボックス＿チェック状態取得(this.m_CloseGameConfirmCheckBox));
+/* 0002d1b0 */}
+
+void CConfigUIInputTab::SelectedMoveMouseCursorSpeed(int Number, int Selected)
+/* 0002d1b8 */{
+/* 0002d1b8 */	int SelectedIndex = this.m_MoveMouseCursorSpeedComboBox.SelectedIndex();
+/* 0002d1d0 */	int Speed;
+/* 0002d1da */	switch (SelectedIndex)
+/* 0002d1ec */	{
+/* 0002d1ec */	case 0:
+/* 0002d1ec */		Speed = -1;
+/* 0002d1f6 */		break;
+/* 0002d1fc */	case 1:
+/* 0002d1fc */		Speed = 2;
+/* 0002d206 */		break;
+/* 0002d20c */	case 2:
+/* 0002d20c */		Speed = 5;
+/* 0002d216 */		break;
+/* 0002d21c */	case 3:
+/* 0002d21c */		Speed = 8;
+/* 0002d226 */		break;
+/* 0002d22c */	case 4:
+/* 0002d22c */		Speed = 0;
+/* 0002d236 */		break;
+/* 0002d23c */	}
+/* 0002d23c */	AFL_Config_SetMoveMouseCursorSpeed(Speed);
+/* 0002d248 */}
+

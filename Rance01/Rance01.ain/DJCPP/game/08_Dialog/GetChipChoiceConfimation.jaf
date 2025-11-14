@@ -1,0 +1,133 @@
+GetChipChoiceConfimation::GetChipChoiceConfimation()
+/* 0007db5c */{
+/* 0007db64 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0007db86 */	this.selected_ = -1;
+/* 0007db98 */	this.background_.initAsPlaneImage(1024, 768, 0, 0, 0, 160);
+/* 0007dbc8 */	this.background_.setPos(0, 0, 3999);
+/* 0007dbe6 */}
+
+void GetChipChoiceConfimation::run()
+/* 0007dbee */{
+/* 0007dbee */	this.fadeObject(true);
+/* 0007dbfc */	g_sysSound.play(2201, false);
+/* 0007dc14 */}
+
+void GetChipChoiceConfimation::update()
+/* 0007dc1c */{
+/* 0007dc1c */	switch (this.state_)
+/* 0007dc2e */	{
+/* 0007dc2e */	case 1:
+/* 0007dc2e */		if (!this.chipInfo_.isMotion())
+/* 0007dc42 */		{
+/* 0007dc42 */			this.state_ = 2;
+/* 0007dc4c */		}
+/* 0007dc52 */		break;
+/* 0007dc58 */	case 2:
+/* 0007dc58 */		this.selected_ = this.getButtonClicked();
+/* 0007dc6c */		if (this.selected_ != -1)
+/* 0007dc80 */		{
+/* 0007dc80 */			this.fadeObject(false);
+/* 0007dc8e */		}
+/* 0007dc94 */		break;
+/* 0007dc9a */	case 3:
+/* 0007dc9a */		if (!this.chipInfo_.isMotion())
+/* 0007dcae */		{
+/* 0007dcae */			this.state_ = 0;
+/* 0007dcb8 */		}
+/* 0007dcbe */		break;
+/* 0007dcc4 */	case 0:
+/* 0007dcc4 */		break;
+/* 0007dcca */	}
+/* 0007dcca */}
+
+void GetChipChoiceConfimation::init(string id, bool isDisposable)
+/* 0007dcd2 */{
+/* 0007dcd2 */	this.id_ = id;
+/* 0007dcdc */	this.isDepositoryDisable_ = getChip(this.id_).isDepositoryDisable();
+/* 0007dd04 */	this.isDisposable_ = !getChip(this.id_).isDepositoryDisable();
+/* 0007dd30 */	g_chipDepository[0].addEventHandler(this.onEvent);
+/* 0007dd4e */	this.chipInfo_.init(id, true);
+/* 0007dd66 */	this.initButton();
+/* 0007dd6e */	this.setButtonPos();
+/* 0007dd76 */	this.updateButtonState();
+/* 0007dd7e */}
+
+void GetChipChoiceConfimation::initButton()
+/* 0007dd86 */{
+/* 0007dd86 */	this.btn_[0].init("システム／ボタン／幅１２８", "手持ちへ", 2113);
+/* 0007ddac */	this.btn_[1].init("システム／ボタン／幅１２８", "押入れへ", 2113);
+/* 0007ddd2 */	this.btn_[2].init("システム／ボタン／幅１２８", "捨てる", 2111);
+/* 0007ddf8 */}
+
+void GetChipChoiceConfimation::setButtonPos()
+/* 0007de00 */{
+/* 0007de00 */	int i;
+/* 0007de0a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007de3a */	{
+/* 0007de3a */		this.btn_[i].setPos(318 + i * 144, 264, 8100);
+/* 0007de70 */	}
+/* 0007de76 */}
+
+void GetChipChoiceConfimation::fadeObject(bool val)
+/* 0007de7e */{
+/* 0007de7e */	this.fadeButton(val);
+/* 0007de8c */	this.chipInfo_.fadeIn(val);
+/* 0007de9e */	this.background_.setShow(true);
+/* 0007deb0 */	this.background_.runMotion(getStandardMotion(val ? 0 : 1));
+/* 0007dee0 */	this.state_ = val ? 1 : 3;
+/* 0007df0a */}
+
+void GetChipChoiceConfimation::fadeButton(bool val)
+/* 0007df12 */{
+/* 0007df12 */	int i;
+/* 0007df1c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007df4c */	{
+/* 0007df4c */		this.btn_[i].fadeIn(val);
+/* 0007df66 */	}
+/* 0007df6c */}
+
+void GetChipChoiceConfimation::onEvent(int event, int info)
+/* 0007df74 */{
+/* 0007df74 */	this.updateButtonState();
+/* 0007df7c */}
+
+void GetChipChoiceConfimation::updateButtonState()
+/* 0007df84 */{
+/* 0007df84 */	this.btn_[0].setEnable(!g_chipDepository[0].isNoMargin());
+/* 0007dfb0 */	this.btn_[1].setEnable(this.isToDepositoryEnable());
+/* 0007dfcc */	this.btn_[2].setEnable(this.isDisposable_);
+/* 0007dfe6 */}
+
+bool GetChipChoiceConfimation::isToDepositoryEnable()
+/* 0007dfee */{
+/* 0007dfee */	return !this.isDepositoryDisable_ && !g_chipDepository[1].isNoMargin() && g_gameFlow.getCurrentObject() != "DUNG11";
+/* 0007e060 */}
+
+int GetChipChoiceConfimation::getButtonClicked()
+/* 0007e06e */{
+/* 0007e06e */	int i;
+/* 0007e078 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0007e0a8 */	{
+/* 0007e0a8 */		if (this.btn_[i].isClick())
+/* 0007e0c2 */		{
+/* 0007e0c2 */			return i;
+/* 0007e0ca */		}
+/* 0007e0d0 */	}
+/* 0007e0d6 */	return -1;
+/* 0007e0de */}
+
+int GetChipChoiceConfimation::getSelection()
+/* 0007e0ec */{
+/* 0007e0ec */	return this.selected_;
+/* 0007e0f4 */}
+
+bool GetChipChoiceConfimation::isMotion()
+/* 0007e102 */{
+/* 0007e102 */	return this.chipInfo_.isMotion();
+/* 0007e110 */}
+
+bool GetChipChoiceConfimation::isConfirmed()
+/* 0007e11e */{
+/* 0007e11e */	return this.selected_ != -1;
+/* 0007e130 */}
+

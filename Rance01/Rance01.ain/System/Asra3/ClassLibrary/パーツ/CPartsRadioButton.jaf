@@ -1,0 +1,50 @@
+CPartsRadioButton::CPartsRadioButton()
+/* 0000b31e */{
+/* 0000b328 */}
+
+CPartsRadioButton::~CPartsRadioButton()
+/* 0000b32e */{
+/* 0000b32e */	this.Clear();
+/* 0000b336 */}
+
+void CPartsRadioButton::ChangeEvent(int PartsNumber)
+/* 0000b33e */{
+/* 0000b33e */	int FindIndex = this.m_CheckBoxNumberList.Find(0, this.m_CheckBoxNumberList.Numof(), PartsNumber);
+/* 0000b36c */	if (FindIndex == -1)
+/* 0000b380 */	{
+/* 0000b380 */		return;
+/* 0000b382 */	}
+/* 0000b388 */	int Index;
+/* 0000b392 */	int Size;
+/* 0000b392 */	for (Size = this.m_CheckBoxNumberList.Numof(); Index < Size; ++Index)
+/* 0000b3ca */	{
+/* 0000b3ca */		Ｐ＿チェックボックス＿チェック状態設定(this.m_CheckBoxNumberList[Index], false);
+/* 0000b3e4 */	}
+/* 0000b3ea */	Ｐ＿チェックボックス＿チェック状態設定(PartsNumber, true);
+/* 0000b3fc */}
+
+void CPartsRadioButton::Clear()
+/* 0000b404 */{
+/* 0000b404 */	for (; this.m_CheckBoxNumberList.Numof() != 0; )
+/* 0000b424 */	{
+/* 0000b424 */		this.EraseCheckBox(this.m_CheckBoxNumberList[0]);
+/* 0000b43a */	}
+/* 0000b440 */}
+
+void CPartsRadioButton::AddCheckBox(int PartsNumber)
+/* 0000b448 */{
+/* 0000b448 */	this.m_CheckBoxNumberList.PushBack(PartsNumber);
+/* 0000b458 */	g_PartsMessageManager.AddChangedEvent(PartsNumber, this.ChangeEvent);
+/* 0000b474 */}
+
+void CPartsRadioButton::EraseCheckBox(int PartsNumber)
+/* 0000b47c */{
+/* 0000b47c */	int FindIndex = this.m_CheckBoxNumberList.Find(0, this.m_CheckBoxNumberList.Numof(), PartsNumber);
+/* 0000b4aa */	if (FindIndex == -1)
+/* 0000b4be */	{
+/* 0000b4be */		return;
+/* 0000b4c0 */	}
+/* 0000b4c6 */	this.m_CheckBoxNumberList.Erase(FindIndex);
+/* 0000b4d8 */	g_PartsMessageManager.EraseChangedEvent(PartsNumber, this.ChangeEvent);
+/* 0000b4f4 */}
+

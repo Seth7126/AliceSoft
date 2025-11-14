@@ -1,0 +1,45 @@
+void ゲーム終了()
+/* 0004e110 */{
+/* 0004e110 */	if (AFL_Config_GetCloseGameConfirm())
+/* 0004e11c */	{
+/* 0004e11c */		if (!system.MsgBoxOkCancel("ゲームを終了しますか？\n\n※セーブされていないデータは失われます"))
+/* 0004e130 */		{
+/* 0004e130 */			SYS_WaitToKeyUpFromMessageBox();
+/* 0004e136 */			return;
+/* 0004e138 */		}
+/* 0004e13e */	}
+/* 0004e144 */	system.Exit(0);
+/* 0004e150 */	for (; ; )
+/* 0004e150 */	{
+/* 0004e150 */		system.Peek();
+/* 0004e156 */	}
+/* 0004e156 */}
+
+void タイトルに戻る()
+/* 0004e16a */{
+/* 0004e16a */	if (AFL_Config_GetBackToTitleConfirm())
+/* 0004e176 */	{
+/* 0004e176 */		if (!system.MsgBoxOkCancel("タイトル画面に戻りますか？\n\n※セーブされていないデータは失われます"))
+/* 0004e18a */		{
+/* 0004e18a */			SYS_WaitToKeyUpFromMessageBox();
+/* 0004e190 */			return;
+/* 0004e192 */		}
+/* 0004e198 */	}
+/* 0004e19e */	Ａ＿タイトルに戻る＿確認なし();
+/* 0004e1a4 */}
+
+void Ａ＿タイトルに戻る＿確認なし()
+/* 0004e1b2 */{
+/* 0004e1b2 */	SYS_システム共通セーブ();
+/* 0004e1b8 */	system.Reset();
+/* 0004e1be */	for (; ; )
+/* 0004e1be */	{
+/* 0004e1be */		system.Peek();
+/* 0004e1c4 */	}
+/* 0004e1c4 */}
+
+bool 再起動後確認()
+/* 0004e1d8 */{
+/* 0004e1d8 */	return SystemService.IsResetOnce();
+/* 0004e1e4 */}
+

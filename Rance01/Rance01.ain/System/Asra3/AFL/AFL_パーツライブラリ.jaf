@@ -1,0 +1,77 @@
+int AFL_Parts_WaitForClick(FTPARTS_WaitForClickCallback Func, bool キーキャンセル)
+/* 00057d7e */{
+/* 00057d7e */	return PARTS_WaitForClick(Func, キーキャンセル);
+/* 00057d92 */}
+
+int AFL_Parts_GetOnCursorSound(int パーツ番号)
+/* 00057da6 */{
+/* 00057da6 */	return GUIEngine.Parts_GetSoundNumber(パーツ番号, 2);
+/* 00057dbe */}
+
+int AFL_Parts_GetClickSound(int パーツ番号)
+/* 00057dd2 */{
+/* 00057dd2 */	return GUIEngine.Parts_GetSoundNumber(パーツ番号, 3);
+/* 00057dea */}
+
+void AFL_Parts_SetStatus(int PartsNumber, int State)
+/* 00057dfe */{
+/* 00057dfe */	GUIEngine.Parts_SetInputState(PartsNumber, State);
+/* 00057e14 */}
+
+int AFL_Parts_GetStatus(int PartsNumber)
+/* 00057e22 */{
+/* 00057e22 */	return GUIEngine.Parts_GetInputState(PartsNumber);
+/* 00057e34 */}
+
+void AFL_Parts_PlaySound(int PartsNumber, int State)
+/* 00057e48 */{
+/* 00057e48 */	int SoundNumber = GUIEngine.Parts_GetSoundNumber(PartsNumber, State);
+/* 00057e6a */	if (SoundNumber == 0)
+/* 00057e78 */	{
+/* 00057e78 */		return;
+/* 00057e7a */	}
+/* 00057e80 */	効果音(SoundNumber);
+/* 00057e8c */}
+
+void AFL_Parts_PlayClickMissSound()
+/* 00057e9a */{
+/* 00057e9a */	int SoundNumber = GUIEngine.Parts_GetClickMissSoundNumber();
+/* 00057eb0 */	if (SoundNumber == 0)
+/* 00057ebe */	{
+/* 00057ebe */		return;
+/* 00057ec0 */	}
+/* 00057ec6 */	効果音(SoundNumber);
+/* 00057ed2 */}
+
+int AFL_Parts_GetUpperLeftPosX(int PartsNumber, int State)
+/* 00057ee0 */{
+/* 00057ee0 */	return GUIEngine.Parts_GetPartsUpperLeftPosX(PartsNumber, 1);
+/* 00057ef8 */}
+
+int AFL_Parts_GetUpperLeftPosY(int PartsNumber, int State)
+/* 00057f0c */{
+/* 00057f0c */	return GUIEngine.Parts_GetPartsUpperLeftPosY(PartsNumber, 1);
+/* 00057f24 */}
+
+int AFL_Parts_GetWidth(int PartsNumber, int State)
+/* 00057f38 */{
+/* 00057f38 */	return GUIEngine.Parts_GetPartsWidth(PartsNumber, State);
+/* 00057f50 */}
+
+int AFL_Parts_GetHeight(int PartsNumber, int State)
+/* 00057f64 */{
+/* 00057f64 */	return GUIEngine.Parts_GetPartsHeight(PartsNumber, State);
+/* 00057f7c */}
+
+bool AFL_Parts_IsPointIn(int PartsNumber, int nX, int nY, int State)
+/* 00057f90 */{
+/* 00057f90 */	return GUIEngine.Parts_IsCursorIn(PartsNumber, nX, nY, State);
+/* 00057fb4 */}
+
+void AFL_Parts_SetZByBaseZ(int PartsNumber, int PosZ, int BasePosZ)
+/* 00057fc8 */{
+/* 00057fc8 */	SYS_ASSERTE_Z(PosZ);
+/* 00057fd6 */	SYS_ASSERTE_BASEZ(BasePosZ);
+/* 00057fe4 */	GUIEngine.Parts_SetZ(PartsNumber, PosZ + BasePosZ);
+/* 00058002 */}
+

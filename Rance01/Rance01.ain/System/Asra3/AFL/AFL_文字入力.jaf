@@ -1,0 +1,35 @@
+void AFL_InputText_Begin(int InputTextAreaNumber, string Text)
+/* 0005b774 */{
+/* 0005b774 */	g_InputText.Begin(InputTextAreaNumber, Text, true);
+/* 0005b792 */}
+
+void AFL_InputHalfText_Begin(int InputTextAreaNumber, string Text)
+/* 0005b7a0 */{
+/* 0005b7a0 */	g_InputText.Begin(InputTextAreaNumber, Text, false);
+/* 0005b7be */}
+
+void AFL_InputText_Update()
+/* 0005b7cc */{
+/* 0005b7cc */	g_InputText.Update();
+/* 0005b7d8 */}
+
+void AFL_InputText_End()
+/* 0005b7e6 */{
+/* 0005b7e6 */	g_InputText.End();
+/* 0005b7f2 */}
+
+bool AFL_InputText_IsEnd()
+/* 0005b800 */{
+/* 0005b800 */	return g_InputText.IsEnd();
+/* 0005b80e */}
+
+string AFL_InputText_GetText()
+/* 0005b822 */{
+/* 0005b822 */	return g_InputText.GetInputText();
+/* 0005b830 */}
+
+bool AFL_InputText_IsConverting()
+/* 0005b844 */{
+/* 0005b844 */	return g_InputText.IsConverting();
+/* 0005b852 */}
+

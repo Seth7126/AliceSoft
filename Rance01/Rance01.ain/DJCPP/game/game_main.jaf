@@ -1,0 +1,58 @@
+void game_main()
+/* 00099e4a */{
+/* 00099e4a */	initLibrary();
+/* 00099e50 */	initGame();
+/* 00099e56 */	startGame();
+/* 00099e5c */	while (true)
+/* 00099e68 */	{
+/* 00099e68 */		AFL_View_Update(true);
+/* 00099e74 */	}
+/* 00099e7a */}
+
+void startGame()
+/* 00099e88 */{
+/* 00099e88 */	SceneWarning scene;
+/* 00099e98 */	scene.run();
+/* 00099ea4 */	RunSceneModal(scene.update);
+/* 00099ebe */	while (true)
+/* 00099eca */	{
+/* 00099eca */		int r = OpenTitle();
+/* 00099edc */		switch (r)
+/* 00099eee */		{
+/* 00099eee */		case 0:
+/* 00099eee */			g_gameFlow.run();
+/* 00099efa */			break;
+/* 00099f00 */		case 1:
+/* 00099f00 */			OpenLoad();
+/* 00099f06 */			break;
+/* 00099f0c */		case 2:
+/* 00099f0c */			g_saveManager.loadLatestAutoSave();
+/* 00099f18 */			break;
+/* 00099f1e */		case 4:
+/* 00099f1e */			OpenCgView();
+/* 00099f24 */			break;
+/* 00099f2a */		case 5:
+/* 00099f2a */			OpenReplayView();
+/* 00099f30 */			break;
+/* 00099f36 */		case 6:
+/* 00099f36 */			OpenMusic();
+/* 00099f3c */			break;
+/* 00099f42 */		case 7:
+/* 00099f42 */			Ｓ＿コンフィグ();
+/* 00099f48 */			break;
+/* 00099f4e */		case 3:
+/* 00099f4e */			g_globalGameFlag.addValue("マニュアルを開いた", 1);
+/* 00099f66 */			Ａ＿プレイングマニュアル表示();
+/* 00099f6c */			break;
+/* 00099f72 */		case 8:
+/* 00099f72 */			OpenEnquite();
+/* 00099f78 */			break;
+/* 00099f7e */		case 9:
+/* 00099f7e */			制御／アリスの館();
+/* 00099f84 */			break;
+/* 00099f8a */		case 10:
+/* 00099f8a */			ゲーム終了();
+/* 00099f90 */		}
+/* 00099f90 */	}
+/* 00099f96 */}
+

@@ -1,0 +1,501 @@
+SceneBattle::SceneBattle()
+/* 00070588 */{
+/* 00070590 */	this.isEscape_ = false;
+/* 0007059a */	this.state_ = 0;
+/* 000705a4 */	g_hallucination.getPos(this.lhx_, this.lhy_);
+/* 000705c0 */	g_hallucination.setPos(-120, 72);
+/* 000705d8 */}
+
+SceneBattle::~SceneBattle()
+/* 000705e0 */{
+/* 000705e0 */	g_hallucination.setPos(this.lhx_, this.lhy_);
+/* 000705f8 */}
+
+void SceneBattle::run()
+/* 00070600 */{
+/* 00070600 */	this.callOnStartBattleCallback();
+/* 00070608 */	this.fadeIn(true);
+/* 00070616 */}
+
+int SceneBattle::update()
+/* 0007061e */{
+/* 0007061e */	switch (this.state_)
+/* 00070630 */	{
+/* 00070630 */	case 1:
+/* 00070630 */		if (!this.partsBg_.isMotion())
+/* 00070644 */		{
+/* 00070644 */			this.state_ = 2;
+/* 0007064e */			this.setReadyEnemyAttackChipEffect();
+/* 00070656 */			this.fadeButton(true);
+/* 00070664 */			this.tutorial_.fadeIn(true);
+/* 00070676 */		}
+/* 0007067c */		break;
+/* 00070682 */	case 2:
+/* 00070682 */		if (this.btnEscape_.isClick())
+/* 00070694 */		{
+/* 00070694 */			int r = this.openEscapeDialog();
+/* 000706a8 */			if (r == 0)
+/* 000706b6 */			{
+/* 000706b6 */				this.isEscape_ = true;
+/* 000706c0 */				g_globalGameFlag.addValue("戦闘／逃げる", 1);
+/* 000706d8 */				this.fadeIn(false);
+/* 000706e6 */			}
+/* 000706ec */		}
+/* 000706f2 */		if (this.btnBattleStart_.isClick())
+/* 00070704 */		{
+/* 00070704 */			this.setEnableOperatableObjectGroup(false);
+/* 00070712 */			this.tutorial_.fadeIn(false);
+/* 00070724 */			this.calcDamage();
+/* 0007072c */			this.setReadyPlayerAttackChipEffect();
+/* 00070734 */			this.resetDamageNumber();
+/* 0007073c */			this.state_ = 3;
+/* 00070746 */			this.timer_.reset();
+/* 00070752 */		}
+/* 00070758 */		break;
+/* 0007075e */	case 3:
+/* 0007075e */		if (this.isFinishChipEffectMotion() && g_mouse.isClick(0) || this.timer_.getTime() > 500)
+/* 000707ce */		{
+/* 000707ce */			this.chipEffect_[0].attack();
+/* 000707e2 */			this.state_ = 4;
+/* 000707ec */		}
+/* 000707f2 */		break;
+/* 000707f8 */	case 4:
+/* 000707f8 */		if (!this.chipEffect_[0].isMotion())
+/* 00070814 */		{
+/* 00070814 */			this.state_ = 5;
+/* 0007081e */			this.damageNumber_[0].run();
+/* 00070832 */			this.battleCharacterView_[1].shake();
+/* 00070846 */			this.chipEffect_[1].attack();
+/* 0007085a */		}
+/* 00070860 */		break;
+/* 00070866 */	case 5:
+/* 00070866 */		if (!this.chipEffect_[1].isMotion())
+/* 00070882 */		{
+/* 00070882 */			this.decHp();
+/* 0007088a */			this.addDamageLog();
+/* 00070892 */			this.damageNumber_[1].run();
+/* 000708a6 */			this.battleCharacterView_[0].shake();
+/* 000708ba */			this.state_ = 6;
+/* 000708c4 */		}
+/* 000708ca */		break;
+/* 000708d0 */	case 6:
+/* 000708d0 */		if (this.damageNumber_[1].isFinish())
+/* 000708ea */		{
+/* 000708ea */			this.useChip();
+/* 000708f2 */			this.callOnTurnEndCallback();
+/* 000708fa */			int r = this.getBattleResult();
+/* 0007090e */			if (r != 0)
+/* 00070922 */			{
+/* 00070922 */				this.runCharacterDown();
+/* 0007092a */				this.saveStatistics();
+/* 00070932 */				this.state_ = 7;
+/* 0007093c */			}
+/* 00070942 */			else
+/* 00070942 */			{
+/* 00070942 */				this.setEnableOperatableObjectGroup(true);
+/* 00070950 */				++this.turn_;
+/* 00070960 */				this.setReadyEnemyAttackChipEffect();
+/* 00070968 */				this.state_ = 2;
+/* 00070972 */			}
+/* 00070972 */		}
+/* 00070978 */		break;
+/* 0007097e */	case 7:
+/* 0007097e */		if (this.isFinishBattleCharacterViewMotion())
+/* 0007098c */		{
+/* 0007098c */			●音楽停止(2000);
+/* 00070998 */			if (this.getBattleResult() == 1)
+/* 000709ae */			{
+/* 000709ae */				this.state_ = 8;
+/* 000709b8 */				this.calcDropItem();
+/* 000709c0 */				this.resultView_.run(this.monsterId_, this.dropChip_ != "");
+/* 000709de */			}
+/* 000709e4 */			else
+/* 000709e4 */			{
+/* 000709e4 */				this.fadeIn(false);
+/* 000709f2 */			}
+/* 000709f2 */		}
+/* 000709f8 */		break;
+/* 000709fe */	case 8:
+/* 000709fe */		if (this.resultView_.isFinish())
+/* 00070a10 */		{
+/* 00070a10 */			this.addResult();
+/* 00070a18 */			g_bonusManager.clear();
+/* 00070a24 */			this.fadeIn(false);
+/* 00070a32 */		}
+/* 00070a38 */		break;
+/* 00070a3e */	case 9:
+/* 00070a3e */		if (!this.partsBg_.isMotion())
+/* 00070a52 */		{
+/* 00070a52 */			ResetBet(0);
+/* 00070a5e */			if (this.dropChip_ != "")
+/* 00070a6e */			{
+/* 00070a6e */				OpenGetChipDialog(this.dropChip_, true);
+/* 00070a80 */			}
+/* 00070a86 */			return 1;
+/* 00070a8e */		}
+/* 00070a94 */		break;
+/* 00070a9a */	}
+/* 00070a9a */	return 0;
+/* 00070aa2 */}
+
+void SceneBattle::init(string monsterId, string bgImage)
+/* 00070ab0 */{
+/* 00070ab0 */	this.monsterId_ = monsterId;
+/* 00070aba */	this.monster_ <- getMonster(this.monsterId_);
+/* 00070ae6 */	this.monster_.setHp(this.monster_.getMaxHp());
+/* 00070afe */	this.initObject(bgImage);
+/* 00070b0c */}
+
+void SceneBattle::initObject(string bgImage)
+/* 00070b14 */{
+/* 00070b14 */	this.initBg(bgImage);
+/* 00070b22 */	this.chipDepositoryView_.init();
+/* 00070b2e */	this.battleCharacterView_[0].init(NULL);
+/* 00070b48 */	this.battleCharacterView_[1].init(this.monster_);
+/* 00070b62 */	this.hpView_.init();
+/* 00070b6e */	this.hpView_.setOffsetY(200);
+/* 00070b80 */	this.tutorial_.init();
+/* 00070b8c */	this.initButton();
+/* 00070b94 */	this.setButtonPos();
+/* 00070b9c */	this.setEnableOperatableObjectGroup(true);
+/* 00070baa */}
+
+void SceneBattle::initButton()
+/* 00070bb2 */{
+/* 00070bb2 */	this.btnBattleStart_.init("システム／ボタン／幅２００", "戦闘開始!", 2126);
+/* 00070bd0 */	if (this.isShowEscapeButton())
+/* 00070bde */	{
+/* 00070bde */		this.btnEscape_.init("システム／ボタン／幅２００", "急いで城下町にもどる", -1);
+/* 00070bfc */	}
+/* 00070c02 */}
+
+void SceneBattle::setButtonPos()
+/* 00070c0a */{
+/* 00070c0a */	this.btnBattleStart_.setPos(412, 516, -2147483648);
+/* 00070c28 */	if (this.isShowEscapeButton())
+/* 00070c36 */	{
+/* 00070c36 */		this.btnEscape_.setPos(16, 716, -2147483648);
+/* 00070c54 */	}
+/* 00070c5a */}
+
+void SceneBattle::initBg(string bgImage)
+/* 00070c62 */{
+/* 00070c62 */	if (bgImage == "")
+/* 00070c72 */	{
+/* 00070c72 */		bgImage = g_gameFlow.getBattleBackground();
+/* 00070c88 */	}
+/* 00070c8e */	if (bgImage == "")
+/* 00070c9e */	{
+/* 00070c9e */		this.partsBg_.initAsPlaneImage(1024, 768, 32, 32, 32, 255);
+/* 00070cce */	}
+/* 00070cd4 */	else
+/* 00070cd4 */	{
+/* 00070cd4 */		if (bgImage == "背景／戦闘／辺境" && g_gameTime.getBlock() >= 6)
+/* 00070d16 */		{
+/* 00070d16 */			bgImage = "背景／戦闘／辺境／夜";
+/* 00070d22 */		}
+/* 00070d28 */		this.partsBg_.init(bgImage, 0);
+/* 00070d40 */	}
+/* 00070d40 */	this.partsBg_.setPos(0, 0, 3000);
+/* 00070d5e */}
+
+void SceneBattle::resetDamageNumber()
+/* 00070d66 */{
+/* 00070d66 */	this.damageNumber_[0].init(0, this.damage_[0].damage, this.damage_[0].isCritical);
+/* 00070dac */	this.damageNumber_[1].init(1, this.damage_[1].damage, this.damage_[1].isCritical);
+/* 00070df2 */}
+
+void SceneBattle::setReadyEnemyAttackChipEffect()
+/* 00070dfa */{
+/* 00070dfa */	array@string n;
+/* 00070e04 */	int atk = this.monster_.getAtk(this.turn_);
+/* 00070e22 */	if (atk != 0)
+/* 00070e36 */	{
+/* 00070e36 */		n.PushBack(g_attackChipRange.getAtkChipName(atk));
+/* 00070e52 */	}
+/* 00070e58 */	int def = this.monster_.getDef(this.turn_);
+/* 00070e76 */	if (def != 0)
+/* 00070e8a */	{
+/* 00070e8a */		n.PushBack(g_attackChipRange.getDefChipName(def));
+/* 00070ea6 */	}
+/* 00070eac */	int i;
+/* 00070eb6 */	for (i = 0; i < 3; ++i)
+/* 00070ee0 */	{
+/* 00070ee0 */		string attr = this.monster_.getAttribute(this.turn_, i);
+/* 00070f02 */		string img = getAttribute(attr).getImageName();
+/* 00070f28 */		if (img != "")
+/* 00070f38 */		{
+/* 00070f38 */			n.PushBack(img);
+/* 00070f42 */		}
+/* 00070f48 */	}
+/* 00070f54 */	if (n.Empty())
+/* 00070f64 */	{
+/* 00070f64 */		n.PushBack("チップ／何もしない");
+/* 00070f74 */	}
+/* 00070f7a */	this.chipEffect_[1].init(n, false, false);
+/* 00070fa0 */	this.chipEffect_[1].fadeIn(true);
+/* 00070fba */}
+
+void SceneBattle::setReadyPlayerAttackChipEffect()
+/* 00070fc2 */{
+/* 00070fc2 */	array@string n;
+/* 00070fcc */	int i;
+/* 00070fd6 */	for (i = 0; i < g_chipDepository[0].getCount(); ++i)
+/* 00071014 */	{
+/* 00071014 */		ref ChipInstance instance = g_chipDepository[0].getInstance(i);
+/* 00071058 */		if (instance.isBet())
+/* 0007106a */		{
+/* 0007106a */			n.PushBack(getChip(instance.getId()).getImageName());
+/* 00071096 */		}
+/* 000710a2 */	}
+/* 000710b4 */	if (n.Empty())
+/* 000710c4 */	{
+/* 000710c4 */		n.PushBack("チップ／素手");
+/* 000710d4 */	}
+/* 000710da */	this.chipEffect_[0].init(n, true, this.damage_[0].isCritical);
+/* 00071110 */	this.chipEffect_[0].fadeIn(true);
+/* 0007112a */}
+
+void SceneBattle::callOnStartBattleCallback()
+/* 00071132 */{
+/* 00071132 */	FuncOnBattleStartCallBack fn = EX_String("戦闘開始時コールバック", "");
+/* 00071156 */	if (fn != NULL)
+/* 0007116a */	{
+/* 0007116a */		fn(this.monsterId_);
+/* 00071180 */	}
+/* 00071186 */}
+
+void SceneBattle::callOnTurnEndCallback()
+/* 0007118e */{
+/* 0007118e */	string n = EX_String("戦闘ターン終了時コールバック", "");
+/* 000711aa */	FuncOnTurnEndCallback fn = n;
+/* 000711c2 */	if (fn != NULL)
+/* 000711d6 */	{
+/* 000711d6 */		fn();
+/* 000711e4 */	}
+/* 000711ea */}
+
+void SceneBattle::useChip()
+/* 000711f2 */{
+/* 000711f2 */	int i;
+/* 000711fc */	ref ChipDepository dep = g_chipDepository[0];
+/* 00071226 */	while (i < dep.getCount())
+/* 00071240 */	{
+/* 00071240 */		ref ChipInstance c = dep.getInstance(i);
+/* 0007127c */		int span = getChip(c.getId()).getUseSpan();
+/* 000712aa */		if (c.isBet())
+/* 000712bc */		{
+/* 000712bc */			c.setBet(false);
+/* 000712ce */			if (span == -1)
+/* 000712e2 */			{
+/* 000712e2 */				dep.erase(i);
+/* 000712f4 */			}
+/* 000712fa */			else
+/* 000712fa */			{
+/* 000712fa */				c.setTimeRemain(span);
+/* 0007130c */				++i;
+/* 00071312 */			}
+/* 00071312 */		}
+/* 00071318 */		else
+/* 00071318 */		{
+/* 00071318 */			c.setTimeRemain(c.getTimeRemain() - 1);
+/* 00071338 */			++i;
+/* 0007133e */		}
+/* 0007133e */	}
+/* 00071356 */}
+
+DamageInfomation SceneBattle::calcDamageToPlayer()
+/* 0007135e */{
+/* 0007135e */	DamageInfomation info;
+/* 0007136e */	FuncPlayerDamageCalcFunction fn = EX_String("プレイヤーの受けるダメージ計算関数", "");
+/* 00071392 */	if (fn != NULL)
+/* 000713a6 */	{
+/* 000713a6 */		info = fn(this.monster_.getId(), this.turn_);
+/* 000713da */	}
+/* 000713e0 */	return info;
+/* 000713f0 */}
+
+DamageInfomation SceneBattle::calcDamageToEnemy()
+/* 000713fe */{
+/* 000713fe */	DamageInfomation info;
+/* 0007140e */	FuncPlayerDamageCalcFunction fn = EX_String("敵の受けるダメージ計算関数", "");
+/* 00071432 */	if (fn != NULL)
+/* 00071446 */	{
+/* 00071446 */		info = fn(this.monster_.getId(), this.turn_);
+/* 0007147a */	}
+/* 00071480 */	return info;
+/* 00071490 */}
+
+void SceneBattle::runDamageNumber()
+/* 0007149e */{
+/* 0007149e */	int i;
+/* 000714a8 */	for (i = 0; i < this.damageNumber_.Numof(); ++i)
+/* 000714d8 */	{
+/* 000714d8 */		this.damageNumber_[i].run();
+/* 000714ec */		this.battleCharacterView_[i].shake();
+/* 00071500 */	}
+/* 00071506 */}
+
+int SceneBattle::getBattleResult()
+/* 0007150e */{
+/* 0007150e */	if (g_player.getHp() <= 0)
+/* 00071528 */	{
+/* 00071528 */		return 2;
+/* 00071530 */	}
+/* 00071536 */	else if (this.monster_.getHp() <= 0)
+/* 00071550 */	{
+/* 00071550 */		return 1;
+/* 00071558 */	}
+/* 0007155e */	else if (g_player.getHp() > 0 && this.monster_.getHp() > 0 && this.isEscape_)
+/* 000715cc */	{
+/* 000715cc */		return 3;
+/* 000715d4 */	}
+/* 000715da */	return 0;
+/* 000715e2 */}
+
+void SceneBattle::calcDamage()
+/* 000715f0 */{
+/* 000715f0 */	this.damage_[0] = this.calcDamageToEnemy();
+/* 00071610 */	this.damage_[1] = this.calcDamageToPlayer();
+/* 00071630 */	this.chipEffect_[1].setCritical(this.damage_[1].isCritical);
+/* 0007165a */}
+
+void SceneBattle::addDamageLog()
+/* 00071662 */{
+/* 00071662 */	g_log[2].add("%sに%dのダメージを与えた。" % this.monster_.getName() % this.damage_[0].damage, 0);
+/* 000716b4 */	g_log[2].add("俺は%dのダメージを受けた。" % this.damage_[1].damage, 0);
+/* 000716f2 */}
+
+void SceneBattle::decHp()
+/* 000716fa */{
+/* 000716fa */	g_player.addHp(-this.damage_[1].damage);
+/* 0007171e */	this.monster_.addHp(-this.damage_[0].damage);
+/* 00071742 */}
+
+bool SceneBattle::isFinishChipEffectMotion()
+/* 0007174a */{
+/* 0007174a */	return !this.chipEffect_[0].isMotion() && !this.chipEffect_[1].isMotion();
+/* 00071798 */}
+
+bool SceneBattle::isFinishBattleCharacterViewMotion()
+/* 000717a6 */{
+/* 000717a6 */	return !this.battleCharacterView_[0].isMotion() && !this.battleCharacterView_[1].isMotion();
+/* 000717f4 */}
+
+void SceneBattle::fadeIn(bool val)
+/* 00071802 */{
+/* 00071802 */	this.hpView_.fadeIn(val);
+/* 00071814 */	this.logView_.fadeIn(val);
+/* 00071826 */	this.battleCharacterView_[0].fadeIn(val);
+/* 00071840 */	this.battleCharacterView_[1].fadeIn(val);
+/* 0007185a */	this.chipDepositoryView_.fadeIn(val);
+/* 0007186c */	if (val)
+/* 00071878 */	{
+/* 00071878 */		this.monsterName_.run(this.monster_.getName());
+/* 00071890 */		g_music.play(this.monster_.getMusicNumber(), 0);
+/* 000718ae */	}
+/* 000718b4 */	else
+/* 000718b4 */	{
+/* 000718b4 */		g_music.fadeOut(2000);
+/* 000718c6 */		this.fadeButton(false);
+/* 000718d4 */		this.chipEffect_[0].fadeIn(false);
+/* 000718ee */		this.chipEffect_[1].fadeIn(false);
+/* 00071908 */		this.monsterName_.fadeOut();
+/* 00071914 */	}
+/* 00071914 */	this.partsBg_.setShow(true);
+/* 00071926 */	MotionInfomation m;
+/* 00071936 */	m = getStandardMotion(val ? 0 : 1);
+/* 0007196a */	m.setTime(600, 0);
+/* 00071982 */	this.partsBg_.runMotion(m);
+/* 0007199c */	this.state_ = val ? 1 : 9;
+/* 000719c6 */}
+
+void SceneBattle::fadeButton(bool val)
+/* 000719ce */{
+/* 000719ce */	this.btnBattleStart_.fadeIn(val);
+/* 000719e0 */	this.btnEscape_.fadeIn(val);
+/* 000719f2 */}
+
+void SceneBattle::runCharacterDown()
+/* 000719fa */{
+/* 000719fa */	if (g_player.getHp() <= 0)
+/* 00071a14 */	{
+/* 00071a14 */		this.battleCharacterView_[0].down();
+/* 00071a28 */	}
+/* 00071a2e */	if (this.monster_.getHp() <= 0)
+/* 00071a48 */	{
+/* 00071a48 */		this.battleCharacterView_[1].down();
+/* 00071a5c */		this.addBattleEndLog();
+/* 00071a64 */	}
+/* 00071a6a */}
+
+void SceneBattle::calcDropItem()
+/* 00071a72 */{
+/* 00071a72 */	this.dropChip_ = this.monster_.getDropChipId();
+/* 00071a88 */	if (this.dropChip_ != "")
+/* 00071a98 */	{
+/* 00071a98 */		FuncItemDropPercentCallBack fn = EX_String("アイテムドロップ率計算関数", "");
+/* 00071abc */		bool drop = false;
+/* 00071ac6 */		if (fn != NULL)
+/* 00071ada */		{
+/* 00071ada */			drop = RAND(100) <= fn(this.monsterId_);
+/* 00071b0c */		}
+/* 00071b12 */		if (!drop)
+/* 00071b20 */		{
+/* 00071b20 */			this.dropChip_ = "";
+/* 00071b2c */		}
+/* 00071b32 */	}
+/* 00071b38 */}
+
+void SceneBattle::addBattleEndLog()
+/* 00071b40 */{
+/* 00071b40 */	string mes;
+/* 00071b4c */	string name;
+/* 00071b58 */	mes = getMonster(this.monsterId_).getEndMessage();
+/* 00071b7e */	name = getMonster(this.monsterId_).getName();
+/* 00071ba4 */	g_log[2].add("%s" % mes, 0);
+/* 00071bd2 */	g_log[2].add("%sを倒した。" % name, 0);
+/* 00071c00 */}
+
+int SceneBattle::openEscapeDialog()
+/* 00071c08 */{
+/* 00071c08 */	DialogInfomation info;
+/* 00071c18 */	info = getEscapeDialogInfomation(this.monster_.getName());
+/* 00071c3a */	return OpenDialog(info);
+/* 00071c48 */}
+
+void SceneBattle::saveStatistics()
+/* 00071c56 */{
+/* 00071c56 */	if (g_player.getHp() <= 0)
+/* 00071c70 */	{
+/* 00071c70 */		g_globalGameFlag.addValue("敗北／%s" % this.monster_.getId(), 1);
+/* 00071c9c */	}
+/* 00071ca2 */	else if (this.monster_.getHp() <= 0)
+/* 00071cbc */	{
+/* 00071cbc */		g_globalGameFlag.addValue("勝利／%s" % this.monster_.getId(), 1);
+/* 00071ce8 */	}
+/* 00071cee */}
+
+void SceneBattle::setEnableOperatableObjectGroup(bool val)
+/* 00071cf6 */{
+/* 00071cf6 */	this.btnBattleStart_.setEnable(val);
+/* 00071d08 */	this.chipDepositoryView_.setOperatable(val);
+/* 00071d1a */	this.btnEscape_.setEnable(val ? this.isEnableEscapeButton() : false);
+/* 00071d46 */}
+
+bool SceneBattle::isEnableEscapeButton()
+/* 00071d4e */{
+/* 00071d4e */	return !this.monster_.isEscapeDisable() && g_player.getBadCondition("COND05") == 0;
+/* 00071d98 */}
+
+bool SceneBattle::isShowEscapeButton()
+/* 00071da6 */{
+/* 00071da6 */	return g_gameFlow.getCurrentObject() != "DUNG11";
+/* 00071dbe */}
+
+void SceneBattle::addResult()
+/* 00071dcc */{
+/* 00071dcc */	g_player.addGold(g_bonusManager.getGold() + getMonster(this.monsterId_).getGold());
+/* 00071e02 */	g_player.addExp(g_bonusManager.getExp() + getMonster(this.monsterId_).getExp());
+/* 00071e38 */}
+

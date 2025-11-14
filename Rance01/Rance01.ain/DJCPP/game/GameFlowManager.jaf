@@ -1,0 +1,196 @@
+GameFlowManager::GameFlowManager()
+/* 00099790 */{
+/* 0009979a */}
+
+void GameFlowManager::init()
+/* 000997a0 */{
+/* 000997a0 */	this.saveAlert_ <- new AutoSaveAlert;
+/* 000997c8 */	g_saveManager.setOnAutoSaveCallback(this.onAutoSave);
+/* 000997de */	g_player.addEventHandler(this.onBadCondition);
+/* 000997f4 */}
+
+void GameFlowManager::onAutoSave()
+/* 000997fc */{
+/* 000997fc */	this.saveAlert_.run();
+/* 00099808 */}
+
+void GameFlowManager::run()
+/* 00099810 */{
+/* 00099810 */	this.init();
+/* 00099818 */	if (g_gameFlagMap.getInt("プロローグスキップ") != 1)
+/* 00099838 */	{
+/* 00099838 */		this.nextObjectId_ = "仮／城下町／プロローグ";
+/* 00099844 */	}
+/* 0009984a */	while (true)
+/* 00099856 */	{
+/* 00099856 */		if (this.nextObjectId_ == "")
+/* 0009986a */		{
+/* 0009986a */			if (this.lastObjectId_ == "")
+/* 0009987e */			{
+/* 0009987e */				this.nextObjectId_ = g_map[0].getId();
+/* 0009989c */			}
+/* 000998a2 */			else
+/* 000998a2 */			{
+/* 000998a2 */				this.nextObjectId_ = this.lastObjectId_;
+/* 000998ae */			}
+/* 000998ae */		}
+/* 000998b4 */		this.type_ = this.getType(this.nextObjectId_);
+/* 000998ce */		g_frameManager.updateFrame();
+/* 000998da */		if (this.type_ == 0)
+/* 000998e8 */		{
+/* 000998e8 */			AdvFunc fn = this.nextObjectId_;
+/* 00099900 */			this.clearNextObject();
+/* 00099908 */			if (fn != NULL)
+/* 0009991c */			{
+/* 0009991c */				g_viewModeManager.set(true);
+/* 0009992e */				fn();
+/* 0009993c */				g_viewModeManager.restore();
+/* 00099948 */			}
+/* 0009994e */		}
+/* 00099954 */		else if (this.type_ == 1)
+/* 00099962 */		{
+/* 00099962 */			string plId = this.callMap(this.nextObjectId_);
+/* 0009997a */			this.callMapCallBack(plId);
+/* 00099988 */			g_gameTime.setForwardBlock();
+/* 00099994 */		}
+/* 0009999a */		else if (this.type_ == 2)
+/* 000999a8 */		{
+/* 000999a8 */			this.callDungeon(this.nextObjectId_, this.dungeonX_, this.dungeonY_);
+/* 000999c2 */		}
+/* 000999c8 */	}
+/* 000999ce */}
+
+void GameFlowManager::clearNextObject()
+/* 000999d6 */{
+/* 000999d6 */	this.lastObjectId_ = this.nextObjectId_;
+/* 000999e2 */	this.nextObjectId_ = "";
+/* 000999ee */	this.dungeonX_ = this.dungeonY_ = 0;
+/* 00099a0a */}
+
+void GameFlowManager::setNextAdv(string func)
+/* 00099a12 */{
+/* 00099a12 */	this.nextObjectId_ = func;
+/* 00099a1c */}
+
+void GameFlowManager::setNextMap(string id)
+/* 00099a24 */{
+/* 00099a24 */	this.nextObjectId_ = id;
+/* 00099a2e */}
+
+void GameFlowManager::setNextDungeon(string id, int x, int y)
+/* 00099a36 */{
+/* 00099a36 */	this.nextObjectId_ = id;
+/* 00099a40 */	this.dungeonX_ = x;
+/* 00099a4a */	this.dungeonY_ = y;
+/* 00099a54 */}
+
+int GameFlowManager::getType(string n)
+/* 00099a5c */{
+/* 00099a5c */	int i;
+/* 00099a66 */	for (i = 0; i < g_map.Numof(); ++i)
+/* 00099a96 */	{
+/* 00099a96 */		if (g_map[i].getId() == n)
+/* 00099ab8 */		{
+/* 00099ab8 */			return 1;
+/* 00099ac0 */		}
+/* 00099ac6 */	}
+/* 00099acc */	for (i = 0; i < g_dungeon.Numof(); ++i)
+/* 00099afc */	{
+/* 00099afc */		if (g_dungeon[i].getId() == n)
+/* 00099b1e */		{
+/* 00099b1e */			return 2;
+/* 00099b26 */		}
+/* 00099b2c */	}
+/* 00099b32 */	return 0;
+/* 00099b3a */	return -1;
+/* 00099b42 */}
+
+void GameFlowManager::callMapCallBack(string placeId)
+/* 00099b50 */{
+/* 00099b50 */	if (placeId == "")
+/* 00099b60 */	{
+/* 00099b60 */		return;
+/* 00099b62 */	}
+/* 00099b68 */	ref Place pl = getPlace(placeId);
+/* 00099b9a */	FuncPlaceCallback fn = pl.getEventFuncName();
+/* 00099bb8 */	if (fn != NULL)
+/* 00099bcc */	{
+/* 00099bcc */		g_viewModeManager.set(true);
+/* 00099bde */		fn();
+/* 00099bec */		●枠消去();
+/* 00099bf2 */		g_viewModeManager.restore();
+/* 00099bfe */	}
+/* 00099c04 */	else
+/* 00099c04 */	{
+/* 00099c04 */		pass("関数[%s]はありませんでした。" % pl.getEventFuncName());
+/* 00099c24 */	}
+/* 00099c24 */}
+
+bool GameFlowManager::isSetNextScene()
+/* 00099c2c */{
+/* 00099c2c */	return this.nextObjectId_ != "";
+/* 00099c3a */}
+
+void GameFlowManager::onBadCondition(int type, int value)
+/* 00099c48 */{
+/* 00099c48 */	if (type == 5)
+/* 00099c56 */	{
+/* 00099c56 */		dlogF("add %s" % g_player.getLastAddedBadCondition());
+/* 00099c76 */		if (g_player.getLastAddedBadCondition() == "COND02")
+/* 00099c90 */		{
+/* 00099c90 */			g_music.forcePlay(17);
+/* 00099ca2 */		}
+/* 00099ca8 */	}
+/* 00099cae */	else if (type == 6)
+/* 00099cbc */	{
+/* 00099cbc */		if (g_player.getLastErasedBadCondition() == "COND02")
+/* 00099cd6 */		{
+/* 00099cd6 */			g_music.forcePlay(-1);
+/* 00099ce8 */		}
+/* 00099cee */	}
+/* 00099cf4 */}
+
+string GameFlowManager::callMap(string mapId)
+/* 00099cfc */{
+/* 00099cfc */	this.clearNextObject();
+/* 00099d04 */	return OpenMap(mapId);
+/* 00099d12 */}
+
+void GameFlowManager::callDungeon(string dungeonId, int x, int y)
+/* 00099d20 */{
+/* 00099d20 */	this.clearNextObject();
+/* 00099d28 */	this.battleBackGround_ = getDungeon(dungeonId).getBattleBgImageName();
+/* 00099d4e */	OpenDungeon(dungeonId, x, y);
+/* 00099d66 */}
+
+string GameFlowManager::getBattleBackground()
+/* 00099d6e */{
+/* 00099d6e */	return this.battleBackGround_;
+/* 00099d76 */}
+
+string GameFlowManager::getCurrentObject()
+/* 00099d84 */{
+/* 00099d84 */	return this.lastObjectId_;
+/* 00099d8c */}
+
+void 場所関数()
+/* 00099d9a */{
+/* 00099d9a */	g_gameFlow.setNextDungeon("DUNG01", 0, 0);
+/* 00099db8 */}
+
+int cardCallback(string id)
+/* 00099dc6 */{
+/* 00099dc6 */	if (id == "CARD02")
+/* 00099dd6 */	{
+/* 00099dd6 */		g_gameFlow.setNextMap("MAP01");
+/* 00099de8 */		return 2;
+/* 00099df0 */	}
+/* 00099df6 */	return 0;
+/* 00099dfe */}
+
+void 仮／城下町／プロローグ()
+/* 00099e12 */{
+/* 00099e12 */	城下町／プロローグ();
+/* 00099e18 */	g_gameFlow.setNextDungeon("DUNG11", 2, 0);
+/* 00099e36 */}
+

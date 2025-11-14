@@ -1,0 +1,56 @@
+ReplayListManager::ReplayListManager()
+/* 000940fc */{
+/* 00094104 */	this.loadList();
+/* 0009410c */}
+
+int ReplayListManager::getCount()
+/* 00094114 */{
+/* 00094114 */	return this.replayList_.Numof();
+/* 0009411c */}
+
+void ReplayListManager::getThumbnailCgList(ref array@string result)
+/* 0009412a */{
+/* 0009412a */	result.Free();
+/* 00094134 */	int i;
+/* 0009413e */	for (i = 0; i < this.replayList_.Numof(); ++i)
+/* 0009416e */	{
+/* 0009416e */		result.PushBack(this.replayList_[i].thumbnailCgName);
+/* 0009418e */	}
+/* 00094194 */}
+
+string ReplayListManager::getScenarioFuncName(int index)
+/* 0009419c */{
+/* 0009419c */	if (index >= 0 && index < this.replayList_.Numof())
+/* 000941d6 */	{
+/* 000941d6 */		return this.replayList_[index].scenarioFuncName;
+/* 000941ee */	}
+/* 000941f4 */	return "";
+/* 000941fc */}
+
+void ReplayListManager::loadList()
+/* 0009420a */{
+/* 0009420a */	array@string node;
+/* 00094214 */	EX_GetNodeNameList("ReplayList", node);
+/* 00094226 */	this.replayList_.Alloc(node.Numof());
+/* 00094246 */	int i;
+/* 00094250 */	for (i = 0; i < node.Numof(); ++i)
+/* 0009428a */	{
+/* 0009428a */		this.replayList_[i].thumbnailCgName = node[i];
+/* 000942ae */		this.replayList_[i].scenarioFuncName = EX_String("ReplayList.%s.funcName" % node[i], "");
+/* 000942f0 */	}
+/* 000942f6 */}
+
+bool ReplayListManager::isEnableReplayMode(int index)
+/* 000942fe */{
+/* 000942fe */	return g_replayFuncList.Find(0, g_replayFuncList.Numof(), this.replayList_[index].scenarioFuncName) != -1;
+/* 00094334 */}
+
+void addReplayModeFuncList(string func)
+/* 00094342 */{
+/* 00094342 */	if (g_replayFuncList.Find(0, g_replayFuncList.Numof(), func) == -1)
+/* 00094372 */	{
+/* 00094372 */		g_replayFuncList.PushBack(func);
+/* 0009437c */		共有セーブ();
+/* 00094382 */	}
+/* 00094388 */}
+

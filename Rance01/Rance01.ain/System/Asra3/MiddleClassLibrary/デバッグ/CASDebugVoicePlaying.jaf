@@ -1,0 +1,56 @@
+CASDebugVoicePlaying::CASDebugVoicePlaying()
+/* 0003a3aa */{
+/* 0003a3b2 */	this.m_Show = false;
+/* 0003a3bc */	this.m_Play = false;
+/* 0003a3c6 */	this.m_Text.Create();
+/* 0003a3d2 */}
+
+void CASDebugVoicePlaying::SetText(CASColor Color)
+/* 0003a3da */{
+/* 0003a3da */	this.m_TextProperty.SetSize(32);
+/* 0003a3ec */	this.m_TextProperty.SetColor(Color);
+/* 0003a406 */	this.m_TextProperty.SetEdgeWeight(1.5);
+/* 0003a418 */	this.m_TextProperty.SetEdgeColor(CF_CASColor(64, 0, 0, 255));
+/* 0003a442 */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 0003a45a */	this.m_Text.SetText("♪", 1);
+/* 0003a472 */	this.m_Text.SetShow(false);
+/* 0003a484 */}
+
+void CASDebugVoicePlaying::SetShow(bool Show)
+/* 0003a48c */{
+/* 0003a48c */	this.m_Show = Show;
+/* 0003a496 */}
+
+bool CASDebugVoicePlaying::IsShow()
+/* 0003a49e */{
+/* 0003a49e */	return this.m_Show;
+/* 0003a4a6 */}
+
+void CASDebugVoicePlaying::SetPlay(bool Play)
+/* 0003a4b4 */{
+/* 0003a4b4 */	this.m_Play = Play;
+/* 0003a4be */}
+
+void CASDebugVoicePlaying::SetPos(int X, int Y)
+/* 0003a4c6 */{
+/* 0003a4c6 */	if (!this.m_Text.IsExist())
+/* 0003a4da */	{
+/* 0003a4da */		return;
+/* 0003a4dc */	}
+/* 0003a4e2 */	this.m_Text.SetPos(X, Y);
+/* 0003a4fa */}
+
+void CASDebugVoicePlaying::Update()
+/* 0003a502 */{
+/* 0003a502 */	if (!this.m_Text.IsExist())
+/* 0003a516 */	{
+/* 0003a516 */		return;
+/* 0003a518 */	}
+/* 0003a51e */	if (!this.m_Show)
+/* 0003a52c */	{
+/* 0003a52c */		return;
+/* 0003a52e */	}
+/* 0003a534 */	this.m_Text.SetShow(this.m_Play);
+/* 0003a546 */	this.m_Text.SetZByBaseZ(0, 16777216);
+/* 0003a55e */}
+

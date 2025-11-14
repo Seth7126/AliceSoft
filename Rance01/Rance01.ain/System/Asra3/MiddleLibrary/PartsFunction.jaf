@@ -1,0 +1,388 @@
+void PARTS_SetDelegateIndex(int PartsNumber, int DelegateIndex)
+/* 000460be */{
+/* 000460be */	GUIEngine.SetDelegateIndex(PartsNumber, DelegateIndex);
+/* 000460d4 */}
+
+int PARTS_GetDelegateIndex(int PartsNumber)
+/* 000460e2 */{
+/* 000460e2 */	return GUIEngine.GetDelegateIndex(PartsNumber);
+/* 000460f4 */}
+
+void PARTS_ClearPartsUpdateEvent()
+/* 00046108 */{
+/* 00046108 */	g_ftPartsUpdateEvent.Free();
+/* 00046112 */	g_dgPartsUpdateEvent.Clear();
+/* 0004611a */}
+
+void PARTS_AddUpdateEvent(DG_PARTS_UpdateHandler DelegateObject)
+/* 00046128 */{
+/* 00046128 */	g_dgPartsUpdateEvent += DelegateObject;
+/* 0004613a */}
+
+void PARTS_EraseUpdateEvent(DG_PARTS_UpdateHandler DelegateObject)
+/* 00046148 */{
+/* 00046148 */	g_dgPartsUpdateEvent -= DelegateObject;
+/* 0004615a */}
+
+void PARTS_AddUpdateFunction(FT_PARTS_UpdateHandler FunctionObject)
+/* 00046168 */{
+/* 00046168 */	int FindIndex;
+/* 00046172 */	int Size;
+/* 00046172 */	for (Size = g_ftPartsUpdateEvent.Numof(); FindIndex < Size; ++FindIndex)
+/* 000461aa */	{
+/* 000461aa */		if (g_ftPartsUpdateEvent[FindIndex] == FunctionObject)
+/* 000461c6 */		{
+/* 000461c6 */			return;
+/* 000461c8 */		}
+/* 000461ce */	}
+/* 000461d4 */	g_ftPartsUpdateEvent.PushBack(FunctionObject);
+/* 000461e4 */}
+
+void PARTS_EraseUpdateFunction(FT_PARTS_UpdateHandler FunctionObject)
+/* 000461f2 */{
+/* 000461f2 */	int FindIndex;
+/* 000461fc */	int Size;
+/* 000461fc */	for (Size = g_ftPartsUpdateEvent.Numof(); FindIndex < Size; ++FindIndex)
+/* 00046234 */	{
+/* 00046234 */		if (g_ftPartsUpdateEvent[FindIndex] == FunctionObject)
+/* 00046250 */		{
+/* 00046250 */			break;
+/* 00046256 */		}
+/* 0004625c */	}
+/* 00046262 */	if (FindIndex == Size)
+/* 00046276 */	{
+/* 00046276 */		return;
+/* 00046278 */	}
+/* 0004627e */	g_ftPartsUpdateEvent.Erase(FindIndex);
+/* 00046290 */}
+
+void PARTS_CallUpdateEvent(int PassedTime)
+/* 0004629e */{
+/* 0004629e */	g_dgPartsUpdateEvent(PassedTime);
+/* 000462c0 */	int FindIndex;
+/* 000462ca */	int Size;
+/* 000462ca */	for (Size = g_ftPartsUpdateEvent.Numof(); FindIndex < Size; ++FindIndex)
+/* 00046302 */	{
+/* 00046302 */		if (g_ftPartsUpdateEvent[FindIndex] == NULL)
+/* 0004631e */		{
+/* 0004631e */			continue;
+/* 00046324 */		}
+/* 0004632a */		g_ftPartsUpdateEvent[FindIndex](PassedTime);
+/* 00046348 */	}
+/* 0004634e */}
+
+void PARTS_Init()
+/* 0004635c */{
+/* 0004635c */	g_PARTS_PrevTime = system.GetTime();
+/* 0004636e */	g_PARTS_Controller_PrevTime = system.GetTime();
+/* 00046380 */}
+
+void PARTS_Release(int PartsNumber)
+/* 0004638e */{
+/* 0004638e */	int DelegateIndex = PARTS_GetDelegateIndex(PartsNumber);
+/* 000463a6 */	GUIEngine.Release(PartsNumber);
+/* 000463b6 */	g_PartsMessageManager.ReleaseFunctionSet(DelegateIndex);
+/* 000463c8 */}
+
+int PARTS_GetFreeSystemPartsNumber()
+/* 000463d6 */{
+/* 000463d6 */	return GUIEngine.GetFreeNumber();
+/* 000463e2 */}
+
+void PARTS_Update(bool SpeedupByMessageSkip)
+/* 000463f6 */{
+/* 000463f6 */	int CurrentTime = system.GetTime();
+/* 00046408 */	int PassedTime = Math.Min(100, CurrentTime - g_PARTS_PrevTime);
+/* 00046432 */	g_PARTS_PrevTime = CurrentTime;
+/* 0004643c */	PARTS_CallUpdateEvent(PassedTime);
+/* 00046448 */	PARTS_UpdateLayer();
+/* 0004644e */	GUIEngine.UpdateComponent(PassedTime);
+/* 0004645e */	AFL_MouseWheel_ClearCount();
+/* 00046464 */	bool IsSkip = SpeedupByMessageSkip && (全文スキップ中確認() || 既読スキップ中確認());
+/* 000464c0 */	GUIEngine.UpdateParts(PassedTime, IsSkip, g_MessageWindowManager.IsShowAll());
+/* 000464e2 */}
+
+void PARTS_UpdateMessage()
+/* 000464f0 */{
+/* 000464f0 */	g_PartsMessageManager.Update();
+/* 000464fc */}
+
+void PARTS_UpdateLayer()
+/* 0004650a */{
+/* 0004650a */	int CurrentTime = system.GetTime();
+/* 0004651c */	int PassedTime = Math.Min(100, CurrentTime - g_PARTS_Controller_PrevTime);
+/* 00046546 */	g_PARTS_Controller_PrevTime = CurrentTime;
+/* 00046550 */	GUIEngine.UpdateInputState(PassedTime);
+/* 00046560 */}
+
+void PARTS_ReleaseAllPartsWithoutSystem()
+/* 0004656e */{
+/* 0004656e */	array@int DelegateIndexList;
+/* 00046578 */	GUIEngine.ReleaseAllWithoutSystem(DelegateIndexList);
+/* 00046588 */	g_PartsMessageManager.ReleaseFunctionSetList(DelegateIndexList);
+/* 0004659a */}
+
+void PARTS_PushLayer()
+/* 000465a8 */{
+/* 000465a8 */	GUIEngine.PushController();
+/* 000465b2 */}
+
+void PARTS_PopLayer()
+/* 000465c0 */{
+/* 000465c0 */	array@int DelegateIndexList;
+/* 000465ca */	GUIEngine.PopController(DelegateIndexList);
+/* 000465da */	g_PartsMessageManager.ReleaseFunctionSetList(DelegateIndexList);
+/* 000465ec */}
+
+void PARTS_BeginInput()
+/* 000465fa */{
+/* 000465fa */	GUIEngine.BeginInput();
+/* 00046604 */}
+
+void PARTS_EndInput()
+/* 00046612 */{
+/* 00046612 */	GUIEngine.EndInput();
+/* 0004661c */}
+
+int PARTS_GetClickPartsNumber()
+/* 0004662a */{
+/* 0004662a */	return GUIEngine.GetClickNumber();
+/* 00046636 */}
+
+int PARTS_WaitForClick(FTPARTS_WaitForClickCallback Func, bool キーキャンセル)
+/* 0004664a */{
+/* 0004664a */	PARTS_EndMotionFociby();
+/* 00046650 */	CASClick RButtonClick;
+/* 00046660 */	CASClick SpaceKeyClick;
+/* 00046670 */	RButtonClick.Init(2, true);
+/* 00046688 */	SpaceKeyClick.Init(32, true);
+/* 000466a0 */	int ClickPartsNumber;
+/* 000466aa */	g_EndPartsBusyLoop = false;
+/* 000466b4 */	PARTS_BeginInput();
+/* 000466ba */	for (; ; )
+/* 000466ba */	{
+/* 000466ba */		if (Func != NULL)
+/* 000466ce */		{
+/* 000466ce */			Func();
+/* 000466dc */		}
+/* 000466e2 */		AFL_View_Update(true);
+/* 000466ee */		if (キーキャンセル)
+/* 000466fa */		{
+/* 000466fa */			if (RButtonClick.IsClick(-2147483648))
+/* 00046712 */			{
+/* 00046712 */				break;
+/* 00046718 */			}
+/* 0004671e */			if (SpaceKeyClick.IsClick(-2147483648))
+/* 00046736 */			{
+/* 00046736 */				break;
+/* 0004673c */			}
+/* 00046742 */		}
+/* 00046748 */		ClickPartsNumber = PARTS_GetClickPartsNumber();
+/* 0004675a */		if (0 < ClickPartsNumber)
+/* 0004676e */		{
+/* 0004676e */			break;
+/* 00046774 */		}
+/* 0004677a */		if (g_EndPartsBusyLoop)
+/* 00046786 */		{
+/* 00046786 */			break;
+/* 0004678c */		}
+/* 00046792 */	}
+/* 00046798 */	PARTS_EndInput();
+/* 0004679e */	g_EndPartsBusyLoop = false;
+/* 000467a8 */	Ｐ＿クリックミス効果音設定(0);
+/* 000467b4 */	return ClickPartsNumber;
+/* 000467bc */}
+
+void PARTS_EndWaitForClick()
+/* 000467d0 */{
+/* 000467d0 */	g_EndPartsBusyLoop = true;
+/* 000467da */}
+
+void PARTS_StopSoundWithoutSystemsound()
+/* 000467e8 */{
+/* 000467e8 */	GUIEngine.StopSoundWithoutSystemSound();
+/* 000467f2 */}
+
+void PARTS_BeginMotion()
+/* 00046800 */{
+/* 00046800 */	GUIEngine.Parts_BeginMotion();
+/* 0004680a */	g_PARTS_MotionTimer.Reset();
+/* 00046816 */	g_PARTS_CurrentMotionTime = 0;
+/* 00046820 */	g_PARTS_PrevMotionTime = g_PARTS_MotionTimer.Get();
+/* 00046838 */	g_PARTS_PauseMotion = false;
+/* 00046842 */}
+
+void PARTS_UpdateMotion(bool 全文既読スキップ)
+/* 00046850 */{
+/* 00046850 */	int CurrentTime = g_PARTS_MotionTimer.Get();
+/* 00046868 */	int PassedTime = Math.Min(100, CurrentTime - g_PARTS_PrevMotionTime);
+/* 00046892 */	g_PARTS_PrevMotionTime = CurrentTime;
+/* 0004689c */	bool IsSkip = 全文既読スキップ && (全文スキップ中確認() || 既読スキップ中確認());
+/* 000468f8 */	if (g_PARTS_PauseMotion)
+/* 00046904 */	{
+/* 00046904 */		return;
+/* 00046906 */	}
+/* 0004690c */	GUIEngine.Parts_UpdateMotionTime(PassedTime, IsSkip);
+/* 00046922 */}
+
+bool PARTS_IsMotion()
+/* 00046930 */{
+/* 00046930 */	return GUIEngine.Parts_IsMotion();
+/* 0004693c */}
+
+void PARTS_PauseMotion()
+/* 00046950 */{
+/* 00046950 */	g_PARTS_PauseMotion = true;
+/* 0004695a */	GUIEngine.Parts_UpdateMotionTime(0, false);
+/* 00046970 */}
+
+void PARTS_PlayMotion()
+/* 0004697e */{
+/* 0004697e */	g_PARTS_PauseMotion = false;
+/* 00046988 */}
+
+void PARTS_EndMotionFociby()
+/* 00046996 */{
+/* 00046996 */	if (PARTS_IsMotion())
+/* 000469a2 */	{
+/* 000469a2 */		GUIEngine.Parts_SeekEndMotion();
+/* 000469ac */		AFL_View_Update(true);
+/* 000469b8 */	}
+/* 000469be */	GUIEngine.Parts_EndMotion();
+/* 000469c8 */	g_PARTS_PauseMotion = false;
+/* 000469d2 */}
+
+void PARTS_EndMotion()
+/* 000469e0 */{
+/* 000469e0 */	GUIEngine.Parts_EndMotion();
+/* 000469ea */	g_PARTS_PauseMotion = false;
+/* 000469f4 */}
+
+void PARTS_SetThumbnailReductionSize(int ReductionSize)
+/* 00046a02 */{
+/* 00046a02 */	GUIEngine.Parts_SetThumbnailReductionSize(ReductionSize);
+/* 00046a14 */}
+
+void PARTS_SetThumbnailMode(bool Mode)
+/* 00046a22 */{
+/* 00046a22 */	if (!GUIEngine.Parts_SetThumbnailMode(Mode))
+/* 00046a3a */	{
+/* 00046a3a */		system.Error("サムネイルモードの移行に失敗しました");
+/* 00046a48 */	}
+/* 00046a4e */}
+
+bool PARTS_Save(ref array@int SaveDataBuffer)
+/* 00046a5c */{
+/* 00046a5c */	return GUIEngine.Save(SaveDataBuffer);
+/* 00046a6e */}
+
+bool PARTS_SaveWithoutHideParts(ref array@int SaveDataBuffer)
+/* 00046a82 */{
+/* 00046a82 */	return GUIEngine.SaveWithoutHideParts(SaveDataBuffer);
+/* 00046a94 */}
+
+bool PARTS_Load(ref array@int SaveDataBuffer)
+/* 00046aa8 */{
+/* 00046aa8 */	return GUIEngine.Load(SaveDataBuffer);
+/* 00046aba */}
+
+void PARTS_Warning(string Text)
+/* 00046ace */{
+/* 00046ace */	system.Output("警告 : " + Text);
+/* 00046ae4 */}
+
+void PARTS_SetSpeedupRateByMessageSkip(int パーツ番号, int 倍率)
+/* 00046af2 */{
+/* 00046af2 */	GUIEngine.Parts_SetSpeedupRateByMessageSkip(パーツ番号, 倍率);
+/* 00046b08 */}
+
+int PARTS_GetSpeedupRateByMessageSkip(int パーツ番号)
+/* 00046b16 */{
+/* 00046b16 */	return GUIEngine.Parts_GetPartsSpeedupRateByMessageSkip(パーツ番号);
+/* 00046b28 */}
+
+void PARTS_TextParts_CalcSize(ref CASCharSpriteProperty Property, string Text, ref int Width, ref int Height, int CharSpace, int LineSpace)
+/* 00046b3c */{
+/* 00046b3c */	if (Text.Length() == 0)
+/* 00046b54 */	{
+/* 00046b54 */		Width = 0;
+/* 00046b64 */		Height = 0;
+/* 00046b74 */	}
+/* 00046b7a */	int FontWidth;
+/* 00046b84 */	int FontHeight = Property.GetPixelHeight();
+/* 00046b9c */	Width = 0;
+/* 00046bac */	Height = FontHeight;
+/* 00046bbc */	int Index;
+/* 00046bc6 */	int Size;
+/* 00046bc6 */	for (Size = Text.Length(); Index < Size; ++Index)
+/* 00046c02 */	{
+/* 00046c02 */		string TextPart = Text.GetPart(Index, 1);
+/* 00046c20 */		if (TextPart == "\n")
+/* 00046c30 */		{
+/* 00046c30 */			Height += FontHeight + LineSpace;
+/* 00046c48 */			Width = Width < FontWidth ? FontWidth : Width;
+/* 00046c7c */			FontWidth = 0;
+/* 00046c86 */			continue;
+/* 00046c8c */		}
+/* 00046c92 */		FontWidth += Property.GetFontWidth(TextPart) + CharSpace;
+/* 00046cb8 */	}
+/* 00046cbe */	Width = Width < FontWidth ? FontWidth : Width;
+/* 00046cf2 */	Height -= LineSpace;
+/* 00046d02 */	Width -= CharSpace;
+/* 00046d12 */}
+
+void PARTS_ReleaseMessage()
+/* 00046d20 */{
+/* 00046d20 */	GUIEngine.ReleaseMessage();
+/* 00046d2a */}
+
+void PARTS_PopMessage()
+/* 00046d38 */{
+/* 00046d38 */	GUIEngine.PopMessage();
+/* 00046d42 */}
+
+int PARTS_GetMessagePartsNumber()
+/* 00046d50 */{
+/* 00046d50 */	return GUIEngine.GetMessagePartsNumber();
+/* 00046d5c */}
+
+int PARTS_GetMessageDelegateIndex()
+/* 00046d70 */{
+/* 00046d70 */	return GUIEngine.GetMessageDelegateIndex();
+/* 00046d7c */}
+
+int PARTS_GetMessageType()
+/* 00046d90 */{
+/* 00046d90 */	return GUIEngine.GetMessageType();
+/* 00046d9c */}
+
+int PARTS_GetMessageVariableCount()
+/* 00046db0 */{
+/* 00046db0 */	return GUIEngine.GetMessageVariableCount();
+/* 00046dbc */}
+
+int PARTS_GetMessageVariableType(int MessageVariableIndex)
+/* 00046dd0 */{
+/* 00046dd0 */	return GUIEngine.GetMessageVariableType(MessageVariableIndex);
+/* 00046de2 */}
+
+int PARTS_GetMessageVariableInt(int MessageVariableIndex)
+/* 00046df6 */{
+/* 00046df6 */	return GUIEngine.GetMessageVariableInt(MessageVariableIndex);
+/* 00046e08 */}
+
+float PARTS_GetMessageVariableFloat(int MessageVariableIndex)
+/* 00046e1c */{
+/* 00046e1c */	return GUIEngine.GetMessageVariableFloat(MessageVariableIndex);
+/* 00046e2e */}
+
+bool PARTS_GetMessageVariableBool(int MessageVariableIndex)
+/* 00046e42 */{
+/* 00046e42 */	return GUIEngine.GetMessageVariableBool(MessageVariableIndex);
+/* 00046e54 */}
+
+void PARTS_GetMessageVariableString(int MessageVariableIndex, ref string String)
+/* 00046e68 */{
+/* 00046e68 */	GUIEngine.GetMessageVariableString(MessageVariableIndex, String);
+/* 00046e7e */}
+

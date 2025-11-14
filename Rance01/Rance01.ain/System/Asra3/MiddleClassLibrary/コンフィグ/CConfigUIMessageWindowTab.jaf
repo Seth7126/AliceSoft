@@ -1,0 +1,113 @@
+CConfigUIMessageWindowTab::CConfigUIMessageWindowTab()
+/* 0002f59e */{
+/* 0002f5a8 */}
+
+CConfigUIMessageWindowTab::~CConfigUIMessageWindowTab()
+/* 0002f5ae */{
+/* 0002f5b0 */}
+
+void CConfigUIMessageWindowTab::Create()
+/* 0002f5b6 */{
+/* 0002f5b6 */	this.CreateUI();
+/* 0002f5be */}
+
+void CConfigUIMessageWindowTab::Release()
+/* 0002f5c6 */{
+/* 0002f5c6 */	this.m_AlphaRateSlider.Release();
+/* 0002f5d2 */	this.m_MulColorSlider.Release();
+/* 0002f5de */	PARTS_Release(this.m_AlphaRateLabel);
+/* 0002f5ea */	PARTS_Release(this.m_MulColorLabel);
+/* 0002f5f6 */	PARTS_Release(this.m_BG);
+/* 0002f602 */	this.m_AlphaRateLabel = 0;
+/* 0002f60c */	this.m_MulColorLabel = 0;
+/* 0002f616 */	this.m_BG = 0;
+/* 0002f620 */}
+
+void CConfigUIMessageWindowTab::CreateUI()
+/* 0002f628 */{
+/* 0002f628 */	this.Release();
+/* 0002f630 */	this.CreateBG();
+/* 0002f638 */	this.CreateMulColor();
+/* 0002f640 */	this.CreateAlphaRate();
+/* 0002f648 */}
+
+void CConfigUIMessageWindowTab::CreateBG()
+/* 0002f650 */{
+/* 0002f650 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002f662 */	Ｐ＿ＣＧボックス＿Ｚ座標設定(this.m_BG, 5);
+/* 0002f674 */	Ｐ＿ＣＧボックス＿サイズ設定(this.m_BG, AFL_View_GetWidth(), AFL_View_GetHeight());
+/* 0002f68c */	Ｐ＿ＣＧボックス＿乗算色設定(this.m_BG, 150, 150, 150);
+/* 0002f6aa */}
+
+void CConfigUIMessageWindowTab::CreateMulColor()
+/* 0002f6b2 */{
+/* 0002f6b2 */	this.m_MulColorLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002f6c4 */	Ｐ＿ラベル＿座標設定(this.m_MulColorLabel, 50, 105);
+/* 0002f6dc */	Ｐ＿ラベル＿Ｚ座標設定(this.m_MulColorLabel, 100);
+/* 0002f6ee */	Ｐ＿ラベル＿テキスト設定(this.m_MulColorLabel, "メッセージウィンドウの明るさ");
+/* 0002f700 */	Ｐ＿ラベル＿フォント設定(this.m_MulColorLabel, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002f748 */	this.m_MulColorSlider.Create();
+/* 0002f754 */	this.m_MulColorSlider.SetButtonPos(800, 105);
+/* 0002f76c */	this.m_MulColorSlider.SetButtonZ(100);
+/* 0002f77e */	this.m_MulColorSlider.SetButtonSize(100, 30);
+/* 0002f796 */	this.m_MulColorSlider.SetButtonColor(150, 150, 150);
+/* 0002f7b4 */	this.m_MulColorSlider.SetButtonText("初期化");
+/* 0002f7c6 */	this.m_MulColorSlider.SetHScrollbarPos(380, 105);
+/* 0002f7de */	this.m_MulColorSlider.SetHScrollbarZ(100);
+/* 0002f7f0 */	this.m_MulColorSlider.SetHScrollbarWidth(400);
+/* 0002f802 */	this.m_MulColorSlider.SetHScrollbarHeight(30);
+/* 0002f814 */	this.m_MulColorSlider.SetHScrollbarLeftWidth(0);
+/* 0002f826 */	this.m_MulColorSlider.SetHScrollbarRightWidth(0);
+/* 0002f838 */	this.m_MulColorSlider.SetHScrollbarTotalSize(100);
+/* 0002f84a */	this.m_MulColorSlider.SetHScrollbarViewSize(0);
+/* 0002f85c */	this.m_MulColorSlider.SetRate(AFL_Config_GetMessageWindowMulColorRate());
+/* 0002f86e */	this.m_MulColorSlider.AddInitializeButtonClickEvent(this.ResetRateMulColor);
+/* 0002f884 */	this.m_MulColorSlider.AddChangeRateEvent(this.ChangedRateMulColor);
+/* 0002f89a */}
+
+void CConfigUIMessageWindowTab::CreateAlphaRate()
+/* 0002f8a2 */{
+/* 0002f8a2 */	this.m_AlphaRateLabel = PARTS_GetFreeSystemPartsNumber();
+/* 0002f8b4 */	Ｐ＿ラベル＿座標設定(this.m_AlphaRateLabel, 50, 180);
+/* 0002f8cc */	Ｐ＿ラベル＿Ｚ座標設定(this.m_AlphaRateLabel, 100);
+/* 0002f8de */	Ｐ＿ラベル＿テキスト設定(this.m_AlphaRateLabel, "メッセージウィンドウの透過率");
+/* 0002f8f0 */	Ｐ＿ラベル＿フォント設定(this.m_AlphaRateLabel, 0, 20, 255, 255, 255, 0.0, 1.0, 0, 0, 0);
+/* 0002f938 */	this.m_AlphaRateSlider.Create();
+/* 0002f944 */	this.m_AlphaRateSlider.SetButtonPos(800, 180);
+/* 0002f95c */	this.m_AlphaRateSlider.SetButtonZ(100);
+/* 0002f96e */	this.m_AlphaRateSlider.SetButtonSize(100, 30);
+/* 0002f986 */	this.m_AlphaRateSlider.SetButtonColor(150, 150, 150);
+/* 0002f9a4 */	this.m_AlphaRateSlider.SetButtonText("初期化");
+/* 0002f9b6 */	this.m_AlphaRateSlider.SetHScrollbarPos(380, 180);
+/* 0002f9ce */	this.m_AlphaRateSlider.SetHScrollbarZ(100);
+/* 0002f9e0 */	this.m_AlphaRateSlider.SetHScrollbarWidth(400);
+/* 0002f9f2 */	this.m_AlphaRateSlider.SetHScrollbarHeight(30);
+/* 0002fa04 */	this.m_AlphaRateSlider.SetHScrollbarLeftWidth(0);
+/* 0002fa16 */	this.m_AlphaRateSlider.SetHScrollbarRightWidth(0);
+/* 0002fa28 */	this.m_AlphaRateSlider.SetHScrollbarTotalSize(100);
+/* 0002fa3a */	this.m_AlphaRateSlider.SetHScrollbarViewSize(0);
+/* 0002fa4c */	this.m_AlphaRateSlider.SetRate(AFL_Config_GetMessageWindowAlphaRate());
+/* 0002fa5e */	this.m_AlphaRateSlider.AddInitializeButtonClickEvent(this.ResetRateAlphaRate);
+/* 0002fa74 */	this.m_AlphaRateSlider.AddChangeRateEvent(this.ChangedRateAlphaRate);
+/* 0002fa8a */}
+
+void CConfigUIMessageWindowTab::ResetRateMulColor(int Number, int MouseX, int MouseY)
+/* 0002fa92 */{
+/* 0002fa92 */	this.m_MulColorSlider.SetRate(1.0);
+/* 0002faa4 */}
+
+void CConfigUIMessageWindowTab::ResetRateAlphaRate(int Number, int MouseX, int MouseY)
+/* 0002faac */{
+/* 0002faac */	this.m_AlphaRateSlider.SetRate(1.0);
+/* 0002fabe */}
+
+void CConfigUIMessageWindowTab::ChangedRateMulColor(int Number)
+/* 0002fac6 */{
+/* 0002fac6 */	AFL_Config_SetMessageWindowMulColorRate(this.m_MulColorSlider.GetRate());
+/* 0002fad8 */}
+
+void CConfigUIMessageWindowTab::ChangedRateAlphaRate(int Number)
+/* 0002fae0 */{
+/* 0002fae0 */	AFL_Config_SetMessageWindowAlphaRate(this.m_AlphaRateSlider.GetRate());
+/* 0002faf2 */}
+

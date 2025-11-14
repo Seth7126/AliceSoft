@@ -1,0 +1,6 @@
+void AFL_GetTime(ref int Year, ref int Month, ref int Day, ref int Weak, ref int Hour, ref int Minute, ref int Second)
+/* 0005b03c */{
+/* 0005b03c */	SystemService.GetDate(Year, Month, Day, Weak);
+/* 0005b05e */	SystemService.GetTime(Hour, Minute, Second);
+/* 0005b07a */}
+

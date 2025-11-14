@@ -1,0 +1,177 @@
+CMessageWindowModel::CMessageWindowModel()
+/* 0001dcd6 */{
+/* 0001dcde */	this.m_InactiveWindowMultipleColor.Set(255, 255, 255, 255);
+/* 0001dd02 */	this.効果番号 = 1;
+/* 0001dd0c */	this.効果時間 = 200;
+/* 0001dd16 */	this.余白上 = 15;
+/* 0001dd20 */	this.余白右 = 10;
+/* 0001dd2a */	this.余白下 = 15;
+/* 0001dd34 */	this.余白左 = 10;
+/* 0001dd3e */	this.字間 = 0;
+/* 0001dd48 */	this.行間 = 3;
+/* 0001dd52 */	this.基準ＣＧ名 = "";
+/* 0001dd5e */	this.開始番号 = 0;
+/* 0001dd68 */	this.マーク枚数 = 0;
+/* 0001dd72 */	this.マーク速度 = 500;
+/* 0001dd7c */	this.マークＸ = 3;
+/* 0001dd86 */	this.マークＹ = 3;
+/* 0001dd90 */	this.マークＸフラグ = 1;
+/* 0001dd9a */	this.マークＹフラグ = 1;
+/* 0001dda4 */	this.フォント = 0;
+/* 0001ddae */	this.m_FontSize = 26;
+/* 0001ddb8 */	this._文字太さ = 400;
+/* 0001ddc2 */	this.文字Ｒ = 255;
+/* 0001ddcc */	this.文字Ｇ = 255;
+/* 0001ddd6 */	this.文字Ｂ = 255;
+/* 0001dde0 */	this.文字速度 = 23;
+/* 0001ddea */	this.文字配置 = 1;
+/* 0001ddf4 */	this.m_FontEdgeWeight = 0.0;
+/* 0001de06 */	this.飾Ｒ = 0;
+/* 0001de10 */	this.飾Ｇ = 0;
+/* 0001de1a */	this.飾Ｂ = 0;
+/* 0001de24 */	this.オートモードマーク＿ＣＧ基準名 = "";
+/* 0001de30 */	this.オートモードマーク＿フラット名 = "";
+/* 0001de3c */	this.オートモードマーク＿ＣＧ開始番号 = 0;
+/* 0001de46 */	this.オートモードマーク＿ＣＧ枚数 = 0;
+/* 0001de50 */	this.オートモードマーク＿Ｘ = 0;
+/* 0001de5a */	this.オートモードマーク＿Ｙ = 0;
+/* 0001de64 */	this.オートモードマーク＿Ｚ = 0;
+/* 0001de6e */	this.オートモードマーク＿ＣＧ切り替え時間 = 0;
+/* 0001de78 */	this.スキップモードマーク＿ＣＧ基準名 = "";
+/* 0001de84 */	this.スキップモードマーク＿フラット名 = "";
+/* 0001de90 */	this.スキップモードマーク＿ＣＧ開始番号 = 0;
+/* 0001de9a */	this.スキップモードマーク＿ＣＧ枚数 = 0;
+/* 0001dea4 */	this.スキップモードマーク＿Ｘ = 0;
+/* 0001deae */	this.スキップモードマーク＿Ｙ = 0;
+/* 0001deb8 */	this.スキップモードマーク＿Ｚ = 0;
+/* 0001dec2 */	this.スキップモードマーク＿ＣＧ切り替え時間 = 0;
+/* 0001decc */	this.m_X = 0;
+/* 0001ded6 */	this.m_Y = 0;
+/* 0001dee0 */	this.m_InitializePosX = false;
+/* 0001deea */	this.m_InitializePosY = false;
+/* 0001def4 */}
+
+void CMessageWindowModel::SetCGName(string CGName)
+/* 0001defc */{
+/* 0001defc */	if (this.m_CGName == CGName)
+/* 0001df0c */	{
+/* 0001df0c */		return;
+/* 0001df0e */	}
+/* 0001df14 */	if (!this.m_CGName.Empty())
+/* 0001df22 */	{
+/* 0001df22 */		SYS_WARNING("メッセージウィンドウのＣＧが書き換えられました %s -> %s" % this.m_CGName % CGName);
+/* 0001df4a */	}
+/* 0001df50 */	this.m_CGName = CGName;
+/* 0001df5a */	this.m_FlatFileName = "";
+/* 0001df66 */}
+
+void CMessageWindowModel::SetFlatFileName(string FlatFileName)
+/* 0001df6e */{
+/* 0001df6e */	if (this.m_FlatFileName == FlatFileName)
+/* 0001df7e */	{
+/* 0001df7e */		return;
+/* 0001df80 */	}
+/* 0001df86 */	if (this.m_FlatFileName != "")
+/* 0001df96 */	{
+/* 0001df96 */		SYS_WARNING("メッセージウィンドウのフラットファイル名が書き換えられました [%s] -> [%s]" % this.m_FlatFileName % FlatFileName);
+/* 0001dfbe */	}
+/* 0001dfc4 */	this.m_FlatFileName = FlatFileName;
+/* 0001dfce */	this.m_CGName = "";
+/* 0001dfda */}
+
+void CMessageWindowModel::SetX(int X)
+/* 0001dfe2 */{
+/* 0001dfe2 */	if (this.m_X == X)
+/* 0001dff0 */	{
+/* 0001dff0 */		return;
+/* 0001dff2 */	}
+/* 0001dff8 */	if (this.m_InitializePosX)
+/* 0001e002 */	{
+/* 0001e002 */		SYS_WARNING("メッセージウィンドウのＸ座標が書き換えられました %d -> %d" % this.m_X % X);
+/* 0001e02a */	}
+/* 0001e030 */	this.m_X = X;
+/* 0001e03a */	this.m_InitializePosX = true;
+/* 0001e044 */}
+
+void CMessageWindowModel::SetY(int Y)
+/* 0001e04c */{
+/* 0001e04c */	if (this.m_Y == Y)
+/* 0001e05a */	{
+/* 0001e05a */		return;
+/* 0001e05c */	}
+/* 0001e062 */	if (this.m_InitializePosY)
+/* 0001e06c */	{
+/* 0001e06c */		SYS_WARNING("メッセージウィンドウのＹ座標が書き換えられました %d -> %d" % this.m_Y % Y);
+/* 0001e094 */	}
+/* 0001e09a */	this.m_Y = Y;
+/* 0001e0a4 */	this.m_InitializePosY = true;
+/* 0001e0ae */}
+
+void CMessageWindowModel::SetFontSize(int FontSize)
+/* 0001e0b6 */{
+/* 0001e0b6 */	if (this.m_FontSize == FontSize)
+/* 0001e0c4 */	{
+/* 0001e0c4 */		return;
+/* 0001e0c6 */	}
+/* 0001e0cc */	if (this.m_FontSize != 26)
+/* 0001e0da */	{
+/* 0001e0da */		SYS_WARNING("メッセージウィンドウのフォントサイズが書き換えられました %d -> %d" % this.m_FontSize % FontSize);
+/* 0001e102 */	}
+/* 0001e108 */	this.m_FontSize = FontSize;
+/* 0001e112 */}
+
+string CMessageWindowModel::GetCGName()
+/* 0001e11a */{
+/* 0001e11a */	return this.m_CGName;
+/* 0001e122 */}
+
+string CMessageWindowModel::GetFlatFileName()
+/* 0001e130 */{
+/* 0001e130 */	return this.m_FlatFileName;
+/* 0001e138 */}
+
+int CMessageWindowModel::GetX()
+/* 0001e146 */{
+/* 0001e146 */	return this.m_X;
+/* 0001e14e */}
+
+int CMessageWindowModel::GetY()
+/* 0001e15c */{
+/* 0001e15c */	return this.m_Y;
+/* 0001e164 */}
+
+int CMessageWindowModel::GetFontSize()
+/* 0001e172 */{
+/* 0001e172 */	return this.m_FontSize;
+/* 0001e17a */}
+
+void CMessageWindowModel::SetEdgeWeight(float EdgeWeight)
+/* 0001e188 */{
+/* 0001e188 */	this.m_FontEdgeWeight = EdgeWeight;
+/* 0001e19a */}
+
+float CMessageWindowModel::GetEdgeWeight()
+/* 0001e1a2 */{
+/* 0001e1a2 */	return this.m_FontEdgeWeight;
+/* 0001e1aa */}
+
+void CMessageWindowModel::SetInactiveMultipleColor(CASColor Color)
+/* 0001e1b8 */{
+/* 0001e1b8 */	this.m_InactiveWindowMultipleColor = Color;
+/* 0001e1c8 */}
+
+CASColor CMessageWindowModel::GetInactiveMultipleColor()
+/* 0001e1d0 */{
+/* 0001e1d0 */	return this.m_InactiveWindowMultipleColor;
+/* 0001e1dc */}
+
+void CMessageWindowModel::SetKeyWaitMarkFlatName(string FlatName)
+/* 0001e1ea */{
+/* 0001e1ea */	this.m_KeyWaitMarkFlatName = FlatName;
+/* 0001e1f4 */}
+
+string CMessageWindowModel::GetKeyWaitMarkFlatName()
+/* 0001e1fc */{
+/* 0001e1fc */	return this.m_KeyWaitMarkFlatName;
+/* 0001e204 */}
+

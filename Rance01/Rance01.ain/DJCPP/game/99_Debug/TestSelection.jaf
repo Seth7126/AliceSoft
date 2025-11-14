@@ -1,0 +1,29 @@
+void TestSelection::add(string name, FuncTestSelection func)
+/* 0008dd0a */{
+/* 0008dd0a */	this.name_.PushBack(name);
+/* 0008dd14 */	this.func_.PushBack(func);
+/* 0008dd24 */}
+
+void TestSelection::clear()
+/* 0008dd2c */{
+/* 0008dd2c */	this.name_.Free();
+/* 0008dd36 */	this.func_.Free();
+/* 0008dd40 */}
+
+bool TestSelection::select()
+/* 0008dd48 */{
+/* 0008dd48 */	int i;
+/* 0008dd52 */	for (i = 0; i < this.name_.Numof(); ++i)
+/* 0008dd82 */	{
+/* 0008dd82 */		選択肢(i, this.name_[i], 0);
+/* 0008dda2 */	}
+/* 0008dda8 */	選択肢(999, "戻る", 0);
+/* 0008ddc0 */	int n = テスト選択();
+/* 0008ddd2 */	if (n >= 0 && n < this.name_.Numof())
+/* 0008de0c */	{
+/* 0008de0c */		this.func_[n]();
+/* 0008de22 */		return true;
+/* 0008de2a */	}
+/* 0008de30 */	return false;
+/* 0008de38 */}
+

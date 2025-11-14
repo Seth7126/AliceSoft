@@ -1,0 +1,776 @@
+float AFL_Config_GetMessageSpeedRate()
+/* 000582dc */{
+/* 000582dc */	return g_fMessageSpeedRate;
+/* 000582e4 */}
+
+void AFL_Config_SetMessageSpeedRate(float Rate)
+/* 000582f8 */{
+/* 000582f8 */	if (Rate < 0.0)
+/* 0005830c */	{
+/* 0005830c */		Rate = 0.0;
+/* 0005831e */	}
+/* 00058324 */	else if (Rate > 1.0)
+/* 00058338 */	{
+/* 00058338 */		Rate = 1.0;
+/* 0005834a */	}
+/* 00058350 */	g_fMessageSpeedRate = Rate;
+/* 00058362 */}
+
+void AFL_Config_ResetMessageSpeedRate()
+/* 00058370 */{
+/* 00058370 */	g_fMessageSpeedRate = 0.5;
+/* 00058382 */}
+
+float AFL_Config_GetAutoModeWaitTimeRate()
+/* 00058390 */{
+/* 00058390 */	return g_fAutoModeWaitTimeRate;
+/* 00058398 */}
+
+void AFL_Config_SetAutoModeWaitTimeRate(float Rate)
+/* 000583ac */{
+/* 000583ac */	if (Rate < 0.0)
+/* 000583c0 */	{
+/* 000583c0 */		Rate = 0.0;
+/* 000583d2 */	}
+/* 000583d8 */	else if (Rate > 1.0)
+/* 000583ec */	{
+/* 000583ec */		Rate = 1.0;
+/* 000583fe */	}
+/* 00058404 */	g_fAutoModeWaitTimeRate = Rate;
+/* 00058416 */}
+
+void AFL_Config_ResetAutoModeWaitTimeRate()
+/* 00058424 */{
+/* 00058424 */	g_fAutoModeWaitTimeRate = 0.5;
+/* 00058436 */}
+
+float AFL_Config_GetReadMessageSkipWaitTimeRate()
+/* 00058444 */{
+/* 00058444 */	return g_fReadMessageSkipWaitTimeRate;
+/* 0005844c */}
+
+void AFL_Config_SetReadMessageSkipWaitTimeRate(float Rate)
+/* 00058460 */{
+/* 00058460 */	if (Rate < 0.0)
+/* 00058474 */	{
+/* 00058474 */		Rate = 0.0;
+/* 00058486 */	}
+/* 0005848c */	else if (Rate > 1.0)
+/* 000584a0 */	{
+/* 000584a0 */		Rate = 1.0;
+/* 000584b2 */	}
+/* 000584b8 */	g_fReadMessageSkipWaitTimeRate = Rate;
+/* 000584ca */}
+
+void AFL_Config_ResetReadMessageSkipWaitTimeRate()
+/* 000584d8 */{
+/* 000584d8 */	g_fReadMessageSkipWaitTimeRate = 1.0;
+/* 000584ea */}
+
+float AFL_Config_GetAllMessageSkipWaitTimeRate()
+/* 000584f8 */{
+/* 000584f8 */	return AFL_Config_GetReadMessageSkipWaitTimeRate();
+/* 00058500 */}
+
+void AFL_Config_SetAllMessageSkipWaitTimeRate(float Rate)
+/* 00058514 */{
+/* 00058514 */	AFL_Config_SetReadMessageSkipWaitTimeRate(Rate);
+/* 00058520 */}
+
+void AFL_Config_ResetAllMessageSkipWaitTimeRate()
+/* 0005852e */{
+/* 0005852e */	AFL_Config_ResetReadMessageSkipWaitTimeRate();
+/* 00058534 */}
+
+bool AFL_Config_GetRestrainScreensaverWhileAutoMode()
+/* 00058542 */{
+/* 00058542 */	return g_bRestrainScreensaverWhileAutoMode;
+/* 0005854a */}
+
+void AFL_Config_SetRestrainScreensaverWhileAutoMode(bool Flag)
+/* 0005855e */{
+/* 0005855e */	g_bRestrainScreensaverWhileAutoMode = Flag;
+/* 00058568 */}
+
+bool AFL_Config_GetFrameSkipWhileMessageSkip()
+/* 00058576 */{
+/* 00058576 */	return g_bConfigIsSpeedupForFrameSkip;
+/* 0005857e */}
+
+void AFL_Config_SetFrameSkipWhileMessageSkip(bool Flag)
+/* 00058592 */{
+/* 00058592 */	g_bConfigIsSpeedupForFrameSkip = Flag;
+/* 0005859c */	ChipmunkSpriteEngine.SYSTEM_SetConfigFrameSkipWhileMessageSkip(g_bConfigIsSpeedupForFrameSkip);
+/* 000585ac */}
+
+bool AFL_Config_GetReleaseSkipModeByClick()
+/* 000585ba */{
+/* 000585ba */	return g_bConfigReleaseSkipModeByClick;
+/* 000585c2 */}
+
+void AFL_Config_SetReleaseSkipModeByClick(bool Flag)
+/* 000585d6 */{
+/* 000585d6 */	g_bConfigReleaseSkipModeByClick = Flag;
+/* 000585e0 */}
+
+bool AFL_Config_GetReleaseSkipModeByReadMessage()
+/* 000585ee */{
+/* 000585ee */	return g_bConfigReleaseSkipModeByReadMessage;
+/* 000585f6 */}
+
+void AFL_Config_SetReleaseSkipModeByReadMessage(bool Flag)
+/* 0005860a */{
+/* 0005860a */	g_bConfigReleaseSkipModeByReadMessage = Flag;
+/* 00058614 */}
+
+bool AFL_Config_GetReleaseAutoModeByClick()
+/* 00058622 */{
+/* 00058622 */	return g_bConfigReleaseAutoModeByClick;
+/* 0005862a */}
+
+void AFL_Config_SetReleaseAutoModeByClick(bool Flag)
+/* 0005863e */{
+/* 0005863e */	g_bConfigReleaseAutoModeByClick = Flag;
+/* 00058648 */}
+
+void AFL_Config_SetSkipAllMessage(bool 許可)
+/* 00058656 */{
+/* 00058656 */	g_ConfigSkipAllMessage = 許可;
+/* 00058660 */}
+
+bool AFL_Config_GetSkipAllMessage()
+/* 0005866e */{
+/* 0005866e */	return g_ConfigSkipAllMessage;
+/* 00058676 */}
+
+bool AFL_Config_GetReleaseMessageSkipInSelectMenu()
+/* 0005868a */{
+/* 0005868a */	return g_ReleaseMessageSkipInSelectMenu;
+/* 00058692 */}
+
+void AFL_Config_SetReleaseMessageSkipInSelectMenu(bool Flag)
+/* 000586a6 */{
+/* 000586a6 */	g_ReleaseMessageSkipInSelectMenu = Flag;
+/* 000586b0 */}
+
+bool AFL_Config_GetReleaseAutoModeInSelectMenu()
+/* 000586be */{
+/* 000586be */	return g_ReleaseAutoModeInSelectMenu;
+/* 000586c6 */}
+
+void AFL_Config_SetReleaseAutoModeInSelectMenu(bool Flag)
+/* 000586da */{
+/* 000586da */	g_ReleaseAutoModeInSelectMenu = Flag;
+/* 000586e4 */}
+
+bool AFL_Config_GetShowSampleMessage()
+/* 000586f2 */{
+/* 000586f2 */	return g_ShowSampleMessage;
+/* 000586fa */}
+
+void AFL_Config_SetShowSampleMessage(bool Flag)
+/* 0005870e */{
+/* 0005870e */	g_ShowSampleMessage = Flag;
+/* 00058718 */}
+
+string AFL_Config_GetSampleMessageTextByElapsedTime(int MilliSecond)
+/* 00058726 */{
+/* 00058726 */	string l_SampleMessageText = "これはサンプルメッセージです。";
+/* 00058732 */	int TimePerOneChar = g_MessageWindowModelManager.GetMessageWindow(1).文字速度 * SYS_メッセージ速度比率();
+/* 00058776 */	if (TimePerOneChar <= 0)
+/* 00058784 */	{
+/* 00058784 */		return l_SampleMessageText;
+/* 0005878c */	}
+/* 00058792 */	int TotalTime = l_SampleMessageText.Length() * TimePerOneChar + SYS_オートモード待機時間計算(l_SampleMessageText.Length());
+/* 000587c2 */	MilliSecond %= TotalTime;
+/* 000587d4 */	int TextLength = Math.Min(MilliSecond / TimePerOneChar, l_SampleMessageText.Length());
+/* 00058802 */	return l_SampleMessageText.GetPart(0, TextLength);
+/* 00058818 */}
+
+bool AFL_Config_IsAnimateMessageWindow()
+/* 0005882c */{
+/* 0005882c */	return g_AnimateMessageWindow;
+/* 00058834 */}
+
+void AFL_Config_SetAnimateMessageWindow(bool AnimateMessageWindow)
+/* 00058848 */{
+/* 00058848 */	g_AnimateMessageWindow = AnimateMessageWindow;
+/* 00058852 */}
+
+bool AFL_Config_ChangesReadTextColor()
+/* 00058860 */{
+/* 00058860 */	return g_既読メッセージ色番号 != -1;
+/* 00058872 */}
+
+void AFL_Config_SetReadTextColorIndex(int Index)
+/* 00058886 */{
+/* 00058886 */	Index = Math.Max(Index, -1);
+/* 000588a8 */	Index = Math.Min(Index, 11);
+/* 000588ca */	g_既読メッセージ色番号 = Index;
+/* 000588d4 */}
+
+int AFL_Config_GetReadTextColorIndex()
+/* 000588e2 */{
+/* 000588e2 */	return g_既読メッセージ色番号;
+/* 000588ea */}
+
+void AFL_Config_GetReadTextColor(int Index, ref int Red, ref int Green, ref int Blue)
+/* 000588fe */{
+/* 000588fe */	CASColor Color;
+/* 0005890e */	Color = CF_CASColor(255, 255, 255, 255);
+/* 0005893c */	switch (Index)
+/* 0005894e */	{
+/* 0005894e */	case 0:
+/* 0005894e */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 0, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 0, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 0, "青", 127), 255);
+/* 000589c4 */		break;
+/* 000589ca */	case 1:
+/* 000589ca */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 1, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 1, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 1, "青", 191), 255);
+/* 00058a40 */		break;
+/* 00058a46 */	case 2:
+/* 00058a46 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 2, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 2, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 2, "青", 255), 255);
+/* 00058abc */		break;
+/* 00058ac2 */	case 3:
+/* 00058ac2 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 3, "赤", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 3, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 3, "青", 255), 255);
+/* 00058b38 */		break;
+/* 00058b3e */	case 4:
+/* 00058b3e */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 4, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 4, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 4, "青", 255), 255);
+/* 00058bb4 */		break;
+/* 00058bba */	case 5:
+/* 00058bba */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 5, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 5, "緑", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 5, "青", 255), 255);
+/* 00058c30 */		break;
+/* 00058c36 */	case 6:
+/* 00058c36 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 6, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 6, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 6, "青", 255), 255);
+/* 00058cac */		break;
+/* 00058cb2 */	case 7:
+/* 00058cb2 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 7, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 7, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 7, "青", 191), 255);
+/* 00058d28 */		break;
+/* 00058d2e */	case 8:
+/* 00058d2e */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 8, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 8, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 8, "青", 127), 255);
+/* 00058da4 */		break;
+/* 00058daa */	case 9:
+/* 00058daa */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 9, "赤", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 9, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 9, "青", 127), 255);
+/* 00058e20 */		break;
+/* 00058e26 */	case 10:
+/* 00058e26 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 10, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 10, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 10, "青", 127), 255);
+/* 00058e9c */		break;
+/* 00058ea2 */	case 11:
+/* 00058ea2 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 11, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 11, "緑", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 11, "青", 127), 255);
+/* 00058f18 */		break;
+/* 00058f1e */	}
+/* 00058f1e */	Red = Color.GetR();
+/* 00058f34 */	Green = Color.GetG();
+/* 00058f4a */	Blue = Color.GetB();
+/* 00058f60 */}
+
+bool AFL_Config_ChangesBackSceneTextColor()
+/* 00058f6e */{
+/* 00058f6e */	return g_バックシーンメッセージ色番号 != -1;
+/* 00058f80 */}
+
+void AFL_Config_SetBackSceneTextColorIndex(int Index)
+/* 00058f94 */{
+/* 00058f94 */	Index = Math.Max(Index, -1);
+/* 00058fb6 */	Index = Math.Min(Index, 11);
+/* 00058fd8 */	g_バックシーンメッセージ色番号 = Index;
+/* 00058fe2 */}
+
+int AFL_Config_GetBackSceneTextColorIndex()
+/* 00058ff0 */{
+/* 00058ff0 */	return g_バックシーンメッセージ色番号;
+/* 00058ff8 */}
+
+void AFL_Config_GetBackSceneTextColor(int Index, ref int Red, ref int Green, ref int Blue)
+/* 0005900c */{
+/* 0005900c */	CASColor Color;
+/* 0005901c */	Color = CF_CASColor(255, 255, 255, 255);
+/* 0005904a */	switch (Index)
+/* 0005905c */	{
+/* 0005905c */	case 0:
+/* 0005905c */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 0, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 0, "緑", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 0, "青", 127), 255);
+/* 000590d2 */		break;
+/* 000590d8 */	case 1:
+/* 000590d8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 1, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 1, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 1, "青", 127), 255);
+/* 0005914e */		break;
+/* 00059154 */	case 2:
+/* 00059154 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 2, "赤", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 2, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 2, "青", 127), 255);
+/* 000591ca */		break;
+/* 000591d0 */	case 3:
+/* 000591d0 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 3, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 3, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 3, "青", 127), 255);
+/* 00059246 */		break;
+/* 0005924c */	case 4:
+/* 0005924c */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 4, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 4, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 4, "青", 191), 255);
+/* 000592c2 */		break;
+/* 000592c8 */	case 5:
+/* 000592c8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 5, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 5, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 5, "青", 255), 255);
+/* 0005933e */		break;
+/* 00059344 */	case 6:
+/* 00059344 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 6, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 6, "緑", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 6, "青", 255), 255);
+/* 000593ba */		break;
+/* 000593c0 */	case 7:
+/* 000593c0 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 7, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 7, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 7, "青", 255), 255);
+/* 00059436 */		break;
+/* 0005943c */	case 8:
+/* 0005943c */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 8, "赤", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 8, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 8, "青", 255), 255);
+/* 000594b2 */		break;
+/* 000594b8 */	case 9:
+/* 000594b8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 9, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 9, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 9, "青", 255), 255);
+/* 0005952e */		break;
+/* 00059534 */	case 10:
+/* 00059534 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 10, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 10, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 10, "青", 191), 255);
+/* 000595aa */		break;
+/* 000595b0 */	case 11:
+/* 000595b0 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 11, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 11, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 11, "青", 127), 255);
+/* 00059626 */		break;
+/* 0005962c */	}
+/* 0005962c */	Red = Color.GetR();
+/* 00059642 */	Green = Color.GetG();
+/* 00059658 */	Blue = Color.GetB();
+/* 0005966e */}
+
+float AFL_Config_GetMessageWindowMulColorRate()
+/* 0005967c */{
+/* 0005967c */	return g_ConfigMessageWindowMulColorRate;
+/* 00059684 */}
+
+void AFL_Config_SetMessageWindowMulColorRate(float Rate)
+/* 00059698 */{
+/* 00059698 */	if (Rate < 0.0)
+/* 000596ac */	{
+/* 000596ac */		Rate = 0.0;
+/* 000596be */	}
+/* 000596c4 */	else if (1.0 < Rate)
+/* 000596d8 */	{
+/* 000596d8 */		Rate = 1.0;
+/* 000596ea */	}
+/* 000596f0 */	g_ConfigMessageWindowMulColorRate = Rate;
+/* 00059702 */}
+
+float AFL_Config_GetMessageWindowAlphaRate()
+/* 00059710 */{
+/* 00059710 */	return g_ConfigMessageWindowAlphaRate;
+/* 00059718 */}
+
+void AFL_Config_SetMessageWindowAlphaRate(float Rate)
+/* 0005972c */{
+/* 0005972c */	if (Rate < 0.0)
+/* 00059740 */	{
+/* 00059740 */		Rate = 0.0;
+/* 00059752 */	}
+/* 00059758 */	else if (1.0 < Rate)
+/* 0005976c */	{
+/* 0005976c */		Rate = 1.0;
+/* 0005977e */	}
+/* 00059784 */	g_ConfigMessageWindowAlphaRate = Rate;
+/* 00059796 */}
+
+bool AFL_Config_GetStopVoiceByStatus()
+/* 000597a4 */{
+/* 000597a4 */	return g_ConfigStopVoiceBySkipMessage;
+/* 000597ac */}
+
+void AFL_Config_SetStopVoiceByStatus(bool Flag)
+/* 000597c0 */{
+/* 000597c0 */	g_ConfigStopVoiceBySkipMessage = Flag;
+/* 000597ca */}
+
+int AFL_Config_GetVolume(int GroupNumber)
+/* 000597d8 */{
+/* 000597d8 */	int Volume;
+/* 000597e2 */	SystemService.GetMixerVolume(GroupNumber, Volume);
+/* 000597fc */	return Volume;
+/* 00059804 */}
+
+int AFL_Config_GetDefaultVolume(int GroupNumber)
+/* 00059818 */{
+/* 00059818 */	int Volume;
+/* 00059822 */	SystemService.GetMixerDefaultVolume(GroupNumber, Volume);
+/* 0005983c */	return Volume;
+/* 00059844 */}
+
+void AFL_Config_SetVolume(int GroupNumber, int Volume)
+/* 00059858 */{
+/* 00059858 */	if (Volume < 0)
+/* 00059866 */	{
+/* 00059866 */		Volume = 0;
+/* 00059870 */	}
+/* 00059876 */	else if (Volume > 100)
+/* 0005988a */	{
+/* 0005988a */		Volume = 100;
+/* 00059894 */	}
+/* 0005989a */	SystemService.SetMixerVolume(GroupNumber, Volume);
+/* 000598b2 */	int BackVoiceGroupNumber = EX_IA2Int("Ｅ＿ＳＥ背景音声関連付け", GroupNumber, "背景音声グループ番号", -1);
+/* 000598dc */	if (BackVoiceGroupNumber != -1)
+/* 000598f0 */	{
+/* 000598f0 */		SystemService.SetMixerVolume(BackVoiceGroupNumber, Volume);
+/* 00059908 */	}
+/* 0005990e */}
+
+bool AFL_Config_GetMute(int GroupNumber)
+/* 0005991c */{
+/* 0005991c */	bool Mute = false;
+/* 00059926 */	SystemService.GetMixerMute(GroupNumber, Mute);
+/* 00059940 */	return Mute;
+/* 00059948 */}
+
+void AFL_Config_SetMute(int GroupNumber, bool Mute)
+/* 0005995c */{
+/* 0005995c */	SystemService.SetMixerMute(GroupNumber, Mute);
+/* 00059974 */	int BackVoiceGroupNumber = EX_IA2Int("Ｅ＿ＳＥ背景音声関連付け", GroupNumber, "背景音声グループ番号", -1);
+/* 0005999e */	if (BackVoiceGroupNumber != -1)
+/* 000599b2 */	{
+/* 000599b2 */		SystemService.SetMixerMute(BackVoiceGroupNumber, Mute);
+/* 000599ca */	}
+/* 000599d0 */}
+
+bool AFL_Config_GetBGMFadeByVoice()
+/* 000599de */{
+/* 000599de */	return g_bConfigBGMFadeByVoice;
+/* 000599e6 */}
+
+void AFL_Config_SetBGMFadeByVoice(bool Flag)
+/* 000599fa */{
+/* 000599fa */	g_bConfigBGMFadeByVoice = Flag;
+/* 00059a04 */}
+
+bool AFL_Config_IsMuteByInactiveWindow()
+/* 00059a12 */{
+/* 00059a12 */	return !g_ConfigSoundGlobalFocus;
+/* 00059a1e */}
+
+void AFL_Config_SetMuteByInactiveWindow(bool Mute)
+/* 00059a32 */{
+/* 00059a32 */	g_ConfigSoundGlobalFocus = !Mute;
+/* 00059a48 */	KiwiSoundEngine.SetGlobalFocus(g_ConfigSoundGlobalFocus);
+/* 00059a58 */}
+
+bool AFL_Config_GetHideUnmoveMouseCursor()
+/* 00059a66 */{
+/* 00059a66 */	int HideUnmoveMouseCursor;
+/* 00059a70 */	SystemService.GetMouseCursorConfig(0, HideUnmoveMouseCursor);
+/* 00059a8a */	return HideUnmoveMouseCursor != 0;
+/* 00059a9c */}
+
+void AFL_Config_SetHideUnmoveMouseCursor(bool Flag)
+/* 00059ab0 */{
+/* 00059ab0 */	SystemService.SetMouseCursorConfig(0, Flag ? 1 : 0);
+/* 00059ae0 */}
+
+bool AFL_Config_GetHideKeyOrJoypadInputMouseCursor()
+/* 00059aee */{
+/* 00059aee */	int HideUnmoveMouseCursor;
+/* 00059af8 */	SystemService.GetMouseCursorConfig(1, HideUnmoveMouseCursor);
+/* 00059b12 */	return HideUnmoveMouseCursor != 0;
+/* 00059b24 */}
+
+void AFL_Config_SetHideKeyOrJoypadInputMouseCursor(bool Flag)
+/* 00059b38 */{
+/* 00059b38 */	SystemService.SetMouseCursorConfig(1, Flag ? 1 : 0);
+/* 00059b68 */}
+
+bool AFL_Config_GetHideStepMessageMouseCursor()
+/* 00059b76 */{
+/* 00059b76 */	int HideUnmoveMouseCursor;
+/* 00059b80 */	SystemService.GetMouseCursorConfig(2, HideUnmoveMouseCursor);
+/* 00059b9a */	return HideUnmoveMouseCursor != 0;
+/* 00059bac */}
+
+void AFL_Config_SetHideStepMessageMouseCursor(bool Flag)
+/* 00059bc0 */{
+/* 00059bc0 */	SystemService.SetMouseCursorConfig(2, Flag ? 1 : 0);
+/* 00059bf0 */}
+
+int AFL_Config_GetWheelForward()
+/* 00059bfe */{
+/* 00059bfe */	return g_nKeyConfigMouseWheelForward;
+/* 00059c06 */}
+
+void AFL_Config_SetWheelForward(int Type)
+/* 00059c1a */{
+/* 00059c1a */	if (Type != 0 && Type != 1)
+/* 00059c5a */	{
+/* 00059c5a */		return;
+/* 00059c5c */	}
+/* 00059c62 */	g_nKeyConfigMouseWheelForward = Type;
+/* 00059c6c */}
+
+bool AFL_Config_GetQuickSaveConfirm()
+/* 00059c7a */{
+/* 00059c7a */	return AFL_GetConfigQuickSaveConfirm();
+/* 00059c82 */}
+
+void AFL_Config_SetQuickSaveConfirm(bool Flag)
+/* 00059c96 */{
+/* 00059c96 */	g_ConfigQuickSaveConfirm = Flag;
+/* 00059ca0 */}
+
+bool AFL_Config_GetQuickLoadConfirm()
+/* 00059cae */{
+/* 00059cae */	return AFL_GetConfigQuickLoadConfirm();
+/* 00059cb6 */}
+
+void AFL_Config_SetQuickLoadConfirm(bool Flag)
+/* 00059cca */{
+/* 00059cca */	g_ConfigQuickLoadConfirm = Flag;
+/* 00059cd4 */}
+
+bool AFL_Config_GetSaveConfirm()
+/* 00059ce2 */{
+/* 00059ce2 */	return AFL_GetConfigSaveConfirm();
+/* 00059cea */}
+
+void AFL_Config_SetSaveConfirm(bool Flag)
+/* 00059cfe */{
+/* 00059cfe */	g_ConfigSaveConfirm = Flag;
+/* 00059d08 */}
+
+bool AFL_Config_GetLoadConfirm()
+/* 00059d16 */{
+/* 00059d16 */	return AFL_GetConfigLoadConfirm();
+/* 00059d1e */}
+
+void AFL_Config_SetLoadConfirm(bool Flag)
+/* 00059d32 */{
+/* 00059d32 */	g_ConfigLoadConfirm = Flag;
+/* 00059d3c */}
+
+void AFL_Config_SetMoveMouseCursorSpeed(int Speed)
+/* 00059d4a */{
+/* 00059d4a */	g_MoveMouseCursorSpeed = Speed;
+/* 00059d54 */}
+
+void AFL_Config_SetBackToTitleConfirm(bool Flag)
+/* 00059d62 */{
+/* 00059d62 */	SystemService.SetWindowSetting(5, Flag ? 1 : 0);
+/* 00059d92 */}
+
+bool AFL_Config_GetBackToTitleConfirm()
+/* 00059da0 */{
+/* 00059da0 */	int Setting = 1;
+/* 00059daa */	SystemService.GetWindowSetting(5, Setting);
+/* 00059dc4 */	return Setting != 0;
+/* 00059dd6 */}
+
+void AFL_Config_SetCloseGameConfirm(bool Flag)
+/* 00059dea */{
+/* 00059dea */	SystemService.SetWindowSetting(6, Flag ? 1 : 0);
+/* 00059e1a */}
+
+bool AFL_Config_GetCloseGameConfirm()
+/* 00059e28 */{
+/* 00059e28 */	int Setting = 1;
+/* 00059e32 */	SystemService.GetWindowSetting(6, Setting);
+/* 00059e4c */	return Setting != 0;
+/* 00059e5e */}
+
+int AFL_Config_GetMoveMouseCursorSpeed()
+/* 00059e72 */{
+/* 00059e72 */	return g_MoveMouseCursorSpeed;
+/* 00059e7a */}
+
+bool AFL_Config_GetWindowMode()
+/* 00059e8e */{
+/* 00059e8e */	return !SystemService.IsFullScreen();
+/* 00059e9e */}
+
+void AFL_Config_SetWindowMode(bool WindowMode)
+/* 00059eb2 */{
+/* 00059eb2 */	if (WindowMode)
+/* 00059ebe */	{
+/* 00059ebe */		if (!SystemService.IsFullScreen())
+/* 00059ed0 */		{
+/* 00059ed0 */			return;
+/* 00059ed2 */		}
+/* 00059ed8 */		SystemService.ChangeNormalScreen();
+/* 00059ee4 */	}
+/* 00059eea */	else
+/* 00059eea */	{
+/* 00059eea */		if (SystemService.IsFullScreen())
+/* 00059efa */		{
+/* 00059efa */			return;
+/* 00059efc */		}
+/* 00059f02 */		SystemService.ChangeFullScreen();
+/* 00059f0e */	}
+/* 00059f0e */}
+
+int AFL_Config_GetAspectRatio()
+/* 00059f1c */{
+/* 00059f1c */	int AspectRatio;
+/* 00059f26 */	SystemService.GetWindowSetting(0, AspectRatio);
+/* 00059f40 */	return AspectRatio;
+/* 00059f48 */}
+
+void AFL_Config_SetAspectRatio(int Type)
+/* 00059f5c */{
+/* 00059f5c */	if (Type != 0 && Type != 1)
+/* 00059f9c */	{
+/* 00059f9c */		return;
+/* 00059f9e */	}
+/* 00059fa4 */	SystemService.SetWindowSetting(0, Type);
+/* 00059fbc */}
+
+int AFL_Config_GetScalingType()
+/* 00059fca */{
+/* 00059fca */	int ScalingMode;
+/* 00059fd4 */	SystemService.GetWindowSetting(1, ScalingMode);
+/* 00059fee */	return ScalingMode;
+/* 00059ff6 */}
+
+void AFL_Config_SetScalingType(int Type)
+/* 0005a00a */{
+/* 0005a00a */	if (Type != 0 && Type != 1)
+/* 0005a04a */	{
+/* 0005a04a */		return;
+/* 0005a04c */	}
+/* 0005a052 */	SystemService.SetWindowSetting(1, Type);
+/* 0005a06a */}
+
+bool AFL_Config_GetWaitVSync()
+/* 0005a078 */{
+/* 0005a078 */	int WaitVSync;
+/* 0005a082 */	SystemService.GetWindowSetting(2, WaitVSync);
+/* 0005a09c */	return WaitVSync != 0;
+/* 0005a0ae */}
+
+void AFL_Config_SetWaitVSync(bool Flag)
+/* 0005a0c2 */{
+/* 0005a0c2 */	SystemService.SetWindowSetting(2, Flag ? 1 : 0);
+/* 0005a0f2 */}
+
+bool AFL_Config_GetRecordPosSize()
+/* 0005a100 */{
+/* 0005a100 */	int RecordPosSize;
+/* 0005a10a */	SystemService.GetWindowSetting(3, RecordPosSize);
+/* 0005a124 */	return RecordPosSize != 0;
+/* 0005a136 */}
+
+void AFL_Config_SetRecordPosSize(bool Flag)
+/* 0005a14a */{
+/* 0005a14a */	SystemService.SetWindowSetting(3, Flag ? 1 : 0);
+/* 0005a17a */}
+
+bool AFL_Config_GetMinimizeByFullScreenInactive()
+/* 0005a188 */{
+/* 0005a188 */	int MinimizeByFullScreenInactive;
+/* 0005a192 */	SystemService.GetWindowSetting(4, MinimizeByFullScreenInactive);
+/* 0005a1ac */	return MinimizeByFullScreenInactive != 0;
+/* 0005a1be */}
+
+void AFL_Config_SetMinimizeByFullScreenInactive(bool Flag)
+/* 0005a1d2 */{
+/* 0005a1d2 */	SystemService.SetWindowSetting(4, Flag ? 1 : 0);
+/* 0005a202 */}
+
+bool AFL_Config_GetSleepByInactive()
+/* 0005a210 */{
+/* 0005a210 */	return ChipmunkSpriteEngine.SYSTEM_GetConfigSleepByInactiveWindow();
+/* 0005a21c */}
+
+void AFL_Config_SetSleepByInactive(bool Flag)
+/* 0005a230 */{
+/* 0005a230 */	ChipmunkSpriteEngine.SYSTEM_SetConfigSleepByInactiveWindow(Flag);
+/* 0005a240 */	g_bSleepByInactiveWindow = Flag;
+/* 0005a24a */}
+
+bool AFL_Config_GetOverFrameRateSleep()
+/* 0005a258 */{
+/* 0005a258 */	return ChipmunkSpriteEngine.SYSTEM_GetConfigOverFrameRateSleep();
+/* 0005a264 */}
+
+void AFL_Config_SetOverFrameRateSleep(bool Flag)
+/* 0005a278 */{
+/* 0005a278 */	ChipmunkSpriteEngine.SYSTEM_SetConfigOverFrameRateSleep(Flag);
+/* 0005a288 */	g_bConfigOverFrameRateSleep = Flag;
+/* 0005a292 */}
+
+void AFL_Config_InitMainWindowPosAndSize()
+/* 0005a2a0 */{
+/* 0005a2a0 */	SystemService.InitMainWindowPosAndSize();
+/* 0005a2ac */}
+
+void AFL_Config_Network_SetEnableConnection(bool EnableConnection)
+/* 0005a2ba */{
+/* 0005a2ba */	if (g_Network_EnableConnection == EnableConnection)
+/* 0005a2ce */	{
+/* 0005a2ce */		return;
+/* 0005a2d0 */	}
+/* 0005a2d6 */	g_Network_EnableConnection = EnableConnection;
+/* 0005a2e0 */	SYS_システム共通セーブ();
+/* 0005a2e6 */}
+
+bool AFL_Config_Network_GetEnableConnection()
+/* 0005a2f4 */{
+/* 0005a2f4 */	return g_Network_EnableConnection;
+/* 0005a2fc */}
+
+bool AFL_Config_GetShowFPS()
+/* 0005a310 */{
+/* 0005a310 */	return AFL_DebugFPS_GetShow();
+/* 0005a318 */}
+
+void AFL_Config_SetShowFPS(bool Flag)
+/* 0005a32c */{
+/* 0005a32c */	AFL_DebugFPS_SetShow(Flag);
+/* 0005a338 */}
+
+bool AFL_Config_GetDirect3DMode()
+/* 0005a346 */{
+/* 0005a346 */	return ChipmunkSpriteEngine.VIEW_GetMode() != 0;
+/* 0005a35c */}
+
+void AFL_Config_SetDirect3DMode(bool Flag)
+/* 0005a370 */{
+/* 0005a370 */	AFL_View_SetMode(Flag ? 1 : 0);
+/* 0005a396 */}
+
+bool AFL_Config_GetShowMemorySize()
+/* 0005a3a4 */{
+/* 0005a3a4 */	return g_DebugMemorySize.GetShow();
+/* 0005a3b2 */}
+
+void AFL_Config_SetShowMemorySize(bool Flag)
+/* 0005a3c6 */{
+/* 0005a3c6 */	g_DebugMemorySize.SetShow(Flag);
+/* 0005a3d8 */}
+
+bool AFL_Config_GetShowFillRate()
+/* 0005a3e6 */{
+/* 0005a3e6 */	return g_DebugFillRate.GetShow();
+/* 0005a3f4 */}
+
+void AFL_Config_SetShowFillRate(bool Flag)
+/* 0005a408 */{
+/* 0005a408 */	g_DebugFillRate.SetShow(Flag);
+/* 0005a41a */}
+
+bool AFL_Config_GetShowVideoMemorySize()
+/* 0005a428 */{
+/* 0005a428 */	return g_DebugVideoMemorySize.GetShow();
+/* 0005a436 */}
+
+void AFL_Config_SetShowVideoMemorySize(bool Flag)
+/* 0005a44a */{
+/* 0005a44a */	g_DebugVideoMemorySize.SetShow(Flag);
+/* 0005a45c */}
+
+string AFL_Config_GetHelpText(int Type, bool AddNewLine)
+/* 0005a46a */{
+/* 0005a46a */	string NewLineText = AddNewLine ? "\n" : "";
+/* 0005a492 */	string NewLineText2 = AddNewLine ? "\n\n" : "";
+/* 0005a4ba */	switch (Type)
+/* 0005a4cc */	{
+/* 0005a4cc */	case 0:
+/* 0005a4cc */		return "ゲーム画面の比率と同じでないディスプレイ" + NewLineText + "でも、フルスクリーン時に画面比率を維持" + NewLineText + "します。" + NewLineText2 + "この機能を使うにはDirect3Dが正常に" + NewLineText + "動作するビデオカードが必要です。";
+/* 0005a514 */	case 1:
+/* 0005a514 */		return "【フルスクリーン時の画面比率が標準の場合】" + NewLineText + "フルスクリーン時はディスプレイの拡大機能が" + NewLineText + "使用されます。ウィンドウモードの時は、" + NewLineText + "バイリニアフィルタリングが適用されます。" + NewLineText + "" + NewLineText + "【フルスクリーン時の画面比率が固定の場合】" + NewLineText + "バイリニアフィルタリングが適用されます。";
+/* 0005a57c */	case 2:
+/* 0005a57c */		return "「標準」よりもよりシャープで綺麗な画質に" + NewLineText + "なります。" + NewLineText2 + "フルスクリーン時の画面比率が固定の場合と、" + NewLineText + "ウィンドウモード時のみ、この機能が適用" + NewLineText + "されます。" + NewLineText2 + "使用するにはシェーダモデル３．０に" + NewLineText + "対応したビデオカードが必要です。";
+/* 0005a5e4 */	case 3:
+/* 0005a5e4 */		return "画面更新時に垂直同期を待つことで、画面の" + NewLineText + "ちらつきを抑えることができます。";
+/* 0005a5fc */	case 4:
+/* 0005a5fc */		return "オフにすることで、マルチディスプレイ環境" + NewLineText + "において、フルスクリーン時に他の" + NewLineText + "ディスプレイ上のウィンドウをアクティブに" + NewLineText + "した時に、ゲーム側のウィンドウが最小化" + NewLineText + "されないようにします。";
+/* 0005a644 */	case 5:
+/* 0005a644 */		return "画面更新頻度を適度に抑え、ＣＰＵ使用率を" + NewLineText + "下げます。" + NewLineText2 + "なお、自動的に動作クロックを下げる機能を" + NewLineText + "持つＣＰＵを使用している場合、タスク" + NewLineText + "マネージャ上でのＣＰＵ使用率の値が" + NewLineText + "下がらない場合があります。";
+/* 0005a69c */	}
+/* 0005a69c */	return "";
+/* 0005a6a4 */}
+

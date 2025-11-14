@@ -1,0 +1,147 @@
+void Ｐ＿横スクロールバー＿座標設定(int パーツ番号, int _Ｘ座標, int _Ｙ座標)
+/* 000534d6 */{
+/* 000534d6 */	GUIEngine.SetHScrollbarPos(パーツ番号, _Ｘ座標, _Ｙ座標);
+/* 000534f2 */}
+
+void Ｐ＿横スクロールバー＿Ｚ座標設定(int パーツ番号, int _Ｚ座標)
+/* 00053500 */{
+/* 00053500 */	GUIEngine.SetHScrollbarZ(パーツ番号, _Ｚ座標);
+/* 00053516 */}
+
+int Ｐ＿横スクロールバー＿Ｘ座標取得(int パーツ番号)
+/* 00053524 */{
+/* 00053524 */	return GUIEngine.GetHScrollbarX(パーツ番号);
+/* 00053536 */}
+
+int Ｐ＿横スクロールバー＿Ｙ座標取得(int パーツ番号)
+/* 0005354a */{
+/* 0005354a */	return GUIEngine.GetHScrollbarY(パーツ番号);
+/* 0005355c */}
+
+int Ｐ＿横スクロールバー＿Ｚ座標取得(int パーツ番号)
+/* 00053570 */{
+/* 00053570 */	return GUIEngine.GetHScrollbarZ(パーツ番号);
+/* 00053582 */}
+
+void Ｐ＿横スクロールバー＿表示設定(int パーツ番号, bool 表示)
+/* 00053596 */{
+/* 00053596 */	GUIEngine.SetHScrollbarShow(パーツ番号, 表示);
+/* 000535ac */}
+
+bool Ｐ＿横スクロールバー＿表示設定取得(int パーツ番号)
+/* 000535ba */{
+/* 000535ba */	return GUIEngine.IsHScrollbarShow(パーツ番号);
+/* 000535cc */}
+
+void Ｐ＿横スクロールバー＿オンカーソル効果音番号設定(int パーツ番号, int サウンド番号)
+/* 000535e0 */{
+/* 000535e0 */	GUIEngine.SetHScrollbarOnCursorSoundNumber(パーツ番号, サウンド番号);
+/* 000535f6 */}
+
+void Ｐ＿横スクロールバー＿クリック効果音番号設定(int パーツ番号, int サウンド番号)
+/* 00053604 */{
+/* 00053604 */	GUIEngine.SetHScrollbarClickSoundNumber(パーツ番号, サウンド番号);
+/* 0005361a */}
+
+int Ｐ＿横スクロールバー＿オンカーソル効果音番号取得(int パーツ番号)
+/* 00053628 */{
+/* 00053628 */	return GUIEngine.GetHScrollbarOnCursorSoundNumber(パーツ番号);
+/* 0005363a */}
+
+int Ｐ＿横スクロールバー＿クリック効果音番号取得(int パーツ番号)
+/* 0005364e */{
+/* 0005364e */	return GUIEngine.GetHScrollbarClickSoundNumber(パーツ番号);
+/* 00053660 */}
+
+void Ｐ＿横スクロールバー＿幅設定(int パーツ番号, int 幅)
+/* 00053674 */{
+/* 00053674 */	GUIEngine.SetHScrollbarWidth(パーツ番号, 幅);
+/* 0005368a */}
+
+void Ｐ＿横スクロールバー＿高さ設定(int パーツ番号, int 高さ)
+/* 00053698 */{
+/* 00053698 */	GUIEngine.SetHScrollbarHeight(パーツ番号, 高さ);
+/* 000536ae */}
+
+void Ｐ＿横スクロールバー＿左ボタン幅設定(int パーツ番号, int 幅)
+/* 000536bc */{
+/* 000536bc */	GUIEngine.SetHScrollbarLeftWidth(パーツ番号, 幅);
+/* 000536d2 */}
+
+void Ｐ＿横スクロールバー＿右ボタン幅設定(int パーツ番号, int 幅)
+/* 000536e0 */{
+/* 000536e0 */	GUIEngine.SetHScrollbarRightWidth(パーツ番号, 幅);
+/* 000536f6 */}
+
+int Ｐ＿横スクロールバー＿幅取得(int パーツ番号)
+/* 00053704 */{
+/* 00053704 */	return GUIEngine.GetHScrollbarWidth(パーツ番号);
+/* 00053716 */}
+
+int Ｐ＿横スクロールバー＿高さ取得(int パーツ番号)
+/* 0005372a */{
+/* 0005372a */	return GUIEngine.GetHScrollbarHeight(パーツ番号);
+/* 0005373c */}
+
+int Ｐ＿横スクロールバー＿左ボタン幅取得(int パーツ番号)
+/* 00053750 */{
+/* 00053750 */	return GUIEngine.GetHScrollbarLeftWidth(パーツ番号);
+/* 00053762 */}
+
+int Ｐ＿横スクロールバー＿右ボタン幅取得(int パーツ番号)
+/* 00053776 */{
+/* 00053776 */	return GUIEngine.GetHScrollbarRightWidth(パーツ番号);
+/* 00053788 */}
+
+void Ｐ＿横スクロールバー＿全体量設定(int パーツ番号, int 全体量)
+/* 0005379c */{
+/* 0005379c */	GUIEngine.SetHScrollbarTotalSize(パーツ番号, 全体量);
+/* 000537b2 */}
+
+void Ｐ＿横スクロールバー＿表示量設定(int パーツ番号, int 表示量)
+/* 000537c0 */{
+/* 000537c0 */	GUIEngine.SetHScrollbarViewSize(パーツ番号, 表示量);
+/* 000537d6 */}
+
+void Ｐ＿横スクロールバー＿スクロール位置設定(int パーツ番号, int 表示位置)
+/* 000537e4 */{
+/* 000537e4 */	GUIEngine.SetHScrollbarScrollPos(パーツ番号, 表示位置);
+/* 000537fa */}
+
+void Ｐ＿横スクロールバー＿ボタンクリック移動量設定(int パーツ番号, int 移動量)
+/* 00053808 */{
+/* 00053808 */	GUIEngine.SetHScrollbarMoveSizeByButton(パーツ番号, 移動量);
+/* 0005381e */}
+
+int Ｐ＿横スクロールバー＿全体量取得(int パーツ番号)
+/* 0005382c */{
+/* 0005382c */	return GUIEngine.GetHScrollbarTotalSize(パーツ番号);
+/* 0005383e */}
+
+int Ｐ＿横スクロールバー＿表示量取得(int パーツ番号)
+/* 00053852 */{
+/* 00053852 */	return GUIEngine.GetHScrollbarViewSize(パーツ番号);
+/* 00053864 */}
+
+int Ｐ＿横スクロールバー＿スクロール位置取得(int パーツ番号)
+/* 00053878 */{
+/* 00053878 */	return GUIEngine.GetHScrollbarScrollPos(パーツ番号);
+/* 0005388a */}
+
+int Ｐ＿横スクロールバー＿ボタンクリック移動量取得(int パーツ番号)
+/* 0005389e */{
+/* 0005389e */	return GUIEngine.GetHScrollbarMoveSizeByButton(パーツ番号);
+/* 000538b0 */}
+
+void Ｐ＿横スクロールバー＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 000538c4 */{
+/* 000538c4 */	GUIEngine.SetHScrollbarCGName(パーツ番号, ＣＧ名);
+/* 000538da */}
+
+string Ｐ＿横スクロールバー＿ＣＧ名取得(int パーツ番号)
+/* 000538e8 */{
+/* 000538e8 */	string Name;
+/* 000538f4 */	GUIEngine.GetHScrollbarCGName(パーツ番号, Name);
+/* 0005390a */	return Name;
+/* 00053912 */}
+

@@ -1,0 +1,30 @@
+int AFL_PlayTime_GetMinuteTime()
+/* 00058188 */{
+/* 00058188 */	return g_PlayMinuteTime;
+/* 00058190 */}
+
+void AFL_PlayTime_SetMinuteTime(int MinuteTime)
+/* 000581a4 */{
+/* 000581a4 */	g_PlayMinuteTime = MinuteTime;
+/* 000581ae */}
+
+void AFL_PlayTime_PauseCounter()
+/* 000581bc */{
+/* 000581bc */	g_PausePlayTimeCounter = true;
+/* 000581c6 */}
+
+void AFL_PlayTime_RestartCounter()
+/* 000581d4 */{
+/* 000581d4 */	g_PausePlayTimeCounter = false;
+/* 000581de */}
+
+bool AFL_PlayTime_IsPauseCounter()
+/* 000581ec */{
+/* 000581ec */	return g_PausePlayTimeCounter;
+/* 000581f4 */}
+
+int AFL_TotalPlayTime_GetMinuteTime()
+/* 00058208 */{
+/* 00058208 */	return SYS_TotalPlayTime_GetMinuteTime();
+/* 00058210 */}
+

@@ -1,0 +1,60 @@
+CModeCGView::CModeCGView()
+/* 0001f86c */{
+/* 0001f876 */}
+
+CModeCGView::~CModeCGView()
+/* 0001f87c */{
+/* 0001f87c */	this.Release();
+/* 0001f884 */}
+
+void CModeCGView::Create(CModeCGModel Info)
+/* 0001f88c */{
+/* 0001f88c */	bool IsEmptyCGName = Info.GetCG().Length() == 0;
+/* 0001f8b0 */	bool IsEmptyFlatName = Info.GetFlatName().Length() == 0;
+/* 0001f8d4 */	if (IsEmptyCGName == IsEmptyFlatName)
+/* 0001f8e8 */	{
+/* 0001f8e8 */		this.Release();
+/* 0001f8f0 */		return;
+/* 0001f8f2 */	}
+/* 0001f8f8 */	if (!this.m_ModeView.IsExist())
+/* 0001f90c */	{
+/* 0001f90c */		this.m_ModeView.Create();
+/* 0001f918 */	}
+/* 0001f91e */	if (!IsEmptyCGName)
+/* 0001f92c */	{
+/* 0001f92c */		if (this.m_Info.GetCG() != Info.GetCG() || this.m_Info.GetCGBeginNumber() != Info.GetCGBeginNumber() || this.m_Info.GetCGCount() != Info.GetCGCount() || this.m_Info.GetCGSwitchTime() != Info.GetCGSwitchTime())
+/* 0001f9f4 */		{
+/* 0001f9f4 */			if (Info.GetCGBeginNumber() == 0 && Info.GetCGCount() == 0 && Info.GetCGSwitchTime() == 0)
+/* 0001fa72 */			{
+/* 0001fa72 */				this.m_ModeView.SetCG(Info.GetCG(), 1);
+/* 0001fa90 */			}
+/* 0001fa96 */			else
+/* 0001fa96 */			{
+/* 0001fa96 */				this.m_ModeView.SetLoopCG(Info.GetCG(), Info.GetCGBeginNumber(), Info.GetCGCount(), Info.GetCGSwitchTime(), 1);
+/* 0001fad8 */			}
+/* 0001fad8 */		}
+/* 0001fade */	}
+/* 0001fae4 */	else
+/* 0001fae4 */	{
+/* 0001fae4 */		this.m_ModeView.SetFlat(Info.GetFlatName());
+/* 0001fafc */	}
+/* 0001fafc */	this.m_ModeView.SetPos(Info.GetX(), Info.GetY());
+/* 0001fb20 */	this.m_ModeView.SetZ(Info.GetZ());
+/* 0001fb38 */	Ｐ＿高速再生設定(this.m_ModeView.GetPartsNumber(), false);
+/* 0001fb50 */	this.m_Info = Info;
+/* 0001fb60 */}
+
+void CModeCGView::Release()
+/* 0001fb68 */{
+/* 0001fb68 */	this.m_ModeView.Release();
+/* 0001fb74 */}
+
+void CModeCGView::SetShow(bool Show)
+/* 0001fb7c */{
+/* 0001fb7c */	if (!this.m_ModeView.IsExist())
+/* 0001fb90 */	{
+/* 0001fb90 */		return;
+/* 0001fb92 */	}
+/* 0001fb98 */	this.m_ModeView.SetShow(Show);
+/* 0001fbaa */}
+

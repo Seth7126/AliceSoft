@@ -1,0 +1,41 @@
+Hallucination::Hallucination()
+/* 0006a6fa */{
+/* 0006a702 */	this.gameObjectId_ = g_gameObjectManager.addNonSleepObject(this.update);
+/* 0006a724 */	this.init();
+/* 0006a72c */}
+
+void Hallucination::init()
+/* 0006a734 */{
+/* 0006a734 */	this.initParts();
+/* 0006a73c */}
+
+void Hallucination::initParts()
+/* 0006a744 */{
+/* 0006a744 */	this.parts_[0].init("システム／幻覚", 0);
+/* 0006a764 */	createPartsGroup(this.parent_, this.parts_, 22000);
+/* 0006a77c */	this.parts_[0].setShow(true);
+/* 0006a796 */	this.parts_[0].setNonSleep(true);
+/* 0006a7b0 */	this.parent_.setNonSleep(true);
+/* 0006a7c2 */	this.setPos(-500, 0);
+/* 0006a7d6 */}
+
+void Hallucination::setPos(int x, int y)
+/* 0006a7de */{
+/* 0006a7de */	this.x_ = x;
+/* 0006a7e8 */	this.y_ = y;
+/* 0006a7f2 */	this.parent_.setPos(this.x_, this.y_, -2147483648);
+/* 0006a810 */}
+
+void Hallucination::getPos(ref int x, ref int y)
+/* 0006a818 */{
+/* 0006a818 */	x = this.x_;
+/* 0006a822 */	y = this.y_;
+/* 0006a82c */}
+
+void Hallucination::update()
+/* 0006a834 */{
+/* 0006a834 */	this.parent_.setShow(g_player.getBadCondition("COND01") > 0);
+/* 0006a85c */	int t = (this.timer_.getTime() * 360) / 2000;
+/* 0006a884 */	this.parent_.setPos(this.x_, this.y_ + Math.Sin(t) * 30.0, -2147483648);
+/* 0006a8c6 */}
+

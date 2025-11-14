@@ -1,0 +1,25 @@
+RepeatKeyState::RepeatKeyState()
+/* 0005be9c */{
+/* 0005bea4 */	this.pressedFrameCount_ = 0;
+/* 0005beae */	this.isPress_ = false;
+/* 0005beb8 */}
+
+bool RepeatKeyState::isPress()
+/* 0005bec0 */{
+/* 0005bec0 */	return this.isPress_;
+/* 0005bec8 */}
+
+void RepeatKeyState::update(bool newState)
+/* 0005bed6 */{
+/* 0005bed6 */	if (!newState)
+/* 0005bee4 */	{
+/* 0005bee4 */		this.pressedFrameCount_ = 0;
+/* 0005beee */		this.isPress_ = false;
+/* 0005bef8 */	}
+/* 0005befe */	else
+/* 0005befe */	{
+/* 0005befe */		this.isPress_ = this.pressedFrameCount_ == 0 || this.pressedFrameCount_ > 40 && this.pressedFrameCount_ % 6 == 0;
+/* 0005bf7a */		++this.pressedFrameCount_;
+/* 0005bf8a */	}
+/* 0005bf8a */}
+

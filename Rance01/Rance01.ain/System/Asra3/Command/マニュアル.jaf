@@ -1,0 +1,10 @@
+bool Ａ＿プレイングマニュアル存在確認()
+/* 0005706a */{
+/* 0005706a */	return SystemService.IsExistPlayingManual();
+/* 00057076 */}
+
+void Ａ＿プレイングマニュアル表示()
+/* 0005708a */{
+/* 0005708a */	SystemService.OpenPlayingManual();
+/* 00057094 */}
+

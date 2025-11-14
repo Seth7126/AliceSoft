@@ -1,0 +1,27 @@
+void AFL_SetShowMessageWindowCallbackFunc(FTShowMessageWindowCallback Func)
+/* 00057668 */{
+/* 00057668 */	if (Func == NULL)
+/* 00057676 */	{
+/* 00057676 */		return;
+/* 00057678 */	}
+/* 0005767e */	AFL_ClearShowMessageWindowCallbackFunc(Func);
+/* 0005768a */	g_ShowMessageWindowCallbackFuncList.PushBack(Func);
+/* 0005769a */}
+
+void AFL_ClearShowMessageWindowCallbackFunc(FTShowMessageWindowCallback Func)
+/* 000576a8 */{
+/* 000576a8 */	if (Func == NULL)
+/* 000576b6 */	{
+/* 000576b6 */		return;
+/* 000576b8 */	}
+/* 000576be */	int n;
+/* 000576c8 */	for (n = 0; n < g_ShowMessageWindowCallbackFuncList.Numof(); )
+/* 000576f2 */	{
+/* 000576f2 */		if (g_ShowMessageWindowCallbackFuncList[n] == Func)
+/* 0005770e */		{
+/* 0005770e */			g_ShowMessageWindowCallbackFuncList.Erase(n);
+/* 00057720 */			break;
+/* 00057726 */		}
+/* 0005772c */	}
+/* 00057732 */}
+

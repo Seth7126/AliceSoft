@@ -1,0 +1,31 @@
+void システムボタン(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ, string 通常ＣＧ名, string 選択ＣＧ名, string キーダウンＣＧ名, sys_btn_fnc_t 呼出コマンド, bool ピクセル判定)
+/* 0004937e */{
+/* 0004937e */	g_SystemButtonModelMap.SetButtonModel(Ｍ番号, 呼出コマンド, Ｘ, Ｙ, Ｚ, 通常ＣＧ名, 選択ＣＧ名, キーダウンＣＧ名, ピクセル判定);
+/* 000493c0 */}
+
+void システムボタン２(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, string 蓋ＣＧ名)
+/* 000493ce */{
+/* 000493ce */	g_SystemButtonModelMap.SetButtonModelForReminisceMode(Ｍ番号, 呼出コマンド, 蓋ＣＧ名);
+/* 000493ec */}
+
+void システムボタン選択不可ＣＧ設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, string CG)
+/* 000493fa */{
+/* 000493fa */	g_SystemButtonModelMap.SetDisableCG(Ｍ番号, 呼出コマンド, CG);
+/* 00049418 */}
+
+void システムボタン選択不可判定関数設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, FTIsEnableSystemButton 判定関数)
+/* 00049426 */{
+/* 00049426 */	g_SystemButtonModelMap.SetIsEnableSystemButtonFunc(Ｍ番号, 呼出コマンド, 判定関数);
+/* 00049444 */}
+
+void システムボタン可視矩形設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, int X, int Y, int Width, int Height)
+/* 00049452 */{
+/* 00049452 */	g_SystemButtonModelMap.SetVisibleRect(Ｍ番号, 呼出コマンド, CF_CASRect(X, Y, Width, Height));
+/* 00049488 */}
+
+void システムボタン効果音(int _click, int _cursor)
+/* 00049496 */{
+/* 00049496 */	_g_MsgKeyWait._SetSndClick(_click);
+/* 000494a8 */	_g_MsgKeyWait._SetSndCursor(_cursor);
+/* 000494ba */}
+

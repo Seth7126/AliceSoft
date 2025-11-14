@@ -1,0 +1,74 @@
+BattleChipDepository::BattleChipDepository()
+/* 000757f0 */{
+/* 000757f8 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 0007581a */}
+
+void BattleChipDepository::init()
+/* 00075822 */{
+/* 00075822 */	this.dep_ <- g_chipDepository[0];
+/* 00075846 */	this.chipView_.init(0, 2, true);
+/* 00075864 */	this.btnBetAll_.init("システム／ボタン／幅１２８", "全選択する", -1);
+/* 00075882 */	this.btnUnbetAll_.init("システム／ボタン／幅１２８", "全選択解除", -1);
+/* 000758a0 */	this.btnBetAll_.setPos(672, 516, -2147483648);
+/* 000758be */	this.btnUnbetAll_.setPos(816, 516, -2147483648);
+/* 000758dc */}
+
+void BattleChipDepository::update()
+/* 000758e4 */{
+/* 000758e4 */	if (this.btnBetAll_.isClick())
+/* 000758f6 */	{
+/* 000758f6 */		this.betAllChip();
+/* 000758fe */	}
+/* 00075904 */	if (this.btnUnbetAll_.isClick())
+/* 00075916 */	{
+/* 00075916 */		this.unbetAllChip();
+/* 0007591e */	}
+/* 00075924 */	this.checkChipBet();
+/* 0007592c */}
+
+void BattleChipDepository::checkChipBet()
+/* 00075934 */{
+/* 00075934 */	int n = this.chipView_.getClickedIndex();
+/* 0007594c */	if (n != -1)
+/* 00075960 */	{
+/* 00075960 */		ref ChipInstance inst = this.dep_.getInstance(n);
+/* 0007599c */		inst.setBet(!inst.isBet());
+/* 000759b8 */	}
+/* 000759ca */}
+
+void BattleChipDepository::betAllChip()
+/* 000759d2 */{
+/* 000759d2 */	int i;
+/* 000759dc */	for (i = 0; i < this.dep_.getCount(); ++i)
+/* 00075a12 */	{
+/* 00075a12 */		ref Chip chip = getChip(this.dep_.getInstance(i).getId());
+/* 00075a64 */		if (chip.getUseType() == 2 && chip.getUseSpan() >= 0)
+/* 00075ab0 */		{
+/* 00075ab0 */			this.dep_.getInstance(i).setBet(true);
+/* 00075adc */		}
+/* 00075ae8 */	}
+/* 00075b00 */}
+
+void BattleChipDepository::unbetAllChip()
+/* 00075b08 */{
+/* 00075b08 */	int i;
+/* 00075b12 */	for (i = 0; i < g_chipDepository[0].getCount(); ++i)
+/* 00075b50 */	{
+/* 00075b50 */		this.dep_.getInstance(i).setBet(false);
+/* 00075b7c */	}
+/* 00075b88 */}
+
+void BattleChipDepository::setOperatable(bool val)
+/* 00075b90 */{
+/* 00075b90 */	this.btnBetAll_.setEnable(val);
+/* 00075ba2 */	this.btnUnbetAll_.setEnable(val);
+/* 00075bb4 */	this.chipView_.setOperatable(val);
+/* 00075bc6 */}
+
+void BattleChipDepository::fadeIn(bool val)
+/* 00075bce */{
+/* 00075bce */	this.btnBetAll_.fadeIn(val);
+/* 00075be0 */	this.btnUnbetAll_.fadeIn(val);
+/* 00075bf2 */	this.chipView_.fadeIn(val);
+/* 00075c04 */}
+

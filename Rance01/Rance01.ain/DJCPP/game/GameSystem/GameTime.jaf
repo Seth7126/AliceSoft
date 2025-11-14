@@ -1,0 +1,71 @@
+GameTime::GameTime()
+/* 00091e82 */{
+/* 00091e8a */	this.day_ = 1;
+/* 00091e94 */	this.block_ = 0;
+/* 00091e9e */}
+
+int GameTime::getDay()
+/* 00091ea6 */{
+/* 00091ea6 */	return this.day_;
+/* 00091eae */}
+
+int GameTime::getBlock()
+/* 00091ebc */{
+/* 00091ebc */	return this.block_;
+/* 00091ec4 */}
+
+void GameTime::setForwardBlock()
+/* 00091ed2 */{
+/* 00091ed2 */	if (this.block_ + 1 < 9)
+/* 00091eee */	{
+/* 00091eee */		++this.block_;
+/* 00091efe */		this.handler_(0, this.block_);
+/* 00091f26 */	}
+/* 00091f2c */	else
+/* 00091f2c */	{
+/* 00091f2c */		++this.day_;
+/* 00091f3c */		this.block_ = 0;
+/* 00091f46 */		this.handler_(1, this.day_);
+/* 00091f6e */	}
+/* 00091f6e */}
+
+void GameTime::setForwardDay()
+/* 00091f76 */{
+/* 00091f76 */	++this.day_;
+/* 00091f86 */	this.block_ = 0;
+/* 00091f90 */	this.handler_(1, this.day_);
+/* 00091fb8 */}
+
+void GameTime::setDay(int val)
+/* 00091fc0 */{
+/* 00091fc0 */	this.day_ = val;
+/* 00091fca */	this.handler_(1, this.day_);
+/* 00091ff2 */}
+
+void GameTime::setBlock(int val)
+/* 00091ffa */{
+/* 00091ffa */	this.block_ = val;
+/* 00092004 */	this.handler_(0, this.block_);
+/* 0009202c */}
+
+string GameTime::getTimeText()
+/* 00092034 */{
+/* 00092034 */	switch (this.block_)
+/* 00092046 */	{
+/* 00092046 */	case 0:
+/* 00092046 */	case 1:
+/* 00092046 */	case 2:
+/* 00092046 */		return "朝";
+/* 0009204e */	case 3:
+/* 0009204e */	case 4:
+/* 0009204e */	case 5:
+/* 0009204e */		return "昼";
+/* 00092056 */	}
+/* 00092056 */	return "夜";
+/* 0009205e */}
+
+void GameTime::addEventHandler(DG_GameTimeEvent handler)
+/* 0009206c */{
+/* 0009206c */	this.handler_ += handler;
+/* 0009207e */}
+

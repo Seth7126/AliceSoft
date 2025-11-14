@@ -1,0 +1,44 @@
+void ShopChipInstance::setId(string val)
+/* 000904a2 */{
+/* 000904a2 */	this.id_ = val;
+/* 000904ac */}
+
+void ShopChipInstance::setDiscountPer(int val)
+/* 000904b4 */{
+/* 000904b4 */	this.discountPer_ = val;
+/* 000904be */}
+
+string ShopChipInstance::getId()
+/* 000904c6 */{
+/* 000904c6 */	return this.id_;
+/* 000904ce */}
+
+int ShopChipInstance::getDiscountPer()
+/* 000904dc */{
+/* 000904dc */	return this.discountPer_;
+/* 000904e4 */}
+
+int ShopChipInstance::getDiscountedPrice()
+/* 000904f2 */{
+/* 000904f2 */	int price = getChip(this.id_).getPrice();
+/* 0009051a */	return price - int((float(price) * float(this.discountPer_)) / 100.0);
+/* 00090540 */}
+
+int ShopChipInstance::getPrice()
+/* 0009054e */{
+/* 0009054e */	return getChip(this.id_).getPrice();
+/* 0009056c */}
+
+int ShopChipSortFunction(ref ShopChipInstance lhs, ref ShopChipInstance rhs)
+/* 0009057a */{
+/* 0009057a */	if (lhs.getId() < rhs.getId())
+/* 0009059a */	{
+/* 0009059a */		return -1;
+/* 000905a2 */	}
+/* 000905a8 */	if (lhs.getId() > rhs.getId())
+/* 000905c8 */	{
+/* 000905c8 */		return 1;
+/* 000905d0 */	}
+/* 000905d6 */	return 0;
+/* 000905de */}
+

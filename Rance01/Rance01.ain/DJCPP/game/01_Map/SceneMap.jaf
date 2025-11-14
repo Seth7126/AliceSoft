@@ -1,0 +1,268 @@
+SceneMap::SceneMap()
+/* 0006a8d4 */{
+/* 0006a8de */}
+
+void SceneMap::init(string mapId)
+/* 0006a8e4 */{
+/* 0006a8e4 */	this.id_ = mapId;
+/* 0006a8ee */	this.map_ <- getMap(this.id_);
+/* 0006a91a */}
+
+void SceneMap::initBg()
+/* 0006a922 */{
+/* 0006a922 */	this.partsBg_.init(this.map_.getImageName(this.getMapImageType()), 0);
+/* 0006a948 */	this.partsBg_.setPos(-50, -50, 1100);
+/* 0006a966 */}
+
+void SceneMap::initPlaceButton()
+/* 0006a96e */{
+/* 0006a96e */	array@string list;
+/* 0006a978 */	this.getAvailablePlaceIdList(list);
+/* 0006a986 */	this.placeBtn_.Alloc(list.Numof());
+/* 0006a9a6 */	int i;
+/* 0006a9b0 */	for (i = 0; i < this.placeBtn_.Numof(); ++i)
+/* 0006a9e0 */	{
+/* 0006a9e0 */		this.placeBtn_[i].init(list[i]);
+/* 0006aa02 */	}
+/* 0006aa08 */}
+
+void SceneMap::initStyledButton()
+/* 0006aa10 */{
+/* 0006aa10 */	this.btnOpenCamp_.init("システム／ボタン／幅２００", "キャンプを張る", -1);
+/* 0006aa2e */	this.btnSystemMenu_.init("システム／ボタン／幅２００", "システムメニュー", -1);
+/* 0006aa4c */	this.btnOpenCamp_.setPos(808, 716, -2147483648);
+/* 0006aa6a */	this.btnSystemMenu_.setPos(16, 716, -2147483648);
+/* 0006aa88 */}
+
+void SceneMap::run()
+/* 0006aa90 */{
+/* 0006aa90 */	this.callAdvOnMapStart();
+/* 0006aa98 */	ReleaseAutoAndSkip();
+/* 0006aa9e */	this.initBg();
+/* 0006aaa6 */	this.initPlaceButton();
+/* 0006aaae */	this.initStyledButton();
+/* 0006aab6 */	this.hpView_.init();
+/* 0006aac2 */	this.fadeInBg(true);
+/* 0006aad0 */	this.playMusic();
+/* 0006aad8 */	this.state_ = 1;
+/* 0006aae2 */}
+
+int SceneMap::getMapImageType()
+/* 0006aaea */{
+/* 0006aaea */	int b = g_gameTime.getBlock();
+/* 0006ab02 */	if (b >= 0 && b < 3)
+/* 0006ab36 */	{
+/* 0006ab36 */		return 0;
+/* 0006ab3e */	}
+/* 0006ab44 */	else if (b >= 3 && b < 6)
+/* 0006ab78 */	{
+/* 0006ab78 */		return 1;
+/* 0006ab80 */	}
+/* 0006ab86 */	return 2;
+/* 0006ab8e */}
+
+void SceneMap::getAvailablePlaceIdList(ref array@string list)
+/* 0006ab9c */{
+/* 0006ab9c */	list.Free();
+/* 0006aba6 */	int i;
+/* 0006abb0 */	for (i = 0; i < g_place.Numof(); ++i)
+/* 0006abe0 */	{
+/* 0006abe0 */		if (g_place[i].getMapId() == this.id_ && g_place[i].isVisible())
+/* 0006ac34 */		{
+/* 0006ac34 */			list.PushBack(g_place[i].getId());
+/* 0006ac52 */		}
+/* 0006ac58 */	}
+/* 0006ac5e */}
+
+int SceneMap::update()
+/* 0006ac66 */{
+/* 0006ac66 */	g_gameObjectManager.update();
+/* 0006ac72 */	switch (this.state_)
+/* 0006ac84 */	{
+/* 0006ac84 */	case 1:
+/* 0006ac84 */		if (!this.partsBg_.isMotion())
+/* 0006ac98 */		{
+/* 0006ac98 */			this.fadeInGameParts(true);
+/* 0006aca6 */			this.state_ = 3;
+/* 0006acb0 */		}
+/* 0006acb6 */		break;
+/* 0006acbc */	case 3:
+/* 0006acbc */		checkBackLogAndScene(false);
+/* 0006acc8 */		if (g_gameFlow.isSetNextScene())
+/* 0006acda */		{
+/* 0006acda */			return -1;
+/* 0006ace2 */		}
+/* 0006ace8 */		this.checkPlaceButtonClick();
+/* 0006acf0 */		this.checkOpenCamp();
+/* 0006acf8 */		this.checkOpenSystemMenu();
+/* 0006ad00 */		break;
+/* 0006ad06 */	case 2:
+/* 0006ad06 */		if (!this.btnOpenCamp_.isMotion())
+/* 0006ad1a */		{
+/* 0006ad1a */			OpenStatus(false);
+/* 0006ad26 */			this.btnOpenCamp_.fadeIn(true);
+/* 0006ad38 */			this.btnSystemMenu_.fadeIn(true);
+/* 0006ad4a */			this.state_ = 3;
+/* 0006ad54 */		}
+/* 0006ad5a */		break;
+/* 0006ad60 */	case 4:
+/* 0006ad60 */		if (!this.partsBg_.isMotion())
+/* 0006ad74 */		{
+/* 0006ad74 */			return -1;
+/* 0006ad7c */		}
+/* 0006ad82 */		break;
+/* 0006ad88 */	}
+/* 0006ad88 */	return 0;
+/* 0006ad90 */}
+
+string SceneMap::getSelectedPlaceId()
+/* 0006ad9e */{
+/* 0006ad9e */	return this.selectedPlaceId_;
+/* 0006ada6 */}
+
+int SceneMap::getClickedButton()
+/* 0006adb4 */{
+/* 0006adb4 */	int i;
+/* 0006adbe */	for (i = 0; i < this.placeBtn_.Numof(); ++i)
+/* 0006adee */	{
+/* 0006adee */		if (this.placeBtn_[i].isClick())
+/* 0006ae08 */		{
+/* 0006ae08 */			return i;
+/* 0006ae10 */		}
+/* 0006ae16 */	}
+/* 0006ae1c */	return -1;
+/* 0006ae24 */}
+
+void SceneMap::callAdvOnMapStart()
+/* 0006ae32 */{
+/* 0006ae32 */	string f = EX_String("マップコールバック", "");
+/* 0006ae4e */	FuncMapCallBack fn = f;
+/* 0006ae66 */	if (fn != NULL)
+/* 0006ae7a */	{
+/* 0006ae7a */		g_viewModeManager.set(true);
+/* 0006ae8c */		fn(this.id_);
+/* 0006aea2 */		g_viewModeManager.restore();
+/* 0006aeae */	}
+/* 0006aeb4 */	else
+/* 0006aeb4 */	{
+/* 0006aeb4 */		pass("マップコールバック[%s]が見つかりませんでした" % f);
+/* 0006aece */	}
+/* 0006aece */}
+
+void SceneMap::fadeButton(bool val)
+/* 0006aed6 */{
+/* 0006aed6 */	int i;
+/* 0006aee0 */	for (i = 0; i < this.placeBtn_.Numof(); ++i)
+/* 0006af10 */	{
+/* 0006af10 */		this.placeBtn_[i].fadeIn(val, i);
+/* 0006af30 */	}
+/* 0006af36 */	this.btnOpenCamp_.fadeIn(val);
+/* 0006af48 */	this.btnSystemMenu_.fadeIn(val);
+/* 0006af5a */	this.hpView_.fadeIn(val);
+/* 0006af6c */}
+
+void SceneMap::fadeInGameParts(bool val)
+/* 0006af74 */{
+/* 0006af74 */	this.fadeButton(val);
+/* 0006af82 */	this.gameTimeView_.fadeIn(val);
+/* 0006af94 */}
+
+void SceneMap::fadeInBg(bool val)
+/* 0006af9c */{
+/* 0006af9c */	this.partsBg_.setShow(true);
+/* 0006afae */	if (val)
+/* 0006afba */	{
+/* 0006afba */		MotionInfomation m;
+/* 0006afca */		m = getStandardMotion(0);
+/* 0006afe6 */		m.setTime(500, 0);
+/* 0006affe */		this.partsBg_.runMotion(m);
+/* 0006b018 */	}
+/* 0006b024 */	else
+/* 0006b024 */	{
+/* 0006b024 */		MotionInfomation m;
+/* 0006b034 */		m = getStandardMotion(1);
+/* 0006b050 */		m.setTime(500, 0);
+/* 0006b068 */		this.partsBg_.runMotion(m);
+/* 0006b082 */	}
+/* 0006b088 */}
+
+void SceneMap::checkOpenCamp()
+/* 0006b090 */{
+/* 0006b090 */	if (this.btnOpenCamp_.isClick())
+/* 0006b0a2 */	{
+/* 0006b0a2 */		this.state_ = 2;
+/* 0006b0ac */		this.btnOpenCamp_.fadeIn(false);
+/* 0006b0be */		this.btnSystemMenu_.fadeIn(false);
+/* 0006b0d0 */	}
+/* 0006b0d6 */}
+
+void SceneMap::checkOpenSystemMenu()
+/* 0006b0de */{
+/* 0006b0de */	if (this.btnSystemMenu_.isClick())
+/* 0006b0f0 */	{
+/* 0006b0f0 */		OpenSystemMenu(1);
+/* 0006b0fc */	}
+/* 0006b102 */}
+
+void SceneMap::playMusic()
+/* 0006b10a */{
+/* 0006b10a */	if (g_gameTime.getBlock() >= 6)
+/* 0006b124 */	{
+/* 0006b124 */		●音楽(6, -2147483648);
+/* 0006b136 */	}
+/* 0006b13c */	else
+/* 0006b13c */	{
+/* 0006b13c */		●音楽(1, -2147483648);
+/* 0006b14e */	}
+/* 0006b14e */}
+
+void SceneMap::checkPlaceButtonClick()
+/* 0006b156 */{
+/* 0006b156 */	int n = this.getClickedButton();
+/* 0006b16a */	if (n != -1)
+/* 0006b17e */	{
+/* 0006b17e */		this.selectedPlaceId_ = this.placeBtn_[n].getId();
+/* 0006b19c */		this.fadeInGameParts(false);
+/* 0006b1aa */		this.fadeInBg(false);
+/* 0006b1b8 */		this.state_ = 4;
+/* 0006b1c2 */	}
+/* 0006b1c8 */}
+
+void checkBackLogAndScene(bool isShowDepository)
+/* 0006b1d0 */{
+/* 0006b1d0 */	if (g_mouse.getWheel() > 0)
+/* 0006b1ea */	{
+/* 0006b1ea */		if (!isShowDepository || isShowDepository && g_mouse.getY() < 508)
+/* 0006b24e */		{
+/* 0006b24e */			if (AFL_Config_GetWheelForward() == 0)
+/* 0006b262 */			{
+/* 0006b262 */				Ｓ＿バックログ();
+/* 0006b268 */			}
+/* 0006b26e */			else
+/* 0006b26e */			{
+/* 0006b26e */				Ｓ＿バックシーン();
+/* 0006b274 */			}
+/* 0006b274 */		}
+/* 0006b27a */	}
+/* 0006b280 */	if (g_keyboard.isDown(36))
+/* 0006b298 */	{
+/* 0006b298 */		Ｓ＿バックシーン();
+/* 0006b29e */	}
+/* 0006b2a4 */	if (g_keyboard.isDown(33))
+/* 0006b2bc */	{
+/* 0006b2bc */		Ｓ＿バックログ();
+/* 0006b2c2 */	}
+/* 0006b2c8 */	if (g_keyboard.isDown(27))
+/* 0006b2e0 */	{
+/* 0006b2e0 */		Ｓ＿コンフィグ();
+/* 0006b2e6 */	}
+/* 0006b2ec */	if (g_keyboard.isPress(65))
+/* 0006b304 */	{
+/* 0006b304 */		Ｓ＿オート();
+/* 0006b30a */	}
+/* 0006b310 */	if (g_keyboard.isPress(83))
+/* 0006b328 */	{
+/* 0006b328 */		Ｓ＿既読スキップ();
+/* 0006b32e */	}
+/* 0006b334 */}
+

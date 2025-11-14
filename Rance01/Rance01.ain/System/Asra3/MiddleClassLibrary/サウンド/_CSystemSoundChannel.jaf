@@ -1,0 +1,58 @@
+_CSystemSoundChannel::_CSystemSoundChannel()
+/* 00037830 */{
+/* 00037838 */	this.m_chn = -2147483648;
+/* 00037842 */	this.m_snd = -2147483648;
+/* 0003784c */}
+
+void _CSystemSoundChannel::_SetChannel(int _ch)
+/* 00037854 */{
+/* 00037854 */	this.m_chn = _ch;
+/* 0003785e */}
+
+bool _CSystemSoundChannel::_Prepare(int _snd)
+/* 00037866 */{
+/* 00037866 */	if (this.m_chn == -2147483648)
+/* 00037874 */	{
+/* 00037874 */		return false;
+/* 0003787c */	}
+/* 00037882 */	if (!KiwiSoundEngine.Sound_Prepare(this.m_chn, _snd))
+/* 000378a0 */	{
+/* 000378a0 */		return false;
+/* 000378a8 */	}
+/* 000378ae */	this.m_snd = _snd;
+/* 000378b8 */	return true;
+/* 000378c0 */}
+
+bool _CSystemSoundChannel::IsPlay()
+/* 000378ce */{
+/* 000378ce */	if (this.m_chn == -2147483648)
+/* 000378dc */	{
+/* 000378dc */		return false;
+/* 000378e4 */	}
+/* 000378ea */	if (this.m_snd == -2147483648)
+/* 000378f8 */	{
+/* 000378f8 */		return false;
+/* 00037900 */	}
+/* 00037906 */	return KiwiSoundEngine.Sound_IsPlay(this.m_chn);
+/* 0003791a */}
+
+void _CSystemSoundChannel::_Play()
+/* 00037928 */{
+/* 00037928 */	if (this.m_snd == -2147483648)
+/* 00037936 */	{
+/* 00037936 */		return;
+/* 00037938 */	}
+/* 0003793e */	KiwiSoundEngine.Sound_Play(this.m_chn);
+/* 00037950 */	g_BGMVolumeCapManager.BeginBGMFade(this.m_chn, this.m_snd);
+/* 00037968 */}
+
+void _CSystemSoundChannel::_Unprepare()
+/* 00037970 */{
+/* 00037970 */	if (this.m_snd == -2147483648)
+/* 0003797e */	{
+/* 0003797e */		return;
+/* 00037980 */	}
+/* 00037986 */	KiwiSoundEngine.Sound_Unprepare(this.m_chn);
+/* 00037998 */	this.m_snd = -2147483648;
+/* 000379a2 */}
+

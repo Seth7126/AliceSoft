@@ -1,0 +1,56 @@
+CASRect CF_CASRect(int nX, int nY, int nWidth, int nHeight)
+/* 00001516 */{
+/* 00001516 */	CASRect Rect;
+/* 00001526 */	Rect.Set(nX, nY, nWidth, nHeight);
+/* 0000154a */	return Rect;
+/* 0000155a */}
+
+void CASRect::Set(int nX, int nY, int nWidth, int nHeight)
+/* 0000156e */{
+/* 0000156e */	this.m_nX = nX;
+/* 00001578 */	this.m_nY = nY;
+/* 00001582 */	this.m_nWidth = nWidth;
+/* 0000158c */	this.m_nHeight = nHeight;
+/* 00001596 */}
+
+int CASRect::GetX()
+/* 0000159e */{
+/* 0000159e */	return this.m_nX;
+/* 000015a6 */}
+
+int CASRect::GetY()
+/* 000015b4 */{
+/* 000015b4 */	return this.m_nY;
+/* 000015bc */}
+
+int CASRect::GetWidth()
+/* 000015ca */{
+/* 000015ca */	return this.m_nWidth;
+/* 000015d2 */}
+
+int CASRect::GetHeight()
+/* 000015e0 */{
+/* 000015e0 */	return this.m_nHeight;
+/* 000015e8 */}
+
+bool CASRect::IsIn(int nX, int nY)
+/* 000015f6 */{
+/* 000015f6 */	if (nX < this.m_nX)
+/* 0000160a */	{
+/* 0000160a */		return false;
+/* 00001612 */	}
+/* 00001618 */	if (nX >= this.m_nX + this.m_nWidth)
+/* 00001634 */	{
+/* 00001634 */		return false;
+/* 0000163c */	}
+/* 00001642 */	if (nY < this.m_nY)
+/* 00001656 */	{
+/* 00001656 */		return false;
+/* 0000165e */	}
+/* 00001664 */	if (nY >= this.m_nY + this.m_nHeight)
+/* 00001680 */	{
+/* 00001680 */		return false;
+/* 00001688 */	}
+/* 0000168e */	return true;
+/* 00001696 */}
+

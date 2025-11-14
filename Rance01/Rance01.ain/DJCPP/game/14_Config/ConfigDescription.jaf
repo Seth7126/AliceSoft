@@ -1,0 +1,99 @@
+ConfigDescription::ConfigDescription()
+/* 000869b0 */{
+/* 000869b8 */	this.gameObjectId_ = g_gameObjectManager.add(this.update);
+/* 000869da */}
+
+void ConfigDescription::update()
+/* 000869e2 */{
+/* 000869e4 */}
+
+void ConfigDescription::init(string backgroundImage, int textSize, int lineHeight, int spanX, int spanY, int lineLength)
+/* 000869ea */{
+/* 000869ea */	this.textSize_ = textSize;
+/* 000869f4 */	this.lineLength_ = lineLength;
+/* 000869fe */	this.spanX_ = spanX;
+/* 00086a08 */	this.spanY_ = spanY;
+/* 00086a12 */	this.type_ = -1;
+/* 00086a24 */	this.lineHeight_ = lineHeight;
+/* 00086a2e */	this.parts_.Alloc(1);
+/* 00086a44 */	if (backgroundImage == "")
+/* 00086a54 */	{
+/* 00086a54 */		this.parts_[0].initAsPlaneImage(1, 1, 0, 0, 0, 255);
+/* 00086a8c */	}
+/* 00086a92 */	else
+/* 00086a92 */	{
+/* 00086a92 */		this.parts_[0].init(backgroundImage, 0);
+/* 00086ab2 */	}
+/* 00086ab2 */	createPartsGroup(this.parent_, this.parts_, 0);
+/* 00086aca */	this.setPartsShow(true);
+/* 00086ad8 */	this.parent_.setShow(true);
+/* 00086aea */}
+
+void ConfigDescription::setPos(int x, int y)
+/* 00086af2 */{
+/* 00086af2 */	this.parent_.setPos(x, y, -2147483648);
+/* 00086b10 */}
+
+void ConfigDescription::setPartsShow(bool val)
+/* 00086b18 */{
+/* 00086b18 */	int i;
+/* 00086b22 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00086b52 */	{
+/* 00086b52 */		this.parts_[i].setShow(val);
+/* 00086b6c */	}
+/* 00086b72 */}
+
+void ConfigDescription::setManualTextId(int type)
+/* 00086b7a */{
+/* 00086b7a */	if (this.type_ == type)
+/* 00086b88 */	{
+/* 00086b88 */		return;
+/* 00086b8a */	}
+/* 00086b90 */	this.type_ = type;
+/* 00086b9a */	if (this.type_ == -1)
+/* 00086bae */	{
+/* 00086bae */		this.parts_.Realloc(1);
+/* 00086bc4 */	}
+/* 00086bca */	else
+/* 00086bca */	{
+/* 00086bca */		this.updateTextParts();
+/* 00086bd2 */	}
+/* 00086bd2 */}
+
+void ConfigDescription::updateTextParts()
+/* 00086bda */{
+/* 00086bda */	string text = AFL_Config_GetHelpText(this.type_, false);
+/* 00086bf6 */	array@string result;
+/* 00086c00 */	this.getSplitString(result, text);
+/* 00086c14 */	this.parts_.Realloc(result.Numof() + 1);
+/* 00086c3c */	int i;
+/* 00086c46 */	for (i = 0; i < result.Numof(); ++i)
+/* 00086c80 */	{
+/* 00086c80 */		this.parts_[i + 1].initAsText(result[i], this.textSize_, false, 256, 255, 255, 255);
+/* 00086cce */		this.parts_[i + 1].setPos(this.spanX_, this.spanY_ + this.lineHeight_ * i, i + 2);
+/* 00086d14 */		this.parts_[i + 1].setParent(this.parent_.getPartsNumber());
+/* 00086d3c */	}
+/* 00086d42 */	this.setPartsShow(true);
+/* 00086d50 */}
+
+void ConfigDescription::setParent(int parentPartsNumber)
+/* 00086d58 */{
+/* 00086d58 */	this.parent_.setParent(parentPartsNumber);
+/* 00086d6a */}
+
+void ConfigDescription::getSplitString(ref array@string result, string text)
+/* 00086d72 */{
+/* 00086d72 */	result.Free();
+/* 00086d7c */	int count = (text.Length() + (this.lineLength_ - 1)) / this.lineLength_;
+/* 00086daa */	int i;
+/* 00086db4 */	for (i = 0; i < count; ++i)
+/* 00086de4 */	{
+/* 00086de4 */		result.PushBack(text.GetPart(i * this.lineLength_, this.lineLength_));
+/* 00086e0a */	}
+/* 00086e10 */}
+
+void ConfigDescription::setShow(bool val)
+/* 00086e18 */{
+/* 00086e18 */	this.parent_.setShow(val);
+/* 00086e2a */}
+

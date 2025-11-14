@@ -1,0 +1,79 @@
+int 制御／価格／オート(ref Item item, int count)
+/* 002200a8 */{
+/* 002200a8 */	int price;
+/* 002200ba */	int base;
+/* 002200cc */	base = item.getPrice();
+/* 002200e8 */	switch (count)
+/* 002200fe */	{
+/* 002200fe */	case 0:
+/* 002200fe */		price = base;
+/* 00220114 */		break;
+/* 0022011a */	case 1:
+/* 0022011a */		price = (base * 12) / 10;
+/* 00220140 */		break;
+/* 00220146 */	case 2:
+/* 00220146 */		price = (base * 14) / 10;
+/* 0022016c */		break;
+/* 00220172 */	case 3:
+/* 00220172 */		price = (base * 20) / 10;
+/* 00220198 */		break;
+/* 0022019e */	case 4:
+/* 0022019e */		price = (base * 26) / 10;
+/* 002201c4 */		break;
+/* 002201ca */	case 5:
+/* 002201ca */		price = (base * 32) / 10;
+/* 002201f0 */		break;
+/* 002201f6 */	case 6:
+/* 002201f6 */		price = (base * 50) / 10;
+/* 0022021c */		break;
+/* 00220222 */	case 7:
+/* 00220222 */		price = (base * 68) / 10;
+/* 00220248 */		break;
+/* 0022024e */	case 8:
+/* 0022024e */		price = (base * 86) / 10;
+/* 00220274 */		break;
+/* 0022027a */	default:
+/* 0022027a */		price = (base * (140 + (count - 8) * 54)) / 10;
+/* 002202bc */		break;
+/* 002202c2 */	}
+/* 002202c2 */	return price;
+/* 002202ce */}
+
+int 制御／価格／世色癌２(ref Item item, int count)
+/* 002202e2 */{
+/* 002202e2 */	int base;
+/* 002202f4 */	int price;
+/* 00220306 */	base = 400;
+/* 00220318 */	switch (count)
+/* 0022032e */	{
+/* 0022032e */	case 0:
+/* 0022032e */	case 1:
+/* 0022032e */	case 2:
+/* 0022032e */		price = base * Math.Pow(1.2, count);
+/* 0022036a */		break;
+/* 00220370 */	default:
+/* 00220370 */		price = base * Math.Pow(2.4, count);
+/* 002203ac */		break;
+/* 002203b2 */	}
+/* 002203b2 */	return price;
+/* 002203be */}
+
+int 制御／価格／世色癌３(ref Item item, int count)
+/* 002203d2 */{
+/* 002203d2 */	int base;
+/* 002203e4 */	int price;
+/* 002203f6 */	base = 1600;
+/* 00220408 */	switch (count)
+/* 0022041e */	{
+/* 0022041e */	case 0:
+/* 0022041e */	case 1:
+/* 0022041e */	case 2:
+/* 0022041e */		price = base * Math.Pow(1.2, count);
+/* 0022045a */		break;
+/* 00220460 */	default:
+/* 00220460 */		price = base * Math.Pow(2.4, count);
+/* 0022049c */		break;
+/* 002204a2 */	}
+/* 002204a2 */	return price;
+/* 002204ae */}
+

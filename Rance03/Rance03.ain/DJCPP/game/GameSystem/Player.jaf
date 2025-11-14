@@ -1,0 +1,639 @@
+Player::Player()
+/* 001dd2dc */{
+/* 001dd2e4 */	this.id_ = "CHARACTER_TEST_ID1";
+/* 001dd2f8 */	this.name_ = "ななしさん";
+/* 001dd30c */	this.shortName_ = "";
+/* 001dd320 */	this.hp_ = 100;
+/* 001dd332 */	this.imageName_ = "立ち絵／シィル／基本";
+/* 001dd346 */	this.maxHp_ = 150;
+/* 001dd358 */	this.level_ = 1;
+/* 001dd36a */	this.exp_ = 20;
+/* 001dd37c */	this.zeroThreeSkillId_ = "";
+/* 001dd390 */	this.strength_ = 10;
+/* 001dd3a2 */	this.mind_ = 10;
+/* 001dd3b4 */	this.isJoin_ = false;
+/* 001dd3c6 */	this.isZeroThreeSkillOpened_ = false;
+/* 001dd3d8 */}
+
+void Player::init(string id)
+/* 001dd3e0 */{
+/* 001dd3e0 */	this.id_ = id;
+/* 001dd3f8 */	this.loadParam();
+/* 001dd400 */}
+
+void Player::loadParam()
+/* 001dd408 */{
+/* 001dd408 */	string key = "プレイヤー情報";
+/* 001dd41c */	this.name_ = EX_SA2String(key, this.id_, "name", "");
+/* 001dd450 */	this.shortName_ = EX_SA2String(key, this.id_, "shortName", "");
+/* 001dd484 */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001dd4b8 */	this.zeroThreeSkillId_ = EX_SA2String(key, this.id_, "zeroThreeSkillId", "");
+/* 001dd4ec */	this.upHp_ = EX_SA2Int(key, this.id_, "upHp", 0);
+/* 001dd51e */	this.upStrength_ = EX_SA2Int(key, this.id_, "upStrength", 0);
+/* 001dd550 */	this.upMind_ = EX_SA2Int(key, this.id_, "upMind", 0);
+/* 001dd582 */	this.upDexterity_ = EX_SA2Int(key, this.id_, "upDexterity", 0);
+/* 001dd5b4 */	this.maxLevel_ = EX_SA2Int(key, this.id_, "maxLevel", 0);
+/* 001dd5e6 */	this.formationPriority_ = EX_SA2Int(key, this.id_, "formationPriority", 0);
+/* 001dd618 */	this.partyNamePlateCgName_ = "システム／編成／名札／%s" % this.shortName_;
+/* 001dd63e */	int i;
+/* 001dd650 */	for (i = 0; i < this.helperSkillProbability_.Numof(); ++i)
+/* 001dd6a0 */	{
+/* 001dd6a0 */		this.helperSkillProbability_[i] = EX_SA2Int(key, this.id_, "helpProb%d" % (i + 1), 1);
+/* 001dd6f8 */	}
+/* 001dd6fe */}
+
+int Player::getFormationPriority()
+/* 001dd706 */{
+/* 001dd706 */	return this.formationPriority_;
+/* 001dd712 */}
+
+void Player::initSkill()
+/* 001dd720 */{
+/* 001dd720 */	this.openSkill(0);
+/* 001dd72e */}
+
+string Player::getId()
+/* 001dd736 */{
+/* 001dd736 */	return this.id_;
+/* 001dd742 */}
+
+string Player::getName()
+/* 001dd750 */{
+/* 001dd750 */	return this.name_;
+/* 001dd75c */}
+
+string Player::getShortName()
+/* 001dd76a */{
+/* 001dd76a */	return this.shortName_;
+/* 001dd776 */}
+
+string Player::getImageName()
+/* 001dd784 */{
+/* 001dd784 */	return this.imageName_;
+/* 001dd790 */}
+
+int Player::setHp(int val)
+/* 001dd79e */{
+/* 001dd79e */	int lost;
+/* 001dd7b0 */	if (this.maxHp_ < val)
+/* 001dd7cc */	{
+/* 001dd7cc */		lost = val - this.maxHp_;
+/* 001dd7ee */	}
+/* 001dd7f4 */	else if (val < 0)
+/* 001dd80c */	{
+/* 001dd80c */		lost = -val;
+/* 001dd824 */	}
+/* 001dd824 */	this.hp_ = Math.Max(0, Math.Min(this.maxHp_, val));
+/* 001dd85e */	this.hpCallback_(this.hp_);
+/* 001dd888 */	return lost;
+/* 001dd894 */}
+
+void Player::setMaxHp(int val)
+/* 001dd8a2 */{
+/* 001dd8a2 */	this.maxHp_ = val;
+/* 001dd8b8 */}
+
+void Player::setLevel(int val)
+/* 001dd8c0 */{
+/* 001dd8c0 */	this.level_ = val;
+/* 001dd8d6 */}
+
+void Player::setExp(int val)
+/* 001dd8de */{
+/* 001dd8de */	this.exp_ = val;
+/* 001dd8f4 */}
+
+void Player::setJoin(bool val)
+/* 001dd8fc */{
+/* 001dd8fc */	this.isJoin_ = val;
+/* 001dd912 */}
+
+void Player::setAttackSkillId(int index, string id)
+/* 001dd91a */{
+/* 001dd91a */	if (0 <= index && index < this.attackSkillId_.Numof())
+/* 001dd96c */	{
+/* 001dd96c */		this.attackSkillId_[index] = id;
+/* 001dd990 */	}
+/* 001dd990 */}
+
+int Player::getHp()
+/* 001dd998 */{
+/* 001dd998 */	return this.hp_;
+/* 001dd9a4 */}
+
+int Player::getMaxHp()
+/* 001dd9b2 */{
+/* 001dd9b2 */	return this.maxHp_;
+/* 001dd9be */}
+
+int Player::getLevel()
+/* 001dd9cc */{
+/* 001dd9cc */	return this.level_;
+/* 001dd9d8 */}
+
+int Player::getExp()
+/* 001dd9e6 */{
+/* 001dd9e6 */	return this.exp_;
+/* 001dd9f2 */}
+
+bool Player::isJoin()
+/* 001dda00 */{
+/* 001dda00 */	return this.isJoin_;
+/* 001dda0c */}
+
+string Player::getZeroThreeSkillId()
+/* 001dda1a */{
+/* 001dda1a */	return this.zeroThreeSkillId_;
+/* 001dda26 */}
+
+string Player::getAttackSkillId(int index)
+/* 001dda34 */{
+/* 001dda34 */	if (0 <= index && index < this.attackSkillId_.Numof())
+/* 001dda86 */	{
+/* 001dda86 */		return this.attackSkillId_[index];
+/* 001dda9e */	}
+/* 001dda9e */	return "";
+/* 001ddaa6 */}
+
+void Player::getAttackSkillIdList(ref array@string s)
+/* 001ddab4 */{
+/* 001ddab4 */	s.Free();
+/* 001ddabe */	int i;
+/* 001ddad0 */	for (i = 0; i < this.attackSkillId_.Numof(); ++i)
+/* 001ddb20 */	{
+/* 001ddb20 */		if (this.attackSkillId_[i] != "")
+/* 001ddb44 */		{
+/* 001ddb44 */			s.PushBack(this.attackSkillId_[i]);
+/* 001ddb64 */		}
+/* 001ddb64 */	}
+/* 001ddb6a */}
+
+bool Player::isAttackSkillUpgradable(string attackSkillId)
+/* 001ddb72 */{
+/* 001ddb72 */	ref PlayerSkill atkTo = getPlayerSkillFromId(attackSkillId);
+/* 001ddbb4 */	int index = this.findSameGroupIdAttackSkill(atkTo.getGroupId());
+/* 001ddbd8 */	if (index >= 0)
+/* 001ddbf0 */	{
+/* 001ddbf0 */		ref PlayerSkill atkFrom = getPlayerSkillFromId(this.attackSkillId_[index]);
+/* 001ddc3e */		if (atkFrom.getGroupRank() < atkTo.getGroupRank())
+/* 001ddc66 */		{
+/* 001ddc66 */			return true;
+/* 001ddc6e */		}
+/* 001ddc6e */	}
+/* 001ddc7a */	return false;
+/* 001ddc82 */}
+
+string Player::upgradeSkill(string attackSkillId)
+/* 001ddc90 */{
+/* 001ddc90 */	ref PlayerSkill atkTo = getPlayerSkillFromId(attackSkillId);
+/* 001ddcd2 */	int index = this.findSameGroupIdAttackSkill(atkTo.getGroupId());
+/* 001ddcf6 */	if (index < 0)
+/* 001ddd0e */	{
+/* 001ddd0e */		return "";
+/* 001ddd16 */	}
+/* 001ddd16 */	string old = this.attackSkillId_[index];
+/* 001ddd3a */	this.attackSkillId_[index] = attackSkillId;
+/* 001ddd5e */	this.coolTime_[index] = 0;
+/* 001ddd7c */	g_party.replace(old, attackSkillId);
+/* 001ddda0 */	return old;
+/* 001dddac */}
+
+int Player::findSameGroupIdAttackSkill(string attackSkillGroupId)
+/* 001dddba */{
+/* 001dddba */	int i;
+/* 001dddcc */	for (i = 0; i < this.attackSkillId_.Numof(); ++i)
+/* 001dde1c */	{
+/* 001dde1c */		if (this.attackSkillId_[i] != "")
+/* 001dde40 */		{
+/* 001dde40 */			string g = getPlayerSkillFromId(this.attackSkillId_[i]).getGroupId();
+/* 001dde86 */			if (g == attackSkillGroupId)
+/* 001ddea2 */			{
+/* 001ddea2 */				return i;
+/* 001ddeae */			}
+/* 001ddeae */		}
+/* 001ddeae */	}
+/* 001ddeba */	return -1;
+/* 001ddec2 */}
+
+int Player::getStrength()
+/* 001dded0 */{
+/* 001dded0 */	return this.strength_;
+/* 001ddedc */}
+
+int Player::getMind()
+/* 001ddeea */{
+/* 001ddeea */	return this.mind_;
+/* 001ddef6 */}
+
+void Player::setDexterity(int val)
+/* 001ddf04 */{
+/* 001ddf04 */	this.dexterity_ = val;
+/* 001ddf1a */}
+
+int Player::getDexterity()
+/* 001ddf22 */{
+/* 001ddf22 */	return this.dexterity_;
+/* 001ddf2e */}
+
+void Player::setStrength(int val)
+/* 001ddf3c */{
+/* 001ddf3c */	this.strength_ = val;
+/* 001ddf52 */}
+
+void Player::setMind(int val)
+/* 001ddf5a */{
+/* 001ddf5a */	this.mind_ = val;
+/* 001ddf70 */}
+
+void Player::addBuff(string buffId)
+/* 001ddf78 */{
+/* 001ddf78 */	if (!this.isExistBuff(buffId) && this.isAvailableBuffId(buffId))
+/* 001ddfc2 */	{
+/* 001ddfc2 */		this.buffIdList_.PushBack(buffId);
+/* 001ddfd6 */		this.addBuffCallback_(buffId);
+/* 001de000 */	}
+/* 001de000 */}
+
+bool Player::isExistBuff(string buffId)
+/* 001de008 */{
+/* 001de008 */	return this.buffIdList_.Find(0, this.buffIdList_.Numof(), buffId) >= 0;
+/* 001de044 */}
+
+void Player::eraseBuff(string id)
+/* 001de052 */{
+/* 001de052 */	if (id == "")
+/* 001de06a */	{
+/* 001de06a */		this.buffIdList_.Free();
+/* 001de074 */	}
+/* 001de07a */	else if (this.isExistBuff(id))
+/* 001de092 */	{
+/* 001de092 */		int index = this.buffIdList_.Find(0, this.buffIdList_.Numof(), id);
+/* 001de0ce */		this.buffIdList_.Erase(index);
+/* 001de0e4 */		this.eraseBuffCallback_(id);
+/* 001de10e */	}
+/* 001de10e */}
+
+bool Player::isAvailableBuffId(string id)
+/* 001de116 */{
+/* 001de116 */	ref PlayerBuff b = getPlayerBuffFromId(id);
+/* 001de158 */	return b !== NULL;
+/* 001de16e */}
+
+void Player::setBuffCallback(DG_OnChangeBuff onAdd, DG_OnChangeBuff onErase)
+/* 001de17c */{
+/* 001de17c */	this.addBuffCallback_ = onAdd;
+/* 001de196 */	this.eraseBuffCallback_ = onErase;
+/* 001de1b0 */}
+
+void Player::getBuffIdList(ref array@string result, int type)
+/* 001de1b8 */{
+/* 001de1b8 */	result.Free();
+/* 001de1c2 */	if (this.buffIdList_.Empty())
+/* 001de1d2 */	{
+/* 001de1d2 */		return;
+/* 001de1d4 */	}
+/* 001de1d4 */	if (type == -1)
+/* 001de1ec */	{
+/* 001de1ec */		result.Alloc(this.buffIdList_.Numof());
+/* 001de20c */		result.Copy(0, this.buffIdList_, 0, this.buffIdList_.Numof());
+/* 001de23e */	}
+/* 001de244 */	else
+/* 001de244 */	{
+/* 001de244 */		int i;
+/* 001de256 */		for (i = 0; i < this.buffIdList_.Numof(); ++i)
+/* 001de2a6 */		{
+/* 001de2a6 */			if (getPlayerBuffFromId(this.buffIdList_[i]).getType() == type)
+/* 001de2f0 */			{
+/* 001de2f0 */				result.PushBack(this.buffIdList_[i]);
+/* 001de310 */			}
+/* 001de310 */		}
+/* 001de31c */	}
+/* 001de31c */}
+
+void Player::setOnChangeHpCallback(DG_OnChangeHp hpCallback)
+/* 001de324 */{
+/* 001de324 */	this.hpCallback_ = hpCallback;
+/* 001de33e */}
+
+string Player::getBattleImageName()
+/* 001de346 */{
+/* 001de346 */	return "システム／戦闘／背中／%s" % this.shortName_;
+/* 001de360 */}
+
+void Player::setCoolTime(string id)
+/* 001de36e */{
+/* 001de36e */	int index = this.attackSkillId_.Find(0, this.attackSkillId_.Numof(), id);
+/* 001de3aa */	if (index < 0)
+/* 001de3c2 */	{
+/* 001de3c2 */		return;
+/* 001de3c4 */	}
+/* 001de3c4 */	this.coolTime_[index] = getPlayerSkillFromId(id).getCoolTime();
+/* 001de408 */}
+
+void Player::setOverCoolTime(string id, int val)
+/* 001de410 */{
+/* 001de410 */	int index = this.attackSkillId_.Find(0, this.attackSkillId_.Numof(), id);
+/* 001de44c */	if (index < 0)
+/* 001de464 */	{
+/* 001de464 */		return;
+/* 001de466 */	}
+/* 001de466 */	this.coolTime_[index] = val;
+/* 001de488 */}
+
+void Player::decCoolTime()
+/* 001de490 */{
+/* 001de490 */	if (this.hp_ == 0)
+/* 001de4a8 */	{
+/* 001de4a8 */		return;
+/* 001de4aa */	}
+/* 001de4aa */	int i;
+/* 001de4bc */	for (i = 0; i < this.coolTime_.Numof(); ++i)
+/* 001de50c */	{
+/* 001de50c */		this.coolTime_[i] = Math.Max(0, this.coolTime_[i] - 1);
+/* 001de552 */	}
+/* 001de558 */}
+
+void Player::clearCoolTime(string id)
+/* 001de560 */{
+/* 001de560 */	int i;
+/* 001de572 */	for (i = 0; i < this.coolTime_.Numof(); ++i)
+/* 001de5c2 */	{
+/* 001de5c2 */		if (this.attackSkillId_[i] == id || id == "")
+/* 001de61a */		{
+/* 001de61a */			this.coolTime_[i] = 0;
+/* 001de638 */		}
+/* 001de638 */	}
+/* 001de63e */}
+
+int Player::getCoolTime(string id)
+/* 001de646 */{
+/* 001de646 */	int index = this.attackSkillId_.Find(0, this.attackSkillId_.Numof(), id);
+/* 001de682 */	if (index < 0)
+/* 001de69a */	{
+/* 001de69a */		return 0;
+/* 001de6a2 */	}
+/* 001de6a2 */	return this.coolTime_[index];
+/* 001de6ba */}
+
+void Player::eraseAttackBuff()
+/* 001de6c8 */{
+/* 001de6c8 */	int i;
+/* 001de6da */	while (i < this.buffIdList_.Numof())
+/* 001de6fc */	{
+/* 001de6fc */		string id = this.buffIdList_[i];
+/* 001de720 */		if (getPlayerBuffFromId(id).isAttackBuff())
+/* 001de752 */		{
+/* 001de752 */			this.buffIdList_.Erase(i);
+/* 001de768 */			this.eraseBuffCallback_(id);
+/* 001de792 */		}
+/* 001de798 */		else
+/* 001de798 */		{
+/* 001de798 */			++i;
+/* 001de7a8 */		}
+/* 001de7a8 */	}
+/* 001de7b4 */}
+
+void Player::eraseDeffenceBuff()
+/* 001de7bc */{
+/* 001de7bc */	int i;
+/* 001de7ce */	while (i < this.buffIdList_.Numof())
+/* 001de7f0 */	{
+/* 001de7f0 */		string id = this.buffIdList_[i];
+/* 001de814 */		if (!getPlayerBuffFromId(id).isAttackBuff())
+/* 001de848 */		{
+/* 001de848 */			this.buffIdList_.Erase(i);
+/* 001de85e */			this.eraseBuffCallback_(id);
+/* 001de888 */		}
+/* 001de88e */		else
+/* 001de88e */		{
+/* 001de88e */			++i;
+/* 001de89e */		}
+/* 001de89e */	}
+/* 001de8aa */}
+
+void Player::clearBuff()
+/* 001de8b2 */{
+/* 001de8b2 */	this.buffIdList_.Free();
+/* 001de8bc */}
+
+void Player::setZeroThreeSkillOpened(bool val)
+/* 001de8c4 */{
+/* 001de8c4 */	this.isZeroThreeSkillOpened_ = val;
+/* 001de8da */}
+
+bool Player::isZeroThreeSkillOpened()
+/* 001de8e2 */{
+/* 001de8e2 */	return this.isZeroThreeSkillOpened_;
+/* 001de8ee */}
+
+int Player::getUpHp()
+/* 001de8fc */{
+/* 001de8fc */	return this.upHp_;
+/* 001de908 */}
+
+int Player::getUpStrength()
+/* 001de916 */{
+/* 001de916 */	return this.upStrength_;
+/* 001de922 */}
+
+int Player::getUpMind()
+/* 001de930 */{
+/* 001de930 */	return this.upMind_;
+/* 001de93c */}
+
+int Player::getUpDexterity()
+/* 001de94a */{
+/* 001de94a */	return this.upDexterity_;
+/* 001de956 */}
+
+int Player::getMaxLevel()
+/* 001de964 */{
+/* 001de964 */	return this.maxLevel_;
+/* 001de970 */}
+
+void Player::setMaxLevel(int val)
+/* 001de97e */{
+/* 001de97e */	if (this.maxLevel_ > val)
+/* 001de99a */	{
+/* 001de99a */		return;
+/* 001de99c */	}
+/* 001de99c */	this.maxLevel_ = val;
+/* 001de9b2 */}
+
+bool Player::levelUp()
+/* 001de9ba */{
+/* 001de9ba */	if (!this.isLevelUpEnable())
+/* 001de9ca */	{
+/* 001de9ca */		return false;
+/* 001de9d2 */	}
+/* 001de9d2 */	int exp = this.getNextExp();
+/* 001de9e6 */	this.level_++;
+/* 001de9fa */	this.exp_ -= exp;
+/* 001dea10 */	this.maxHp_ += this.upHp_;
+/* 001dea26 */	this.strength_ += this.upStrength_;
+/* 001dea3c */	this.mind_ += this.upMind_;
+/* 001dea52 */	this.dexterity_ += this.upDexterity_;
+/* 001dea68 */	this.hp_ = this.maxHp_;
+/* 001dea7e */	this.openSkill(this.level_);
+/* 001dea90 */	return true;
+/* 001dea98 */}
+
+bool Player::isLevelUpEnable()
+/* 001deaa6 */{
+/* 001deaa6 */	return this.level_ != this.maxLevel_ && this.exp_ >= this.getNextExp();
+/* 001deaf2 */}
+
+int Player::getNextExp()
+/* 001deb00 */{
+/* 001deb00 */	if (this.level_ == this.maxLevel_)
+/* 001deb1c */	{
+/* 001deb1c */		return 0;
+/* 001deb24 */	}
+/* 001deb24 */	DG_ExpFunction fn;
+/* 001deb30 */	fn = EX_String("必要経験値取得関数", "");
+/* 001deb5e */	return fn(this.level_ + 1);
+/* 001deb92 */}
+
+int testGetExpTable(int nextLevel)
+/* 001deba0 */{
+/* 001deba0 */	return nextLevel * 100;
+/* 001debb4 */}
+
+void Player::openSkill(int level)
+/* 001debc8 */{
+/* 001debc8 */	int i;
+/* 001debda */	for (i = 0; i < g_playerSkillOpenLevel.Numof(); ++i)
+/* 001dec2a */	{
+/* 001dec2a */		ref PlayerSkillOpenLevel ol = g_playerSkillOpenLevel[i];
+/* 001dec5c */		if (ol.getPlayerId() == this.id_ && ol.getOpenLevel() == level)
+/* 001decb8 */		{
+/* 001decb8 */			this.setAttackSkillId(ol.getIndex(), ol.getSkillId());
+/* 001dece0 */		}
+/* 001dece0 */	}
+/* 001decec */}
+
+string Player::getCurrentLevelNewSkillId()
+/* 001decf4 */{
+/* 001decf4 */	int i;
+/* 001ded06 */	for (i = 0; i < g_playerSkillOpenLevel.Numof(); ++i)
+/* 001ded56 */	{
+/* 001ded56 */		ref PlayerSkillOpenLevel ol = g_playerSkillOpenLevel[i];
+/* 001ded88 */		if (ol.getPlayerId() == this.id_ && ol.getOpenLevel() == this.level_)
+/* 001dede4 */		{
+/* 001dede4 */			return ol.getSkillId();
+/* 001dedf6 */		}
+/* 001dedf6 */	}
+/* 001dee02 */	return "";
+/* 001dee0a */}
+
+void Player::getNextSkillId(ref string skillId, ref int level)
+/* 001dee18 */{
+/* 001dee18 */	string minSkill;
+/* 001dee2c */	int minLevel = -1;
+/* 001dee3e */	int i;
+/* 001dee50 */	for (i = 0; i < g_playerSkillOpenLevel.Numof(); ++i)
+/* 001deea0 */	{
+/* 001deea0 */		ref PlayerSkillOpenLevel ol = g_playerSkillOpenLevel[i];
+/* 001deed2 */		if (ol.getPlayerId() == this.id_)
+/* 001deef4 */		{
+/* 001deef4 */			int lv = ol.getOpenLevel();
+/* 001def10 */			if (this.level_ < lv)
+/* 001def2c */			{
+/* 001def2c */				if (minLevel == -1 || lv < minLevel)
+/* 001def78 */				{
+/* 001def78 */					minLevel = lv;
+/* 001def8e */					minSkill = ol.getSkillId();
+/* 001defac */				}
+/* 001defac */			}
+/* 001defac */		}
+/* 001defac */	}
+/* 001defb8 */	skillId = minSkill;
+/* 001defd0 */	level = minLevel;
+/* 001defe8 */}
+
+int Player::getSkillIndexFromId(string attackSkillId)
+/* 001deff0 */{
+/* 001deff0 */	int i;
+/* 001df002 */	for (i = 0; i < this.attackSkillId_.Numof(); ++i)
+/* 001df052 */	{
+/* 001df052 */		if (this.attackSkillId_[i] == attackSkillId)
+/* 001df07a */		{
+/* 001df07a */			return i;
+/* 001df086 */		}
+/* 001df086 */	}
+/* 001df08c */	return -1;
+/* 001df094 */}
+
+void Player::addExp(int val)
+/* 001df0a2 */{
+/* 001df0a2 */	this.exp_ += val;
+/* 001df0b8 */	this.exp_ = Math.Max(0, this.exp_);
+/* 001df0de */}
+
+void Player::addTotalBattleCount()
+/* 001df0e6 */{
+/* 001df0e6 */	++this.totalBattleCount_;
+/* 001df0f6 */}
+
+int Player::getTotalBattleCount()
+/* 001df0fe */{
+/* 001df0fe */	return this.totalBattleCount_;
+/* 001df10a */}
+
+void Player::addConsecutiveBattleCount()
+/* 001df118 */{
+/* 001df118 */	++this.consecutiveBattleCount_;
+/* 001df128 */}
+
+void Player::clearConsecutiveBattleCount()
+/* 001df130 */{
+/* 001df130 */	this.consecutiveBattleCount_ = 0;
+/* 001df142 */}
+
+int Player::getConsecutiveBattleCount()
+/* 001df14a */{
+/* 001df14a */	return this.consecutiveBattleCount_;
+/* 001df156 */}
+
+void Player::setCoolTimeCancelSkillId(string id)
+/* 001df164 */{
+/* 001df164 */	this.coolTimeCancelSkillId_ = id;
+/* 001df17c */}
+
+string Player::getCoolTimeCancelSkillId()
+/* 001df184 */{
+/* 001df184 */	return this.coolTimeCancelSkillId_;
+/* 001df190 */}
+
+int Player::getHelperSkillProbability(int index)
+/* 001df19e */{
+/* 001df19e */	if (0 <= index && index < this.helperSkillProbability_.Numof())
+/* 001df1f0 */	{
+/* 001df1f0 */		return this.helperSkillProbability_[index];
+/* 001df208 */	}
+/* 001df208 */	return 0;
+/* 001df210 */}
+
+int Player::getHelperSkillProbabilityById(string id)
+/* 001df21e */{
+/* 001df21e */	int i;
+/* 001df230 */	for (i = 0; i < this.attackSkillId_.Numof(); ++i)
+/* 001df280 */	{
+/* 001df280 */		if (this.attackSkillId_[i] == id)
+/* 001df2a8 */		{
+/* 001df2a8 */			return this.getHelperSkillProbability(i);
+/* 001df2bc */		}
+/* 001df2bc */	}
+/* 001df2c2 */	return 0;
+/* 001df2ca */}
+
+string Player::getPartyNamePlateCgName()
+/* 001df2d8 */{
+/* 001df2d8 */	return this.partyNamePlateCgName_;
+/* 001df2e4 */}
+
+void Player::setPartyNamePlateCgName(string cgName)
+/* 001df2f2 */{
+/* 001df2f2 */	this.partyNamePlateCgName_ = cgName;
+/* 001df30a */}
+

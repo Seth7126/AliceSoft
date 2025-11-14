@@ -1,0 +1,172 @@
+void _CButtonCgInfo::_SetCgPln(string _cg)
+/* 00003ab6 */{
+/* 00003ab6 */	this._SetCg(this._m_cg_pln, _cg);
+/* 00003ad2 */}
+
+void _CButtonCgInfo::_SetCgHlt(string _cg)
+/* 00003ada */{
+/* 00003ada */	this._SetCg(this._m_cg_hlt, _cg);
+/* 00003af6 */}
+
+void _CButtonCgInfo::_SetCgInv(string _cg)
+/* 00003afe */{
+/* 00003afe */	this._SetCg(this._m_cg_inv, _cg);
+/* 00003b1a */}
+
+void _CButtonCgInfo::_SetCgChk(string _cg)
+/* 00003b22 */{
+/* 00003b22 */	this._SetCg(this._m_cg_chk, _cg);
+/* 00003b3e */}
+
+void _CButtonCgInfo::_SetCgHltChk(string _cg)
+/* 00003b46 */{
+/* 00003b46 */	this._SetCg(this._m_cg_hlt_chk, _cg);
+/* 00003b62 */}
+
+void _CButtonCgInfo::_SetClickSound(string _click)
+/* 00003b6a */{
+/* 00003b6a */	this._m_click_sound = _click;
+/* 00003b82 */}
+
+void _CButtonCgInfo::_SetCursorSound(string _cursor)
+/* 00003b8a */{
+/* 00003b8a */	this._m_cursor_sound = _cursor;
+/* 00003ba2 */}
+
+bool _CButtonCgInfo::_IsSetCgPln()
+/* 00003baa */{
+/* 00003baa */	return !this._m_cg_pln.Empty();
+/* 00003bbc */}
+
+bool _CButtonCgInfo::_IsSetCgHlt()
+/* 00003bca */{
+/* 00003bca */	return !this._m_cg_hlt.Empty();
+/* 00003bdc */}
+
+bool _CButtonCgInfo::_IsSetCgInv()
+/* 00003bea */{
+/* 00003bea */	return !this._m_cg_inv.Empty();
+/* 00003bfc */}
+
+bool _CButtonCgInfo::_IsSetCgChk()
+/* 00003c0a */{
+/* 00003c0a */	return !this._m_cg_chk.Empty();
+/* 00003c1c */}
+
+bool _CButtonCgInfo::_IsSetCgHltChk()
+/* 00003c2a */{
+/* 00003c2a */	return this._m_cg_hlt_chk.Empty();
+/* 00003c3a */}
+
+int _CButtonCgInfo::_GetX()
+/* 00003c48 */{
+/* 00003c48 */	return this._m_x;
+/* 00003c54 */}
+
+int _CButtonCgInfo::_GetY()
+/* 00003c62 */{
+/* 00003c62 */	return this._m_y;
+/* 00003c6e */}
+
+int _CButtonCgInfo::_GetZ()
+/* 00003c7c */{
+/* 00003c7c */	return this._m_z;
+/* 00003c88 */}
+
+string _CButtonCgInfo::_GetClickSound()
+/* 00003c96 */{
+/* 00003c96 */	return this._m_click_sound;
+/* 00003ca2 */}
+
+string _CButtonCgInfo::_GetCursorSound()
+/* 00003cb0 */{
+/* 00003cb0 */	return this._m_cursor_sound;
+/* 00003cbc */}
+
+void _CButtonCgInfo::_SetCg(ref string _dst, string _src)
+/* 00003cca */{
+/* 00003cca */	if (_src != "")
+/* 00003ce2 */	{
+/* 00003ce2 */		_dst = _src;
+/* 00003cfa */	}
+/* 00003cfa */}
+
+_CButtonCgInfo::_CButtonCgInfo()
+/* 00003d02 */{
+/* 00003d0a */	this._m_x = -2147483648;
+/* 00003d1c */	this._m_y = -2147483648;
+/* 00003d2e */	this._m_z = 1;
+/* 00003d40 */	this._m_cg_pln = "";
+/* 00003d54 */	this._m_cg_hlt = "";
+/* 00003d68 */	this._m_cg_inv = "";
+/* 00003d7c */	this._m_cg_chk = "";
+/* 00003d90 */	this._m_cg_hlt_chk = "";
+/* 00003da4 */	this._m_click_sound = "";
+/* 00003db8 */	this._m_cursor_sound = "";
+/* 00003dcc */}
+
+void _CButtonCgInfo::_SetPos(int _x, int _y)
+/* 00003dd4 */{
+/* 00003dd4 */	if (_x != -2147483648)
+/* 00003dec */	{
+/* 00003dec */		this._m_x = _x;
+/* 00003e02 */	}
+/* 00003e02 */	if (_y != -2147483648)
+/* 00003e1a */	{
+/* 00003e1a */		this._m_y = _y;
+/* 00003e30 */	}
+/* 00003e30 */}
+
+void _CButtonCgInfo::_SetZ(int _z)
+/* 00003e38 */{
+/* 00003e38 */	if (_z != -2147483648)
+/* 00003e50 */	{
+/* 00003e50 */		this._m_z = _z;
+/* 00003e66 */	}
+/* 00003e66 */}
+
+string _CButtonCgInfo::_GetCg(bool _hilite, bool _check, bool _invalid)
+/* 00003e6e */{
+/* 00003e6e */	if (_invalid)
+/* 00003e7e */	{
+/* 00003e7e */		if (!this._m_cg_inv.Empty())
+/* 00003e92 */		{
+/* 00003e92 */			return this._m_cg_inv;
+/* 00003e9e */		}
+/* 00003e9e */		return this._m_cg_pln;
+/* 00003eaa */	}
+/* 00003eaa */	if (_hilite && _check)
+/* 00003ee2 */	{
+/* 00003ee2 */		if (!this._m_cg_hlt_chk.Empty())
+/* 00003ef6 */		{
+/* 00003ef6 */			return this._m_cg_hlt_chk;
+/* 00003f02 */		}
+/* 00003f02 */		if (!this._m_cg_chk.Empty())
+/* 00003f16 */		{
+/* 00003f16 */			return this._m_cg_chk;
+/* 00003f22 */		}
+/* 00003f22 */		if (!this._m_cg_hlt.Empty())
+/* 00003f36 */		{
+/* 00003f36 */			return this._m_cg_hlt;
+/* 00003f42 */		}
+/* 00003f42 */		return this._m_cg_pln;
+/* 00003f4e */	}
+/* 00003f4e */	if (_hilite)
+/* 00003f5e */	{
+/* 00003f5e */		if (!this._m_cg_hlt.Empty())
+/* 00003f72 */		{
+/* 00003f72 */			return this._m_cg_hlt;
+/* 00003f7e */		}
+/* 00003f7e */		return this._m_cg_pln;
+/* 00003f8a */	}
+/* 00003f8a */	if (_check)
+/* 00003f9a */	{
+/* 00003f9a */		if (!this._m_cg_chk.Empty())
+/* 00003fae */		{
+/* 00003fae */			return this._m_cg_chk;
+/* 00003fba */		}
+/* 00003fba */		return this._m_cg_pln;
+/* 00003fc6 */	}
+/* 00003fc6 */	return this._m_cg_pln;
+/* 00003fd2 */}
+

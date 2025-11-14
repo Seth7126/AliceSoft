@@ -1,0 +1,108 @@
+void game_main()
+/* 00200604 */{
+/* 00200604 */	if (g_common_configTimerScaling == 0.0)
+/* 0020061c */	{
+/* 0020061c */		g_common_configTimerScaling = 1.0;
+/* 0020062e */	}
+/* 0020062e */	AFL_Config_SetEndEvent("共有セーブ");
+/* 0020064c */	g_battleCalcMode = false;
+/* 0020065e */	initLibrary();
+/* 00200664 */	initAdv();
+/* 0020066a */	initGameSystem();
+/* 00200670 */	initConfigSetting();
+/* 00200676 */	g_hallucination <- new Hallucination;
+/* 002006aa */	g_hallucination.init();
+/* 002006ba */	gameEntryPoint();
+/* 002006c0 */}
+
+void gameEntryPoint()
+/* 002006ce */{
+/* 002006ce */	initGameMode();
+/* 002006d4 */	setGameMode(true);
+/* 002006e0 */	if (!再起動後確認())
+/* 002006ee */	{
+/* 002006ee */		checkNetworkConnection();
+/* 002006f4 */		openLogo();
+/* 002006fa */	}
+/* 002006fa */	openTitle();
+/* 00200700 */	restoreGameMode();
+/* 00200706 */	checkVoiceSetting();
+/* 0020070c */	gameMain();
+/* 00200712 */}
+
+void gameMain()
+/* 00200720 */{
+/* 00200720 */	g_gameSceneManager.setCurrentPos("アイス");
+/* 00200736 */	g_gameSceneManager.init(EX_String("プロローグ関数", ""));
+/* 0020076a */	g_gameSceneManager.run();
+/* 0020077a */	system.Reset();
+/* 00200780 */}
+
+void checkVoiceSetting()
+/* 0020078e */{
+/* 0020078e */	string key = "ゲーム開始回数";
+/* 002007a2 */	string voiceKey = "ボイス設定確認";
+/* 002007b6 */	g_globalGameFlag.setInt(key, g_globalGameFlag.getInt(key) + 1);
+/* 002007f2 */	if (g_globalGameFlag.getInt(key) == 1)
+/* 0020081a */	{
+/* 0020081a */		if (!isOffConfigVoiceSetting())
+/* 00200828 */		{
+/* 00200828 */			DialogInfomation info;
+/* 00200838 */			info.setCaption("音声を再生しますか");
+/* 0020084e */			info.setMessage("“はい”を選択すると、|ゲーム中で音声が再生されます");
+/* 00200864 */			info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 0020087a */			info.setAnswerTypeYesNo(true);
+/* 00200890 */			if (openDialog(info) == 0)
+/* 002008b2 */			{
+/* 002008b2 */				AFL_Config_SetMute(3, false);
+/* 002008c4 */				g_globalGameFlag.setInt(voiceKey, 2);
+/* 002008e4 */			}
+/* 002008ea */			else
+/* 002008ea */			{
+/* 002008ea */				AFL_Config_SetMute(3, true);
+/* 002008fc */				g_globalGameFlag.setInt(voiceKey, 3);
+/* 0020091c */			}
+/* 0020091c */			DialogInfomation info;
+/* 00200932 */			info.setCaption("音声再生について");
+/* 00200948 */			info.setMessage("音声の再生設定は|コンフィグのサウンドタブで|いつでも変更できます");
+/* 0020095e */			info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 00200974 */			openDialog(info);
+/* 0020098a */		}
+/* 00200996 */		else
+/* 00200996 */		{
+/* 00200996 */			g_globalGameFlag.setInt(voiceKey, 1);
+/* 002009b6 */		}
+/* 002009b6 */	}
+/* 002009b6 */}
+
+bool isOffConfigVoiceSetting()
+/* 002009c4 */{
+/* 002009c4 */	if (AFL_Config_GetMute(3))
+/* 002009d6 */	{
+/* 002009d6 */		return true;
+/* 002009de */	}
+/* 002009de */	if (AFL_Config_GetMute(6) && AFL_Config_GetMute(7))
+/* 00200a1a */	{
+/* 00200a1a */		return true;
+/* 00200a22 */	}
+/* 00200a22 */	if (AFL_Config_GetVolume(3) == 0)
+/* 00200a3c */	{
+/* 00200a3c */		return true;
+/* 00200a44 */	}
+/* 00200a44 */	if (AFL_Config_GetVolume(6) == 0 && AFL_Config_GetVolume(7) == 0)
+/* 00200a90 */	{
+/* 00200a90 */		return true;
+/* 00200a98 */	}
+/* 00200a98 */	return false;
+/* 00200aa0 */}
+
+void checkNetworkConnection()
+/* 00200ab4 */{
+/* 00200ab4 */	string key = "ネットワーク接続設定";
+/* 00200ac8 */	if (g_globalGameFlag.getInt(key) == 0)
+/* 00200af0 */	{
+/* 00200af0 */		g_globalGameFlag.setInt(key, 1);
+/* 00200b10 */		openNetworkConnection();
+/* 00200b16 */	}
+/* 00200b16 */}
+

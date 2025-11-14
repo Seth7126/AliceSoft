@@ -1,0 +1,202 @@
+Permutation::Permutation()
+/* 001acc50 */{
+/* 001acc58 */	this.evaluation = -1000;
+/* 001acc6a */}
+
+void PonanChang::convertSkillIdsFromPermutation(ref array@string actions, ref array@string allIds, int permutation)
+/* 001acc72 */{
+/* 001acc72 */	actions.Free();
+/* 001acc7c */	int i;
+/* 001acc8e */	for (i = 0; i < 8; ++i)
+/* 001accd4 */	{
+/* 001accd4 */		int index = (permutation / int(Math.Pow(10.0, i))) % 10;
+/* 001acd12 */		if (index != 0)
+/* 001acd2a */		{
+/* 001acd2a */			actions.PushBack(allIds[index - 1]);
+/* 001acd52 */		}
+/* 001acd52 */	}
+/* 001acd58 */}
+
+int PonanChang::calcEvaluation(ref array@string pAction)
+/* 001acd60 */{
+/* 001acd60 */	g_battleCalcMode = true;
+/* 001acd72 */	BattleModel model;
+/* 001acd82 */	model = this.battleModel_;
+/* 001acda4 */	model.setDummyMode(true);
+/* 001acdba */	int i;
+/* 001acdcc */	for (i = 0; i < pAction.Numof(); ++i)
+/* 001ace1c */	{
+/* 001ace1c */		model.setPlayerAction(pAction[i]);
+/* 001ace42 */		array@TargetInfomation t;
+/* 001ace4c */		int kind;
+/* 001ace5e */		model.processPlayerAction(t, kind);
+/* 001ace80 */		model.updateMonsterList();
+/* 001ace92 */		if (model.isNoMonster())
+/* 001acea8 */		{
+/* 001acea8 */			t.Free();
+/* 001aceb2 */			break;
+/* 001aceb8 */		}
+/* 001acec2 */	}
+/* 001acec8 */	model.loadMonsterAttackList(NULL);
+/* 001acede */	while (true)
+/* 001aceea */	{
+/* 001aceea */		if (model.isEmptyMonsterAttack())
+/* 001acf00 */		{
+/* 001acf00 */			break;
+/* 001acf06 */		}
+/* 001acf06 */		array@TargetInfomation t;
+/* 001acf10 */		int kind;
+/* 001acf22 */		model.processMonsterAction(t, kind);
+/* 001acf44 */		model.popMonsterAttack(NULL);
+/* 001acf64 */	}
+/* 001acf6a */	int val = model.getEvaluation();
+/* 001acf86 */	model.setTurn(this.turn_ + 1);
+/* 001acfa8 */	g_battleCalcMode = false;
+/* 001acfba */	return val;
+/* 001acfc6 */}
+
+void PonanChang::call(BattleModel model, int turn, array@string ids, array@string allIds)
+/* 001acfd4 */{
+/* 001acfd4 */	this.currentEvaluation_ = model.getEvaluation();
+/* 001acff0 */	this.turn_ = turn;
+/* 001ad006 */	this.battleModel_ = model;
+/* 001ad028 */	if (ids.Empty())
+/* 001ad038 */	{
+/* 001ad038 */		return;
+/* 001ad03a */	}
+/* 001ad03a */	array@int n;
+/* 001ad044 */	int i;
+/* 001ad056 */	for (i = 0; i < ids.Numof(); ++i)
+/* 001ad0a6 */	{
+/* 001ad0a6 */		n.PushBack(g_party.getIndexFromId(ids[i]) + 1);
+/* 001ad0de */	}
+/* 001ad0e4 */	int depth = n.Numof();
+/* 001ad100 */	CASTimer rapTimer;
+/* 001ad110 */	array@Permutation p;
+/* 001ad11a */	rapTimer.Reset();
+/* 001ad12a */	CASTimer timer;
+/* 001ad13a */	int i;
+/* 001ad14c */	for (i = 0; i < depth; ++i)
+/* 001ad196 */	{
+/* 001ad196 */		array@int m;
+/* 001ad1a0 */		lookUpPermutation(timer, p, m, n, i + 1);
+/* 001ad1ee */	}
+/* 001ad1f4 */	pass("rap:%d" % rapTimer.Get());
+/* 001ad21e */	rapTimer.Reset();
+/* 001ad22e */	CASTimer timer;
+/* 001ad23e */	int i;
+/* 001ad250 */	int thinkDepth = 100;
+/* 001ad262 */	int c = Math.Min(thinkDepth, p.Numof());
+/* 001ad292 */	for (i = 0; i < c; ++i)
+/* 001ad2dc */	{
+/* 001ad2dc */		int pIndex = i;
+/* 001ad2f2 */		if (p.Numof() > thinkDepth)
+/* 001ad314 */		{
+/* 001ad314 */			pIndex = RAND(p.Numof()) - 1;
+/* 001ad33e */		}
+/* 001ad33e */		array@string actions;
+/* 001ad348 */		this.convertSkillIdsFromPermutation(actions, allIds, p[pIndex].permutation);
+/* 001ad382 */		p[pIndex].evaluation = this.calcEvaluation(actions);
+/* 001ad3b4 */		if (timer.Get() > 12)
+/* 001ad3d2 */		{
+/* 001ad3d2 */			timer.Reset();
+/* 001ad3e2 */			g_frameManager.updateFrame();
+/* 001ad3f2 */			g_gameObjectManager.update();
+/* 001ad402 */		}
+/* 001ad40c */	}
+/* 001ad412 */	pass("rap:%d" % rapTimer.Get());
+/* 001ad43c */	rapTimer.Reset();
+/* 001ad44c */	p.SortBy(&Permutation::evaluation);
+/* 001ad45c */	p.Reverse();
+/* 001ad466 */	for (i = 0; i < Math.Min(10, p.Numof()); ++i)
+/* 001ad4c6 */	{
+/* 001ad4c6 */		pass("[%08d]eval:%4d" % p[i].permutation % p[i].evaluation);
+/* 001ad51e */	}
+/* 001ad524 */	this.result_ = p[0].permutation;
+/* 001ad54a */	this.maxEvaluation_ = p[0].evaluation;
+/* 001ad570 */}
+
+void lookUpPermutation(ref CASTimer timer, ref array@Permutation result, array@int selected, array@int rest, int depth)
+/* 001ad578 */{
+/* 001ad578 */	if (selected.Numof() >= depth)
+/* 001ad59a */	{
+/* 001ad59a */		int val;
+/* 001ad5ac */		int i;
+/* 001ad5be */		for (i = 0; i < selected.Numof(); ++i)
+/* 001ad60e */		{
+/* 001ad60e */			val += selected[i] * Math.Pow(10.0, i);
+/* 001ad656 */		}
+/* 001ad65c */		Permutation p;
+/* 001ad66c */		p.permutation = val;
+/* 001ad68a */		result.PushBack(p);
+/* 001ad6a2 */		if (timer.Get() > 50)
+/* 001ad6c0 */		{
+/* 001ad6c0 */			timer.Reset();
+/* 001ad6d0 */			g_frameManager.updateFrame();
+/* 001ad6e0 */			g_gameObjectManager.update();
+/* 001ad6f0 */		}
+/* 001ad6f0 */	}
+/* 001ad6fc */	else
+/* 001ad6fc */	{
+/* 001ad6fc */		int i;
+/* 001ad70e */		for (i = 0; i < rest.Numof(); ++i)
+/* 001ad75e */		{
+/* 001ad75e */			array@int newselected;
+/* 001ad768 */			newselected.Alloc(selected.Numof());
+/* 001ad788 */			newselected.Copy(0, selected, 0, selected.Numof());
+/* 001ad7ba */			newselected.PushBack(rest[i]);
+/* 001ad7da */			array@int newrest;
+/* 001ad7e4 */			newrest.Alloc(rest.Numof());
+/* 001ad804 */			newrest.Copy(0, rest, 0, rest.Numof());
+/* 001ad836 */			newrest.Erase(i);
+/* 001ad84c */			lookUpPermutation(timer, result, newselected, newrest, depth);
+/* 001ad89c */		}
+/* 001ad8a2 */	}
+/* 001ad8a2 */}
+
+void PonanChang::selectSkillSelector(ref SkillSelectorGroup selector)
+/* 001ad8b0 */{
+/* 001ad8b0 */	selector.clearOrder();
+/* 001ad8c0 */	int i;
+/* 001ad8d2 */	for (i = 0; i < 8; ++i)
+/* 001ad918 */	{
+/* 001ad918 */		int index = (this.result_ / int(Math.Pow(10.0, i))) % 10;
+/* 001ad956 */		if (index != 0)
+/* 001ad96e */		{
+/* 001ad96e */			selector.select(index - 1);
+/* 001ad990 */		}
+/* 001ad990 */	}
+/* 001ad996 */}
+
+void PonanChang::playVoice()
+/* 001ad99e */{
+/* 001ad99e */	int n;
+/* 001ad9b0 */	if (this.currentEvaluation_ > this.maxEvaluation_)
+/* 001ad9cc */	{
+/* 001ad9cc */		array@int v;
+/* 001ad9d6 */		v.PushBack(37006);
+/* 001ad9e6 */		v.PushBack(37007);
+/* 001ad9f6 */		v.PushBack(37009);
+/* 001ada06 */		n = v[RAND(v.Numof()) - 1];
+/* 001ada46 */	}
+/* 001ada4c */	else if (this.maxEvaluation_ > 700)
+/* 001ada64 */	{
+/* 001ada64 */		array@int v;
+/* 001ada6e */		v.PushBack(37002);
+/* 001ada7e */		v.PushBack(37003);
+/* 001ada8e */		v.PushBack(37004);
+/* 001ada9e */		v.PushBack(37005);
+/* 001adaae */		n = v[RAND(v.Numof()) - 1];
+/* 001adaee */	}
+/* 001adaf4 */	else
+/* 001adaf4 */	{
+/* 001adaf4 */		array@int v;
+/* 001adafe */		v.PushBack(37001);
+/* 001adb0e */		v.PushBack(37005);
+/* 001adb1e */		v.PushBack(37007);
+/* 001adb2e */		v.PushBack(37008);
+/* 001adb3e */		n = v[RAND(v.Numof()) - 1];
+/* 001adb7e */	}
+/* 001adb7e */	g_sysSound.playVoice(n);
+/* 001adb98 */}
+

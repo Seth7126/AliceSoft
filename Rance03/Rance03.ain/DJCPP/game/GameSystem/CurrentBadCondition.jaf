@@ -1,0 +1,26 @@
+void CurrentBadCondition::init(string id, int turn)
+/* 001ce25a */{
+/* 001ce25a */	this.id_ = id;
+/* 001ce272 */	this.turn_ = turn;
+/* 001ce288 */}
+
+string CurrentBadCondition::getId()
+/* 001ce290 */{
+/* 001ce290 */	return this.id_;
+/* 001ce29c */}
+
+int CurrentBadCondition::getTurn()
+/* 001ce2aa */{
+/* 001ce2aa */	return this.turn_;
+/* 001ce2b6 */}
+
+void CurrentBadCondition::decTurn()
+/* 001ce2c4 */{
+/* 001ce2c4 */	this.turn_ = Math.Max(0, this.turn_ - 1);
+/* 001ce2f2 */}
+
+void CurrentBadCondition::setTurn(int value)
+/* 001ce2fa */{
+/* 001ce2fa */	this.turn_ = value;
+/* 001ce310 */}
+

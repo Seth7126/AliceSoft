@@ -1,0 +1,70 @@
+FullScreenFlat::FullScreenFlat()
+/* 00180d22 */{
+/* 00180d2a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00180d50 */	this.isRunning_ = false;
+/* 00180d62 */}
+
+void FullScreenFlat::init(string flatName, string soundName, bool isCenter)
+/* 00180d6a */{
+/* 00180d6a */	this.release();
+/* 00180d72 */	this.soundName_ = soundName;
+/* 00180d8a */	this.parts_.initAsFlat(flatName);
+/* 00180da4 */	this.parts_.setZ(30000.0);
+/* 00180dba */	if (isCenter)
+/* 00180dca */	{
+/* 00180dca */		this.parts_.setPos(512.0, 384.0);
+/* 00180de6 */	}
+/* 00180de6 */}
+
+void FullScreenFlat::update()
+/* 00180dee */{
+/* 00180dee */	if (this.isRunning_ && this.isFinish())
+/* 00180e24 */	{
+/* 00180e24 */		this.release();
+/* 00180e2c */	}
+/* 00180e2c */}
+
+void FullScreenFlat::release()
+/* 00180e34 */{
+/* 00180e34 */	this.parts_.release();
+/* 00180e44 */	this.isRunning_ = false;
+/* 00180e56 */	this.onFinish_();
+/* 00180e76 */}
+
+void FullScreenFlat::join(int time)
+/* 00180e7e */{
+/* 00180e7e */	if (!this.isRunning_)
+/* 00180e90 */	{
+/* 00180e90 */		return;
+/* 00180e92 */	}
+/* 00180e92 */	LocalTimer t;
+/* 00180ea2 */	if (time < 0)
+/* 00180eba */	{
+/* 00180eba */		time = 1000000;
+/* 00180ecc */	}
+/* 00180ecc */	t.reset();
+/* 00180edc */	while (t.getTime() < time && !this.isFinish())
+/* 00180f26 */	{
+/* 00180f26 */		g_gameObjectManager.update();
+/* 00180f36 */		g_frameManager.updateFrame();
+/* 00180f46 */	}
+/* 00180f4c */}
+
+bool FullScreenFlat::isFinish()
+/* 00180f54 */{
+/* 00180f54 */	return !this.parts_.isMotionFlat();
+/* 00180f6a */}
+
+void FullScreenFlat::run(float timeScaling)
+/* 00180f78 */{
+/* 00180f78 */	g_sysSound.play(1, this.soundName_);
+/* 00180f98 */	this.parts_.setShow(true);
+/* 00180fae */	this.parts_.startFlat(false, timeScaling);
+/* 00180fce */	this.isRunning_ = true;
+/* 00180fe0 */}
+
+void FullScreenFlat::setOnFinishCallback(DG_GeneralCallback onFinish)
+/* 00180fe8 */{
+/* 00180fe8 */	this.onFinish_ = onFinish;
+/* 00181002 */}
+

@@ -1,0 +1,82 @@
+void MapEncountMonsterGroup::getMonsterList(ref array@string result)
+/* 001d89da */{
+/* 001d89da */	int i;
+/* 001d89ec */	for (i = 0; i < this.monsterId_.Numof(); ++i)
+/* 001d8a3c */	{
+/* 001d8a3c */		if (!this.monsterId_[i].Empty())
+/* 001d8a5c */		{
+/* 001d8a5c */			result.PushBack(this.monsterId_[i]);
+/* 001d8a7c */		}
+/* 001d8a7c */	}
+/* 001d8a82 */}
+
+void MapEncountMonsterGroup::init(string id)
+/* 001d8a8a */{
+/* 001d8a8a */	string key = "マップエンカウントモンスターグループ情報";
+/* 001d8a9e */	this.id_ = id;
+/* 001d8ab6 */	this.addMonsterId(EX_SA2String(key, id, "mId1", ""));
+/* 001d8ae4 */	this.addMonsterId(EX_SA2String(key, id, "mId2", ""));
+/* 001d8b12 */	this.addMonsterId(EX_SA2String(key, id, "mId3", ""));
+/* 001d8b40 */	this.addMonsterId(EX_SA2String(key, id, "mId4", ""));
+/* 001d8b6e */	this.addMonsterId(EX_SA2String(key, id, "mId5", ""));
+/* 001d8b9c */	this.addMonsterId(EX_SA2String(key, id, "mId6", ""));
+/* 001d8bca */	this.gold_ = EX_SA2Int(key, id, "gold", 0);
+/* 001d8bfc */	this.exp_ = EX_SA2Int(key, id, "exp", 0);
+/* 001d8c2e */	this.itemId_ = EX_SA2String(key, id, "item", "");
+/* 001d8c62 */	this.itemProbability_ = EX_SA2Int(key, id, "itemProbability", 0);
+/* 001d8c94 */	this.musicId_ = EX_SA2String(key, id, "musicId", "");
+/* 001d8cc8 */}
+
+void MapEncountMonsterGroup::addMonsterId(string id)
+/* 001d8cd0 */{
+/* 001d8cd0 */	if (id == "")
+/* 001d8ce8 */	{
+/* 001d8ce8 */		return;
+/* 001d8cea */	}
+/* 001d8cea */	this.monsterId_.PushBack(id);
+/* 001d8cfe */}
+
+string MapEncountMonsterGroup::getId()
+/* 001d8d06 */{
+/* 001d8d06 */	return this.id_;
+/* 001d8d12 */}
+
+string MapEncountMonsterGroup::getMonsterId(int index)
+/* 001d8d20 */{
+/* 001d8d20 */	if (0 <= index && index < this.monsterId_.Numof())
+/* 001d8d72 */	{
+/* 001d8d72 */		return this.monsterId_[index];
+/* 001d8d8a */	}
+/* 001d8d8a */	return "";
+/* 001d8d92 */}
+
+int MapEncountMonsterGroup::getMonsterCount()
+/* 001d8da0 */{
+/* 001d8da0 */	return this.monsterId_.Numof();
+/* 001d8db2 */}
+
+int MapEncountMonsterGroup::getGold()
+/* 001d8dc0 */{
+/* 001d8dc0 */	return this.gold_;
+/* 001d8dcc */}
+
+int MapEncountMonsterGroup::getExp()
+/* 001d8dda */{
+/* 001d8dda */	return this.exp_;
+/* 001d8de6 */}
+
+string MapEncountMonsterGroup::getItemId()
+/* 001d8df4 */{
+/* 001d8df4 */	return this.itemId_;
+/* 001d8e00 */}
+
+int MapEncountMonsterGroup::getItemProbability()
+/* 001d8e0e */{
+/* 001d8e0e */	return this.itemProbability_;
+/* 001d8e1a */}
+
+string MapEncountMonsterGroup::getMusicId()
+/* 001d8e28 */{
+/* 001d8e28 */	return this.musicId_;
+/* 001d8e34 */}
+

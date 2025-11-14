@@ -1,0 +1,30 @@
+void Ｓ＿コンフィグ()
+/* 0015d532 */{
+/* 0015d532 */	Ａ＿サウンド状態保存(false);
+/* 0015d53e */	if (g_ConfigViewFunction.Numof() != 0)
+/* 0015d55a */	{
+/* 0015d55a */		g_ConfigViewFunction();
+/* 0015d57a */	}
+/* 0015d580 */	else
+/* 0015d580 */	{
+/* 0015d580 */		SYS_OpenConfig();
+/* 0015d586 */	}
+/* 0015d586 */	SYS_コンフィグセーブ();
+/* 0015d58c */	g_MessageWindowManager.UpdateMulColor();
+/* 0015d59c */	g_MessageWindowManager.UpdateAlpha();
+/* 0015d5ac */	g_MessageTextView.DrawAll(g_MessageTextModel);
+/* 0015d5c6 */	++g_NumofOpenConfig;
+/* 0015d5d6 */	SYS_情報集計データセーブ();
+/* 0015d5de */	Ａ＿サウンド状態復帰();
+/* 0015d5e4 */}
+
+int Ａ＿コンフィグ表示回数取得()
+/* 0015d5f2 */{
+/* 0015d5f2 */	return g_NumofOpenConfig;
+/* 0015d5fe */}
+
+void Ｓ＿コンフィグ＿関数登録(FTConfigView ConfigViewFunction)
+/* 0015d612 */{
+/* 0015d612 */	g_ConfigViewFunction = ConfigViewFunction;
+/* 0015d62c */}
+

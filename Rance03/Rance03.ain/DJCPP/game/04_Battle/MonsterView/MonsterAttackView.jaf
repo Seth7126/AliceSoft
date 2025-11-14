@@ -1,0 +1,168 @@
+MonsterAttackView::MonsterAttackView()
+/* 00198c28 */{
+/* 00198c30 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00198c56 */	this.isFirst_ = true;
+/* 00198c68 */}
+
+void MonsterAttackView::init(int parentPartsNumber)
+/* 00198c70 */{
+/* 00198c70 */	this.parent_.initAsDummy();
+/* 00198c80 */	this.parent_.setShow(true);
+/* 00198c96 */	this.parent_.setParent(parentPartsNumber);
+/* 00198cb0 */}
+
+void MonsterAttackView::reset(MonsterAttack attack, int position)
+/* 00198cb8 */{
+/* 00198cb8 */	this.attack_ = attack;
+/* 00198cda */	this.attr_ = getMonsterAttackAttributeFromId(this.attack_.getAttributeId());
+/* 00198d20 */	this.position_ = position;
+/* 00198d36 */	if (this.isFirst_)
+/* 00198d46 */	{
+/* 00198d46 */		this.isFirst_ = false;
+/* 00198d58 */		this.initIconParts();
+/* 00198d60 */		this.fadeIcon(true, NULL);
+/* 00198d70 */	}
+/* 00198d76 */	else
+/* 00198d76 */	{
+/* 00198d76 */		this.fadeIcon(false, this.resetParts);
+/* 00198d8e */	}
+/* 00198d8e */}
+
+void MonsterAttackView::fadeIcon(bool val, DG_GeneralCallback cb)
+/* 00198d96 */{
+/* 00198d96 */	PartsMotion m;
+/* 00198da6 */	if (val)
+/* 00198db6 */	{
+/* 00198db6 */		m.setScaling(0, 100, 1);
+/* 00198dd8 */	}
+/* 00198dde */	else
+/* 00198dde */	{
+/* 00198dde */		m.setScaling(100, 0, 1);
+/* 00198e00 */	}
+/* 00198e00 */	this.parts_[0].runMotion(m, cb);
+/* 00198e32 */}
+
+void MonsterAttackView::resetParts()
+/* 00198e3a */{
+/* 00198e3a */	this.initIconParts();
+/* 00198e42 */	this.fadeIcon(true, NULL);
+/* 00198e52 */}
+
+void MonsterAttackView::initIconParts()
+/* 00198e5a */{
+/* 00198e5a */	this.parts_[0].setPos(0.0, 0.0);
+/* 00198e7e */	this.parts_[0].init(this.getAttackTypeIcon(), 0);
+/* 00198ea4 */	this.parts_[0].changeOrigin(5);
+/* 00198ec2 */	this.parts_[0].setParent(this.parent_.getPartsNumber());
+/* 00198eea */	this.parts_[0].setShow(true);
+/* 00198f08 */	this.parts_[0].setScaling(0.0);
+/* 00198f26 */	this.setShowAttackDisable();
+/* 00198f2e */}
+
+void MonsterAttackView::setShowAttackDisable()
+/* 00198f36 */{
+/* 00198f36 */	if (this.attr_.getType() == 0 && !isMonsterAttackAvailable(this.attack_, this.position_))
+/* 00198f8e */	{
+/* 00198f8e */		this.parts_[0].setMultiColorValue(128, 128, 128);
+/* 00198fb8 */	}
+/* 00198fbe */	else
+/* 00198fbe */	{
+/* 00198fbe */		this.parts_[0].setMultiColorValue(255, 255, 255);
+/* 00198fe8 */	}
+/* 00198fe8 */}
+
+string MonsterAttackView::getAttackTypeIcon()
+/* 00198ff0 */{
+/* 00198ff0 */	int count = this.attack_.getTargetType() % 10;
+/* 00199014 */	switch (this.attr_.getId())
+/* 00199030 */	{
+/* 00199030 */	case "物理攻撃":
+/* 00199030 */	case "爆裂攻撃":
+/* 00199030 */	case "性的攻撃":
+/* 00199030 */	case "急所攻撃":
+/* 00199030 */		if (count == 1)
+/* 00199048 */		{
+/* 00199048 */			return "システム／スキル／モンスター／攻撃／物理";
+/* 00199050 */		}
+/* 00199056 */		else if (count == 8)
+/* 0019906e */		{
+/* 0019906e */			return "システム／スキル／モンスター／攻撃／物理全体";
+/* 00199076 */		}
+/* 0019907c */		else
+/* 0019907c */		{
+/* 0019907c */			return "システム／スキル／モンスター／攻撃／物理複数";
+/* 00199084 */		}
+/* 00199084 */	case "魔法攻撃":
+/* 00199084 */		if (count == 1)
+/* 0019909c */		{
+/* 0019909c */			return "システム／スキル／モンスター／攻撃／魔法";
+/* 001990a4 */		}
+/* 001990aa */		else if (count == 8)
+/* 001990c2 */		{
+/* 001990c2 */			return "システム／スキル／モンスター／攻撃／魔法全体";
+/* 001990ca */		}
+/* 001990d0 */		else
+/* 001990d0 */		{
+/* 001990d0 */			return "システム／スキル／モンスター／攻撃／魔法複数";
+/* 001990d8 */		}
+/* 001990d8 */	case "物理防御":
+/* 001990d8 */	case "魔法防御":
+/* 001990d8 */		return "システム／スキル／モンスター／攻撃／防御";
+/* 001990e0 */	case "物理治療":
+/* 001990e0 */	case "魔法治療":
+/* 001990e0 */		if (count == 1 || count == 2)
+/* 00199128 */		{
+/* 00199128 */			return "システム／スキル／モンスター／攻撃／治療";
+/* 00199130 */		}
+/* 00199136 */		else
+/* 00199136 */		{
+/* 00199136 */			return "システム／スキル／モンスター／攻撃／治療複数";
+/* 0019913e */		}
+/* 0019913e */	case "物理攻撃上昇":
+/* 0019913e */	case "魔法攻撃上昇":
+/* 0019913e */	case "物理防御上昇":
+/* 0019913e */	case "魔法防御上昇":
+/* 0019913e */		if (count == 1 || count == 2)
+/* 00199186 */		{
+/* 00199186 */			return "システム／スキル／モンスター／攻撃／バフ";
+/* 0019918e */			break;
+/* 00199194 */		}
+/* 00199194 */		return "システム／スキル／モンスター／攻撃／バフ複数";
+/* 0019919c */	}
+/* 0019919c */	return "システム／スキル／モンスター／攻撃／待機";
+/* 001991a4 */}
+
+bool MonsterAttackView::isSingleTarget()
+/* 001991b2 */{
+/* 001991b2 */	return this.attack_.getTargetType() % 10 == 1;
+/* 001991d6 */}
+
+void MonsterAttackView::setPartsShow()
+/* 001991e4 */{
+/* 001991e4 */	int i;
+/* 001991f6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00199246 */	{
+/* 00199246 */		this.parts_[i].setShow(true);
+/* 00199268 */	}
+/* 0019926e */	this.parent_.setShow(true);
+/* 00199284 */}
+
+void MonsterAttackView::setPartsPos()
+/* 0019928c */{
+/* 0019928e */}
+
+void MonsterAttackView::update()
+/* 00199294 */{
+/* 00199296 */}
+
+void MonsterAttackView::setPos(int x, int y)
+/* 0019929c */{
+/* 0019929c */	this.parent_.setPos(x, y);
+/* 001992c4 */}
+
+void MonsterAttackView::updatePosition(int position)
+/* 001992cc */{
+/* 001992cc */	this.position_ = position;
+/* 001992e2 */	this.setShowAttackDisable();
+/* 001992ea */}
+

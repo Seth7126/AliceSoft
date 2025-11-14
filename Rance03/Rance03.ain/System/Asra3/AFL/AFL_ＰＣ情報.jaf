@@ -1,0 +1,32 @@
+string AFL_PCInfo_GetCPUInfo()
+/* 00173516 */{
+/* 00173516 */	string VenderName;
+/* 0017352a */	string BrandName;
+/* 0017353e */	int Signature;
+/* 00173550 */	int CPUFlag;
+/* 00173562 */	SystemService.GetCPUInfo(VenderName, Signature, CPUFlag, BrandName);
+/* 00173590 */	return BrandName;
+/* 0017359c */}
+
+int AFL_PCInfo_GetMemoryInfo()
+/* 001735b0 */{
+/* 001735b0 */	int Max;
+/* 001735c2 */	int Use;
+/* 001735d4 */	SystemService.GetMemoryInfo(Max, Use);
+/* 001735ee */	return Max;
+/* 001735fa */}
+
+string AFL_PCInfo_GetOSInfo()
+/* 0017360e */{
+/* 0017360e */	string Text;
+/* 00173622 */	SystemService.GetOSInfo(Text);
+/* 00173636 */	return Text;
+/* 00173642 */}
+
+string AFL_PCInfo_GetScreenInfo()
+/* 00173656 */{
+/* 00173656 */	string Text;
+/* 0017366a */	SystemService.GetScreenInfo(Text);
+/* 0017367e */	return Text;
+/* 0017368a */}
+

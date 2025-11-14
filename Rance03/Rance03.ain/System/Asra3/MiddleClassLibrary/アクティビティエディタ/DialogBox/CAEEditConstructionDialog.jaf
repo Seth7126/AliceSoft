@@ -1,0 +1,607 @@
+CAEEditConstructionDialog::CAEEditConstructionDialog()
+/* 000534ec */{
+/* 000534f4 */	this.m_ProcessNameList.PushBack("作成");
+/* 00053504 */	this.m_ProcessNameList.PushBack("ピクセル作成");
+/* 00053514 */	this.m_ProcessNameList.PushBack("ＣＧ設定");
+/* 00053524 */	this.m_ProcessNameList.PushBack("ＲＧＢ色塗り");
+/* 00053534 */	this.m_ProcessNameList.PushBack("ブレンド塗り");
+/* 00053544 */	this.m_ProcessNameList.PushBack("アルファ塗り");
+/* 00053554 */	this.m_ProcessNameList.PushBack("ＲＧＢＡ色塗り");
+/* 00053564 */	this.m_ProcessNameList.PushBack("テキストブレンド");
+/* 00053574 */	this.m_ProcessNameList.PushBack("テキストコピー");
+/* 00053584 */	this.m_ProcessNameList.PushBack("グラデーション");
+/* 00053594 */	this.m_ProcessNameList.PushBack("矩形");
+/* 000535a4 */	this.m_ProcessNameList.PushBack("ＣＧ部分ブレンド");
+/* 000535b4 */	this.m_ProcessNameList.PushBack("ＣＧ部分拡大縮小ブレンド");
+/* 000535c4 */	this.m_ProcessNameList.PushBack("ＣＧ部分コピー");
+/* 000535d4 */	this.m_ProcessNameList.PushBack("ＣＧ部分拡大縮小コピー");
+/* 000535e4 */	this.m_ProcessNameList.PushBack("ＣＧ部分アルファブレンド");
+/* 000535f4 */	this.m_ProcessNameList.PushBack("ＣＧ部分拡大縮小アルファブレンド");
+/* 00053604 */	this.m_ProcessNameList.PushBack("ＣＧ部分アルファ塗り");
+/* 00053614 */	this.m_ProcessNameList.PushBack("ＣＧ部分拡大縮小アルファ塗り");
+/* 00053624 */	this.m_ProcessNameList.PushBack("白黒フィルタ全");
+/* 00053634 */	this.m_ProcessNameList.PushBack("白黒フィルタ");
+/* 00053644 */	this.m_ProcessNameList.PushBack("加算フィルタ全");
+/* 00053654 */	this.m_ProcessNameList.PushBack("加算フィルタ");
+/* 00053664 */	this.m_ProcessNameList.PushBack("乗算フィルタ全");
+/* 00053674 */	this.m_ProcessNameList.PushBack("乗算フィルタ");
+/* 00053684 */	this.m_ProcessNameList.PushBack("線");
+/* 00053694 */}
+
+CAEEditConstructionDialog::~CAEEditConstructionDialog()
+/* 0005369c */{
+/* 0005369c */	this.Release();
+/* 000536a4 */}
+
+void CAEEditConstructionDialog::CreateParts(int PosX, int PosY, ref array@CASConstructionProcess List)
+/* 000536ac */{
+/* 000536ac */	this.m_ProcessList.Realloc(List.Numof());
+/* 000536cc */	this.m_ProcessList.Copy(0, List, 0, List.Numof());
+/* 000536fe */	this.CreateRootLayoutBox();
+/* 00053706 */	this.CreateProcessFieldLayout();
+/* 0005370e */	this.CreateProcessNameBG();
+/* 00053716 */	this.CreateProcessBG();
+/* 0005371e */	this.CreateProcessLayout();
+/* 00053726 */	this.CreateProcessForm(this.m_ProcessLayout, this.m_ProcessNameBG, this.m_ProcessBG, 200, this.m_ProcessList);
+/* 0005375c */	this.CreateAddButton();
+/* 00053764 */	this.CreateRemoveButton();
+/* 0005376c */	this.CreateUpButton();
+/* 00053774 */	this.CreateDownButton();
+/* 0005377c */	this.CreateVScroll();
+/* 00053784 */	this.CreateHScroll();
+/* 0005378c */	this.CreateButtonLayout();
+/* 00053794 */	this.CreateOkButton();
+/* 0005379c */	this.CreateCancelButton();
+/* 000537a4 */	this.CreateBG(PosX, PosY);
+/* 000537c0 */}
+
+void CAEEditConstructionDialog::ReleaseProcessList()
+/* 000537c8 */{
+/* 000537c8 */	int Index;
+/* 000537da */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 0005382a */	{
+/* 0005382a */		this.m_EditProcessList[Index].Release();
+/* 00053846 */	}
+/* 0005384c */	this.m_EditProcessList.Free();
+/* 00053856 */}
+
+void CAEEditConstructionDialog::CreateRootLayoutBox()
+/* 0005385e */{
+/* 0005385e */	this.m_RootLayout = PARTS_GetFreeSystemPartsNumber();
+/* 00053870 */	Ｐ＿レイアウトボックス＿パディング設定(this.m_RootLayout, 6, 6, 6, 6);
+/* 00053898 */	Ｐ＿レイアウトボックス＿配置設定(this.m_RootLayout, 3);
+/* 000538ae */	AFL_Parts_AddMouseWheelEvent(this.m_RootLayout, this.MouseWheelEvent);
+/* 000538c8 */}
+
+void CAEEditConstructionDialog::CreateProcessFieldLayout()
+/* 000538d0 */{
+/* 000538d0 */	this.m_ProcessFieldLayout = PARTS_GetFreeSystemPartsNumber();
+/* 000538e2 */	Ｐ＿レイアウトボックス＿追加(this.m_RootLayout, this.m_ProcessFieldLayout);
+/* 000538fc */	Ｐ＿レイアウトボックス＿折り返し設定(this.m_ProcessFieldLayout, true, 256.0);
+/* 00053918 */	Ｐ＿Ｚ座標設定(this.m_ProcessFieldLayout, 1);
+/* 0005392e */	AFL_Parts_AddMouseWheelEvent(this.m_ProcessFieldLayout, this.MouseWheelEvent);
+/* 00053948 */}
+
+void CAEEditConstructionDialog::CreateProcessNameBG()
+/* 00053950 */{
+/* 00053950 */	this.m_ProcessNameBG = PARTS_GetFreeSystemPartsNumber();
+/* 00053962 */	Ｐ＿構築手順＿作成(this.m_ProcessNameBG, 200, 256, 1);
+/* 00053984 */	Ｐ＿構築手順＿色塗り(this.m_ProcessNameBG, 0, 0, 200, 256, 255, 255, 255, 255, 1);
+/* 000539ca */	Ｐ＿構築ビルド(this.m_ProcessNameBG, 1);
+/* 000539e0 */	Ｐ＿レイアウトボックス＿追加(this.m_ProcessFieldLayout, this.m_ProcessNameBG);
+/* 000539fa */	Ｐ＿マージン設定(this.m_ProcessNameBG, 0, 16, 0, 0);
+/* 00053a22 */	AFL_Parts_AddMouseWheelEvent(this.m_ProcessNameBG, this.MouseWheelEvent);
+/* 00053a3c */}
+
+void CAEEditConstructionDialog::CreateProcessBG()
+/* 00053a44 */{
+/* 00053a44 */	this.m_ProcessBG = PARTS_GetFreeSystemPartsNumber();
+/* 00053a56 */	Ｐ＿構築手順＿作成(this.m_ProcessBG, 552, 256, 1);
+/* 00053a78 */	Ｐ＿構築手順＿色塗り(this.m_ProcessBG, 0, 0, 552, 256, 255, 255, 255, 255, 1);
+/* 00053abe */	Ｐ＿構築手順＿色塗り(this.m_ProcessBG, 0, 0, 1, 256, 200, 200, 200, 255, 1);
+/* 00053b04 */	Ｐ＿構築ビルド(this.m_ProcessBG, 1);
+/* 00053b1a */	Ｐ＿レイアウトボックス＿追加(this.m_ProcessFieldLayout, this.m_ProcessBG);
+/* 00053b34 */	Ｐ＿マージン設定(this.m_ProcessBG, 0, 16, 0, 16);
+/* 00053b5c */	AFL_Parts_AddMouseWheelEvent(this.m_ProcessBG, this.MouseWheelEvent);
+/* 00053b76 */}
+
+void CAEEditConstructionDialog::CreateProcessLayout()
+/* 00053b7e */{
+/* 00053b7e */	this.m_ProcessLayout = PARTS_GetFreeSystemPartsNumber();
+/* 00053b90 */	Ｐ＿親設定(this.m_ProcessLayout, this.m_ProcessNameBG);
+/* 00053baa */	Ｐ＿Ｚ座標設定(this.m_ProcessLayout, 1);
+/* 00053bc0 */	AFL_Parts_AddMouseWheelEvent(this.m_ProcessLayout, this.MouseWheelEvent);
+/* 00053bda */}
+
+void CAEEditConstructionDialog::CreateAddButton()
+/* 00053be2 */{
+/* 00053be2 */	this.m_AddButton = PARTS_GetFreeSystemPartsNumber();
+/* 00053bf4 */	Ｐ＿ボタン＿サイズ設定(this.m_AddButton, 60, 24);
+/* 00053c10 */	Ｐ＿ボタン＿テキスト設定(this.m_AddButton, "追加");
+/* 00053c26 */	Ｐ＿マージン設定(this.m_AddButton, 1, 1, 3, 0);
+/* 00053c4e */	Ｐ＿レイアウトボックス＿追加(this.m_ProcessFieldLayout, this.m_AddButton);
+/* 00053c68 */	AFL_Parts_AddMouseLClickEvent(this.m_AddButton, this.MouseLClickEvent);
+/* 00053c82 */	AFL_Parts_AddMouseWheelEvent(this.m_AddButton, this.MouseWheelEvent);
+/* 00053c9c */}
+
+void CAEEditConstructionDialog::CreateRemoveButton()
+/* 00053ca4 */{
+/* 00053ca4 */	this.m_RemoveButton = PARTS_GetFreeSystemPartsNumber();
+/* 00053cb6 */	Ｐ＿ボタン＿サイズ設定(this.m_RemoveButton, 60, 24);
+/* 00053cd2 */	Ｐ＿ボタン＿テキスト設定(this.m_RemoveButton, "削除");
+/* 00053ce8 */	Ｐ＿マージン設定(this.m_RemoveButton, 1, 1, 3, 0);
+/* 00053d10 */	Ｐ＿レイアウトボックス＿追加(this.m_ProcessFieldLayout, this.m_RemoveButton);
+/* 00053d2a */	AFL_Parts_AddMouseLClickEvent(this.m_RemoveButton, this.MouseLClickEvent);
+/* 00053d44 */	AFL_Parts_AddMouseWheelEvent(this.m_RemoveButton, this.MouseWheelEvent);
+/* 00053d5e */}
+
+void CAEEditConstructionDialog::CreateUpButton()
+/* 00053d66 */{
+/* 00053d66 */	this.m_UpButton = PARTS_GetFreeSystemPartsNumber();
+/* 00053d78 */	Ｐ＿ボタン＿サイズ設定(this.m_UpButton, 60, 24);
+/* 00053d94 */	Ｐ＿ボタン＿テキスト設定(this.m_UpButton, "↑");
+/* 00053daa */	Ｐ＿マージン設定(this.m_UpButton, 1, 1, 3, 0);
+/* 00053dd2 */	Ｐ＿レイアウトボックス＿追加(this.m_ProcessFieldLayout, this.m_UpButton);
+/* 00053dec */	AFL_Parts_AddMouseLClickEvent(this.m_UpButton, this.MouseLClickEvent);
+/* 00053e06 */	AFL_Parts_AddMouseWheelEvent(this.m_UpButton, this.MouseWheelEvent);
+/* 00053e20 */}
+
+void CAEEditConstructionDialog::CreateDownButton()
+/* 00053e28 */{
+/* 00053e28 */	this.m_DownButton = PARTS_GetFreeSystemPartsNumber();
+/* 00053e3a */	Ｐ＿ボタン＿サイズ設定(this.m_DownButton, 60, 24);
+/* 00053e56 */	Ｐ＿ボタン＿テキスト設定(this.m_DownButton, "↓");
+/* 00053e6c */	Ｐ＿マージン設定(this.m_DownButton, 1, 1, 3, 0);
+/* 00053e94 */	Ｐ＿レイアウトボックス＿追加(this.m_ProcessFieldLayout, this.m_DownButton);
+/* 00053eae */	AFL_Parts_AddMouseLClickEvent(this.m_DownButton, this.MouseLClickEvent);
+/* 00053ec8 */	AFL_Parts_AddMouseWheelEvent(this.m_DownButton, this.MouseWheelEvent);
+/* 00053ee2 */}
+
+void CAEEditConstructionDialog::CreateVScroll()
+/* 00053eea */{
+/* 00053eea */	this.m_VScroll = PARTS_GetFreeSystemPartsNumber();
+/* 00053efc */	Ｐ＿縦スクロールバー＿サイズ設定(this.m_VScroll, 16, 256);
+/* 00053f18 */	Ｐ＿親設定(this.m_VScroll, this.m_ProcessNameBG);
+/* 00053f32 */	Ｐ＿座標設定(this.m_VScroll, 752.0, 0.0);
+/* 00053f4e */	Ｐ＿Ｚ座標設定(this.m_VScroll, 1);
+/* 00053f64 */	AFL_Parts_AddScrollEvent(this.m_VScroll, this.ScrollEvent);
+/* 00053f7e */	AFL_Parts_AddMouseWheelEvent(this.m_VScroll, this.MouseWheelEvent);
+/* 00053f98 */}
+
+void CAEEditConstructionDialog::CreateHScroll()
+/* 00053fa0 */{
+/* 00053fa0 */	this.m_HScroll = PARTS_GetFreeSystemPartsNumber();
+/* 00053fb2 */	Ｐ＿横スクロールバー＿サイズ設定(this.m_HScroll, 552, 16);
+/* 00053fce */	Ｐ＿親設定(this.m_HScroll, this.m_ProcessNameBG);
+/* 00053fe8 */	Ｐ＿座標設定(this.m_HScroll, 200.0, 256.0);
+/* 00054004 */	Ｐ＿Ｚ座標設定(this.m_HScroll, 1);
+/* 0005401a */	AFL_Parts_AddScrollEvent(this.m_HScroll, this.ScrollEvent);
+/* 00054034 */	AFL_Parts_AddMouseWheelEvent(this.m_HScroll, this.MouseWheelEvent);
+/* 0005404e */}
+
+void CAEEditConstructionDialog::CreateButtonLayout()
+/* 00054056 */{
+/* 00054056 */	this.m_ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 00054068 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_ButtonLayout, 2);
+/* 0005407e */	Ｐ＿レイアウトボックス＿パディング設定(this.m_ButtonLayout, 3, 3, 3, 3);
+/* 000540a6 */	Ｐ＿レイアウトボックス＿追加(this.m_RootLayout, this.m_ButtonLayout);
+/* 000540c0 */	AFL_Parts_AddMouseWheelEvent(this.m_RootLayout, this.MouseWheelEvent);
+/* 000540da */}
+
+void CAEEditConstructionDialog::CreateOkButton()
+/* 000540e2 */{
+/* 000540e2 */	this.m_OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 000540f4 */	Ｐ＿ボタン＿テキスト設定(this.m_OKButton, "決定");
+/* 0005410a */	Ｐ＿ボタン＿サイズ設定(this.m_OKButton, 65, 22);
+/* 00054126 */	Ｐ＿マージン設定(this.m_OKButton, 0, 0, 3, 0);
+/* 0005414e */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayout, this.m_OKButton);
+/* 00054168 */	AFL_Parts_AddMouseLClickEvent(this.m_OKButton, this.ClickOKButtonEvent);
+/* 00054182 */	AFL_Parts_AddMouseWheelEvent(this.m_OKButton, this.MouseWheelEvent);
+/* 0005419c */}
+
+void CAEEditConstructionDialog::CreateCancelButton()
+/* 000541a4 */{
+/* 000541a4 */	this.m_CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 000541b6 */	Ｐ＿ボタン＿テキスト設定(this.m_CancelButton, "キャンセル");
+/* 000541cc */	Ｐ＿ボタン＿サイズ設定(this.m_CancelButton, 100, 22);
+/* 000541e8 */	Ｐ＿マージン設定(this.m_CancelButton, 0, 0, 3, 0);
+/* 00054210 */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayout, this.m_CancelButton);
+/* 0005422a */	AFL_Parts_AddMouseLClickEvent(this.m_CancelButton, this.ClickCancelButtonEvent);
+/* 00054244 */	AFL_Parts_AddMouseWheelEvent(this.m_CancelButton, this.MouseWheelEvent);
+/* 0005425e */}
+
+void CAEEditConstructionDialog::CreateBG(int PosX, int PosY)
+/* 00054266 */{
+/* 00054266 */	int Width = AFL_Parts_GetWidth(this.m_RootLayout, 1);
+/* 00054288 */	int Height = AFL_Parts_GetHeight(this.m_RootLayout, 1);
+/* 000542aa */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 000542bc */	Ｐ＿構築手順＿ピクセル作成(this.m_BG, Width, Height, 1);
+/* 000542e6 */	Ｐ＿構築手順＿色塗り(this.m_BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 00054334 */	Ｐ＿構築ビルド(this.m_BG, 1);
+/* 0005434a */	Ｐ＿親設定(this.m_RootLayout, this.m_BG);
+/* 00054364 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 000543a6 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 000543e8 */	Ｐ＿座標設定(this.m_BG, PosX, PosY);
+/* 00054410 */	Ｐ＿ドラッグ可能設定(this.m_BG, true);
+/* 00054426 */	AFL_Parts_AddDragEndEvent(this.m_BG, this.DragEndEvent);
+/* 00054440 */	AFL_Parts_AddMouseWheelEvent(this.m_BG, this.MouseWheelEvent);
+/* 0005445a */}
+
+void CAEEditConstructionDialog::Release()
+/* 00054462 */{
+/* 00054462 */	this.m_ProcessList.Free();
+/* 0005446c */	this.m_dgChangedConstructionProcessList.Clear();
+/* 00054478 */	this.ReleaseProcessList();
+/* 00054480 */	PARTS_ReleaseWithInit(this.m_AddButton);
+/* 0005448e */	PARTS_ReleaseWithInit(this.m_RemoveButton);
+/* 0005449c */	PARTS_ReleaseWithInit(this.m_UpButton);
+/* 000544aa */	PARTS_ReleaseWithInit(this.m_DownButton);
+/* 000544b8 */	PARTS_ReleaseWithInit(this.m_BG);
+/* 000544c6 */	PARTS_ReleaseWithInit(this.m_CancelButton);
+/* 000544d4 */	PARTS_ReleaseWithInit(this.m_OKButton);
+/* 000544e2 */	PARTS_ReleaseWithInit(this.m_ButtonLayout);
+/* 000544f0 */	PARTS_ReleaseWithInit(this.m_HScroll);
+/* 000544fe */	PARTS_ReleaseWithInit(this.m_VScroll);
+/* 0005450c */	PARTS_ReleaseWithInit(this.m_ProcessLayout);
+/* 0005451a */	PARTS_ReleaseWithInit(this.m_ProcessBG);
+/* 00054528 */	PARTS_ReleaseWithInit(this.m_ProcessNameBG);
+/* 00054536 */	PARTS_ReleaseWithInit(this.m_ProcessFieldLayout);
+/* 00054544 */	PARTS_ReleaseWithInit(this.m_RootLayout);
+/* 00054552 */}
+
+void CAEEditConstructionDialog::Show(int ID, int PosX, int PosY, ref array@CASConstructionProcess List, DG_ChangedConstructionProcessList dgChangedConstructionProcessList)
+/* 0005455a */{
+/* 0005455a */	AFL_Parts_AddLayer(-1);
+/* 00054568 */	this.m_dgChangedConstructionProcessList = dgChangedConstructionProcessList;
+/* 00054582 */	this.m_ParentID = ID;
+/* 00054598 */	this.CreateParts(PosX, PosY, List);
+/* 000545be */	this.UpdateScroll();
+/* 000545c6 */	this.ScrollEvent(0, 0, 0);
+/* 000545e0 */	this.m_OK = false;
+/* 000545f2 */	this.m_Cancel = false;
+/* 00054604 */	for (; ; )
+/* 00054604 */	{
+/* 00054604 */		Ｐ＿クリック実行(false);
+/* 00054612 */		if (this.m_OK)
+/* 00054622 */		{
+/* 00054622 */			break;
+/* 00054628 */		}
+/* 00054628 */		if (this.m_Cancel)
+/* 00054638 */		{
+/* 00054638 */			dgChangedConstructionProcessList(ID, List);
+/* 0005466c */			break;
+/* 00054672 */		}
+/* 00054672 */	}
+/* 00054678 */	AFL_Parts_EraseLayer(-1);
+/* 00054684 */}
+
+void CAEEditConstructionDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 0005468c */{
+/* 0005468c */	this.m_OK = true;
+/* 0005469e */	AFL_Parts_EndWaitForClick(0);
+/* 000546aa */}
+
+void CAEEditConstructionDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 000546b2 */{
+/* 000546b2 */	this.m_Cancel = true;
+/* 000546c4 */	AFL_Parts_EndWaitForClick(0);
+/* 000546d0 */}
+
+void CAEEditConstructionDialog::DragEndEvent(int ID)
+/* 000546d8 */{
+/* 000546d8 */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 000546f6 */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 00054714 */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 00054736 */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 00054758 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0005479a */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 000547dc */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 00054804 */}
+
+void CAEEditConstructionDialog::MouseClickProcessName(int ID, int MouseX, int MouseY)
+/* 0005480c */{
+/* 0005480c */	int Index;
+/* 0005481e */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 0005486e */	{
+/* 0005486e */		this.m_EditProcessList[Index].SetActive(this.m_EditProcessList[Index].GetID() == ID);
+/* 000548b4 */	}
+/* 000548ba */	this.UpdateScroll();
+/* 000548c2 */}
+
+void CAEEditConstructionDialog::CreateProcessForm(int LayoutID, int ProcessNameAlphaClipper, int ProcessAlphaClipper, int NameWidth, ref array@CASConstructionProcess List)
+/* 000548ca */{
+/* 000548ca */	int XPos = this.m_HScroll == 0 ? 0 : Ｐ＿横スクロールバー＿スクロール位置取得(this.m_HScroll);
+/* 0005490a */	this.ReleaseProcessList();
+/* 00054912 */	int Index;
+/* 00054924 */	for (Index = 0; Index < List.Numof(); ++Index)
+/* 00054974 */	{
+/* 00054974 */		this.m_EditProcessList.Realloc(Index + 1);
+/* 00054996 */		this.m_EditProcessList[Index].Create(LayoutID, ProcessNameAlphaClipper, ProcessAlphaClipper, NameWidth, List[Index]);
+/* 000549f0 */		this.m_EditProcessList[Index].SetLButtonClick(this.MouseClickProcessName);
+/* 00054a16 */		this.m_EditProcessList[Index].SetMouseWheelEvent(this.MouseWheelEvent);
+/* 00054a3c */		this.m_EditProcessList[Index].SetChangedEvent(this.ChangedEvent);
+/* 00054a62 */		this.m_EditProcessList[Index].SetProcessLabelX(-XPos);
+/* 00054a8a */	}
+/* 00054a90 */}
+
+void CAEEditConstructionDialog::UpdateScroll()
+/* 00054a98 */{
+/* 00054a98 */	Ｐ＿縦スクロールバー＿全体量設定(this.m_VScroll, AFL_Parts_GetHeight(this.m_ProcessLayout, 1));
+/* 00054abe */	Ｐ＿縦スクロールバー＿表示量設定(this.m_VScroll, AFL_Parts_GetHeight(this.m_ProcessNameBG, 1));
+/* 00054ae4 */	int Index;
+/* 00054af6 */	int MaxWidth;
+/* 00054b08 */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 00054b58 */	{
+/* 00054b58 */		MaxWidth = Math.Max(MaxWidth, this.m_EditProcessList[Index].GetProcessLabelWidth());
+/* 00054b94 */	}
+/* 00054b9a */	int Pos = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_HScroll);
+/* 00054bb6 */	Ｐ＿横スクロールバー＿全体量設定(this.m_HScroll, MaxWidth);
+/* 00054bd0 */	Ｐ＿横スクロールバー＿表示量設定(this.m_HScroll, AFL_Parts_GetWidth(this.m_ProcessBG, 1));
+/* 00054bf6 */	Ｐ＿横スクロールバー＿スクロール位置設定(this.m_HScroll, Pos);
+/* 00054c10 */}
+
+void CAEEditConstructionDialog::UpScroll()
+/* 00054c18 */{
+/* 00054c18 */	int TotalHeight = Ｐ＿縦スクロールバー＿全体量取得(this.m_VScroll);
+/* 00054c34 */	int ProcessHeight = TotalHeight / this.m_EditProcessList.Numof();
+/* 00054c5c */	int Pos = Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 00054c78 */	Ｐ＿縦スクロールバー＿スクロール位置設定(this.m_VScroll, Pos - ProcessHeight);
+/* 00054c9e */}
+
+void CAEEditConstructionDialog::DownScroll()
+/* 00054ca6 */{
+/* 00054ca6 */	int TotalHeight = Ｐ＿縦スクロールバー＿全体量取得(this.m_VScroll);
+/* 00054cc2 */	int ProcessHeight = TotalHeight / this.m_EditProcessList.Numof();
+/* 00054cea */	int Pos = Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 00054d06 */	Ｐ＿縦スクロールバー＿スクロール位置設定(this.m_VScroll, Pos + ProcessHeight);
+/* 00054d2c */}
+
+void CAEEditConstructionDialog::ScrollEvent(int ID, int ScrollPos, int Total)
+/* 00054d34 */{
+/* 00054d34 */	int YPos = Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 00054d50 */	Ｐ＿座標設定(this.m_ProcessLayout, 0.0, -YPos);
+/* 00054d74 */	int XPos = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_HScroll);
+/* 00054d90 */	int Index;
+/* 00054da2 */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 00054df2 */	{
+/* 00054df2 */		this.m_EditProcessList[Index].SetProcessLabelX(-XPos);
+/* 00054e1a */	}
+/* 00054e20 */}
+
+void CAEEditConstructionDialog::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00054e28 */{
+/* 00054e28 */	int Pos = Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 00054e44 */	Ｐ＿縦スクロールバー＿スクロール位置設定(this.m_VScroll, (Pos - Forward * 36) + Back * 36);
+/* 00054e86 */}
+
+void CAEEditConstructionDialog::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00054e8e */{
+/* 00054e8e */	if (ID == this.m_AddButton)
+/* 00054eaa */	{
+/* 00054eaa */		this.AddItem(MouseX, MouseY);
+/* 00054ec6 */	}
+/* 00054ecc */	else if (ID == this.m_RemoveButton)
+/* 00054ee8 */	{
+/* 00054ee8 */		this.RemoveItem();
+/* 00054ef0 */	}
+/* 00054ef6 */	else if (ID == this.m_UpButton)
+/* 00054f12 */	{
+/* 00054f12 */		this.UpItem();
+/* 00054f1a */	}
+/* 00054f20 */	else if (ID == this.m_DownButton)
+/* 00054f3c */	{
+/* 00054f3c */		this.DownItem();
+/* 00054f44 */	}
+/* 00054f44 */	this.UpdateScroll();
+/* 00054f4c */	this.ChangedEvent(0);
+/* 00054f5a */}
+
+void CAEEditConstructionDialog::AddItem(int MouseX, int MouseY)
+/* 00054f62 */{
+/* 00054f62 */	this.m_SelectIndex = -1;
+/* 00054f74 */	CAESelectTextDialog Form;
+/* 00054f84 */	Form.Show(0, "追加する手順を選択してください", MouseX, MouseY, this.m_ProcessNameList, "", this.SelecteTextEvent);
+/* 00054fd0 */	CASConstructionProcess Process;
+/* 00054fe0 */	switch (this.m_SelectIndex)
+/* 00054ff6 */	{
+/* 00054ff6 */	case 0:
+/* 00054ff6 */		Process.SetCommand(0);
+/* 0005500c */		break;
+/* 00055012 */	case 1:
+/* 00055012 */		Process.SetCommand(1);
+/* 00055028 */		break;
+/* 0005502e */	case 2:
+/* 0005502e */		Process.SetCommand(2);
+/* 00055044 */		break;
+/* 0005504a */	case 3:
+/* 0005504a */		Process.SetCommand(3);
+/* 00055060 */		break;
+/* 00055066 */	case 4:
+/* 00055066 */		Process.SetCommand(4);
+/* 0005507c */		break;
+/* 00055082 */	case 5:
+/* 00055082 */		Process.SetCommand(5);
+/* 00055098 */		break;
+/* 0005509e */	case 6:
+/* 0005509e */		Process.SetCommand(6);
+/* 000550b4 */		break;
+/* 000550ba */	case 7:
+/* 000550ba */		Process.SetCommand(7);
+/* 000550d0 */		break;
+/* 000550d6 */	case 8:
+/* 000550d6 */		Process.SetCommand(8);
+/* 000550ec */		break;
+/* 000550f2 */	case 9:
+/* 000550f2 */		Process.SetCommand(9);
+/* 00055108 */		break;
+/* 0005510e */	case 10:
+/* 0005510e */		Process.SetCommand(10);
+/* 00055124 */		break;
+/* 0005512a */	case 11:
+/* 0005512a */		Process.SetCommand(11);
+/* 00055140 */		break;
+/* 00055146 */	case 12:
+/* 00055146 */		Process.SetCommand(13);
+/* 0005515c */		break;
+/* 00055162 */	case 13:
+/* 00055162 */		Process.SetCommand(12);
+/* 00055178 */		break;
+/* 0005517e */	case 14:
+/* 0005517e */		Process.SetCommand(14);
+/* 00055194 */		break;
+/* 0005519a */	case 15:
+/* 0005519a */		Process.SetCommand(19);
+/* 000551b0 */		break;
+/* 000551b6 */	case 16:
+/* 000551b6 */		Process.SetCommand(20);
+/* 000551cc */		break;
+/* 000551d2 */	case 17:
+/* 000551d2 */		Process.SetCommand(21);
+/* 000551e8 */		break;
+/* 000551ee */	case 18:
+/* 000551ee */		Process.SetCommand(22);
+/* 00055204 */		break;
+/* 0005520a */	case 19:
+/* 0005520a */		Process.SetCommand(15);
+/* 00055220 */		break;
+/* 00055226 */	case 20:
+/* 00055226 */		Process.SetCommand(15);
+/* 0005523c */		break;
+/* 00055242 */	case 21:
+/* 00055242 */		Process.SetCommand(16);
+/* 00055258 */		break;
+/* 0005525e */	case 22:
+/* 0005525e */		Process.SetCommand(16);
+/* 00055274 */		break;
+/* 0005527a */	case 23:
+/* 0005527a */		Process.SetCommand(17);
+/* 00055290 */		break;
+/* 00055296 */	case 24:
+/* 00055296 */		Process.SetCommand(17);
+/* 000552ac */		break;
+/* 000552b2 */	case 25:
+/* 000552b2 */		Process.SetCommand(18);
+/* 000552c8 */		break;
+/* 000552ce */	default:
+/* 000552ce */		return;
+/* 000552d0 */	}
+/* 000552d0 */	if (this.m_SelectIndex == 19 || this.m_SelectIndex == 21 || this.m_SelectIndex == 23)
+/* 00055348 */	{
+/* 00055348 */		Process.SetFullSize(true);
+/* 0005535e */	}
+/* 0005535e */	int Index;
+/* 00055370 */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 000553c0 */	{
+/* 000553c0 */		if (this.m_EditProcessList[Index].IsActive())
+/* 000553e2 */		{
+/* 000553e2 */			break;
+/* 000553e8 */		}
+/* 000553e8 */	}
+/* 000553ee */	++Index;
+/* 000553fe */	if (this.m_ProcessList.Numof() <= Index)
+/* 00055420 */	{
+/* 00055420 */		this.m_ProcessList.PushBack(Process);
+/* 00055438 */	}
+/* 0005543e */	else
+/* 0005543e */	{
+/* 0005543e */		this.m_ProcessList.Insert(Index, Process);
+/* 00055460 */	}
+/* 00055460 */	this.CreateProcessForm(this.m_ProcessLayout, this.m_ProcessNameBG, this.m_ProcessBG, 200, this.m_ProcessList);
+/* 00055496 */	Index = Math.Max(0, Math.Min(this.m_EditProcessList.Numof() - 1, Index));
+/* 000554de */	this.m_EditProcessList[Index].SetActive(true);
+/* 00055500 */	this.DownScroll();
+/* 00055508 */}
+
+void CAEEditConstructionDialog::CreateContentEvent(int LayoutBox)
+/* 00055510 */{
+/* 00055512 */}
+
+void CAEEditConstructionDialog::SelectedEvent(int ID, int Selected)
+/* 00055518 */{
+/* 00055518 */	this.m_SelectIndex = Selected;
+/* 0005552e */}
+
+void CAEEditConstructionDialog::RemoveItem()
+/* 00055536 */{
+/* 00055536 */	int Index;
+/* 00055548 */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 00055598 */	{
+/* 00055598 */		if (this.m_EditProcessList[Index].IsActive())
+/* 000555ba */		{
+/* 000555ba */			break;
+/* 000555c0 */		}
+/* 000555c0 */	}
+/* 000555c6 */	if (this.m_EditProcessList.Numof() <= Index)
+/* 000555e8 */	{
+/* 000555e8 */		return;
+/* 000555ea */	}
+/* 000555ea */	this.m_ProcessList.Erase(Index);
+/* 00055600 */	this.CreateProcessForm(this.m_ProcessLayout, this.m_ProcessNameBG, this.m_ProcessBG, 200, this.m_ProcessList);
+/* 00055636 */	if (this.m_ProcessList.Empty())
+/* 00055646 */	{
+/* 00055646 */		return;
+/* 00055648 */	}
+/* 00055648 */	Index = Math.Max(0, Math.Min(this.m_EditProcessList.Numof() - 1, Index));
+/* 00055690 */	this.m_EditProcessList[Index].SetActive(true);
+/* 000556b2 */}
+
+void CAEEditConstructionDialog::UpItem()
+/* 000556ba */{
+/* 000556ba */	int Index;
+/* 000556cc */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 0005571c */	{
+/* 0005571c */		if (!this.m_EditProcessList[Index].IsActive())
+/* 00055740 */		{
+/* 00055740 */			continue;
+/* 00055746 */		}
+/* 00055746 */		if (Index <= 0)
+/* 0005575e */		{
+/* 0005575e */			return;
+/* 00055760 */		}
+/* 00055760 */		this.m_ProcessList[Index] <=> this.m_ProcessList[Index - 1];
+/* 00055798 */		break;
+/* 0005579e */	}
+/* 000557a4 */	if (this.m_EditProcessList.Numof() <= Index)
+/* 000557c6 */	{
+/* 000557c6 */		return;
+/* 000557c8 */	}
+/* 000557c8 */	this.CreateProcessForm(this.m_ProcessLayout, this.m_ProcessNameBG, this.m_ProcessBG, 200, this.m_ProcessList);
+/* 000557fe */	this.m_EditProcessList[Index - 1].SetActive(true);
+/* 00055828 */	this.UpScroll();
+/* 00055830 */}
+
+void CAEEditConstructionDialog::DownItem()
+/* 00055838 */{
+/* 00055838 */	int Index;
+/* 0005584a */	for (Index = 0; Index < this.m_EditProcessList.Numof(); ++Index)
+/* 0005589a */	{
+/* 0005589a */		if (!this.m_EditProcessList[Index].IsActive())
+/* 000558be */		{
+/* 000558be */			continue;
+/* 000558c4 */		}
+/* 000558c4 */		if (this.m_EditProcessList.Numof() - 1 <= Index)
+/* 000558ee */		{
+/* 000558ee */			return;
+/* 000558f0 */		}
+/* 000558f0 */		this.m_ProcessList[Index] <=> this.m_ProcessList[Index + 1];
+/* 00055928 */		break;
+/* 0005592e */	}
+/* 00055934 */	if (this.m_EditProcessList.Numof() <= Index)
+/* 00055956 */	{
+/* 00055956 */		return;
+/* 00055958 */	}
+/* 00055958 */	this.CreateProcessForm(this.m_ProcessLayout, this.m_ProcessNameBG, this.m_ProcessBG, 200, this.m_ProcessList);
+/* 0005598e */	this.m_EditProcessList[Index + 1].SetActive(true);
+/* 000559b8 */	this.DownScroll();
+/* 000559c0 */}
+
+void CAEEditConstructionDialog::ChangedEvent(int ID)
+/* 000559c8 */{
+/* 000559c8 */	this.m_dgChangedConstructionProcessList(this.m_ParentID, this.m_ProcessList);
+/* 000559fc */}
+
+void CAEEditConstructionDialog::SelecteTextEvent(int ID, string Name)
+/* 00055a04 */{
+/* 00055a04 */	this.m_SelectIndex = this.m_ProcessNameList.Find(0, this.m_ProcessNameList.Numof(), Name);
+/* 00055a40 */}
+

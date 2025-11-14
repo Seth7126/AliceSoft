@@ -1,0 +1,35 @@
+void MonsterAttackAttribute::init(string id)
+/* 001da3be */{
+/* 001da3be */	string key = "モンスター攻撃属性情報";
+/* 001da3d2 */	this.id_ = id;
+/* 001da3ea */	this.name_ = EX_SA2String(key, this.id_, "name", "");
+/* 001da41e */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001da452 */	this.flatName_ = EX_SA2String(key, this.id_, "flatName", "");
+/* 001da486 */	this.type_ = EX_SA2Int(key, this.id_, "type", 0);
+/* 001da4b8 */}
+
+string MonsterAttackAttribute::getId()
+/* 001da4c0 */{
+/* 001da4c0 */	return this.id_;
+/* 001da4cc */}
+
+string MonsterAttackAttribute::getName()
+/* 001da4da */{
+/* 001da4da */	return this.name_;
+/* 001da4e6 */}
+
+string MonsterAttackAttribute::getImageName()
+/* 001da4f4 */{
+/* 001da4f4 */	return this.imageName_;
+/* 001da500 */}
+
+int MonsterAttackAttribute::getType()
+/* 001da50e */{
+/* 001da50e */	return this.type_;
+/* 001da51a */}
+
+string MonsterAttackAttribute::getFlatName()
+/* 001da528 */{
+/* 001da528 */	return this.flatName_;
+/* 001da534 */}
+

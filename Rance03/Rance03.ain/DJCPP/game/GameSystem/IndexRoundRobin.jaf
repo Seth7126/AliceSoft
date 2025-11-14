@@ -1,0 +1,57 @@
+void IndexRoundRobin::init(int count)
+/* 001d433c */{
+/* 001d433c */	this.count_ = count;
+/* 001d4352 */	this.lastIndex_ = -1;
+/* 001d4364 */}
+
+int IndexRoundRobin::get()
+/* 001d436c */{
+/* 001d436c */	if (this.count_ == 0)
+/* 001d4384 */	{
+/* 001d4384 */		return -1;
+/* 001d438c */	}
+/* 001d438c */	if (this.indexes_.Empty())
+/* 001d439c */	{
+/* 001d439c */		this.resetIndexes();
+/* 001d43a4 */	}
+/* 001d43a4 */	int val = this.indexes_[0];
+/* 001d43c2 */	this.indexes_.Erase(0);
+/* 001d43d4 */	return val;
+/* 001d43e0 */}
+
+void IndexRoundRobin::resetIndexes()
+/* 001d43ee */{
+/* 001d43ee */	int i;
+/* 001d4400 */	for (i = 0; i < this.count_; ++i)
+/* 001d444a */	{
+/* 001d444a */		this.indexes_.PushBack(i);
+/* 001d445e */	}
+/* 001d4464 */	this.shuffleIndexes();
+/* 001d446c */	if (this.lastIndex_ == this.indexes_[0])
+/* 001d4490 */	{
+/* 001d4490 */		int l;
+/* 001d44a2 */		int r = RAND(this.indexes_.Numof() - 1);
+/* 001d44cc */		this.indexes_[l] <=> this.indexes_[r];
+/* 001d44fc */	}
+/* 001d44fc */	this.lastIndex_ = this.indexes_[this.indexes_.Numof() - 1];
+/* 001d452c */}
+
+void IndexRoundRobin::shuffleIndexes()
+/* 001d4534 */{
+/* 001d4534 */	if (this.indexes_.Numof() <= 1)
+/* 001d4552 */	{
+/* 001d4552 */		return;
+/* 001d4554 */	}
+/* 001d4554 */	int i;
+/* 001d4566 */	int n = this.indexes_.Numof();
+/* 001d4582 */	for (i = 0; i < n * 2; ++i)
+/* 001d45d4 */	{
+/* 001d45d4 */		int l = RAND(n) - 1;
+/* 001d45f8 */		int r = RAND(n) - 1;
+/* 001d461c */		if (l != r)
+/* 001d4638 */		{
+/* 001d4638 */			this.indexes_[l] <=> this.indexes_[r];
+/* 001d4668 */		}
+/* 001d4668 */	}
+/* 001d466e */}
+

@@ -1,0 +1,45 @@
+void initGameMode()
+/* 001e3fba */{
+/* 001e3fba */	AFL_SetInvalidateFrameSkipWhileMessageSkip(false);
+/* 001e3fc6 */}
+
+void setGameMode(bool isGameMode)
+/* 001e3fd4 */{
+/* 001e3fd4 */	int val = isGameMode;
+/* 001e3fea */	g_lastFrameSkipMode.PushBack(AFL_GetInvalidateFrameSkipWhileMessageSkip());
+/* 001e3ffa */	AFL_SetInvalidateFrameSkipWhileMessageSkip(isGameMode);
+/* 001e400a */	オートモードマーク表示許可設定(!isGameMode);
+/* 001e401e */	既読スキップモードマーク表示許可設定(!isGameMode);
+/* 001e4032 */	updateGameModeParts(isGameMode);
+/* 001e4042 */	g_hallucination.update();
+/* 001e4052 */}
+
+void restoreGameMode()
+/* 001e4060 */{
+/* 001e4060 */	bool bFlg = false;
+/* 001e4072 */	if (g_lastFrameSkipMode.Empty())
+/* 001e4082 */	{
+/* 001e4082 */		bFlg = false;
+/* 001e4094 */	}
+/* 001e409a */	else
+/* 001e409a */	{
+/* 001e409a */		bFlg = g_lastFrameSkipMode[g_lastFrameSkipMode.Numof() - 1];
+/* 001e40ca */		g_lastFrameSkipMode.PopBack();
+/* 001e40d4 */	}
+/* 001e40d4 */	int val = bFlg;
+/* 001e40ea */	AFL_SetInvalidateFrameSkipWhileMessageSkip(bFlg);
+/* 001e40fa */	オートモードマーク表示許可設定(!bFlg);
+/* 001e410e */	既読スキップモードマーク表示許可設定(!bFlg);
+/* 001e4122 */	updateGameModeParts(bFlg);
+/* 001e4132 */	g_hallucination.update();
+/* 001e4142 */}
+
+bool getGameMode()
+/* 001e4150 */{
+/* 001e4150 */	return AFL_GetInvalidateFrameSkipWhileMessageSkip();
+/* 001e4158 */}
+
+void updateGameModeParts(bool isGameMode)
+/* 001e416c */{
+/* 001e416e */}
+

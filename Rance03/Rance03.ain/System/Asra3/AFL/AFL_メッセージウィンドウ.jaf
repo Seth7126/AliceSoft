@@ -1,0 +1,32 @@
+void AFL_SetShowMessageWindowCallbackFunc(FTShowMessageWindowCallback Func)
+/* 00169fde */{
+/* 00169fde */	if (Func.Numof() == 0)
+/* 00169ff8 */	{
+/* 00169ff8 */		return;
+/* 00169ffa */	}
+/* 00169ffa */	g_ShowMessageWindowCallbackFuncList += Func;
+/* 0016a014 */}
+
+void AFL_ClearShowMessageWindowCallbackFunc(FTShowMessageWindowCallback Func)
+/* 0016a022 */{
+/* 0016a022 */	if (Func.Numof() == 0)
+/* 0016a03c */	{
+/* 0016a03c */		return;
+/* 0016a03e */	}
+/* 0016a03e */	g_ShowMessageWindowCallbackFuncList -= Func;
+/* 0016a058 */}
+
+void AFL_UpdateMessageWindowLayer(int ID)
+/* 0016a066 */{
+/* 0016a066 */	if (ID == -1)
+/* 0016a07e */	{
+/* 0016a07e */		ID = AFL_Parts_GetActiveLayer();
+/* 0016a090 */	}
+/* 0016a090 */	g_MessageWindowManager.SetPartsLayer(ID);
+/* 0016a0aa */	g_MessageTextView.SetPartsLayer(ID);
+/* 0016a0c4 */	g_SystemButtonViewList.SetPartsLayer(ID);
+/* 0016a0de */	_g_MsgKeyWaitAnime.SetPartsLayer(ID);
+/* 0016a0f8 */	_g_MsgSkipModeCGList.SetPartsLayer(ID);
+/* 0016a112 */	_g_AutoModeCGList.SetPartsLayer(ID);
+/* 0016a12c */}
+

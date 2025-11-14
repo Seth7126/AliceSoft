@@ -1,0 +1,52 @@
+DungeonBackground::DungeonBackground()
+/* 0018b0f0 */{
+/* 0018b0f8 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018b11e */}
+
+void DungeonBackground::init(string dungeonId)
+/* 0018b126 */{
+/* 0018b126 */	this.dungeon_ <- getDungeonFromId(dungeonId);
+/* 0018b162 */	int i;
+/* 0018b174 */	for (i = 0; i < this.sideObject_.Numof(); ++i)
+/* 0018b1c4 */	{
+/* 0018b1c4 */		this.sideObject_[i].init(this.dungeon_.getFlatName(i), i);
+/* 0018b204 */	}
+/* 0018b20a */	this.initParts();
+/* 0018b212 */}
+
+void DungeonBackground::update()
+/* 0018b21a */{
+/* 0018b21c */}
+
+void DungeonBackground::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 0018b222 */{
+/* 0018b222 */	this.setPartsShow();
+/* 0018b22a */	PartsMotion m;
+/* 0018b23a */	m = getStandardMotion(val ? 0 : 1);
+/* 0018b276 */	m.setTime(val ? 500 : 300);
+/* 0018b2a8 */	this.partsBg_.runMotion(m, onFinish);
+/* 0018b2d2 */	int i;
+/* 0018b2e4 */	for (i = 0; i < this.sideObject_.Numof(); ++i)
+/* 0018b334 */	{
+/* 0018b334 */		this.sideObject_[i].fadeIn(val, NULL);
+/* 0018b35c */	}
+/* 0018b362 */}
+
+void DungeonBackground::initParts()
+/* 0018b36a */{
+/* 0018b36a */	this.partsBg_.init(this.dungeon_.getBackGroundImageName(), 0);
+/* 0018b390 */	this.partsBg_.setPos(0.0, 0.0);
+/* 0018b3ac */	this.partsBg_.setZ(1000.0);
+/* 0018b3c2 */	this.partsBg_.setShow(true);
+/* 0018b3d8 */	this.setPartsPos();
+/* 0018b3e0 */}
+
+void DungeonBackground::setPartsShow()
+/* 0018b3e8 */{
+/* 0018b3e8 */	this.partsBg_.setShow(true);
+/* 0018b3fe */}
+
+void DungeonBackground::setPartsPos()
+/* 0018b406 */{
+/* 0018b408 */}
+

@@ -1,0 +1,182 @@
+void Dungeon::init(string id)
+/* 001ce31e */{
+/* 001ce31e */	this.isLineLoaded_ = false;
+/* 001ce330 */	this.isShowTitle_ = false;
+/* 001ce342 */	this.id_ = id;
+/* 001ce35a */	this.loadDungeonInfomationFromEx();
+/* 001ce362 */}
+
+void Dungeon::loadDungeonLine()
+/* 001ce36a */{
+/* 001ce36a */	this.createDungeonLine(this.exDefinition_, this.dungeonWidth_);
+/* 001ce386 */	this.setDungeonLineInfo();
+/* 001ce38e */}
+
+void Dungeon::loadDungeonInfomationFromEx()
+/* 001ce396 */{
+/* 001ce396 */	this.exDefinition_ = "ダンジョン" + this.id_;
+/* 001ce3b6 */	this.dungeonWidth_ = this.getDungeonWidth(this.exDefinition_);
+/* 001ce3d4 */	if (!EX_IsExist(this.exDefinition_))
+/* 001ce3ec */	{
+/* 001ce3ec */		pass("情報がありません:%s" % this.exDefinition_);
+/* 001ce40a */	}
+/* 001ce40a */	string key = "ダンジョン情報";
+/* 001ce41e */	this.caption_ = EX_SA2String(key, this.id_, "caption", "取得できませんでした");
+/* 001ce452 */	this.defaultCardId_ = EX_SA2String(key, this.id_, "defaultCardId", "取得できませんでした");
+/* 001ce486 */	this.backGroundImage_ = EX_SA2String(key, this.id_, "backGroundImage", "システム／ダンジョン／背景／仮");
+/* 001ce4ba */	this.musicId_ = EX_SA2String(key, this.id_, "musicId", "");
+/* 001ce4ee */	this.shadowR_ = EX_SA2Int(key, this.id_, "shadowR", 0);
+/* 001ce520 */	this.shadowG_ = EX_SA2Int(key, this.id_, "shadowG", 0);
+/* 001ce552 */	this.shadowB_ = EX_SA2Int(key, this.id_, "shadowB", 0);
+/* 001ce584 */	this.bgFlatName_[0] = EX_SA2String(key, this.id_, "flatLeft", "");
+/* 001ce5c0 */	this.bgFlatName_[1] = EX_SA2String(key, this.id_, "flatRight", "");
+/* 001ce5fc */	this.bgFlatName_[2] = EX_SA2String(key, this.id_, "flatTop", "");
+/* 001ce638 */	this.titleFlatName_ = EX_SA2String(key, this.id_, "flatTitle", "");
+/* 001ce66c */}
+
+void Dungeon::setDungeonLineInfo()
+/* 001ce674 */{
+/* 001ce674 */	int i;
+/* 001ce686 */	for (i = 0; i < this.dungeonLine_.Numof(); ++i)
+/* 001ce6d6 */	{
+/* 001ce6d6 */		int j;
+/* 001ce6e8 */		for (j = 0; j < this.dungeonWidth_; ++j)
+/* 001ce732 */		{
+/* 001ce732 */			string typeId = EX_A2String(this.exDefinition_, j * 2 + 0, i, "");
+/* 001ce77a */			int openType = EX_A2Int(this.exDefinition_, j * 2 + 1, i, 0);
+/* 001ce7c0 */			this.dungeonLine_[i].setDungeonCard(j, typeId, openType);
+/* 001ce7fa */		}
+/* 001ce800 */	}
+/* 001ce806 */	this.dungeonLine_.Reverse();
+/* 001ce810 */}
+
+void Dungeon::createDungeonLine(string def, int width)
+/* 001ce818 */{
+/* 001ce818 */	int height = EX_Height(def);
+/* 001ce834 */	this.dungeonLine_.Alloc(height);
+/* 001ce84e */	int i;
+/* 001ce860 */	for (i = 0; i < this.dungeonLine_.Numof(); ++i)
+/* 001ce8b0 */	{
+/* 001ce8b0 */		int depth = this.dungeonLine_.Numof() - i - 1;
+/* 001ce8e0 */		this.dungeonLine_[i].init(width, depth);
+/* 001ce910 */	}
+/* 001ce916 */}
+
+int Dungeon::getDungeonWidth(string def)
+/* 001ce91e */{
+/* 001ce91e */	int lineCount;
+/* 001ce930 */	int j;
+/* 001ce942 */	for (j = 0; j < 9; ++j)
+/* 001ce988 */	{
+/* 001ce988 */		if (EX_A2String(def, j * 2, 0, "") == "")
+/* 001ce9c4 */		{
+/* 001ce9c4 */			break;
+/* 001ce9ca */		}
+/* 001ce9ca */		lineCount = j + 1;
+/* 001ce9e8 */	}
+/* 001ce9ee */	return lineCount;
+/* 001ce9fa */}
+
+ref DungeonLine Dungeon::getDungeonLine(int line)
+/* 001cea08 */{
+/* 001cea08 */	return this.dungeonLine_[line % this.dungeonLine_.Numof()];
+/* 001cea36 */}
+
+int Dungeon::getDepth()
+/* 001cea44 */{
+/* 001cea44 */	return this.dungeonLine_.Numof();
+/* 001cea56 */}
+
+string Dungeon::getId()
+/* 001cea64 */{
+/* 001cea64 */	return this.id_;
+/* 001cea70 */}
+
+string Dungeon::getCaption()
+/* 001cea7e */{
+/* 001cea7e */	return this.caption_;
+/* 001cea8a */}
+
+int Dungeon::getWidth()
+/* 001cea98 */{
+/* 001cea98 */	return this.dungeonWidth_;
+/* 001ceaa4 */}
+
+void Dungeon::reset()
+/* 001ceab2 */{
+/* 001ceab2 */	if (!this.isLineLoaded_)
+/* 001ceac4 */	{
+/* 001ceac4 */		this.isLineLoaded_ = true;
+/* 001cead6 */		this.loadDungeonLine();
+/* 001ceade */	}
+/* 001ceade */	int i;
+/* 001ceaf0 */	for (i = 0; i < this.dungeonLine_.Numof(); ++i)
+/* 001ceb40 */	{
+/* 001ceb40 */		this.dungeonLine_[i].reset();
+/* 001ceb5c */	}
+/* 001ceb62 */}
+
+string Dungeon::getDefaultCardId()
+/* 001ceb6a */{
+/* 001ceb6a */	return this.defaultCardId_;
+/* 001ceb76 */}
+
+string Dungeon::getBackGroundImageName()
+/* 001ceb84 */{
+/* 001ceb84 */	return this.backGroundImage_;
+/* 001ceb90 */}
+
+string Dungeon::getMusicId()
+/* 001ceb9e */{
+/* 001ceb9e */	return this.musicId_;
+/* 001cebaa */}
+
+void Dungeon::setShowMinimap(bool isShow)
+/* 001cebb8 */{
+/* 001cebb8 */	this.isShowMinimap_ = isShow;
+/* 001cebce */}
+
+bool Dungeon::isShowMinimap()
+/* 001cebd6 */{
+/* 001cebd6 */	return this.isShowMinimap_;
+/* 001cebe2 */}
+
+int Dungeon::getShadowR()
+/* 001cebf0 */{
+/* 001cebf0 */	return this.shadowR_;
+/* 001cebfc */}
+
+int Dungeon::getShadowG()
+/* 001cec0a */{
+/* 001cec0a */	return this.shadowG_;
+/* 001cec16 */}
+
+int Dungeon::getShadowB()
+/* 001cec24 */{
+/* 001cec24 */	return this.shadowB_;
+/* 001cec30 */}
+
+string Dungeon::getFlatName(int type)
+/* 001cec3e */{
+/* 001cec3e */	if (0 <= type && type < this.bgFlatName_.Numof())
+/* 001cec90 */	{
+/* 001cec90 */		return this.bgFlatName_[type];
+/* 001ceca8 */	}
+/* 001ceca8 */	return "";
+/* 001cecb0 */}
+
+void Dungeon::setShowTitle(bool isShow)
+/* 001cecbe */{
+/* 001cecbe */	this.isShowTitle_ = isShow;
+/* 001cecd4 */}
+
+bool Dungeon::isShowTitle()
+/* 001cecdc */{
+/* 001cecdc */	return this.isShowTitle_;
+/* 001cece8 */}
+
+string Dungeon::getTitleFlatName()
+/* 001cecf6 */{
+/* 001cecf6 */	return this.titleFlatName_;
+/* 001ced02 */}
+

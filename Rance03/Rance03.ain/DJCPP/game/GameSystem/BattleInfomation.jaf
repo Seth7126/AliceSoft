@@ -1,0 +1,131 @@
+BattleInfomation::BattleInfomation()
+/* 001cccc2 */{
+/* 001cccca */	this.reset();
+/* 001cccd2 */}
+
+void BattleInfomation::reset()
+/* 001cccda */{
+/* 001cccda */	this.monsterId_.Free();
+/* 001ccce4 */	this.gold_ = -1;
+/* 001cccf6 */	this.exp_ = -1;
+/* 001ccd08 */	this.musicId_ = "音楽／戦闘／通常";
+/* 001ccd1c */	this.itemId_ = "";
+/* 001ccd30 */	this.itemProbability_ = 0;
+/* 001ccd42 */	this.battleBackGroundId_ = "平野";
+/* 001ccd56 */}
+
+void BattleInfomation::addMonster(string monsterId)
+/* 001ccd5e */{
+/* 001ccd5e */	this.monsterId_.PushBack(monsterId);
+/* 001ccd72 */}
+
+void BattleInfomation::setMonsterArray(array@string monsterId)
+/* 001ccd7a */{
+/* 001ccd7a */	this.monsterId_.Free();
+/* 001ccd84 */	this.monsterId_.Alloc(monsterId.Numof());
+/* 001ccda4 */	this.monsterId_.Copy(0, monsterId, 0, monsterId.Numof());
+/* 001ccdd6 */}
+
+void BattleInfomation::setGold(int gold)
+/* 001ccdde */{
+/* 001ccdde */	this.gold_ = gold;
+/* 001ccdf4 */}
+
+void BattleInfomation::setExp(int exp)
+/* 001ccdfc */{
+/* 001ccdfc */	this.exp_ = exp;
+/* 001cce12 */}
+
+void BattleInfomation::setItem(string id, int probability)
+/* 001cce1a */{
+/* 001cce1a */	this.itemId_ = id;
+/* 001cce32 */	this.itemProbability_ = probability;
+/* 001cce48 */}
+
+void BattleInfomation::setBattleBackGroundId(string battleBackGroundId)
+/* 001cce50 */{
+/* 001cce50 */	this.battleBackGroundId_ = battleBackGroundId;
+/* 001cce68 */}
+
+void BattleInfomation::getMonsterId(ref array@string result)
+/* 001cce70 */{
+/* 001cce70 */	result.Free();
+/* 001cce7a */	result.Alloc(this.monsterId_.Numof());
+/* 001cce9a */	result.Copy(0, this.monsterId_, 0, this.monsterId_.Numof());
+/* 001ccecc */}
+
+int BattleInfomation::getGold()
+/* 001cced4 */{
+/* 001cced4 */	return this.gold_;
+/* 001ccee0 */}
+
+int BattleInfomation::getExp()
+/* 001cceee */{
+/* 001cceee */	return this.exp_;
+/* 001ccefa */}
+
+string BattleInfomation::getItemId()
+/* 001ccf08 */{
+/* 001ccf08 */	return this.itemId_;
+/* 001ccf14 */}
+
+int BattleInfomation::getItemProbability()
+/* 001ccf22 */{
+/* 001ccf22 */	return this.itemProbability_;
+/* 001ccf2e */}
+
+string BattleInfomation::getBattleBackGroundId()
+/* 001ccf3c */{
+/* 001ccf3c */	return this.battleBackGroundId_;
+/* 001ccf48 */}
+
+void BattleInfomation::setMusicId(string musicId)
+/* 001ccf56 */{
+/* 001ccf56 */	this.musicId_ = musicId;
+/* 001ccf6e */}
+
+string BattleInfomation::getMusicId()
+/* 001ccf76 */{
+/* 001ccf76 */	return this.musicId_;
+/* 001ccf82 */}
+
+void BattleInfomation::setExpFromMonster()
+/* 001ccf90 */{
+/* 001ccf90 */	int i;
+/* 001ccfa2 */	this.exp_ = 0;
+/* 001ccfb4 */	for (i = 0; i < this.monsterId_.Numof(); ++i)
+/* 001cd004 */	{
+/* 001cd004 */		this.exp_ += getMonsterFromId(this.monsterId_[i]).getExp();
+/* 001cd048 */	}
+/* 001cd054 */}
+
+void BattleInfomation::setGoldFromMonster()
+/* 001cd05c */{
+/* 001cd05c */	int i;
+/* 001cd06e */	this.gold_ = 0;
+/* 001cd080 */	for (i = 0; i < this.monsterId_.Numof(); ++i)
+/* 001cd0d0 */	{
+/* 001cd0d0 */		this.gold_ += getMonsterFromId(this.monsterId_[i]).getGold();
+/* 001cd114 */	}
+/* 001cd120 */}
+
+void BattleInfomation::setExtraBattleFlag(int val)
+/* 001cd128 */{
+/* 001cd128 */	this.extraBattleFlag_ = val;
+/* 001cd13e */}
+
+int BattleInfomation::getExtraBattleFlag()
+/* 001cd146 */{
+/* 001cd146 */	return this.extraBattleFlag_;
+/* 001cd152 */}
+
+void BattleInfomation::setEffectFlat(string flatName)
+/* 001cd160 */{
+/* 001cd160 */	this.flatName_ = flatName;
+/* 001cd178 */}
+
+string BattleInfomation::getEffectFlatName()
+/* 001cd180 */{
+/* 001cd180 */	return this.flatName_;
+/* 001cd18c */}
+

@@ -1,0 +1,22 @@
+void ZeroThreeSkill::init(string id, string name, string desc)
+/* 001e23e8 */{
+/* 001e23e8 */	this.id_ = id;
+/* 001e2400 */	this.name_ = name;
+/* 001e2418 */	this.desc_ = desc;
+/* 001e2430 */}
+
+string ZeroThreeSkill::getId()
+/* 001e2438 */{
+/* 001e2438 */	return this.id_;
+/* 001e2444 */}
+
+string ZeroThreeSkill::getName()
+/* 001e2452 */{
+/* 001e2452 */	return this.name_;
+/* 001e245e */}
+
+string ZeroThreeSkill::getDesc()
+/* 001e246c */{
+/* 001e246c */	return this.desc_;
+/* 001e2478 */}
+

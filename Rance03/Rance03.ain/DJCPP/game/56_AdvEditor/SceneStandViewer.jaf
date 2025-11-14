@@ -1,0 +1,80 @@
+void SceneStandViewer::init(string standCgName)
+/* 001c7dd8 */{
+/* 001c7dd8 */	this.partsBg_.initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 001c7e0c */	this.partsBg_.setZ(8500.0);
+/* 001c7e22 */	this.partsStand_.init(standCgName, 0);
+/* 001c7e42 */	string n = standCgName.GetPart(5, standCgName.Length() - 5);
+/* 001c7e74 */	int x = EX_SA2Int("立ち絵オフセット", n, "x", 0);
+/* 001c7ea2 */	int offset = 425;
+/* 001c7eb4 */	this.partsStand_.setPos(x - offset, 50.0);
+/* 001c7ee2 */	this.partsStand_.setOrigin(7);
+/* 001c7ef8 */	this.partsStand_.setZ(8550.0);
+/* 001c7f0e */	int vHeight = this.partsStand_.getHeight() + -718;
+/* 001c7f32 */	if (vHeight < 0)
+/* 001c7f4a */	{
+/* 001c7f4a */		this.partsStand_.setPos(x - offset, 384.0);
+/* 001c7f78 */		this.partsStand_.setOrigin(4);
+/* 001c7f8e */		vHeight = 0;
+/* 001c7fa0 */	}
+/* 001c7fa0 */	int snap = 300;
+/* 001c7fb2 */	if (vHeight > 0)
+/* 001c7fca */	{
+/* 001c7fca */		int index = 1;
+/* 001c7fdc */		int val = 300;
+/* 001c7fee */		int i;
+/* 001c8000 */		for (i = 1; i < 10; ++i)
+/* 001c8046 */		{
+/* 001c8046 */			float v = float(vHeight) / float(i);
+/* 001c806c */			int n = Math.Abs(300 - v);
+/* 001c809c */			if (n < val)
+/* 001c80b8 */			{
+/* 001c80b8 */				val = n;
+/* 001c80ce */				index = i;
+/* 001c80e4 */			}
+/* 001c80e4 */		}
+/* 001c80ea */		snap = vHeight / index;
+/* 001c810c */	}
+/* 001c810c */	this.scroller_.init(0, 0, 1024, 768, vHeight, snap, true);
+/* 001c814e */	this.partsStand_.setShow(true);
+/* 001c8164 */	this.partsBg_.setShow(true);
+/* 001c817a */	this.partsStand_.setParent(this.scroller_.getPartsNumber());
+/* 001c819a */	this.isFinish_ = false;
+/* 001c81ac */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001c81d4 */	this.btnExit_.setPos(839, 691);
+/* 001c81f0 */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001c8210 */	this.btnExit_.setZ(8550);
+/* 001c8226 */}
+
+void SceneStandViewer::onClickButtonExit(int id)
+/* 001c822e */{
+/* 001c822e */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001c8246 */}
+
+void SceneStandViewer::onFinishFadeOut()
+/* 001c824e */{
+/* 001c824e */	this.isFinish_ = true;
+/* 001c8260 */}
+
+void SceneStandViewer::run()
+/* 001c8268 */{
+/* 001c8268 */	this.fadeIn(true, NULL);
+/* 001c8278 */	this.btnExit_.fadeIn(true);
+/* 001c828e */}
+
+bool SceneStandViewer::update()
+/* 001c8296 */{
+/* 001c8296 */	if (!this.cbTimer_.isRunning() && g_mouse.isClick(1))
+/* 001c82e2 */	{
+/* 001c82e2 */		playCancel();
+/* 001c82e8 */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c8300 */	}
+/* 001c8300 */	return !this.isFinish_;
+/* 001c8310 */}
+
+void SceneStandViewer::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 001c831e */{
+/* 001c831e */	this.partsStand_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c8358 */	this.btnExit_.fadeIn(val);
+/* 001c8372 */	this.cbTimer_.setTimer(150, onFinish);
+/* 001c8394 */}
+

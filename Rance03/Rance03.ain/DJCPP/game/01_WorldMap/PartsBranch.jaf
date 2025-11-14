@@ -1,0 +1,44 @@
+PartsBranch::PartsBranch()
+/* 00188e4e */{
+/* 00188e56 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00188e7c */}
+
+void PartsBranch::init(int parentPartsNumber)
+/* 00188e84 */{
+/* 00188e84 */	this.parts_.init("システム／マップ／ライン", 0);
+/* 00188ea0 */	this.parts_.setShow(true);
+/* 00188eb6 */	this.parts_.setOrigin(5);
+/* 00188ecc */	this.parts_.setAlpha(180.0);
+/* 00188ee2 */	this.parts_.setZ(30.0);
+/* 00188ef8 */	if (parentPartsNumber != 0)
+/* 00188f10 */	{
+/* 00188f10 */		this.parts_.setParent(parentPartsNumber);
+/* 00188f2a */	}
+/* 00188f2a */}
+
+void PartsBranch::setPos(int x1, int y1, int x2, int y2)
+/* 00188f32 */{
+/* 00188f32 */	this.parts_.setPos((x1 + x2) / 2, (y1 + y2) / 2);
+/* 00188f82 */	float dx = x2 - x1;
+/* 00188fa6 */	float dy = y2 - y1;
+/* 00188fca */	float d = Math.Sqrt(dx * dx + dy * dy);
+/* 0018900e */	this.parts_.setCgRange(0, 0, int(d) & -16, this.parts_.getHeight());
+/* 0018904e */	float rot = (Math.Atan2(dy, dx) / 3.141592) * 180.0;
+/* 00189088 */	this.parts_.setXYRot(rot);
+/* 001890a2 */}
+
+void PartsBranch::update()
+/* 001890aa */{
+/* 001890ac */}
+
+void PartsBranch::setShow(bool val)
+/* 001890b2 */{
+/* 001890b2 */	this.parts_.setShow(val);
+/* 001890cc */}
+
+void PartsBranch::fadeIn(bool val, DG_GeneralCallback onFinishCallback)
+/* 001890d4 */{
+/* 001890d4 */	this.parts_.setShow(true);
+/* 001890ea */	this.parts_.runMotion(getStandardMotion(val ? 0 : 1), onFinishCallback);
+/* 0018912e */}
+

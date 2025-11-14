@@ -1,0 +1,84 @@
+HelperCountView::HelperCountView()
+/* 00181342 */{
+/* 0018134a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00181370 */}
+
+void HelperCountView::init()
+/* 00181378 */{
+/* 00181378 */	this.initParts();
+/* 00181380 */}
+
+void HelperCountView::initParts()
+/* 00181388 */{
+/* 00181388 */	this.parts_[0].init("システム／ハッスル", 0);
+/* 001813ac */	this.parts_[1].initAsNumber("システム／数字／幅１２／ピンク", NULL);
+/* 001813d0 */	this.parts_[2].init("システム／ハッスル／スラッシュ", 0);
+/* 001813f4 */	this.parts_[3].initAsNumber("システム／数字／幅１６／白", NULL);
+/* 00181418 */	createPartsGroup(this.parent_, this.parts_, 8000);
+/* 00181438 */	this.setPartsValue();
+/* 00181440 */	this.setPartsPos();
+/* 00181448 */}
+
+void HelperCountView::setPartsValue()
+/* 00181450 */{
+/* 00181450 */	this.parts_[3].setNumber(g_playerCommonParam.getHelperCount());
+/* 0018147a */	this.parts_[1].setNumber(g_playerCommonParam.getMaxHelperCount());
+/* 001814a4 */}
+
+void HelperCountView::update()
+/* 001814ac */{
+/* 001814ae */}
+
+void HelperCountView::setPos(int x, int y)
+/* 001814b4 */{
+/* 001814b4 */	this.x_ = x;
+/* 001814ca */	this.y_ = y;
+/* 001814e0 */	this.parent_.setPos(x, y);
+/* 00181508 */}
+
+void HelperCountView::updateCount()
+/* 00181510 */{
+/* 00181510 */	this.setPartsValue();
+/* 00181518 */}
+
+void HelperCountView::fadeIn(bool val, unknown_delegate onFinish)
+/* 00181520 */{
+/* 00181520 */	this.setPartsShow();
+/* 00181528 */	if (val)
+/* 00181538 */	{
+/* 00181538 */		PartsMotion m;
+/* 00181548 */		m.setMove(this.x_ + 300, this.y_, this.x_, this.y_, 1);
+/* 0018158e */		m.setAlpha(0, 255, 0);
+/* 001815b0 */		this.parent_.runMotion(m, NULL);
+/* 001815d0 */	}
+/* 001815dc */	else
+/* 001815dc */	{
+/* 001815dc */		PartsMotion m;
+/* 001815ec */		m.setMove(this.x_, this.y_, this.x_ + 300, this.y_, 1);
+/* 00181632 */		m.setAlpha(255, 0, 0);
+/* 00181654 */		this.parent_.runMotion(m, NULL);
+/* 00181674 */	}
+/* 00181674 */}
+
+void HelperCountView::setPartsShow()
+/* 00181682 */{
+/* 00181682 */	int i;
+/* 00181694 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001816e4 */	{
+/* 001816e4 */		this.parts_[i].setShow(true);
+/* 00181706 */	}
+/* 0018170c */	this.parent_.setShow(true);
+/* 00181722 */}
+
+void HelperCountView::setPartsPos()
+/* 0018172a */{
+/* 0018172a */	int x = 125;
+/* 0018173c */	int i;
+/* 0018174e */	for (i = 1; i <= 3; ++i)
+/* 00181794 */	{
+/* 00181794 */		this.parts_[i].setPos(x, 47.0);
+/* 001817c2 */		this.parts_[i].setOrigin(3);
+/* 001817e4 */		x -= this.parts_[i].getWidth();
+/* 0018180c */	}
+/* 00181812 */}
+

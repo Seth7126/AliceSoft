@@ -1,0 +1,24 @@
+bool EnquiteYesNoDialog::open(string activityFileName)
+/* 001c5300 */{
+/* 001c5300 */	this.clicked_ = -1;
+/* 001c5312 */	Ｐ＿アクティビティ実行(activityFileName, this.onLoad, NULL, NULL);
+/* 001c5330 */	return this.clicked_ == 0;
+/* 001c5346 */}
+
+void EnquiteYesNoDialog::onLoad(string activityFileName, string activityName)
+/* 001c5354 */{
+/* 001c5354 */	this.activityFileName_ = activityFileName;
+/* 001c536c */	this.activityName_ = activityName;
+/* 001c5384 */	setCursorClickSoundToActivity(activityName);
+/* 001c5394 */	this.btnOk_.init(this.activityName_, "はい", 0);
+/* 001c53bc */	this.btnCancel_.init(this.activityName_, "いいえ", 1);
+/* 001c53e4 */	this.btnOk_.setOnClickCallback(this.onClick);
+/* 001c53fe */	this.btnCancel_.setOnClickCallback(this.onClick);
+/* 001c5418 */}
+
+void EnquiteYesNoDialog::onClick(int id)
+/* 001c5420 */{
+/* 001c5420 */	this.clicked_ = id;
+/* 001c5436 */	AFL_Activity_End();
+/* 001c543c */}
+

@@ -1,0 +1,192 @@
+Dialog::Dialog()
+/* 001771c6 */{
+/* 001771ce */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001771f4 */}
+
+void Dialog::init(DialogInfomation info)
+/* 001771fc */{
+/* 001771fc */	this.isGetItem_ = false;
+/* 0017720e */	this.initParts(info);
+/* 00177220 */	this.initButton(info);
+/* 00177232 */}
+
+void Dialog::initButton(ref DialogInfomation info)
+/* 0017723a */{
+/* 0017723a */	if (info.isYesNo())
+/* 00177250 */	{
+/* 00177250 */		this.btn_.Alloc(2);
+/* 00177266 */		this.btn_[0].init("システム／ボタン／幅１２８", "はい", "", true);
+/* 00177296 */		this.btn_[1].init("システム／ボタン／幅１２８", "いいえ", "", true);
+/* 001772c6 */		this.btn_[0].setPos(468, 424);
+/* 001772ea */		this.btn_[0].setZ(8550);
+/* 00177308 */		this.btn_[1].setPos(616, 424);
+/* 0017732c */		this.btn_[1].setZ(8550);
+/* 0017734a */	}
+/* 00177350 */	else
+/* 00177350 */	{
+/* 00177350 */		this.btn_.Alloc(1);
+/* 00177366 */		this.btn_[0].init("システム／ボタン／幅１２８", "OK", "", true);
+/* 00177396 */		this.btn_[0].setPos(542, 424);
+/* 001773ba */		this.btn_[0].setZ(8550);
+/* 001773d8 */	}
+/* 001773d8 */}
+
+void Dialog::fadeButton(bool val)
+/* 001773e0 */{
+/* 001773e0 */	int i;
+/* 001773f2 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00177442 */	{
+/* 00177442 */		this.btn_[i].fadeIn(val);
+/* 00177468 */	}
+/* 0017746e */}
+
+void Dialog::initParts(ref DialogInfomation info)
+/* 00177476 */{
+/* 00177476 */	array@string msg;
+/* 00177480 */	info.getMessage(msg);
+/* 0017749a */	this.messageLines_ = msg.Numof();
+/* 001774b6 */	this.parts_[0].init("システム／ダイアログ／写真／下地", 0);
+/* 001774da */	this.parts_[3].initAsText(info.getCaption(), 40, false, 256, 128, 16, 30);
+/* 00177526 */	if (this.parts_[3].getWidth() > 340)
+/* 0017754c */	{
+/* 0017754c */		this.parts_[3].setXScaling((float(340) / float(this.parts_[3].getWidth())) * 100.0);
+/* 00177594 */	}
+/* 00177594 */	this.pictureImageName_ = info.getPictureImageName();
+/* 001775b2 */	if (this.pictureImageName_ != "")
+/* 001775ca */	{
+/* 001775ca */		this.parts_[1].initAsFlat("システム／ダイアログ／写真");
+/* 001775e8 */		this.parts_[1].changeFlatCg("写真.png", this.pictureImageName_);
+/* 00177610 */	}
+/* 00177610 */	if (info.getItemId() != "")
+/* 0017762e */	{
+/* 0017762e */		this.isGetItem_ = true;
+/* 00177640 */		this.parts_[2].initAsFlat("システム／ダイアログ／アイテム");
+/* 0017765e */		ref Item item = getItemFromId(info.getItemId());
+/* 001776a6 */		if (item !== NULL)
+/* 001776be */		{
+/* 001776be */			this.parts_[2].changeFlatCg("アイテム／世色癌.png", item.getIconImageName());
+/* 001776ec */		}
+/* 001776ec */	}
+/* 001776f8 */	int i;
+/* 0017770a */	for (i = 0; i < msg.Numof(); ++i)
+/* 0017775a */	{
+/* 0017775a */		this.parts_[4 + i].initAsText(msg[i], 26, false, 256, 58, 18, 18);
+/* 001777b8 */	}
+/* 001777be */	createPartsGroup(this.parent_, this.parts_, 8500);
+/* 001777de */	this.setPartsPos();
+/* 001777e6 */}
+
+void Dialog::setPartsShow()
+/* 001777ee */{
+/* 001777ee */	int i;
+/* 00177800 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00177850 */	{
+/* 00177850 */		this.parts_[i].setShow(true);
+/* 00177872 */	}
+/* 00177878 */	this.parent_.setShow(true);
+/* 0017788e */}
+
+void Dialog::setPartsPos()
+/* 00177896 */{
+/* 00177896 */	this.parts_[0].setPos(0.0, 0.0);
+/* 001778ba */	this.parts_[3].setPos(264.0, 247.0);
+/* 001778de */	this.parts_[1].setPos(-183.0, 0.0);
+/* 00177902 */	this.parts_[2].setPos(-183.0, 0.0);
+/* 00177926 */	int h = this.parts_[4].getHeight();
+/* 0017794a */	int span = -2;
+/* 0017795c */	int totalHeight = (h + span) * this.messageLines_ - span;
+/* 00177996 */	int i;
+/* 001779a8 */	for (i = 0; i < this.messageLines_; ++i)
+/* 001779f2 */	{
+/* 001779f2 */		this.parts_[4 + i].setOrigin(7);
+/* 00177a1c */		this.parts_[4 + i].setPos(264.0, 290 + (h + span) * i);
+/* 00177a72 */	}
+/* 00177a78 */	this.parent_.setPos(183.0, 21.0);
+/* 00177a94 */}
+
+void Dialog::update()
+/* 00177a9c */{
+/* 00177a9e */}
+
+void Dialog::fadeIn(bool val)
+/* 00177aa4 */{
+/* 00177aa4 */	this.setPartsShow();
+/* 00177aac */	if (val)
+/* 00177abc */	{
+/* 00177abc */		this.playSound();
+/* 00177ac4 */		this.parent_.runMotion(getStandardMotion(0), NULL);
+/* 00177ae2 */		this.parts_[1].startFlat(false, 1.0);
+/* 00177b06 */		this.parts_[2].startFlat(false, 1.0);
+/* 00177b2a */	}
+/* 00177b30 */	else
+/* 00177b30 */	{
+/* 00177b30 */		this.parent_.runMotion(getStandardMotion(1), this.onFinishCallback_);
+/* 00177b58 */	}
+/* 00177b58 */	this.fadeButton(val);
+/* 00177b6a */}
+
+void Dialog::playSound()
+/* 00177b72 */{
+/* 00177b72 */	if (this.isGetItem_)
+/* 00177b82 */	{
+/* 00177b82 */		g_sysSound.play(6, "効果音／ダイアログ／アイテム取得");
+/* 00177b9e */	}
+/* 00177b9e */	switch (this.pictureImageName_)
+/* 00177bb4 */	{
+/* 00177bb4 */	case "システム／ダイアログ／写真／マグマ":
+/* 00177bb4 */	case "システム／ダイアログ／写真／炎の鼻息":
+/* 00177bb4 */	case "システム／ダイアログ／写真／警備レーザー":
+/* 00177bb4 */	case "システム／ダイアログ／写真／激臭":
+/* 00177bb4 */	case "システム／ダイアログ／写真／破裂玉":
+/* 00177bb4 */	case "システム／ダイアログ／写真／粉塵爆発":
+/* 00177bb4 */	case "システム／ダイアログ／写真／転落":
+/* 00177bb4 */	case "システム／ダイアログ／写真／仕掛け矢":
+/* 00177bb4 */	case "システム／ダイアログ／写真／煮えたぎった油":
+/* 00177bb4 */	case "システム／ダイアログ／写真／罠":
+/* 00177bb4 */	case "システム／ダイアログ／写真／崩れる柱":
+/* 00177bb4 */	case "システム／ダイアログ／写真／落とし穴":
+/* 00177bb4 */	case "システム／ダイアログ／写真／フリードリンク":
+/* 00177bb4 */	case "システム／ダイアログ／写真／閉店":
+/* 00177bb4 */	case "システム／ダイアログ／写真／動揺":
+/* 00177bb4 */	case "システム／ダイアログ／写真／痛風":
+/* 00177bb4 */	case "システム／ダイアログ／写真／乱視":
+/* 00177bb4 */	case "システム／ダイアログ／写真／幻聴":
+/* 00177bb4 */	case "システム／ダイアログ／写真／骨粗":
+/* 00177bb4 */	case "システム／ダイアログ／写真／湿気":
+/* 00177bb4 */	case "システム／ダイアログ／写真／忘れた草":
+/* 00177bb4 */		g_sysSound.play(6, "効果音／ダイアログ／ダメージ");
+/* 00177bd0 */		break;
+/* 00177bd6 */	case "システム／ダイアログ／写真／天然足湯":
+/* 00177bd6 */	case "システム／ダイアログ／写真／混浴温泉":
+/* 00177bd6 */	case "システム／ダイアログ／写真／回復":
+/* 00177bd6 */	case "システム／ダイアログ／写真／珍味":
+/* 00177bd6 */	case "システム／ダイアログ／写真／寝る":
+/* 00177bd6 */		g_sysSound.play(6, "効果音／ダイアログ／回復");
+/* 00177bf2 */		break;
+/* 00177bf8 */	case "システム／ダイアログ／写真／パチル":
+/* 00177bf8 */	case "システム／ダイアログ／写真／金減少":
+/* 00177bf8 */		g_sysSound.play(6, "効果音／ダイアログ／金減少");
+/* 00177c14 */		break;
+/* 00177c1a */	case "システム／ダイアログ／写真／金増加":
+/* 00177c1a */		g_sysSound.play(6, "効果音／ダイアログ／金増加");
+/* 00177c36 */		break;
+/* 00177c3c */	default:
+/* 00177c3c */		g_sysSound.play(6, "効果音／ダイアログ／一般情報");
+/* 00177c58 */		break;
+/* 00177c5e */	}
+/* 00177c5e */}
+
+void Dialog::setOnFinishCallback(DG_GeneralCallback onFinish)
+/* 00177c66 */{
+/* 00177c66 */	this.onFinishCallback_ = onFinish;
+/* 00177c80 */}
+
+void Dialog::setOnClickCallback(DG_ButtonClickCallback onClick)
+/* 00177c88 */{
+/* 00177c88 */	int i;
+/* 00177c9a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 00177cea */	{
+/* 00177cea */		this.btn_[i].setClickCallback(onClick, i);
+/* 00177d1c */	}
+/* 00177d22 */}
+

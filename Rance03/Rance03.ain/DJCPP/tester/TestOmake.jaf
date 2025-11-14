@@ -1,0 +1,402 @@
+void test_Soundtest()
+/* 001fb100 */{
+/* 001fb100 */	array@string music;
+/* 001fb10a */	music.PushBack("音楽／システム／レベル神");
+/* 001fb11a */	music.PushBack("音楽／ダンジョン／不思議");
+/* 001fb12a */	music.PushBack("音楽／ダンジョン／普通");
+/* 001fb13a */	music.PushBack("音楽／戦闘／通常");
+/* 001fb14a */	music.PushBack("音楽／ＡＤＶ／のんき");
+/* 001fb15a */	music.PushBack("音楽／ＡＤＶ／アリスのテーマ");
+/* 001fb16a */	music.PushBack("音楽／ＡＤＶ／エロ");
+/* 001fb17a */	music.PushBack("音楽／ＡＤＶ／パティ");
+/* 001fb18a */	music.PushBack("音楽／ＡＤＶ／ミリー");
+/* 001fb19a */	music.PushBack("音楽／ＡＤＶ／ロイヤルチェイサー");
+/* 001fb1aa */	music.PushBack("音楽／ＡＤＶ／香港マカオ");
+/* 001fb1ba */	music.PushBack("音楽／ＡＤＶ／魔人");
+/* 001fb1ca */	array@string fx;
+/* 001fb1d4 */	fx.PushBack("効果音／お腹");
+/* 001fb1e4 */	fx.PushBack("効果音／お金");
+/* 001fb1f4 */	fx.PushBack("効果音／はばたき");
+/* 001fb204 */	fx.PushBack("効果音／ひっぱたく");
+/* 001fb214 */	fx.PushBack("効果音／ふすま");
+/* 001fb224 */	fx.PushBack("効果音／ぶつかる");
+/* 001fb234 */	fx.PushBack("効果音／アラーム");
+/* 001fb244 */	fx.PushBack("効果音／エロ１");
+/* 001fb254 */	fx.PushBack("効果音／エロ１ループ");
+/* 001fb264 */	fx.PushBack("効果音／エロ２");
+/* 001fb274 */	fx.PushBack("効果音／エロ２ループ");
+/* 001fb284 */	fx.PushBack("効果音／エロ３");
+/* 001fb294 */	fx.PushBack("効果音／エロ３ループ");
+/* 001fb2a4 */	fx.PushBack("効果音／エロ４");
+/* 001fb2b4 */	fx.PushBack("効果音／エロ４ループ");
+/* 001fb2c4 */	fx.PushBack("効果音／カメラ");
+/* 001fb2d4 */	fx.PushBack("効果音／カメラ連続");
+/* 001fb2e4 */	fx.PushBack("効果音／カートを引く");
+/* 001fb2f4 */	fx.PushBack("効果音／コンピュータ");
+/* 001fb304 */	fx.PushBack("効果音／コールブザー");
+/* 001fb314 */	fx.PushBack("効果音／ジェットコースター");
+/* 001fb324 */	fx.PushBack("効果音／スイッチ");
+/* 001fb334 */	fx.PushBack("効果音／セクハラ");
+/* 001fb344 */	fx.PushBack("効果音／チューリップ");
+/* 001fb354 */	fx.PushBack("効果音／ツルハシ");
+/* 001fb364 */	fx.PushBack("効果音／ドアベル");
+/* 001fb374 */	fx.PushBack("効果音／ドットマトリクスプリンター");
+/* 001fb384 */	fx.PushBack("効果音／ドリル");
+/* 001fb394 */	fx.PushBack("効果音／ノック");
+/* 001fb3a4 */	fx.PushBack("効果音／ヒビ");
+/* 001fb3b4 */	fx.PushBack("効果音／ブザー");
+/* 001fb3c4 */	fx.PushBack("効果音／プレッシャー");
+/* 001fb3d4 */	fx.PushBack("効果音／メカ起動");
+/* 001fb3e4 */	fx.PushBack("効果音／乾杯");
+/* 001fb3f4 */	fx.PushBack("効果音／人間下ろす");
+/* 001fb404 */	fx.PushBack("効果音／倒れる巨大");
+/* 001fb414 */	fx.PushBack("効果音／出血");
+/* 001fb424 */	fx.PushBack("効果音／刺す");
+/* 001fb434 */	fx.PushBack("効果音／剣を抜く");
+/* 001fb444 */	fx.PushBack("効果音／剣を構える");
+/* 001fb454 */	fx.PushBack("効果音／包丁");
+/* 001fb464 */	fx.PushBack("効果音／叩きつける");
+/* 001fb474 */	fx.PushBack("効果音／呼び鈴");
+/* 001fb484 */	fx.PushBack("効果音／呼び鈴２");
+/* 001fb494 */	fx.PushBack("効果音／呼び鈴２連続");
+/* 001fb4a4 */	fx.PushBack("効果音／咆哮");
+/* 001fb4b4 */	fx.PushBack("効果音／喊声");
+/* 001fb4c4 */	fx.PushBack("効果音／喊声遠く");
+/* 001fb4d4 */	fx.PushBack("効果音／土砂崩れ");
+/* 001fb4e4 */	fx.PushBack("効果音／地揺れ");
+/* 001fb4f4 */	fx.PushBack("効果音／地面に叩きつける");
+/* 001fb504 */	fx.PushBack("効果音／地鳴りループ");
+/* 001fb514 */	fx.PushBack("効果音／堅い物を叩く");
+/* 001fb524 */	fx.PushBack("効果音／天罰");
+/* 001fb534 */	fx.PushBack("効果音／射精");
+/* 001fb544 */	fx.PushBack("効果音／岩石");
+/* 001fb554 */	fx.PushBack("効果音／崩落");
+/* 001fb564 */	fx.PushBack("効果音／巨人一歩");
+/* 001fb574 */	fx.PushBack("効果音／巨人歩く");
+/* 001fb584 */	fx.PushBack("効果音／布を裂く");
+/* 001fb594 */	fx.PushBack("効果音／弓矢");
+/* 001fb5a4 */	fx.PushBack("効果音／弓矢連続");
+/* 001fb5b4 */	fx.PushBack("効果音／弾ける（水）");
+/* 001fb5c4 */	fx.PushBack("効果音／心臓");
+/* 001fb5d4 */	fx.PushBack("効果音／必殺技");
+/* 001fb5e4 */	fx.PushBack("効果音／情報屋入店");
+/* 001fb5f4 */	fx.PushBack("効果音／戦争音ループ");
+/* 001fb604 */	fx.PushBack("効果音／戦争音遠いループ");
+/* 001fb614 */	fx.PushBack("効果音／戦車走る");
+/* 001fb624 */	fx.PushBack("効果音／扉ガチャ");
+/* 001fb634 */	fx.PushBack("効果音／扉軋み");
+/* 001fb644 */	fx.PushBack("効果音／扉閉じる");
+/* 001fb654 */	fx.PushBack("効果音／扉閉じる（強）");
+/* 001fb664 */	fx.PushBack("効果音／扉開く");
+/* 001fb674 */	fx.PushBack("効果音／扉開く（強）");
+/* 001fb684 */	fx.PushBack("効果音／手を拍つ");
+/* 001fb694 */	fx.PushBack("効果音／手裏剣弾かれる");
+/* 001fb6a4 */	fx.PushBack("効果音／手裏剣投げ");
+/* 001fb6b4 */	fx.PushBack("効果音／抱きつく");
+/* 001fb6c4 */	fx.PushBack("効果音／掴む");
+/* 001fb6d4 */	fx.PushBack("効果音／斬る");
+/* 001fb6e4 */	fx.PushBack("効果音／机を叩く");
+/* 001fb6f4 */	fx.PushBack("効果音／歩き去る");
+/* 001fb704 */	fx.PushBack("効果音／歩み寄る");
+/* 001fb714 */	fx.PushBack("効果音／殴る");
+/* 001fb724 */	fx.PushBack("効果音／殴る＋蹴る");
+/* 001fb734 */	fx.PushBack("効果音／殺到（大勢）");
+/* 001fb744 */	fx.PushBack("効果音／水から上がる");
+/* 001fb754 */	fx.PushBack("効果音／液体流れる");
+/* 001fb764 */	fx.PushBack("効果音／火を付ける");
+/* 001fb774 */	fx.PushBack("効果音／炎魔法");
+/* 001fb784 */	fx.PushBack("効果音／炒め物");
+/* 001fb794 */	fx.PushBack("効果音／焼き肉");
+/* 001fb7a4 */	fx.PushBack("効果音／爆発（大）");
+/* 001fb7b4 */	fx.PushBack("効果音／爆発（遠）");
+/* 001fb7c4 */	fx.PushBack("効果音／物音（ごとごと）");
+/* 001fb7d4 */	fx.PushBack("効果音／物音（Ｇハニー）");
+/* 001fb7e4 */	fx.PushBack("効果音／発車メロディー");
+/* 001fb7f4 */	fx.PushBack("効果音／着地");
+/* 001fb804 */	fx.PushBack("効果音／着地２");
+/* 001fb814 */	fx.PushBack("効果音／空振り");
+/* 001fb824 */	fx.PushBack("効果音／空振り（複数）");
+/* 001fb834 */	fx.PushBack("効果音／空振り（重）");
+/* 001fb844 */	fx.PushBack("効果音／空間展開");
+/* 001fb854 */	fx.PushBack("効果音／紅色破壊光線");
+/* 001fb864 */	fx.PushBack("効果音／結界");
+/* 001fb874 */	fx.PushBack("効果音／落ちる（紙）");
+/* 001fb884 */	fx.PushBack("効果音／落雷");
+/* 001fb894 */	fx.PushBack("効果音／藍色破壊光線");
+/* 001fb8a4 */	fx.PushBack("効果音／衣擦れ");
+/* 001fb8b4 */	fx.PushBack("効果音／衣擦れ２");
+/* 001fb8c4 */	fx.PushBack("効果音／警報");
+/* 001fb8d4 */	fx.PushBack("効果音／走っていく（大勢）");
+/* 001fb8e4 */	fx.PushBack("効果音／走ってくる");
+/* 001fb8f4 */	fx.PushBack("効果音／走ってくる（大勢）");
+/* 001fb904 */	fx.PushBack("効果音／走り去る");
+/* 001fb914 */	fx.PushBack("効果音／蹄");
+/* 001fb924 */	fx.PushBack("効果音／蹴る");
+/* 001fb934 */	fx.PushBack("効果音／蹴る（２回）");
+/* 001fb944 */	fx.PushBack("効果音／軋む");
+/* 001fb954 */	fx.PushBack("効果音／軍靴");
+/* 001fb964 */	fx.PushBack("効果音／転がる");
+/* 001fb974 */	fx.PushBack("効果音／転がる（重）");
+/* 001fb984 */	fx.PushBack("効果音／連打コンボ");
+/* 001fb994 */	fx.PushBack("効果音／連撃（剣）");
+/* 001fb9a4 */	fx.PushBack("効果音／連続爆発");
+/* 001fb9b4 */	fx.PushBack("効果音／部屋を荒らす");
+/* 001fb9c4 */	fx.PushBack("効果音／金的");
+/* 001fb9d4 */	fx.PushBack("効果音／鍔迫り合い");
+/* 001fb9e4 */	fx.PushBack("効果音／鍔迫り合い（斧）");
+/* 001fb9f4 */	fx.PushBack("効果音／鍔迫り合い（２回）");
+/* 001fba04 */	fx.PushBack("効果音／鍔迫り斬り");
+/* 001fba14 */	fx.PushBack("効果音／鎖");
+/* 001fba24 */	fx.PushBack("効果音／鎧弾く連続");
+/* 001fba34 */	fx.PushBack("効果音／鏡割れる");
+/* 001fba44 */	fx.PushBack("効果音／開ける");
+/* 001fba54 */	fx.PushBack("効果音／闇魔法");
+/* 001fba64 */	fx.PushBack("効果音／電撃");
+/* 001fba74 */	fx.PushBack("効果音／電車発車");
+/* 001fba84 */	fx.PushBack("効果音／電車走る");
+/* 001fba94 */	fx.PushBack("効果音／風ループ");
+/* 001fbaa4 */	fx.PushBack("効果音／骨折れる");
+/* 001fbab4 */	fx.PushBack("効果音／鬼畜アタック");
+/* 001fbac4 */	fx.PushBack("効果音／魔法");
+/* 001fbad4 */	fx.PushBack("効果音／鳴き声（モンスター）");
+/* 001fbae4 */	fx.PushBack("効果音／黒色破壊光線");
+/* 001fbaf4 */	int i;
+/* 001fbb06 */	選択肢(0, "フェードインアウトテスト", 0);
+/* 001fbb1e */	選択肢(1, "クロスフェードテスト", 0);
+/* 001fbb36 */	選択肢(2, "ボリュームキャップテスト", 0);
+/* 001fbb4e */	選択肢(3, "効果音テスト", 0);
+/* 001fbb66 */	switch (テスト選択())
+/* 001fbb78 */	{
+/* 001fbb78 */	case 0:
+/* 001fbb78 */		while (true)
+/* 001fbb84 */		{
+/* 001fbb84 */			■音楽(music[i % music.Numof()], 0);
+/* 001fbbb8 */			++i;
+/* 001fbbc8 */			キー待ち(false);
+/* 001fbbd4 */			■音楽停止(3000);
+/* 001fbbe0 */			キー待ち(false);
+/* 001fbbec */		}
+/* 001fbbf2 */		break;
+/* 001fbbf8 */	case 1:
+/* 001fbbf8 */		while (true)
+/* 001fbc04 */		{
+/* 001fbc04 */			string next = music[RAND(music.Numof()) - 1];
+/* 001fbc3c */			■音楽(next, 1500);
+/* 001fbc52 */			キー待ち(false);
+/* 001fbc5e */		}
+/* 001fbc64 */		break;
+/* 001fbc6a */	case 2:
+/* 001fbc6a */		■音楽(music[0], 0);
+/* 001fbc88 */		while (true)
+/* 001fbc94 */		{
+/* 001fbc94 */			VOICE("テスト／サウンド");
+/* 001fbca0 */			'TEST' A;
+/* 001fbcac */			キー待ち(false);
+/* 001fbcb8 */		}
+/* 001fbcbe */		break;
+/* 001fbcc4 */	case 3:
+/* 001fbcc4 */		■音楽(music[0], 0);
+/* 001fbce2 */		while (true)
+/* 001fbcee */		{
+/* 001fbcee */			■効果音(fx[i % fx.Numof()]);
+/* 001fbd1c */			++i;
+/* 001fbd2c */			キー待ち(false);
+/* 001fbd38 */		}
+/* 001fbd3e */		break;
+/* 001fbd44 */	}
+/* 001fbd44 */}
+
+void test_ScrollCgView()
+/* 001fbd52 */{
+/* 001fbd52 */	array@string n;
+/* 001fbd5c */	n.PushBack("イベント／その他／タイトル０１");
+/* 001fbd6c */	n.PushBack("イベント／リア／祈る０１");
+/* 001fbd7c */	n.PushBack("イベント／その他／タイトル０１");
+/* 001fbd8c */	n.PushBack("イベント／リア／祈る０１");
+/* 001fbd9c */	ScrollCgView view;
+/* 001fbdac */	view.init(n);
+/* 001fbdc8 */	view.fadeIn(true);
+/* 001fbdde */	while (true)
+/* 001fbdea */	{
+/* 001fbdea */		if (g_mouse.isClick(1))
+/* 001fbe06 */		{
+/* 001fbe06 */			break;
+/* 001fbe0c */		}
+/* 001fbe0c */		g_gameObjectManager.update();
+/* 001fbe1c */		g_frameManager.updateFrame();
+/* 001fbe2c */	}
+/* 001fbe32 */}
+
+void test_Button_ThumbnailClickCallback(int index)
+/* 001fbe40 */{
+/* 001fbe40 */	pass("click:%d" % index);
+/* 001fbe5e */}
+
+void test_Scene_AdvEditor()
+/* 001fbe6c */{
+/* 001fbe6c */	openAdvEditor();
+/* 001fbe72 */}
+
+void test_Scene_StandViewer()
+/* 001fbe80 */{
+/* 001fbe80 */	string key = "立ち絵オフセット";
+/* 001fbe94 */	int c = EX_Height(key);
+/* 001fbeb0 */	int i;
+/* 001fbec2 */	for (i = 0; i < c; ++i)
+/* 001fbf0c */	{
+/* 001fbf0c */		string cg = EX_RA2String(key, i, "name", "");
+/* 001fbf40 */		openStandViewer(cg);
+/* 001fbf50 */	}
+/* 001fbf56 */}
+
+void test_Scene_AdvObjectListSelector()
+/* 001fbf64 */{
+/* 001fbf64 */	SceneAdvObjectListSelector scene;
+/* 001fbf74 */	scene.init(1, "");
+/* 001fbf90 */	scene.run();
+/* 001fbfa0 */	runScene(scene.update);
+/* 001fbfb8 */}
+
+void test_Scene_Cg()
+/* 001fbfc6 */{
+/* 001fbfc6 */	openCg();
+/* 001fbfcc */}
+
+void test_Scene_Replay()
+/* 001fbfda */{
+/* 001fbfda */	openReplay();
+/* 001fbfe0 */}
+
+void test_MusicInfo()
+/* 001fbfee */{
+/* 001fbfee */	int count = g_musicInfo.Numof();
+/* 001fc00a */	int i;
+/* 001fc01c */	pass("%d" % count);
+/* 001fc03a */	for (i = 0; i < count; ++i)
+/* 001fc084 */	{
+/* 001fc084 */		string n = "%s %s" % g_musicInfo[i].getId() % g_musicInfo[i].getSongName();
+/* 001fc0e0 */		pass(n);
+/* 001fc0f0 */	}
+/* 001fc0f6 */}
+
+void test_Music_PanelView()
+/* 001fc104 */{
+/* 001fc104 */	MusicPanelView time;
+/* 001fc114 */	time.init();
+/* 001fc124 */	while (true)
+/* 001fc130 */	{
+/* 001fc130 */		if (g_mouse.isClick(1))
+/* 001fc14c */		{
+/* 001fc14c */			break;
+/* 001fc152 */		}
+/* 001fc152 */		if (g_mouse.isClick(0))
+/* 001fc16e */		{
+/* 001fc16e */			if (g_music.getPlayingMusicId() == "")
+/* 001fc18c */			{
+/* 001fc18c */				g_music.play("", -2147483648, false);
+/* 001fc1ae */				time.start();
+/* 001fc1be */			}
+/* 001fc1c4 */			else
+/* 001fc1c4 */			{
+/* 001fc1c4 */				g_music.play("", -2147483648, false);
+/* 001fc1e6 */				time.stop();
+/* 001fc1f6 */			}
+/* 001fc1f6 */		}
+/* 001fc1f6 */		g_gameObjectManager.update();
+/* 001fc206 */		g_frameManager.updateFrame();
+/* 001fc216 */	}
+/* 001fc21c */}
+
+void test_Music()
+/* 001fc22a */{
+/* 001fc22a */	int i;
+/* 001fc23c */	for (i = 0; i < 100; ++i)
+/* 001fc282 */	{
+/* 001fc282 */		音楽(SYS_Sound_GetFileName(i), -1, -1);
+/* 001fc2a4 */		キー待ち(false);
+/* 001fc2b0 */	}
+/* 001fc2b6 */}
+
+void test_Scene_Music()
+/* 001fc2c4 */{
+/* 001fc2c4 */	openMusic();
+/* 001fc2ca */}
+
+void test_SaveObjectList()
+/* 001fc2d8 */{
+/* 001fc2d8 */	SaveObjectList list;
+/* 001fc2e8 */	list.init(true);
+/* 001fc2fe */	list.setOnClickCallback("test_SaveObjectListCallback");
+/* 001fc326 */	while (true)
+/* 001fc332 */	{
+/* 001fc332 */		g_gameObjectManager.update();
+/* 001fc342 */		g_frameManager.updateFrame();
+/* 001fc352 */	}
+/* 001fc358 */}
+
+void test_SaveObjectListCallback(int id)
+/* 001fc366 */{
+/* 001fc366 */	pass("clicked:%d" % id);
+/* 001fc384 */}
+
+void test_Scene_Save()
+/* 001fc392 */{
+/* 001fc392 */	openSave();
+/* 001fc398 */}
+
+void test_Scene_Load()
+/* 001fc3a6 */{
+/* 001fc3a6 */	openLoad();
+/* 001fc3ac */}
+
+void test_Scene_CgSwipeView()
+/* 001fc3ba */{
+/* 001fc3ba */	array@string n;
+/* 001fc3c4 */	n.PushBack("イベント／その他／タイトル０１");
+/* 001fc3d4 */	n.PushBack("イベント／リア／祈る０１");
+/* 001fc3e4 */	n.PushBack("イベント／その他／タイトル０１");
+/* 001fc3f4 */	n.PushBack("イベント／リア／祈る０１");
+/* 001fc404 */	openCgSwipeView(n);
+/* 001fc414 */}
+
+void test_Scene_GameOver()
+/* 001fc422 */{
+/* 001fc422 */	openGameOver();
+/* 001fc428 */}
+
+void test_EXLoading_MirrorPiece()
+/* 001fc436 */{
+/* 001fc436 */	int i;
+/* 001fc448 */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001fc498 */	{
+/* 001fc498 */		string n = "%s %s %s" % g_mirrorPiece[i].getCgName(0) % g_mirrorPiece[i].getCompleteCgName() % g_mirrorPiece[i].getAdvFunctionName();
+/* 001fc51e */		pass(n);
+/* 001fc52e */	}
+/* 001fc534 */}
+
+void test_Scene_MirrorPiece()
+/* 001fc542 */{
+/* 001fc542 */	openMirrorPiece();
+/* 001fc548 */}
+
+void test_Scene_AliceLogo()
+/* 001fc556 */{
+/* 001fc556 */	openLogo();
+/* 001fc55c */}
+
+void test_Scene_Enquite()
+/* 001fc56a */{
+/* 001fc56a */	openEnquite();
+/* 001fc570 */}
+
+void test_OmakeMode_ThumbnailList()
+/* 001fc57e */{
+/* 001fc57e */	ThumbnailList list;
+/* 001fc58e */	list.init(true);
+/* 001fc5a4 */	while (true)
+/* 001fc5b0 */	{
+/* 001fc5b0 */		g_gameObjectManager.update();
+/* 001fc5c0 */		g_frameManager.updateFrame();
+/* 001fc5d0 */	}
+/* 001fc5d6 */}
+

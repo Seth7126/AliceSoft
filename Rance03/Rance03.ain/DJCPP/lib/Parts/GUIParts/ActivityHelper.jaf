@@ -1,0 +1,17 @@
+void getPartsNameByGUIType(ref array@string partsName, string activityName, int guiType)
+/* 001e69c0 */{
+/* 001e69c0 */	partsName.Free();
+/* 001e69ca */	int count = AFL_Activity_NumofParts(activityName);
+/* 001e69e6 */	int i;
+/* 001e69f8 */	for (i = 0; i < count; ++i)
+/* 001e6a42 */	{
+/* 001e6a42 */		int number;
+/* 001e6a54 */		string name;
+/* 001e6a68 */		AFL_Activity_GetParts(i, activityName, name, number);
+/* 001e6a96 */		if (PARTS_GetComponentType(number, 1) == guiType)
+/* 001e6abe */		{
+/* 001e6abe */			partsName.PushBack(name);
+/* 001e6ad2 */		}
+/* 001e6ad2 */	}
+/* 001e6ad8 */}
+

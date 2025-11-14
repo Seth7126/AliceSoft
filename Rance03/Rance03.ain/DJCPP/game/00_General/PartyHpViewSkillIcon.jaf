@@ -1,0 +1,86 @@
+PartyHpViewSkillIcon::PartyHpViewSkillIcon()
+/* 0018450a */{
+/* 00184512 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00184538 */}
+
+void PartyHpViewSkillIcon::init(int index)
+/* 00184540 */{
+/* 00184540 */	this.index_ = index;
+/* 00184556 */	this.baseX_ = 16 + this.index_ * 118;
+/* 0018457c */	this.baseY_ = 556 + this.index_ * 12;
+/* 001845a2 */	this.initParts();
+/* 001845aa */}
+
+void PartyHpViewSkillIcon::update()
+/* 001845b2 */{
+/* 001845b4 */}
+
+void PartyHpViewSkillIcon::fadeIn(bool val, unknown_delegate onFinish)
+/* 001845ba */{
+/* 001845ba */	this.setPartsShow();
+/* 001845c2 */	if (val)
+/* 001845d2 */	{
+/* 001845d2 */		array@PartsMotion m[2];
+/* 001845e8 */		m[0].setAlpha(255, 255, 0);
+/* 00184612 */		m[0].setTime(this.index_ * 30);
+/* 0018463c */		m[0].setMove(this.baseX_, this.baseY_ + 200, this.baseX_, this.baseY_ + 200, 1);
+/* 00184692 */		m[1].setTime(200);
+/* 001846b0 */		m[1].setMove(this.baseX_, this.baseY_ + 200, this.baseX_, this.baseY_, 1);
+/* 001846fe */		this.parent_.runMotionArray(m, NULL);
+/* 00184726 */	}
+/* 0018472c */	else
+/* 0018472c */	{
+/* 0018472c */		PartsMotion m;
+/* 0018473c */		m.setTime(60);
+/* 00184752 */		m.setMove(this.baseX_, this.baseY_, this.baseX_, this.baseY_ + 200, 1);
+/* 00184798 */		m.setAlpha(255, 0, 0);
+/* 001847ba */		this.parent_.runMotion(m, NULL);
+/* 001847da */	}
+/* 001847da */}
+
+void PartyHpViewSkillIcon::initParts()
+/* 001847e8 */{
+/* 001847e8 */	string pId = g_party.getPlayerId(this.index_);
+/* 00184810 */	this.parts_[0].init("システム／スキル／下地／%s" % getPlayerFromId(pId).getShortName(), 0);
+/* 00184868 */	this.parts_[1].init("システム／編成／クールタイム", 0);
+/* 0018488c */	this.parts_[2].initAsNumber("システム／数字／幅２３／白フチ", NULL);
+/* 001848b0 */	PlayerSkill skill;
+/* 001848c0 */	skill = getPlayerSkillFromId(g_party.getAttackSkillId(this.index_));
+/* 00184910 */	this.parts_[3].init(skill.getIconImageName(), 0);
+/* 0018493e */	this.parts_[0].setCgRange((this.parts_[0].getWidth() / 4) * 3, 0, this.parts_[0].getWidth() / 4, this.parts_[0].getHeight());
+/* 001849bc */	this.parts_[3].setCgRange((this.parts_[3].getWidth() / 5) * 4, 0, this.parts_[3].getWidth() / 5, this.parts_[3].getHeight());
+/* 00184a3a */	int v = 200;
+/* 00184a4c */	this.parts_[1].setMultiColorValue(v, v, v);
+/* 00184a82 */	this.parts_[2].setMultiColorValue(v, v, v);
+/* 00184ab8 */	this.parts_[3].setMultiColorValue(v, v, v);
+/* 00184aee */	createPartsGroup(this.parent_, this.parts_, 5100);
+/* 00184b0e */	this.setPartsPos();
+/* 00184b16 */}
+
+void PartyHpViewSkillIcon::setPartsShow()
+/* 00184b1e */{
+/* 00184b1e */	this.parts_[0].setShow(true);
+/* 00184b3c */	this.parts_[3].setShow(true);
+/* 00184b5a */	this.updateCoolTime();
+/* 00184b62 */	this.parent_.setShow(true);
+/* 00184b78 */}
+
+void PartyHpViewSkillIcon::setPartsPos()
+/* 00184b80 */{
+/* 00184b80 */	this.parts_[0].setPos(0.0, 0.0);
+/* 00184ba4 */	this.parts_[1].setPos(82.0, 0.0);
+/* 00184bc8 */	this.parts_[2].setPos(100.0, 17.0);
+/* 00184bec */	this.parts_[2].setOrigin(5);
+/* 00184c0a */	this.parts_[3].setOrigin(8);
+/* 00184c28 */	this.parts_[3].setPos(59.0, 19.0);
+/* 00184c4c */	this.parent_.setPos(this.baseX_, this.baseY_);
+/* 00184c74 */}
+
+void PartyHpViewSkillIcon::updateCoolTime()
+/* 00184c7c */{
+/* 00184c7c */	int ct = getCoolTimeFromSkillId(g_party.getAttackSkillId(this.index_));
+/* 00184ca8 */	this.parts_[1].setShow(ct > 0);
+/* 00184cd4 */	this.parts_[2].setShow(ct > 0);
+/* 00184d00 */	this.parts_[2].setNumber(ct);
+/* 00184d24 */}
+

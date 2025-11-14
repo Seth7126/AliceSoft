@@ -1,0 +1,111 @@
+void Ｐ＿ボタン＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 0016537a */{
+/* 0016537a */	PartsEngine.SetButtonSize(パーツ番号, 幅, 高さ);
+/* 001653a2 */}
+
+void Ｐ＿ボタン＿有効設定(int パーツ番号, bool 有効)
+/* 001653b0 */{
+/* 001653b0 */	PartsEngine.SetButtonEnable(パーツ番号, 有効);
+/* 001653ce */}
+
+bool Ｐ＿ボタン＿有効設定取得(int パーツ番号)
+/* 001653dc */{
+/* 001653dc */	return PartsEngine.IsButtonEnable(パーツ番号);
+/* 001653f2 */}
+
+void Ｐ＿ボタン＿色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00165406 */{
+/* 00165406 */	PartsEngine.SetButtonColor(パーツ番号, 赤, 緑, 青);
+/* 00165438 */}
+
+int Ｐ＿ボタン＿赤色取得(int パーツ番号)
+/* 00165446 */{
+/* 00165446 */	return PartsEngine.GetButtonR(パーツ番号);
+/* 0016545c */}
+
+int Ｐ＿ボタン＿緑色取得(int パーツ番号)
+/* 00165470 */{
+/* 00165470 */	return PartsEngine.GetButtonG(パーツ番号);
+/* 00165486 */}
+
+int Ｐ＿ボタン＿青色取得(int パーツ番号)
+/* 0016549a */{
+/* 0016549a */	return PartsEngine.GetButtonB(パーツ番号);
+/* 001654b0 */}
+
+void Ｐ＿ボタン＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, int 縁取り赤, int 縁取り緑, int 縁取り青, float 縁取り幅)
+/* 001654c4 */{
+/* 001654c4 */	PartsEngine.SetButtonFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 0016553c */}
+
+void Ｐ＿ボタン＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青, ref float 縁取り幅)
+/* 0016554a */{
+/* 0016554a */	PartsEngine.GetButtonFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 001655c2 */}
+
+void Ｐ＿ボタン＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 001655d0 */{
+/* 001655d0 */	PartsEngine.SetButtonCGName(パーツ番号, ＣＧ名);
+/* 001655ee */}
+
+string Ｐ＿ボタン＿ＣＧ名取得(int パーツ番号)
+/* 001655fc */{
+/* 001655fc */	string Name;
+/* 00165610 */	PartsEngine.GetButtonCGName(パーツ番号, Name);
+/* 0016562e */	return Name;
+/* 0016563a */}
+
+void Ｐ＿ボタン＿フラット名設定(int パーツ番号, string ＣＧ名)
+/* 0016564e */{
+/* 0016564e */	PartsEngine.SetButtonFlatName(パーツ番号, ＣＧ名);
+/* 0016566c */}
+
+string Ｐ＿ボタン＿フラット名取得(int パーツ番号)
+/* 0016567a */{
+/* 0016567a */	string Name;
+/* 0016568e */	PartsEngine.GetButtonFlatName(パーツ番号, Name);
+/* 001656ac */	return Name;
+/* 001656b8 */}
+
+void Ｐ＿ボタン＿テキスト設定(int パーツ番号, string テキスト)
+/* 001656cc */{
+/* 001656cc */	PartsEngine.SetButtonText(パーツ番号, テキスト);
+/* 001656ea */}
+
+string Ｐ＿ボタン＿テキスト取得(int パーツ番号)
+/* 001656f8 */{
+/* 001656f8 */	string Text;
+/* 0016570c */	PartsEngine.GetButtonText(パーツ番号, Text);
+/* 0016572a */	return Text;
+/* 00165736 */}
+
+void Ｐ＿ボタン＿テキスト位置設定(int パーツ番号, int 位置)
+/* 0016574a */{
+/* 0016574a */	PartsEngine.SetButtonTextOriginPosMode(パーツ番号, 位置);
+/* 00165768 */}
+
+int Ｐ＿ボタン＿テキスト位置取得(int パーツ番号)
+/* 00165776 */{
+/* 00165776 */	return PartsEngine.GetButtonTextOriginPosMode(パーツ番号);
+/* 0016578c */}
+
+void Ｐ＿ボタン＿文字間隔設定(int パーツ番号, int 間隔)
+/* 001657a0 */{
+/* 001657a0 */	PartsEngine.SetButtonCharSpace(パーツ番号, 間隔);
+/* 001657be */}
+
+int Ｐ＿ボタン＿文字間隔取得(int パーツ番号)
+/* 001657cc */{
+/* 001657cc */	return PartsEngine.GetButtonCharSpace(パーツ番号);
+/* 001657e2 */}
+
+void Ｐ＿ボタン＿行間隔設定(int パーツ番号, int 間隔)
+/* 001657f6 */{
+/* 001657f6 */	PartsEngine.SetButtonLineSpace(パーツ番号, 間隔);
+/* 00165814 */}
+
+int Ｐ＿ボタン＿行間隔取得(int パーツ番号)
+/* 00165822 */{
+/* 00165822 */	return PartsEngine.GetButtonLineSpace(パーツ番号);
+/* 00165838 */}
+

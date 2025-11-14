@@ -1,0 +1,70 @@
+void SceneSave::init()
+/* 001b93b8 */{
+/* 001b93b8 */	this.partsRecoveryOverlay_.initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 001b93ec */	this.partsRecoveryOverlay_.setZ(30000.0);
+/* 001b9402 */	this.isFinish_ = false;
+/* 001b9414 */	this.list_.init(false);
+/* 001b942a */	this.list_.setOnClickCallback(this.onClick);
+/* 001b9444 */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001b946c */	this.btnExit_.setPos(839, 691);
+/* 001b9488 */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001b94a8 */}
+
+void SceneSave::run()
+/* 001b94b0 */{
+/* 001b94b0 */	this.fadeIn(true, NULL);
+/* 001b94c0 */}
+
+void SceneSave::onClickButtonExit(int id)
+/* 001b94c8 */{
+/* 001b94c8 */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001b94e0 */}
+
+bool SceneSave::update()
+/* 001b94e8 */{
+/* 001b94e8 */	if (!this.timerCb_.isRunning() && g_mouse.isClick(1))
+/* 001b9534 */	{
+/* 001b9534 */		playCancel();
+/* 001b953a */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001b9552 */	}
+/* 001b9552 */	return !this.isFinish_;
+/* 001b9562 */}
+
+void SceneSave::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001b9570 */{
+/* 001b9570 */	this.list_.fadeIn(val);
+/* 001b958a */	this.btnExit_.fadeIn(val);
+/* 001b95a4 */	if (cb.Numof() != 0)
+/* 001b95c0 */	{
+/* 001b95c0 */		this.timerCb_.setTimer(300, cb);
+/* 001b95e2 */	}
+/* 001b95e2 */}
+
+void SceneSave::onClick(int index)
+/* 001b95ea */{
+/* 001b95ea */	if (AFL_Config_GetSaveConfirm())
+/* 001b95f6 */	{
+/* 001b95f6 */		DialogInfomation info;
+/* 001b9606 */		info.setCaption("セーブします");
+/* 001b961c */		info.setMessage("既にセーブデータがある場合は、|上書きされます");
+/* 001b9632 */		info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 001b9648 */		info.setAnswerTypeYesNo(true);
+/* 001b965e */		if (openDialog(info) == 1)
+/* 001b9680 */		{
+/* 001b9680 */			return;
+/* 001b9682 */		}
+/* 001b9682 */	}
+/* 001b9688 */	g_sysSound.play(6, "効果音／セーブ");
+/* 001b96a4 */	if (!g_saveDataManager.save(index))
+/* 001b96c6 */	{
+/* 001b96c6 */		this.partsRecoveryOverlay_.setShow(true);
+/* 001b96dc */		this.isFinish_ = true;
+/* 001b96ee */	}
+/* 001b96ee */	this.list_.reset();
+/* 001b96fe */}
+
+void SceneSave::onFinishFadeOut()
+/* 001b9706 */{
+/* 001b9706 */	this.isFinish_ = true;
+/* 001b9718 */}
+

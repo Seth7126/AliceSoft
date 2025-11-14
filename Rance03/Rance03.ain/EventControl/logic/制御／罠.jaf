@@ -1,0 +1,860 @@
+void 制御／罠／落とし穴()
+/* 00230d36 */{
+/* 00230d36 */	制御／罠／ダメージ("落とし穴", 75.0);
+/* 00230d48 */}
+
+void 制御／罠／深い落とし穴()
+/* 00230d56 */{
+/* 00230d56 */	制御／罠／ダメージ("深い落とし穴", 300.0);
+/* 00230d68 */}
+
+void 制御／罠／炎の鼻息()
+/* 00230d76 */{
+/* 00230d76 */	制御／罠／ダメージ("炎の鼻息", 100.0);
+/* 00230d88 */}
+
+void 制御／罠／崩れる柱()
+/* 00230d96 */{
+/* 00230d96 */	制御／罠／ダメージ("崩れる柱", 250.0);
+/* 00230da8 */}
+
+void 制御／罠／崩れる柱Ｂ()
+/* 00230db6 */{
+/* 00230db6 */	制御／罠／ダメージ("崩れる柱", 750.0);
+/* 00230dc8 */}
+
+void 制御／罠／粉塵爆発()
+/* 00230dd6 */{
+/* 00230dd6 */	制御／罠／ダメージ("粉塵爆発", 125.0);
+/* 00230de8 */}
+
+void 制御／罠／破裂玉()
+/* 00230df6 */{
+/* 00230df6 */	制御／罠／ダメージ("破裂玉", 240.0);
+/* 00230e08 */}
+
+void 制御／罠／筋力天井()
+/* 00230e16 */{
+/* 00230e16 */	制御／罠／ダメージ("筋力天井", 300.0);
+/* 00230e28 */}
+
+void 制御／罠／筋力天井Ｂ()
+/* 00230e36 */{
+/* 00230e36 */	制御／罠／ダメージ("筋力天井", 900.0);
+/* 00230e48 */}
+
+void 制御／罠／魔力真空()
+/* 00230e56 */{
+/* 00230e56 */	制御／罠／ダメージ("魔力真空", 200.0);
+/* 00230e68 */}
+
+void 制御／罠／魔力真空Ｂ()
+/* 00230e76 */{
+/* 00230e76 */	制御／罠／ダメージ("魔力真空", 600.0);
+/* 00230e88 */}
+
+void 制御／罠／激臭()
+/* 00230e96 */{
+/* 00230e96 */	制御／罠／ダメージ("激臭", 200.0);
+/* 00230ea8 */}
+
+void 制御／罠／激臭Ｂ()
+/* 00230eb6 */{
+/* 00230eb6 */	制御／罠／ダメージ("激臭", 600.0);
+/* 00230ec8 */}
+
+void 制御／罠／マグマ()
+/* 00230ed6 */{
+/* 00230ed6 */	制御／罠／ダメージ("マグマ", 1000.0);
+/* 00230ee8 */}
+
+void 制御／罠／仕掛け矢()
+/* 00230ef6 */{
+/* 00230ef6 */	制御／罠／ダメージ／単体("仕掛け矢", 250.0);
+/* 00230f08 */}
+
+void 制御／罠／仕掛け矢Ｂ()
+/* 00230f16 */{
+/* 00230f16 */	制御／罠／ダメージ／単体("仕掛け矢", 750.0);
+/* 00230f28 */}
+
+void 制御／罠／警備レーザー()
+/* 00230f36 */{
+/* 00230f36 */	制御／罠／ダメージ／単体("警備レーザー", 300.0);
+/* 00230f48 */}
+
+void 制御／罠／警備レーザーＢ()
+/* 00230f56 */{
+/* 00230f56 */	制御／罠／ダメージ／単体("警備レーザー", 900.0);
+/* 00230f68 */}
+
+void 制御／罠／煮えたぎった油()
+/* 00230f76 */{
+/* 00230f76 */	制御／罠／ダメージ／単体("煮えたぎった油", 400.0);
+/* 00230f88 */}
+
+void 制御／罠／煮えたぎった油Ｂ()
+/* 00230f96 */{
+/* 00230f96 */	制御／罠／ダメージ／単体("煮えたぎった油", 1200.0);
+/* 00230fa8 */}
+
+void 制御／罠／ジル()
+/* 00230fb6 */{
+/* 00230fb6 */	if (getPlayerFromId("ランス").getHp() < getPlayerFromId("ランス").getMaxHp() / 3)
+/* 00231016 */	{
+/* 00231016 */		制御／罠／ダメージ／単体("ジル", 100.0);
+/* 00231028 */	}
+/* 0023102e */	else
+/* 0023102e */	{
+/* 0023102e */		制御／罠／ダメージ／単体("ジル", 150.0);
+/* 00231040 */	}
+/* 00231040 */}
+
+void 制御／罠／ジルＢ()
+/* 0023104e */{
+/* 0023104e */	if (getPlayerFromId("ランス").getHp() < getPlayerFromId("ランス").getMaxHp() / 3)
+/* 002310ae */	{
+/* 002310ae */		制御／罠／ダメージ／単体("ジルB", 50.0);
+/* 002310c0 */	}
+/* 002310c6 */	else
+/* 002310c6 */	{
+/* 002310c6 */		制御／罠／ダメージ／単体("ジルB", 100.0);
+/* 002310d8 */	}
+/* 002310d8 */}
+
+void 制御／罠／ジルＣ()
+/* 002310e6 */{
+/* 002310e6 */	if (getPlayerFromId("ランス").getHp() < getPlayerFromId("ランス").getMaxHp() / 3)
+/* 00231146 */	{
+/* 00231146 */		制御／罠／ダメージ／単体("ジルC", 75.0);
+/* 00231158 */	}
+/* 0023115e */	else
+/* 0023115e */	{
+/* 0023115e */		制御／罠／ダメージ／単体("ジルC", 125.0);
+/* 00231170 */	}
+/* 00231170 */}
+
+void 制御／罠／ジルＤ()
+/* 0023117e */{
+/* 0023117e */	if (getPlayerFromId("ランス").getHp() < getPlayerFromId("ランス").getMaxHp() / 3)
+/* 002311de */	{
+/* 002311de */		制御／罠／ダメージ／単体("ジルD", 25.0);
+/* 002311f0 */	}
+/* 002311f6 */	else
+/* 002311f6 */	{
+/* 002311f6 */		制御／罠／ダメージ／単体("ジルD", 75.0);
+/* 00231208 */	}
+/* 00231208 */}
+
+void 制御／罠／転落()
+/* 00231216 */{
+/* 00231216 */	制御／罠／ダメージ("転落", 275.0);
+/* 00231228 */	制御／シーン設定／ダンジョン("地上灯台最下層", 0, 10);
+/* 00231240 */}
+
+void 制御／罠／タクシー()
+/* 0023124e */{
+/* 0023124e */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 0023125a */	int val = 35;
+/* 0023126c */	float fluctuation = (val * (RAND(16) - 1)) / 100;
+/* 002312a2 */	val += fluctuation;
+/* 002312ba */	int beforeHp;
+/* 002312cc */	int afterHp;
+/* 002312de */	beforeHp = getPlayerFromId("フェリス").getHp();
+/* 00231312 */	afterHp = getPlayerFromId("フェリス").getHp() - val;
+/* 00231352 */	if (afterHp < 0)
+/* 0023136a */	{
+/* 0023136a */		afterHp = 0;
+/* 0023137c */	}
+/* 0023137c */	getPlayerFromId("フェリス").setHp(afterHp);
+/* 002313b0 */	DialogInfomation info;
+/* 002313c0 */	info.setCaption("飛行！そして疲労！");
+/* 002313d6 */	info.setMessage("ふらふら頼りないが快適だ！|フェリスは疲労で%dのダメージ！|フェリスのHP:%d → %d" % val % beforeHp % afterHp);
+/* 00231422 */	info.setPictureImageName("システム／ダイアログ／写真／タクシー");
+/* 00231438 */	openDialog(info);
+/* 0023144e */	if (getPlayerFromId("フェリス").getHp() == 0)
+/* 00231484 */	{
+/* 00231484 */		DialogInfomation info2;
+/* 00231494 */		info2.setCaption("墜落！そして激突！");
+/* 002314aa */		info2.setMessage("フェリスが力尽きて墜落！|という事は全員墜落！");
+/* 002314c0 */		info2.setPictureImageName("システム／ダイアログ／写真／転落");
+/* 002314d6 */		openDialog(info2);
+/* 002314ec */		制御／シーン設定／ダンジョン("地上灯台最下層", 0, 10);
+/* 00231504 */	}
+/* 00231504 */}
+
+void 制御／罠／パチル()
+/* 00231518 */{
+/* 00231518 */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00231524 */	int val;
+/* 00231536 */	float base;
+/* 00231548 */	float fluctuation;
+/* 0023155a */	base = 制御／所持金確認() * 0.05;
+/* 0023157a */	fluctuation = (base * (RAND(16) - 1)) / 100.0;
+/* 002315b0 */	val = base + fluctuation;
+/* 002315d4 */	g_playerCommonParam.addGold(val * -1);
+/* 002315f6 */	DialogInfomation info;
+/* 00231606 */	info.setCaption("パチルが襲ってきた！");
+/* 0023161c */	info.setMessage("鮮やかなお手並みで、|%dGOLDパチられた！" % val);
+/* 00231644 */	info.setPictureImageName("システム／ダイアログ／写真／パチル");
+/* 0023165a */	openDialog(info);
+/* 00231670 */}
+
+void 制御／罠／こぼれいくら()
+/* 0023167e */{
+/* 0023167e */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 0023168a */	int rank;
+/* 0023169c */	int val;
+/* 002316ae */	rank = 制御／罠／回避／レイラ();
+/* 002316c0 */	val = 13 - rank;
+/* 002316de */	string resist;
+/* 002316f2 */	if (rank != 0)
+/* 0023170a */	{
+/* 0023170a */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 0023171e */	}
+/* 0023171e */	g_playerCommonParam.addBadCondition("痛風", val);
+/* 0023173e */	DialogInfomation info;
+/* 0023174e */	info.setCaption("いくらをもりもり食べた！");
+/* 00231764 */	info.setMessage("さっそく痛風にかかった！|歩くだけで激しく痛い！%s" % resist);
+/* 0023178c */	info.setPictureImageName("システム／ダイアログ／写真／痛風");
+/* 002317a2 */	openDialog(info);
+/* 002317b8 */}
+
+void 制御／罠／フリードリンク()
+/* 002317c6 */{
+/* 002317c6 */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 002317d2 */	int rank;
+/* 002317e4 */	int val;
+/* 002317f6 */	rank = 制御／罠／回避／レイラ();
+/* 00231808 */	val = 13 - rank;
+/* 00231826 */	string resist;
+/* 0023183a */	if (rank != 0)
+/* 00231852 */	{
+/* 00231852 */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 00231866 */	}
+/* 00231866 */	g_playerCommonParam.addBadCondition("内股", val);
+/* 00231886 */	DialogInfomation info;
+/* 00231896 */	info.setCaption("ドリンクをがぶ飲みした！");
+/* 002318ac */	info.setMessage("ぱんぱんでもれそうだ！|内股で進むしかない！%s" % resist);
+/* 002318d4 */	info.setPictureImageName("システム／ダイアログ／写真／フリードリンク");
+/* 002318ea */	openDialog(info);
+/* 00231900 */}
+
+void 制御／罠／坑内放送()
+/* 0023190e */{
+/* 0023190e */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 0023191a */	int rank;
+/* 0023192c */	int val;
+/* 0023193e */	rank = 制御／罠／回避／レイラ();
+/* 00231950 */	val = 13 - rank;
+/* 0023196e */	string resist;
+/* 00231982 */	if (rank != 0)
+/* 0023199a */	{
+/* 0023199a */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 002319ae */	}
+/* 002319ae */	g_playerCommonParam.addBadCondition("幻聴", val);
+/* 002319ce */	DialogInfomation info;
+/* 002319de */	info.setCaption("坑内放送のスイッチを入れた！");
+/* 002319f4 */	info.setMessage("脳に響く不快な曲が流れる！|リクエストしたのはどこのどいつだ！%s" % resist);
+/* 00231a1c */	info.setPictureImageName("システム／ダイアログ／写真／幻聴");
+/* 00231a32 */	openDialog(info);
+/* 00231a48 */}
+
+void 制御／罠／森の演奏会()
+/* 00231a56 */{
+/* 00231a56 */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00231a62 */	int rank;
+/* 00231a74 */	int val;
+/* 00231a86 */	rank = 制御／罠／回避／レイラ();
+/* 00231a98 */	val = 13 - rank;
+/* 00231ab6 */	string resist;
+/* 00231aca */	if (rank != 0)
+/* 00231ae2 */	{
+/* 00231ae2 */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 00231af6 */	}
+/* 00231af6 */	g_playerCommonParam.addBadCondition("幻聴", val);
+/* 00231b16 */	DialogInfomation info;
+/* 00231b26 */	info.setCaption("森の演奏会が開かれた！");
+/* 00231b3c */	info.setMessage("脳に響く不快な曲が流れる！|指揮者はどこのどいつだ！%s" % resist);
+/* 00231b64 */	info.setPictureImageName("システム／ダイアログ／写真／幻聴");
+/* 00231b7a */	openDialog(info);
+/* 00231b90 */}
+
+void 制御／罠／有線放送()
+/* 00231b9e */{
+/* 00231b9e */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00231baa */	int rank;
+/* 00231bbc */	int val;
+/* 00231bce */	rank = 制御／罠／回避／レイラ();
+/* 00231be0 */	val = 13 - rank;
+/* 00231bfe */	string resist;
+/* 00231c12 */	if (rank != 0)
+/* 00231c2a */	{
+/* 00231c2a */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 00231c3e */	}
+/* 00231c3e */	g_playerCommonParam.addBadCondition("幻聴", val);
+/* 00231c5e */	DialogInfomation info;
+/* 00231c6e */	info.setCaption("有線放送のスイッチを入れた！");
+/* 00231c84 */	info.setMessage("脳に響く不快な曲が流れる！|リクエストしたのはどこのどいつだ！%s" % resist);
+/* 00231cac */	info.setPictureImageName("システム／ダイアログ／写真／幻聴");
+/* 00231cc2 */	openDialog(info);
+/* 00231cd8 */}
+
+void 制御／罠／前衛的めがね()
+/* 00231ce6 */{
+/* 00231ce6 */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00231cf2 */	int rank;
+/* 00231d04 */	int val;
+/* 00231d16 */	rank = 制御／罠／回避／レイラ();
+/* 00231d28 */	val = 13 - rank;
+/* 00231d46 */	string resist;
+/* 00231d5a */	if (rank != 0)
+/* 00231d72 */	{
+/* 00231d72 */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 00231d86 */	}
+/* 00231d86 */	g_playerCommonParam.addBadCondition("乱視", val);
+/* 00231da6 */	DialogInfomation info;
+/* 00231db6 */	info.setCaption("拾っためがねを装着した！");
+/* 00231dcc */	info.setMessage("視界がおかしくなった！|うまく狙いをつけにくくなった！%s" % resist);
+/* 00231df4 */	info.setPictureImageName("システム／ダイアログ／写真／乱視");
+/* 00231e0a */	openDialog(info);
+/* 00231e20 */}
+
+void 制御／罠／黒牛乳()
+/* 00231e2e */{
+/* 00231e2e */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00231e3a */	int rank;
+/* 00231e4c */	int val;
+/* 00231e5e */	rank = 制御／罠／回避／レイラ();
+/* 00231e70 */	val = 13 - rank;
+/* 00231e8e */	string resist;
+/* 00231ea2 */	if (rank != 0)
+/* 00231eba */	{
+/* 00231eba */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 00231ece */	}
+/* 00231ece */	g_playerCommonParam.addBadCondition("骨粗", val);
+/* 00231eee */	DialogInfomation info;
+/* 00231efe */	info.setCaption("黒牛乳を飲んだ！");
+/* 00231f14 */	info.setMessage("みるみる骨が弱くなった！|余計にダメージを喰らいそうだ！%s" % resist);
+/* 00231f3c */	info.setPictureImageName("システム／ダイアログ／写真／骨粗");
+/* 00231f52 */	openDialog(info);
+/* 00231f68 */}
+
+void 制御／罠／極秘書類()
+/* 00231f76 */{
+/* 00231f76 */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00231f82 */	int rank;
+/* 00231f94 */	int val;
+/* 00231fa6 */	rank = 制御／罠／回避／レイラ();
+/* 00231fb8 */	val = 13 - rank;
+/* 00231fd6 */	string resist;
+/* 00231fea */	if (rank != 0)
+/* 00232002 */	{
+/* 00232002 */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 00232016 */	}
+/* 00232016 */	g_playerCommonParam.addBadCondition("動揺", val);
+/* 00232036 */	DialogInfomation info;
+/* 00232046 */	info.setCaption("秘密書類を見た！");
+/* 0023205c */	info.setMessage("頭がおかしくなった！|見えないものが見えはじめた！%s" % resist);
+/* 00232084 */	info.setPictureImageName("システム／ダイアログ／写真／動揺");
+/* 0023209a */	openDialog(info);
+/* 002320b0 */}
+
+void 制御／罠／真理の書()
+/* 002320be */{
+/* 002320be */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 002320ca */	int rank;
+/* 002320dc */	int val;
+/* 002320ee */	rank = 制御／罠／回避／レイラ();
+/* 00232100 */	val = 13 - rank;
+/* 0023211e */	string resist;
+/* 00232132 */	if (rank != 0)
+/* 0023214a */	{
+/* 0023214a */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 0023215e */	}
+/* 0023215e */	g_playerCommonParam.addBadCondition("動揺", val);
+/* 0023217e */	DialogInfomation info;
+/* 0023218e */	info.setCaption("真理の書を読んだ！");
+/* 002321a4 */	info.setMessage("世界の真理を知って発狂！|見えないものが見えはじめた！%s" % resist);
+/* 002321cc */	info.setPictureImageName("システム／ダイアログ／写真／動揺");
+/* 002321e2 */	openDialog(info);
+/* 002321f8 */}
+
+void 制御／罠／閉店()
+/* 00232206 */{
+/* 00232206 */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00232212 */	int rank;
+/* 00232224 */	int val;
+/* 00232236 */	rank = 制御／罠／回避／レイラ();
+/* 00232248 */	val = 13 - rank;
+/* 00232266 */	string resist;
+/* 0023227a */	if (rank != 0)
+/* 00232292 */	{
+/* 00232292 */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 002322a6 */	}
+/* 002322a6 */	g_playerCommonParam.addBadCondition("閉店", val);
+/* 002322c6 */	DialogInfomation info;
+/* 002322d6 */	info.setCaption("閉店！");
+/* 002322ec */	info.setMessage("なぜかこの場所が閉店して、|問答無用で照明が落とされた！%s" % resist);
+/* 00232314 */	info.setPictureImageName("システム／ダイアログ／写真／閉店");
+/* 0023232a */	openDialog(info);
+/* 00232340 */}
+
+void 制御／罠／濁流()
+/* 0023234e */{
+/* 0023234e */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 0023235a */	制御／帰り木設定(false);
+/* 00232366 */	DialogInfomation info;
+/* 00232376 */	info.setCaption("横穴から濁流！");
+/* 0023238c */	info.setMessage("帰り木が濡れて使えない！|自力で外に出るはめになった！");
+/* 002323a2 */	info.setPictureImageName("システム／ダイアログ／写真／湿気");
+/* 002323b8 */	openDialog(info);
+/* 002323ce */}
+
+void 制御／罠／警報()
+/* 002323dc */{
+/* 002323dc */	if (!EV("ＥＶ／牢獄／警報／初回", -2147483648) && !EV("ＥＶ／牢獄／リア／二回目／Ｈ後", -2147483648))
+/* 00232428 */	{
+/* 00232428 */		ＥＶ／牢獄／警報／初回();
+/* 0023242e */	}
+/* 00232434 */	else if (!EV("ＥＶ／牢獄／警報／汎用", -2147483648) && !EV("ＥＶ／牢獄／リア／二回目／Ｈ後", -2147483648))
+/* 00232480 */	{
+/* 00232480 */		ＥＶ／牢獄／警報／汎用();
+/* 00232486 */	}
+/* 0023248c */	else
+/* 0023248c */	{
+/* 0023248c */		DialogInfomation info;
+/* 0023249c */		info.setCaption("警報を踏んだ！");
+/* 002324b2 */		info.setMessage("鳴り響く音を聞きつけて、|何者かが近づいてくる……");
+/* 002324c8 */		info.setPictureImageName("システム／ダイアログ／写真／警報");
+/* 002324de */		openDialog(info);
+/* 002324f4 */	}
+/* 002324fa */	if (!EV("ＥＶ／居館／一階／入口／初回", -2147483648))
+/* 00232514 */	{
+/* 00232514 */		制御／モンスター／牢獄／ヘルマン歩兵();
+/* 0023251a */	}
+/* 00232520 */	else
+/* 00232520 */	{
+/* 00232520 */		switch (RAND(6))
+/* 00232538 */		{
+/* 00232538 */		case 1:
+/* 00232538 */			制御／モンスター／牢獄／コンテ();
+/* 0023253e */			break;
+/* 00232544 */		case 2:
+/* 00232544 */		case 3:
+/* 00232544 */			制御／モンスター／牢獄／フルパワーゴリラＺＩＩ();
+/* 0023254a */			break;
+/* 00232550 */		case 4:
+/* 00232550 */		case 5:
+/* 00232550 */		case 6:
+/* 00232550 */			制御／モンスター／牢獄／ライカンスロープ();
+/* 00232556 */			break;
+/* 0023255c */		}
+/* 0023255c */	}
+/* 0023255c */	if (!EV("ＥＶ／牢獄／リア／二回目／Ｈ後", -2147483648))
+/* 00232576 */	{
+/* 00232576 */		if (!EV("ＥＶ／牢獄／警報／初回／戦闘後", -2147483648))
+/* 00232590 */		{
+/* 00232590 */			ＥＶ／牢獄／警報／初回／戦闘後();
+/* 00232596 */		}
+/* 0023259c */		else if (!EV("ＥＶ／牢獄／警報／汎用／戦闘後", -2147483648))
+/* 002325b6 */		{
+/* 002325b6 */			ＥＶ／牢獄／警報／汎用／戦闘後();
+/* 002325bc */		}
+/* 002325bc */	}
+/* 002325bc */}
+
+void 制御／罠／忘れた草()
+/* 002325ca */{
+/* 002325ca */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 002325d6 */	int rank;
+/* 002325e8 */	int val;
+/* 002325fa */	rank = 制御／罠／回避／レイラ();
+/* 0023260c */	val = 13 - rank;
+/* 0023262a */	string resist;
+/* 0023263e */	if (rank != 0)
+/* 00232656 */	{
+/* 00232656 */		resist = "|レイラの変調抵抗でターンは軽減！";
+/* 0023266a */	}
+/* 00232670 */	else
+/* 00232670 */	{
+/* 00232670 */		resist = "|思い出すまでしばらくかかりそうだ";
+/* 00232684 */	}
+/* 00232684 */	array@string skills;
+/* 0023268e */	array@string activeSkills;
+/* 00232698 */	g_party.getSkillIdList(skills);
+/* 002326b2 */	int i;
+/* 002326c4 */	for (i = 0; i < skills.Numof(); ++i)
+/* 00232714 */	{
+/* 00232714 */		string tempPlayerId;
+/* 00232728 */		tempPlayerId = getPlayerSkillFromId(skills[i]).getPlayerId();
+/* 0023276e */		if (getPlayerFromId(tempPlayerId).getHp() != 0)
+/* 002327a8 */		{
+/* 002327a8 */			activeSkills.PushBack(skills[i]);
+/* 002327c8 */		}
+/* 002327c8 */	}
+/* 002327da */	string targetSkillId;
+/* 002327ee */	string targetPlayerId;
+/* 00232802 */	targetSkillId = activeSkills[RAND(activeSkills.Numof()) - 1];
+/* 0023283a */	targetPlayerId = getPlayerSkillFromId(targetSkillId).getPlayerId();
+/* 00232874 */	getPlayerFromId(targetPlayerId).setOverCoolTime(targetSkillId, val);
+/* 002328b4 */	string skillName;
+/* 002328c8 */	string playerName;
+/* 002328dc */	skillName = getPlayerSkillFromId(targetSkillId).getName();
+/* 00232916 */	playerName = getPlayerFromId(targetPlayerId).getShortName();
+/* 00232950 */	DialogInfomation info;
+/* 00232960 */	info.setCaption("忘れた草に触れた！");
+/* 00232976 */	info.setMessage("%sは、|%sのやり方を忘れた！%s" % playerName % skillName % resist);
+/* 002329c2 */	info.setPictureImageName("システム／ダイアログ／写真／忘れた草");
+/* 002329d8 */	openDialog(info);
+/* 002329ee */}
+
+void 制御／罠／ダメージ(string type, float base)
+/* 002329fc */{
+/* 002329fc */	openFlat("ダンジョン/システム／エフェクト／罠");
+/* 00232a08 */	if (type != "痛風")
+/* 00232a20 */	{
+/* 00232a20 */		if (制御／罠／回避／スー())
+/* 00232a2c */		{
+/* 00232a2c */			return;
+/* 00232a2e */		}
+/* 00232a2e */	}
+/* 00232a2e */	int val;
+/* 00232a40 */	int minDamage;
+/* 00232a52 */	int maxDamage;
+/* 00232a64 */	int beforeHp;
+/* 00232a76 */	int afterHp;
+/* 00232a88 */	float fluctuation;
+/* 00232a9a */	float dexAdjust;
+/* 00232aac */	float critAdjust;
+/* 00232abe */	minDamage = 16777216;
+/* 00232ad0 */	array@string players;
+/* 00232ada */	g_party.getPlayerIdList(players);
+/* 00232af4 */	int i;
+/* 00232b06 */	for (i = 0; i < players.Numof(); ++i)
+/* 00232b56 */	{
+/* 00232b56 */		string pId;
+/* 00232b6a */		pId = players[i];
+/* 00232b8e */		if (getPlayerFromId(pId).getHp() != 0)
+/* 00232bc8 */		{
+/* 00232bc8 */			if ((getPlayerFromId(pId).getId() == "フェリス" || getPlayerFromId(pId).getId() == "ユラン") && (type == "落とし穴" || type == "深い落とし穴"))
+/* 00232cb4 */			{
+/* 00232cb4 */				critAdjust = 0.0;
+/* 00232cc6 */			}
+/* 00232ccc */			else if (type == "筋力天井")
+/* 00232ce4 */			{
+/* 00232ce4 */				if (RAND(512) <= getPlayerFromId(pId).getStrength())
+/* 00232d24 */				{
+/* 00232d24 */					critAdjust = 0.2;
+/* 00232d36 */				}
+/* 00232d3c */				else if (RAND(256) <= getPlayerFromId(pId).getStrength())
+/* 00232d7c */				{
+/* 00232d7c */					critAdjust = 0.4;
+/* 00232d8e */				}
+/* 00232d94 */				else if (RAND(128) <= getPlayerFromId(pId).getStrength())
+/* 00232dd4 */				{
+/* 00232dd4 */					critAdjust = 0.6;
+/* 00232de6 */				}
+/* 00232dec */				else if (RAND(64) <= getPlayerFromId(pId).getStrength())
+/* 00232e2c */				{
+/* 00232e2c */					critAdjust = 0.8;
+/* 00232e3e */				}
+/* 00232e44 */				else
+/* 00232e44 */				{
+/* 00232e44 */					critAdjust = 1.0;
+/* 00232e56 */				}
+/* 00232e56 */			}
+/* 00232e74 */			else if (type == "魔力真空")
+/* 00232e8c */			{
+/* 00232e8c */				if (RAND(512) <= getPlayerFromId(pId).getMind())
+/* 00232ecc */				{
+/* 00232ecc */					critAdjust = 0.2;
+/* 00232ede */				}
+/* 00232ee4 */				else if (RAND(256) <= getPlayerFromId(pId).getMind())
+/* 00232f24 */				{
+/* 00232f24 */					critAdjust = 0.4;
+/* 00232f36 */				}
+/* 00232f3c */				else if (RAND(128) <= getPlayerFromId(pId).getMind())
+/* 00232f7c */				{
+/* 00232f7c */					critAdjust = 0.6;
+/* 00232f8e */				}
+/* 00232f94 */				else if (RAND(64) <= getPlayerFromId(pId).getMind())
+/* 00232fd4 */				{
+/* 00232fd4 */					critAdjust = 0.8;
+/* 00232fe6 */				}
+/* 00232fec */				else
+/* 00232fec */				{
+/* 00232fec */					critAdjust = 1.0;
+/* 00232ffe */				}
+/* 00232ffe */			}
+/* 0023301c */			else if (type != "痛風")
+/* 00233034 */			{
+/* 00233034 */				if (RAND(512) <= getPlayerFromId(pId).getDexterity())
+/* 00233074 */				{
+/* 00233074 */					critAdjust = 0.2;
+/* 00233086 */				}
+/* 0023308c */				else if (RAND(256) <= getPlayerFromId(pId).getDexterity())
+/* 002330cc */				{
+/* 002330cc */					critAdjust = 0.4;
+/* 002330de */				}
+/* 002330e4 */				else if (RAND(128) <= getPlayerFromId(pId).getDexterity())
+/* 00233124 */				{
+/* 00233124 */					critAdjust = 0.6;
+/* 00233136 */				}
+/* 0023313c */				else if (RAND(64) <= getPlayerFromId(pId).getDexterity())
+/* 0023317c */				{
+/* 0023317c */					critAdjust = 0.8;
+/* 0023318e */				}
+/* 00233194 */				else
+/* 00233194 */				{
+/* 00233194 */					critAdjust = 1.0;
+/* 002331a6 */				}
+/* 002331a6 */			}
+/* 002331c4 */			else
+/* 002331c4 */			{
+/* 002331c4 */				critAdjust = 1.0;
+/* 002331d6 */			}
+/* 002331d6 */			fluctuation = (base * (RAND(16) - 1)) / 100.0;
+/* 0023320c */			val = (base + fluctuation) * critAdjust;
+/* 0023323c */			if (val < 0)
+/* 00233254 */			{
+/* 00233254 */				val = 0;
+/* 00233266 */			}
+/* 00233266 */			if (val < minDamage)
+/* 00233282 */			{
+/* 00233282 */				minDamage = val;
+/* 00233298 */			}
+/* 00233298 */			if (val > maxDamage)
+/* 002332b4 */			{
+/* 002332b4 */				maxDamage = val;
+/* 002332ca */			}
+/* 002332ca */			pass("被害者:%s ダメージ:%d" % getPlayerFromId(pId).getShortName() % val);
+/* 0023331c */			beforeHp = getPlayerFromId(pId).getHp();
+/* 00233354 */			afterHp = getPlayerFromId(pId).getHp() - val;
+/* 00233398 */			getPlayerFromId(pId).setHp(afterHp);
+/* 002333d0 */		}
+/* 002333d0 */	}
+/* 00233400 */	DialogInfomation info;
+/* 00233410 */	switch (type)
+/* 00233426 */	{
+/* 00233426 */	case "落とし穴":
+/* 00233426 */		info.setCaption("落とし穴に落ちた！");
+/* 0023343c */		info.setMessage("3メートルも掘りやがって！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 00233476 */		info.setPictureImageName("システム／ダイアログ／写真／落とし穴");
+/* 0023348c */		break;
+/* 00233492 */	case "深い落とし穴":
+/* 00233492 */		info.setCaption("深い落とし穴に落ちた！");
+/* 002334a8 */		info.setMessage("18メートルも掘りやがって！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 002334e2 */		info.setPictureImageName("システム／ダイアログ／写真／落とし穴");
+/* 002334f8 */		break;
+/* 002334fe */	case "炎の鼻息":
+/* 002334fe */		info.setCaption("燃える鼻息で焼かれた！");
+/* 00233514 */		info.setMessage("熱いプラス不愉快！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 0023354e */		info.setPictureImageName("システム／ダイアログ／写真／炎の鼻息");
+/* 00233564 */		break;
+/* 0023356a */	case "崩れる柱":
+/* 0023356a */		info.setCaption("瓦礫の下敷きになった！");
+/* 00233580 */		info.setMessage("有無を言わさぬ質量！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 002335ba */		info.setPictureImageName("システム／ダイアログ／写真／崩れる柱");
+/* 002335d0 */		break;
+/* 002335d6 */	case "転落":
+/* 002335d6 */		info.setCaption("転落！そして激突！");
+/* 002335ec */		info.setMessage("足を滑らせて大惨事だ！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 00233626 */		info.setPictureImageName("システム／ダイアログ／写真／落とし穴");
+/* 0023363c */		break;
+/* 00233642 */	case "粉塵爆発":
+/* 00233642 */		info.setCaption("目の前でいきなり爆発！");
+/* 00233658 */		info.setMessage("反応する間もなかった！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 00233692 */		info.setPictureImageName("システム／ダイアログ／写真／粉塵爆発");
+/* 002336a8 */		break;
+/* 002336ae */	case "破裂玉":
+/* 002336ae */		info.setCaption("車体が爆発で揺れた！");
+/* 002336c4 */		info.setMessage("何か踏んだか！？|３号は%dのダメージ！" % maxDamage);
+/* 002336ec */		info.setPictureImageName("システム／ダイアログ／写真／破裂玉");
+/* 00233702 */		break;
+/* 00233708 */	case "筋力天井":
+/* 00233708 */		info.setCaption("天井が落ちてきた！");
+/* 0023371e */		info.setMessage("筋力勝負で持ち堪えろ！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 00233758 */		info.setPictureImageName("システム／ダイアログ／写真／崩れる柱");
+/* 0023376e */		break;
+/* 00233774 */	case "魔力真空":
+/* 00233774 */		info.setCaption("辺りが真空になった！");
+/* 0023378a */		info.setMessage("魔力勝負で持ち堪えろ！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 002337c4 */		info.setPictureImageName("システム／ダイアログ／写真／罠");
+/* 002337da */		break;
+/* 002337e0 */	case "マグマ":
+/* 002337e0 */		info.setCaption("マグマに突入！");
+/* 002337f6 */		info.setMessage("噴き上がる溶岩！自然の驚異！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 00233830 */		info.setPictureImageName("システム／ダイアログ／写真／マグマ");
+/* 00233846 */		break;
+/* 0023384c */	case "激臭":
+/* 0023384c */		info.setCaption("くさい！");
+/* 00233862 */		info.setMessage("気を失うほどの威力！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 0023389c */		info.setPictureImageName("システム／ダイアログ／写真／激臭");
+/* 002338b2 */		break;
+/* 002338b8 */	case "痛風":
+/* 002338b8 */		info.setCaption("痛風の激痛が走った！");
+/* 002338ce */		info.setMessage("ぎゃーー！|編成パーティはそれぞれ、|%d～%dのダメージ！" % minDamage % maxDamage);
+/* 00233908 */		info.setPictureImageName("システム／ダイアログ／写真／痛風");
+/* 0023391e */		break;
+/* 00233924 */	}
+/* 00233924 */	openDialog(info);
+/* 0023393a */}
+
+void 制御／罠／ダメージ／単体(string type, float base)
+/* 00233948 */{
+/* 00233948 */	switch (type)
+/* 0023395e */	{
+/* 0023395e */	case "ジル":
+/* 0023395e */		openFlat("ダンジョン/システム／エフェクト／罠／落雷");
+/* 0023396a */		break;
+/* 00233970 */	case "ジルB":
+/* 00233970 */		openFlat("ダンジョン/システム／エフェクト／罠／炎");
+/* 0023397c */		break;
+/* 00233982 */	case "ジルC":
+/* 00233982 */		openFlat("ダンジョン/システム／エフェクト／罠／ひっかき");
+/* 0023398e */		break;
+/* 00233994 */	case "ジルD":
+/* 00233994 */		openFlat("ダンジョン/システム／エフェクト／罠／噛みつき");
+/* 002339a0 */		break;
+/* 002339a6 */	default:
+/* 002339a6 */		openFlat("ダンジョン/システム／エフェクト／罠");
+/* 002339b2 */		break;
+/* 002339b8 */	}
+/* 002339b8 */	if (制御／罠／回避／スー())
+/* 002339c4 */	{
+/* 002339c4 */		return;
+/* 002339c6 */	}
+/* 002339c6 */	int val;
+/* 002339d8 */	int beforeHp;
+/* 002339ea */	int afterHp;
+/* 002339fc */	float fluctuation;
+/* 00233a0e */	float dexAdjust;
+/* 00233a20 */	float critAdjust;
+/* 00233a32 */	array@string players;
+/* 00233a3c */	g_party.getPlayerIdList(players);
+/* 00233a56 */	string pId;
+/* 00233a6a */	pId = players[RAND(players.Numof()) - 1];
+/* 00233aa2 */	if (RAND(512) <= getPlayerFromId(pId).getDexterity())
+/* 00233ae2 */	{
+/* 00233ae2 */		critAdjust = 0.2;
+/* 00233af4 */	}
+/* 00233afa */	else if (RAND(256) <= getPlayerFromId(pId).getDexterity())
+/* 00233b3a */	{
+/* 00233b3a */		critAdjust = 0.4;
+/* 00233b4c */	}
+/* 00233b52 */	else if (RAND(128) <= getPlayerFromId(pId).getDexterity())
+/* 00233b92 */	{
+/* 00233b92 */		critAdjust = 0.6;
+/* 00233ba4 */	}
+/* 00233baa */	else if (RAND(64) <= getPlayerFromId(pId).getDexterity())
+/* 00233bea */	{
+/* 00233bea */		critAdjust = 0.8;
+/* 00233bfc */	}
+/* 00233c02 */	else
+/* 00233c02 */	{
+/* 00233c02 */		critAdjust = 1.0;
+/* 00233c14 */	}
+/* 00233c14 */	fluctuation = (base * (RAND(16) - 1)) / 100.0;
+/* 00233c4a */	val = (base + fluctuation) * critAdjust;
+/* 00233c7a */	if (val < 0)
+/* 00233c92 */	{
+/* 00233c92 */		val = 0;
+/* 00233ca4 */	}
+/* 00233ca4 */	pass("被害者:%s ダメージ:%d" % getPlayerFromId(pId).getShortName() % val);
+/* 00233cf6 */	beforeHp = getPlayerFromId(pId).getHp();
+/* 00233d2e */	afterHp = getPlayerFromId(pId).getHp() - val;
+/* 00233d72 */	getPlayerFromId(pId).setHp(afterHp);
+/* 00233daa */	if (afterHp < 0)
+/* 00233dc2 */	{
+/* 00233dc2 */		afterHp = 0;
+/* 00233dd4 */	}
+/* 00233dd4 */	if (type != "ジル" && type != "ジルB" && type != "ジルC" && type != "ジルD")
+/* 00233e7c */	{
+/* 00233e7c */		DialogInfomation info;
+/* 00233e8c */		switch (type)
+/* 00233ea2 */		{
+/* 00233ea2 */		case "仕掛け矢":
+/* 00233ea2 */			info.setCaption("仕掛け矢が刺さった！");
+/* 00233eb8 */			info.setMessage("もれなく痛い箇所を狙われた！|%sは%dのダメージ！|HP:%d → %d" % getPlayerFromId(pId).getShortName() % val % beforeHp % afterHp);
+/* 00233f38 */			info.setPictureImageName("システム／ダイアログ／写真／仕掛け矢");
+/* 00233f4e */			break;
+/* 00233f5a */		case "警備レーザー":
+/* 00233f5a */			info.setCaption("警備レーザーに撃たれた！");
+/* 00233f70 */			info.setMessage("ジュッ|%sは%dのダメージ！|HP:%d → %d" % getPlayerFromId(pId).getShortName() % val % beforeHp % afterHp);
+/* 00233ff0 */			info.setPictureImageName("システム／ダイアログ／写真／警備レーザー");
+/* 00234006 */			break;
+/* 00234018 */		case "煮えたぎった油":
+/* 00234018 */			info.setCaption("煮えたぎった油をかぶった！");
+/* 0023402e */			info.setMessage("溶ける！溶けた！|%sは%dのダメージ！|HP:%d → %d" % getPlayerFromId(pId).getShortName() % val % beforeHp % afterHp);
+/* 002340ae */			info.setPictureImageName("システム／ダイアログ／写真／煮えたぎった油");
+/* 002340c4 */			break;
+/* 002340dc */		}
+/* 002340ee */		openDialog(info);
+/* 00234104 */	}
+/* 00234104 */}
+
+bool 制御／罠／回避／スー()
+/* 00234118 */{
+/* 00234118 */	if (制御／パーティ／ゼロスリースキル確認("スー"))
+/* 0023412a */	{
+/* 0023412a */		int consecutive;
+/* 0023413c */		int rank;
+/* 0023414e */		consecutive = getPlayerFromId("スー").getConsecutiveBattleCount();
+/* 00234182 */		if (consecutive >= 10)
+/* 0023419a */		{
+/* 0023419a */			rank = 7;
+/* 002341ac */		}
+/* 002341b2 */		else if (consecutive >= 5)
+/* 002341ca */		{
+/* 002341ca */			rank = 4;
+/* 002341dc */		}
+/* 002341e2 */		else if (consecutive >= 1)
+/* 002341fa */		{
+/* 002341fa */			rank = 2;
+/* 0023420c */		}
+/* 00234212 */		else
+/* 00234212 */		{
+/* 00234212 */			rank = 1;
+/* 00234224 */		}
+/* 00234224 */		if (RAND(10) <= rank)
+/* 00234242 */		{
+/* 00234242 */			DialogInfomation info;
+/* 00234252 */			info.setCaption("スーのワイルドセンス！");
+/* 00234268 */			info.setMessage("野生を発揮して危険を回避した！");
+/* 0023427e */			info.setPictureImageName("システム／ダイアログ／写真／スー");
+/* 00234294 */			openDialog(info);
+/* 002342aa */			return true;
+/* 002342b2 */		}
+/* 002342b2 */	}
+/* 002342be */	return false;
+/* 002342c6 */}
+
+int 制御／罠／回避／レイラ()
+/* 002342da */{
+/* 002342da */	if (制御／パーティ／ゼロスリースキル確認("レイラ"))
+/* 002342ec */	{
+/* 002342ec */		int consecutive;
+/* 002342fe */		int rank;
+/* 00234310 */		consecutive = getPlayerFromId("レイラ").getConsecutiveBattleCount();
+/* 00234344 */		if (consecutive >= 10)
+/* 0023435c */		{
+/* 0023435c */			rank = 7;
+/* 0023436e */		}
+/* 00234374 */		else if (consecutive >= 5)
+/* 0023438c */		{
+/* 0023438c */			rank = 4;
+/* 0023439e */		}
+/* 002343a4 */		else if (consecutive >= 1)
+/* 002343bc */		{
+/* 002343bc */			rank = 2;
+/* 002343ce */		}
+/* 002343d4 */		else
+/* 002343d4 */		{
+/* 002343d4 */			rank = 1;
+/* 002343e6 */		}
+/* 002343e6 */		return rank;
+/* 002343f2 */	}
+/* 002343f8 */	return 0;
+/* 00234400 */}
+

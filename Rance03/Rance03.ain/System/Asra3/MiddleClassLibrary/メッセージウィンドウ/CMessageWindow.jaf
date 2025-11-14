@@ -1,0 +1,238 @@
+CMessageWindow::CMessageWindow()
+/* 00020c20 */{
+/* 00020c28 */	this.m_Exist = false;
+/* 00020c3a */	this.m_Active = false;
+/* 00020c4c */	this.m_Flat = false;
+/* 00020c5e */	this.m_InactiveMultipleColor.Set(255, 255, 255, 255);
+/* 00020c86 */	this.m_OffsetZ = 0;
+/* 00020c98 */}
+
+CMessageWindow::~CMessageWindow()
+/* 00020ca0 */{
+/* 00020ca0 */	this.Release();
+/* 00020ca8 */}
+
+void CMessageWindow::Release()
+/* 00020cb0 */{
+/* 00020cb0 */	if (!this.m_Exist)
+/* 00020cc2 */	{
+/* 00020cc2 */		return;
+/* 00020cc4 */	}
+/* 00020cc4 */	PARTS_Release(this.GetPartsNumber());
+/* 00020cd2 */	Ｐ＿表示設定(this.GetPartsNumber(), false);
+/* 00020ce6 */	this.m_Active = false;
+/* 00020cf8 */	this.m_Exist = false;
+/* 00020d0a */	this.m_Flat = false;
+/* 00020d1c */	this.m_InactiveMultipleColor.Set(255, 255, 255, 255);
+/* 00020d44 */	this.m_OffsetZ = 0;
+/* 00020d56 */}
+
+bool CMessageWindow::IsExist()
+/* 00020d5e */{
+/* 00020d5e */	return this.m_Exist;
+/* 00020d6a */}
+
+bool CMessageWindow::Create(int MessageWindowNumber)
+/* 00020d78 */{
+/* 00020d78 */	this.m_MessageWindowNumber = MessageWindowNumber;
+/* 00020d8e */	ref CMessageWindowModel a = g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber);
+/* 00020dde */	if (!a.GetFlatFileName().Empty())
+/* 00020df8 */	{
+/* 00020df8 */		Ｐ＿フラット設定(this.GetPartsNumber(), a.GetFlatFileName(), 1);
+/* 00020e1c */		this.m_Flat = true;
+/* 00020e2e */		this.m_Exist = true;
+/* 00020e40 */	}
+/* 00020e46 */	else if (!a.GetCGName().Empty())
+/* 00020e60 */	{
+/* 00020e60 */		Ｐ＿ＣＧ設定(this.GetPartsNumber(), a.GetCGName(), 1);
+/* 00020e84 */		this.m_Flat = false;
+/* 00020e96 */		this.m_Exist = true;
+/* 00020ea8 */	}
+/* 00020eae */	else
+/* 00020eae */	{
+/* 00020eae */		this.m_Exist = false;
+/* 00020ec0 */	}
+/* 00020ec0 */	if (this.m_Exist)
+/* 00020ed0 */	{
+/* 00020ed0 */		Ｐ＿座標設定(this.GetPartsNumber(), a.GetX(), a.GetY());
+/* 00020f02 */		this.UpdateAlpha();
+/* 00020f0a */		this.UpdateMulColor();
+/* 00020f12 */		Ｐ＿表示設定(this.GetPartsNumber(), true);
+/* 00020f26 */	}
+/* 00020f26 */	this.m_InactiveMultipleColor = a.GetInactiveMultipleColor();
+/* 00020f4a */	if (this.m_Exist)
+/* 00020f5a */	{
+/* 00020f5a */		Ｐ＿メッセージウィンドウ表示連動設定(this.GetPartsNumber(), true);
+/* 00020f6e */	}
+/* 00020f6e */	return true;
+/* 00020f76 */}
+
+int CMessageWindow::GetMessageWindowNumber()
+/* 00020f84 */{
+/* 00020f84 */	return this.m_MessageWindowNumber;
+/* 00020f90 */}
+
+void CMessageWindow::SetShow(bool Show)
+/* 00020f9e */{
+/* 00020f9e */	if (!this.IsExist())
+/* 00020fae */	{
+/* 00020fae */		return;
+/* 00020fb0 */	}
+/* 00020fb0 */	Ｐ＿表示設定(this.GetPartsNumber(), Show);
+/* 00020fc8 */}
+
+bool CMessageWindow::IsShow()
+/* 00020fd0 */{
+/* 00020fd0 */	if (!this.IsExist())
+/* 00020fe0 */	{
+/* 00020fe0 */		return false;
+/* 00020fe8 */	}
+/* 00020fe8 */	return Ｐ＿表示設定取得(this.GetPartsNumber());
+/* 00020ff8 */}
+
+void CMessageWindow::UpdatePos()
+/* 00021006 */{
+/* 00021006 */	ref CMessageWindowModel a = g_MessageWindowModelManager.GetMessageWindow(this.m_MessageWindowNumber);
+/* 00021056 */	Ｐ＿座標設定(this.GetPartsNumber(), a.GetX(), a.GetY());
+/* 00021088 */}
+
+void CMessageWindow::SetOffsetZ(int OffsetZ)
+/* 00021090 */{
+/* 00021090 */	this.m_OffsetZ = OffsetZ;
+/* 000210a6 */}
+
+int CMessageWindow::GetOffsetZ()
+/* 000210ae */{
+/* 000210ae */	return this.m_OffsetZ;
+/* 000210ba */}
+
+void CMessageWindow::UpdateZ()
+/* 000210c8 */{
+/* 000210c8 */	if (!this.IsExist())
+/* 000210d8 */	{
+/* 000210d8 */		return;
+/* 000210da */	}
+/* 000210da */	Ｐ＿Ｚ座標設定(this.GetPartsNumber(), g_MessageWindowModelManager.GetZ() + this.m_OffsetZ);
+/* 00021104 */}
+
+void CMessageWindow::SetPartsLayer(int ID)
+/* 0002110c */{
+/* 0002110c */	Ｐ＿親設定(this.GetPartsNumber(), ID);
+/* 00021124 */}
+
+void CMessageWindow::UpdateAlpha()
+/* 0002112c */{
+/* 0002112c */	int AlphaRate = 255 * g_ConfigMessageWindowAlphaRate;
+/* 00021152 */	Ｐ＿アルファ値設定(this.GetPartsNumber(), AlphaRate);
+/* 0002116a */}
+
+void CMessageWindow::UpdateMulColor()
+/* 00021172 */{
+/* 00021172 */	int ResultR;
+/* 00021184 */	int ResultG;
+/* 00021196 */	int ResultB;
+/* 000211a8 */	if (this.m_Active)
+/* 000211b8 */	{
+/* 000211b8 */		ResultR = 255;
+/* 000211ca */		ResultG = 255;
+/* 000211dc */		ResultB = 255;
+/* 000211ee */	}
+/* 000211f4 */	else
+/* 000211f4 */	{
+/* 000211f4 */		ResultR = this.m_InactiveMultipleColor.GetR();
+/* 00021210 */		ResultG = this.m_InactiveMultipleColor.GetG();
+/* 0002122c */		ResultB = this.m_InactiveMultipleColor.GetB();
+/* 00021248 */	}
+/* 00021248 */	int MulR = g_MessageWindowModelManager.GetMessageWindowMulColorR();
+/* 00021264 */	int MulG = g_MessageWindowModelManager.GetMessageWindowMulColorG();
+/* 00021280 */	int MulB = g_MessageWindowModelManager.GetMessageWindowMulColorB();
+/* 0002129c */	ResultR = ResultR + (MulR - ResultR) * (1.0 - g_ConfigMessageWindowMulColorRate);
+/* 000212ec */	ResultG = ResultG + (MulG - ResultG) * (1.0 - g_ConfigMessageWindowMulColorRate);
+/* 0002133c */	ResultB = ResultB + (MulB - ResultB) * (1.0 - g_ConfigMessageWindowMulColorRate);
+/* 0002138c */	if (ResultR < 0)
+/* 000213a4 */	{
+/* 000213a4 */		ResultR = 0;
+/* 000213b6 */	}
+/* 000213bc */	else if (ResultR > 255)
+/* 000213d4 */	{
+/* 000213d4 */		ResultR = 255;
+/* 000213e6 */	}
+/* 000213e6 */	if (ResultG < 0)
+/* 000213fe */	{
+/* 000213fe */		ResultG = 0;
+/* 00021410 */	}
+/* 00021416 */	else if (ResultG > 255)
+/* 0002142e */	{
+/* 0002142e */		ResultG = 255;
+/* 00021440 */	}
+/* 00021440 */	if (ResultB < 0)
+/* 00021458 */	{
+/* 00021458 */		ResultB = 0;
+/* 0002146a */	}
+/* 00021470 */	else if (ResultB > 255)
+/* 00021488 */	{
+/* 00021488 */		ResultB = 255;
+/* 0002149a */	}
+/* 0002149a */	Ｐ＿乗算色設定(this.GetPartsNumber(), ResultR, ResultG, ResultB);
+/* 000214c6 */}
+
+void CMessageWindow::UpdateActiveState(bool Active)
+/* 000214ce */{
+/* 000214ce */	if (!this.IsExist())
+/* 000214de */	{
+/* 000214de */		return;
+/* 000214e0 */	}
+/* 000214e0 */	this.m_Active = Active;
+/* 000214f6 */	this.UpdateMulColor();
+/* 000214fe */}
+
+bool CMessageWindow::IsFlat()
+/* 00021506 */{
+/* 00021506 */	return this.m_Flat;
+/* 00021512 */}
+
+bool CMessageWindow::IsOverFlatWaitFrame()
+/* 00021520 */{
+/* 00021520 */	if (!this.IsExist())
+/* 00021530 */	{
+/* 00021530 */		return true;
+/* 00021538 */	}
+/* 00021538 */	if (!this.IsShow())
+/* 00021548 */	{
+/* 00021548 */		return true;
+/* 00021550 */	}
+/* 00021550 */	if (!this.IsFlat())
+/* 00021560 */	{
+/* 00021560 */		return true;
+/* 00021568 */	}
+/* 00021568 */	ref CMessageWindowModel MessageWindowModel = g_MessageWindowModelManager.GetMessageWindow(this.m_MessageWindowNumber);
+/* 000215b8 */	if (AFL_Parts_GetPartsFlatCurrentFrameNumber(this.GetPartsNumber(), 1) >= MessageWindowModel.m_FlatShowWaitFrameNumber)
+/* 000215e6 */	{
+/* 000215e6 */		return true;
+/* 000215ee */	}
+/* 000215ee */	return false;
+/* 000215f6 */}
+
+void CMessageWindow::BackFlatBeginFrame()
+/* 00021604 */{
+/* 00021604 */	if (!this.IsExist())
+/* 00021614 */	{
+/* 00021614 */		return;
+/* 00021616 */	}
+/* 00021616 */	Ｐ＿フラット開始フレーム移動(this.GetPartsNumber(), 1);
+/* 0002162a */}
+
+void CMessageWindow::StepFlatFinalFrame()
+/* 00021632 */{
+/* 00021632 */	if (!this.IsExist())
+/* 00021642 */	{
+/* 00021642 */		return;
+/* 00021644 */	}
+/* 00021644 */	Ｐ＿フラット最終フレームステップ(this.GetPartsNumber(), 1);
+/* 00021658 */}
+
+int CMessageWindow::GetPartsNumber()
+/* 00021660 */{
+/* 00021660 */	return 1000000000 + this.m_MessageWindowNumber;
+/* 00021674 */}
+

@@ -1,0 +1,89 @@
+OmakeScrollBase::OmakeScrollBase()
+/* 001c0534 */{
+/* 001c053c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001c0562 */}
+
+void OmakeScrollBase::init(int pageCount, string bgImageName, bool isMirrorPieceMode)
+/* 001c056a */{
+/* 001c056a */	this.pageCount_ = pageCount;
+/* 001c0580 */	this.lastPage_ = -1;
+/* 001c0592 */	this.tab_.init(this.pageCount_, isMirrorPieceMode);
+/* 001c05b6 */	this.tab_.setOnClickCallback(this.onClickTab);
+/* 001c05d0 */	this.scroller_.init(0, 0, 1024, 768, 1024 * (this.pageCount_ - 1), 1024, false);
+/* 001c061e */	this.initButton();
+/* 001c0626 */	this.initBg(bgImageName);
+/* 001c0638 */}
+
+void OmakeScrollBase::initBg(string bgImageName)
+/* 001c0640 */{
+/* 001c0640 */	this.partsBg_.init(bgImageName, 0);
+/* 001c0660 */	this.partsBg_.setZ(4000.0);
+/* 001c0676 */}
+
+void OmakeScrollBase::initButton()
+/* 001c067e */{
+/* 001c067e */	this.btnMovePage_[0].init("システム／左移動", "", "", false);
+/* 001c06ae */	this.btnMovePage_[1].init("システム／右移動", "", "", false);
+/* 001c06de */	this.btnMovePage_[0].setPos(0, 128);
+/* 001c0702 */	this.btnMovePage_[1].setPos(960, 128);
+/* 001c0726 */	this.btnMovePage_[0].setClickCallback(this.onClickMovePage, 0);
+/* 001c074e */	this.btnMovePage_[1].setClickCallback(this.onClickMovePage, 1);
+/* 001c0776 */}
+
+void OmakeScrollBase::onClickMovePage(int index)
+/* 001c077e */{
+/* 001c077e */	int page = roundOff(this.scroller_.getCurrentPosition() / 1024.0);
+/* 001c07a8 */	if (index == 0 && page > 0)
+/* 001c07f0 */	{
+/* 001c07f0 */		this.jumpPage(page - 1);
+/* 001c080a */	}
+/* 001c0810 */	else if (index == 1 && page < this.pageCount_ - 1)
+/* 001c0864 */	{
+/* 001c0864 */		this.jumpPage(page + 1);
+/* 001c087e */	}
+/* 001c087e */}
+
+void OmakeScrollBase::onClickTab(int index)
+/* 001c0886 */{
+/* 001c0886 */	this.jumpPage(index);
+/* 001c0898 */}
+
+void OmakeScrollBase::jumpPage(int page)
+/* 001c08a0 */{
+/* 001c08a0 */	this.scroller_.scrollTo(page * 1024);
+/* 001c08c4 */}
+
+void OmakeScrollBase::update()
+/* 001c08cc */{
+/* 001c08cc */	int page = this.getCurrentPage();
+/* 001c08e0 */	if (this.lastPage_ != page)
+/* 001c08fc */	{
+/* 001c08fc */		this.btnMovePage_[0].setEnable(page > 0);
+/* 001c0928 */		this.btnMovePage_[1].setEnable(page < this.pageCount_ - 1);
+/* 001c0960 */		this.tab_.setCurrentPage(page);
+/* 001c097a */		this.lastPage_ = page;
+/* 001c0990 */	}
+/* 001c0990 */}
+
+int OmakeScrollBase::getCurrentPage()
+/* 001c0998 */{
+/* 001c0998 */	return roundOff(this.scroller_.getCurrentPosition() / 1024.0);
+/* 001c09b8 */}
+
+void OmakeScrollBase::fadeIn(bool val, unknown_delegate onFinish)
+/* 001c09c6 */{
+/* 001c09c6 */	this.tab_.fadeIn(val, NULL);
+/* 001c09e2 */	int i;
+/* 001c09f4 */	for (i = 0; i < this.btnMovePage_.Numof(); ++i)
+/* 001c0a44 */	{
+/* 001c0a44 */		this.btnMovePage_[i].fadeIn(val);
+/* 001c0a6a */	}
+/* 001c0a70 */	this.partsBg_.setShow(true);
+/* 001c0a86 */	this.partsBg_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c0ac0 */}
+
+int OmakeScrollBase::getPartsNumber()
+/* 001c0ac8 */{
+/* 001c0ac8 */	return this.scroller_.getPartsNumber();
+/* 001c0ada */}
+

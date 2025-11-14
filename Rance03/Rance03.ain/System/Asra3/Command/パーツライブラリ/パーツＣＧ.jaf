@@ -1,0 +1,54 @@
+void Ｐ＿ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 00161206 */{
+/* 00161206 */	if (!PartsEngine.Parts_SetPartsCG(パーツ番号, ＣＧ名, 0, 状態))
+/* 0016123c */	{
+/* 0016123c */		PARTS_Warning("Ｐ＿ＣＧ名(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 0016127e */	}
+/* 0016127e */	ＣＧモード登録(ＣＧ名);
+/* 0016128e */}
+
+void Ｐ＿左右反転ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 0016129c */{
+/* 0016129c */	if (!PartsEngine.Parts_SetPartsCG(パーツ番号, ＣＧ名, 1, 状態))
+/* 001612d2 */	{
+/* 001612d2 */		PARTS_Warning("Ｐ＿左右反転ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 00161314 */	}
+/* 00161314 */	ＣＧモード登録(ＣＧ名);
+/* 00161324 */}
+
+void Ｐ＿上下反転ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 00161332 */{
+/* 00161332 */	if (!PartsEngine.Parts_SetPartsCG(パーツ番号, ＣＧ名, 2, 状態))
+/* 00161368 */	{
+/* 00161368 */		PARTS_Warning("Ｐ＿上下反転ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 001613aa */	}
+/* 001613aa */	ＣＧモード登録(ＣＧ名);
+/* 001613ba */}
+
+string Ｐ＿ＣＧ名取得(int パーツ番号, int 状態)
+/* 001613c8 */{
+/* 001613c8 */	string CGName;
+/* 001613dc */	PartsEngine.Parts_GetPartsCGName(パーツ番号, CGName, 状態);
+/* 00161404 */	return CGName;
+/* 00161410 */}
+
+bool Ｐ＿左右反転確認(int パーツ番号, int 状態)
+/* 00161424 */{
+/* 00161424 */	return PartsEngine.Parts_GetPartsCGDeform(パーツ番号, 状態) == 1;
+/* 0016144e */}
+
+bool Ｐ＿上下反転確認(int パーツ番号, int 状態)
+/* 00161462 */{
+/* 00161462 */	return PartsEngine.Parts_GetPartsCGDeform(パーツ番号, 状態) == 2;
+/* 0016148c */}
+
+void Ｐ＿ＣＧ表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 001614a0 */{
+/* 001614a0 */	PartsEngine.Parts_SetPartsCGSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 001614e8 */}
+
+void Ｐ＿ＣＧ表示範囲取得(int パーツ番号, ref int Ｘ, ref int Ｙ, ref int 幅, ref int 高さ, int 状態)
+/* 001614f6 */{
+/* 001614f6 */	PartsEngine.GetPartsCGSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 0016153c */}
+

@@ -1,0 +1,254 @@
+void SceneAdvEditor::init()
+/* 001c5d92 */{
+/* 001c5d92 */	this.isFinish_ = false;
+/* 001c5da4 */	array@string n;
+/* 001c5dae */	n.PushBack("立ち絵(向かい)");
+/* 001c5dbe */	n.PushBack("立ち絵(手前)");
+/* 001c5dce */	n.PushBack("背景");
+/* 001c5dde */	n.PushBack("メッセージ1行目");
+/* 001c5dee */	n.PushBack("メッセージ2行目");
+/* 001c5dfe */	n.PushBack("メッセージ3行目");
+/* 001c5e0e */	n.PushBack("名札");
+/* 001c5e1e */	n.PushBack("メニューを消す");
+/* 001c5e2e */	n.PushBack("メッセージを実行");
+/* 001c5e3e */	n.PushBack("シーンエディタを終了");
+/* 001c5e4e */	this.stand_[0].init(-200, -373, 0, "立ち絵／");
+/* 001c5e7e */	this.stand_[1].init(-50, -373, 1, "立ち絵背／");
+/* 001c5eae */	int i;
+/* 001c5ec0 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c5f10 */	{
+/* 001c5f10 */		this.btn_[i].init("システム／ボタン／幅１７０", n[i], "", true);
+/* 001c5f54 */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001c5f84 */	}
+/* 001c5f8a */	for (i = 0; i < 3; ++i)
+/* 001c5fd0 */	{
+/* 001c5fd0 */		this.btn_[i].setPos(227 + 210 * i, 130);
+/* 001c600c */	}
+/* 001c6012 */	for (i = 0; i < 4; ++i)
+/* 001c6058 */	{
+/* 001c6058 */		this.btn_[3 + i].setPos(163, 270 + i * 74);
+/* 001c609c */	}
+/* 001c60a2 */	for (i = 0; i < 3; ++i)
+/* 001c60e8 */	{
+/* 001c60e8 */		this.btn_[7 + i].setPos(227 + i * 210, 600);
+/* 001c612c */	}
+/* 001c6132 */	this.initParts();
+/* 001c613a */}
+
+void SceneAdvEditor::initParts()
+/* 001c6142 */{
+/* 001c6142 */	this.parts_[0].initAsPlaneImage(824, 668, 0, 0, 0, 255);
+/* 001c617e */	this.parts_[1].initAsText("立ち絵と背景", 30, true, 256, 255, 255, 255);
+/* 001c61c0 */	this.parts_[2].initAsText("メッセージの設定", 30, true, 256, 255, 255, 255);
+/* 001c6202 */	this.parts_[0].setAlpha(160.0);
+/* 001c6220 */	createPartsGroup(this.parent_, this.parts_, 3999);
+/* 001c6240 */	this.parts_[0].setPos(512.0, 384.0);
+/* 001c6264 */	this.parts_[1].setPos(512.0, 90.0);
+/* 001c6288 */	this.parts_[2].setPos(512.0, 230.0);
+/* 001c62ac */	this.parts_[0].setOrigin(5);
+/* 001c62ca */	this.parts_[1].setOrigin(8);
+/* 001c62e8 */	this.parts_[2].setOrigin(8);
+/* 001c6306 */}
+
+void SceneAdvEditor::onClick(int index)
+/* 001c630e */{
+/* 001c630e */	this.menuIndex_ = index;
+/* 001c6324 */	if (this.menuIndex_ == 9)
+/* 001c633c */	{
+/* 001c633c */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c6354 */	}
+/* 001c635a */	else
+/* 001c635a */	{
+/* 001c635a */		this.fadeIn(false, this.onFinishButtonFadeOut);
+/* 001c6372 */	}
+/* 001c6372 */}
+
+void SceneAdvEditor::onFinishButtonFadeOut()
+/* 001c637a */{
+/* 001c637a */	this.showMenu();
+/* 001c6382 */	this.fadeIn(true, NULL);
+/* 001c6392 */}
+
+void SceneAdvEditor::showMenu()
+/* 001c639a */{
+/* 001c639a */	string r;
+/* 001c63ae */	bool isInDetail = false;
+/* 001c63c0 */	switch (this.menuIndex_)
+/* 001c63d6 */	{
+/* 001c63d6 */	case 0:
+/* 001c63d6 */		string sel = this.selected_[0];
+/* 001c63f6 */		int result = openAdvObjectList(sel, 0, sel);
+/* 001c6422 */		if (result == 0)
+/* 001c643a */		{
+/* 001c643a */			if (sel == "")
+/* 001c6452 */			{
+/* 001c6452 */				this.stand_[0].hide(1, true);
+/* 001c6476 */			}
+/* 001c647c */			else
+/* 001c647c */			{
+/* 001c647c */				this.stand_[0].show(sel, 1, true);
+/* 001c64aa */			}
+/* 001c64aa */			this.selected_[0] = sel;
+/* 001c64ca */		}
+/* 001c64ca */		break;
+/* 001c64d0 */	case 1:
+/* 001c64d0 */		string sel = this.selected_[1];
+/* 001c64f0 */		int result = openAdvObjectList(sel, 1, sel);
+/* 001c651c */		if (result == 0)
+/* 001c6534 */		{
+/* 001c6534 */			if (sel == "")
+/* 001c654c */			{
+/* 001c654c */				this.stand_[1].hide(1, true);
+/* 001c6570 */			}
+/* 001c6576 */			else
+/* 001c6576 */			{
+/* 001c6576 */				this.stand_[1].show(sel, 1, true);
+/* 001c65a4 */			}
+/* 001c65a4 */			this.selected_[1] = sel;
+/* 001c65c4 */		}
+/* 001c65c4 */		break;
+/* 001c65ca */	case 2:
+/* 001c65ca */		string sel = this.selected_[2];
+/* 001c65ea */		int result = openAdvObjectList(sel, 2, sel);
+/* 001c6616 */		if (result == 0)
+/* 001c662e */		{
+/* 001c662e */			if (sel == "")
+/* 001c6646 */			{
+/* 001c6646 */				this.bg_.hide(2, 200, true);
+/* 001c6668 */			}
+/* 001c666e */			else
+/* 001c666e */			{
+/* 001c666e */				this.bg_.show(sel, 2, 200, true);
+/* 001c669a */			}
+/* 001c669a */			this.selected_[2] = sel;
+/* 001c66ba */		}
+/* 001c66ba */		break;
+/* 001c66c0 */	case 6:
+/* 001c66c0 */		string sel = this.selected_[3];
+/* 001c66e0 */		int result = openAdvObjectList(sel, 3, sel);
+/* 001c670c */		if (result == 0)
+/* 001c6724 */		{
+/* 001c6724 */			this.selected_[3] = sel;
+/* 001c6744 */			this.parts_[6].init("システム／名札／" + this.selected_[3], 0);
+/* 001c677c */			this.parts_[6].setParent(this.parent_.getPartsNumber());
+/* 001c67a4 */			this.parts_[6].setPos(363.0, 522.0);
+/* 001c67c8 */			this.parts_[6].setOrigin(4);
+/* 001c67e6 */			this.parts_[6].setZ(10.0);
+/* 001c6804 */		}
+/* 001c6804 */		break;
+/* 001c680a */	case 3:
+/* 001c680a */	case 4:
+/* 001c680a */	case 5:
+/* 001c680a */		int n = this.menuIndex_ - 3;
+/* 001c6828 */		this.inputText(this.msg_[n]);
+/* 001c6846 */		this.parts_[3 + n].initAsText(this.msg_[n], 30, true, 256, 255, 255, 255);
+/* 001c68a4 */		this.parts_[3 + n].setParent(this.parent_.getPartsNumber());
+/* 001c68d8 */		this.parts_[3 + n].setPos(363.0, 270 + n * 74 + 30);
+/* 001c6926 */		this.parts_[3 + n].setOrigin(4);
+/* 001c6950 */		this.parts_[3 + n].setZ(10.0);
+/* 001c697a */		break;
+/* 001c6980 */	case 7:
+/* 001c6980 */		キー待ち(false);
+/* 001c698c */		break;
+/* 001c6992 */	case 8:
+/* 001c6992 */		if (!this.selected_[3].Empty())
+/* 001c69ae */		{
+/* 001c69ae */			●名札(this.selected_[3], "");
+/* 001c69cc */		}
+/* 001c69d2 */		else
+/* 001c69d2 */		{
+/* 001c69d2 */			●ト書き();
+/* 001c69d8 */		}
+/* 001c69d8 */		S(this.msg_[0]);
+/* 001c69f0 */		R();
+/* 001c69f6 */		S(this.msg_[1]);
+/* 001c6a0e */		R();
+/* 001c6a14 */		S(this.msg_[2]);
+/* 001c6a2c */		A();
+/* 001c6a32 */		■枠消去();
+/* 001c6a38 */		break;
+/* 001c6a3e */	}
+/* 001c6a3e */}
+
+void SceneAdvEditor::inputText(ref string result)
+/* 001c6a46 */{
+/* 001c6a46 */	Parts parent;
+/* 001c6a56 */	array@Parts p[2];
+/* 001c6a6c */	p[0].initAsPlaneImage(600, 100, 0, 0, 0, 255);
+/* 001c6aa8 */	p[0].setAlpha(200.0);
+/* 001c6ac6 */	p[0].setPos(512.0, 384.0);
+/* 001c6aea */	p[0].setOrigin(5);
+/* 001c6b08 */	p[1].initAsText("テキストを入力してください(20文字まで)", 30, true, 256, 255, 255, 255);
+/* 001c6b4a */	p[1].setPos(512.0, 379.0);
+/* 001c6b6e */	p[1].setOrigin(2);
+/* 001c6b8c */	createPartsGroup(parent, p, 4000);
+/* 001c6bac */	parent.setShow(true);
+/* 001c6bc2 */	int i;
+/* 001c6bd4 */	for (i = 0; i < p.Numof(); ++i)
+/* 001c6c24 */	{
+/* 001c6c24 */		p[i].setShow(true);
+/* 001c6c46 */	}
+/* 001c6c4c */	文字入力エリア(0, 302, 389, 4500, "");
+/* 001c6c70 */	文字入力エリア２(0, 420, 32, 80, 80, 80, 200, -2147483648, -2147483648, -2147483648, -2147483648);
+/* 001c6cb8 */	文字入力エリアクリッピング文字数設定(0, 20);
+/* 001c6cca */	string r;
+/* 001c6cde */	文字入力(1, result);
+/* 001c6cf4 */	result = result.GetPart(0, 20);
+/* 001c6d1a */}
+
+void SceneAdvEditor::showButton(bool val)
+/* 001c6d22 */{
+/* 001c6d22 */	int i;
+/* 001c6d34 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c6d84 */	{
+/* 001c6d84 */		this.btn_[i].setShow(val);
+/* 001c6daa */	}
+/* 001c6db0 */}
+
+void SceneAdvEditor::fadeButton(bool val)
+/* 001c6db8 */{
+/* 001c6db8 */	int i;
+/* 001c6dca */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c6e1a */	{
+/* 001c6e1a */		this.btn_[i].fadeIn(val);
+/* 001c6e40 */	}
+/* 001c6e46 */}
+
+void SceneAdvEditor::run()
+/* 001c6e4e */{
+/* 001c6e4e */	this.fadeIn(true, NULL);
+/* 001c6e5e */}
+
+void SceneAdvEditor::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001c6e66 */{
+/* 001c6e66 */	this.fadeButton(val);
+/* 001c6e78 */	this.fadeParts(val);
+/* 001c6e8a */	this.cbTimer_.setTimer(300, cb);
+/* 001c6eac */}
+
+void SceneAdvEditor::fadeParts(bool val)
+/* 001c6eb4 */{
+/* 001c6eb4 */	int i;
+/* 001c6ec6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001c6f16 */	{
+/* 001c6f16 */		this.parts_[i].setShow(true);
+/* 001c6f38 */	}
+/* 001c6f3e */	this.parent_.setShow(true);
+/* 001c6f54 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c6f8e */}
+
+bool SceneAdvEditor::update()
+/* 001c6f96 */{
+/* 001c6f96 */	if (!this.cbTimer_.isRunning() && g_mouse.isClick(1))
+/* 001c6fe2 */	{
+/* 001c6fe2 */		playCancel();
+/* 001c6fe8 */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c7000 */	}
+/* 001c7000 */	return !this.isFinish_;
+/* 001c7010 */}
+
+void SceneAdvEditor::onFinishFadeOut()
+/* 001c701e */{
+/* 001c701e */	this.isFinish_ = true;
+/* 001c7030 */}
+

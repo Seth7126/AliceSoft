@@ -1,0 +1,97 @@
+EmissionLine::EmissionLine()
+/* 00178524 */{
+/* 0017852c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00178552 */	this.z_ = 30000;
+/* 00178564 */}
+
+void EmissionLine::init(int type)
+/* 0017856c */{
+/* 0017856c */	this.type_ = type;
+/* 00178582 */	if (type == 0)
+/* 0017859a */	{
+/* 0017859a */		float w = RAND(500) + 300;
+/* 001785bc */		float h = RAND(6) + 2;
+/* 001785de */		this.parts_.init("システム／効果線／仮", 0);
+/* 001785fa */		this.parts_.setXScaling((w / 1024.0) * 100.0);
+/* 00178624 */		this.parts_.setYScaling((h / 8.0) * 100.0);
+/* 0017864e */	}
+/* 00178654 */	else if (type == 1)
+/* 0017866c */	{
+/* 0017866c */		this.parts_.init("システム／エフェクト／ダメージ", 0);
+/* 00178688 */		this.parts_.setXScaling(RAND(300) + 50);
+/* 001786ae */		this.parts_.setYScaling(RAND(100) + 20);
+/* 001786d4 */	}
+/* 001786da */	else if (type == 2)
+/* 001786f2 */	{
+/* 001786f2 */		this.parts_.init("システム／エフェクト／ダメージ", 0);
+/* 0017870e */		this.parts_.setXScaling(RAND(150) + 450);
+/* 00178734 */		this.parts_.setYScaling(RAND(50) + 50);
+/* 0017875a */	}
+/* 0017875a */	this.parts_.setAlpha(RAND(55) + 200);
+/* 00178780 */	this.parts_.setOrigin(4);
+/* 00178796 */	this.parts_.setZ(this.z_);
+/* 001787b2 */}
+
+void EmissionLine::run()
+/* 001787ba */{
+/* 001787ba */	this.resetMotion();
+/* 001787c2 */}
+
+void EmissionLine::resetMotion()
+/* 001787ca */{
+/* 001787ca */	array@PartsMotion m[2];
+/* 001787e0 */	this.rot_ = RAND(360);
+/* 001787f8 */	m[0].setTime(RAND(100));
+/* 0017881c */	m[0].setAlpha(0, 0, 0);
+/* 00178846 */	this.parts_.setShow(true);
+/* 0017885c */	if (this.type_ == 0)
+/* 00178874 */	{
+/* 00178874 */		m[1].setMove(this.x_, this.y_, this.x_ + Math.Cos(this.rot_) * 1024.0, this.y_ + Math.Sin(this.rot_) * 1024.0, 0);
+/* 0017890a */		m[1].setTime(500 + RAND(250));
+/* 00178936 */	}
+/* 0017893c */	else if (this.type_ == 1)
+/* 00178954 */	{
+/* 00178954 */		m[1].setMove(this.x_ - Math.Cos(this.rot_) * 120.0, this.y_ - Math.Sin(this.rot_) * 120.0, this.x_ + Math.Cos(this.rot_) * 300.0, this.y_ + Math.Sin(this.rot_) * 300.0, 0);
+/* 00178a3a */		m[1].setAlpha(255, 0, 0);
+/* 00178a64 */		m[1].setTime(200 + RAND(150));
+/* 00178a90 */	}
+/* 00178a96 */	else if (this.type_ == 2)
+/* 00178aae */	{
+/* 00178aae */		m[1].setMove(this.x_ + Math.Cos(this.rot_) * 600.0, this.y_ + Math.Sin(this.rot_) * 600.0, this.x_ + Math.Cos(this.rot_) * 200.0, this.y_ + Math.Sin(this.rot_) * 200.0, 0);
+/* 00178b94 */		m[1].setAlpha(255, 0, 0);
+/* 00178bbe */		m[1].setTime(100 + RAND(100));
+/* 00178bea */	}
+/* 00178bea */	this.parts_.setZ(this.z_);
+/* 00178c06 */	this.parts_.setXYRot(this.rot_);
+/* 00178c22 */	this.parts_.runMotionArray(m, this.onFinish);
+/* 00178c48 */}
+
+void EmissionLine::onFinish()
+/* 00178c50 */{
+/* 00178c50 */	this.parts_.setShow(false);
+/* 00178c66 */	if (this.isLoop_)
+/* 00178c76 */	{
+/* 00178c76 */		this.resetMotion();
+/* 00178c7e */	}
+/* 00178c7e */}
+
+void EmissionLine::update()
+/* 00178c86 */{
+/* 00178c88 */}
+
+void EmissionLine::setCenter(int x, int y)
+/* 00178c8e */{
+/* 00178c8e */	this.x_ = x;
+/* 00178ca4 */	this.y_ = y;
+/* 00178cba */}
+
+void EmissionLine::setLoopMode(bool isLoop)
+/* 00178cc2 */{
+/* 00178cc2 */	this.isLoop_ = isLoop;
+/* 00178cd8 */}
+
+void EmissionLine::setZ(int z)
+/* 00178ce0 */{
+/* 00178ce0 */	this.z_ = z;
+/* 00178cf6 */}
+

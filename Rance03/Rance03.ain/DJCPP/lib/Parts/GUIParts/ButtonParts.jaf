@@ -1,0 +1,40 @@
+bool ButtonParts::init(string activityName, string partsName, int id)
+/* 001e6aec */{
+/* 001e6aec */	this.release();
+/* 001e6af4 */	this.activityName_ = activityName;
+/* 001e6b0c */	this.partsName_ = partsName;
+/* 001e6b24 */	this.id_ = id;
+/* 001e6b3a */	this.partsNumber_ = AFL_Activity_GetPartsNumber(this.activityName_, partsName);
+/* 001e6b60 */	if (this.partsNumber_ != 0)
+/* 001e6b78 */	{
+/* 001e6b78 */		AFL_Parts_AddMouseLClickEvent(this.partsNumber_, this.onClick);
+/* 001e6b92 */		return true;
+/* 001e6b9a */	}
+/* 001e6b9a */	return false;
+/* 001e6ba2 */}
+
+void ButtonParts::setOnClickCallback(DG_OnClickButtonParts cb)
+/* 001e6bb0 */{
+/* 001e6bb0 */	this.cb_ = cb;
+/* 001e6bca */}
+
+void ButtonParts::onClick(int partsNumber, int mouseX, int mouseY)
+/* 001e6bd2 */{
+/* 001e6bd2 */	this.cb_(this.id_);
+/* 001e6bfc */}
+
+void ButtonParts::release()
+/* 001e6c04 */{
+/* 001e6c04 */	if (this.partsNumber_ != 0)
+/* 001e6c1c */	{
+/* 001e6c1c */		AFL_Parts_EraseMouseLClickEvent(this.partsNumber_, this.onClick);
+/* 001e6c36 */	}
+/* 001e6c36 */	this.partsNumber_ = 0;
+/* 001e6c48 */	this.cb_.Clear();
+/* 001e6c54 */}
+
+void ButtonParts::setEnable(bool val)
+/* 001e6c5c */{
+/* 001e6c5c */	Ｐ＿ボタン＿有効設定(this.partsNumber_, val);
+/* 001e6c76 */}
+

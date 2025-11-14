@@ -1,0 +1,252 @@
+PlayerStatusView::PlayerStatusView()
+/* 001957ca */{
+/* 001957d2 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001957f8 */}
+
+void PlayerStatusView::init(array@string playerIds)
+/* 00195800 */{
+/* 00195800 */	this.playerIds_.Alloc(playerIds.Numof());
+/* 00195820 */	this.playerIds_.Copy(0, playerIds, 0, playerIds.Numof());
+/* 00195852 */	this.reset(this.playerIds_[roundOff(this.currentPos_)]);
+/* 00195876 */}
+
+void PlayerStatusView::reset(string playerId)
+/* 0019587e */{
+/* 0019587e */	this.player_ <- getPlayerFromId(playerId);
+/* 001958ba */	this.parts_.Free();
+/* 001958c4 */	this.parts_.Alloc(16);
+/* 001958da */	this.initParts();
+/* 001958e2 */}
+
+void PlayerStatusView::initParts()
+/* 001958ea */{
+/* 001958ea */	this.parts_[0].init("システム／編成／ステータス下地", 0);
+/* 0019590e */	this.parts_[2].init("システム／編成／経験値ゲージ", 0);
+/* 00195932 */	this.parts_[3].init("システム／編成／ＨＰゲージ", 0);
+/* 00195956 */	this.parts_[5].init("システム／編成／レベルスラッシュ", 0);
+/* 0019597a */	this.parts_[8].init("システム／編成／経験値スラッシュ", 0);
+/* 0019599e */	this.parts_[11].init("システム／編成／ＨＰスラッシュ", 0);
+/* 001959c2 */	this.initNumberParts(4, "システム／数字／幅２２／白", 22);
+/* 001959dc */	this.initNumberParts(6, "システム／数字／幅１４／ピンク", 14);
+/* 001959f6 */	this.initNumberParts(7, "システム／数字／幅１１／黄", 11);
+/* 00195a10 */	this.initNumberParts(9, "システム／数字／幅１１／黄", 11);
+/* 00195a2a */	this.initNumberParts(10, "システム／数字／幅２０／白フチ", 20);
+/* 00195a44 */	this.initNumberParts(12, "システム／数字／幅１３／白フチ", 13);
+/* 00195a5e */	this.initNumberParts(13, "システム／数字／幅１４／白", 14);
+/* 00195a78 */	this.initNumberParts(14, "システム／数字／幅１４／白", 14);
+/* 00195a92 */	this.initNumberParts(15, "システム／数字／幅１４／白", 14);
+/* 00195aac */	createPartsGroup(this.parent_, this.parts_, 4200);
+/* 00195acc */	this.resetParts();
+/* 00195ad4 */	this.setPartsParam();
+/* 00195adc */	this.setPartsShow();
+/* 00195ae4 */	this.setPartsPos();
+/* 00195aec */}
+
+void PlayerStatusView::resetParts()
+/* 00195af4 */{
+/* 00195af4 */	this.parts_[1].init(this.player_.getPartyNamePlateCgName(), 0);
+/* 00195b22 */	this.parts_[1].setShow(true);
+/* 00195b40 */	this.parts_[1].setParent(this.parent_.getPartsNumber());
+/* 00195b68 */	this.parts_[1].setZ(2.0);
+/* 00195b86 */	this.parts_[1].setPos(456.0, 289.0);
+/* 00195baa */	string name = getZeroThreeSkillFromId(this.player_.getZeroThreeSkillId()).getName();
+/* 00195bea */	if (this.player_.isZeroThreeSkillOpened())
+/* 00195c00 */	{
+/* 00195c00 */		this.btnSkill_.init("システム／編成／ゼロスリースキル", name, "", true);
+/* 00195c2c */		this.btnSkill_.setClickCallback(this.onClickZeroThreeSkillButton, 0);
+/* 00195c4c */		this.btnSkill_.setEnable(true);
+/* 00195c62 */	}
+/* 00195c68 */	else
+/* 00195c68 */	{
+/* 00195c68 */		this.btnSkill_.init("システム／編成／ゼロスリースキル", "？？？", "", true);
+/* 00195c90 */		this.btnSkill_.setEnable(false);
+/* 00195ca6 */	}
+/* 00195ca6 */	this.btnSkill_.setParent(this.parent_.getPartsNumber());
+/* 00195cc6 */	this.btnSkill_.setZ(17);
+/* 00195cdc */	this.btnSkill_.setPos(625, 480);
+/* 00195cf8 */	this.btnSkill_.setShow(true);
+/* 00195d0e */}
+
+void PlayerStatusView::initNumberParts(int pIndex, string fileName, int width)
+/* 00195d16 */{
+/* 00195d16 */	NumberPartsInfomation info;
+/* 00195d26 */	info.setSameWidth(width);
+/* 00195d40 */	this.parts_[pIndex].initAsNumber(fileName, info);
+/* 00195d70 */}
+
+void PlayerStatusView::setPartsShow()
+/* 00195d78 */{
+/* 00195d78 */	int i;
+/* 00195d8a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00195dda */	{
+/* 00195dda */		this.parts_[i].setShow(true);
+/* 00195dfc */	}
+/* 00195e02 */	this.parent_.setShow(true);
+/* 00195e18 */}
+
+void PlayerStatusView::setPartsPos()
+/* 00195e20 */{
+/* 00195e20 */	this.parts_[0].setPos(1024.0, 768.0);
+/* 00195e44 */	this.parts_[0].setOrigin(3);
+/* 00195e62 */	this.parts_[0].changeOrigin(1);
+/* 00195e80 */	this.setPartsSpaceOut(771, 384, 6, 5, 4);
+/* 00195ea6 */	this.setPartsSpaceOut(771, 411, 9, 8, 7);
+/* 00195ecc */	this.setPartsSpaceOut(771, 442, 12, 11, 10);
+/* 00195ef2 */	this.parts_[13].setOrigin(8);
+/* 00195f10 */	this.parts_[13].setPos(551.0, 453.0);
+/* 00195f34 */	this.parts_[14].setOrigin(8);
+/* 00195f52 */	this.parts_[14].setPos(651.0, 453.0);
+/* 00195f76 */	this.parts_[15].setOrigin(8);
+/* 00195f94 */	this.parts_[15].setPos(751.0, 453.0);
+/* 00195fb8 */	this.parts_[2].setPos(587.0, 388.0);
+/* 00195fdc */	this.parts_[3].setPos(530.0, 425.0);
+/* 00196000 */}
+
+void PlayerStatusView::setPartsParam()
+/* 00196008 */{
+/* 00196008 */	int morphBase = this.currentPos_;
+/* 00196020 */	float morph = this.currentPos_ - morphBase;
+/* 00196044 */	ref Player l;
+/* 0019605c */	ref Player r;
+/* 00196074 */	if (morphBase < this.playerIds_.Numof() - 1)
+/* 0019609e */	{
+/* 0019609e */		l <- getPlayerFromId(this.playerIds_[morphBase]);
+/* 001960e6 */		r <- getPlayerFromId(this.playerIds_[morphBase + 1]);
+/* 00196136 */	}
+/* 00196148 */	else
+/* 00196148 */	{
+/* 00196148 */		l <- getPlayerFromId(this.playerIds_[morphBase]);
+/* 00196190 */		r <- getPlayerFromId(this.playerIds_[morphBase]);
+/* 001961d8 */	}
+/* 001961e4 */	this.parts_[4].setNumber(l.getLevel() * (1 - morph) + r.getLevel() * morph);
+/* 00196250 */	this.parts_[6].setNumber(l.getMaxLevel() * (1 - morph) + r.getMaxLevel() * morph);
+/* 001962bc */	this.parts_[7].setNumber(l.getExp() * (1 - morph) + r.getExp() * morph);
+/* 00196328 */	this.parts_[9].setNumber(l.getNextExp() * (1 - morph) + r.getNextExp() * morph);
+/* 00196394 */	this.parts_[10].setNumber(l.getHp() * (1 - morph) + r.getHp() * morph);
+/* 00196400 */	this.parts_[12].setNumber(l.getMaxHp() * (1 - morph) + r.getMaxHp() * morph);
+/* 0019646c */	this.parts_[13].setNumber(l.getStrength() * (1 - morph) + r.getStrength() * morph);
+/* 001964d8 */	this.parts_[14].setNumber(l.getMind() * (1 - morph) + r.getMind() * morph);
+/* 00196544 */	this.parts_[15].setNumber(l.getDexterity() * (1 - morph) + r.getDexterity() * morph);
+/* 001965b0 */	float r1 = float(l.getHp()) / float(l.getMaxHp());
+/* 001965e2 */	float r2 = float(r.getHp()) / float(r.getMaxHp());
+/* 00196614 */	float ratio = r1 * (1 - morph) + r2 * morph;
+/* 0019665c */	int w = this.parts_[3].getWidth() * ratio;
+/* 00196694 */	if (w == 0)
+/* 001966ac */	{
+/* 001966ac */		if (morph <= 0.02 && l.getHp() > 0)
+/* 001966fa */		{
+/* 001966fa */			w = 1;
+/* 0019670c */		}
+/* 00196712 */		else if (morph >= 0.98 && r.getHp() > 0)
+/* 00196760 */		{
+/* 00196760 */			w = 1;
+/* 00196772 */		}
+/* 00196772 */	}
+/* 00196772 */	this.parts_[3].setCgRange(0, 0, w, this.parts_[3].getHeight());
+/* 001967b8 */	float ratio = (float(l.getExp()) / float(l.getNextExp())) * (1 - morph) + (float(r.getExp()) / float(r.getNextExp())) * morph;
+/* 00196838 */	this.parts_[2].setCgRange(0, 0, this.parts_[2].getWidth() * ratio, this.parts_[2].getHeight());
+/* 001968a0 */}
+
+void PlayerStatusView::setPartsSpaceOut(int x, int y, int p1, int p2, int p3)
+/* 001968a8 */{
+/* 001968a8 */	this.parts_[p1].setOrigin(3);
+/* 001968ca */	this.parts_[p2].setOrigin(3);
+/* 001968ec */	this.parts_[p3].setOrigin(3);
+/* 0019690e */	this.parts_[p1].setPos(x, y);
+/* 00196942 */	x -= this.parts_[p1].getWidth();
+/* 0019696a */	this.parts_[p2].setPos(x, y);
+/* 0019699e */	x -= this.parts_[p2].getWidth();
+/* 001969c6 */	this.parts_[p3].setPos(x, y);
+/* 001969fa */}
+
+void PlayerStatusView::update()
+/* 00196a02 */{
+/* 00196a04 */}
+
+void PlayerStatusView::fadeIn(bool val)
+/* 00196a0a */{
+/* 00196a0a */	if (val)
+/* 00196a1a */	{
+/* 00196a1a */		PartsMotion m;
+/* 00196a2a */		m.setTime(300);
+/* 00196a40 */		m.setAlpha(0, 255, 0);
+/* 00196a62 */		int i;
+/* 00196a74 */		for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00196ac4 */		{
+/* 00196ac4 */			if (i != 0)
+/* 00196adc */			{
+/* 00196adc */				this.parts_[i].runMotion(m, NULL);
+/* 00196b08 */			}
+/* 00196b08 */		}
+/* 00196b0e */		PartsMotion m2;
+/* 00196b1e */		int w = this.parts_[0].getWidth();
+/* 00196b42 */		int h = this.parts_[0].getHeight();
+/* 00196b66 */		m2.setCgRangeMove(0, 0, 1, h, 0, 0, w, h, 0);
+/* 00196bb8 */		m2.setTime(350);
+/* 00196bce */		this.parts_[0].runMotion(m2, NULL);
+/* 00196bf6 */	}
+/* 00196c08 */	else
+/* 00196c08 */	{
+/* 00196c08 */		PartsMotion m;
+/* 00196c18 */		m.setTime(150);
+/* 00196c2e */		m.setAlpha(255, 0, 0);
+/* 00196c50 */		this.parent_.runMotion(m, NULL);
+/* 00196c70 */	}
+/* 00196c76 */	this.btnSkill_.fadeIn(val);
+/* 00196c90 */}
+
+void PlayerStatusView::setFloatingPosition(float pos)
+/* 00196c98 */{
+/* 00196c98 */	int r = roundOff(pos);
+/* 00196cb4 */	int s = roundOff(this.currentPos_);
+/* 00196cd0 */	if (r != s)
+/* 00196cec */	{
+/* 00196cec */		this.currentPos_ = pos;
+/* 00196d02 */		this.changePlayerId(this.playerIds_[r]);
+/* 00196d20 */	}
+/* 00196d26 */	else if (pos != this.currentPos_)
+/* 00196d42 */	{
+/* 00196d42 */		this.currentPos_ = pos;
+/* 00196d58 */		this.updateParam();
+/* 00196d60 */	}
+/* 00196d60 */}
+
+void PlayerStatusView::changePlayerId(string playerId)
+/* 00196d68 */{
+/* 00196d68 */	this.player_ <- getPlayerFromId(playerId);
+/* 00196da4 */	this.resetParts();
+/* 00196dac */	this.updateParam();
+/* 00196db4 */}
+
+void PlayerStatusView::updateParam()
+/* 00196dbc */{
+/* 00196dbc */	this.setPartsParam();
+/* 00196dc4 */	this.setPartsSpaceOut(771, 384, 6, 5, 4);
+/* 00196dea */	this.setPartsSpaceOut(771, 411, 9, 8, 7);
+/* 00196e10 */	this.setPartsSpaceOut(771, 442, 12, 11, 10);
+/* 00196e36 */}
+
+void PlayerStatusView::changeCenter(bool isWithOutInfomation)
+/* 00196e3e */{
+/* 00196e3e */	PartsMotion m;
+/* 00196e4e */	if (isWithOutInfomation)
+/* 00196e5e */	{
+/* 00196e5e */		m.setMove(100, 0, 0, 0, 1);
+/* 00196e8c */	}
+/* 00196e92 */	else
+/* 00196e92 */	{
+/* 00196e92 */		m.setMove(0, 0, 100, 0, 1);
+/* 00196ec0 */	}
+/* 00196ec0 */	this.parent_.runMotion(m, NULL);
+/* 00196ee0 */}
+
+void PlayerStatusView::onClickZeroThreeSkillButton(int id)
+/* 00196ee8 */{
+/* 00196ee8 */	DialogInfomation info;
+/* 00196ef8 */	ref ZeroThreeSkill s = getZeroThreeSkillFromId(this.player_.getZeroThreeSkillId());
+/* 00196f40 */	info.setCaption(s.getName());
+/* 00196f60 */	info.setMessage(s.getDesc());
+/* 00196f80 */	info.setPictureImageName("システム／ダイアログ／写真／%s" % this.player_.getShortName());
+/* 00196fae */	openDialog(info);
+/* 00196fc4 */}
+

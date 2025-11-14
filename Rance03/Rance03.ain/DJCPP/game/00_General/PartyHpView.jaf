@@ -1,0 +1,168 @@
+PartyHpView::PartyHpView()
+/* 00183756 */{
+/* 0018375e */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00183784 */}
+
+void PartyHpView::reset()
+/* 0018378c */{
+/* 0018378c */	this.init(5200);
+/* 0018379a */}
+
+void PartyHpView::init(int z)
+/* 001837a2 */{
+/* 001837a2 */	this.z_ = z;
+/* 001837b8 */	g_party.getPlayerIdList(this.playerIdList_);
+/* 001837d2 */	this.icons_.init();
+/* 001837e2 */	this.initHpBar();
+/* 001837ea */	this.initLevelUpEnableIcon();
+/* 001837f2 */	this.initParts();
+/* 001837fa */}
+
+void PartyHpView::initParts()
+/* 00183802 */{
+/* 00183802 */	this.parts_[0].init("システム／ダンジョン／下地", 0);
+/* 00183826 */	this.parts_[0].setPos(0.0, 482.0);
+/* 0018384a */	this.parts_[0].setZ(5000.0);
+/* 00183868 */	this.parts_[1].initAsFlat("システム／ダンジョン／鎖");
+/* 00183886 */	this.parts_[1].setPos(0.0, -30.0);
+/* 001838aa */	this.parts_[1].setZ(5300.0);
+/* 001838c8 */}
+
+void PartyHpView::initHpBar()
+/* 001838d0 */{
+/* 001838d0 */	int c = this.playerIdList_.Numof();
+/* 001838ec */	this.hpBar_.Alloc(c);
+/* 00183906 */	this.x_.Alloc(c);
+/* 00183920 */	this.y_.Alloc(c);
+/* 0018393a */	int i;
+/* 0018394c */	for (i = 0; i < this.hpBar_.Numof(); ++i)
+/* 0018399c */	{
+/* 0018399c */		int min;
+/* 001839ae */		int max;
+/* 001839c0 */		g_party.getPlayerSkillIndexMinMax(min, max, this.playerIdList_[i]);
+/* 001839f6 */		this.getHpBarPos(min, max, this.x_[i], this.y_[i]);
+/* 00183a3a */		this.x_[i] += 80;
+/* 00183a58 */		this.hpBar_[i].initAsPlayer(getPlayerFromId(this.playerIdList_[i]));
+/* 00183aa6 */		this.hpBar_[i].setZ(this.z_);
+/* 00183acc */	}
+/* 00183ad8 */	this.setHpBarPos();
+/* 00183ae0 */}
+
+void PartyHpView::initLevelUpEnableIcon()
+/* 00183ae8 */{
+/* 00183ae8 */	this.partsLvUp_.Alloc(this.playerIdList_.Numof());
+/* 00183b08 */	int i;
+/* 00183b1a */	for (i = 0; i < this.partsLvUp_.Numof(); ++i)
+/* 00183b6a */	{
+/* 00183b6a */		this.partsLvUp_[i].initAsFlat("システム／ダンジョン／レベルアップ");
+/* 00183b8c */		this.partsLvUp_[i].setPos(this.x_[i], this.y_[i]);
+/* 00183bd8 */		this.partsLvUp_[i].setZ(5000.0);
+/* 00183bfa */	}
+/* 00183c00 */}
+
+void PartyHpView::fadeInLevelUpEnableIcon(bool val)
+/* 00183c08 */{
+/* 00183c08 */	int i;
+/* 00183c1a */	for (i = 0; i < this.partsLvUp_.Numof(); ++i)
+/* 00183c6a */	{
+/* 00183c6a */		PartsMotion m;
+/* 00183c7a */		m = getStandardMotion(val ? 0 : 1);
+/* 00183cb6 */		int min;
+/* 00183cc8 */		int max;
+/* 00183cda */		g_party.getPlayerSkillIndexMinMax(min, max, this.playerIdList_[i]);
+/* 00183d10 */		int x;
+/* 00183d22 */		int y;
+/* 00183d34 */		this.getHpBarPos(min, max, x, y);
+/* 00183d60 */		if (val)
+/* 00183d70 */		{
+/* 00183d70 */			m.setMove(this.x_[i] - 20, this.y_[i] + 250, this.x_[i], this.y_[i], 1);
+/* 00183dee */		}
+/* 00183df4 */		else
+/* 00183df4 */		{
+/* 00183df4 */			m.setMove(this.x_[i], this.y_[i], this.x_[i] - 20, this.y_[i] + 250, 1);
+/* 00183e72 */			m.setTime(150);
+/* 00183e88 */		}
+/* 00183e88 */		this.partsLvUp_[i].runMotion(m, NULL);
+/* 00183eb4 */		this.partsLvUp_[i].startFlat(false, 1.0);
+/* 00183edc */		this.partsLvUp_[i].setShow(getPlayerFromId(this.playerIdList_[i]).isLevelUpEnable());
+/* 00183f30 */	}
+/* 00183f42 */}
+
+void PartyHpView::setHpBarPos()
+/* 00183f4a */{
+/* 00183f4a */	int i;
+/* 00183f5c */	for (i = 0; i < this.playerIdList_.Numof(); ++i)
+/* 00183fac */	{
+/* 00183fac */		int min;
+/* 00183fbe */		int max;
+/* 00183fd0 */		g_party.getPlayerSkillIndexMinMax(min, max, this.playerIdList_[i]);
+/* 00184006 */		int x;
+/* 00184018 */		int y;
+/* 0018402a */		this.getHpBarPos(min, max, x, y);
+/* 00184056 */		this.hpBar_[i].setPos(x, y);
+/* 00184086 */	}
+/* 0018408c */}
+
+void PartyHpView::getHpBarPos(int min, int max, ref int x, ref int y)
+/* 00184094 */{
+/* 00184094 */	int left = 16 + min * 118;
+/* 001840ba */	int right = 16 + max * 118;
+/* 001840e0 */	x = (left + right) / 2.0;
+/* 00184110 */	y = 504 + ((min + max) / 2.0) * 12.0;
+/* 00184156 */}
+
+void PartyHpView::setPartsShow(bool val)
+/* 0018415e */{
+/* 0018415e */	int i;
+/* 00184170 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001841c0 */	{
+/* 001841c0 */		this.parts_[i].setShow(val);
+/* 001841e6 */	}
+/* 001841ec */}
+
+void PartyHpView::setPartsPos()
+/* 001841f4 */{
+/* 001841f6 */}
+
+void PartyHpView::update()
+/* 001841fc */{
+/* 001841fe */}
+
+void PartyHpView::fadeIn(bool val)
+/* 00184204 */{
+/* 00184204 */	this.setPartsShow(val);
+/* 00184216 */	if (val)
+/* 00184226 */	{
+/* 00184226 */		PartsMotion m;
+/* 00184236 */		m.setMove(0, 782, 0, 482, 2);
+/* 00184264 */		this.parts_[0].setZ(5000.0);
+/* 00184282 */		this.parts_[0].runMotion(m, NULL);
+/* 001842aa */		this.parts_[1].startFlat(false, 1.0);
+/* 001842ce */	}
+/* 001842d4 */	this.icons_.fadeIn(val);
+/* 001842ee */	this.fadeInLevelUpEnableIcon(val);
+/* 00184300 */	int i;
+/* 00184312 */	for (i = 0; i < this.hpBar_.Numof(); ++i)
+/* 00184362 */	{
+/* 00184362 */		PartsMotion m;
+/* 00184372 */		int x = this.hpBar_[i].getX();
+/* 0018439a */		int y = this.hpBar_[i].getY();
+/* 001843c2 */		if (val)
+/* 001843d2 */		{
+/* 001843d2 */			m.setMove(x, y + 250, x, y, 1);
+/* 00184418 */			m.setAlpha(0, 255, 0);
+/* 0018443a */		}
+/* 00184440 */		else
+/* 00184440 */		{
+/* 00184440 */			m.setMove(x, y, x, y + 250, 1);
+/* 00184486 */			m.setAlpha(255, 0, 0);
+/* 001844a8 */		}
+/* 001844a8 */		this.hpBar_[i].fadeIn(val, m);
+/* 001844d8 */	}
+/* 001844e4 */}
+
+void PartyHpView::updateCoolTime()
+/* 001844ec */{
+/* 001844ec */	this.icons_.updateCoolTime();
+/* 001844fc */}
+

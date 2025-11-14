@@ -1,0 +1,51 @@
+void AFL_Activity_End()
+/* 0017331c */{
+/* 0017331c */	g_EndActivity = true;
+/* 0017332e */}
+
+int AFL_Activity_NumofParts(string Name)
+/* 0017333c */{
+/* 0017333c */	return SYS_Activity_NumofParts(Name);
+/* 0017334e */}
+
+bool AFL_Activity_GetParts(int Index, string Name, ref string PartsName, ref int Number)
+/* 00173362 */{
+/* 00173362 */	return SYS_Activity_GetParts(Index, Name, PartsName, Number);
+/* 00173392 */}
+
+bool AFL_Activity_IsExistPartsByName(string Name, string PartsName)
+/* 001733a6 */{
+/* 001733a6 */	return SYS_Activity_IsExistPartsByName(Name, PartsName);
+/* 001733c2 */}
+
+bool AFL_Activity_IsExistPartsByNumber(string Name, int Number)
+/* 001733d6 */{
+/* 001733d6 */	return SYS_Activity_IsExistPartsByNumber(Name, Number);
+/* 001733f2 */}
+
+int AFL_Activity_GetPartsNumber(string Name, string PartsName)
+/* 00173406 */{
+/* 00173406 */	return SYS_Activity_GetPartsNumber(Name, PartsName);
+/* 00173422 */}
+
+string AFL_Activity_GetPartsName(string Name, int Number)
+/* 00173436 */{
+/* 00173436 */	return SYS_Activity_GetPartsName(Name, Number);
+/* 00173452 */}
+
+string AFL_Activity_Load(string FileName)
+/* 00173466 */{
+/* 00173466 */	string ActivityName = SYS_Activity_GetFreeName("");
+/* 00173480 */	if (!SYS_Activity_ReadFile(ActivityName, FileName))
+/* 001734a2 */	{
+/* 001734a2 */		system.Output("アクティビティの読み込みに失敗しました。【%s】\n" % FileName);
+/* 001734c2 */		return "";
+/* 001734ca */	}
+/* 001734ca */	return ActivityName;
+/* 001734d6 */}
+
+bool AFL_Activity_Release(string ActivityName)
+/* 001734ea */{
+/* 001734ea */	return SYS_Activity_Release(ActivityName);
+/* 001734fc */}
+

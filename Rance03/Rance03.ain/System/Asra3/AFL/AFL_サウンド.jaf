@@ -1,0 +1,51 @@
+int AFL_Sound_GetLength(string DataName)
+/* 0016a8a2 */{
+/* 0016a8a2 */	return KiwiSoundEngine.GetLengthFromFile(DataName);
+/* 0016a8b8 */}
+
+int AFL_BGM_GetPlayLength()
+/* 0016a8cc */{
+/* 0016a8cc */	return g_BGM.GetLength();
+/* 0016a8de */}
+
+int AFL_BGM_GetPlayPos()
+/* 0016a8f2 */{
+/* 0016a8f2 */	return g_BGM.GetPos();
+/* 0016a904 */}
+
+int AFL_BGM_Seek(int MilliSecond)
+/* 0016a918 */{
+/* 0016a918 */	return g_BGM.Seek(MilliSecond);
+/* 0016a934 */}
+
+void AFL_BGM_Play(string BGMName, float Volume, int TotalTime)
+/* 0016a948 */{
+/* 0016a948 */	g_BGM.PlayBGM(BGMName, 0, 1, TotalTime, Volume);
+/* 0016a982 */}
+
+void AFL_BGM_BeginFade(float Volume, int TotalTime, int FadeType)
+/* 0016a990 */{
+/* 0016a990 */	g_BGM.SetVolume(Volume);
+/* 0016a9aa */	g_BGM.FadeWithVolumeCap(TotalTime, g_BGMVolumeCapManager.GetCurrentBGMVolumeCapRate(), FadeType);
+/* 0016a9de */}
+
+void AFL_BGM_SetLoop(bool Loop)
+/* 0016a9ec */{
+/* 0016a9ec */	g_BGM.SetLoop(Loop);
+/* 0016aa06 */}
+
+void AFL_SystemSE_Play(string SeName, int ID)
+/* 0016aa14 */{
+/* 0016aa14 */	SYS_PlaySystemSE(ID, SeName);
+/* 0016aa2e */}
+
+void AFL_SystemSE_Stop(int ID)
+/* 0016aa3c */{
+/* 0016aa3c */	SYS_StopSystemSE(ID);
+/* 0016aa4c */}
+
+bool AFL_SystemSE_IsPlay(int ID)
+/* 0016aa5a */{
+/* 0016aa5a */	return SYS_IsPlaySystemSE(ID);
+/* 0016aa6c */}
+

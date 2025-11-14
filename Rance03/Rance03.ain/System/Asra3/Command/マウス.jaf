@@ -1,0 +1,10 @@
+void CMoveCursorDummy::Callback()
+/* 001698a8 */{
+/* 001698aa */}
+
+void Ａ＿カーソル移動(int 移動先Ｘ, int 移動先Ｙ)
+/* 001698b0 */{
+/* 001698b0 */	CMoveCursorDummy Dummy;
+/* 001698c0 */	AFL_Mouse_MovePos(移動先Ｘ, 移動先Ｙ, Dummy.Callback);
+/* 001698ec */}
+

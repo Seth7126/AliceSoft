@@ -1,0 +1,462 @@
+bool EX_ReloadDebugEXFile()
+/* 00168260 */{
+/* 00168260 */	return MainEXFile.ReloadDebugEXFile();
+/* 0016826c */}
+
+bool EX_AddEXFile(string FilePath)
+/* 00168280 */{
+/* 00168280 */	return MainEXFile.AddEXText(FilePath);
+/* 00168296 */}
+
+int EX_Height(string Name)
+/* 001682aa */{
+/* 001682aa */	return MainEXFile.Row(Name);
+/* 001682c0 */}
+
+int EX_Width(string Name)
+/* 001682d4 */{
+/* 001682d4 */	return MainEXFile.Col(Name);
+/* 001682ea */}
+
+int EX_Type(string Name)
+/* 001682fe */{
+/* 001682fe */	return MainEXFile.Type(Name);
+/* 00168314 */}
+
+int EX_AType(string Name, int Index)
+/* 00168328 */{
+/* 00168328 */	return MainEXFile.AType(Name, Index);
+/* 00168348 */}
+
+int EX_A2Type(string Name, int LineX, int LineY)
+/* 0016835c */{
+/* 0016835c */	return MainEXFile.A2Type(Name, LineY, LineX);
+/* 00168386 */}
+
+int EX_IA2Type(string Name, int Key, string FormatName)
+/* 0016839a */{
+/* 0016839a */	return MainEXFile.IA2Type(Name, Key, FormatName);
+/* 001683c4 */}
+
+int EX_SA2Type(string Name, string Key, string FormatName)
+/* 001683d8 */{
+/* 001683d8 */	return MainEXFile.SA2Type(Name, Key, FormatName);
+/* 00168402 */}
+
+int EX_RA2Type(string Name, int LineY, string FormatName)
+/* 00168416 */{
+/* 00168416 */	return MainEXFile.RA2Type(Name, LineY, FormatName);
+/* 00168440 */}
+
+bool EX_IsExist(string Name)
+/* 00168454 */{
+/* 00168454 */	return MainEXFile.Exists(Name);
+/* 0016846a */}
+
+bool EX_IsExistA(string Name, int Index)
+/* 0016847e */{
+/* 0016847e */	return MainEXFile.AExists(Name, Index);
+/* 0016849e */}
+
+bool EX_IsExistA2(string Name, int LineX, int LineY)
+/* 001684b2 */{
+/* 001684b2 */	return MainEXFile.A2Exists(Name, LineY, LineX);
+/* 001684dc */}
+
+bool EX_IsExistIA2(string Name, int Key, string FormatName)
+/* 001684f0 */{
+/* 001684f0 */	return MainEXFile.IA2Exists(Name, Key, FormatName);
+/* 0016851a */}
+
+bool EX_IsExistSA2(string Name, string Key, string FormatName)
+/* 0016852e */{
+/* 0016852e */	return MainEXFile.SA2Exists(Name, Key, FormatName);
+/* 00168558 */}
+
+bool EX_IsExistRA2(string Name, int LineY, string FormatName)
+/* 0016856c */{
+/* 0016856c */	return MainEXFile.RA2Exists(Name, LineY, FormatName);
+/* 00168596 */}
+
+bool EX_IsInt(string Name)
+/* 001685aa */{
+/* 001685aa */	return EX_Type(Name) == 1;
+/* 001685c6 */}
+
+bool EX_IsAInt(string Name, int Index)
+/* 001685da */{
+/* 001685da */	return EX_AType(Name, Index) == 1;
+/* 00168600 */}
+
+bool EX_IsA2Int(string Name, int LineX, int LineY)
+/* 00168614 */{
+/* 00168614 */	return EX_A2Type(Name, LineX, LineY) == 1;
+/* 00168644 */}
+
+bool EX_IsIA2Int(string Name, int Key, string FormatName)
+/* 00168658 */{
+/* 00168658 */	return EX_IA2Type(Name, Key, FormatName) == 1;
+/* 00168688 */}
+
+bool EX_IsSA2Int(string Name, string Key, string FormatName)
+/* 0016869c */{
+/* 0016869c */	return EX_SA2Type(Name, Key, FormatName) == 1;
+/* 001686cc */}
+
+bool EX_IsRA2Int(string Name, int LineY, string FormatName)
+/* 001686e0 */{
+/* 001686e0 */	return EX_RA2Type(Name, LineY, FormatName) == 1;
+/* 00168710 */}
+
+bool EX_IsFloat(string Name)
+/* 00168724 */{
+/* 00168724 */	if (EX_Type(Name) == 2)
+/* 00168742 */	{
+/* 00168742 */		return true;
+/* 0016874a */	}
+/* 0016874a */	return EX_IsInt(Name);
+/* 0016875c */}
+
+bool EX_IsAFloat(string Name, int Index)
+/* 00168770 */{
+/* 00168770 */	if (EX_AType(Name, Index) == 2)
+/* 00168798 */	{
+/* 00168798 */		return true;
+/* 001687a0 */	}
+/* 001687a0 */	return EX_IsAInt(Name, Index);
+/* 001687bc */}
+
+bool EX_IsA2Float(string Name, int LineX, int LineY)
+/* 001687d0 */{
+/* 001687d0 */	if (EX_A2Type(Name, LineX, LineY) == 2)
+/* 00168802 */	{
+/* 00168802 */		return true;
+/* 0016880a */	}
+/* 0016880a */	return EX_IsA2Int(Name, LineY, LineX);
+/* 00168830 */}
+
+bool EX_IsIA2Float(string Name, int Key, string FormatName)
+/* 00168844 */{
+/* 00168844 */	if (EX_IA2Type(Name, Key, FormatName) == 2)
+/* 00168876 */	{
+/* 00168876 */		return true;
+/* 0016887e */	}
+/* 0016887e */	return EX_IsIA2Int(Name, Key, FormatName);
+/* 001688a4 */}
+
+bool EX_IsSA2Float(string Name, string Key, string FormatName)
+/* 001688b8 */{
+/* 001688b8 */	if (EX_SA2Type(Name, Key, FormatName) == 2)
+/* 001688ea */	{
+/* 001688ea */		return true;
+/* 001688f2 */	}
+/* 001688f2 */	return EX_IsSA2Int(Name, Key, FormatName);
+/* 00168918 */}
+
+bool EX_IsRA2Float(string Name, int LineY, string FormatName)
+/* 0016892c */{
+/* 0016892c */	if (EX_RA2Type(Name, LineY, FormatName) == 2)
+/* 0016895e */	{
+/* 0016895e */		return true;
+/* 00168966 */	}
+/* 00168966 */	return EX_IsRA2Int(Name, LineY, FormatName);
+/* 0016898c */}
+
+bool EX_IsString(string Name)
+/* 001689a0 */{
+/* 001689a0 */	return EX_Type(Name) == 3;
+/* 001689bc */}
+
+bool EX_IsAString(string Name, int Index)
+/* 001689d0 */{
+/* 001689d0 */	return EX_AType(Name, Index) == 3;
+/* 001689f6 */}
+
+bool EX_IsA2String(string Name, int LineX, int LineY)
+/* 00168a0a */{
+/* 00168a0a */	return EX_A2Type(Name, LineX, LineY) == 3;
+/* 00168a3a */}
+
+bool EX_IsIA2String(string Name, int Key, string FormatName)
+/* 00168a4e */{
+/* 00168a4e */	return EX_IA2Type(Name, Key, FormatName) == 3;
+/* 00168a7e */}
+
+bool EX_IsSA2String(string Name, string Key, string FormatName)
+/* 00168a92 */{
+/* 00168a92 */	return EX_SA2Type(Name, Key, FormatName) == 3;
+/* 00168ac2 */}
+
+bool EX_IsRA2String(string Name, int LineY, string FormatName)
+/* 00168ad6 */{
+/* 00168ad6 */	return EX_RA2Type(Name, LineY, FormatName) == 3;
+/* 00168b06 */}
+
+bool EX_IsArray2(string Name)
+/* 00168b1a */{
+/* 00168b1a */	return EX_Type(Name) == 4;
+/* 00168b36 */}
+
+bool EX_IsA2Array2(string Name, int LineX, int LineY)
+/* 00168b4a */{
+/* 00168b4a */	return EX_A2Type(Name, LineX, LineY) == 4;
+/* 00168b7a */}
+
+bool EX_IsIA2Array2(string Name, int Key, string FormatName)
+/* 00168b8e */{
+/* 00168b8e */	return EX_IA2Type(Name, Key, FormatName) == 4;
+/* 00168bbe */}
+
+bool EX_IsSA2Array2(string Name, string Key, string FormatName)
+/* 00168bd2 */{
+/* 00168bd2 */	return EX_SA2Type(Name, Key, FormatName) == 4;
+/* 00168c02 */}
+
+bool EX_IsRA2Array2(string Name, int LineY, string FormatName)
+/* 00168c16 */{
+/* 00168c16 */	return EX_RA2Type(Name, LineY, FormatName) == 4;
+/* 00168c46 */}
+
+bool EX_IsArray(string Name)
+/* 00168c5a */{
+/* 00168c5a */	return EX_Type(Name) == 5;
+/* 00168c76 */}
+
+int EX_Int(string Name, int Default)
+/* 00168c8a */{
+/* 00168c8a */	int Data;
+/* 00168c9c */	if (!MainEXFile.Int(Name, Data))
+/* 00168cc0 */	{
+/* 00168cc0 */		return Default;
+/* 00168ccc */	}
+/* 00168ccc */	return Data;
+/* 00168cd8 */}
+
+float EX_Float(string Name, float Default)
+/* 00168cec */{
+/* 00168cec */	if (EX_IsInt(Name))
+/* 00168d02 */	{
+/* 00168d02 */		return EX_Int(Name, 0);
+/* 00168d1c */	}
+/* 00168d1c */	float Data;
+/* 00168d2e */	if (!MainEXFile.Float(Name, Data))
+/* 00168d52 */	{
+/* 00168d52 */		return Default;
+/* 00168d5e */	}
+/* 00168d5e */	return Data;
+/* 00168d6a */}
+
+string EX_String(string Name, string Default)
+/* 00168d7e */{
+/* 00168d7e */	string Data;
+/* 00168d92 */	if (!MainEXFile.String(Name, Data))
+/* 00168db8 */	{
+/* 00168db8 */		return Default;
+/* 00168dc4 */	}
+/* 00168dc4 */	return Data;
+/* 00168dd0 */}
+
+int EX_AInt(string Name, int Index, int Default)
+/* 00168de4 */{
+/* 00168de4 */	int Data;
+/* 00168df6 */	if (!MainEXFile.AInt(Name, Index, Data))
+/* 00168e24 */	{
+/* 00168e24 */		return Default;
+/* 00168e30 */	}
+/* 00168e30 */	return Data;
+/* 00168e3c */}
+
+float EX_AFloat(string Name, int Index, float Default)
+/* 00168e50 */{
+/* 00168e50 */	if (EX_IsAInt(Name, Index))
+/* 00168e70 */	{
+/* 00168e70 */		return EX_AInt(Name, Index, 0);
+/* 00168e94 */	}
+/* 00168e94 */	float Data;
+/* 00168ea6 */	if (!MainEXFile.AFloat(Name, Index, Data))
+/* 00168ed4 */	{
+/* 00168ed4 */		return Default;
+/* 00168ee0 */	}
+/* 00168ee0 */	return Data;
+/* 00168eec */}
+
+string EX_AString(string Name, int Index, string Default)
+/* 00168f00 */{
+/* 00168f00 */	string Data;
+/* 00168f14 */	if (!MainEXFile.AString(Name, Index, Data))
+/* 00168f44 */	{
+/* 00168f44 */		return Default;
+/* 00168f50 */	}
+/* 00168f50 */	return Data;
+/* 00168f5c */}
+
+int EX_A2Int(string Name, int LineX, int LineY, int Default)
+/* 00168f70 */{
+/* 00168f70 */	int Data;
+/* 00168f82 */	if (!MainEXFile.A2Int(Name, LineY, LineX, Data))
+/* 00168fba */	{
+/* 00168fba */		return Default;
+/* 00168fc6 */	}
+/* 00168fc6 */	return Data;
+/* 00168fd2 */}
+
+float EX_A2Float(string Name, int LineX, int LineY, float Default)
+/* 00168fe6 */{
+/* 00168fe6 */	if (EX_IsA2Int(Name, LineX, LineY))
+/* 00169010 */	{
+/* 00169010 */		return EX_A2Int(Name, LineX, LineY, 0);
+/* 0016903e */	}
+/* 0016903e */	float Data;
+/* 00169050 */	if (!MainEXFile.A2Float(Name, LineY, LineX, Data))
+/* 00169088 */	{
+/* 00169088 */		return Default;
+/* 00169094 */	}
+/* 00169094 */	return Data;
+/* 001690a0 */}
+
+string EX_A2String(string Name, int LineX, int LineY, string Default)
+/* 001690b4 */{
+/* 001690b4 */	string Data;
+/* 001690c8 */	if (!MainEXFile.A2String(Name, LineY, LineX, Data))
+/* 00169102 */	{
+/* 00169102 */		return Default;
+/* 0016910e */	}
+/* 0016910e */	return Data;
+/* 0016911a */}
+
+int EX_IA2LineY(string Name, int Key)
+/* 0016912e */{
+/* 0016912e */	return MainEXFile.GetRowAtIntKey(Name, Key);
+/* 0016914e */}
+
+float EX_SA2LineY(string Name, string Key)
+/* 00169162 */{
+/* 00169162 */	return MainEXFile.GetRowAtStringKey(Name, Key);
+/* 00169184 */}
+
+int EX_IA2Int(string Name, int Key, string FormatName, int Default)
+/* 00169198 */{
+/* 00169198 */	int Data;
+/* 001691aa */	if (!MainEXFile.IA2Int(Name, Key, FormatName, Data))
+/* 001691e2 */	{
+/* 001691e2 */		return Default;
+/* 001691ee */	}
+/* 001691ee */	return Data;
+/* 001691fa */}
+
+float EX_IA2Float(string Name, int Key, string FormatName, float Default)
+/* 0016920e */{
+/* 0016920e */	if (EX_IsIA2Int(Name, Key, FormatName))
+/* 00169238 */	{
+/* 00169238 */		return EX_IA2Int(Name, Key, FormatName, 0);
+/* 00169266 */	}
+/* 00169266 */	float Data;
+/* 00169278 */	if (!MainEXFile.IA2Float(Name, Key, FormatName, Data))
+/* 001692b0 */	{
+/* 001692b0 */		return Default;
+/* 001692bc */	}
+/* 001692bc */	return Data;
+/* 001692c8 */}
+
+string EX_IA2String(string Name, int Key, string FormatName, string Default)
+/* 001692dc */{
+/* 001692dc */	string Data;
+/* 001692f0 */	if (!MainEXFile.IA2String(Name, Key, FormatName, Data))
+/* 0016932a */	{
+/* 0016932a */		return Default;
+/* 00169336 */	}
+/* 00169336 */	return Data;
+/* 00169342 */}
+
+int EX_SA2Int(string Name, string Key, string FormatName, int Default)
+/* 00169356 */{
+/* 00169356 */	int Data;
+/* 00169368 */	if (!MainEXFile.SA2Int(Name, Key, FormatName, Data))
+/* 001693a0 */	{
+/* 001693a0 */		return Default;
+/* 001693ac */	}
+/* 001693ac */	return Data;
+/* 001693b8 */}
+
+float EX_SA2Float(string Name, string Key, string FormatName, float Default)
+/* 001693cc */{
+/* 001693cc */	if (EX_IsSA2Int(Name, Key, FormatName))
+/* 001693f6 */	{
+/* 001693f6 */		return EX_SA2Int(Name, Key, FormatName, 0);
+/* 00169424 */	}
+/* 00169424 */	float Data;
+/* 00169436 */	if (!MainEXFile.SA2Float(Name, Key, FormatName, Data))
+/* 0016946e */	{
+/* 0016946e */		return Default;
+/* 0016947a */	}
+/* 0016947a */	return Data;
+/* 00169486 */}
+
+string EX_SA2String(string Name, string Key, string FormatName, string Default)
+/* 0016949a */{
+/* 0016949a */	string Data;
+/* 001694ae */	if (!MainEXFile.SA2String(Name, Key, FormatName, Data))
+/* 001694e8 */	{
+/* 001694e8 */		return Default;
+/* 001694f4 */	}
+/* 001694f4 */	return Data;
+/* 00169500 */}
+
+int EX_RA2Int(string Name, int LineY, string FormatName, int Default)
+/* 00169514 */{
+/* 00169514 */	int Data;
+/* 00169526 */	if (!MainEXFile.RA2Int(Name, LineY, FormatName, Data))
+/* 0016955e */	{
+/* 0016955e */		return Default;
+/* 0016956a */	}
+/* 0016956a */	return Data;
+/* 00169576 */}
+
+float EX_RA2Float(string Name, int LineY, string FormatName, float Default)
+/* 0016958a */{
+/* 0016958a */	if (EX_IsRA2Int(Name, LineY, FormatName))
+/* 001695b4 */	{
+/* 001695b4 */		return EX_RA2Int(Name, LineY, FormatName, 0);
+/* 001695e2 */	}
+/* 001695e2 */	float Data;
+/* 001695f4 */	if (!MainEXFile.RA2Float(Name, LineY, FormatName, Data))
+/* 0016962c */	{
+/* 0016962c */		return Default;
+/* 00169638 */	}
+/* 00169638 */	return Data;
+/* 00169644 */}
+
+string EX_RA2String(string Name, int LineY, string FormatName, string Default)
+/* 00169658 */{
+/* 00169658 */	string Data;
+/* 0016966c */	if (!MainEXFile.RA2String(Name, LineY, FormatName, Data))
+/* 001696a6 */	{
+/* 001696a6 */		return Default;
+/* 001696b2 */	}
+/* 001696b2 */	return Data;
+/* 001696be */}
+
+void EX_GetNodeNameList(string TreePath, ref array@string NodeList)
+/* 001696d2 */{
+/* 001696d2 */	int NodeNameListCount = MainEXFile.GetNodeNameCount(TreePath);
+/* 001696f2 */	int Count;
+/* 001696f2 */	for (Count = 0; Count < NodeNameListCount; ++Count)
+/* 0016973c */	{
+/* 0016973c */		string NodeName;
+/* 00169750 */		MainEXFile.GetNodeName(TreePath, Count, NodeName);
+/* 0016977a */		NodeList.PushBack(NodeName);
+/* 0016978e */	}
+/* 00169794 */}
+
+void EX_GetEXNameList(string TreePath, ref array@string EXList)
+/* 001697a2 */{
+/* 001697a2 */	int NodeNameListCount = MainEXFile.GetEXNameCount(TreePath);
+/* 001697c2 */	int Count;
+/* 001697c2 */	for (Count = 0; Count < NodeNameListCount; ++Count)
+/* 0016980c */	{
+/* 0016980c */		string EXName;
+/* 00169820 */		MainEXFile.GetEXName(TreePath, Count, EXName);
+/* 0016984a */		EXList.PushBack(EXName);
+/* 0016985e */	}
+/* 00169864 */}
+

@@ -1,0 +1,138 @@
+PlayerCommonParamView::PlayerCommonParamView()
+/* 00184f5c */{
+/* 00184f64 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00184f8a */}
+
+void PlayerCommonParamView::init()
+/* 00184f92 */{
+/* 00184f92 */	g_playerCommonParam.setOnChangeGoldCallback(this.onChangeGold);
+/* 00184fac */	g_playerCommonParam.addOnChangeBadConditionCallback(this.onChangeBadCondition);
+/* 00184fc6 */	g_playerCommonParam.addOnChangeHelperCountCallback(this.onChangeHelper);
+/* 00184fe0 */	this.initParts();
+/* 00184fe8 */	this.setPartsPos();
+/* 00184ff0 */	this.setPartsShow();
+/* 00184ff8 */	this.initBadConditionView();
+/* 00185000 */	this.helper_.init();
+/* 00185010 */	this.helper_.setPos(874, 100);
+/* 0018502c */}
+
+void PlayerCommonParamView::initParts()
+/* 00185034 */{
+/* 00185034 */	this.parts_[0].init("システム／共通パラメータ", 0);
+/* 00185058 */	this.parts_[1].initAsText(g_playerCommonParam.getPlaceName(), 36, true, 256, 255, 255, 255);
+/* 001850a4 */	this.parts_[2].initAsNumber("システム／数字／幅２１／白", NULL);
+/* 001850c8 */	this.parts_[2].setNumber(g_playerCommonParam.getGold());
+/* 001850f2 */	createPartsGroup(this.parent_, this.parts_, 8100);
+/* 00185112 */}
+
+void PlayerCommonParamView::initBadConditionView()
+/* 0018511a */{
+/* 0018511a */	array@CurrentBadCondition bc;
+/* 00185124 */	g_playerCommonParam.getBadCondition(bc);
+/* 0018513e */	int i;
+/* 00185150 */	while (i < this.badConditionView_.Numof())
+/* 00185172 */	{
+/* 00185172 */		if (bc.Numof() <= i || bc[i].getId() != this.badConditionView_[i].getId())
+/* 001851ec */		{
+/* 001851ec */			this.badConditionView_.Erase(i);
+/* 00185202 */		}
+/* 00185208 */		else
+/* 00185208 */		{
+/* 00185208 */			this.badConditionView_[i].changeIndex(i);
+/* 0018522e */			++i;
+/* 0018523e */		}
+/* 0018523e */	}
+/* 00185244 */	int count = bc.Numof() - i;
+/* 0018526c */	this.badConditionView_.Realloc(bc.Numof());
+/* 0018528c */	int j;
+/* 0018529e */	for (j = i; j < bc.Numof(); ++j)
+/* 001852f2 */	{
+/* 001852f2 */		this.badConditionView_[j].init(bc[j].getId(), j);
+/* 00185334 */		this.badConditionView_[j].fadeIn(true);
+/* 00185356 */	}
+/* 0018535c */	for (i = 0; i < this.badConditionView_.Numof(); ++i)
+/* 001853ac */	{
+/* 001853ac */		this.badConditionView_[i].updateCount();
+/* 001853c8 */	}
+/* 001853ce */}
+
+void PlayerCommonParamView::setPartsShow()
+/* 001853d6 */{
+/* 001853d6 */	int i;
+/* 001853e8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00185438 */	{
+/* 00185438 */		this.parts_[i].setShow(true);
+/* 0018545a */	}
+/* 00185460 */	this.parent_.setShow(true);
+/* 00185476 */}
+
+void PlayerCommonParamView::setPartsPos()
+/* 0018547e */{
+/* 0018547e */	this.parts_[0].setOrigin(9);
+/* 0018549c */	this.parts_[0].setPos(1024.0, 0.0);
+/* 001854c0 */	this.parts_[1].setOrigin(3);
+/* 001854de */	this.parts_[1].setPos(998.0, 49.0);
+/* 00185502 */	this.parts_[2].setOrigin(3);
+/* 00185520 */	this.parts_[2].setPos(998.0, 108.0);
+/* 00185544 */	int i;
+/* 00185556 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001855a6 */	{
+/* 001855a6 */		this.parts_[i].changeOrigin(9);
+/* 001855c8 */	}
+/* 001855ce */}
+
+void PlayerCommonParamView::update()
+/* 001855d6 */{
+/* 001855d8 */}
+
+void PlayerCommonParamView::onChangeGold()
+/* 001855de */{
+/* 001855de */	PartsMotion m;
+/* 001855ee */	m.setKey(15, this.parts_[2].getNumber(), g_playerCommonParam.getGold(), 0);
+/* 00185632 */	this.parts_[2].runMotion(m, NULL);
+/* 0018565a */}
+
+void PlayerCommonParamView::fadeIn(bool val)
+/* 00185662 */{
+/* 00185662 */	PartsMotion m;
+/* 00185672 */	if (val)
+/* 00185682 */	{
+/* 00185682 */		m.setMove(200, 0, 0, 0, 1);
+/* 001856b0 */		m.setAlpha(0, 255, 0);
+/* 001856d2 */		m.setTime(350);
+/* 001856e8 */	}
+/* 001856ee */	else
+/* 001856ee */	{
+/* 001856ee */		m.setMove(0, 0, 200, 0, 1);
+/* 0018571c */		m.setAlpha(255, 0, 0);
+/* 0018573e */		m.setTime(150);
+/* 00185754 */	}
+/* 00185754 */	this.parent_.setShow(true);
+/* 0018576a */	this.parent_.runMotion(m, NULL);
+/* 0018578a */	int i;
+/* 0018579c */	for (i = 0; i < this.badConditionView_.Numof(); ++i)
+/* 001857ec */	{
+/* 001857ec */		this.badConditionView_[i].fadeIn(val);
+/* 00185812 */	}
+/* 00185818 */	if (g_playerCommonParam.getMaxHelperCount() > 0)
+/* 00185836 */	{
+/* 00185836 */		this.helper_.fadeIn(val, NULL);
+/* 00185852 */	}
+/* 00185852 */}
+
+void PlayerCommonParamView::onChangeHelper(int restNow, int restOld, int maxNow, int maxOld)
+/* 0018585a */{
+/* 0018585a */	this.helper_.updateCount();
+/* 0018586a */	if (maxOld == 0 && maxNow == 1)
+/* 001858b2 */	{
+/* 001858b2 */		this.helper_.fadeIn(true, NULL);
+/* 001858ca */	}
+/* 001858ca */}
+
+void PlayerCommonParamView::onChangeBadCondition()
+/* 001858d2 */{
+/* 001858d2 */	this.initBadConditionView();
+/* 001858da */	this.setPartsPos();
+/* 001858e2 */	this.setPartsShow();
+/* 001858ea */}
+

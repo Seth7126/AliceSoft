@@ -1,0 +1,184 @@
+CAESelectOriginDialog::CAESelectOriginDialog()
+/* 00050008 */{
+/* 00050012 */}
+
+void CAESelectOriginDialog::Show(int ID, int PosX, int PosY, int Type, DG_ChangedOriginType dgChangedOrigin)
+/* 00050018 */{
+/* 00050018 */	AFL_Parts_AddLayer(-1);
+/* 00050026 */	this.m_dgChangedOrigin = dgChangedOrigin;
+/* 00050040 */	this.m_ParentID = ID;
+/* 00050056 */	int LayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 00050068 */	Ｐ＿レイアウトボックス＿パディング設定(LayoutBox, 6, 6, 6, 6);
+/* 00050090 */	Ｐ＿レイアウトボックス＿配置設定(LayoutBox, 3);
+/* 000500a6 */	int OriginLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 000500b8 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(OriginLayoutBox, 2);
+/* 000500ce */	Ｐ＿レイアウトボックス＿折り返し設定(OriginLayoutBox, true, 90.0);
+/* 000500ea */	Ｐ＿レイアウトボックス＿追加(LayoutBox, OriginLayoutBox);
+/* 00050104 */	this.m_OriginLT = PARTS_GetFreeSystemPartsNumber();
+/* 00050116 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginLT, "＼");
+/* 0005012c */	Ｐ＿ボタン＿サイズ設定(this.m_OriginLT, 22, 22);
+/* 00050148 */	Ｐ＿マージン設定(this.m_OriginLT, 4, 4, 4, 4);
+/* 00050170 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginLT);
+/* 0005018a */	AFL_Parts_AddMouseLClickEvent(this.m_OriginLT, this.MouseLClickEvent);
+/* 000501a4 */	this.m_OriginMT = PARTS_GetFreeSystemPartsNumber();
+/* 000501b6 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginMT, "｜");
+/* 000501cc */	Ｐ＿ボタン＿サイズ設定(this.m_OriginMT, 22, 22);
+/* 000501e8 */	Ｐ＿マージン設定(this.m_OriginMT, 4, 4, 4, 4);
+/* 00050210 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginMT);
+/* 0005022a */	AFL_Parts_AddMouseLClickEvent(this.m_OriginMT, this.MouseLClickEvent);
+/* 00050244 */	this.m_OriginRT = PARTS_GetFreeSystemPartsNumber();
+/* 00050256 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginRT, "／");
+/* 0005026c */	Ｐ＿ボタン＿サイズ設定(this.m_OriginRT, 22, 22);
+/* 00050288 */	Ｐ＿マージン設定(this.m_OriginRT, 4, 4, 4, 4);
+/* 000502b0 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginRT);
+/* 000502ca */	AFL_Parts_AddMouseLClickEvent(this.m_OriginRT, this.MouseLClickEvent);
+/* 000502e4 */	this.m_OriginLM = PARTS_GetFreeSystemPartsNumber();
+/* 000502f6 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginLM, "―");
+/* 0005030c */	Ｐ＿ボタン＿サイズ設定(this.m_OriginLM, 22, 22);
+/* 00050328 */	Ｐ＿マージン設定(this.m_OriginLM, 4, 4, 4, 4);
+/* 00050350 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginLM);
+/* 0005036a */	AFL_Parts_AddMouseLClickEvent(this.m_OriginLM, this.MouseLClickEvent);
+/* 00050384 */	this.m_OriginMM = PARTS_GetFreeSystemPartsNumber();
+/* 00050396 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginMM, "○");
+/* 000503ac */	Ｐ＿ボタン＿サイズ設定(this.m_OriginMM, 22, 22);
+/* 000503c8 */	Ｐ＿マージン設定(this.m_OriginMM, 4, 4, 4, 4);
+/* 000503f0 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginMM);
+/* 0005040a */	AFL_Parts_AddMouseLClickEvent(this.m_OriginMM, this.MouseLClickEvent);
+/* 00050424 */	this.m_OriginRM = PARTS_GetFreeSystemPartsNumber();
+/* 00050436 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginRM, "―");
+/* 0005044c */	Ｐ＿ボタン＿サイズ設定(this.m_OriginRM, 22, 22);
+/* 00050468 */	Ｐ＿マージン設定(this.m_OriginRM, 4, 4, 4, 4);
+/* 00050490 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginRM);
+/* 000504aa */	AFL_Parts_AddMouseLClickEvent(this.m_OriginRM, this.MouseLClickEvent);
+/* 000504c4 */	this.m_OriginLB = PARTS_GetFreeSystemPartsNumber();
+/* 000504d6 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginLB, "／");
+/* 000504ec */	Ｐ＿ボタン＿サイズ設定(this.m_OriginLB, 22, 22);
+/* 00050508 */	Ｐ＿マージン設定(this.m_OriginLB, 4, 4, 4, 4);
+/* 00050530 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginLB);
+/* 0005054a */	AFL_Parts_AddMouseLClickEvent(this.m_OriginLB, this.MouseLClickEvent);
+/* 00050564 */	this.m_OriginMB = PARTS_GetFreeSystemPartsNumber();
+/* 00050576 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginMB, "｜");
+/* 0005058c */	Ｐ＿ボタン＿サイズ設定(this.m_OriginMB, 22, 22);
+/* 000505a8 */	Ｐ＿マージン設定(this.m_OriginMB, 4, 4, 4, 4);
+/* 000505d0 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginMB);
+/* 000505ea */	AFL_Parts_AddMouseLClickEvent(this.m_OriginMB, this.MouseLClickEvent);
+/* 00050604 */	this.m_OriginRB = PARTS_GetFreeSystemPartsNumber();
+/* 00050616 */	Ｐ＿ボタン＿テキスト設定(this.m_OriginRB, "＼");
+/* 0005062c */	Ｐ＿ボタン＿サイズ設定(this.m_OriginRB, 22, 22);
+/* 00050648 */	Ｐ＿マージン設定(this.m_OriginRB, 4, 4, 4, 4);
+/* 00050670 */	Ｐ＿レイアウトボックス＿追加(OriginLayoutBox, this.m_OriginRB);
+/* 0005068a */	AFL_Parts_AddMouseLClickEvent(this.m_OriginRB, this.MouseLClickEvent);
+/* 000506a4 */	int ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 000506b6 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(ButtonLayout, 2);
+/* 000506cc */	Ｐ＿レイアウトボックス＿パディング設定(ButtonLayout, 3, 3, 3, 3);
+/* 000506f4 */	Ｐ＿レイアウトボックス＿追加(LayoutBox, ButtonLayout);
+/* 0005070e */	int OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 00050720 */	Ｐ＿ボタン＿テキスト設定(OKButton, "決定");
+/* 00050736 */	Ｐ＿ボタン＿サイズ設定(OKButton, 65, 22);
+/* 00050752 */	Ｐ＿マージン設定(OKButton, 0, 0, 3, 0);
+/* 0005077a */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, OKButton);
+/* 00050794 */	AFL_Parts_AddMouseLClickEvent(OKButton, this.ClickOKButtonEvent);
+/* 000507ae */	int CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 000507c0 */	Ｐ＿ボタン＿テキスト設定(CancelButton, "キャンセル");
+/* 000507d6 */	Ｐ＿ボタン＿サイズ設定(CancelButton, 100, 22);
+/* 000507f2 */	Ｐ＿マージン設定(CancelButton, 0, 0, 3, 0);
+/* 0005081a */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, CancelButton);
+/* 00050834 */	AFL_Parts_AddMouseLClickEvent(CancelButton, this.ClickCancelButtonEvent);
+/* 0005084e */	int Width = AFL_Parts_GetWidth(LayoutBox, 1);
+/* 00050870 */	int Height = AFL_Parts_GetHeight(LayoutBox, 1);
+/* 00050892 */	int BG = PARTS_GetFreeSystemPartsNumber();
+/* 000508a4 */	Ｐ＿構築手順＿ピクセル作成(BG, Width, Height, 1);
+/* 000508ce */	Ｐ＿構築手順＿色塗り(BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 0005091c */	Ｐ＿構築ビルド(BG, 1);
+/* 00050932 */	Ｐ＿ドラッグ可能設定(BG, true);
+/* 00050948 */	Ｐ＿親設定(LayoutBox, BG);
+/* 00050962 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 000509a4 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 000509e6 */	Ｐ＿座標設定(BG, PosX, PosY);
+/* 00050a0e */	AFL_Parts_AddDragEndEvent(BG, this.DragEndEvent);
+/* 00050a28 */	this.m_OK = false;
+/* 00050a3a */	this.m_Cancel = false;
+/* 00050a4c */	PARTS_BeginInput();
+/* 00050a52 */	for (; ; )
+/* 00050a52 */	{
+/* 00050a52 */		AFL_View_Update(true);
+/* 00050a5e */		if (this.m_OK)
+/* 00050a6e */		{
+/* 00050a6e */			break;
+/* 00050a74 */		}
+/* 00050a74 */		if (this.m_Cancel)
+/* 00050a84 */		{
+/* 00050a84 */			dgChangedOrigin(ID, Type);
+/* 00050ab8 */			break;
+/* 00050abe */		}
+/* 00050abe */	}
+/* 00050ac4 */	PARTS_EndInput();
+/* 00050aca */	PARTS_ReleaseWithInit(LayoutBox);
+/* 00050ad8 */	PARTS_ReleaseWithInit(CancelButton);
+/* 00050ae6 */	PARTS_ReleaseWithInit(OKButton);
+/* 00050af4 */	PARTS_ReleaseWithInit(ButtonLayout);
+/* 00050b02 */	PARTS_ReleaseWithInit(BG);
+/* 00050b10 */	AFL_Parts_EraseLayer(-1);
+/* 00050b1c */}
+
+void CAESelectOriginDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 00050b24 */{
+/* 00050b24 */	this.m_OK = true;
+/* 00050b36 */}
+
+void CAESelectOriginDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 00050b3e */{
+/* 00050b3e */	this.m_Cancel = true;
+/* 00050b50 */}
+
+void CAESelectOriginDialog::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00050b58 */{
+/* 00050b58 */	if (ID == this.m_OriginLT)
+/* 00050b74 */	{
+/* 00050b74 */		this.m_dgChangedOrigin(this.m_ParentID, 1);
+/* 00050ba4 */	}
+/* 00050baa */	else if (ID == this.m_OriginMT)
+/* 00050bc6 */	{
+/* 00050bc6 */		this.m_dgChangedOrigin(this.m_ParentID, 2);
+/* 00050bf6 */	}
+/* 00050bfc */	else if (ID == this.m_OriginRT)
+/* 00050c18 */	{
+/* 00050c18 */		this.m_dgChangedOrigin(this.m_ParentID, 3);
+/* 00050c48 */	}
+/* 00050c4e */	else if (ID == this.m_OriginLM)
+/* 00050c6a */	{
+/* 00050c6a */		this.m_dgChangedOrigin(this.m_ParentID, 4);
+/* 00050c9a */	}
+/* 00050ca0 */	else if (ID == this.m_OriginMM)
+/* 00050cbc */	{
+/* 00050cbc */		this.m_dgChangedOrigin(this.m_ParentID, 5);
+/* 00050cec */	}
+/* 00050cf2 */	else if (ID == this.m_OriginRM)
+/* 00050d0e */	{
+/* 00050d0e */		this.m_dgChangedOrigin(this.m_ParentID, 6);
+/* 00050d3e */	}
+/* 00050d44 */	else if (ID == this.m_OriginLB)
+/* 00050d60 */	{
+/* 00050d60 */		this.m_dgChangedOrigin(this.m_ParentID, 7);
+/* 00050d90 */	}
+/* 00050d96 */	else if (ID == this.m_OriginMB)
+/* 00050db2 */	{
+/* 00050db2 */		this.m_dgChangedOrigin(this.m_ParentID, 8);
+/* 00050de2 */	}
+/* 00050de8 */	else if (ID == this.m_OriginRB)
+/* 00050e04 */	{
+/* 00050e04 */		this.m_dgChangedOrigin(this.m_ParentID, 9);
+/* 00050e34 */	}
+/* 00050e34 */}
+
+void CAESelectOriginDialog::DragEndEvent(int ID)
+/* 00050e3c */{
+/* 00050e3c */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 00050e5a */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 00050e78 */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 00050e9a */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 00050ebc */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 00050efe */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 00050f40 */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 00050f68 */}
+

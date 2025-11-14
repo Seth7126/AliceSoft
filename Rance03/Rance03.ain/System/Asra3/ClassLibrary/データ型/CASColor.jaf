@@ -1,0 +1,56 @@
+CASColor CF_CASColor(int nR, int nG, int nB, int nA)
+/* 00001768 */{
+/* 00001768 */	CASColor Color;
+/* 00001778 */	Color.Set(nR, nG, nB, nA);
+/* 000017b0 */	return Color;
+/* 000017c0 */}
+
+void CASColor::Set(int nR, int nG, int nB, int nA)
+/* 000017d4 */{
+/* 000017d4 */	this.m_nR = nR;
+/* 000017ea */	this.m_nG = nG;
+/* 00001800 */	this.m_nB = nB;
+/* 00001816 */	this.m_nA = nA;
+/* 0000182c */}
+
+int CASColor::GetR()
+/* 00001834 */{
+/* 00001834 */	return this.m_nR;
+/* 00001840 */}
+
+int CASColor::GetG()
+/* 0000184e */{
+/* 0000184e */	return this.m_nG;
+/* 0000185a */}
+
+int CASColor::GetB()
+/* 00001868 */{
+/* 00001868 */	return this.m_nB;
+/* 00001874 */}
+
+int CASColor::GetA()
+/* 00001882 */{
+/* 00001882 */	return this.m_nA;
+/* 0000188e */}
+
+bool CASColor::Equal(ref CASColor Obj)
+/* 0000189c */{
+/* 0000189c */	if (this.m_nR != Obj.m_nR)
+/* 000018c0 */	{
+/* 000018c0 */		return false;
+/* 000018c8 */	}
+/* 000018c8 */	if (this.m_nG != Obj.m_nG)
+/* 000018ec */	{
+/* 000018ec */		return false;
+/* 000018f4 */	}
+/* 000018f4 */	if (this.m_nB != Obj.m_nB)
+/* 00001918 */	{
+/* 00001918 */		return false;
+/* 00001920 */	}
+/* 00001920 */	if (this.m_nA != Obj.m_nA)
+/* 00001944 */	{
+/* 00001944 */		return false;
+/* 0000194c */	}
+/* 0000194c */	return true;
+/* 00001954 */}
+

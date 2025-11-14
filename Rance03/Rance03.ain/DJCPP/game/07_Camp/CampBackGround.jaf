@@ -1,0 +1,49 @@
+CampBackGround::CampBackGround()
+/* 001b65d0 */{
+/* 001b65d8 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b65fe */}
+
+void CampBackGround::init()
+/* 001b6606 */{
+/* 001b6606 */	this.isShow_ = false;
+/* 001b6618 */	this.partsBg_.init("システム／キャンプ／背景", 0);
+/* 001b6634 */	this.partsBg_.setZ(4000.0);
+/* 001b664a */}
+
+void CampBackGround::update()
+/* 001b6652 */{
+/* 001b6654 */}
+
+void CampBackGround::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 001b665a */{
+/* 001b665a */	if (this.isShow_ && val)
+/* 001b6692 */	{
+/* 001b6692 */		return;
+/* 001b6694 */	}
+/* 001b6694 */	this.isShow_ = val;
+/* 001b66aa */	this.partsBg_.setShow(true);
+/* 001b66c0 */	PartsMotion m;
+/* 001b66d0 */	if (val)
+/* 001b66e0 */	{
+/* 001b66e0 */		m.setMove(0, 384, 0, 0, 1);
+/* 001b670e */		m.setCgRangeMove(0, 384, 1024, 384, 0, 0, 1024, 768, 1);
+/* 001b6754 */		m.setTime(400);
+/* 001b676a */	}
+/* 001b6770 */	else
+/* 001b6770 */	{
+/* 001b6770 */		m.setMove(0, 0, 0, 384, 2);
+/* 001b679e */		m.setCgRangeMove(0, 0, 1024, 768, 0, 384, 1024, 384, 2);
+/* 001b67e4 */		m.setTime(200);
+/* 001b67fa */	}
+/* 001b67fa */	this.partsBg_.runMotion(m, onFinish);
+/* 001b6824 */}
+
+void CampBackGround::joinFade()
+/* 001b682c */{
+/* 001b682c */	while (this.partsBg_.isMotion())
+/* 001b6842 */	{
+/* 001b6842 */		g_gameObjectManager.update();
+/* 001b6852 */		g_frameManager.updateFrame();
+/* 001b6862 */	}
+/* 001b6868 */}
+

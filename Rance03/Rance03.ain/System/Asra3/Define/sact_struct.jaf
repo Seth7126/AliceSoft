@@ -1,0 +1,17 @@
+sact_text_metrics_t::sact_text_metrics_t()
+/* 0000000c */{
+/* 00000014 */	this.nColorR = 255;
+/* 00000026 */	this.nColorG = 255;
+/* 00000038 */	this.nColorB = 255;
+/* 0000004a */	this.nSize = 16;
+/* 0000005c */	this.nWeight = 0;
+/* 0000006e */	this.nFace = 0;
+/* 00000080 */	this.nShadowPixelL = 0;
+/* 00000092 */	this.nShadowPixelU = 0;
+/* 000000a4 */	this.nShadowPixelR = 0;
+/* 000000b6 */	this.nShadowPixelD = 0;
+/* 000000c8 */	this.nShadowColorR = 0;
+/* 000000da */	this.nShadowColorG = 0;
+/* 000000ec */	this.nShadowColorB = 0;
+/* 000000fe */}
+

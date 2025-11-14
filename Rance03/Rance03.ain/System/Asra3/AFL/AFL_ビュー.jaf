@@ -1,0 +1,45 @@
+void AFL_KeepPreviousView_SetMode(bool KeepPreviousViewMode)
+/* 0016a76c */{
+/* 0016a76c */	ChipmunkSpriteEngine.KeepPreviousView_SetMode(KeepPreviousViewMode);
+/* 0016a782 */}
+
+bool AFL_KeepPreviousView_GetMode()
+/* 0016a790 */{
+/* 0016a790 */	return ChipmunkSpriteEngine.KeepPreviousView_GetMode();
+/* 0016a79c */}
+
+void AFL_View_Update(bool 未読既読スキップ)
+/* 0016a7b0 */{
+/* 0016a7b0 */	SYS_View_Update(未読既読スキップ, false, 0.0);
+/* 0016a7cc */}
+
+int AFL_View_GetDefaultWidth()
+/* 0016a7da */{
+/* 0016a7da */	return SystemService.GetDefaultViewWidth();
+/* 0016a7e6 */}
+
+int AFL_View_GetDefaultHeight()
+/* 0016a7fa */{
+/* 0016a7fa */	return SystemService.GetDefaultViewHeight();
+/* 0016a806 */}
+
+int AFL_View_GetWidth()
+/* 0016a81a */{
+/* 0016a81a */	return SystemService.GetViewWidth();
+/* 0016a826 */}
+
+int AFL_View_GetHeight()
+/* 0016a83a */{
+/* 0016a83a */	return SystemService.GetViewHeight();
+/* 0016a846 */}
+
+void AFL_View_SetResizableMode(bool ResizableMode)
+/* 0016a85a */{
+/* 0016a85a */	SystemService.SetViewResizableMode(ResizableMode);
+/* 0016a86e */}
+
+bool AFL_View_IsResizableMode()
+/* 0016a87c */{
+/* 0016a87c */	return SystemService.IsViewResizableMode();
+/* 0016a888 */}
+

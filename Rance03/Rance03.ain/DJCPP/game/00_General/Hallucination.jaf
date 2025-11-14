@@ -1,0 +1,57 @@
+Hallucination::Hallucination()
+/* 00181010 */{
+/* 00181018 */	this.gameObjectId_ = g_gameObjectManager.addIndependentObject(this.update);
+/* 0018103e */}
+
+void Hallucination::init()
+/* 00181046 */{
+/* 00181046 */	this.parts_.init("システム／動揺", 0);
+/* 00181062 */	this.parts_.setOrigin(5);
+/* 00181078 */	this.parts_.setZ(31000.0);
+/* 0018108e */	this.vx_ = (RAND(50) + 50) / 10.0;
+/* 001810b8 */	this.vy_ = (RAND(50) + 50) / 10.0;
+/* 001810e2 */	this.vRot_ = 5.0;
+/* 001810f4 */}
+
+void Hallucination::update()
+/* 001810fc */{
+/* 001810fc */	if (!this.parts_.isInitialized())
+/* 00181114 */	{
+/* 00181114 */		return;
+/* 00181116 */	}
+/* 00181116 */	bool enable = g_playerCommonParam.getBadConditionTurn("動揺") > 0 && getGameMode();
+/* 00181166 */	this.parts_.setShow(enable);
+/* 00181180 */	this.x_ += this.vx_;
+/* 00181196 */	this.y_ += this.vy_;
+/* 001811ac */	this.rot_ += this.vRot_;
+/* 001811c2 */	if (this.x_ > 1024.0 || this.x_ < 0.0)
+/* 0018120a */	{
+/* 0018120a */		this.vx_ = -this.vx_;
+/* 00181222 */	}
+/* 00181222 */	if (this.y_ > 768.0 || this.y_ < 0.0)
+/* 0018126a */	{
+/* 0018126a */		this.vy_ = -this.vy_;
+/* 00181282 */	}
+/* 00181282 */	this.parts_.setPos(this.x_, this.y_);
+/* 001812a6 */	this.parts_.setXYRot(this.rot_);
+/* 001812c0 */}
+
+void Hallucination::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 001812c8 */{
+/* 001812c8 */	this.setPartsShow();
+/* 001812d0 */	this.parts_.runMotion(getStandardMotion(val ? 0 : 1), onFinish);
+/* 00181314 */}
+
+void Hallucination::initParts()
+/* 0018131c */{
+/* 0018131c */	this.setPartsPos();
+/* 00181324 */}
+
+void Hallucination::setPartsShow()
+/* 0018132c */{
+/* 0018132e */}
+
+void Hallucination::setPartsPos()
+/* 00181334 */{
+/* 00181336 */}
+

@@ -1,0 +1,57 @@
+bool EV(string func_name, int flag)
+/* 0015f2da */{
+/* 0015f2da */	if (!func_name.Empty())
+/* 0015f2ee */	{
+/* 0015f2ee */		void_functype fnc;
+/* 0015f2fa */		fnc = func_name;
+/* 0015f320 */		if (fnc.Numof() == 0)
+/* 0015f33a */		{
+/* 0015f33a */			SYS_ERROR("関数\"%s\"未実装" % func_name, 0);
+/* 0015f35e */		}
+/* 0015f35e */		fnc.Clear();
+/* 0015f36a */	}
+/* 0015f36a */	if (flag != -2147483648)
+/* 0015f382 */	{
+/* 0015f382 */		if (func_name.Empty())
+/* 0015f394 */		{
+/* 0015f394 */			SYS_ERROR("フラグ強制セットには関数名の指定が必要", 0);
+/* 0015f3a6 */			return false;
+/* 0015f3ae */		}
+/* 0015f3ae */		bool old = false;
+/* 0015f3c0 */		int i = _EV_TABLE.Find(0, _EV_TABLE.Numof(), func_name);
+/* 0015f3fc */		if (i == -1)
+/* 0015f414 */		{
+/* 0015f414 */			old = false;
+/* 0015f428 */			if (flag == 1)
+/* 0015f440 */			{
+/* 0015f440 */				_EV_TABLE.PushBack(func_name);
+/* 0015f454 */			}
+/* 0015f454 */		}
+/* 0015f45a */		else
+/* 0015f45a */		{
+/* 0015f45a */			old = true;
+/* 0015f46e */			if (flag == 0)
+/* 0015f486 */			{
+/* 0015f486 */				_EV_TABLE.Erase(i);
+/* 0015f49c */			}
+/* 0015f49c */		}
+/* 0015f49c */		return old;
+/* 0015f4a8 */	}
+/* 0015f4a8 */	if (!func_name.Empty())
+/* 0015f4bc */	{
+/* 0015f4bc */		return -1 != _EV_TABLE.Find(0, _EV_TABLE.Numof(), func_name);
+/* 0015f4f8 */	}
+/* 0015f4f8 */	func_name = system.GetFuncStackName(1);
+/* 0015f512 */	if (-1 != _EV_TABLE.Find(0, _EV_TABLE.Numof(), func_name))
+/* 0015f550 */	{
+/* 0015f550 */		return true;
+/* 0015f55a */	}
+/* 0015f55a */	_EV_TABLE.PushBack(func_name);
+/* 0015f56e */	return false;
+/* 0015f578 */}
+
+void EV全クリア()
+/* 0015f58c */{
+/* 0015f58c */	_EV_TABLE.Free();
+/* 0015f596 */}
+

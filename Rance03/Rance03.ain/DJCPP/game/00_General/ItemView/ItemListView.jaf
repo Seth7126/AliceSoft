@@ -1,0 +1,259 @@
+ItemListView::ItemListView()
+/* 00179532 */{
+/* 0017953a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00179560 */}
+
+void ItemListView::init(ref array@string idList, bool isShopMode)
+/* 00179568 */{
+/* 00179568 */	this.isShopMode_ = isShopMode;
+/* 0017957e */	this.narrowDownType_ = 0;
+/* 00179590 */	this.idList_.Alloc(idList.Numof());
+/* 001795b0 */	this.idList_.Copy(0, idList, 0, idList.Numof());
+/* 001795e2 */	this.narrowDownButton_.init(this.idList_, this.onClickNarrowDownButton);
+/* 00179608 */	this.initButton();
+/* 00179610 */	this.initParts();
+/* 00179618 */	this.scrollerMax_ = Math.Max(0, this.idList_.Numof() - 5) * 142;
+/* 00179654 */	this.vScroller_.init(0, 0, 578, 768, this.scrollerMax_, 142, true);
+/* 00179692 */	this.scrollBox_.init(this.getScrollerPosition, this.setScrollerPosition, this.scrollScrollerPosition, this.scrollerMax_);
+/* 001796cc */	this.scrollBox_.setPos(578, 101);
+/* 001796e8 */	this.initItems();
+/* 001796f0 */	this.setEnableUpDownButton();
+/* 001796f8 */	this.setInitialItemPos();
+/* 00179700 */}
+
+float ItemListView::getScrollerPosition()
+/* 00179708 */{
+/* 00179708 */	return this.vScroller_.getCurrentPosition();
+/* 0017971a */}
+
+void ItemListView::setScrollerPosition(float val)
+/* 00179728 */{
+/* 00179728 */	this.vScroller_.setPos(val);
+/* 00179742 */}
+
+void ItemListView::scrollScrollerPosition(float val)
+/* 0017974a */{
+/* 0017974a */	this.vScroller_.scrollTo(val);
+/* 00179764 */}
+
+void ItemListView::initButton()
+/* 0017976c */{
+/* 0017976c */	this.btnUpDown_[0].init("システム／アイテム／上矢印", "", "", false);
+/* 0017979c */	this.btnUpDown_[1].init("システム／アイテム／下矢印", "", "", false);
+/* 001797cc */	this.btnUpDown_[0].setPos(578, 29);
+/* 001797f0 */	this.btnUpDown_[1].setPos(578, 667);
+/* 00179814 */	this.btnUpDown_[0].setZ(4500);
+/* 00179832 */	this.btnUpDown_[1].setZ(4500);
+/* 00179850 */	this.btnUpDown_[0].setClickCallback(this.onClickUpDown, 0);
+/* 00179878 */	this.btnUpDown_[1].setClickCallback(this.onClickUpDown, 1);
+/* 001798a0 */}
+
+void ItemListView::setEnableUpDownButton()
+/* 001798a8 */{
+/* 001798a8 */	this.btnUpDown_[0].setEnable(this.scrollerMax_ > 0);
+/* 001798d4 */	this.btnUpDown_[1].setEnable(this.scrollerMax_ > 0);
+/* 00179900 */}
+
+void ItemListView::onClickUpDown(int index)
+/* 00179908 */{
+/* 00179908 */	float snap = 142.0;
+/* 0017991a */	float p = -this.vScroller_.getMoveToDestination() / snap;
+/* 00179944 */	pass("%f" % p);
+/* 00179962 */	if (index == 0)
+/* 0017997a */	{
+/* 0017997a */		this.vScroller_.scrollTo((p - 1.0) * snap);
+/* 001799a8 */	}
+/* 001799ae */	else
+/* 001799ae */	{
+/* 001799ae */		this.vScroller_.scrollTo((p + 1.0) * snap);
+/* 001799dc */	}
+/* 001799dc */}
+
+void ItemListView::initItems()
+/* 001799e4 */{
+/* 001799e4 */	this.itemView_.Free();
+/* 001799ee */	this.itemView_.Alloc(this.idList_.Numof());
+/* 00179a0e */	int i;
+/* 00179a20 */	for (i = 0; i < this.itemView_.Numof(); ++i)
+/* 00179a70 */	{
+/* 00179a70 */		this.itemView_[i].init(this.idList_[i], this.isShopMode_);
+/* 00179aac */		this.itemView_[i].setOnClickCallback(this.onClick, i);
+/* 00179adc */		this.itemView_[i].setParent(this.vScroller_.getPartsNumber());
+/* 00179b08 */		this.itemView_[i].setClipper(this.partsClipper_.getPartsNumber());
+/* 00179b34 */	}
+/* 00179b3a */}
+
+void ItemListView::initParts()
+/* 00179b42 */{
+/* 00179b42 */	this.partsBg_.init("システム／アイテム／下地", 0);
+/* 00179b5e */	this.partsBg_.setZ(4300.0);
+/* 00179b74 */	this.partsClipper_.init("システム／アイテム／クリッパー", 0);
+/* 00179b90 */	this.partsClipper_.setPos(0.0, 0.0);
+/* 00179bac */}
+
+void ItemListView::update()
+/* 00179bb4 */{
+/* 00179bb6 */}
+
+void ItemListView::setOnClickCallback(DG_ItemListViewClickCallback cb)
+/* 00179bbc */{
+/* 00179bbc */	this.onClickCallback_ = cb;
+/* 00179bd6 */}
+
+void ItemListView::onClick(int id)
+/* 00179bde */{
+/* 00179bde */	this.onClickCallback_(this.idList_[id]);
+/* 00179c14 */}
+
+void ItemListView::updateState()
+/* 00179c1c */{
+/* 00179c1c */	int i;
+/* 00179c2e */	for (i = 0; i < this.itemView_.Numof(); ++i)
+/* 00179c7e */	{
+/* 00179c7e */		this.itemView_[i].updateState();
+/* 00179c9a */	}
+/* 00179ca0 */}
+
+void ItemListView::fadeIn(bool val, DG_GeneralCallback cb)
+/* 00179ca8 */{
+/* 00179ca8 */	this.fadeButton(val);
+/* 00179cba */	this.scrollBox_.fadeIn(val, NULL);
+/* 00179cd6 */	this.fadeInItem(val);
+/* 00179ce8 */	this.partsBg_.setShow(true);
+/* 00179cfe */	PartsMotion m;
+/* 00179d0e */	m.setTime(250);
+/* 00179d24 */	int w = this.partsBg_.getWidth();
+/* 00179d40 */	if (val)
+/* 00179d50 */	{
+/* 00179d50 */		m.setMove(-w, 0, 0, 0, 1);
+/* 00179d84 */	}
+/* 00179d8a */	else
+/* 00179d8a */	{
+/* 00179d8a */		m.setMove(0, 0, -w, 0, 1);
+/* 00179dbe */	}
+/* 00179dbe */	this.partsBg_.runMotion(m, cb);
+/* 00179de8 */}
+
+void ItemListView::fadeButton(bool val)
+/* 00179df0 */{
+/* 00179df0 */	int i;
+/* 00179e02 */	for (i = 0; i < this.btnUpDown_.Numof(); ++i)
+/* 00179e52 */	{
+/* 00179e52 */		this.btnUpDown_[i].fadeIn(val);
+/* 00179e78 */	}
+/* 00179e7e */	this.narrowDownButton_.fadeIn(val, NULL);
+/* 00179e9a */}
+
+void ItemListView::eraseFromList(string itemId)
+/* 00179ea2 */{
+/* 00179ea2 */	int n;
+/* 00179eb4 */	while (n < this.itemView_.Numof())
+/* 00179ed6 */	{
+/* 00179ed6 */		if (this.itemView_[n].getId() == itemId)
+/* 00179f04 */		{
+/* 00179f04 */			this.itemView_.Erase(n);
+/* 00179f1a */		}
+/* 00179f20 */		else
+/* 00179f20 */		{
+/* 00179f20 */			++n;
+/* 00179f30 */		}
+/* 00179f30 */	}
+/* 00179f36 */	this.Reposition(this.narrowDownType_);
+/* 00179f48 */}
+
+void ItemListView::eraseIndex(int index)
+/* 00179f50 */{
+/* 00179f50 */	if (0 <= index && index < this.itemView_.Numof())
+/* 00179fa2 */	{
+/* 00179fa2 */		this.itemView_.Erase(index);
+/* 00179fb8 */	}
+/* 00179fb8 */	this.Reposition(this.narrowDownType_);
+/* 00179fca */}
+
+void ItemListView::setInitialItemPos()
+/* 00179fd2 */{
+/* 00179fd2 */	int i;
+/* 00179fe4 */	for (i = 0; i < this.itemView_.Numof(); ++i)
+/* 0017a034 */	{
+/* 0017a034 */		this.itemView_[i].setPos(129, this.getItemViewYPos(i), true);
+/* 0017a06e */	}
+/* 0017a074 */}
+
+void ItemListView::onClickNarrowDownButton(int id)
+/* 0017a07c */{
+/* 0017a07c */	this.narrowDownType_ = id;
+/* 0017a092 */	this.vScroller_.setPos(0.0);
+/* 0017a0a8 */	this.Reposition(this.narrowDownType_);
+/* 0017a0ba */	this.fadeInItem(true);
+/* 0017a0c8 */}
+
+void ItemListView::Reposition(int narrowDownType)
+/* 0017a0d0 */{
+/* 0017a0d0 */	int i;
+/* 0017a0e2 */	int index;
+/* 0017a0f4 */	for (i = 0; i < this.itemView_.Numof(); ++i)
+/* 0017a144 */	{
+/* 0017a144 */		ref Item item = getItemFromId(this.itemView_[i].getId());
+/* 0017a198 */		if (item.getNarrowDownType() == narrowDownType || narrowDownType == 0)
+/* 0017a1ea */		{
+/* 0017a1ea */			this.itemView_[i].setPos(129, this.getItemViewYPos(index), false);
+/* 0017a224 */			++index;
+/* 0017a234 */		}
+/* 0017a23a */	}
+/* 0017a24c */	this.scrollerMax_ = Math.Max(0, (index - 5) * 142);
+/* 0017a282 */	this.vScroller_.changeVirtualHeight(this.scrollerMax_);
+/* 0017a29c */	this.setEnableUpDownButton();
+/* 0017a2a4 */	this.scrollBox_.changeMax(this.scrollerMax_);
+/* 0017a2c0 */}
+
+void ItemListView::fadeInItem(bool val)
+/* 0017a2c8 */{
+/* 0017a2c8 */	if (val)
+/* 0017a2d8 */	{
+/* 0017a2d8 */		int i;
+/* 0017a2ea */		int index;
+/* 0017a2fc */		for (i = 0; i < this.itemView_.Numof(); ++i)
+/* 0017a34c */		{
+/* 0017a34c */			ref Item item = getItemFromId(this.itemView_[i].getId());
+/* 0017a3a0 */			if (item.getNarrowDownType() == this.narrowDownType_ || this.narrowDownType_ == 0)
+/* 0017a3f2 */			{
+/* 0017a3f2 */				this.itemView_[i].fadeIn(true, Math.Min(5, index) * 40);
+/* 0017a436 */				++index;
+/* 0017a446 */			}
+/* 0017a44c */			else
+/* 0017a44c */			{
+/* 0017a44c */				this.itemView_[i].fadeIn(false, 0);
+/* 0017a474 */			}
+/* 0017a474 */		}
+/* 0017a486 */	}
+/* 0017a48c */	else
+/* 0017a48c */	{
+/* 0017a48c */		int i;
+/* 0017a49e */		for (i = 0; i < this.itemView_.Numof(); ++i)
+/* 0017a4ee */		{
+/* 0017a4ee */			this.itemView_[i].fadeIn(false, 0);
+/* 0017a516 */		}
+/* 0017a51c */	}
+/* 0017a51c */}
+
+int ItemListView::getItemViewYPos(int index)
+/* 0017a524 */{
+/* 0017a524 */	int totalHeight = 660 + 40;
+/* 0017a53e */	int top = (768 - totalHeight) / 2;
+/* 0017a564 */	return top + index * 142;
+/* 0017a584 */}
+
+string ItemListView::getId(int index)
+/* 0017a592 */{
+/* 0017a592 */	if (0 <= index && index < this.itemView_.Numof())
+/* 0017a5e4 */	{
+/* 0017a5e4 */		return this.itemView_[index].getId();
+/* 0017a602 */	}
+/* 0017a602 */	return "";
+/* 0017a60a */}
+
+int ItemListView::getCount()
+/* 0017a618 */{
+/* 0017a618 */	return this.itemView_.Numof();
+/* 0017a62a */}
+

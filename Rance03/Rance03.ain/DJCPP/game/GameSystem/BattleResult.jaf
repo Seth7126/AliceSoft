@@ -1,0 +1,215 @@
+void BattleResult::addExpBonus(string key, int value)
+/* 001cd23e */{
+/* 001cd23e */	if (g_battleCalcMode)
+/* 001cd24e */	{
+/* 001cd24e */		return;
+/* 001cd250 */	}
+/* 001cd250 */	if (this.isExistExpBonus(key))
+/* 001cd268 */	{
+/* 001cd268 */		return;
+/* 001cd26a */	}
+/* 001cd26a */	BattleBonus b;
+/* 001cd27a */	b.init(key, value);
+/* 001cd29e */	this.expBonus_.PushBack(b);
+/* 001cd2b6 */}
+
+bool BattleResult::isExistExpBonus(string key)
+/* 001cd2be */{
+/* 001cd2be */	int i;
+/* 001cd2d0 */	for (i = 0; i < this.expBonus_.Numof(); ++i)
+/* 001cd320 */	{
+/* 001cd320 */		if (this.expBonus_[i].getName() == key)
+/* 001cd34e */		{
+/* 001cd34e */			return true;
+/* 001cd356 */		}
+/* 001cd356 */	}
+/* 001cd35c */	return false;
+/* 001cd364 */}
+
+bool BattleResult::isExistGoldBonus(string key)
+/* 001cd372 */{
+/* 001cd372 */	int i;
+/* 001cd384 */	for (i = 0; i < this.goldBonus_.Numof(); ++i)
+/* 001cd3d4 */	{
+/* 001cd3d4 */		if (this.goldBonus_[i].getName() == key)
+/* 001cd402 */		{
+/* 001cd402 */			return true;
+/* 001cd40a */		}
+/* 001cd40a */	}
+/* 001cd410 */	return false;
+/* 001cd418 */}
+
+void BattleResult::addGoldBonus(string key, int value)
+/* 001cd426 */{
+/* 001cd426 */	if (g_battleCalcMode)
+/* 001cd436 */	{
+/* 001cd436 */		return;
+/* 001cd438 */	}
+/* 001cd438 */	if (this.isExistGoldBonus(key))
+/* 001cd450 */	{
+/* 001cd450 */		return;
+/* 001cd452 */	}
+/* 001cd452 */	BattleBonus b;
+/* 001cd462 */	b.init(key, value);
+/* 001cd486 */	this.goldBonus_.PushBack(b);
+/* 001cd49e */}
+
+void BattleResult::setInfo(BattleInfomation info)
+/* 001cd4a6 */{
+/* 001cd4a6 */	this.itemId_ = info.getItemId();
+/* 001cd4c4 */	this.itemProbability_ = info.getItemProbability();
+/* 001cd4e0 */	this.info_ = info;
+/* 001cd502 */}
+
+bool BattleResult::isGetItemByLot()
+/* 001cd50a */{
+/* 001cd50a */	return RAND(100) <= this.itemProbability_;
+/* 001cd526 */}
+
+int BattleResult::getExp()
+/* 001cd534 */{
+/* 001cd534 */	return this.info_.getExp();
+/* 001cd546 */}
+
+int BattleResult::getGold()
+/* 001cd554 */{
+/* 001cd554 */	return this.info_.getGold();
+/* 001cd566 */}
+
+string BattleResult::getItemId()
+/* 001cd574 */{
+/* 001cd574 */	return this.itemId_;
+/* 001cd580 */}
+
+void BattleResult::getExpBonus(ref array@BattleBonus result)
+/* 001cd58e */{
+/* 001cd58e */	result.Free();
+/* 001cd598 */	result.Alloc(this.expBonus_.Numof());
+/* 001cd5b8 */	result.Copy(0, this.expBonus_, 0, this.expBonus_.Numof());
+/* 001cd5ea */}
+
+void BattleResult::getGoldBonus(ref array@BattleBonus result)
+/* 001cd5f2 */{
+/* 001cd5f2 */	result.Free();
+/* 001cd5fc */	result.Alloc(this.goldBonus_.Numof());
+/* 001cd61c */	result.Copy(0, this.goldBonus_, 0, this.goldBonus_.Numof());
+/* 001cd64e */}
+
+void BattleResult::reset()
+/* 001cd656 */{
+/* 001cd656 */	this.info_.reset();
+/* 001cd666 */	this.battleEndEvent_ = "";
+/* 001cd67a */	this.itemId_ = "";
+/* 001cd68e */	this.itemProbability_ = 0;
+/* 001cd6a0 */	this.expBonus_.Free();
+/* 001cd6aa */	this.goldBonus_.Free();
+/* 001cd6b4 */	this.playerId_ = "";
+/* 001cd6c8 */	this.resultMessage_ = "";
+/* 001cd6dc */	this.battleEndMessage_.Free();
+/* 001cd6e6 */}
+
+int BattleResult::getExpCountedBonus()
+/* 001cd6ee */{
+/* 001cd6ee */	return this.info_.getExp() * this.getBonusRatio(this.expBonus_);
+/* 001cd71c */}
+
+int BattleResult::getGoldCountedBonus()
+/* 001cd72a */{
+/* 001cd72a */	return this.info_.getGold() * this.getBonusRatio(this.goldBonus_);
+/* 001cd758 */}
+
+float BattleResult::getBonusRatio(ref array@BattleBonus b)
+/* 001cd766 */{
+/* 001cd766 */	int per = this.getTotalPer(b);
+/* 001cd784 */	return (per + 100) / 100.0;
+/* 001cd7a2 */}
+
+int BattleResult::getExpBonusTotalPer()
+/* 001cd7b0 */{
+/* 001cd7b0 */	return this.getTotalPer(this.expBonus_);
+/* 001cd7c4 */}
+
+int BattleResult::getGoldBonusTotalPer()
+/* 001cd7d2 */{
+/* 001cd7d2 */	return this.getTotalPer(this.goldBonus_);
+/* 001cd7e6 */}
+
+int BattleResult::getTotalPer(ref array@BattleBonus b)
+/* 001cd7f4 */{
+/* 001cd7f4 */	int per;
+/* 001cd806 */	int i;
+/* 001cd818 */	for (i = 0; i < b.Numof(); ++i)
+/* 001cd868 */	{
+/* 001cd868 */		per += b[i].getValue();
+/* 001cd890 */	}
+/* 001cd896 */	return per;
+/* 001cd8a2 */}
+
+void BattleResult::countDownItemProbability()
+/* 001cd8b0 */{
+/* 001cd8b0 */	DG_GetItemProbabilityCallback fn;
+/* 001cd8bc */	fn = EX_String("アイテム取得確率減算関数", "");
+/* 001cd8ea */	if (fn.Numof() == 0)
+/* 001cd904 */	{
+/* 001cd904 */		pass("アイテム取得確率減算関数がありません");
+/* 001cd910 */		fn = "testItemProbability";
+/* 001cd932 */	}
+/* 001cd932 */	this.itemProbability_ = fn(this.itemProbability_);
+/* 001cd968 */}
+
+int testItemProbability(int val)
+/* 001cd970 */{
+/* 001cd970 */	return val * 0.7;
+/* 001cd988 */}
+
+int BattleResult::getItemProbability()
+/* 001cd99c */{
+/* 001cd99c */	return this.itemProbability_;
+/* 001cd9a8 */}
+
+void BattleResult::setFinalAttacker(string playerId)
+/* 001cd9b6 */{
+/* 001cd9b6 */	this.playerId_ = playerId;
+/* 001cd9ce */}
+
+string BattleResult::getFinalAttacker()
+/* 001cd9d6 */{
+/* 001cd9d6 */	return this.playerId_;
+/* 001cd9e2 */}
+
+void BattleResult::setResultMessage(string msg)
+/* 001cd9f0 */{
+/* 001cd9f0 */	this.resultMessage_ = msg;
+/* 001cda08 */}
+
+string BattleResult::getResultMessage()
+/* 001cda10 */{
+/* 001cda10 */	return this.resultMessage_;
+/* 001cda1c */}
+
+BattleInfomation BattleResult::getBattleInfomation()
+/* 001cda2a */{
+/* 001cda2a */	return this.info_;
+/* 001cda3a */}
+
+void BattleResult::addBattleEndMessage(string msg)
+/* 001cda48 */{
+/* 001cda48 */	this.battleEndMessage_.PushBack(msg);
+/* 001cda5c */}
+
+void BattleResult::getBattleEndMessage(ref array@string msg)
+/* 001cda64 */{
+/* 001cda64 */	msg.Alloc(this.battleEndMessage_.Numof());
+/* 001cda84 */	msg.Copy(0, this.battleEndMessage_, 0, this.battleEndMessage_.Numof());
+/* 001cdab6 */}
+
+void BattleResult::setBattleEndEvent(string eventName)
+/* 001cdabe */{
+/* 001cdabe */	this.battleEndEvent_ = eventName;
+/* 001cdad6 */}
+
+string BattleResult::getBattleEndEvent()
+/* 001cdade */{
+/* 001cdade */	return this.battleEndEvent_;
+/* 001cdaea */}
+

@@ -1,0 +1,101 @@
+CAEEditTextDialog::CAEEditTextDialog()
+/* 00052292 */{
+/* 0005229c */}
+
+string CAEEditTextDialog::Show(int ID, int PosX, int PosY, string Text, DG_ChangeTextHandler dgChangeText)
+/* 000522a2 */{
+/* 000522a2 */	AFL_Parts_AddLayer(-1);
+/* 000522b0 */	this.m_dgChangeTextEvent = dgChangeText;
+/* 000522ca */	this.m_ParentID = ID;
+/* 000522e0 */	int LayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 000522f2 */	Ｐ＿レイアウトボックス＿パディング設定(LayoutBox, 6, 6, 6, 6);
+/* 0005231a */	Ｐ＿レイアウトボックス＿配置設定(LayoutBox, 3);
+/* 00052330 */	this.m_MTextBox = PARTS_GetFreeSystemPartsNumber();
+/* 00052342 */	Ｐ＿マルチラインテキストボックス＿サイズ設定(this.m_MTextBox, 512, 512);
+/* 0005235e */	Ｐ＿マルチラインテキストボックス＿最大文字数設定(this.m_MTextBox, 2147483647);
+/* 00052374 */	Ｐ＿マルチラインテキストボックス＿テキスト設定(this.m_MTextBox, Text);
+/* 0005238e */	Ｐ＿レイアウトボックス＿追加(LayoutBox, this.m_MTextBox);
+/* 000523a8 */	AFL_Parts_AddChangedEvent(this.m_MTextBox, this.ChangeTextEvent);
+/* 000523c2 */	int ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 000523d4 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(ButtonLayout, 2);
+/* 000523ea */	Ｐ＿レイアウトボックス＿パディング設定(ButtonLayout, 3, 3, 3, 3);
+/* 00052412 */	Ｐ＿レイアウトボックス＿追加(LayoutBox, ButtonLayout);
+/* 0005242c */	int OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 0005243e */	Ｐ＿ボタン＿テキスト設定(OKButton, "決定");
+/* 00052454 */	Ｐ＿ボタン＿サイズ設定(OKButton, 65, 22);
+/* 00052470 */	Ｐ＿マージン設定(OKButton, 0, 0, 3, 0);
+/* 00052498 */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, OKButton);
+/* 000524b2 */	AFL_Parts_AddMouseLClickEvent(OKButton, this.ClickOKButtonEvent);
+/* 000524cc */	int CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 000524de */	Ｐ＿ボタン＿テキスト設定(CancelButton, "キャンセル");
+/* 000524f4 */	Ｐ＿ボタン＿サイズ設定(CancelButton, 100, 22);
+/* 00052510 */	Ｐ＿マージン設定(CancelButton, 0, 0, 3, 0);
+/* 00052538 */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, CancelButton);
+/* 00052552 */	AFL_Parts_AddMouseLClickEvent(CancelButton, this.ClickCancelButtonEvent);
+/* 0005256c */	int Width = AFL_Parts_GetWidth(LayoutBox, 1);
+/* 0005258e */	int Height = AFL_Parts_GetHeight(LayoutBox, 1);
+/* 000525b0 */	int BG = PARTS_GetFreeSystemPartsNumber();
+/* 000525c2 */	Ｐ＿構築手順＿ピクセル作成(BG, Width, Height, 1);
+/* 000525ec */	Ｐ＿構築手順＿色塗り(BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 0005263a */	Ｐ＿構築ビルド(BG, 1);
+/* 00052650 */	Ｐ＿ドラッグ可能設定(BG, true);
+/* 00052666 */	Ｐ＿親設定(LayoutBox, BG);
+/* 00052680 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 000526c2 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 00052704 */	Ｐ＿座標設定(BG, PosX, PosY);
+/* 0005272c */	AFL_Parts_AddDragEndEvent(BG, this.DragEndEvent);
+/* 00052746 */	this.m_OK = false;
+/* 00052758 */	this.m_Cancel = false;
+/* 0005276a */	Ｐ＿フォーカス設定(this.m_MTextBox);
+/* 0005277a */	PARTS_BeginInput();
+/* 00052780 */	for (; ; )
+/* 00052780 */	{
+/* 00052780 */		AFL_View_Update(true);
+/* 0005278c */		if (this.m_OK)
+/* 0005279c */		{
+/* 0005279c */			break;
+/* 000527a2 */		}
+/* 000527a2 */		if (this.m_Cancel)
+/* 000527b2 */		{
+/* 000527b2 */			dgChangeText(ID, Text);
+/* 000527e6 */			break;
+/* 000527ec */		}
+/* 000527ec */	}
+/* 000527f2 */	string Result = this.m_Cancel ? Text : Ｐ＿マルチラインテキストボックス＿テキスト取得(this.m_MTextBox);
+/* 00052830 */	PARTS_EndInput();
+/* 00052836 */	PARTS_ReleaseWithInit(LayoutBox);
+/* 00052844 */	PARTS_ReleaseWithInit(this.m_MTextBox);
+/* 00052852 */	PARTS_ReleaseWithInit(CancelButton);
+/* 00052860 */	PARTS_ReleaseWithInit(OKButton);
+/* 0005286e */	PARTS_ReleaseWithInit(ButtonLayout);
+/* 0005287c */	PARTS_ReleaseWithInit(BG);
+/* 0005288a */	AFL_Parts_EraseLayer(-1);
+/* 00052896 */	return Result;
+/* 000528a2 */}
+
+void CAEEditTextDialog::ChangeTextEvent(int ID)
+/* 000528b0 */{
+/* 000528b0 */	this.m_dgChangeTextEvent(this.m_ParentID, Ｐ＿マルチラインテキストボックス＿テキスト取得(this.m_MTextBox));
+/* 000528ea */}
+
+void CAEEditTextDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 000528f2 */{
+/* 000528f2 */	this.m_OK = true;
+/* 00052904 */}
+
+void CAEEditTextDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 0005290c */{
+/* 0005290c */	this.m_Cancel = true;
+/* 0005291e */}
+
+void CAEEditTextDialog::DragEndEvent(int ID)
+/* 00052926 */{
+/* 00052926 */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 00052944 */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 00052962 */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 00052984 */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 000529a6 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 000529e8 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 00052a2a */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 00052a52 */}
+

@@ -1,0 +1,292 @@
+MonsterView::MonsterView()
+/* 0019c0c6 */{
+/* 0019c0ce */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019c0f4 */	this.isDeadMotionFinish_ = false;
+/* 0019c106 */}
+
+bool MonsterView::isShownName()
+/* 0019c10e */{
+/* 0019c10e */	return this.isShownName_;
+/* 0019c11a */}
+
+void MonsterView::init(ref MonsterInstance instance, string battleBackGroundId, int turn)
+/* 0019c128 */{
+/* 0019c128 */	this.isShownName_ = false;
+/* 0019c13a */	this.isChanged_ = false;
+/* 0019c14c */	this.turn_ = turn;
+/* 0019c162 */	this.battleBackGroundId_ = battleBackGroundId;
+/* 0019c17a */	this.instance_ <- instance;
+/* 0019c19a */	this.monster_ <- getMonsterFromId(this.instance_.getId());
+/* 0019c1dc */	this.initViewObject();
+/* 0019c1e4 */}
+
+void MonsterView::resetPosition()
+/* 0019c1ec */{
+/* 0019c1ec */	this.onChangePosition();
+/* 0019c1f4 */}
+
+void MonsterView::initAsChange(ref MonsterInstance instance, string battleBackGroundId, int turn)
+/* 0019c1fc */{
+/* 0019c1fc */	this.init(instance, battleBackGroundId, turn);
+/* 0019c222 */	this.isChanged_ = true;
+/* 0019c234 */}
+
+void MonsterView::getIn()
+/* 0019c23c */{
+/* 0019c23c */	if (this.isChanged_)
+/* 0019c24c */	{
+/* 0019c24c */		g_sysSound.play(3, "効果音／モンスター変化");
+/* 0019c268 */		this.stand_.changeIn();
+/* 0019c278 */		this.infos_.init(this.instance_);
+/* 0019c292 */		this.infos_.resetAttackView(this.instance_.getAttack(this.turn_));
+/* 0019c2bc */		this.infos_.fadeIn(true, NULL);
+/* 0019c2d4 */	}
+/* 0019c2da */	else
+/* 0019c2da */	{
+/* 0019c2da */		this.stand_.movePosition();
+/* 0019c2ea */	}
+/* 0019c2ea */}
+
+void MonsterView::initViewObject()
+/* 0019c2f2 */{
+/* 0019c2f2 */	this.stand_.init(this.instance_, this.battleBackGroundId_);
+/* 0019c316 */	this.initNameParts();
+/* 0019c31e */	this.initMonsterInfoView();
+/* 0019c326 */}
+
+void MonsterView::initMonsterInfoView()
+/* 0019c32e */{
+/* 0019c32e */	this.infos_.init(this.instance_);
+/* 0019c348 */	this.updateInfoView();
+/* 0019c350 */}
+
+void MonsterView::setTurn(int val)
+/* 0019c358 */{
+/* 0019c358 */	this.turn_ = val;
+/* 0019c36e */	this.updateInfoView();
+/* 0019c376 */}
+
+void MonsterView::updateInfoView()
+/* 0019c37e */{
+/* 0019c37e */	this.infos_.resetAttackView(this.instance_.getAttack(this.turn_));
+/* 0019c3a8 */}
+
+bool MonsterView::isFixedPosition()
+/* 0019c3b0 */{
+/* 0019c3b0 */	return this.monster_.isFixedPosition();
+/* 0019c3c2 */}
+
+void MonsterView::initNameParts()
+/* 0019c3d0 */{
+/* 0019c3d0 */	int x;
+/* 0019c3e2 */	int y;
+/* 0019c3f4 */	if (this.monster_.isFixedPosition())
+/* 0019c40a */	{
+/* 0019c40a */		this.monster_.getNamePosition(x, y);
+/* 0019c42a */	}
+/* 0019c430 */	else
+/* 0019c430 */	{
+/* 0019c430 */		getMonsterInfomationPosition(x, y, this.instance_.getPosition());
+/* 0019c456 */		y -= 50;
+/* 0019c468 */	}
+/* 0019c468 */	this.partsName_.initAsText(this.monster_.getName(), 48, true, 256, 255, 255, 255);
+/* 0019c4ac */	this.partsName_.setZ(2800.0);
+/* 0019c4c2 */	this.partsName_.setShow(false);
+/* 0019c4d8 */	this.partsName_.setPos(x, y);
+/* 0019c500 */	this.partsName_.setOrigin(5);
+/* 0019c516 */}
+
+void MonsterView::update()
+/* 0019c51e */{
+/* 0019c520 */}
+
+void MonsterView::setFocus(bool val)
+/* 0019c526 */{
+/* 0019c526 */	this.stand_.setFocus(val);
+/* 0019c540 */}
+
+void MonsterView::onChangePosition()
+/* 0019c548 */{
+/* 0019c548 */	this.stand_.movePosition();
+/* 0019c558 */	if (this.infos_.isNotShow())
+/* 0019c56e */	{
+/* 0019c56e */		this.infos_.fadeIn(true, NULL);
+/* 0019c586 */	}
+/* 0019c58c */	else
+/* 0019c58c */	{
+/* 0019c58c */		this.infos_.movePosition();
+/* 0019c59c */	}
+/* 0019c59c */}
+
+void MonsterView::setDamage(int val, string effectName, bool isDamage, int type, int delay, DG_GeneralCallback onFinishShowDamageCallback)
+/* 0019c5a4 */{
+/* 0019c5a4 */	this.onFinishShowDamageCallback_ = onFinishShowDamageCallback;
+/* 0019c5be */	this.initDamage(val, effectName, isDamage, type);
+/* 0019c5ee */	this.runDamage(isDamage, delay);
+/* 0019c60a */	this.infos_.changeValue();
+/* 0019c61a */}
+
+void MonsterView::runDamage(bool isDamage, int delay)
+/* 0019c622 */{
+/* 0019c622 */	if (this.instance_.getHp() > 0)
+/* 0019c640 */	{
+/* 0019c640 */		this.cbDamageTimer_.setTimer(800, this.onFinishShowDamage);
+/* 0019c660 */		this.damage_.run(delay, NULL);
+/* 0019c67c */		if (isDamage)
+/* 0019c68c */		{
+/* 0019c68c */			this.stand_.showDamage(NULL);
+/* 0019c69e */		}
+/* 0019c69e */	}
+/* 0019c6a4 */	else if (this.monster_.getDeadMotionType() == 2)
+/* 0019c6c2 */	{
+/* 0019c6c2 */		this.damage_.run(delay, NULL);
+/* 0019c6de */		this.stand_.showDamage(this.onFinishShowDamage);
+/* 0019c6f8 */	}
+/* 0019c6fe */	else
+/* 0019c6fe */	{
+/* 0019c6fe */		this.cbDamageTimer_.setTimer(900, this.onFinishShowDamage);
+/* 0019c71e */		this.damage_.run(delay, NULL);
+/* 0019c73a */		this.stand_.showDamage(this.onFinishDeadMotion);
+/* 0019c754 */	}
+/* 0019c754 */}
+
+void MonsterView::initDamage(int val, string effectName, bool isDamage, int type)
+/* 0019c75c */{
+/* 0019c75c */	bool isCritical = false;
+/* 0019c76e */	bool isDefence = false;
+/* 0019c780 */	bool isMessage = false;
+/* 0019c792 */	int resistType;
+/* 0019c7a4 */	int x;
+/* 0019c7b6 */	int y;
+/* 0019c7c8 */	this.getDamagePosition(x, y);
+/* 0019c7e0 */	this.getShowDamageTypeFromTargetInfoType(type, isCritical, isDefence, isMessage, resistType);
+/* 0019c812 */	this.damage_.init(val, effectName, isDamage, isCritical, isDefence, resistType);
+/* 0019c85e */	this.damage_.setPos(x, y, 0, 0);
+/* 0019c88e */	this.damage_.setEffectZ(this.stand_.getBaseZ() + 10);
+/* 0019c8b6 */}
+
+void MonsterView::onFinishDeadMotion()
+/* 0019c8be */{
+/* 0019c8be */	this.isDeadMotionFinish_ = true;
+/* 0019c8d0 */}
+
+void MonsterView::onFinishShowDamage()
+/* 0019c8d8 */{
+/* 0019c8d8 */	this.onFinishShowDamageCallback_();
+/* 0019c8f8 */}
+
+void MonsterView::showAttack()
+/* 0019c900 */{
+/* 0019c900 */	this.stand_.showAttack();
+/* 0019c910 */}
+
+void MonsterView::setTargetMark(bool val)
+/* 0019c918 */{
+/* 0019c918 */	this.infos_.showTargetMark(val);
+/* 0019c932 */}
+
+void MonsterView::showEffect(string flatName)
+/* 0019c93a */{
+/* 0019c93a */	int x;
+/* 0019c94c */	int y;
+/* 0019c95e */	this.getDamagePosition(x, y);
+/* 0019c976 */	this.effect_.init(flatName);
+/* 0019c990 */	this.effect_.setPos(x, y);
+/* 0019c9b4 */	this.effect_.setZ(this.stand_.getBaseZ() + 10);
+/* 0019c9dc */	this.effect_.run(3);
+/* 0019c9f2 */}
+
+void getMonsterInfomationPosition(ref int x, ref int y, int position)
+/* 0019c9fa */{
+/* 0019c9fa */	switch (position)
+/* 0019ca10 */	{
+/* 0019ca10 */	case 0:
+/* 0019ca10 */		x = 664;
+/* 0019ca24 */		y = 342;
+/* 0019ca38 */		break;
+/* 0019ca3e */	case 1:
+/* 0019ca3e */		x = 754;
+/* 0019ca52 */		y = 282;
+/* 0019ca66 */		break;
+/* 0019ca6c */	case 2:
+/* 0019ca6c */		x = 844;
+/* 0019ca80 */		y = 222;
+/* 0019ca94 */		break;
+/* 0019ca9a */	default:
+/* 0019ca9a */		x = 934;
+/* 0019caae */		y = 162;
+/* 0019cac2 */		break;
+/* 0019cac8 */	}
+/* 0019cac8 */}
+
+void MonsterView::getDamagePosition(ref int x, ref int y)
+/* 0019cad6 */{
+/* 0019cad6 */	this.stand_.getCenter(x, y);
+/* 0019cafa */}
+
+bool MonsterView::isChanged()
+/* 0019cb02 */{
+/* 0019cb02 */	return this.isChanged_;
+/* 0019cb0e */}
+
+void MonsterView::showName(DG_GeneralCallback onFinishShowNameCallback)
+/* 0019cb1c */{
+/* 0019cb1c */	array@PartsMotion m[3];
+/* 0019cb32 */	m[0].setScaling(300, 100, 1);
+/* 0019cb5c */	m[0].setAlpha(0, 255, 0);
+/* 0019cb86 */	m[0].setTime(150);
+/* 0019cba4 */	m[1].setTime(400);
+/* 0019cbc2 */	m[2].setTime(150);
+/* 0019cbe0 */	m[2].setAlpha(255, 0, 0);
+/* 0019cc0a */	this.cbTimer_.setTimer(550, onFinishShowNameCallback);
+/* 0019cc2c */	this.isShownName_ = true;
+/* 0019cc3e */	this.partsName_.setShow(true);
+/* 0019cc54 */	this.partsName_.runMotionArray(m, NULL);
+/* 0019cc72 */}
+
+void MonsterView::onFinishShowName()
+/* 0019cc7a */{
+/* 0019cc7a */	this.onFinishShowNameCallback_();
+/* 0019cc9a */	this.partsName_.runMotion(getStandardMotion(1), NULL);
+/* 0019ccb8 */}
+
+void MonsterView::getShowDamageTypeFromTargetInfoType(int type, ref bool isCritical, ref bool isDefence, ref bool isMessage, ref int resistType)
+/* 0019ccc0 */{
+/* 0019ccc0 */	isCritical = type % 10;
+/* 0019cce2 */	isDefence = (type / 1000) % 10;
+/* 0019cd0c */	isMessage = (type / 10000) % 10;
+/* 0019cd36 */	if ((type / 100) % 10 != 0)
+/* 0019cd5e */	{
+/* 0019cd5e */		resistType = 2;
+/* 0019cd72 */	}
+/* 0019cd78 */	else if ((type / 10) % 10 != 0)
+/* 0019cda0 */	{
+/* 0019cda0 */		resistType = 1;
+/* 0019cdb4 */	}
+/* 0019cdba */	else
+/* 0019cdba */	{
+/* 0019cdba */		resistType = 0;
+/* 0019cdce */	}
+/* 0019cdce */}
+
+void MonsterView::resetChanged()
+/* 0019cdd6 */{
+/* 0019cdd6 */	this.isChanged_ = false;
+/* 0019cde8 */}
+
+void MonsterView::fadeOut()
+/* 0019cdf0 */{
+/* 0019cdf0 */	this.stand_.fadeOut();
+/* 0019ce00 */	this.infos_.fadeIn(false, NULL);
+/* 0019ce18 */}
+
+bool MonsterView::isDeadMotionFinish()
+/* 0019ce20 */{
+/* 0019ce20 */	return this.isDeadMotionFinish_;
+/* 0019ce2c */}
+
+void MonsterView::updateBuffView()
+/* 0019ce3a */{
+/* 0019ce3a */	this.infos_.updateBuffView();
+/* 0019ce4a */}
+

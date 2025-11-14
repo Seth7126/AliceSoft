@@ -1,0 +1,232 @@
+PlayerViewGroup::PlayerViewGroup()
+/* 0019fad6 */{
+/* 0019fade */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019fb04 */}
+
+void PlayerViewGroup::init()
+/* 0019fb0c */{
+/* 0019fb0c */	array@string pId;
+/* 0019fb16 */	g_party.getPlayerIdList(pId);
+/* 0019fb30 */	this.view_.Alloc(pId.Numof());
+/* 0019fb50 */	int i;
+/* 0019fb62 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019fbb2 */	{
+/* 0019fbb2 */		this.view_[i].val <- new PlayerView;
+/* 0019fbfa */		this.view_[i].val.init(pId[i]);
+/* 0019fc34 */	}
+/* 0019fc40 */}
+
+void PlayerViewGroup::update()
+/* 0019fc48 */{
+/* 0019fc4a */}
+
+void PlayerViewGroup::joinDeadMotion()
+/* 0019fc50 */{
+/* 0019fc50 */	while (true)
+/* 0019fc5c */	{
+/* 0019fc5c */		g_gameObjectManager.update();
+/* 0019fc6c */		g_frameManager.updateFrame();
+/* 0019fc7c */		bool isMotion = false;
+/* 0019fc8e */		int i;
+/* 0019fca0 */		for (i = 0; i < this.playerViewDead_.Numof(); ++i)
+/* 0019fcf0 */		{
+/* 0019fcf0 */			isMotion = isMotion || this.playerViewDead_[i].val.isMotion();
+/* 0019fd4a */		}
+/* 0019fd50 */		if (!isMotion)
+/* 0019fd62 */		{
+/* 0019fd62 */			break;
+/* 0019fd68 */		}
+/* 0019fd68 */	}
+/* 0019fd6e */	this.playerViewDead_.Free();
+/* 0019fd78 */}
+
+void PlayerViewGroup::setFocus(string id)
+/* 0019fd80 */{
+/* 0019fd80 */	int i;
+/* 0019fd92 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019fde2 */	{
+/* 0019fde2 */		this.view_[i].val.setFocus(this.view_[i].val.getId() == id);
+/* 0019fe38 */	}
+/* 0019fe3e */}
+
+void PlayerViewGroup::fadeIn(bool val)
+/* 0019fe46 */{
+/* 0019fe46 */	int i;
+/* 0019fe58 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019fea8 */	{
+/* 0019fea8 */		this.view_[i].val.fadeIn(val);
+/* 0019fed6 */	}
+/* 0019fedc */}
+
+void PlayerViewGroup::updateHp()
+/* 0019fee4 */{
+/* 0019fee4 */	int i;
+/* 0019fef6 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019ff46 */	{
+/* 0019ff46 */		this.view_[i].val.updateHp();
+/* 0019ff6a */	}
+/* 0019ff70 */}
+
+int PlayerViewGroup::getPlayerViewIndexFromId(string playerId)
+/* 0019ff78 */{
+/* 0019ff78 */	int i;
+/* 0019ff8a */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019ffda */	{
+/* 0019ffda */		if (this.view_[i].val.getId() == playerId)
+/* 001a0010 */		{
+/* 001a0010 */			return i;
+/* 001a001c */		}
+/* 001a001c */	}
+/* 001a0022 */	return -1;
+/* 001a002a */}
+
+void PlayerViewGroup::showPopupMessage(string id, string msg, DG_GeneralCallback cb)
+/* 001a0038 */{
+/* 001a0038 */	int index = this.getPlayerViewIndexFromId(id);
+/* 001a0056 */	this.view_[index].val.popupMessage(msg, cb);
+/* 001a0090 */}
+
+bool PlayerViewGroup::eraseDead()
+/* 001a0098 */{
+/* 001a0098 */	bool isErase = false;
+/* 001a00aa */	int i;
+/* 001a00bc */	while (i < this.view_.Numof())
+/* 001a00de */	{
+/* 001a00de */		string id = this.view_[i].val.getId();
+/* 001a0110 */		if (getPlayerFromId(id).getHp() == 0)
+/* 001a014a */		{
+/* 001a014a */			isErase = true;
+/* 001a015c */			this.playerViewDead_.PushBack(this.view_[i]);
+/* 001a0180 */			this.view_.Erase(i);
+/* 001a0196 */		}
+/* 001a019c */		else
+/* 001a019c */		{
+/* 001a019c */			++i;
+/* 001a01ac */		}
+/* 001a01ac */	}
+/* 001a01b8 */	for (i = 0; i < this.playerViewDead_.Numof(); ++i)
+/* 001a0208 */	{
+/* 001a0208 */		this.playerViewDead_[i].val.showDeadMotion();
+/* 001a022c */	}
+/* 001a0232 */	return isErase;
+/* 001a023e */}
+
+void PlayerViewGroup::onFinishEraseDead()
+/* 001a024c */{
+/* 001a024c */	this.playerViewDead_.Free();
+/* 001a0256 */	this.onFinishEraseDead_();
+/* 001a0276 */	this.onFinishEraseDead_.Clear();
+/* 001a0282 */}
+
+void PlayerViewGroup::resetPos()
+/* 001a028a */{
+/* 001a028a */	int i;
+/* 001a029c */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 001a02ec */	{
+/* 001a02ec */		this.view_[i].val.resetPos();
+/* 001a0310 */	}
+/* 001a0316 */}
+
+void PlayerViewGroup::addHelper()
+/* 001a031e */{
+/* 001a031e */	array@string pIds;
+/* 001a0328 */	g_party.getPlayerIdList(pIds);
+/* 001a0342 */	int i;
+/* 001a0354 */	for (i = 0; i < pIds.Numof(); ++i)
+/* 001a03a4 */	{
+/* 001a03a4 */		if (this.getPlayerViewIndexFromId(pIds[i]) == -1)
+/* 001a03d0 */		{
+/* 001a03d0 */			this.view_.Realloc(this.view_.Numof() + 1);
+/* 001a03f8 */			int index = this.view_.Numof() - 1;
+/* 001a041c */			this.view_[index].val <- new PlayerView;
+/* 001a0464 */			this.view_[index].val.init(pIds[i]);
+/* 001a049e */			this.view_[index].val.fadeIn(true);
+/* 001a04c8 */		}
+/* 001a04c8 */	}
+/* 001a04d4 */}
+
+void PlayerViewGroup::showDamage(ref array@TargetInfomation targets, string ef, DG_GeneralCallback cb)
+/* 001a04dc */{
+/* 001a04dc */	this.onFinishShowDamage_ = cb;
+/* 001a04f6 */	this.updateBuffView();
+/* 001a04fe */	int i;
+/* 001a0510 */	for (i = 0; i < targets.Numof(); ++i)
+/* 001a0560 */	{
+/* 001a0560 */		int index = this.getPlayerViewIndexFromId(targets[i].getTargetId());
+/* 001a0590 */		int dmg = targets[i].getDamage();
+/* 001a05b8 */		int delay = i * 20;
+/* 001a05d6 */		if (i == targets.Numof() - 1)
+/* 001a0600 */		{
+/* 001a0600 */			this.view_[index].val.setDamage(dmg, ef, true, delay, this.onFinishShowDamage);
+/* 001a0652 */		}
+/* 001a0658 */		else
+/* 001a0658 */		{
+/* 001a0658 */			this.view_[index].val.setDamage(dmg, ef, true, delay, NULL);
+/* 001a06a2 */		}
+/* 001a06a2 */	}
+/* 001a06a8 */}
+
+void PlayerViewGroup::onFinishShowDamage()
+/* 001a06b0 */{
+/* 001a06b0 */	this.eraseDead();
+/* 001a06ba */	this.onFinishShowDamage_();
+/* 001a06da */}
+
+void PlayerViewGroup::showHeal(ref array@TargetInfomation targets, DG_GeneralCallback cb)
+/* 001a06e2 */{
+/* 001a06e2 */	int i;
+/* 001a06f4 */	for (i = 0; i < targets.Numof(); ++i)
+/* 001a0744 */	{
+/* 001a0744 */		int index = this.getPlayerViewIndexFromId(targets[i].getTargetId());
+/* 001a0774 */		int dmg = targets[i].getDamage();
+/* 001a079c */		string effectName = this.getEffectName(targets[0].getPlayerSkillId());
+/* 001a07ca */		if (i == 0)
+/* 001a07e2 */		{
+/* 001a07e2 */			this.view_[index].val.setDamage(dmg, effectName, false, 0, cb);
+/* 001a0832 */		}
+/* 001a0838 */		else
+/* 001a0838 */		{
+/* 001a0838 */			this.view_[index].val.setDamage(dmg, effectName, false, 0, NULL);
+/* 001a087e */		}
+/* 001a087e */	}
+/* 001a0884 */}
+
+void PlayerViewGroup::showBuffEffect(ref array@TargetInfomation targets, DG_GeneralCallback onFinish)
+/* 001a088c */{
+/* 001a088c */	this.timer_.setTimer(1000, onFinish);
+/* 001a08ae */	this.updateBuffView();
+/* 001a08b6 */	int i;
+/* 001a08c8 */	for (i = 0; i < targets.Numof(); ++i)
+/* 001a0918 */	{
+/* 001a0918 */		int index = this.getPlayerViewIndexFromId(targets[i].getTargetId());
+/* 001a0948 */		string effectName = this.getEffectName(targets[0].getPlayerSkillId());
+/* 001a0976 */		this.view_[index].val.showEffect(effectName);
+/* 001a09a4 */	}
+/* 001a09aa */}
+
+string PlayerViewGroup::getEffectName(string skillId)
+/* 001a09b2 */{
+/* 001a09b2 */	string name;
+/* 001a09c6 */	ref PlayerSkill s = getPlayerSkillFromId(skillId);
+/* 001a0a08 */	if (s.getFlatName() != "")
+/* 001a0a26 */	{
+/* 001a0a26 */		name = s.getFlatName();
+/* 001a0a44 */	}
+/* 001a0a4a */	else
+/* 001a0a4a */	{
+/* 001a0a4a */		PlayerSkillAttribute attr;
+/* 001a0a5a */		attr = getPlayerSkillAttributeFromId(s.getAttributeId());
+/* 001a0aa0 */		name = attr.getFlatName();
+/* 001a0abe */	}
+/* 001a0aca */	return "戦闘エフェクト/" + name;
+/* 001a0ade */}
+
+void PlayerViewGroup::updateBuffView()
+/* 001a0aec */{
+/* 001a0aec */	int i;
+/* 001a0afe */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 001a0b4e */	{
+/* 001a0b4e */		this.view_[i].val.updateBuffView();
+/* 001a0b72 */	}
+/* 001a0b78 */}
+

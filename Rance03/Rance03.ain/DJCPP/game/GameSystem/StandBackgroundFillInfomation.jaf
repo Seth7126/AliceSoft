@@ -1,0 +1,28 @@
+void StandBackgroundFillInfomation::init(string id, int r, int g, int b)
+/* 001e2318 */{
+/* 001e2318 */	this.id_ = id;
+/* 001e2330 */	this.r_ = r;
+/* 001e2346 */	this.g_ = g;
+/* 001e235c */	this.b_ = b;
+/* 001e2372 */}
+
+string StandBackgroundFillInfomation::getId()
+/* 001e237a */{
+/* 001e237a */	return this.id_;
+/* 001e2386 */}
+
+int StandBackgroundFillInfomation::getR()
+/* 001e2394 */{
+/* 001e2394 */	return this.r_;
+/* 001e23a0 */}
+
+int StandBackgroundFillInfomation::getG()
+/* 001e23ae */{
+/* 001e23ae */	return this.g_;
+/* 001e23ba */}
+
+int StandBackgroundFillInfomation::getB()
+/* 001e23c8 */{
+/* 001e23c8 */	return this.b_;
+/* 001e23d4 */}
+

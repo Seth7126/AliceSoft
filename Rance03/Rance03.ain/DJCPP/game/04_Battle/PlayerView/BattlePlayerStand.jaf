@@ -1,0 +1,171 @@
+BattlePlayerStand::BattlePlayerStand()
+/* 0019e204 */{
+/* 0019e20c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019e232 */}
+
+void BattlePlayerStand::init(string id)
+/* 0019e23a */{
+/* 0019e23a */	this.player_ <- getPlayerFromId(id);
+/* 0019e276 */	if (this.player_.getHp() == 0)
+/* 0019e294 */	{
+/* 0019e294 */		this.isDead_ = true;
+/* 0019e2a6 */	}
+/* 0019e2a6 */	this.initParts();
+/* 0019e2ae */}
+
+void BattlePlayerStand::update()
+/* 0019e2b6 */{
+/* 0019e2b8 */}
+
+void BattlePlayerStand::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 0019e2be */{
+/* 0019e2be */	if (this.isDead_)
+/* 0019e2ce */	{
+/* 0019e2ce */		return;
+/* 0019e2d0 */	}
+/* 0019e2d0 */	this.setPartsShow();
+/* 0019e2d8 */	if (val)
+/* 0019e2e8 */	{
+/* 0019e2e8 */		array@PartsMotion m[2];
+/* 0019e2fe */		int min;
+/* 0019e310 */		int max;
+/* 0019e322 */		g_party.getPlayerSkillIndexMinMax(min, max, this.player_.getId());
+/* 0019e352 */		m[0].setAlpha(0, 0, 0);
+/* 0019e37c */		m[0].setTime(((min + max) / 2.0) * 40.0);
+/* 0019e3c2 */		m[1].setMove(this.x_ + 135.600006, this.y_ + 2.8, this.x_, this.y_, 1);
+/* 0019e428 */		m[1].setAlpha(0, 255, 0);
+/* 0019e452 */		m[1].setTime(250);
+/* 0019e470 */		this.parent_.runMotionArray(m, onFinish);
+/* 0019e4a2 */	}
+/* 0019e4a8 */	else
+/* 0019e4a8 */	{
+/* 0019e4a8 */		this.parent_.runMotion(getStandardMotion(val ? 0 : 1), onFinish);
+/* 0019e4ec */	}
+/* 0019e4ec */}
+
+void BattlePlayerStand::initParts()
+/* 0019e4f4 */{
+/* 0019e4f4 */	this.parts_[0].init(this.player_.getBattleImageName(), 0);
+/* 0019e522 */	this.parts_[1].initAsCgPlaneImage(this.player_.getBattleImageName(), 255, 255, 128);
+/* 0019e55c */	this.parts_[1].setAlpha(128.0);
+/* 0019e57a */	this.parts_[2].initAsCgPlaneImage(this.player_.getBattleImageName(), 255, 200, 0);
+/* 0019e5b4 */	this.parts_[2].setAlpha(128.0);
+/* 0019e5d2 */	int min;
+/* 0019e5e4 */	int max;
+/* 0019e5f6 */	g_party.getPlayerSkillIndexMinMax(min, max, this.player_.getId());
+/* 0019e626 */	createPartsGroup(this.parent_, this.parts_, 2500 + ((min + max) / 2) * 5);
+/* 0019e66e */	this.setPartsPos();
+/* 0019e676 */	this.setPartsOrigin();
+/* 0019e67e */}
+
+void BattlePlayerStand::setPartsOrigin()
+/* 0019e686 */{
+/* 0019e686 */	int i;
+/* 0019e698 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019e6e8 */	{
+/* 0019e6e8 */		this.parts_[i].setOrigin(8);
+/* 0019e70a */	}
+/* 0019e710 */}
+
+void BattlePlayerStand::setPartsShow()
+/* 0019e718 */{
+/* 0019e718 */	int i;
+/* 0019e72a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019e77a */	{
+/* 0019e77a */		this.parts_[i].setShow(true);
+/* 0019e79c */	}
+/* 0019e7a2 */	this.parts_[1].setShow(this.isFocus_);
+/* 0019e7c4 */	this.parts_[2].setShow(false);
+/* 0019e7e2 */	this.parent_.setShow(true);
+/* 0019e7f8 */}
+
+void BattlePlayerStand::setPartsPos()
+/* 0019e800 */{
+/* 0019e802 */}
+
+void BattlePlayerStand::setFocus(bool val)
+/* 0019e808 */{
+/* 0019e808 */	if (this.isDead_)
+/* 0019e818 */	{
+/* 0019e818 */		return;
+/* 0019e81a */	}
+/* 0019e81a */	if (val == this.isFocus_)
+/* 0019e836 */	{
+/* 0019e836 */		return;
+/* 0019e838 */	}
+/* 0019e838 */	this.isFocus_ = val;
+/* 0019e84e */	float mv = 90.0;
+/* 0019e860 */	float tx = this.x_ / 3 + 400;
+/* 0019e888 */	float ty = 100.0;
+/* 0019e89a */	float r = Math.Atan2(ty - this.y_, tx - this.x_);
+/* 0019e8e0 */	r = (r / 3.14159) * 180.0;
+/* 0019e906 */	float mx = Math.Cos(r) * mv;
+/* 0019e932 */	float my = Math.Sin(r) * mv;
+/* 0019e95e */	PartsMotion m;
+/* 0019e96e */	if (val)
+/* 0019e97e */	{
+/* 0019e97e */		m.setMove(this.x_, this.y_, this.x_ + mx, this.y_ + my, 1);
+/* 0019e9e4 */		m.setTime(150);
+/* 0019e9fa */	}
+/* 0019ea00 */	else
+/* 0019ea00 */	{
+/* 0019ea00 */		m.setMove(this.x_ + mx, this.y_ + my, this.x_, this.y_, 0);
+/* 0019ea66 */		m.setTime(80);
+/* 0019ea7c */	}
+/* 0019ea7c */	this.parent_.setZ(val ? 2400 : 2500);
+/* 0019eab0 */	this.parent_.runMotion(m, NULL);
+/* 0019ead0 */	this.parts_[1].setShow(this.isFocus_);
+/* 0019eaf2 */}
+
+void BattlePlayerStand::showDamageMotion()
+/* 0019eafa */{
+/* 0019eafa */	if (this.isDead_)
+/* 0019eb0a */	{
+/* 0019eb0a */		return;
+/* 0019eb0c */	}
+/* 0019eb0c */	PartsMotion m;
+/* 0019eb1c */	m.setTime(600);
+/* 0019eb32 */	m.setShakeLevel(30, 10, 0);
+/* 0019eb54 */	this.parent_.runMotion(m, NULL);
+/* 0019eb74 */	PartsMotion m;
+/* 0019eb8a */	m.setTime(1200);
+/* 0019eba0 */	m.setAlpha(255, 0, 0);
+/* 0019ebc2 */	this.parts_[2].setShow(true);
+/* 0019ebe0 */	this.parts_[2].runMotion(m, NULL);
+/* 0019ec08 */	this.parts_[1].setShow(false);
+/* 0019ec2c */}
+
+void BattlePlayerStand::showDeadMotion()
+/* 0019ec34 */{
+/* 0019ec34 */	if (this.isDead_)
+/* 0019ec44 */	{
+/* 0019ec44 */		return;
+/* 0019ec46 */	}
+/* 0019ec46 */	PartsMotion m;
+/* 0019ec56 */	m.setMove(this.x_, this.y_, this.x_, this.y_ + 100, 1);
+/* 0019ec9c */	m.setAlpha(255, 0, 0);
+/* 0019ecbe */	this.parent_.runMotion(m, NULL);
+/* 0019ecde */	this.isDead_ = true;
+/* 0019ecf0 */}
+
+void BattlePlayerStand::setPos(int x, int y)
+/* 0019ecf8 */{
+/* 0019ecf8 */	this.x_ = x;
+/* 0019ed0e */	this.y_ = y;
+/* 0019ed24 */	this.parent_.setPos(this.x_, this.y_);
+/* 0019ed4c */}
+
+void BattlePlayerStand::move(int x, int y)
+/* 0019ed54 */{
+/* 0019ed54 */	PartsMotion m;
+/* 0019ed64 */	m.setMove(this.x_, this.y_, x, y, 1);
+/* 0019eda2 */	this.parent_.runMotion(m, NULL);
+/* 0019edc2 */	this.x_ = x;
+/* 0019edd8 */	this.y_ = y;
+/* 0019edee */}
+
+bool BattlePlayerStand::isMotion()
+/* 0019edf6 */{
+/* 0019edf6 */	return this.parent_.isMotion();
+/* 0019ee08 */}
+

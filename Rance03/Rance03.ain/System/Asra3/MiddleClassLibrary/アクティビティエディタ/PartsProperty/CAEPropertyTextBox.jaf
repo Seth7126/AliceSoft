@@ -1,0 +1,237 @@
+CAEPropertyTextBox::CAEPropertyTextBox()
+/* 0006427c */{
+/* 00064284 */	this.Init(0, NULL);
+/* 00064298 */}
+
+CAEPropertyTextBox::~CAEPropertyTextBox()
+/* 000642a0 */{
+/* 000642a0 */	this.Release();
+/* 000642a8 */}
+
+void CAEPropertyTextBox::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 000642b0 */{
+/* 000642b0 */	this.Release();
+/* 000642b8 */	if (Item === NULL)
+/* 000642d0 */	{
+/* 000642d0 */		return;
+/* 000642d2 */	}
+/* 000642d2 */	this.m_Item <- Item;
+/* 000642f2 */	this.m_Panel.Init(LayoutID);
+/* 0006430c */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00064326 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 00064340 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0006435a */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 00064374 */	this.m_Panel.AddChangedCheckBoxEvent(this.ChangedCheckBoxEvent);
+/* 0006438e */	int ID = this.m_Item.GetID();
+/* 000643aa */	float 太字幅;
+/* 000643bc */	float 縁取り幅;
+/* 000643ce */	int 種類;
+/* 000643e0 */	int サイズ;
+/* 000643f2 */	int 赤;
+/* 00064404 */	int 緑;
+/* 00064416 */	int 青;
+/* 00064428 */	int 縁取り赤;
+/* 0006443a */	int 縁取り緑;
+/* 0006444c */	int 縁取り青;
+/* 0006445e */	Ｐ＿テキストボックス＿フォント取得(ID, 種類, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000644b6 */	this.m_Panel.AddTextBoxItem("幅", string(AFL_Parts_GetWidth(ID, 1)), false);
+/* 00064506 */	this.m_Panel.AddTextBoxItem("高さ", string(AFL_Parts_GetHeight(ID, 1)), false);
+/* 00064556 */	this.m_Panel.AddButtonItem("フォント", "%s" % PARTS_GetFontName(種類));
+/* 000645a6 */	this.m_Panel.AddCheckBoxItem("読み取り専用", Ｐ＿テキストボックス＿読み取り専用確認(ID));
+/* 000645e8 */	this.m_Panel.AddTextBoxItem("テキスト", Ｐ＿テキストボックス＿テキスト取得(ID), true);
+/* 00064630 */	this.m_Panel.AddTextBoxItem("最大文字数", string(Ｐ＿テキストボックス＿最大文字数取得(ID)), false);
+/* 0006467a */	this.m_Panel.AddButtonItem("背景色", "%d,%d,%d" % Ｐ＿テキストボックス＿背景色赤取得(ID) % Ｐ＿テキストボックス＿背景色緑取得(ID) % Ｐ＿テキストボックス＿背景色青取得(ID));
+/* 000646fa */	this.m_Panel.AddButtonItem("読み取り専用背景色", "%d,%d,%d" % Ｐ＿テキストボックス＿読み取り専用背景色赤取得(ID) % Ｐ＿テキストボックス＿読み取り専用背景色緑取得(ID) % Ｐ＿テキストボックス＿読み取り専用背景色青取得(ID));
+/* 0006477a */	this.m_Panel.AddButtonItem("枠色", "%d,%d,%d" % Ｐ＿テキストボックス＿枠色赤取得(ID) % Ｐ＿テキストボックス＿枠色緑取得(ID) % Ｐ＿テキストボックス＿枠色青取得(ID));
+/* 000647fa */	this.m_Panel.AddButtonItem("選択色", "%d,%d,%d" % Ｐ＿テキストボックス＿選択色赤取得(ID) % Ｐ＿テキストボックス＿選択色緑取得(ID) % Ｐ＿テキストボックス＿選択色青取得(ID));
+/* 0006487a */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿テキストボックス＿ＣＧ名取得(ID), true);
+/* 000648c2 */	this.m_Panel.AddCheckBoxItem("全角入力", Ｐ＿テキストボックス＿全角入力確認(ID));
+/* 00064904 */}
+
+void CAEPropertyTextBox::Release()
+/* 0006490c */{
+/* 0006490c */	this.m_dgMouseWheelEvent.Clear();
+/* 00064918 */	this.m_dgKeyDownEvent.Clear();
+/* 00064924 */	this.m_Item <- NULL;
+/* 0006493c */	this.m_Panel.Release();
+/* 0006494c */}
+
+void CAEPropertyTextBox::KeyDownEvent(int ID, int KeyID)
+/* 00064954 */{
+/* 00064954 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00064988 */}
+
+void CAEPropertyTextBox::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00064990 */{
+/* 00064990 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 000649ce */}
+
+void CAEPropertyTextBox::ChangeTextEvent(int ID)
+/* 000649d6 */{
+/* 000649d6 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00064a26 */	if (Item === NULL)
+/* 00064a3e */	{
+/* 00064a3e */		return;
+/* 00064a40 */	}
+/* 00064a40 */	int PartsID = this.m_Item.GetID();
+/* 00064a5c */	if (Item.GetLabel() == "幅")
+/* 00064a7a */	{
+/* 00064a7a */		Ｐ＿テキストボックス＿サイズ設定(PartsID, Item.GetTextBoxInt(), AFL_Parts_GetHeight(PartsID, 1));
+/* 00064ab0 */	}
+/* 00064ab6 */	else if (Item.GetLabel() == "高さ")
+/* 00064ad4 */	{
+/* 00064ad4 */		Ｐ＿テキストボックス＿サイズ設定(PartsID, AFL_Parts_GetWidth(PartsID, 1), Item.GetTextBoxInt());
+/* 00064b0a */	}
+/* 00064b10 */	else if (Item.GetLabel() == "テキスト")
+/* 00064b2e */	{
+/* 00064b2e */		Ｐ＿テキストボックス＿テキスト設定(PartsID, Item.GetTextBoxText());
+/* 00064b4e */	}
+/* 00064b54 */	else if (Item.GetLabel() == "最大文字数")
+/* 00064b72 */	{
+/* 00064b72 */		Ｐ＿テキストボックス＿最大文字数設定(PartsID, Item.GetTextBoxInt());
+/* 00064b92 */	}
+/* 00064b98 */	else if (Item.GetLabel() == "ＣＧ名")
+/* 00064bb6 */	{
+/* 00064bb6 */		Ｐ＿テキストボックス＿ＣＧ名設定(PartsID, Item.GetTextBoxText());
+/* 00064bd6 */	}
+/* 00064bd6 */}
+
+void CAEPropertyTextBox::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00064bde */{
+/* 00064bde */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00064c2e */	if (Item === NULL)
+/* 00064c46 */	{
+/* 00064c46 */		return;
+/* 00064c48 */	}
+/* 00064c48 */	int PartsID = this.m_Item.GetID();
+/* 00064c64 */	if (Item.GetLabel() == "背景色")
+/* 00064c82 */	{
+/* 00064c82 */		CAESelectColorDialog Form;
+/* 00064c92 */		Form.Show(ID, MouseX, MouseY, Ｐ＿テキストボックス＿背景色赤取得(PartsID), Ｐ＿テキストボックス＿背景色緑取得(PartsID), Ｐ＿テキストボックス＿背景色青取得(PartsID), this.ChangedColorEvent);
+/* 00064cfa */	}
+/* 00064d06 */	else if (Item.GetLabel() == "読み取り専用背景色")
+/* 00064d24 */	{
+/* 00064d24 */		CAESelectColorDialog Form;
+/* 00064d34 */		Form.Show(ID, MouseX, MouseY, Ｐ＿テキストボックス＿読み取り専用背景色赤取得(PartsID), Ｐ＿テキストボックス＿読み取り専用背景色緑取得(PartsID), Ｐ＿テキストボックス＿読み取り専用背景色青取得(PartsID), this.ChangedColorEvent);
+/* 00064d9c */	}
+/* 00064da8 */	else if (Item.GetLabel() == "枠色")
+/* 00064dc6 */	{
+/* 00064dc6 */		CAESelectColorDialog Form;
+/* 00064dd6 */		Form.Show(ID, MouseX, MouseY, Ｐ＿テキストボックス＿枠色赤取得(PartsID), Ｐ＿テキストボックス＿枠色緑取得(PartsID), Ｐ＿テキストボックス＿枠色青取得(PartsID), this.ChangedColorEvent);
+/* 00064e3e */	}
+/* 00064e4a */	else if (Item.GetLabel() == "選択色")
+/* 00064e68 */	{
+/* 00064e68 */		CAESelectColorDialog Form;
+/* 00064e78 */		Form.Show(ID, MouseX, MouseY, Ｐ＿テキストボックス＿選択色赤取得(PartsID), Ｐ＿テキストボックス＿選択色緑取得(PartsID), Ｐ＿テキストボックス＿選択色青取得(PartsID), this.ChangedColorEvent);
+/* 00064ee0 */	}
+/* 00064eec */	else if (Item.GetLabel() == "フォント")
+/* 00064f0a */	{
+/* 00064f0a */		float 太字幅;
+/* 00064f1c */		float 縁取り幅;
+/* 00064f2e */		int 種類;
+/* 00064f40 */		int 赤;
+/* 00064f52 */		int 緑;
+/* 00064f64 */		int 青;
+/* 00064f76 */		int 縁取り赤;
+/* 00064f88 */		int 縁取り緑;
+/* 00064f9a */		int 縁取り青;
+/* 00064fac */		Ｐ＿テキストボックス＿フォント取得(PartsID, 種類, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00065004 */		CASCharSpriteProperty Font;
+/* 00065014 */		Font.SetType(種類);
+/* 0006502e */		Font.SetSize(0);
+/* 00065044 */		Font.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 0006507e */		Font.SetBoldWeight(太字幅);
+/* 00065098 */		Font.SetEdgeWeight(縁取り幅);
+/* 000650b2 */		Font.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 000650ec */		CAESelectFontDialog Form;
+/* 000650fc */		Form.Show(ID, MouseX, MouseY, Font, this.ChangedFontEvent);
+/* 00065142 */	}
+/* 00065142 */}
+
+void CAEPropertyTextBox::ChangedColorEvent(int ID, int Red, int Green, int Blue)
+/* 00065156 */{
+/* 00065156 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000651a6 */	if (Item === NULL)
+/* 000651be */	{
+/* 000651be */		return;
+/* 000651c0 */	}
+/* 000651c0 */	int PartsID = this.m_Item.GetID();
+/* 000651dc */	if (Item.GetLabel() == "背景色")
+/* 000651fa */	{
+/* 000651fa */		Ｐ＿テキストボックス＿背景色設定(PartsID, Red, Green, Blue);
+/* 00065228 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00065274 */	}
+/* 0006527a */	else if (Item.GetLabel() == "読み取り専用背景色")
+/* 00065298 */	{
+/* 00065298 */		Ｐ＿テキストボックス＿読み取り専用背景色設定(PartsID, Red, Green, Blue);
+/* 000652c6 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00065312 */	}
+/* 00065318 */	else if (Item.GetLabel() == "枠色")
+/* 00065336 */	{
+/* 00065336 */		Ｐ＿テキストボックス＿枠色設定(PartsID, Red, Green, Blue);
+/* 00065364 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 000653b0 */	}
+/* 000653b6 */	else if (Item.GetLabel() == "選択色")
+/* 000653d4 */	{
+/* 000653d4 */		Ｐ＿テキストボックス＿選択色設定(PartsID, Red, Green, Blue);
+/* 00065402 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 0006544e */	}
+/* 0006544e */}
+
+void CAEPropertyTextBox::ChangedFontEvent(int ID, ref CASCharSpriteProperty Font)
+/* 00065456 */{
+/* 00065456 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000654a6 */	if (Item === NULL)
+/* 000654be */	{
+/* 000654be */		return;
+/* 000654c0 */	}
+/* 000654c0 */	int PartsID = this.m_Item.GetID();
+/* 000654dc */	CASColor Color;
+/* 000654ec */	Color = Font.GetColor();
+/* 00065510 */	CASColor EdgeColor;
+/* 00065520 */	EdgeColor = Font.GetEdgeColor();
+/* 00065544 */	if (Item.GetLabel() == "フォント")
+/* 00065562 */	{
+/* 00065562 */		Ｐ＿テキストボックス＿フォント設定(PartsID, Font.GetType(), Color.GetR(), Color.GetG(), Color.GetB(), Font.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Font.GetEdgeWeight());
+/* 00065602 */		Item.SetButtonText("%s" % PARTS_GetFontName(Font.GetType()));
+/* 00065636 */	}
+/* 00065636 */}
+
+void CAEPropertyTextBox::ChangedCheckBoxEvent(int ID, bool Check)
+/* 0006563e */{
+/* 0006563e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006568e */	if (Item === NULL)
+/* 000656a6 */	{
+/* 000656a6 */		return;
+/* 000656a8 */	}
+/* 000656a8 */	int PartsID = this.m_Item.GetID();
+/* 000656c4 */	if (Item.GetLabel() == "読み取り専用")
+/* 000656e2 */	{
+/* 000656e2 */		Ｐ＿テキストボックス＿読み取り専用設定(PartsID, Item.GetFlg());
+/* 00065702 */	}
+/* 00065708 */	else if (Item.GetLabel() == "全角入力")
+/* 00065726 */	{
+/* 00065726 */		Ｐ＿テキストボックス＿全角入力設定(PartsID, Item.GetFlg());
+/* 00065746 */	}
+/* 00065746 */}
+
+void CAEPropertyTextBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006574e */{
+/* 0006574e */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00065768 */}
+
+void CAEPropertyTextBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00065770 */{
+/* 00065770 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0006578a */}
+
+void CAEPropertyTextBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00065792 */{
+/* 00065792 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 000657ac */}
+
+void CAEPropertyTextBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000657b4 */{
+/* 000657b4 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 000657ce */}
+

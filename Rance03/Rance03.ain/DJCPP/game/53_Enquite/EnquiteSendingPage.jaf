@@ -1,0 +1,57 @@
+void EnquiteSendingPage::resetIsClickExit()
+/* 001c50b8 */{
+/* 001c50b8 */	pass("");
+/* 001c50c4 */	this.isClickExit_ = false;
+/* 001c50d6 */}
+
+void EnquiteSendingPage::init(string activityFileName, string activityName)
+/* 001c50de */{
+/* 001c50de */	this.activityFileName_ = activityFileName;
+/* 001c50f6 */	this.activityName_ = activityName;
+/* 001c510e */	this.isClickExit_ = false;
+/* 001c5120 */	this.btnSend_.init(this.activityName_, "SYS_アンケートを送信する", 0);
+/* 001c5148 */	this.btnSend_.setOnClickCallback(this.onClickSend);
+/* 001c5162 */	this.btnExit_.init(this.activityName_, "SYS_タイトル画面に戻る:0", 0);
+/* 001c518a */	this.btnExit_.setOnClickCallback(this.onClickExit);
+/* 001c51a4 */}
+
+void EnquiteSendingPage::onClickExit(int id)
+/* 001c51ac */{
+/* 001c51ac */	pass("");
+/* 001c51b8 */	this.isClickExit_ = true;
+/* 001c51ca */}
+
+void EnquiteSendingPage::onClickSend(int id)
+/* 001c51d2 */{
+/* 001c51d2 */	this.isClickExit_ = false;
+/* 001c51e4 */	EnquiteYesNoDialog dialog;
+/* 001c51f4 */	if (dialog.open("アンケート／送信確認"))
+/* 001c5210 */	{
+/* 001c5210 */		g_globalGameFlag.setInt("アンケート送信", 1);
+/* 001c522c */		if (!AFL_Config_Network_GetEnableConnection())
+/* 001c523a */		{
+/* 001c523a */			openNetworkConnection();
+/* 001c5240 */		}
+/* 001c5240 */		if (AFL_Config_Network_GetEnableConnection())
+/* 001c524c */		{
+/* 001c524c */			g_enquiteSender.createId();
+/* 001c525e */			if (g_enquiteSender.send())
+/* 001c5274 */			{
+/* 001c5274 */				EnquiteInfoDialog info;
+/* 001c5284 */				info.open("アンケート／送信成功");
+/* 001c529a */				AFL_Activity_End();
+/* 001c52a0 */			}
+/* 001c52ac */			else
+/* 001c52ac */			{
+/* 001c52ac */				EnquiteInfoDialog info;
+/* 001c52bc */				info.open("アンケート／送信失敗");
+/* 001c52d2 */			}
+/* 001c52d2 */		}
+/* 001c52d2 */	}
+/* 001c52d2 */}
+
+bool EnquiteSendingPage::isClickExit()
+/* 001c52e0 */{
+/* 001c52e0 */	return this.isClickExit_;
+/* 001c52ec */}
+

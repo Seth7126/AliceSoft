@@ -1,0 +1,66 @@
+void SceneLoad::init()
+/* 001b90b4 */{
+/* 001b90b4 */	this.isFinish_ = false;
+/* 001b90c6 */	this.list_.init(true);
+/* 001b90dc */	this.list_.setOnClickCallback(this.onClick);
+/* 001b90f6 */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001b911e */	this.btnExit_.setPos(839, 691);
+/* 001b913a */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001b915a */}
+
+void SceneLoad::onClickButtonExit(int id)
+/* 001b9162 */{
+/* 001b9162 */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001b917a */}
+
+void SceneLoad::run()
+/* 001b9182 */{
+/* 001b9182 */	this.fadeIn(true, NULL);
+/* 001b9192 */}
+
+bool SceneLoad::update()
+/* 001b919a */{
+/* 001b919a */	if (!this.timerCb_.isRunning() && g_mouse.isClick(1))
+/* 001b91e6 */	{
+/* 001b91e6 */		playCancel();
+/* 001b91ec */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001b9204 */	}
+/* 001b9204 */	return !this.isFinish_;
+/* 001b9214 */}
+
+void SceneLoad::onFinishFadeOut()
+/* 001b9222 */{
+/* 001b9222 */	this.isFinish_ = true;
+/* 001b9234 */}
+
+void SceneLoad::onClick(int index)
+/* 001b923c */{
+/* 001b923c */	if (AFL_Config_GetLoadConfirm())
+/* 001b9248 */	{
+/* 001b9248 */		DialogInfomation info;
+/* 001b9258 */		info.setCaption("ロードします");
+/* 001b926e */		info.setMessage("よろしいですか");
+/* 001b9284 */		info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 001b929a */		info.setAnswerTypeYesNo(true);
+/* 001b92b0 */		if (openDialog(info) == 1)
+/* 001b92d2 */		{
+/* 001b92d2 */			return;
+/* 001b92d4 */		}
+/* 001b92d4 */	}
+/* 001b92da */	if (g_saveDataManager.isSaved(index))
+/* 001b92fa */	{
+/* 001b92fa */		g_sysSound.play(6, "効果音／ロード");
+/* 001b9316 */		g_saveDataManager.load(index);
+/* 001b9330 */	}
+/* 001b9330 */}
+
+void SceneLoad::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001b9338 */{
+/* 001b9338 */	this.list_.fadeIn(val);
+/* 001b9352 */	this.btnExit_.fadeIn(val);
+/* 001b936c */	if (cb.Numof() != 0)
+/* 001b9388 */	{
+/* 001b9388 */		this.timerCb_.setTimer(300, cb);
+/* 001b93aa */	}
+/* 001b93aa */}
+

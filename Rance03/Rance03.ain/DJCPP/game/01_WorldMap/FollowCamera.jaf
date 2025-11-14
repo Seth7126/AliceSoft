@@ -1,0 +1,81 @@
+FollowCamera::FollowCamera()
+/* 00185a20 */{
+/* 00185a28 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00185a4e */	this.timer_.reset();
+/* 00185a5e */	this.lastTime_ = 0;
+/* 00185a70 */}
+
+void FollowCamera::update()
+/* 00185a78 */{
+/* 00185a78 */	int now = this.timer_.getTime();
+/* 00185a94 */	float dt = now - this.lastTime_;
+/* 00185ab8 */	if (dt < 12.0)
+/* 00185ad0 */	{
+/* 00185ad0 */		return;
+/* 00185ad2 */	}
+/* 00185ad2 */	if (dt > 60.0)
+/* 00185aea */	{
+/* 00185aea */		dt = 24.0;
+/* 00185afc */	}
+/* 00185afc */	this.lastTime_ = now;
+/* 00185b12 */	float pps = 800.0;
+/* 00185b24 */	float dest = getDest(this.x_, this.y_, this.fx_, this.fy_);
+/* 00185b66 */	if (dest == 0.0)
+/* 00185b7e */	{
+/* 00185b7e */		return;
+/* 00185b80 */	}
+/* 00185b80 */	if (dest <= 1.5 && this.speed_ > 0.0)
+/* 00185bc8 */	{
+/* 00185bc8 */		this.speed_ = (dest * 1000.0) / dt;
+/* 00185bf2 */		this.x_ = this.fx_;
+/* 00185c08 */		this.y_ = this.fy_;
+/* 00185c1e */		return;
+/* 00185c20 */	}
+/* 00185c20 */	int i;
+/* 00185c32 */	float dtSpeed;
+/* 00185c44 */	int suitei = getHenni(this.speed_, 0.0, this.speed_ / pps);
+/* 00185c7e */	if (suitei < dest)
+/* 00185ca0 */	{
+/* 00185ca0 */		dtSpeed = this.speed_ + pps * (dt / 1000.0);
+/* 00185cd6 */	}
+/* 00185cdc */	else
+/* 00185cdc */	{
+/* 00185cdc */		dtSpeed = this.speed_ - pps * (dt / 1000.0);
+/* 00185d12 */	}
+/* 00185d12 */	dtSpeed = Math.MinF(Math.MaxF(dtSpeed, 0.0), pps);
+/* 00185d4c */	float henni = getHenni(this.speed_, dtSpeed, dt / 1000.0);
+/* 00185d84 */	float rad = (Math.Atan2(this.fy_ - this.y_, this.fx_ - this.x_) * 180.0) / 3.1415;
+/* 00185dd6 */	this.x_ += Math.Cos(rad) * henni;
+/* 00185e02 */	this.y_ += Math.Sin(rad) * henni;
+/* 00185e2e */	this.speed_ = dtSpeed;
+/* 00185e44 */}
+
+void FollowCamera::setPos(int x, int y)
+/* 00185e4c */{
+/* 00185e4c */	this.reset();
+/* 00185e54 */	this.x_ = x;
+/* 00185e6c */	this.y_ = y;
+/* 00185e84 */}
+
+void FollowCamera::reset()
+/* 00185e8c */{
+/* 00185e8c */	this.x_ = this.y_ = this.fx_ = this.fy_ = 0.0;
+/* 00185ebc */	this.speed_ = 0.0;
+/* 00185ece */}
+
+void FollowCamera::setFollowPos(int x, int y)
+/* 00185ed6 */{
+/* 00185ed6 */	this.fx_ = x;
+/* 00185eee */	this.fy_ = y;
+/* 00185f06 */}
+
+int FollowCamera::getX()
+/* 00185f0e */{
+/* 00185f0e */	return this.x_;
+/* 00185f1c */}
+
+int FollowCamera::getY()
+/* 00185f2a */{
+/* 00185f2a */	return this.y_;
+/* 00185f38 */}
+

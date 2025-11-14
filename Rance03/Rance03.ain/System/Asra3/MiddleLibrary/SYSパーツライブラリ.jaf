@@ -1,0 +1,803 @@
+void PARTS_SetDelegateIndex(int PartsNumber, int DelegateIndex)
+/* 0015192a */{
+/* 0015192a */	PartsEngine.SetDelegateIndex(PartsNumber, DelegateIndex);
+/* 00151948 */}
+
+int PARTS_GetDelegateIndex(int PartsNumber)
+/* 00151956 */{
+/* 00151956 */	return PartsEngine.GetDelegateIndex(PartsNumber);
+/* 0015196c */}
+
+void PARTS_SetWantSaveBackScene(int PartsNumber, bool Enable)
+/* 00151980 */{
+/* 00151980 */	PartsEngine.SetWantSaveBackScene(PartsNumber, Enable);
+/* 0015199e */}
+
+bool PARTS_IsWantSaveBackScene(int PartsNumber)
+/* 001519ac */{
+/* 001519ac */	return PartsEngine.IsWantSaveBackScene(PartsNumber);
+/* 001519c2 */}
+
+void PARTS_SetComponentType(int PartsNumber, int Type, int State)
+/* 001519d6 */{
+/* 001519d6 */	PartsEngine.SetComponentType(PartsNumber, Type, State);
+/* 001519fe */}
+
+int PARTS_GetComponentType(int PartsNumber, int State)
+/* 00151a0c */{
+/* 00151a0c */	return PartsEngine.GetComponentType(PartsNumber, State);
+/* 00151a2c */}
+
+float PARTS_GetAbsoluteX(int PartsNumber)
+/* 00151a40 */{
+/* 00151a40 */	return PartsEngine.GetComponentAbsolutePosX(PartsNumber);
+/* 00151a56 */}
+
+float PARTS_GetAbsoluteY(int PartsNumber)
+/* 00151a6a */{
+/* 00151a6a */	return PartsEngine.GetComponentAbsolutePosY(PartsNumber);
+/* 00151a80 */}
+
+int PARTS_GetAbsoluteZ(int PartsNumber)
+/* 00151a94 */{
+/* 00151a94 */	return PartsEngine.GetComponentAbsolutePosZ(PartsNumber);
+/* 00151aaa */}
+
+int PARTS_GetAbsoluteMaxZ(int PartsNumber)
+/* 00151abe */{
+/* 00151abe */	return PartsEngine.GetComponentAbsoluteMaxPosZ(PartsNumber);
+/* 00151ad4 */}
+
+void PARTS_SetLockInputState(int PartsNumber, bool Lock)
+/* 00151ae8 */{
+/* 00151ae8 */	PartsEngine.SetLockInputState(PartsNumber, Lock);
+/* 00151b06 */}
+
+bool PARTS_IsLockInputState(int PartsNumber)
+/* 00151b14 */{
+/* 00151b14 */	return PartsEngine.IsLockInputState(PartsNumber);
+/* 00151b2a */}
+
+void PARTS_SetScrollPosXLink(int PartsNumber, int LinkNumber)
+/* 00151b3e */{
+/* 00151b3e */	PartsEngine.SetComponentScrollPosXLinkNumber(PartsNumber, LinkNumber);
+/* 00151b5c */}
+
+void PARTS_SetScrollPosYLink(int PartsNumber, int LinkNumber)
+/* 00151b6a */{
+/* 00151b6a */	PartsEngine.SetComponentScrollPosYLinkNumber(PartsNumber, LinkNumber);
+/* 00151b88 */}
+
+int PARTS_GetScrollPosXLink(int PartsNumber)
+/* 00151b96 */{
+/* 00151b96 */	return PartsEngine.GetComponentScrollPosXLinkNumber(PartsNumber);
+/* 00151bac */}
+
+int PARTS_GetScrollPosYLink(int PartsNumber)
+/* 00151bc0 */{
+/* 00151bc0 */	return PartsEngine.GetComponentScrollPosYLinkNumber(PartsNumber);
+/* 00151bd6 */}
+
+void PARTS_SetScrollAlphaLink(int PartsNumber, int LinkNumber)
+/* 00151bea */{
+/* 00151bea */	PartsEngine.SetComponentScrollAlphaLinkNumber(PartsNumber, LinkNumber);
+/* 00151c08 */}
+
+int PARTS_GetScrollAlphaLink(int PartsNumber)
+/* 00151c16 */{
+/* 00151c16 */	return PartsEngine.GetComponentScrollAlphaLinkNumber(PartsNumber);
+/* 00151c2c */}
+
+void PARTS_SetCheckBoxShowLinkNumber(int PartsNumber, int LinkNumber)
+/* 00151c40 */{
+/* 00151c40 */	PartsEngine.SetComponentCheckBoxShowLinkNumber(PartsNumber, LinkNumber);
+/* 00151c5e */}
+
+int PARTS_GetCheckBoxShowLinkNumber(int PartsNumber)
+/* 00151c6c */{
+/* 00151c6c */	return PartsEngine.GetComponentCheckBoxShowLinkNumber(PartsNumber);
+/* 00151c82 */}
+
+void PARTS_CallBeginUpdateEvent(int PassedTime)
+/* 00151c96 */{
+/* 00151c96 */	g_IsInPartsBeginUpdate = true;
+/* 00151ca8 */	g_dgPartsBeginUpdateEvent(PassedTime);
+/* 00151cd2 */	g_IsInPartsBeginUpdate = false;
+/* 00151ce4 */}
+
+void PARTS_CallEndUpdateEvent(int PassedTime)
+/* 00151cf2 */{
+/* 00151cf2 */	g_IsInPartsEndUpdate = true;
+/* 00151d04 */	g_dgPartsEndUpdateEvent(PassedTime);
+/* 00151d2e */	g_IsInPartsEndUpdate = false;
+/* 00151d40 */}
+
+void PARTS_CallErasingLayerEvent(int ID)
+/* 00151d4e */{
+/* 00151d4e */	g_dgPartsErasingLayerEvent(ID);
+/* 00151d78 */}
+
+void PARTS_CallChangedActiveLayerEvent(int PrevID, int ID)
+/* 00151d86 */{
+/* 00151d86 */	g_dgPartsChangedActiveLayerEvent(PrevID, ID);
+/* 00151dba */}
+
+void PARTS_NotifyChangedActiveLayerEvent()
+/* 00151dc8 */{
+/* 00151dc8 */	int ActiveLayerID = PARTS_GetActiveLayer();
+/* 00151dda */	if (g_PARTS_ActiveLayerID == ActiveLayerID)
+/* 00151df6 */	{
+/* 00151df6 */		return;
+/* 00151df8 */	}
+/* 00151df8 */	PARTS_CallChangedActiveLayerEvent(g_PARTS_ActiveLayerID, ActiveLayerID);
+/* 00151e12 */	g_PARTS_ActiveLayerID = ActiveLayerID;
+/* 00151e28 */}
+
+void PARTS_Init()
+/* 00151e36 */{
+/* 00151e36 */	g_PARTS_PrevTime = system.GetTime();
+/* 00151e48 */}
+
+void PARTS_Release(int PartsNumber)
+/* 00151e56 */{
+/* 00151e56 */	if (PartsNumber == 0)
+/* 00151e6e */	{
+/* 00151e6e */		return;
+/* 00151e70 */	}
+/* 00151e70 */	int DelegateIndex = PARTS_GetDelegateIndex(PartsNumber);
+/* 00151e8c */	PartsEngine.Release(PartsNumber);
+/* 00151ea0 */	g_PartsMessageManager.ReleaseFunctionSet(DelegateIndex);
+/* 00151eba */}
+
+void PARTS_ReleaseList(ref array@int PartsNumberList)
+/* 00151ec8 */{
+/* 00151ec8 */	int Index;
+/* 00151eda */	for (Index = 0; Index < PartsNumberList.Numof(); ++Index)
+/* 00151f2a */	{
+/* 00151f2a */		PARTS_Release(PartsNumberList[Index]);
+/* 00151f46 */	}
+/* 00151f4c */}
+
+void PARTS_ReleaseListWithFree(ref array@int PartsNumberList)
+/* 00151f5a */{
+/* 00151f5a */	PARTS_ReleaseList(PartsNumberList);
+/* 00151f6a */	PartsNumberList.Free();
+/* 00151f74 */}
+
+void PARTS_ReleaseWithInit(ref int PartsNumber)
+/* 00151f82 */{
+/* 00151f82 */	PARTS_Release(PartsNumber);
+/* 00151f94 */	PartsNumber = 0;
+/* 00151fa8 */}
+
+void PARTS_ReleaseWithChild(int PartsNumber)
+/* 00151fb6 */{
+/* 00151fb6 */	if (PartsNumber == 0)
+/* 00151fce */	{
+/* 00151fce */		return;
+/* 00151fd0 */	}
+/* 00151fd0 */	int i = Ｐ＿子数取得(PartsNumber);
+/* 00151fec */	while (--i >= 0)
+/* 00152008 */	{
+/* 00152008 */		PARTS_ReleaseWithChild(Ｐ＿子取得(PartsNumber, i));
+/* 00152028 */	}
+/* 0015202e */	PARTS_Release(PartsNumber);
+/* 0015203e */}
+
+int PARTS_GetFreeSystemPartsNumber()
+/* 0015204c */{
+/* 0015204c */	return PartsEngine.GetFreeNumber();
+/* 00152058 */}
+
+void PARTS_Update(bool SpeedupByMessageSkip)
+/* 0015206c */{
+/* 0015206c */	int CurrentTime = system.GetTime();
+/* 0015207e */	int PassedTime = Math.Max(0, Math.Min(1000, CurrentTime - g_PARTS_PrevTime));
+/* 001520c0 */	g_PARTS_PrevTime = CurrentTime;
+/* 001520d6 */	PARTS_CallBeginUpdateEvent(PassedTime);
+/* 001520e6 */	bool IsSkip = SpeedupByMessageSkip && (全文スキップ中確認() || 既読スキップ中確認());
+/* 00152146 */	PartsEngine.UpdateComponent(PassedTime, IsSkip, g_MessageWindowManager.IsShowAll());
+/* 00152174 */	PARTS_CallEndUpdateEvent(PassedTime);
+/* 00152184 */}
+
+void PARTS_UpdateMessage()
+/* 00152192 */{
+/* 00152192 */	g_PartsMessageManager.Update();
+/* 001521a2 */}
+
+void PARTS_BeginMotion()
+/* 001521b0 */{
+/* 001521b0 */	PartsEngine.BeginMotion();
+/* 001521ba */	g_PARTS_MotionTimer.Reset();
+/* 001521ca */	g_PARTS_CurrentMotionTime = 0;
+/* 001521dc */	g_PARTS_PrevMotionTime = g_PARTS_MotionTimer.Get();
+/* 001521f8 */}
+
+void PARTS_UpdateMotion(bool 全文既読スキップ)
+/* 00152206 */{
+/* 00152206 */	int CurrentTime = g_PARTS_MotionTimer.Get();
+/* 00152222 */	int PassedTime = Math.Min(100, CurrentTime - g_PARTS_PrevMotionTime);
+/* 00152254 */	g_PARTS_PrevMotionTime = CurrentTime;
+/* 0015226a */	bool IsSkip = 全文既読スキップ && (全文スキップ中確認() || 既読スキップ中確認());
+/* 001522ca */	PartsEngine.UpdateMotionTime(PassedTime, IsSkip);
+/* 001522e8 */}
+
+bool PARTS_IsMotion()
+/* 001522f6 */{
+/* 001522f6 */	return PartsEngine.IsMotion();
+/* 00152302 */}
+
+void PARTS_PauseMotion()
+/* 00152316 */{
+/* 00152316 */	PartsEngine.PauseMotion(true);
+/* 00152326 */}
+
+void PARTS_PlayMotion()
+/* 00152334 */{
+/* 00152334 */	PartsEngine.PauseMotion(false);
+/* 00152344 */}
+
+void PARTS_EndMotionFociby()
+/* 00152352 */{
+/* 00152352 */	if (PARTS_IsMotion())
+/* 0015235e */	{
+/* 0015235e */		PartsEngine.SeekEndMotion();
+/* 00152368 */		AFL_View_Update(true);
+/* 00152374 */	}
+/* 00152374 */	PartsEngine.EndMotion();
+/* 0015237e */}
+
+void PARTS_EndMotion()
+/* 0015238c */{
+/* 0015238c */	PartsEngine.EndMotion();
+/* 00152396 */}
+
+void PARTS_ReleaseAllPartsWithoutSystem()
+/* 001523a4 */{
+/* 001523a4 */	array@int DelegateIndexList;
+/* 001523ae */	PartsEngine.ReleaseAllWithoutSystem(DelegateIndexList);
+/* 001523c2 */	g_PartsMessageManager.ReleaseFunctionSetList(DelegateIndexList);
+/* 001523dc */}
+
+int PARTS_AddLayer(int ID)
+/* 001523ea */{
+/* 001523ea */	int CreateID = PartsEngine.AddController(ID);
+/* 0015240a */	PARTS_NotifyChangedActiveLayerEvent();
+/* 00152410 */	return CreateID;
+/* 0015241c */}
+
+void PARTS_EraseLayer(int ID)
+/* 00152430 */{
+/* 00152430 */	if (ID == -1)
+/* 00152448 */	{
+/* 00152448 */		ID = PARTS_GetActiveLayer();
+/* 0015245a */	}
+/* 0015245a */	PARTS_CallErasingLayerEvent(ID);
+/* 0015246a */	array@int DelegateIndexList;
+/* 00152474 */	PartsEngine.RemoveController(DelegateIndexList, ID);
+/* 00152492 */	g_PartsMessageManager.ReleaseFunctionSetList(DelegateIndexList);
+/* 001524ac */	PARTS_NotifyChangedActiveLayerEvent();
+/* 001524b2 */}
+
+int PARTS_GetSystemOverlayLayer()
+/* 001524c0 */{
+/* 001524c0 */	return PartsEngine.GetSystemOverlayController();
+/* 001524cc */}
+
+int PARTS_GetLayerIndex(int ID)
+/* 001524e0 */{
+/* 001524e0 */	return PartsEngine.GetControllerIndex(ID);
+/* 001524f6 */}
+
+int PARTS_GetLayerID(int Index)
+/* 0015250a */{
+/* 0015250a */	return PartsEngine.GetControllerID(Index);
+/* 00152520 */}
+
+int PARTS_NumofLayer()
+/* 00152534 */{
+/* 00152534 */	return PartsEngine.GetControllerLength();
+/* 00152540 */}
+
+int PARTS_SetActiveLayer(int ID)
+/* 00152554 */{
+/* 00152554 */	int PrevLayerID = PARTS_GetActiveLayer();
+/* 00152566 */	PartsEngine.SetActiveController(ID);
+/* 0015257a */	PARTS_NotifyChangedActiveLayerEvent();
+/* 00152580 */	return PrevLayerID;
+/* 0015258c */}
+
+int PARTS_GetActiveLayer()
+/* 001525a0 */{
+/* 001525a0 */	return PartsEngine.GetActiveController();
+/* 001525ac */}
+
+void PARTS_BeginInput()
+/* 001525c0 */{
+/* 001525c0 */	PartsEngine.BeginInput();
+/* 001525ca */}
+
+void PARTS_EndInput()
+/* 001525d8 */{
+/* 001525d8 */	PartsEngine.EndInput();
+/* 001525e2 */}
+
+void PARTS_SuspendComponentBuildView(int Number)
+/* 001525f0 */{
+/* 001525f0 */	PartsEngine.SuspendBuildView(Number);
+/* 00152604 */}
+
+void PARTS_SuspendComponentBuildViewAt(int Number, int Type)
+/* 00152612 */{
+/* 00152612 */	PartsEngine.SuspendBuildViewAt(Number, Type);
+/* 00152630 */}
+
+void PARTS_ResumeComponentBuildView(int Number)
+/* 0015263e */{
+/* 0015263e */	PartsEngine.ResumeBuildView(Number);
+/* 00152652 */}
+
+int PARTS_GetClickPartsNumber()
+/* 00152660 */{
+/* 00152660 */	return PartsEngine.GetClickNumber();
+/* 0015266c */}
+
+int PARTS_GetActivePartsType()
+/* 00152680 */{
+/* 00152680 */	int Number = PartsEngine.GetActiveParts();
+/* 00152696 */	if (Number == 0)
+/* 001526ae */	{
+/* 001526ae */		return -1;
+/* 001526b6 */	}
+/* 001526b6 */	return PARTS_GetComponentType(Number, 1);
+/* 001526ce */}
+
+int PARTS_WaitForClick(FTPARTS_WaitForClickCallback Func, bool キーキャンセル)
+/* 001526e2 */{
+/* 001526e2 */	PARTS_EndMotionFociby();
+/* 001526e8 */	CASClick RButtonClick;
+/* 001526f8 */	CASClick SpaceKeyClick;
+/* 00152708 */	RButtonClick.Init(2, true);
+/* 00152724 */	SpaceKeyClick.Init(32, true);
+/* 00152740 */	int ClickPartsNumber;
+/* 00152752 */	g_EndPartsBusyLoop = false;
+/* 00152764 */	g_EndPartsBusyLoopNumber = 0;
+/* 00152776 */	PARTS_BeginInput();
+/* 0015277c */	for (; ; )
+/* 0015277c */	{
+/* 0015277c */		if (Func.Numof() != 0)
+/* 00152798 */		{
+/* 00152798 */			Func();
+/* 001527b8 */		}
+/* 001527b8 */		AFL_View_Update(true);
+/* 001527c4 */		if (キーキャンセル)
+/* 001527d4 */		{
+/* 001527d4 */			if (RButtonClick.IsClick(-2147483648))
+/* 001527f0 */			{
+/* 001527f0 */				break;
+/* 001527f6 */			}
+/* 001527f6 */			if (SpaceKeyClick.IsClick(-2147483648))
+/* 00152812 */			{
+/* 00152812 */				int Type = PARTS_GetActivePartsType();
+/* 00152824 */				if (Type != 4 && Type != 7)
+/* 0015286c */				{
+/* 0015286c */					break;
+/* 00152872 */				}
+/* 00152872 */			}
+/* 00152872 */		}
+/* 00152872 */		ClickPartsNumber = PARTS_GetClickPartsNumber();
+/* 00152884 */		if (0 < ClickPartsNumber)
+/* 0015289c */		{
+/* 0015289c */			break;
+/* 001528a2 */		}
+/* 001528a2 */		if (g_EndPartsBusyLoop)
+/* 001528b2 */		{
+/* 001528b2 */			break;
+/* 001528b8 */		}
+/* 001528b8 */	}
+/* 001528be */	PARTS_EndInput();
+/* 001528c4 */	g_EndPartsBusyLoop = false;
+/* 001528d6 */	if (g_EndPartsBusyLoopNumber != 0)
+/* 001528ee */	{
+/* 001528ee */		ClickPartsNumber = g_EndPartsBusyLoopNumber;
+/* 00152904 */		g_EndPartsBusyLoopNumber = 0;
+/* 00152916 */	}
+/* 00152916 */	Ｐ＿クリックミス効果音設定("");
+/* 00152922 */	return ClickPartsNumber;
+/* 0015292e */}
+
+void PARTS_EndWaitForClick(int PartsNumber)
+/* 00152942 */{
+/* 00152942 */	g_EndPartsBusyLoop = true;
+/* 00152954 */	g_EndPartsBusyLoopNumber = PartsNumber;
+/* 0015296a */}
+
+void PARTS_StopSoundWithoutSystemsound()
+/* 00152978 */{
+/* 00152978 */	PartsEngine.StopSoundWithoutSystemSound();
+/* 00152982 */}
+
+void PARTS_ClearBackScene()
+/* 00152990 */{
+/* 00152990 */	PartsEngine.ClearBackScene();
+/* 0015299a */}
+
+void PARTS_SetFontColorForBackScene(int PartsNumber, int Red, int Green, int Blue, int State)
+/* 001529a8 */{
+/* 001529a8 */	PartsEngine.SetFontColorForBackScene(PartsNumber, Red, Green, Blue, State);
+/* 001529e4 */}
+
+void PARTS_SetMulColorForBackScene(int PartsNumber, int Red, int Green, int Blue)
+/* 001529f2 */{
+/* 001529f2 */	PartsEngine.SetMulColorForBackScene(PartsNumber, Red, Green, Blue);
+/* 00152a24 */}
+
+void PARTS_SetAlphaForBackScene(int PartsNumber, int Alpha)
+/* 00152a32 */{
+/* 00152a32 */	PartsEngine.SetAlphaForBackScene(PartsNumber, Alpha);
+/* 00152a50 */}
+
+void PARTS_SetShowForBackScene(int PartsNumber, bool Show)
+/* 00152a5e */{
+/* 00152a5e */	PartsEngine.SetShowForBackScene(PartsNumber, Show);
+/* 00152a7c */}
+
+bool PARTS_Save(ref array@int SaveDataBuffer)
+/* 00152a8a */{
+/* 00152a8a */	return PartsEngine.Save(SaveDataBuffer);
+/* 00152aa0 */}
+
+bool PARTS_SaveBackScene(ref array@int SaveDataBuffer)
+/* 00152ab4 */{
+/* 00152ab4 */	return PartsEngine.SaveBackScene(SaveDataBuffer);
+/* 00152aca */}
+
+bool PARTS_Load(ref array@int SaveDataBuffer)
+/* 00152ade */{
+/* 00152ade */	return PartsEngine.Load(SaveDataBuffer);
+/* 00152af4 */}
+
+bool PARTS_LoadBackScene(ref array@int SaveDataBuffer)
+/* 00152b08 */{
+/* 00152b08 */	return PartsEngine.LoadBackScene(SaveDataBuffer);
+/* 00152b1e */}
+
+bool PARTS_SaveParts(int PartsNumber, ref array@int SaveDataBuffer)
+/* 00152b32 */{
+/* 00152b32 */	return PartsEngine.SaveParts(PartsNumber, SaveDataBuffer);
+/* 00152b52 */}
+
+bool PARTS_LoadParts(int PartsNumber, ref array@int SaveDataBuffer)
+/* 00152b66 */{
+/* 00152b66 */	return PartsEngine.LoadParts(PartsNumber, SaveDataBuffer);
+/* 00152b86 */}
+
+string PARTS_GetPartsFlatDataInfo(int PartsNumber, int State)
+/* 00152b9a */{
+/* 00152b9a */	string Text;
+/* 00152bae */	PartsEngine.Parts_GetPartsFlatDataInfo(PartsNumber, Text, State);
+/* 00152bd6 */	return Text;
+/* 00152be2 */}
+
+void PARTS_Warning(string Text)
+/* 00152bf6 */{
+/* 00152bf6 */	system.Output("警告 : " + Text + "\n");
+/* 00152c18 */}
+
+void PARTS_Event_Warning()
+/* 00152c26 */{
+/* 00152c26 */	system.Output("警告 : PARTS_INVALID_NUMBERにはイベント登録できません。\n");
+/* 00152c34 */}
+
+void PARTS_SetSpeedupRateByMessageSkip(int パーツ番号, int 倍率)
+/* 00152c42 */{
+/* 00152c42 */	PartsEngine.SetComponentSpeedupRateByMessageSkip(パーツ番号, 倍率);
+/* 00152c60 */}
+
+int PARTS_GetSpeedupRateByMessageSkip(int パーツ番号)
+/* 00152c6e */{
+/* 00152c6e */	return PartsEngine.GetComponentSpeedupRateByMessageSkip(パーツ番号);
+/* 00152c84 */}
+
+void PARTS_TextParts_CalcSize(ref CASCharSpriteProperty Property, string Text, ref int Width, ref int Height, int CharSpace, int LineSpace)
+/* 00152c98 */{
+/* 00152c98 */	if (Text.Length() == 0)
+/* 00152cb0 */	{
+/* 00152cb0 */		Width = 0;
+/* 00152cc4 */		Height = 0;
+/* 00152cd8 */	}
+/* 00152cd8 */	int FontWidth;
+/* 00152cea */	int FontHeight = Property.GetPixelHeight();
+/* 00152d06 */	Width = 0;
+/* 00152d1a */	Height = FontHeight;
+/* 00152d32 */	int Index;
+/* 00152d44 */	int Size;
+/* 00152d44 */	for (Size = Text.Length(); Index < Size; ++Index)
+/* 00152d92 */	{
+/* 00152d92 */		string TextPart = Text.GetPart(Index, 1);
+/* 00152dbc */		if (TextPart == "\n")
+/* 00152dd4 */		{
+/* 00152dd4 */			Height += FontHeight + LineSpace;
+/* 00152df8 */			Width = Width < FontWidth ? FontWidth : Width;
+/* 00152e40 */			FontWidth = 0;
+/* 00152e52 */			continue;
+/* 00152e58 */		}
+/* 00152e58 */		FontWidth += Property.GetFontWidth(TextPart) + CharSpace;
+/* 00152e8a */	}
+/* 00152e90 */	Width = Width < FontWidth ? FontWidth : Width;
+/* 00152ed8 */	Height -= LineSpace;
+/* 00152ef0 */	Width -= CharSpace;
+/* 00152f08 */}
+
+void PARTS_ReleaseMessage()
+/* 00152f16 */{
+/* 00152f16 */	PartsEngine.ReleaseMessage();
+/* 00152f20 */}
+
+void PARTS_PopMessage()
+/* 00152f2e */{
+/* 00152f2e */	PartsEngine.PopMessage();
+/* 00152f38 */}
+
+int PARTS_GetMessagePartsNumber()
+/* 00152f46 */{
+/* 00152f46 */	return PartsEngine.GetMessagePartsNumber();
+/* 00152f52 */}
+
+int PARTS_GetMessageDelegateIndex()
+/* 00152f66 */{
+/* 00152f66 */	return PartsEngine.GetMessageDelegateIndex();
+/* 00152f72 */}
+
+int PARTS_GetMessageType()
+/* 00152f86 */{
+/* 00152f86 */	return PartsEngine.GetMessageType();
+/* 00152f92 */}
+
+int PARTS_GetMessageVariableCount()
+/* 00152fa6 */{
+/* 00152fa6 */	return PartsEngine.GetMessageVariableCount();
+/* 00152fb2 */}
+
+int PARTS_GetMessageVariableType(int MessageVariableIndex)
+/* 00152fc6 */{
+/* 00152fc6 */	return PartsEngine.GetMessageVariableType(MessageVariableIndex);
+/* 00152fdc */}
+
+int PARTS_GetMessageVariableInt(int MessageVariableIndex)
+/* 00152ff0 */{
+/* 00152ff0 */	return PartsEngine.GetMessageVariableInt(MessageVariableIndex);
+/* 00153006 */}
+
+float PARTS_GetMessageVariableFloat(int MessageVariableIndex)
+/* 0015301a */{
+/* 0015301a */	return PartsEngine.GetMessageVariableFloat(MessageVariableIndex);
+/* 00153030 */}
+
+bool PARTS_GetMessageVariableBool(int MessageVariableIndex)
+/* 00153044 */{
+/* 00153044 */	return PartsEngine.GetMessageVariableBool(MessageVariableIndex);
+/* 0015305a */}
+
+void PARTS_GetMessageVariableString(int MessageVariableIndex, ref string String)
+/* 0015306e */{
+/* 0015306e */	PartsEngine.GetMessageVariableString(MessageVariableIndex, String);
+/* 0015308c */}
+
+string PARTS_GetOriginPosModeName(int Type)
+/* 0015309a */{
+/* 0015309a */	switch (Type)
+/* 001530b0 */	{
+/* 001530b0 */	case 1:
+/* 001530b0 */		return "左上";
+/* 001530b8 */	case 2:
+/* 001530b8 */		return "中上";
+/* 001530c0 */	case 3:
+/* 001530c0 */		return "右上";
+/* 001530c8 */	case 4:
+/* 001530c8 */		return "左中";
+/* 001530d0 */	case 5:
+/* 001530d0 */		return "中中";
+/* 001530d8 */	case 6:
+/* 001530d8 */		return "右中";
+/* 001530e0 */	case 7:
+/* 001530e0 */		return "左下";
+/* 001530e8 */	case 8:
+/* 001530e8 */		return "中下";
+/* 001530f0 */	case 9:
+/* 001530f0 */		return "右下";
+/* 001530f8 */	}
+/* 001530f8 */	return "不明";
+/* 00153100 */}
+
+void PARTS_GetFont(int PartsNumber, ref CASCharSpriteProperty Font, int State)
+/* 00153114 */{
+/* 00153114 */	float 太字幅;
+/* 00153126 */	float 縁取り幅;
+/* 00153138 */	int 種類;
+/* 0015314a */	int サイズ;
+/* 0015315c */	int 赤;
+/* 0015316e */	int 緑;
+/* 00153180 */	int 青;
+/* 00153192 */	int 縁取り赤;
+/* 001531a4 */	int 縁取り緑;
+/* 001531b6 */	int 縁取り青;
+/* 001531c8 */	Ｐ＿フォント取得(PartsNumber, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅, State);
+/* 00153232 */	Font.SetType(種類);
+/* 0015324c */	Font.SetSize(サイズ);
+/* 00153266 */	Font.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 001532a0 */	Font.SetBoldWeight(太字幅);
+/* 001532ba */	Font.SetEdgeWeight(縁取り幅);
+/* 001532d4 */	Font.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 0015330e */}
+
+void PARTS_GetFontNameList(ref array@string List)
+/* 0015331c */{
+/* 0015331c */	List.PushBack("ゴシック");
+/* 0015332c */	List.PushBack("明朝");
+/* 0015333c */	if (!EX_IsExist("Ｅ＿外部フォント名"))
+/* 00153350 */	{
+/* 00153350 */		return;
+/* 00153352 */	}
+/* 00153352 */	int Length = EX_Width("Ｅ＿外部フォント名");
+/* 0015336a */	int Index;
+/* 0015337c */	for (Index = 0; Index < Length; ++Index)
+/* 001533c6 */	{
+/* 001533c6 */		List.PushBack(EX_AString("Ｅ＿外部フォント名", Index, ""));
+/* 001533ec */	}
+/* 001533f2 */}
+
+string PARTS_GetFontName(int Type)
+/* 00153400 */{
+/* 00153400 */	switch (Type)
+/* 00153416 */	{
+/* 00153416 */	case 0:
+/* 00153416 */		return "ゴシック";
+/* 0015341e */	case 1:
+/* 0015341e */		return "明朝";
+/* 00153426 */	}
+/* 00153426 */	if (Type < 256)
+/* 0015343e */	{
+/* 0015343e */		return "不明";
+/* 00153446 */	}
+/* 00153446 */	int EXFontNumber = Type - 256;
+/* 00153464 */	if (EX_IsExistA("Ｅ＿外部フォント名", EXFontNumber))
+/* 00153480 */	{
+/* 00153480 */		return EX_AString("Ｅ＿外部フォント名", EXFontNumber, "");
+/* 0015349e */	}
+/* 0015349e */	return "外部フォント + %d" % EXFontNumber;
+/* 001534b8 */}
+
+int PARTS_GetFontNumber(string Name)
+/* 001534cc */{
+/* 001534cc */	switch (Name)
+/* 001534e2 */	{
+/* 001534e2 */	case "ゴシック":
+/* 001534e2 */		return 0;
+/* 001534ea */	case "明朝":
+/* 001534ea */		return 1;
+/* 001534f2 */	}
+/* 001534f2 */	if (!EX_IsExist("Ｅ＿外部フォント名"))
+/* 00153506 */	{
+/* 00153506 */		return 0;
+/* 0015350e */	}
+/* 0015350e */	int Length = EX_Width("Ｅ＿外部フォント名");
+/* 00153526 */	int Index;
+/* 00153538 */	for (Index = 0; Index < Length; ++Index)
+/* 00153582 */	{
+/* 00153582 */		if (EX_AString("Ｅ＿外部フォント名", Index, "") == Name)
+/* 001535b0 */		{
+/* 001535b0 */			return 256 + Index;
+/* 001535c4 */		}
+/* 001535c4 */	}
+/* 001535ca */	return 0;
+/* 001535d2 */}
+
+string PARTS_GetComponentTypeName(int Type)
+/* 001535e6 */{
+/* 001535e6 */	switch (Type)
+/* 001535fc */	{
+/* 001535fc */	case 0:
+/* 001535fc */		return "ボタン";
+/* 00153604 */	case 1:
+/* 00153604 */		return "チェックボックス";
+/* 0015360c */	case 2:
+/* 0015360c */		return "縦スクロールバー";
+/* 00153614 */	case 3:
+/* 00153614 */		return "横スクロールバー";
+/* 0015361c */	case 4:
+/* 0015361c */		return "テキストボックス";
+/* 00153624 */	case 5:
+/* 00153624 */		return "リストボックス";
+/* 0015362c */	case 6:
+/* 0015362c */		return "コンボボックス";
+/* 00153634 */	case 7:
+/* 00153634 */		return "マルチラインテキストボックス";
+/* 0015363c */	case 8:
+/* 0015363c */		return "レイアウトボックス";
+/* 00153644 */	case 9:
+/* 00153644 */		return "ラジオボタンボックス";
+/* 0015364c */	case 10:
+/* 0015364c */		return "低レベルパーツ";
+/* 00153654 */	case 11:
+/* 00153654 */		return "ＣＧパーツ";
+/* 0015365c */	case 12:
+/* 0015365c */		return "ループＣＧパーツ";
+/* 00153664 */	case 13:
+/* 00153664 */		return "テキストパーツ";
+/* 0015366c */	case 14:
+/* 0015366c */		return "横ゲージパーツ";
+/* 00153674 */	case 15:
+/* 00153674 */		return "縦ゲージパーツ";
+/* 0015367c */	case 16:
+/* 0015367c */		return "数字パーツ";
+/* 00153684 */	case 17:
+/* 00153684 */		return "矩形パーツ";
+/* 0015368c */	case 18:
+/* 0015368c */		return "構築パーツ";
+/* 00153694 */	case 19:
+/* 00153694 */		return "ＣＧ判定パーツ";
+/* 0015369c */	case 20:
+/* 0015369c */		return "フラットパーツ";
+/* 001536a4 */	case 21:
+/* 001536a4 */		return "３Ｄレイヤパーツ";
+/* 001536ac */	case 22:
+/* 001536ac */		return "ムービーパーツ";
+/* 001536b4 */	}
+/* 001536b4 */	return "";
+/* 001536bc */}
+
+int PARTS_GetComponentTypeID(string ComponentName)
+/* 001536d0 */{
+/* 001536d0 */	switch (ComponentName)
+/* 001536e6 */	{
+/* 001536e6 */	case "ボタン":
+/* 001536e6 */		return 0;
+/* 001536ee */	case "チェックボックス":
+/* 001536ee */		return 1;
+/* 001536f6 */	case "縦スクロールバー":
+/* 001536f6 */		return 2;
+/* 001536fe */	case "横スクロールバー":
+/* 001536fe */		return 3;
+/* 00153706 */	case "テキストボックス":
+/* 00153706 */		return 4;
+/* 0015370e */	case "リストボックス":
+/* 0015370e */		return 5;
+/* 00153716 */	case "コンボボックス":
+/* 00153716 */		return 6;
+/* 0015371e */	case "マルチラインテキストボックス":
+/* 0015371e */		return 7;
+/* 00153726 */	case "レイアウトボックス":
+/* 00153726 */		return 8;
+/* 0015372e */	case "ラジオボタンボックス":
+/* 0015372e */		return 9;
+/* 00153736 */	case "低レベルパーツ":
+/* 00153736 */		return 10;
+/* 0015373e */	case "ＣＧパーツ":
+/* 0015373e */		return 11;
+/* 00153746 */	case "ループＣＧパーツ":
+/* 00153746 */		return 12;
+/* 0015374e */	case "テキストパーツ":
+/* 0015374e */		return 13;
+/* 00153756 */	case "横ゲージパーツ":
+/* 00153756 */		return 14;
+/* 0015375e */	case "縦ゲージパーツ":
+/* 0015375e */		return 15;
+/* 00153766 */	case "数字パーツ":
+/* 00153766 */		return 16;
+/* 0015376e */	case "矩形パーツ":
+/* 0015376e */		return 17;
+/* 00153776 */	case "構築パーツ":
+/* 00153776 */		return 18;
+/* 0015377e */	case "ＣＧ判定パーツ":
+/* 0015377e */		return 19;
+/* 00153786 */	case "フラットパーツ":
+/* 00153786 */		return 20;
+/* 0015378e */	case "３Ｄレイヤパーツ":
+/* 0015378e */		return 21;
+/* 00153796 */	case "ムービーパーツ":
+/* 00153796 */		return 22;
+/* 0015379e */	}
+/* 0015379e */	return -1;
+/* 001537a6 */}
+

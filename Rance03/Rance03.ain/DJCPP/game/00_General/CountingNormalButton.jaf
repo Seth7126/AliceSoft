@@ -1,0 +1,91 @@
+CountingNormalButton::CountingNormalButton()
+/* 00180844 */{
+/* 0018084c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00180872 */}
+
+void CountingNormalButton::init(string caption, DG_CountButtonGetCount cbGet)
+/* 0018087a */{
+/* 0018087a */	this.state_ = 1;
+/* 0018088c */	this.cbGet_ = cbGet;
+/* 001808a6 */	this.btn_.init("システム／ボタン／幅１２８", caption, "", true);
+/* 001808d2 */	this.initParts();
+/* 001808da */	this.updateCount();
+/* 001808e2 */}
+
+void CountingNormalButton::setPos(int x, int y)
+/* 001808ea */{
+/* 001808ea */	this.btn_.setPos(x, y);
+/* 0018090e */	this.parent_.setPos(x, y);
+/* 00180936 */}
+
+void CountingNormalButton::setZ(int z)
+/* 0018093e */{
+/* 0018093e */	this.btn_.setZ(z);
+/* 00180958 */	this.parent_.setZ(z + 100);
+/* 0018097c */}
+
+void CountingNormalButton::update()
+/* 00180984 */{
+/* 00180986 */}
+
+void CountingNormalButton::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 0018098c */{
+/* 0018098c */	if (val)
+/* 0018099c */	{
+/* 0018099c */		if (this.state_ == 0)
+/* 001809b4 */		{
+/* 001809b4 */			return;
+/* 001809b6 */		}
+/* 001809b6 */		if (this.cbGet_() <= 0)
+/* 001809e4 */		{
+/* 001809e4 */			return;
+/* 001809e6 */		}
+/* 001809e6 */	}
+/* 001809e6 */	if (!val && this.state_ == 1)
+/* 00180a28 */	{
+/* 00180a28 */		return;
+/* 00180a2a */	}
+/* 00180a2a */	this.setPartsShow();
+/* 00180a32 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), onFinish);
+/* 00180a76 */	this.btn_.fadeIn(val);
+/* 00180a90 */	this.state_ = val ? 0 : 1;
+/* 00180abe */}
+
+void CountingNormalButton::initParts()
+/* 00180ac6 */{
+/* 00180ac6 */	this.parts_[0].init("システム／オート／下地", 0);
+/* 00180aea */	this.parts_[1].initAsNumber("システム／数字／幅１０／白", NULL);
+/* 00180b0e */	this.setPartsPos();
+/* 00180b16 */	createPartsGroup(this.parent_, this.parts_, 6100);
+/* 00180b36 */}
+
+void CountingNormalButton::setPartsShow()
+/* 00180b3e */{
+/* 00180b3e */	int i;
+/* 00180b50 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00180ba0 */	{
+/* 00180ba0 */		this.parts_[i].setShow(true);
+/* 00180bc2 */	}
+/* 00180bc8 */	this.parent_.setShow(true);
+/* 00180bde */}
+
+void CountingNormalButton::setPartsPos()
+/* 00180be6 */{
+/* 00180be6 */	this.parts_[0].setPos(64.0, 49.0);
+/* 00180c0a */	this.parts_[1].setPos(64.0, 52.0);
+/* 00180c2e */	this.parts_[0].setOrigin(8);
+/* 00180c4c */	this.parts_[1].setOrigin(8);
+/* 00180c6a */}
+
+void CountingNormalButton::updateCount()
+/* 00180c72 */{
+/* 00180c72 */	int count = this.cbGet_();
+/* 00180c9e */	this.btn_.setEnable(count > 0);
+/* 00180cc2 */	this.parts_[1].setNumber(count);
+/* 00180ce6 */}
+
+void CountingNormalButton::setClickCallback(DG_ButtonClickCallback onClick, int id)
+/* 00180cee */{
+/* 00180cee */	this.btn_.setClickCallback(onClick, id);
+/* 00180d14 */}
+

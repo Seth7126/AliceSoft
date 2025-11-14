@@ -1,0 +1,37 @@
+void initAdvObject()
+/* 00173f5a */{
+/* 00173f5a */	メッセージエリア画面トランジション設定(0, 1, 0);
+/* 00173f72 */	g_advStand[0].init(-200, -373, 0, "立ち絵／");
+/* 00173fa2 */	g_advStand[1].init(-50, -373, 1, "立ち絵背／");
+/* 00173fd2 */	g_advMessageWindow.init();
+/* 00173fe2 */}
+
+void RunPartsMotion()
+/* 00173ff0 */{
+/* 00173ff0 */	while (!g_partsMotionManager.isEmpty())
+/* 00174008 */	{
+/* 00174008 */		g_frameManager.updateFrame();
+/* 00174018 */		if (既読スキップ中確認() || 全文スキップ中確認())
+/* 00174048 */		{
+/* 00174048 */			g_partsMotionManager.finalize(-1);
+/* 0017405e */			g_frameManager.updateFrame();
+/* 0017406e */		}
+/* 0017406e */	}
+/* 00174074 */}
+
+void プロット設定()
+/* 00174082 */{
+/* 00174084 */}
+
+void ■プロット()
+/* 00174090 */{
+/* 00174092 */}
+
+void debugChirokTest()
+/* 0017409e */{
+/* 001740a0 */}
+
+void advErr(string msg)
+/* 001740ac */{
+/* 001740ae */}
+

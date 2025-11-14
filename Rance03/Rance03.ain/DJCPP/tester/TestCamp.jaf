@@ -1,0 +1,99 @@
+void test_Scene_Camp()
+/* 001f1126 */{
+/* 001f1126 */	g_playerCommonParam.setEnableLevelGod(true);
+/* 001f113c */	g_player[1].setPartyNamePlateCgName("システム／編成／名札／かなみ");
+/* 001f115a */	int i;
+/* 001f116c */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001f11bc */	{
+/* 001f11bc */		if (RAND(2) == 1)
+/* 001f11d6 */		{
+/* 001f11d6 */			g_player[i].setHp((RAND(100) * g_player[i].getMaxHp()) / 100.0);
+/* 001f122e */		}
+/* 001f122e */		if (RAND(3) == 1)
+/* 001f1248 */		{
+/* 001f1248 */			g_player[i].setHp(0);
+/* 001f126c */		}
+/* 001f126c */		if (RAND(4) == 1)
+/* 001f1286 */		{
+/* 001f1286 */			g_player[i].setHp(1);
+/* 001f12aa */		}
+/* 001f12aa */		g_player[i].setExp(RAND(100000));
+/* 001f12d2 */	}
+/* 001f12d8 */	debugPlayerJoinAll();
+/* 001f12de */	test_Party_Organize();
+/* 001f12e4 */	openCamp(0);
+/* 001f12f2 */}
+
+void test_Player_CommonParamView()
+/* 001f1300 */{
+/* 001f1300 */	g_playerCommonParam.setPlaceName("テスト場所");
+/* 001f1316 */	PlayerCommonParamView view;
+/* 001f1326 */	view.init();
+/* 001f1336 */	view.fadeIn(true);
+/* 001f134c */	while (true)
+/* 001f1358 */	{
+/* 001f1358 */		g_gameObjectManager.update();
+/* 001f1368 */		g_frameManager.updateFrame();
+/* 001f1378 */	}
+/* 001f137e */}
+
+void test_MemoView()
+/* 001f138c */{
+/* 001f138c */	MemoView memoView;
+/* 001f139c */	memoView.init("てすとてきすとです。ああああああ|ああ|いいうえこかいｓｄｋｄｊｆ");
+/* 001f13b2 */	memoView.fadeIn(true);
+/* 001f13c8 */	while (true)
+/* 001f13d4 */	{
+/* 001f13d4 */		g_gameObjectManager.update();
+/* 001f13e4 */		g_frameManager.updateFrame();
+/* 001f13f4 */	}
+/* 001f13fa */}
+
+void test_CampCharacterIcon()
+/* 001f1408 */{
+/* 001f1408 */	CampHopIcon icon;
+/* 001f1418 */	icon.init("システム／キャンプ／ＳＤ／ランス");
+/* 001f142e */	icon.run();
+/* 001f143e */	while (true)
+/* 001f144a */	{
+/* 001f144a */		if (g_mouse.isClick(1))
+/* 001f1466 */		{
+/* 001f1466 */			break;
+/* 001f146c */		}
+/* 001f146c */		g_gameObjectManager.update();
+/* 001f147c */		g_frameManager.updateFrame();
+/* 001f148c */	}
+/* 001f1492 */}
+
+void test_CampIcon()
+/* 001f14a0 */{
+/* 001f14a0 */	test_LevelMaxAndPartyOrganize();
+/* 001f14a6 */	CampIcon icon;
+/* 001f14b6 */	icon.init(NULL);
+/* 001f14c8 */	while (true)
+/* 001f14d4 */	{
+/* 001f14d4 */		if (g_mouse.isClick(1))
+/* 001f14f0 */		{
+/* 001f14f0 */			break;
+/* 001f14f6 */		}
+/* 001f14f6 */		if (g_mouse.isClick(0))
+/* 001f1512 */		{
+/* 001f1512 */			icon.fadeIn(false);
+/* 001f1528 */		}
+/* 001f1528 */		g_gameObjectManager.update();
+/* 001f1538 */		g_frameManager.updateFrame();
+/* 001f1548 */	}
+/* 001f154e */}
+
+void test_Scene_ReplaySelection()
+/* 001f155c */{
+/* 001f155c */	SceneReplaySelection scene;
+/* 001f156c */	array@string n[10];
+/* 001f1582 */	int i;
+/* 001f1594 */	for (i = 0; i < n.Numof(); ++i)
+/* 001f15e4 */	{
+/* 001f15e4 */		n[i] = "テストあｓｄｆあｓｄｆ%D" % i;
+/* 001f1616 */	}
+/* 001f161c */	openReplayDialog(n);
+/* 001f1630 */}
+

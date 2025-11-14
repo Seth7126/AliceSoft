@@ -1,0 +1,49 @@
+bool CheckBoxParts::init(string activityName, string partsName)
+/* 001e6c84 */{
+/* 001e6c84 */	this.release();
+/* 001e6c8c */	this.activityName_ = activityName;
+/* 001e6ca4 */	this.partsName_ = partsName;
+/* 001e6cbc */	this.partsNumber_ = AFL_Activity_GetPartsNumber(this.activityName_, partsName);
+/* 001e6ce2 */	if (this.partsNumber_ != 0)
+/* 001e6cfa */	{
+/* 001e6cfa */		AFL_Parts_AddChangedFlgEvent(this.partsNumber_, this.onCheckStateChanged);
+/* 001e6d14 */		return true;
+/* 001e6d1c */	}
+/* 001e6d1c */	return false;
+/* 001e6d24 */}
+
+bool CheckBoxParts::isChecked()
+/* 001e6d32 */{
+/* 001e6d32 */	return Ｐ＿チェックボックス＿チェック状態取得(this.partsNumber_);
+/* 001e6d44 */}
+
+void CheckBoxParts::setCheck(bool val)
+/* 001e6d52 */{
+/* 001e6d52 */	Ｐ＿チェックボックス＿チェック状態設定(this.partsNumber_, val);
+/* 001e6d6c */}
+
+void CheckBoxParts::setOnCheckCallback(DG_OnCheckCheckBoxParts cb)
+/* 001e6d74 */{
+/* 001e6d74 */	this.cb_ = cb;
+/* 001e6d8e */}
+
+void CheckBoxParts::onCheckStateChanged(int partsNumber, bool isCheck)
+/* 001e6d96 */{
+/* 001e6d96 */	this.cb_(this.partsName_, isCheck);
+/* 001e6dca */}
+
+void CheckBoxParts::release()
+/* 001e6dd2 */{
+/* 001e6dd2 */	if (this.partsNumber_ != 0)
+/* 001e6dea */	{
+/* 001e6dea */		AFL_Parts_EraseChangedFlgEvent(this.partsNumber_, this.onCheckStateChanged);
+/* 001e6e04 */	}
+/* 001e6e04 */	this.partsNumber_ = 0;
+/* 001e6e16 */	this.cb_.Clear();
+/* 001e6e22 */}
+
+void CheckBoxParts::setEnable(bool val)
+/* 001e6e2a */{
+/* 001e6e2a */	Ｐ＿表示設定(this.partsNumber_, val);
+/* 001e6e44 */}
+

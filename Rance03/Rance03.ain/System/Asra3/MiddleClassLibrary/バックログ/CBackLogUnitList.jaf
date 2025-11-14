@@ -1,0 +1,116 @@
+CBackLogUnitList::CBackLogUnitList()
+/* 00023eb0 */{
+/* 00023eb8 */	AFL_Parts_AddBeginUpdateEvent(this.PlayingVoice);
+/* 00023ec8 */}
+
+CBackLogUnitList::~CBackLogUnitList()
+/* 00023ed0 */{
+/* 00023ed0 */	AFL_Parts_EraseBeginUpdateEvent(this.PlayingVoice);
+/* 00023ee0 */}
+
+void CBackLogUnitList::Init(float PosX, float PosY, float PosZ, ref array@SBackLogUnitModel List)
+/* 00023ee8 */{
+/* 00023ee8 */	this.m_MainLayout.Create();
+/* 00023ef8 */	this.m_MainLayout.SetPos(PosX, PosY);
+/* 00023f20 */	this.m_MainLayout.SetZ(PosZ);
+/* 00023f3c */	this.m_ModelList <- List;
+/* 00023f5c */}
+
+void CBackLogUnitList::Free()
+/* 00023f64 */{
+/* 00023f64 */	this.m_List.Free();
+/* 00023f6e */}
+
+void CBackLogUnitList::AddUnit(ref SBackLogUnitModel Model)
+/* 00023f76 */{
+/* 00023f76 */	if (Model.m_Separator)
+/* 00023f8e */	{
+/* 00023f8e */		this.AddSeparate(Model);
+/* 00023fa0 */		return;
+/* 00023fa2 */	}
+/* 00023fa2 */	this.AddLog(Model);
+/* 00023fb4 */}
+
+void CBackLogUnitList::AddLog(ref SBackLogUnitModel Model)
+/* 00023fbc */{
+/* 00023fbc */	if (this.m_List.Empty())
+/* 00023fcc */	{
+/* 00023fcc */		this.PushUnit();
+/* 00023fd4 */	}
+/* 00023fd4 */	this.m_List[this.m_List.Numof() - 1].Add(Model);
+/* 00024008 */}
+
+void CBackLogUnitList::AddSeparate(ref SBackLogUnitModel Model)
+/* 00024010 */{
+/* 00024010 */	this.PushUnit();
+/* 00024018 */	this.m_List[this.m_List.Numof() - 1].Add(Model);
+/* 0002404c */	this.PushUnit();
+/* 00024054 */}
+
+void CBackLogUnitList::PushUnit()
+/* 0002405c */{
+/* 0002405c */	this.m_List.Realloc(this.m_List.Numof() + 1);
+/* 00024084 */}
+
+void CBackLogUnitList::Build(CASCharSpriteProperty Font, CASCharSpriteProperty VoiceFont, CASCharSpriteProperty VoiceOnFont, CASCharSpriteProperty PlayVoiceFont, int CharSpace, int LineSpace, int Width)
+/* 0002408c */{
+/* 0002408c */	int i;
+/* 0002409e */	for (i = 0; i < this.m_List.Numof(); ++i)
+/* 000240ee */	{
+/* 000240ee */		this.m_List[i].AddPlayVoiceEvent(this.NotifyPlayVoiceEvent);
+/* 00024114 */		this.m_List[i].Build(this.m_MainLayout.GetPartsNumber(), Font, VoiceFont, VoiceOnFont, PlayVoiceFont, CharSpace, LineSpace, Width);
+/* 00024196 */	}
+/* 0002419c */}
+
+void CBackLogUnitList::NotifyPlayVoiceEvent(ref array@string List)
+/* 000241a4 */{
+/* 000241a4 */	this.StopVoice();
+/* 000241ac */	this.m_VoiceList.Free();
+/* 000241b6 */	if (List.Empty())
+/* 000241c6 */	{
+/* 000241c6 */		return;
+/* 000241c8 */	}
+/* 000241c8 */	this.m_VoiceList.Alloc(List.Numof());
+/* 000241e8 */	this.m_VoiceList.Copy(0, List, 0, List.Numof());
+/* 0002421a */	SYS_PlayVoice(this.m_VoiceList[0]);
+/* 00024232 */}
+
+void CBackLogUnitList::PlayingVoice(int PassedTime)
+/* 0002423a */{
+/* 0002423a */	if (this.m_VoiceList.Empty())
+/* 0002424a */	{
+/* 0002424a */		return;
+/* 0002424c */	}
+/* 0002424c */	if (SYS_IsPlayVoice())
+/* 00024258 */	{
+/* 00024258 */		return;
+/* 0002425a */	}
+/* 0002425a */	if (this.m_VoiceList.Numof() == 1)
+/* 00024278 */	{
+/* 00024278 */		this.StopVoice();
+/* 00024280 */	}
+/* 00024280 */	this.m_VoiceList.Erase(0);
+/* 00024292 */	if (this.m_VoiceList.Empty())
+/* 000242a2 */	{
+/* 000242a2 */		return;
+/* 000242a4 */	}
+/* 000242a4 */	SYS_PlayVoice(this.m_VoiceList[0]);
+/* 000242bc */}
+
+void CBackLogUnitList::StopVoice()
+/* 000242c4 */{
+/* 000242c4 */	int i;
+/* 000242d6 */	for (i = 0; i < this.m_List.Numof(); ++i)
+/* 00024326 */	{
+/* 00024326 */		this.m_List[i].StopVoice();
+/* 00024342 */	}
+/* 00024348 */	if (this.m_ModelList !== NULL)
+/* 00024360 */	{
+/* 00024360 */		for (i = 0; i < this.m_ModelList.Numof(); ++i)
+/* 000243b0 */		{
+/* 000243b0 */			this.m_ModelList[i].m_Playing = false;
+/* 000243d6 */		}
+/* 000243dc */	}
+/* 000243dc */	SYS_StopVoice();
+/* 000243e2 */}
+

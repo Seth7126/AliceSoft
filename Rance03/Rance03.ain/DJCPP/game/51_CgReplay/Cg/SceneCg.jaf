@@ -1,0 +1,70 @@
+void SceneCg::init()
+/* 001bf638 */{
+/* 001bf638 */	this.isFinish_ = false;
+/* 001bf64a */	this.pageCount_ = (g_cgList.Numof() + 11) / 12;
+/* 001bf676 */	this.initTab();
+/* 001bf67e */	this.initThumbnailList();
+/* 001bf686 */	this.initButton();
+/* 001bf68e */}
+
+void SceneCg::initThumbnailList()
+/* 001bf696 */{
+/* 001bf696 */	this.list_.init(true);
+/* 001bf6ac */	this.list_.setOnClickCallback(this.onClickThumbnailButton);
+/* 001bf6c6 */}
+
+void SceneCg::initButton()
+/* 001bf6ce */{
+/* 001bf6ce */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001bf6f6 */	this.btnExit_.setPos(839, 691);
+/* 001bf712 */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001bf732 */}
+
+void SceneCg::onClickButtonExit(int index)
+/* 001bf73a */{
+/* 001bf73a */	this.fadeIn(false);
+/* 001bf748 */}
+
+void SceneCg::initTab()
+/* 001bf750 */{
+/* 001bf752 */}
+
+void SceneCg::run()
+/* 001bf758 */{
+/* 001bf758 */	this.fadeIn(true);
+/* 001bf766 */}
+
+void SceneCg::fadeIn(bool val)
+/* 001bf76e */{
+/* 001bf76e */	this.list_.fadeIn(val, NULL);
+/* 001bf78a */	this.btnExit_.fadeIn(val);
+/* 001bf7a4 */	if (!val)
+/* 001bf7b6 */	{
+/* 001bf7b6 */		this.timerCb_.setTimer(300, this.onFinish);
+/* 001bf7d6 */	}
+/* 001bf7d6 */}
+
+void SceneCg::onFinish()
+/* 001bf7de */{
+/* 001bf7de */	this.isFinish_ = true;
+/* 001bf7f0 */}
+
+bool SceneCg::update()
+/* 001bf7f8 */{
+/* 001bf7f8 */	if (g_mouse.isClick(1))
+/* 001bf814 */	{
+/* 001bf814 */		playCancel();
+/* 001bf81a */		this.fadeIn(false);
+/* 001bf828 */	}
+/* 001bf828 */	return !this.isFinish_;
+/* 001bf838 */}
+
+void SceneCg::onClickThumbnailButton(int index)
+/* 001bf846 */{
+/* 001bf846 */	string key = "ＣＧ%02d" % (index + 1);
+/* 001bf874 */	g_globalGameFlag.setInt(key, g_globalGameFlag.getInt(key) + 1);
+/* 001bf8b0 */	array@string n;
+/* 001bf8ba */	g_cgList[index].getShownCgList(n);
+/* 001bf8e0 */	openCgSwipeView(n);
+/* 001bf8f0 */}
+

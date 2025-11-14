@@ -1,0 +1,92 @@
+DungeonDotView::DungeonDotView()
+/* 0018cca6 */{
+/* 0018ccae */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018ccd4 */}
+
+void DungeonDotView::init(string dungeonId)
+/* 0018ccdc */{
+/* 0018ccdc */	this.dungeon_ = getDungeonFromId(dungeonId);
+/* 0018cd1c */	this.initParts();
+/* 0018cd24 */}
+
+void DungeonDotView::initParts()
+/* 0018cd2c */{
+/* 0018cd2c */	this.width_ = this.dungeon_.getWidth();
+/* 0018cd48 */	this.height_ = this.dungeon_.getDepth();
+/* 0018cd64 */	this.parts_.Alloc(this.width_ * this.height_);
+/* 0018cd8a */	int i;
+/* 0018cd9c */	for (i = 0; i < this.height_; ++i)
+/* 0018cde6 */	{
+/* 0018cde6 */		int j;
+/* 0018cdf8 */		ref DungeonLine line = this.dungeon_.getDungeonLine(i);
+/* 0018ce48 */		for (j = 0; j < this.width_; ++j)
+/* 0018ce92 */		{
+/* 0018ce92 */			int index = i * this.width_ + j;
+/* 0018cec0 */			CardInfomation c;
+/* 0018ced0 */			c = getCardInfomationFromId(line.getDungeonCard(j).getCardTypeId());
+/* 0018cf40 */			string cb = c.getClickableJudgeCallback();
+/* 0018cf5e */			if (cb != "通行不可")
+/* 0018cf76 */			{
+/* 0018cf76 */				this.parts_.Realloc(this.parts_.Numof() + 1);
+/* 0018cf9e */				int r;
+/* 0018cfb0 */				int g;
+/* 0018cfc2 */				int b;
+/* 0018cfd4 */				r = g = b = 255;
+/* 0018cffa */				if (c.getFadeOutType() == 2)
+/* 0018d018 */				{
+/* 0018d018 */					g = b = 0;
+/* 0018d034 */				}
+/* 0018d03a */				else if (c.getEventCallback() != "")
+/* 0018d058 */				{
+/* 0018d058 */					r = g = 0;
+/* 0018d074 */				}
+/* 0018d074 */				this.createDotParts(this.parts_[this.parts_.Numof() - 1], j, i, r, g, b);
+/* 0018d0d2 */			}
+/* 0018d0d2 */		}
+/* 0018d0ea */	}
+/* 0018d0fc */	this.parts_.Realloc(this.parts_.Numof() + 1);
+/* 0018d124 */	this.parts_[this.parts_.Numof() - 1].initAsPlaneImage(15, 15, 255, 200, 0, 255);
+/* 0018d172 */	this.parts_[this.parts_.Numof() - 1].setShow(true);
+/* 0018d1a2 */	this.parts_[this.parts_.Numof() - 1].setAlpha(128.0);
+/* 0018d1d2 */	createPartsGroup(this.parent_, this.parts_, 6000);
+/* 0018d1f2 */	this.parent_.setShow(true);
+/* 0018d208 */	this.parent_.setPos(850.0, 450.0);
+/* 0018d224 */}
+
+void DungeonDotView::createDotParts(ref Parts p, int x, int y, int r, int g, int b)
+/* 0018d22c */{
+/* 0018d22c */	p.initAsPlaneImage(15, 15, r, g, b, 255);
+/* 0018d26c */	p.setPos(x * 16 - this.width_ * 8, -y * 16);
+/* 0018d2ba */	p.setAlpha(180.0);
+/* 0018d2d0 */	p.setShow(true);
+/* 0018d2e6 */}
+
+void DungeonDotView::setPartsShow()
+/* 0018d2ee */{
+/* 0018d2ee */	int i;
+/* 0018d300 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0018d350 */	{
+/* 0018d350 */		this.parts_[i].setShow(true);
+/* 0018d372 */	}
+/* 0018d378 */	this.parent_.setShow(true);
+/* 0018d38e */}
+
+void DungeonDotView::setPartsPos()
+/* 0018d396 */{
+/* 0018d398 */}
+
+void DungeonDotView::update()
+/* 0018d39e */{
+/* 0018d3a0 */}
+
+void DungeonDotView::fadeIn(bool val)
+/* 0018d3a6 */{
+/* 0018d3a6 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 0018d3e0 */}
+
+void DungeonDotView::setPlayerPos(int x, int y)
+/* 0018d3e8 */{
+/* 0018d3e8 */	this.parent_.setPos(850.0, 450 + y * 16);
+/* 0018d41a */	this.parts_[this.parts_.Numof() - 1].setPos(x * 16 - 8, -y * 16);
+/* 0018d476 */}
+

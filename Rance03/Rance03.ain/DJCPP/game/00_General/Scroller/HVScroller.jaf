@@ -1,0 +1,171 @@
+HVScroller::HVScroller()
+/* 0017c8c6 */{
+/* 0017c8ce */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0017c8f4 */}
+
+void HVScroller::init(float x, float y, float width, float height)
+/* 0017c8fc */{
+/* 0017c8fc */	this.initParts();
+/* 0017c904 */	this.state_ = 1;
+/* 0017c916 */	this.width_ = width;
+/* 0017c92c */	this.height_ = height;
+/* 0017c942 */	float mx;
+/* 0017c954 */	float my;
+/* 0017c966 */	this.convertMapPosToPartsPos(mx, my, x, y);
+/* 0017c992 */	this.parent_.setPos(mx, my);
+/* 0017c9b6 */}
+
+void HVScroller::initParts()
+/* 0017c9be */{
+/* 0017c9be */	this.parent_.initAsDummy();
+/* 0017c9ce */	this.setPartsShow();
+/* 0017c9d6 */}
+
+void HVScroller::setPartsShow()
+/* 0017c9de */{
+/* 0017c9e0 */}
+
+void HVScroller::update()
+/* 0017c9e6 */{
+/* 0017c9e6 */	switch (this.state_)
+/* 0017c9fc */	{
+/* 0017c9fc */	case 0:
+/* 0017c9fc */		break;
+/* 0017ca02 */	case 2:
+/* 0017ca02 */		break;
+/* 0017ca08 */	case 5:
+/* 0017ca08 */		if (this.timer_.getTime() <= 300)
+/* 7fffffffffffffff */		{
+/* 7fffffffffffffff */		}
+/* 0017ca2c */		else
+/* 0017ca2c */		{
+/* 0017ca2c */			this.state_ = 1;
+/* 0017ca3e */		}
+/* 0017ca3e */	case 1:
+/* 0017ca3e */		if (g_mouse.onDown(0))
+/* 0017ca5a */		{
+/* 0017ca5a */			this.state_ = 4;
+/* 0017ca6c */			this.dragStartMouseX_ = g_mouse.getX();
+/* 0017ca8a */			this.dragStartMouseY_ = g_mouse.getY();
+/* 0017caa8 */		}
+/* 0017caa8 */		break;
+/* 0017caae */	case 4:
+/* 0017caae */		if (getDest(g_mouse.getX(), g_mouse.getY(), this.dragStartMouseX_, this.dragStartMouseY_) > 20.0)
+/* 0017cafa */		{
+/* 0017cafa */			this.dragStartPartsX_ = this.parent_.getX();
+/* 0017cb16 */			this.dragStartPartsY_ = this.parent_.getY();
+/* 0017cb32 */			this.state_ = 3;
+/* 0017cb44 */			g_mouse.setNextMouseUpIgnore();
+/* 0017cb54 */		}
+/* 0017cb54 */		if (!g_mouse.isDown(0))
+/* 0017cb72 */		{
+/* 0017cb72 */			this.state_ = 1;
+/* 0017cb84 */		}
+/* 0017cb84 */		break;
+/* 0017cb8a */	case 3:
+/* 0017cb8a */		if (g_mouse.isCursorChanged())
+/* 0017cba0 */		{
+/* 0017cba0 */			float x = this.getNonlinearDragParam(this.dragStartPartsX_, g_mouse.getX() - this.dragStartMouseX_, 1024.0, this.width_);
+/* 0017cbf0 */			float y = this.getNonlinearDragParam(this.dragStartPartsY_, g_mouse.getY() - this.dragStartMouseY_, 768.0, this.height_);
+/* 0017cc40 */			this.parent_.setPos(x, y);
+/* 0017cc64 */		}
+/* 0017cc64 */		if (!g_mouse.isDown(0))
+/* 0017cc82 */		{
+/* 0017cc82 */			this.state_ = 1;
+/* 0017cc94 */		}
+/* 0017cc94 */		break;
+/* 0017cc9a */	case 6:
+/* 0017cc9a */		float t = Math.MinF(1.0, float(this.timer_.getTime()) / float(this.focusTime_));
+/* 0017ccd6 */		float x = getMotionValue(7, this.focusFromX_, this.focusToX_, t);
+/* 0017cd0c */		float y = getMotionValue(7, this.focusFromY_, this.focusToY_, t);
+/* 0017cd42 */		this.parent_.setPos(x, y);
+/* 0017cd66 */		if (this.timer_.getTime() > this.focusTime_)
+/* 0017cd88 */		{
+/* 0017cd88 */			this.onFinishMoveFocus_();
+/* 0017cda8 */			this.state_ = 1;
+/* 0017cdba */		}
+/* 0017cdba */		break;
+/* 0017cdc0 */	case 7:
+/* 0017cdc0 */		this.parent_.setPos(this.followCamera_.getX(), this.followCamera_.getY());
+/* 0017cdf4 */		break;
+/* 0017cdfa */	}
+/* 0017cdfa */}
+
+float HVScroller::getNonlinearDragParam(float partsStartPos, float dragWidth, float screenSize, float objectSize)
+/* 0017ce02 */{
+/* 0017ce02 */	float linearL = Math.Max(0, Math.Abs(partsStartPos) - 100);
+/* 0017ce3e */	float nonLinearL = dragWidth - linearL;
+/* 0017ce60 */	if (0 < nonLinearL)
+/* 0017ce7e */	{
+/* 0017ce7e */		float outsideMargin = Math.Min(100, Math.Abs(partsStartPos));
+/* 0017ceb2 */		float n = (nonLinearL / screenSize) * outsideMargin;
+/* 0017cee0 */		return partsStartPos + linearL + n;
+/* 0017cf04 */	}
+/* 0017cf04 */	float linearR = Math.Max(0, (partsStartPos + objectSize) - screenSize - 100.0);
+/* 0017cf4e */	float nonLinearR = -dragWidth - linearR;
+/* 0017cf72 */	if (0 < nonLinearR)
+/* 0017cf90 */	{
+/* 0017cf90 */		float outsideMargin = Math.Min(100, Math.Abs((objectSize + partsStartPos) - screenSize));
+/* 0017cfdc */		float n = (nonLinearR / screenSize) * outsideMargin;
+/* 0017d00a */		return partsStartPos - linearR - n;
+/* 0017d02e */	}
+/* 0017d02e */	return partsStartPos + dragWidth;
+/* 0017d046 */}
+
+int HVScroller::getPartsNumber()
+/* 0017d054 */{
+/* 0017d054 */	return this.parent_.getPartsNumber();
+/* 0017d066 */}
+
+void HVScroller::moveFocus(float x, float y, DG_GeneralCallback onFinishMoveFocus)
+/* 0017d074 */{
+/* 0017d074 */	this.onFinishMoveFocus_ = onFinishMoveFocus;
+/* 0017d08e */	this.focusFromX_ = this.parent_.getX();
+/* 0017d0aa */	this.focusFromY_ = this.parent_.getY();
+/* 0017d0c6 */	this.convertMapPosToPartsPos(this.focusToX_, this.focusToY_, x, y);
+/* 0017d0f2 */	this.focusTime_ = getDest(this.focusFromX_, this.focusFromY_, this.focusToX_, this.focusToY_) * 2.0;
+/* 0017d13e */	this.timer_.reset();
+/* 0017d14e */	this.state_ = 6;
+/* 0017d160 */}
+
+void HVScroller::convertMapPosToPartsPos(ref float x, ref float y, float mapX, float mapY)
+/* 0017d168 */{
+/* 0017d168 */	x = Math.MaxF(1024 - this.width_, Math.MinF(0.0, 512 - mapX));
+/* 0017d1c0 */	y = Math.MaxF(768 - this.height_, Math.MinF(0.0, 384 - mapY));
+/* 0017d218 */}
+
+void HVScroller::setCameraFollowMode(bool val)
+/* 0017d220 */{
+/* 0017d220 */	if (val)
+/* 0017d230 */	{
+/* 0017d230 */		this.followCamera_.setPos(this.parent_.getX(), this.parent_.getY());
+/* 0017d264 */		this.state_ = 7;
+/* 0017d276 */	}
+/* 0017d27c */	else
+/* 0017d27c */	{
+/* 0017d27c */		this.state_ = 1;
+/* 0017d28e */	}
+/* 0017d28e */}
+
+void HVScroller::setCameraTarget(float x, float y)
+/* 0017d296 */{
+/* 0017d296 */	float mx;
+/* 0017d2a8 */	float my;
+/* 0017d2ba */	this.convertMapPosToPartsPos(mx, my, x, y);
+/* 0017d2e6 */	this.followCamera_.setFollowPos(mx, my);
+/* 0017d30e */}
+
+void HVScroller::fadeIn(bool val, int time, DG_GeneralCallback onFinishCallback)
+/* 0017d316 */{
+/* 0017d316 */	this.parent_.setShow(true);
+/* 0017d32c */	PartsMotion m;
+/* 0017d33c */	m = getStandardMotion(val ? 0 : 1);
+/* 0017d378 */	m.setTime(time);
+/* 0017d392 */	this.parent_.runMotion(m, onFinishCallback);
+/* 0017d3bc */}
+
+void HVScroller::setShow(bool val)
+/* 0017d3c4 */{
+/* 0017d3c4 */	this.parent_.setShow(val);
+/* 0017d3de */}
+

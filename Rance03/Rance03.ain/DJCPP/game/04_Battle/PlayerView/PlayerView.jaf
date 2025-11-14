@@ -1,0 +1,141 @@
+PlayerView::PlayerView()
+/* 0019f2ee */{
+/* 0019f2f6 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019f31c */}
+
+void PlayerView::init(string id)
+/* 0019f324 */{
+/* 0019f324 */	this.player_ <- getPlayerFromId(id);
+/* 0019f360 */	this.buffView_.init(id);
+/* 0019f37a */	this.hpBar_.init(this.player_.getHp(), this.player_.getMaxHp(), true, "システム／ＨＰ／下地／%s" % this.player_.getShortName());
+/* 0019f3ce */	this.stand_.init(id);
+/* 0019f3e8 */	this.setPos();
+/* 0019f3f0 */}
+
+void PlayerView::resetPos()
+/* 0019f3f8 */{
+/* 0019f3f8 */	getBattlePlayerViewPosition(this.player_.getId(), this.x_, this.y_);
+/* 0019f41e */	this.stand_.move(this.x_, this.y_);
+/* 0019f442 */	int min;
+/* 0019f454 */	int max;
+/* 0019f466 */	g_party.getPlayerSkillIndexMinMax(min, max, this.player_.getId());
+/* 0019f496 */	float n = (min + max) / 2.0;
+/* 0019f4c2 */	this.hpBar_.move(n * 113.0 + 35.0, n * 14.0 + 458.0);
+/* 0019f50a */	this.buffView_.move((n * 113.0 + 35.0 + 159.0) - 55.0, (n * 14.0 + 458.0) - 3.0);
+/* 0019f56a */}
+
+void PlayerView::showDeadMotion()
+/* 0019f572 */{
+/* 0019f572 */	this.stand_.showDeadMotion();
+/* 0019f582 */}
+
+void PlayerView::setPos()
+/* 0019f58a */{
+/* 0019f58a */	this.setPosStand();
+/* 0019f592 */	this.setPosHpBarBuffView();
+/* 0019f59a */}
+
+void PlayerView::fadeIn(bool val)
+/* 0019f5a2 */{
+/* 0019f5a2 */	if (this.player_.getHp() > 0)
+/* 0019f5c0 */	{
+/* 0019f5c0 */		this.hpBar_.fadeIn(val, NULL);
+/* 0019f5e0 */		this.buffView_.fadeIn(val);
+/* 0019f5fa */		this.stand_.fadeIn(val, NULL);
+/* 0019f616 */	}
+/* 0019f616 */}
+
+void PlayerView::setPosStand()
+/* 0019f61e */{
+/* 0019f61e */	getBattlePlayerViewPosition(this.player_.getId(), this.x_, this.y_);
+/* 0019f644 */	this.stand_.setPos(this.x_, this.y_);
+/* 0019f668 */}
+
+void PlayerView::setPosHpBarBuffView()
+/* 0019f670 */{
+/* 0019f670 */	int min;
+/* 0019f682 */	int max;
+/* 0019f694 */	g_party.getPlayerSkillIndexMinMax(min, max, this.player_.getId());
+/* 0019f6c4 */	float n = (min + max) / 2.0;
+/* 0019f6f0 */	this.hpBar_.setPos(n * 113.0 + 35.0, n * 14.0 + 458.0);
+/* 0019f738 */	this.buffView_.setPos((n * 113.0 + 35.0 + 159.0) - 55.0, (n * 14.0 + 458.0) - 3.0);
+/* 0019f798 */}
+
+void PlayerView::update()
+/* 0019f7a0 */{
+/* 0019f7a2 */}
+
+void PlayerView::setFocus(bool val)
+/* 0019f7a8 */{
+/* 0019f7a8 */	this.stand_.setFocus(val);
+/* 0019f7c2 */}
+
+void PlayerView::setDamage(int val, string effectName, bool isDamage, int delay, DG_GeneralCallback onFinishShowDamageCallback)
+/* 0019f7ca */{
+/* 0019f7ca */	this.onFinishShowDamageCallback_ = onFinishShowDamageCallback;
+/* 0019f7e4 */	this.damage_.init(val, effectName, isDamage, false, false, 0);
+/* 0019f824 */	this.damage_.setPos(this.x_, this.y_ + 80, 0, 160);
+/* 0019f85c */	this.damage_.run(delay, this.onFinishShowDamage);
+/* 0019f880 */	if (isDamage)
+/* 0019f890 */	{
+/* 0019f890 */		this.stand_.showDamageMotion();
+/* 0019f8a0 */	}
+/* 0019f8a0 */	if (this.player_.getHp() == 0)
+/* 0019f8be */	{
+/* 0019f8be */		this.hpBar_.changeValue(this.player_.getHp(), this.hideHpBar);
+/* 0019f8e8 */	}
+/* 0019f8ee */	else
+/* 0019f8ee */	{
+/* 0019f8ee */		this.hpBar_.changeValue(this.player_.getHp(), NULL);
+/* 0019f910 */	}
+/* 0019f910 */}
+
+void PlayerView::hideHpBar()
+/* 0019f918 */{
+/* 0019f918 */	this.hpBar_.fadeIn(false, NULL);
+/* 0019f934 */}
+
+void PlayerView::onFinishShowDamage()
+/* 0019f93c */{
+/* 0019f93c */	this.onFinishShowDamageCallback_();
+/* 0019f95c */}
+
+void PlayerView::popupMessage(string msg, DG_GeneralCallback cb)
+/* 0019f964 */{
+/* 0019f964 */	this.popup_.init(msg);
+/* 0019f97e */	this.popup_.setPos(this.x_, this.y_ + 80);
+/* 0019f9aa */	this.popup_.popup(1000, cb);
+/* 0019f9cc */}
+
+void PlayerView::hidePopup()
+/* 0019f9d4 */{
+/* 0019f9d4 */	this.popup_.fadeIn(false);
+/* 0019f9ea */}
+
+void PlayerView::updateHp()
+/* 0019f9f2 */{
+/* 0019f9f2 */	this.hpBar_.changeValue(this.player_.getHp(), NULL);
+/* 0019fa14 */}
+
+string PlayerView::getId()
+/* 0019fa1c */{
+/* 0019fa1c */	return this.player_.getId();
+/* 0019fa2e */}
+
+void PlayerView::showEffect(string effectName)
+/* 0019fa3c */{
+/* 0019fa3c */	this.effect_.init(effectName);
+/* 0019fa56 */	this.effect_.setPos(this.x_, this.y_);
+/* 0019fa7a */	this.effect_.run(3);
+/* 0019fa90 */}
+
+bool PlayerView::isMotion()
+/* 0019fa98 */{
+/* 0019fa98 */	return this.stand_.isMotion();
+/* 0019faaa */}
+
+void PlayerView::updateBuffView()
+/* 0019fab8 */{
+/* 0019fab8 */	this.buffView_.updateState();
+/* 0019fac8 */}
+

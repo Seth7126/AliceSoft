@@ -1,0 +1,223 @@
+DungeonPlayerPieceGroup::DungeonPlayerPieceGroup()
+/* 0018f90a */{
+/* 0018f912 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018f938 */}
+
+void DungeonPlayerPieceGroup::init(bool isRanceOnlyMode)
+/* 0018f940 */{
+/* 0018f940 */	this.isRanceOnlyMode_ = isRanceOnlyMode;
+/* 0018f956 */	this.reset();
+/* 0018f95e */}
+
+void DungeonPlayerPieceGroup::reset()
+/* 0018f966 */{
+/* 0018f966 */	if (this.isRanceOnlyMode_)
+/* 0018f976 */	{
+/* 0018f976 */		this.piece_.Alloc(1);
+/* 0018f98c */		this.piece_[0].val <- new DungeonPlayerPiece;
+/* 0018f9d0 */		this.piece_[0].val.init("", 0);
+/* 0018f9fc */	}
+/* 0018fa08 */	else
+/* 0018fa08 */	{
+/* 0018fa08 */		array@string pIds;
+/* 0018fa12 */		getAlivePlayerList(pIds);
+/* 0018fa22 */		shuffleIds(pIds);
+/* 0018fa32 */		this.sortIds(pIds);
+/* 0018fa44 */		this.piece_.Alloc(pIds.Numof());
+/* 0018fa64 */		int i;
+/* 0018fa76 */		for (i = 0; i < this.piece_.Numof(); ++i)
+/* 0018fac6 */		{
+/* 0018fac6 */			this.piece_[i].val <- new DungeonPlayerPiece;
+/* 0018fb0e */			this.piece_[i].val.init(pIds[i], i);
+/* 0018fb52 */		}
+/* 0018fb68 */	}
+/* 0018fb68 */}
+
+void shuffleIds(ref array@string list)
+/* 0018fb70 */{
+/* 0018fb70 */	if (list.Numof() <= 1)
+/* 0018fb8e */	{
+/* 0018fb8e */		return;
+/* 0018fb90 */	}
+/* 0018fb90 */	int i;
+/* 0018fba2 */	int n = list.Numof();
+/* 0018fbbe */	for (i = 0; i < 100; ++i)
+/* 0018fc04 */	{
+/* 0018fc04 */		int l = RAND(n) - 1;
+/* 0018fc28 */		int r = RAND(n) - 1;
+/* 0018fc4c */		if (l != r)
+/* 0018fc68 */		{
+/* 0018fc68 */			list[l] <=> list[r];
+/* 0018fc98 */		}
+/* 0018fc98 */	}
+/* 0018fc9e */}
+
+void DungeonPlayerPieceGroup::update()
+/* 0018fcac */{
+/* 0018fcae */}
+
+void DungeonPlayerPieceGroup::fadeIn(bool val, unknown_delegate onFinish)
+/* 0018fcb4 */{
+/* 0018fcb4 */	int i;
+/* 0018fcc6 */	for (i = 0; i < this.piece_.Numof(); ++i)
+/* 0018fd16 */	{
+/* 0018fd16 */		this.piece_[i].val.fadeIn(val);
+/* 0018fd44 */	}
+/* 0018fd4a */}
+
+void DungeonPlayerPieceGroup::moveFront()
+/* 0018fd52 */{
+/* 0018fd52 */	int i;
+/* 0018fd64 */	for (i = 0; i < this.piece_.Numof(); ++i)
+/* 0018fdb4 */	{
+/* 0018fdb4 */		this.piece_[i].val.moveFront();
+/* 0018fdd8 */	}
+/* 0018fdde */}
+
+void DungeonPlayerPieceGroup::moveSideWays(bool isLeft)
+/* 0018fde6 */{
+/* 0018fde6 */	int i;
+/* 0018fdf8 */	for (i = 0; i < this.piece_.Numof(); ++i)
+/* 0018fe48 */	{
+/* 0018fe48 */		this.piece_[i].val.moveSideWays(isLeft);
+/* 0018fe76 */	}
+/* 0018fe7c */}
+
+void DungeonPlayerPieceGroup::updateCharacter()
+/* 0018fe84 */{
+/* 0018fe84 */	if (this.isRanceOnlyMode_)
+/* 0018fe94 */	{
+/* 0018fe94 */		return;
+/* 0018fe96 */	}
+/* 0018fe96 */	array@string current;
+/* 0018fea0 */	array@string updated;
+/* 0018feaa */	current.Alloc(this.piece_.Numof());
+/* 0018feca */	int i;
+/* 0018fedc */	for (i = 0; i < current.Numof(); ++i)
+/* 0018ff2c */	{
+/* 0018ff2c */		current[i] = this.piece_[i].val.getId();
+/* 0018ff6a */	}
+/* 0018ff70 */	getAlivePlayerList(updated);
+/* 0018ff80 */	current.Sort();
+/* 0018ff90 */	updated.Sort();
+/* 0018ffa0 */	if (this.isChanged(current, updated))
+/* 0018ffc2 */	{
+/* 0018ffc2 */		array@string erase;
+/* 0018ffcc */		array@string add;
+/* 0018ffd6 */		int i;
+/* 0018ffe8 */		int j;
+/* 0018fffa */		i = 0;
+/* 0019000c */		j = 0;
+/* 0019001e */		while (true)
+/* 0019002a */		{
+/* 0019002a */			if (updated.Numof() <= j)
+/* 0019004c */			{
+/* 0019004c */				++i;
+/* 0019005c */				j = 0;
+/* 0019006e */			}
+/* 0019006e */			if (current.Numof() <= i || updated.Numof() <= j)
+/* 001900ca */			{
+/* 001900ca */				break;
+/* 001900d0 */			}
+/* 001900d0 */			if (current[i] == updated[j])
+/* 00190104 */			{
+/* 00190104 */				current.Erase(i);
+/* 0019011a */				updated.Erase(j);
+/* 00190130 */			}
+/* 00190136 */			else
+/* 00190136 */			{
+/* 00190136 */				++j;
+/* 00190146 */			}
+/* 00190146 */		}
+/* 0019014c */		this.moveToErase(current);
+/* 0019015e */		this.addPiece(updated);
+/* 00190170 */		this.reposition();
+/* 0019018c */	}
+/* 0019018c */}
+
+bool DungeonPlayerPieceGroup::isChanged(ref array@string l, ref array@string r)
+/* 00190194 */{
+/* 00190194 */	if (l.Numof() != r.Numof())
+/* 001901bc */	{
+/* 001901bc */		return true;
+/* 001901c4 */	}
+/* 001901c4 */	int i;
+/* 001901d6 */	for (i = 0; i < l.Numof(); ++i)
+/* 00190226 */	{
+/* 00190226 */		if (l[i] != r[i])
+/* 0019025a */		{
+/* 0019025a */			return true;
+/* 00190262 */		}
+/* 00190262 */	}
+/* 00190268 */	return false;
+/* 00190270 */}
+
+void DungeonPlayerPieceGroup::reposition()
+/* 0019027e */{
+/* 0019027e */	array@string ids;
+/* 00190288 */	int i;
+/* 0019029a */	for (i = 0; i < this.piece_.Numof(); ++i)
+/* 001902ea */	{
+/* 001902ea */		ids.PushBack(this.piece_[i].val.getId());
+/* 00190318 */	}
+/* 0019031e */	shuffleIds(ids);
+/* 0019032e */	this.sortIds(ids);
+/* 00190340 */	for (i = 0; i < this.piece_.Numof(); ++i)
+/* 00190390 */	{
+/* 00190390 */		int j;
+/* 001903a2 */		for (j = 0; j < ids.Numof(); ++j)
+/* 001903f2 */		{
+/* 001903f2 */			if (ids[j] == this.piece_[i].val.getId())
+/* 00190434 */			{
+/* 00190434 */				this.piece_[i].val.changePosition(j);
+/* 00190462 */			}
+/* 00190462 */		}
+/* 00190468 */	}
+/* 0019046e */}
+
+void DungeonPlayerPieceGroup::moveToErase(ref array@string eraseIds)
+/* 00190476 */{
+/* 00190476 */	int i;
+/* 00190488 */	for (i = 0; i < eraseIds.Numof(); ++i)
+/* 001904d8 */	{
+/* 001904d8 */		int j;
+/* 001904ea */		for (j = 0; j < this.piece_.Numof(); ++j)
+/* 0019053a */		{
+/* 0019053a */			if (eraseIds[i] == this.piece_[j].val.getId())
+/* 0019057c */			{
+/* 0019057c */				this.piece_.Erase(j);
+/* 00190592 */				break;
+/* 00190598 */			}
+/* 00190598 */		}
+/* 0019059e */	}
+/* 001905a4 */}
+
+void DungeonPlayerPieceGroup::addPiece(ref array@string addIds)
+/* 001905ac */{
+/* 001905ac */	int i;
+/* 001905be */	for (i = 0; i < addIds.Numof(); ++i)
+/* 0019060e */	{
+/* 0019060e */		this.piece_.Realloc(this.piece_.Numof() + 1);
+/* 00190636 */		this.piece_[this.piece_.Numof() - 1].val <- new DungeonPlayerPiece;
+/* 0019068c */		this.piece_[this.piece_.Numof() - 1].val.init(addIds[i], i);
+/* 001906de */	}
+/* 001906ea */}
+
+void DungeonPlayerPieceGroup::sortIds(ref array@string pIds)
+/* 001906f2 */{
+/* 001906f2 */	pIds.Sort(&sortFunctionDungeonPiece);
+/* 00190702 */}
+
+int sortFunctionDungeonPiece(string lhs, string rhs)
+/* 0019070a */{
+/* 0019070a */	if (getPlayerFromId(lhs).getFormationPriority() > getPlayerFromId(rhs).getFormationPriority())
+/* 0019076a */	{
+/* 0019076a */		return 1;
+/* 00190772 */	}
+/* 00190772 */	if (getPlayerFromId(lhs).getFormationPriority() < getPlayerFromId(rhs).getFormationPriority())
+/* 001907d2 */	{
+/* 001907d2 */		return -1;
+/* 001907da */	}
+/* 001907da */	return 0;
+/* 001907e2 */}
+

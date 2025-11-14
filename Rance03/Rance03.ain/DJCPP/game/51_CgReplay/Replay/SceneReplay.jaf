@@ -1,0 +1,101 @@
+void SceneReplay::init()
+/* 001c1580 */{
+/* 001c1580 */	this.isFinish_ = false;
+/* 001c1592 */	this.pageCount_ = (g_replay.Numof() + 11) / 12;
+/* 001c15be */	this.initThumbnailList();
+/* 001c15c6 */	this.initButton();
+/* 001c15ce */}
+
+void SceneReplay::initThumbnailList()
+/* 001c15d6 */{
+/* 001c15d6 */	this.list_.init(false);
+/* 001c15ec */	this.list_.setOnClickCallback(this.onClickThumbnailButton);
+/* 001c1606 */}
+
+void SceneReplay::initButton()
+/* 001c160e */{
+/* 001c160e */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001c1636 */	this.btnExit_.setPos(839, 691);
+/* 001c1652 */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001c1672 */}
+
+void SceneReplay::onClickButtonExit(int index)
+/* 001c167a */{
+/* 001c167a */	this.fadeIn(false, this.onFinish);
+/* 001c1692 */}
+
+void SceneReplay::run()
+/* 001c169a */{
+/* 001c169a */	this.fadeIn(true, NULL);
+/* 001c16aa */}
+
+void SceneReplay::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001c16b2 */{
+/* 001c16b2 */	this.list_.fadeIn(val, NULL);
+/* 001c16ce */	this.btnExit_.fadeIn(val);
+/* 001c16e8 */	if (cb.Numof() != 0)
+/* 001c1704 */	{
+/* 001c1704 */		this.timerCb_.setTimer(300, cb);
+/* 001c1726 */	}
+/* 001c1726 */}
+
+void SceneReplay::onFinish()
+/* 001c172e */{
+/* 001c172e */	this.isFinish_ = true;
+/* 001c1740 */}
+
+bool SceneReplay::update()
+/* 001c1748 */{
+/* 001c1748 */	if (g_mouse.isClick(1))
+/* 001c1764 */	{
+/* 001c1764 */		playCancel();
+/* 001c176a */		this.fadeIn(false, this.onFinish);
+/* 001c1782 */	}
+/* 001c1782 */	return !this.isFinish_;
+/* 001c1792 */}
+
+void SceneReplay::onClickThumbnailButton(int index)
+/* 001c17a0 */{
+/* 001c17a0 */	array@string ev;
+/* 001c17aa */	array@string name;
+/* 001c17b4 */	this.clickedIndex_ = index;
+/* 001c17ca */	g_replay[index].getAvailableEventList(ev, name);
+/* 001c17fa */	if (ev.Numof() > 1)
+/* 001c1818 */	{
+/* 001c1818 */		int result = openReplayDialog(name);
+/* 001c1836 */		if (result != -1)
+/* 001c184e */		{
+/* 001c184e */			this.runEventFuncName_ = ev[result];
+/* 001c1872 */		}
+/* 001c1872 */	}
+/* 001c1878 */	else
+/* 001c1878 */	{
+/* 001c1878 */		this.runEventFuncName_ = ev[0];
+/* 001c1898 */	}
+/* 001c1898 */	if (this.runEventFuncName_ != "")
+/* 001c18b0 */	{
+/* 001c18b0 */		this.fadeIn(false, this.onFinishSelection);
+/* 001c18c8 */	}
+/* 001c18c8 */}
+
+void SceneReplay::onFinishSelection()
+/* 001c18d0 */{
+/* 001c18d0 */	string key = "回想%02d" % (this.clickedIndex_ + 1);
+/* 001c18fe */	g_globalGameFlag.setInt(key, g_globalGameFlag.getInt(key) + 1);
+/* 001c193a */	if (g_saveDataManager.replaySave())
+/* 001c1950 */	{
+/* 001c1950 */		setGameMode(false);
+/* 001c195c */		DG_GeneralCallback cb;
+/* 001c1968 */		cb = this.runEventFuncName_;
+/* 001c198e */		cb();
+/* 001c19ae */		restoreGameMode();
+/* 001c19b4 */		g_saveDataManager.replayLoad();
+/* 001c19c4 */		cb.Clear();
+/* 001c19d0 */	}
+/* 001c19d6 */	else
+/* 001c19d6 */	{
+/* 001c19d6 */		this.runEventFuncName_ = "";
+/* 001c19ea */		this.fadeIn(true, NULL);
+/* 001c19fa */	}
+/* 001c19fa */}
+

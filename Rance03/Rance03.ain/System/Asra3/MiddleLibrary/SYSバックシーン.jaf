@@ -1,0 +1,37 @@
+void SYS_バックシーン登録()
+/* 0014e518 */{
+/* 0014e518 */	if (!g_bバックシーン登録可能)
+/* 0014e52a */	{
+/* 0014e52a */		return;
+/* 0014e52c */	}
+/* 0014e52c */	CASParts BG;
+/* 0014e53c */	if (Ａ＿ＣＧ存在確認(g_BackSceneBGName))
+/* 0014e552 */	{
+/* 0014e552 */		BG.Create();
+/* 0014e562 */		BG.SetCG(g_BackSceneBGName, 1);
+/* 0014e582 */		Ｐ＿親設定(BG.GetPartsNumber(), AFL_Parts_GetLayerID(0));
+/* 0014e5a4 */	}
+/* 0014e5a4 */	ADVSceneData ADVScene;
+/* 0014e5b4 */	SYS_SaveBackSceneData(ADVScene);
+/* 0014e5c4 */	if (g_ADVSceneList.Numof() >= 500)
+/* 0014e5e2 */	{
+/* 0014e5e2 */		g_ADVSceneList.Erase(0);
+/* 0014e5f4 */	}
+/* 0014e5f4 */	g_ADVSceneList.PushBack(ADVScene);
+/* 0014e60c */}
+
+int SYS_GetNumofADVScene()
+/* 0014e61a */{
+/* 0014e61a */	return g_ADVSceneList.Numof();
+/* 0014e62c */}
+
+bool SYS_GetADVScene(int nIndex, ref ADVSceneData ADVScene)
+/* 0014e640 */{
+/* 0014e640 */	if (nIndex < 0 || nIndex >= g_ADVSceneList.Numof())
+/* 0014e692 */	{
+/* 0014e692 */		return false;
+/* 0014e69a */	}
+/* 0014e69a */	ADVScene = g_ADVSceneList[nIndex];
+/* 0014e6c8 */	return true;
+/* 0014e6d0 */}
+

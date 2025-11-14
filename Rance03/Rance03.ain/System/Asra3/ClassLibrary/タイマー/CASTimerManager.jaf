@@ -1,0 +1,89 @@
+CASTimerManager::CASTimerManager()
+/* 000012fc */{
+/* 00001306 */}
+
+CASTimerManager::~CASTimerManager()
+/* 0000130c */{
+/* 0000130e */}
+
+int CASTimerManager::CreateHandle()
+/* 00001314 */{
+/* 00001314 */	int nEmptyIndex = this.m_CreatedFlagList.Find(0, this.m_CreatedFlagList.Numof(), 0);
+/* 0000134c */	if (nEmptyIndex != -1)
+/* 00001364 */	{
+/* 00001364 */		this.m_CreatedFlagList[nEmptyIndex] = 1;
+/* 00001382 */		return nEmptyIndex;
+/* 0000138e */	}
+/* 0000138e */	int nNewIndex = this.m_TimerImpList.Numof();
+/* 000013aa */	this.m_TimerImpList.Realloc(this.m_TimerImpList.Numof() + 1);
+/* 000013d2 */	this.m_CreatedFlagList.Realloc(this.m_CreatedFlagList.Numof() + 1);
+/* 000013fa */	this.m_CreatedFlagList[nNewIndex] = 1;
+/* 00001418 */	this.m_TimerImpList[nNewIndex].Reset();
+/* 00001434 */	return nNewIndex;
+/* 00001440 */}
+
+void CASTimerManager::ReleaseHandle(int nHandle)
+/* 0000144e */{
+/* 0000144e */	if (!this.CheckHandle(nHandle))
+/* 00001468 */	{
+/* 00001468 */		return;
+/* 0000146a */	}
+/* 0000146a */	this.m_CreatedFlagList[nHandle] = 0;
+/* 00001488 */	this.GC();
+/* 00001490 */}
+
+void CASTimerManager::GC()
+/* 00001498 */{
+/* 00001498 */	if (this.m_CreatedFlagList.Empty())
+/* 000014a8 */	{
+/* 000014a8 */		return;
+/* 000014aa */	}
+/* 000014aa */	for (; !this.m_CreatedFlagList.Empty(); )
+/* 000014c8 */	{
+/* 000014c8 */		if (this.m_CreatedFlagList[this.m_CreatedFlagList.Numof() - 1] == 1)
+/* 000014fa */		{
+/* 000014fa */			break;
+/* 00001500 */		}
+/* 00001500 */		this.m_CreatedFlagList.PopBack();
+/* 0000150a */		this.m_TimerImpList.PopBack();
+/* 00001514 */	}
+/* 0000151a */}
+
+ref CASTimerImp CASTimerManager::GetObject(int nHandle)
+/* 00001522 */{
+/* 00001522 */	if (!this.CheckHandle(nHandle))
+/* 0000153c */	{
+/* 0000153c */		return NULL;
+/* 00001544 */	}
+/* 00001544 */	return this.m_TimerImpList[nHandle];
+/* 00001560 */}
+
+bool CASTimerManager::CheckHandle(int nHandle)
+/* 0000156e */{
+/* 0000156e */	if (nHandle < 0 || nHandle >= this.m_CreatedFlagList.Numof() || !this.m_CreatedFlagList[nHandle])
+/* 000015f6 */	{
+/* 000015f6 */		system.Error("AsraFramework内部エラー\nCASTimerManager - ハンドルエラー");
+/* 00001604 */		return false;
+/* 0000160e */	}
+/* 0000160e */	return true;
+/* 00001618 */}
+
+void CASTimerManager::UpdateCurrentTime()
+/* 00001626 */{
+/* 00001626 */	int nHandle;
+/* 00001638 */	for (nHandle = 0; nHandle < this.m_TimerImpList.Numof(); nHandle++)
+/* 0000168c */	{
+/* 0000168c */		this.m_TimerImpList[nHandle].UpdateCurrentTime();
+/* 000016a8 */	}
+/* 000016ae */}
+
+void CASTimerManager::Rebuild()
+/* 000016b6 */{
+/* 000016b6 */	int nCurrentTime = system.GetTime();
+/* 000016c8 */	int nHandle;
+/* 000016da */	for (nHandle = 0; nHandle < this.m_TimerImpList.Numof(); nHandle++)
+/* 0000172e */	{
+/* 0000172e */		this.m_TimerImpList[nHandle].Rebuild(nCurrentTime);
+/* 00001754 */	}
+/* 0000175a */}
+

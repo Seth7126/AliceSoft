@@ -1,0 +1,170 @@
+MapCloud::MapCloud()
+/* 001866dc */{
+/* 001866e4 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018670a */}
+
+void MapCloud::init(int parentPartsNumber)
+/* 00186712 */{
+/* 00186712 */	this.initParts(parentPartsNumber);
+/* 00186724 */	this.setPartsShow();
+/* 0018672c */}
+
+void MapCloud::update()
+/* 00186734 */{
+/* 00186734 */	this.updateMotion();
+/* 0018673c */	if (this.aliveTime_ < this.timer_.getTime())
+/* 0018675e */	{
+/* 0018675e */		this.reset();
+/* 00186766 */	}
+/* 0018676c */	else if (this.timer_.getTime() < this.fadeTime_)
+/* 0018678e */	{
+/* 0018678e */		float n = float(this.timer_.getTime()) / float(this.fadeTime_);
+/* 001867ba */		this.parent_.setAlpha(n * 255.0);
+/* 001867dc */	}
+/* 001867e2 */	else if (this.aliveTime_ - this.timer_.getTime() < this.fadeTime_)
+/* 00186810 */	{
+/* 00186810 */		float n = float(this.aliveTime_ - this.timer_.getTime()) / float(this.fadeTime_);
+/* 00186848 */		this.parent_.setAlpha(n * 255.0);
+/* 0018686a */	}
+/* 0018686a */	float r = float(this.timer_.getTime()) / float(this.aliveTime_);
+/* 00186896 */	this.parent_.setPos(this.sx_ * (1 - r) + this.ex_ * r, this.sy_ * (1 - r) + this.ey_ * r);
+/* 00186936 */}
+
+void MapCloud::updateMotion()
+/* 0018693e */{
+/* 0018693e */	int i;
+/* 00186950 */	for (i = 0; i < 5; ++i)
+/* 00186996 */	{
+/* 00186996 */		if (!this.parts_[i].isMotion())
+/* 001869ba */		{
+/* 001869ba */			array@PartsMotion m1;
+/* 001869c4 */			array@PartsMotion m2;
+/* 001869ce */			this.getMotion(m1, m2);
+/* 001869ea */			int scaling = RAND(50) + 35;
+/* 00186a0a */			this.parts_[i].setScaling(scaling);
+/* 00186a32 */			this.parts_[i].runMotionArray(m1, NULL);
+/* 00186a5c */			this.parts_[i + 5].setScaling(scaling);
+/* 00186a8c */			this.parts_[i + 5].runMotionArray(m2, NULL);
+/* 00186ad2 */		}
+/* 00186ad2 */	}
+/* 00186ad8 */}
+
+void MapCloud::reset()
+/* 00186ae0 */{
+/* 00186ae0 */	this.getMoveArea(this.sx_, this.sy_, this.ex_, this.ey_);
+/* 00186b08 */	int dest = getDest(this.sx_, this.sy_, this.ex_, this.ey_);
+/* 00186b44 */	this.aliveTime_ = dest * (15 + RAND(10));
+/* 00186b70 */	this.fadeTime_ = this.aliveTime_ / 3;
+/* 00186b8e */	this.shadowHeight_ = 80 + RAND(50);
+/* 00186bae */	this.timer_.reset();
+/* 00186bbe */}
+
+void MapCloud::getMoveArea(ref int sx, ref int sy, ref int ex, ref int ey)
+/* 00186bc6 */{
+/* 00186bc6 */	array@int area;
+/* 00186bd0 */	area.PushBack(0);
+/* 00186be0 */	area.PushBack(168);
+/* 00186bf0 */	area.PushBack(702);
+/* 00186c00 */	area.PushBack(84);
+/* 00186c10 */	area.PushBack(0);
+/* 00186c20 */	area.PushBack(636);
+/* 00186c30 */	area.PushBack(2048);
+/* 00186c40 */	area.PushBack(504);
+/* 00186c50 */	area.PushBack(1110);
+/* 00186c60 */	area.PushBack(464);
+/* 00186c70 */	area.PushBack(938);
+/* 00186c80 */	area.PushBack(1076);
+/* 00186c90 */	area.PushBack(582);
+/* 00186ca0 */	area.PushBack(0);
+/* 00186cb0 */	area.PushBack(760);
+/* 00186cc0 */	area.PushBack(210);
+/* 00186cd0 */	area.PushBack(0);
+/* 00186ce0 */	area.PushBack(1148);
+/* 00186cf0 */	area.PushBack(524);
+/* 00186d00 */	area.PushBack(390);
+/* 00186d10 */	float x;
+/* 00186d22 */	float y;
+/* 00186d34 */	float w;
+/* 00186d46 */	float h;
+/* 00186d58 */	int index = RAND(5) - 1;
+/* 00186d78 */	x = area[index * 4 + 0];
+/* 00186dac */	y = area[index * 4 + 1];
+/* 00186de0 */	w = area[index * 4 + 2];
+/* 00186e14 */	h = area[index * 4 + 3];
+/* 00186e48 */	float vw = w * ((40.0 + RAND(50)) / 100.0);
+/* 00186e7e */	float vh = RAND(200) - 100;
+/* 00186ea0 */	float dx = w - vw;
+/* 00186ec2 */	float dy = Math.Abs(h - vh);
+/* 00186ef2 */	sx = x + RAND(dx);
+/* 00186f22 */	sy = y + RAND(dy);
+/* 00186f52 */	ex = sx + vw;
+/* 00186f80 */	ey = sy + vh;
+/* 00186fae */}
+
+void MapCloud::initParts(int parentPartsNumber)
+/* 00186fb6 */{
+/* 00186fb6 */	this.parent_.initAsDummy();
+/* 00186fc6 */	this.parts_.Alloc(10);
+/* 00186fdc */	int i;
+/* 00186fee */	for (i = 0; i < 5; ++i)
+/* 00187034 */	{
+/* 00187034 */		int index = RAND(4) - 1;
+/* 00187054 */		this.parts_[i].init("システム／マップ／雲%D" % (index + 1), 0);
+/* 00187096 */		this.parts_[i].setShow(true);
+/* 001870b8 */		this.parts_[i].setOrigin(5);
+/* 001870da */		this.parts_[i].setZ(500.0);
+/* 001870fc */		this.parts_[i].setParent(this.parent_.getPartsNumber());
+/* 00187128 */		this.parts_[i + 5].initAsCgPlaneImage("システム／マップ／雲%D" % (i % 4 + 1), 0, 0, 0);
+/* 00187186 */		this.parts_[i + 5].setFilterType(2);
+/* 001871b0 */		this.parts_[i + 5].setShow(true);
+/* 001871da */		this.parts_[i + 5].setOrigin(5);
+/* 00187204 */		this.parts_[i + 5].setZ(0.0);
+/* 0018722e */		this.parts_[i + 5].setParent(this.parent_.getPartsNumber());
+/* 00187262 */	}
+/* 00187268 */	this.parent_.setParent(parentPartsNumber);
+/* 00187282 */}
+
+void MapCloud::getMotion(ref array@PartsMotion m, ref array@PartsMotion m2)
+/* 0018728a */{
+/* 0018728a */	m.Free();
+/* 00187294 */	m.Alloc(3);
+/* 001872aa */	int rot = RAND(60) - 30;
+/* 001872ca */	int mx = 50 + RAND(50);
+/* 001872ea */	int my = RAND(15);
+/* 00187302 */	int x = (-((mx * 3) / 2) + RAND(50)) - 25;
+/* 00187340 */	int y = (-((my * 3) / 2) + RAND(50)) - 25;
+/* 0018737e */	int time = 2000 + RAND(1000);
+/* 0018739e */	m[0].setTime(time);
+/* 001873c0 */	m[0].setAlpha(0, 200, 0);
+/* 001873ea */	m[0].setKey(3, 0, rot, 0);
+/* 0018741e */	m[0].setMove(x, y, x + mx, y + my, 0);
+/* 0018747c */	m[1].setTime(time);
+/* 0018749e */	m[1].setKey(3, rot, rot * 2, 0);
+/* 001874de */	m[1].setMove(x + mx, y + my, x + mx * 2, y + my * 2, 0);
+/* 00187564 */	m[2].setTime(time);
+/* 00187586 */	m[2].setAlpha(200, 0, 0);
+/* 001875b0 */	m[2].setKey(3, rot * 2, rot * 3, 0);
+/* 001875f8 */	m[2].setMove(x + mx * 2, y + my * 2, x + mx * 3, y + my * 3, 0);
+/* 0018768e */	m2.Alloc(m.Numof());
+/* 001876ae */	m2.Copy(0, m, 0, m.Numof());
+/* 001876e0 */	m2[0].setAlpha(0, 64, 0);
+/* 0018770a */	m2[2].setAlpha(64, 0, 0);
+/* 00187734 */	m2[0].setMove(x, this.shadowHeight_ + y, x + mx, this.shadowHeight_ + y + my, 0);
+/* 001877aa */	m2[1].setMove(x + mx, this.shadowHeight_ + y + my, x + mx * 2, this.shadowHeight_ + y + my * 2, 0);
+/* 00187848 */	m2[2].setMove(x + mx * 2, this.shadowHeight_ + y + my * 2, x + mx * 3, this.shadowHeight_ + y + my * 3, 0);
+/* 001878f6 */}
+
+void MapCloud::setPartsShow()
+/* 001878fe */{
+/* 001878fe */	int i;
+/* 00187910 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00187960 */	{
+/* 00187960 */		this.parts_[i].setShow(true);
+/* 00187982 */	}
+/* 00187988 */	this.parent_.setShow(true);
+/* 0018799e */}
+
+void MapCloud::setPartsPos()
+/* 001879a6 */{
+/* 001879a8 */}
+

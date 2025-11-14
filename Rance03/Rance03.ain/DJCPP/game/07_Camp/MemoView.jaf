@@ -1,0 +1,65 @@
+MemoView::MemoView()
+/* 001b7ba6 */{
+/* 001b7bae */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b7bd4 */}
+
+void MemoView::init(string memoText)
+/* 001b7bdc */{
+/* 001b7bdc */	array@string n;
+/* 001b7be6 */	splitToken(n, memoText, "|");
+/* 001b7c06 */	int c = Math.Min(2, n.Numof());
+/* 001b7c32 */	this.parts_[0].init("システム／キャンプ／メモ", 0);
+/* 001b7c56 */	int i;
+/* 001b7c68 */	for (i = 0; i < c; ++i)
+/* 001b7cb2 */	{
+/* 001b7cb2 */		this.parts_[1 + i].initAsText(n[i], 32, false, 256, 254, 246, 230);
+/* 001b7d10 */	}
+/* 001b7d16 */	createPartsGroup(this.parent_, this.parts_, 4100);
+/* 001b7d36 */	this.setPartsPos();
+/* 001b7d3e */}
+
+void MemoView::initParts()
+/* 001b7d46 */{
+/* 001b7d48 */}
+
+void MemoView::setPartsShow()
+/* 001b7d4e */{
+/* 001b7d4e */	int i;
+/* 001b7d60 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b7db0 */	{
+/* 001b7db0 */		this.parts_[i].setShow(true);
+/* 001b7dd2 */	}
+/* 001b7dd8 */	this.parent_.setShow(true);
+/* 001b7dee */}
+
+void MemoView::setPartsPos()
+/* 001b7df6 */{
+/* 001b7df6 */	this.parts_[0].setPos(-19.0, -50.0);
+/* 001b7e1a */	int i;
+/* 001b7e2c */	for (i = 0; i < 2; ++i)
+/* 001b7e72 */	{
+/* 001b7e72 */		this.parts_[1 + i].setPos(97.0, 58 + i * 26);
+/* 001b7eb8 */	}
+/* 001b7ebe */}
+
+void MemoView::update()
+/* 001b7ec6 */{
+/* 001b7ec8 */}
+
+void MemoView::fadeIn(bool val)
+/* 001b7ece */{
+/* 001b7ece */	this.setPartsShow();
+/* 001b7ed6 */	PartsMotion m;
+/* 001b7ee6 */	if (val)
+/* 001b7ef6 */	{
+/* 001b7ef6 */		m.setMove(0, -400, 0, 0, 2);
+/* 001b7f24 */		m.setTime(300);
+/* 001b7f3a */	}
+/* 001b7f40 */	else
+/* 001b7f40 */	{
+/* 001b7f40 */		m.setMove(0, 0, 0, -400, 1);
+/* 001b7f6e */		m.setTime(100);
+/* 001b7f84 */	}
+/* 001b7f84 */	this.parent_.runMotion(m, NULL);
+/* 001b7fa4 */}
+

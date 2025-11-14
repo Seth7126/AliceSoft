@@ -1,0 +1,320 @@
+void test_Scene_Dungeon()
+/* 001f1644 */{
+/* 001f1644 */	openDungeon(g_dungeon[0].getId(), 0, 3);
+/* 001f166e */}
+
+void test_Dungeon_CardViewMove()
+/* 001f167c */{
+/* 001f167c */	array@DungeonCard card[45];
+/* 001f1692 */	array@DungeonCardView view[45];
+/* 001f16a8 */	int i;
+/* 001f16ba */	for (i = 0; i < card.Numof(); ++i)
+/* 001f170a */	{
+/* 001f170a */		card[i].init(g_cardInfomation[i % 4].getId(), 0);
+/* 001f1750 */	}
+/* 001f1756 */	for (i = 0; i < view.Numof(); ++i)
+/* 001f17a6 */	{
+/* 001f17a6 */		view[i].init(card[i], NULL, 0, 0, 0, 0);
+/* 001f17f2 */		view[i].setLocalPos(i % 9 - 4, i / 9);
+/* 001f183e */	}
+/* 001f1844 */	float y = 8.0;
+/* 001f1856 */	while (!g_mouse.isClick(1))
+/* 001f1874 */	{
+/* 001f1874 */		if (g_mouse.isClick(0))
+/* 001f1890 */		{
+/* 001f1890 */			y = 8.0;
+/* 001f18a2 */		}
+/* 001f18a2 */		y -= 0.05;
+/* 001f18b4 */		for (i = 0; i < view.Numof(); ++i)
+/* 001f1904 */		{
+/* 001f1904 */			view[i].init(card[i], NULL, 0, 0, 0, 0);
+/* 001f1950 */			view[i].setLocalPos(i % 9 - 4, i / 9 + y);
+/* 001f19ac */		}
+/* 001f19b2 */		g_gameObjectManager.update();
+/* 001f19c2 */		g_frameManager.updateFrame();
+/* 001f19d2 */	}
+/* 001f19d8 */}
+
+void test_Dungeon_CardViewFlip()
+/* 001f19e6 */{
+/* 001f19e6 */	array@DungeonCard card[5];
+/* 001f19fc */	array@DungeonCardView view[5];
+/* 001f1a12 */	int i;
+/* 001f1a24 */	for (i = 0; i < card.Numof(); ++i)
+/* 001f1a74 */	{
+/* 001f1a74 */		card[i].init(g_cardInfomation[i % 4].getId(), i % 3);
+/* 001f1ac6 */	}
+/* 001f1acc */	for (i = 0; i < view.Numof(); ++i)
+/* 001f1b1c */	{
+/* 001f1b1c */		view[i].init(card[i], NULL, 0, 0, 0, 0);
+/* 001f1b68 */		view[i].setLocalPos(i - 1, 0.0);
+/* 001f1b9e */	}
+/* 001f1ba4 */	float y = 8.0;
+/* 001f1bb6 */	while (!g_mouse.isClick(1))
+/* 001f1bd4 */	{
+/* 001f1bd4 */		if (g_mouse.isClick(0))
+/* 001f1bf0 */		{
+/* 001f1bf0 */			for (i = 0; i < card.Numof(); ++i)
+/* 001f1c40 */			{
+/* 001f1c40 */				card[i].openCard();
+/* 001f1c5c */			}
+/* 001f1c62 */		}
+/* 001f1c62 */		g_gameObjectManager.update();
+/* 001f1c72 */		g_frameManager.updateFrame();
+/* 001f1c82 */	}
+/* 001f1c88 */}
+
+void test_Dungeon_CardViewFadeIn()
+/* 001f1c96 */{
+/* 001f1c96 */	array@DungeonCard card[5];
+/* 001f1cac */	array@DungeonCardView view[5];
+/* 001f1cc2 */	int i;
+/* 001f1cd4 */	for (i = 0; i < card.Numof(); ++i)
+/* 001f1d24 */	{
+/* 001f1d24 */		card[i].init(g_cardInfomation[i % 4].getId(), i % 3);
+/* 001f1d76 */	}
+/* 001f1d7c */	for (i = 0; i < view.Numof(); ++i)
+/* 001f1dcc */	{
+/* 001f1dcc */		view[i].init(card[i], NULL, 0, 0, 0, 0);
+/* 001f1e18 */		view[i].setLocalPos(i - 1, 0.0);
+/* 001f1e4e */		view[i].fadeIn(true, NULL);
+/* 001f1e72 */	}
+/* 001f1e78 */	float y = 8.0;
+/* 001f1e8a */	while (!g_mouse.isClick(1))
+/* 001f1ea8 */	{
+/* 001f1ea8 */		if (g_mouse.isClick(0))
+/* 001f1ec4 */		{
+/* 001f1ec4 */			for (i = 0; i < view.Numof(); ++i)
+/* 001f1f14 */			{
+/* 001f1f14 */				view[i].fadeIn(true, NULL);
+/* 001f1f38 */			}
+/* 001f1f3e */		}
+/* 001f1f3e */		g_gameObjectManager.update();
+/* 001f1f4e */		g_frameManager.updateFrame();
+/* 001f1f5e */	}
+/* 001f1f64 */}
+
+void test_Dungeon_Infomation()
+/* 001f1f72 */{
+/* 001f1f72 */	string key = g_dungeon[0].getId();
+/* 001f1f98 */	Dungeon d;
+/* 001f1fa8 */	d.init(key);
+/* 001f1fc2 */	int i;
+/* 001f1fd4 */	for (i = 0; i < d.getDepth(); ++i)
+/* 001f2024 */	{
+/* 001f2024 */		ref DungeonLine line = d.getDungeonLine(i);
+/* 001f2074 */		line.debugOut();
+/* 001f2084 */	}
+/* 001f2096 */}
+
+void test_Dungeon_CamraMotion()
+/* 001f20a4 */{
+/* 001f20a4 */	array@DungeonCard card[45];
+/* 001f20ba */	array@DungeonCardView view[45];
+/* 001f20d0 */	int i;
+/* 001f20e2 */	for (i = 0; i < card.Numof(); ++i)
+/* 001f2132 */	{
+/* 001f2132 */		card[i].init(g_cardInfomation[i % 4].getId(), 0);
+/* 001f2178 */	}
+/* 001f217e */	for (i = 0; i < view.Numof(); ++i)
+/* 001f21ce */	{
+/* 001f21ce */		view[i].init(card[i], NULL, 0, 0, 0, 0);
+/* 001f221a */		view[i].setLocalPos(i % 9 - 4, i / 9);
+/* 001f2266 */	}
+/* 001f226c */	float camera;
+/* 001f227e */	while (!g_mouse.isClick(1))
+/* 001f229c */	{
+/* 001f229c */		if (g_keyboard.isDown(37))
+/* 001f22b8 */		{
+/* 001f22b8 */			camera += 0.03;
+/* 001f22ca */		}
+/* 001f22d0 */		else if (g_keyboard.isDown(39))
+/* 001f22ec */		{
+/* 001f22ec */			camera -= 0.03;
+/* 001f22fe */		}
+/* 001f22fe */		int i;
+/* 001f2310 */		for (i = 0; i < view.Numof(); ++i)
+/* 001f2360 */		{
+/* 001f2360 */			view[i].setCameraPos(camera);
+/* 001f2386 */		}
+/* 001f238c */		g_gameObjectManager.update();
+/* 001f239c */		g_frameManager.updateFrame();
+/* 001f23ac */	}
+/* 001f23b2 */}
+
+void test_Dungeon_CardInfomation()
+/* 001f23c0 */{
+/* 001f23c0 */	int i;
+/* 001f23d2 */	for (i = 0; i < g_cardInfomation.Numof(); ++i)
+/* 001f2422 */	{
+/* 001f2422 */		string n = "%s|%s|%s|%s|%d|%d|%s" % g_cardInfomation[i].getId() % g_cardInfomation[i].getCaption() % g_cardInfomation[i].getImageName() % g_cardInfomation[i].getEventCallback() % g_cardInfomation[i].getFadeOutType() % g_cardInfomation[i].getChangeType() % g_cardInfomation[i].getClickableJudgeCallback();
+/* 001f2532 */		pass(n);
+/* 001f2542 */	}
+/* 001f2548 */}
+
+void test_Dungeon_Line()
+/* 001f2556 */{
+/* 001f2556 */	string key = "DUNG002";
+/* 001f256a */	g_testDungeonFront = 0;
+/* 001f257c */	g_testDungeonPlayerX = 0;
+/* 001f258e */	g_testDungeonLine.Alloc(7);
+/* 001f25a4 */	g_testDungeon.init(key);
+/* 001f25be */	int i;
+/* 001f25d0 */	for (i = 0; i < g_testDungeonLine.Numof(); ++i)
+/* 001f2620 */	{
+/* 001f2620 */		g_testDungeonLine[i].init(g_testDungeon.getDungeonLine(i), g_testDungeonPlayerX, i, 0, 0, 0);
+/* 001f269a */		g_testDungeonLine[i].setOnClickCallback("test_Dungeon_LineClickCallback");
+/* 001f26ce */	}
+/* 001f26da */	while (!g_mouse.isClick(1))
+/* 001f26f8 */	{
+/* 001f26f8 */		if (g_keyboard.isPress(37))
+/* 001f2714 */		{
+/* 001f2714 */			int i;
+/* 001f2726 */			for (i = 0; i < g_testDungeon.getDepth(); ++i)
+/* 001f2776 */			{
+/* 001f2776 */				int w = g_testDungeon.getDungeonLine(i).getWidth();
+/* 001f27bc */				int j;
+/* 001f27ce */				for (j = 0; j < w; ++j)
+/* 001f2818 */				{
+/* 001f2818 */					g_testDungeon.getDungeonLine(i).getDungeonCard(j).openCard();
+/* 001f287c */				}
+/* 001f288e */			}
+/* 001f289a */		}
+/* 001f289a */		g_gameObjectManager.update();
+/* 001f28aa */		g_frameManager.updateFrame();
+/* 001f28ba */	}
+/* 001f28c0 */	g_testDungeonLine.Free();
+/* 001f28ca */}
+
+void test_Dungeon_LineOnFinishMove()
+/* 001f28d8 */{
+/* 001f28d8 */	++g_finishEventCount2;
+/* 001f28e8 */	if (g_testDungeonLine.Numof() == g_finishEventCount2)
+/* 001f290a */	{
+/* 001f290a */		g_finishEventCount2 = 0;
+/* 001f291c */		++g_testDungeonFront;
+/* 001f292c */		int count = g_testDungeonLine.Numof();
+/* 001f2948 */		g_testDungeonLine.Erase(0);
+/* 001f295a */		g_testDungeonLine.Realloc(count);
+/* 001f2974 */		g_testDungeonLine[count - 1].init(g_testDungeon.getDungeonLine(g_testDungeonFront + count), g_testDungeonPlayerX, count - 1, 0, 0, 0);
+/* 001f2a0a */		g_testDungeonLine[count - 1].setOnClickCallback("test_Dungeon_LineClickCallback");
+/* 001f2a46 */	}
+/* 001f2a46 */}
+
+void test_Dungeon_LineOnFinishMoveSideways()
+/* 001f2a5a */{
+/* 001f2a5a */	++g_finishEventCount1;
+/* 001f2a6a */	if (g_testDungeonLine.Numof() == g_finishEventCount1)
+/* 001f2a8c */	{
+/* 001f2a8c */		g_finishEventCount1 = 0;
+/* 001f2a9e */		test_Dungeon_CardMoveForward();
+/* 001f2aa4 */	}
+/* 001f2aa4 */}
+
+void test_ExLoading_Dungeon()
+/* 001f2ab2 */{
+/* 001f2ab2 */	int i;
+/* 001f2ac4 */	for (i = 0; i < g_dungeon.Numof(); ++i)
+/* 001f2b14 */	{
+/* 001f2b14 */		string s = "%s|%s|%s" % g_dungeon[i].getId() % g_dungeon[i].getCaption() % g_dungeon[i].getDefaultCardId();
+/* 001f2b94 */		pass(s);
+/* 001f2ba4 */	}
+/* 001f2baa */}
+
+void test_ExLoading_CardInfomation()
+/* 001f2bb8 */{
+/* 001f2bb8 */	int i;
+/* 001f2bca */	for (i = 0; i < g_cardInfomation.Numof(); ++i)
+/* 001f2c1a */	{
+/* 001f2c1a */		string s = "id:%s|caption:%s|imagename:%s|eventCallback:%s|minimapIcon:%s|foType:%d|changeType:%d|judgecallback:%s" % g_cardInfomation[i].getId() % g_cardInfomation[i].getCaption() % g_cardInfomation[i].getImageName() % g_cardInfomation[i].getEventCallback() % g_cardInfomation[i].getMinimapIconImageName() % g_cardInfomation[i].getFadeOutType() % g_cardInfomation[i].getChangeType() % g_cardInfomation[i].getClickableJudgeCallback();
+/* 001f2d4e */		pass(s);
+/* 001f2d5e */	}
+/* 001f2d64 */}
+
+void test_Dungeon_CardMoveForward()
+/* 001f2d72 */{
+/* 001f2d72 */	int i;
+/* 001f2d84 */	for (i = 0; i < g_testDungeonLine.Numof(); ++i)
+/* 001f2dd4 */	{
+/* 001f2dd4 */		g_testDungeonLine[i].moveForward("test_Dungeon_LineOnFinishMove");
+/* 001f2e08 */	}
+/* 001f2e0e */}
+
+void test_Dungeon_LineClickCallback(ref DungeonCard card, int xPos, int yPos)
+/* 001f2e1c */{
+/* 001f2e1c */	if (g_testDungeonPlayerX != xPos)
+/* 001f2e38 */	{
+/* 001f2e38 */		g_testDungeonPlayerX = xPos;
+/* 001f2e4e */		int i;
+/* 001f2e60 */		for (i = 0; i < g_testDungeonLine.Numof(); ++i)
+/* 001f2eb0 */		{
+/* 001f2eb0 */			g_testDungeonLine[i].moveSideways(g_testDungeonPlayerX, "test_Dungeon_LineOnFinishMoveSideways");
+/* 001f2eee */		}
+/* 001f2ef4 */	}
+/* 001f2efa */	else
+/* 001f2efa */	{
+/* 001f2efa */		test_Dungeon_CardMoveForward();
+/* 001f2f00 */	}
+/* 001f2f00 */}
+
+void test_Party_HpView()
+/* 001f2f0e */{
+/* 001f2f0e */	test_Player_Init();
+/* 001f2f14 */	test_Party_Organize();
+/* 001f2f1a */	PartyHpView view;
+/* 001f2f2a */	view.init(5200);
+/* 001f2f40 */	view.fadeIn(true);
+/* 001f2f56 */	while (!g_mouse.isClick(1))
+/* 001f2f74 */	{
+/* 001f2f74 */		g_gameObjectManager.update();
+/* 001f2f84 */		g_frameManager.updateFrame();
+/* 001f2f94 */	}
+/* 001f2f9a */}
+
+void test_Dungeon_Minimap()
+/* 001f2fa8 */{
+/* 001f2fa8 */	DungeonMiniMap mm;
+/* 001f2fb8 */	mm.init(g_dungeon[0].getId());
+/* 001f2fe0 */	int ypos;
+/* 001f2ff2 */	int xpos;
+/* 001f3004 */	while (!g_mouse.isClick(1))
+/* 001f3022 */	{
+/* 001f3022 */		if (g_mouse.isClick(0))
+/* 001f303e */		{
+/* 001f303e */			++ypos;
+/* 001f304e */			mm.setPlayerPos(xpos, ypos);
+/* 001f3072 */		}
+/* 001f3072 */		if (g_keyboard.isPress(37))
+/* 001f308e */		{
+/* 001f308e */			--xpos;
+/* 001f309e */			mm.setPlayerPos(xpos, ypos);
+/* 001f30c2 */		}
+/* 001f30c8 */		else if (g_keyboard.isPress(39))
+/* 001f30e4 */		{
+/* 001f30e4 */			++xpos;
+/* 001f30f4 */			mm.setPlayerPos(xpos, ypos);
+/* 001f3118 */		}
+/* 001f3118 */		g_gameObjectManager.update();
+/* 001f3128 */		g_frameManager.updateFrame();
+/* 001f3138 */	}
+/* 001f313e */}
+
+void test_testDungeonBackground()
+/* 001f314c */{
+/* 001f314c */	DungeonBackground b;
+/* 001f315c */	b.init(g_dungeon[0].getId());
+/* 001f3184 */	while (true)
+/* 001f3190 */	{
+/* 001f3190 */		if (g_keyboard.isPress(90))
+/* 001f31ac */		{
+/* 001f31ac */			b.fadeIn(true, NULL);
+/* 001f31c4 */		}
+/* 001f31c4 */		if (g_keyboard.isPress(88))
+/* 001f31e0 */		{
+/* 001f31e0 */			b.fadeIn(false, NULL);
+/* 001f31f8 */		}
+/* 001f31f8 */		g_gameObjectManager.update();
+/* 001f3208 */		g_frameManager.updateFrame();
+/* 001f3218 */	}
+/* 001f321e */}
+

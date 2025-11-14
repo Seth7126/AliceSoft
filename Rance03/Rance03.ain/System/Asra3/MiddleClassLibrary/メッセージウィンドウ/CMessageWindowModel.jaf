@@ -1,0 +1,354 @@
+CMessageWindowModel::CMessageWindowModel()
+/* 0001f19a */{
+/* 0001f1a2 */	this.m_InactiveWindowMultipleColor.Set(255, 255, 255, 255);
+/* 0001f1ca */	this.効果番号 = 1;
+/* 0001f1dc */	this.効果時間 = 200;
+/* 0001f1ee */	this.m_TextAreaRect.Set(10, 15, 0, 0);
+/* 0001f216 */	this.字間 = 0;
+/* 0001f228 */	this.行間 = 3;
+/* 0001f23a */	this.基準ＣＧ名 = "";
+/* 0001f24e */	this.開始番号 = 0;
+/* 0001f260 */	this.マーク枚数 = 0;
+/* 0001f272 */	this.マーク速度 = 500;
+/* 0001f284 */	this.マークＸ = 3;
+/* 0001f296 */	this.マークＹ = 3;
+/* 0001f2a8 */	this.フォント = 0;
+/* 0001f2ba */	this.m_FontSize = 26;
+/* 0001f2cc */	this._文字太さ = 400;
+/* 0001f2de */	this.文字Ｒ = 255;
+/* 0001f2f0 */	this.文字Ｇ = 255;
+/* 0001f302 */	this.文字Ｂ = 255;
+/* 0001f314 */	this.文字速度 = 23;
+/* 0001f326 */	this.文字配置 = 1;
+/* 0001f338 */	this.m_FontEdgeWeight = 0.0;
+/* 0001f34a */	this.m_ExistFontEdgeWeightInEX = false;
+/* 0001f35c */	this.m_FontEdgeWeightInEX = 0.0;
+/* 0001f36e */	this.飾Ｒ = 0;
+/* 0001f380 */	this.飾Ｇ = 0;
+/* 0001f392 */	this.飾Ｂ = 0;
+/* 0001f3a4 */	this.オートモードマーク＿ＣＧ基準名 = "";
+/* 0001f3b8 */	this.オートモードマーク＿フラット名 = "";
+/* 0001f3cc */	this.オートモードマーク＿ＣＧ開始番号 = 0;
+/* 0001f3de */	this.オートモードマーク＿ＣＧ枚数 = 0;
+/* 0001f3f0 */	this.オートモードマーク＿Ｘ = 0;
+/* 0001f402 */	this.オートモードマーク＿Ｙ = 0;
+/* 0001f414 */	this.オートモードマーク＿Ｚ = 0;
+/* 0001f426 */	this.オートモードマーク＿ＣＧ切り替え時間 = 0;
+/* 0001f438 */	this.スキップモードマーク＿ＣＧ基準名 = "";
+/* 0001f44c */	this.スキップモードマーク＿フラット名 = "";
+/* 0001f460 */	this.スキップモードマーク＿ＣＧ開始番号 = 0;
+/* 0001f472 */	this.スキップモードマーク＿ＣＧ枚数 = 0;
+/* 0001f484 */	this.スキップモードマーク＿Ｘ = 0;
+/* 0001f496 */	this.スキップモードマーク＿Ｙ = 0;
+/* 0001f4a8 */	this.スキップモードマーク＿Ｚ = 0;
+/* 0001f4ba */	this.スキップモードマーク＿ＣＧ切り替え時間 = 0;
+/* 0001f4cc */	this.m_X = 0;
+/* 0001f4de */	this.m_Y = 0;
+/* 0001f4f0 */	this.m_InitializePosX = false;
+/* 0001f502 */	this.m_InitializePosY = false;
+/* 0001f514 */}
+
+void CMessageWindowModel::Init(int MessageWindowNumber)
+/* 0001f51c */{
+/* 0001f51c */	this.InitFontEdgeWeightInEX(MessageWindowNumber);
+/* 0001f52e */	this.InitFontEdgeColorRInEX(MessageWindowNumber);
+/* 0001f540 */	this.InitFontEdgeColorGInEX(MessageWindowNumber);
+/* 0001f552 */	this.InitFontEdgeColorBInEX(MessageWindowNumber);
+/* 0001f564 */	this.InitFontWeightInEX(MessageWindowNumber);
+/* 0001f576 */}
+
+void CMessageWindowModel::InitFontEdgeWeightInEX(int MessageWindowNumber)
+/* 0001f57e */{
+/* 0001f57e */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.幅" % MessageWindowNumber;
+/* 0001f5a4 */	if (EX_IsFloat(PartEXName))
+/* 0001f5ba */	{
+/* 0001f5ba */		this.m_ExistFontEdgeWeightInEX = true;
+/* 0001f5cc */		this.m_FontEdgeWeightInEX = EX_Float(PartEXName, 0.0);
+/* 0001f5ee */		return;
+/* 0001f5f0 */	}
+/* 0001f5f0 */	if (EX_IsFloat("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.幅"))
+/* 0001f602 */	{
+/* 0001f602 */		this.m_ExistFontEdgeWeightInEX = true;
+/* 0001f614 */		this.m_FontEdgeWeightInEX = EX_Float("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.幅", 0.0);
+/* 0001f632 */		return;
+/* 0001f634 */	}
+/* 0001f634 */	this.m_ExistFontEdgeWeightInEX = false;
+/* 0001f646 */}
+
+void CMessageWindowModel::InitFontEdgeColorRInEX(int MessageWindowNumber)
+/* 0001f64e */{
+/* 0001f64e */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.赤色" % MessageWindowNumber;
+/* 0001f674 */	if (EX_IsInt(PartEXName))
+/* 0001f68a */	{
+/* 0001f68a */		this.m_ExistFontEdgeColorRInEX = true;
+/* 0001f69c */		this.m_FontEdgeColorRInEX = EX_Int(PartEXName, 0);
+/* 0001f6be */		return;
+/* 0001f6c0 */	}
+/* 0001f6c0 */	if (EX_IsInt("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.赤色"))
+/* 0001f6d2 */	{
+/* 0001f6d2 */		this.m_ExistFontEdgeColorRInEX = true;
+/* 0001f6e4 */		this.m_FontEdgeColorRInEX = EX_Int("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.赤色", 0);
+/* 0001f702 */		return;
+/* 0001f704 */	}
+/* 0001f704 */	this.m_ExistFontEdgeColorRInEX = false;
+/* 0001f716 */}
+
+void CMessageWindowModel::InitFontEdgeColorGInEX(int MessageWindowNumber)
+/* 0001f71e */{
+/* 0001f71e */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.緑色" % MessageWindowNumber;
+/* 0001f744 */	if (EX_IsInt(PartEXName))
+/* 0001f75a */	{
+/* 0001f75a */		this.m_ExistFontEdgeColorGInEX = true;
+/* 0001f76c */		this.m_FontEdgeColorGInEX = EX_Int(PartEXName, 0);
+/* 0001f78e */		return;
+/* 0001f790 */	}
+/* 0001f790 */	if (EX_IsInt("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.緑色"))
+/* 0001f7a2 */	{
+/* 0001f7a2 */		this.m_ExistFontEdgeColorGInEX = true;
+/* 0001f7b4 */		this.m_FontEdgeColorGInEX = EX_Int("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.緑色", 0);
+/* 0001f7d2 */		return;
+/* 0001f7d4 */	}
+/* 0001f7d4 */	this.m_ExistFontEdgeColorGInEX = false;
+/* 0001f7e6 */}
+
+void CMessageWindowModel::InitFontEdgeColorBInEX(int MessageWindowNumber)
+/* 0001f7ee */{
+/* 0001f7ee */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.縁取り.青色" % MessageWindowNumber;
+/* 0001f814 */	if (EX_IsInt(PartEXName))
+/* 0001f82a */	{
+/* 0001f82a */		this.m_ExistFontEdgeColorBInEX = true;
+/* 0001f83c */		this.m_FontEdgeColorBInEX = EX_Int(PartEXName, 0);
+/* 0001f85e */		return;
+/* 0001f860 */	}
+/* 0001f860 */	if (EX_IsInt("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.青色"))
+/* 0001f872 */	{
+/* 0001f872 */		this.m_ExistFontEdgeColorBInEX = true;
+/* 0001f884 */		this.m_FontEdgeColorBInEX = EX_Int("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.縁取り.青色", 0);
+/* 0001f8a2 */		return;
+/* 0001f8a4 */	}
+/* 0001f8a4 */	this.m_ExistFontEdgeColorBInEX = false;
+/* 0001f8b6 */}
+
+void CMessageWindowModel::InitFontWeightInEX(int MessageWindowNumber)
+/* 0001f8be */{
+/* 0001f8be */	string PartEXName = "Ｅ＿メッセージウィンドウ.%D番.メッセージテキスト.太さ" % MessageWindowNumber;
+/* 0001f8e4 */	if (EX_IsFloat(PartEXName))
+/* 0001f8fa */	{
+/* 0001f8fa */		this.m_ExistFontWeightInEX = true;
+/* 0001f90c */		this.m_FontWeightInEX = EX_Float(PartEXName, 0.0);
+/* 0001f92e */		return;
+/* 0001f930 */	}
+/* 0001f930 */	if (EX_IsFloat("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.太さ"))
+/* 0001f942 */	{
+/* 0001f942 */		this.m_ExistFontWeightInEX = true;
+/* 0001f954 */		this.m_FontWeightInEX = EX_Float("Ｅ＿メッセージウィンドウ.全体.メッセージテキスト.太さ", 0.0);
+/* 0001f972 */		return;
+/* 0001f974 */	}
+/* 0001f974 */	this.m_ExistFontWeightInEX = false;
+/* 0001f986 */}
+
+void CMessageWindowModel::SetCGName(string CGName)
+/* 0001f98e */{
+/* 0001f98e */	if (this.m_CGName == CGName)
+/* 0001f9aa */	{
+/* 0001f9aa */		return;
+/* 0001f9ac */	}
+/* 0001f9ac */	if (!this.m_CGName.Empty())
+/* 0001f9c0 */	{
+/* 0001f9c0 */		SYS_WARNING("メッセージウィンドウのＣＧが書き換えられました %s -> %s" % this.m_CGName % CGName);
+/* 0001f9f0 */	}
+/* 0001f9f0 */	this.m_CGName = CGName;
+/* 0001fa08 */	this.m_FlatFileName = "";
+/* 0001fa1c */}
+
+void CMessageWindowModel::SetFlatFileName(string FlatFileName)
+/* 0001fa24 */{
+/* 0001fa24 */	if (this.m_FlatFileName == FlatFileName)
+/* 0001fa40 */	{
+/* 0001fa40 */		return;
+/* 0001fa42 */	}
+/* 0001fa42 */	if (this.m_FlatFileName != "")
+/* 0001fa5a */	{
+/* 0001fa5a */		SYS_WARNING("メッセージウィンドウのフラットファイル名が書き換えられました [%s] -> [%s]" % this.m_FlatFileName % FlatFileName);
+/* 0001fa8a */	}
+/* 0001fa8a */	this.m_FlatFileName = FlatFileName;
+/* 0001faa2 */	this.m_CGName = "";
+/* 0001fab6 */}
+
+void CMessageWindowModel::SetX(int X)
+/* 0001fabe */{
+/* 0001fabe */	if (this.m_X == X)
+/* 0001fada */	{
+/* 0001fada */		return;
+/* 0001fadc */	}
+/* 0001fadc */	if (this.m_InitializePosX)
+/* 0001faec */	{
+/* 0001faec */		SYS_WARNING("メッセージウィンドウのＸ座標が書き換えられました %d -> %d" % this.m_X % X);
+/* 0001fb1c */	}
+/* 0001fb1c */	this.m_X = X;
+/* 0001fb32 */	this.m_InitializePosX = true;
+/* 0001fb44 */}
+
+void CMessageWindowModel::SetY(int Y)
+/* 0001fb4c */{
+/* 0001fb4c */	if (this.m_Y == Y)
+/* 0001fb68 */	{
+/* 0001fb68 */		return;
+/* 0001fb6a */	}
+/* 0001fb6a */	if (this.m_InitializePosY)
+/* 0001fb7a */	{
+/* 0001fb7a */		SYS_WARNING("メッセージウィンドウのＹ座標が書き換えられました %d -> %d" % this.m_Y % Y);
+/* 0001fbaa */	}
+/* 0001fbaa */	this.m_Y = Y;
+/* 0001fbc0 */	this.m_InitializePosY = true;
+/* 0001fbd2 */}
+
+void CMessageWindowModel::SetFontSize(int FontSize)
+/* 0001fbda */{
+/* 0001fbda */	if (this.m_FontSize == FontSize)
+/* 0001fbf6 */	{
+/* 0001fbf6 */		return;
+/* 0001fbf8 */	}
+/* 0001fbf8 */	if (this.m_FontSize != 26)
+/* 0001fc10 */	{
+/* 0001fc10 */		SYS_WARNING("メッセージウィンドウのフォントサイズが書き換えられました %d -> %d" % this.m_FontSize % FontSize);
+/* 0001fc40 */	}
+/* 0001fc40 */	this.m_FontSize = FontSize;
+/* 0001fc56 */}
+
+string CMessageWindowModel::GetCGName()
+/* 0001fc5e */{
+/* 0001fc5e */	return this.m_CGName;
+/* 0001fc6a */}
+
+string CMessageWindowModel::GetFlatFileName()
+/* 0001fc78 */{
+/* 0001fc78 */	return this.m_FlatFileName;
+/* 0001fc84 */}
+
+int CMessageWindowModel::GetX()
+/* 0001fc92 */{
+/* 0001fc92 */	return this.m_X;
+/* 0001fc9e */}
+
+int CMessageWindowModel::GetY()
+/* 0001fcac */{
+/* 0001fcac */	return this.m_Y;
+/* 0001fcb8 */}
+
+int CMessageWindowModel::GetFontSize()
+/* 0001fcc6 */{
+/* 0001fcc6 */	return this.m_FontSize;
+/* 0001fcd2 */}
+
+void CMessageWindowModel::SetFontWeight(int FontWeight)
+/* 0001fce0 */{
+/* 0001fce0 */	this._文字太さ = FontWeight;
+/* 0001fcf6 */}
+
+int CMessageWindowModel::GetFontWeight()
+/* 0001fcfe */{
+/* 0001fcfe */	return this._文字太さ;
+/* 0001fd0a */}
+
+float CMessageWindowModel::GetFontRealWeight()
+/* 0001fd18 */{
+/* 0001fd18 */	if (this.m_ExistFontWeightInEX)
+/* 0001fd28 */	{
+/* 0001fd28 */		return this.m_FontWeightInEX;
+/* 0001fd34 */	}
+/* 0001fd34 */	return this.CalcFontWeight(this._文字太さ);
+/* 0001fd48 */}
+
+float CMessageWindowModel::CalcFontWeight(int Weight)
+/* 0001fd56 */{
+/* 0001fd56 */	if (Weight <= 400)
+/* 0001fd6e */	{
+/* 0001fd6e */		return 0.0;
+/* 0001fd76 */	}
+/* 0001fd76 */	float fWeight = ((Weight - 400) * 2.0) / 600.0;
+/* 0001fdaa */	if (fWeight > 2.0)
+/* 0001fdc2 */	{
+/* 0001fdc2 */		fWeight = 2.0;
+/* 0001fdd4 */	}
+/* 0001fdd4 */	return fWeight;
+/* 0001fde0 */}
+
+void CMessageWindowModel::SetEdgeWeight(float EdgeWeight)
+/* 0001fdee */{
+/* 0001fdee */	this.m_FontEdgeWeight = EdgeWeight;
+/* 0001fe04 */}
+
+float CMessageWindowModel::GetEdgeWeight()
+/* 0001fe0c */{
+/* 0001fe0c */	if (this.m_ExistFontEdgeWeightInEX)
+/* 0001fe1c */	{
+/* 0001fe1c */		return this.m_FontEdgeWeightInEX;
+/* 0001fe28 */	}
+/* 0001fe28 */	return this.m_FontEdgeWeight;
+/* 0001fe34 */}
+
+void CMessageWindowModel::SetEdgeColor(int ColorR, int ColorG, int ColorB)
+/* 0001fe42 */{
+/* 0001fe42 */	this.飾Ｒ = ColorR;
+/* 0001fe58 */	this.飾Ｇ = ColorG;
+/* 0001fe6e */	this.飾Ｂ = ColorB;
+/* 0001fe84 */}
+
+int CMessageWindowModel::GetEdgeColorR()
+/* 0001fe8c */{
+/* 0001fe8c */	if (this.m_ExistFontEdgeColorRInEX)
+/* 0001fe9c */	{
+/* 0001fe9c */		return this.m_FontEdgeColorRInEX;
+/* 0001fea8 */	}
+/* 0001fea8 */	return this.飾Ｒ;
+/* 0001feb4 */}
+
+int CMessageWindowModel::GetEdgeColorG()
+/* 0001fec2 */{
+/* 0001fec2 */	if (this.m_ExistFontEdgeColorGInEX)
+/* 0001fed2 */	{
+/* 0001fed2 */		return this.m_FontEdgeColorGInEX;
+/* 0001fede */	}
+/* 0001fede */	return this.飾Ｇ;
+/* 0001feea */}
+
+int CMessageWindowModel::GetEdgeColorB()
+/* 0001fef8 */{
+/* 0001fef8 */	if (this.m_ExistFontEdgeColorBInEX)
+/* 0001ff08 */	{
+/* 0001ff08 */		return this.m_FontEdgeColorBInEX;
+/* 0001ff14 */	}
+/* 0001ff14 */	return this.飾Ｂ;
+/* 0001ff20 */}
+
+void CMessageWindowModel::SetInactiveMultipleColor(CASColor Color)
+/* 0001ff2e */{
+/* 0001ff2e */	this.m_InactiveWindowMultipleColor = Color;
+/* 0001ff50 */}
+
+CASColor CMessageWindowModel::GetInactiveMultipleColor()
+/* 0001ff58 */{
+/* 0001ff58 */	return this.m_InactiveWindowMultipleColor;
+/* 0001ff68 */}
+
+void CMessageWindowModel::SetTextAreaRect(CASRect TextAreaRect)
+/* 0001ff76 */{
+/* 0001ff76 */	this.m_TextAreaRect = TextAreaRect;
+/* 0001ff98 */}
+
+CASRect CMessageWindowModel::GetTextAreaRect()
+/* 0001ffa0 */{
+/* 0001ffa0 */	return this.m_TextAreaRect;
+/* 0001ffb0 */}
+
+void CMessageWindowModel::SetKeyWaitMarkFlatName(string FlatName)
+/* 0001ffbe */{
+/* 0001ffbe */	this.m_KeyWaitMarkFlatName = FlatName;
+/* 0001ffd6 */}
+
+string CMessageWindowModel::GetKeyWaitMarkFlatName()
+/* 0001ffde */{
+/* 0001ffde */	return this.m_KeyWaitMarkFlatName;
+/* 0001ffea */}
+

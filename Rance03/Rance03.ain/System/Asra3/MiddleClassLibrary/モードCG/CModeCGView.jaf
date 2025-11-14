@@ -1,0 +1,78 @@
+CModeCGView::CModeCGView()
+/* 00022762 */{
+/* 0002276c */}
+
+CModeCGView::~CModeCGView()
+/* 00022772 */{
+/* 00022774 */}
+
+void CModeCGView::Init()
+/* 0002277a */{
+/* 0002277a */	this.m_ModeView.Create();
+/* 0002278a */	PARTS_SetWantSaveBackScene(this.m_ModeView.GetPartsNumber(), false);
+/* 000227a6 */}
+
+void CModeCGView::Create(CModeCGModel Info)
+/* 000227ae */{
+/* 000227ae */	if (!this.m_ModeView.IsExist())
+/* 000227c6 */	{
+/* 000227c6 */		return;
+/* 000227c8 */	}
+/* 000227c8 */	bool IsEmptyCGName = Info.GetCG().Length() == 0;
+/* 000227f0 */	bool IsEmptyFlatName = Info.GetFlatName().Length() == 0;
+/* 00022818 */	if (IsEmptyCGName == IsEmptyFlatName)
+/* 00022834 */	{
+/* 00022834 */		this.SetShow(false);
+/* 00022842 */		return;
+/* 00022844 */	}
+/* 00022844 */	if (!IsEmptyCGName)
+/* 00022856 */	{
+/* 00022856 */		if (this.m_Info.GetCG() != Info.GetCG() || this.m_Info.GetCGBeginNumber() != Info.GetCGBeginNumber() || this.m_Info.GetCGCount() != Info.GetCGCount() || this.m_Info.GetCGSwitchTime() != Info.GetCGSwitchTime())
+/* 0002293e */		{
+/* 0002293e */			if (Info.GetCGBeginNumber() == 0 && Info.GetCGCount() == 0 && Info.GetCGSwitchTime() == 0)
+/* 000229c8 */			{
+/* 000229c8 */				this.m_ModeView.SetCG(Info.GetCG(), 1);
+/* 000229ee */			}
+/* 000229f4 */			else
+/* 000229f4 */			{
+/* 000229f4 */				this.m_ModeView.SetLoopCG(Info.GetCG(), Info.GetCGBeginNumber(), Info.GetCGCount(), Info.GetCGSwitchTime(), 1);
+/* 00022a4a */			}
+/* 00022a4a */		}
+/* 00022a4a */	}
+/* 00022a50 */	else
+/* 00022a50 */	{
+/* 00022a50 */		this.m_ModeView.SetFlat(Info.GetFlatName());
+/* 00022a70 */	}
+/* 00022a70 */	this.m_ModeView.SetPos(Info.GetX(), Info.GetY());
+/* 00022aa0 */	this.m_ModeView.SetZ(Info.GetZ());
+/* 00022ac0 */	Ｐ＿高速再生設定(this.m_ModeView.GetPartsNumber(), false);
+/* 00022adc */	this.m_Info = Info;
+/* 00022afe */}
+
+void CModeCGView::SetShow(bool Show)
+/* 00022b06 */{
+/* 00022b06 */	if (!this.m_ModeView.IsExist())
+/* 00022b1e */	{
+/* 00022b1e */		return;
+/* 00022b20 */	}
+/* 00022b20 */	this.m_ModeView.SetShow(Show);
+/* 00022b3a */}
+
+bool CModeCGView::IsShow()
+/* 00022b42 */{
+/* 00022b42 */	if (!this.m_ModeView.IsExist())
+/* 00022b5a */	{
+/* 00022b5a */		return false;
+/* 00022b62 */	}
+/* 00022b62 */	return this.m_ModeView.IsShow();
+/* 00022b74 */}
+
+void CModeCGView::SetPartsLayer(int ID)
+/* 00022b82 */{
+/* 00022b82 */	if (!this.m_ModeView.IsExist())
+/* 00022b9a */	{
+/* 00022b9a */		return;
+/* 00022b9c */	}
+/* 00022b9c */	Ｐ＿親設定(this.m_ModeView.GetPartsNumber(), ID);
+/* 00022bbc */}
+

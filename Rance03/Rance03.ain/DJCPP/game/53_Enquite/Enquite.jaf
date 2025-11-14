@@ -1,0 +1,162 @@
+void openEnquite()
+/* 001c36b2 */{
+/* 001c36b2 */	Enquite scene;
+/* 001c36c2 */	scene.run();
+/* 001c36d2 */}
+
+void Enquite::run()
+/* 001c36e0 */{
+/* 001c36e0 */	if (g_enquiteSelection.Empty())
+/* 001c36f0 */	{
+/* 001c36f0 */		loadEnquiteSelection();
+/* 001c36f6 */	}
+/* 001c36f6 */	Ｐ＿アクティビティ実行("アンケート／０１", this.onLoad, this.onRelease, this.onExit);
+/* 001c3720 */}
+
+void Enquite::onLoad(string activityFileName, string activityName)
+/* 001c3728 */{
+/* 001c3728 */	this.currentFileName_ = activityFileName;
+/* 001c3740 */	this.currentActivityName_ = activityName;
+/* 001c3758 */	setCursorClickSoundToActivity(this.currentActivityName_);
+/* 001c3768 */	switch (activityFileName)
+/* 001c377e */	{
+/* 001c377e */	case "アンケート／０１":
+/* 001c377e */	case "アンケート／０２":
+/* 001c377e */	case "アンケート／０３":
+/* 001c377e */	case "アンケート／０４":
+/* 001c377e */		this.normalPage_ <- new EnquiteNormalPage;
+/* 001c37b2 */		this.normalPage_.init(this.currentFileName_, this.currentActivityName_);
+/* 001c37d6 */		break;
+/* 001c37e2 */	case "アンケート／０５":
+/* 001c37e2 */	case "アンケート／０６":
+/* 001c37e2 */	case "アンケート／０７":
+/* 001c37e2 */		this.characterPage_ <- new EnquiteCharacterPage;
+/* 001c3816 */		this.characterPage_.init(this.currentFileName_, this.currentActivityName_);
+/* 001c383a */		break;
+/* 001c384c */	case "アンケート／０８":
+/* 001c384c */		this.sendingPage_ <- new EnquiteSendingPage;
+/* 001c3880 */		this.sendingPage_.init(this.currentFileName_, this.currentActivityName_);
+/* 001c38a4 */		break;
+/* 001c38bc */	case "アンケート／自由記入":
+/* 001c38bc */		this.freeInputPage_ <- new EnquiteFreeInput;
+/* 001c38f0 */		this.freeInputPage_.init(this.currentFileName_, this.currentActivityName_);
+/* 001c3914 */		break;
+/* 001c3932 */	}
+/* 001c3932 */}
+
+void Enquite::onRelease(string ActivityFileName, string ActivityName)
+/* 001c3952 */{
+/* 001c3952 */	switch (ActivityFileName)
+/* 001c3968 */	{
+/* 001c3968 */	case "アンケート／０１":
+/* 001c3968 */	case "アンケート／０２":
+/* 001c3968 */	case "アンケート／０３":
+/* 001c3968 */	case "アンケート／０４":
+/* 001c3968 */		this.normalPage_ <- NULL;
+/* 001c3980 */		break;
+/* 001c3986 */	case "アンケート／０５":
+/* 001c3986 */	case "アンケート／０６":
+/* 001c3986 */	case "アンケート／０７":
+/* 001c3986 */		this.characterPage_ <- NULL;
+/* 001c399e */		break;
+/* 001c39a4 */	case "アンケート／０８":
+/* 001c39a4 */		this.sendingPage_ <- NULL;
+/* 001c39bc */		break;
+/* 001c39c2 */	case "アンケート／自由記入":
+/* 001c39c2 */		this.freeInputPage_ <- NULL;
+/* 001c39da */		break;
+/* 001c39e0 */	}
+/* 001c39e0 */	共有セーブ();
+/* 001c39e6 */}
+
+void Enquite::onExit(ref bool isCancel)
+/* 001c39ee */{
+/* 001c39ee */	if (this.normalPage_ !== NULL)
+/* 001c3a06 */	{
+/* 001c3a06 */		if (this.normalPage_.getClickedButton() == 2)
+/* 001c3a24 */		{
+/* 001c3a24 */			switch (this.currentFileName_)
+/* 001c3a3a */			{
+/* 001c3a3a */			case "アンケート／０１":
+/* 001c3a3a */				if (!this.isAllAnswered(1, 4))
+/* 001c3a56 */				{
+/* 001c3a56 */					this.openNotAnsweredDialog();
+/* 001c3a5e */					isCancel = true;
+/* 001c3a72 */				}
+/* 001c3a72 */				break;
+/* 001c3a78 */			case "アンケート／０２":
+/* 001c3a78 */				if (!this.isAllAnswered(5, 7))
+/* 001c3a94 */				{
+/* 001c3a94 */					this.openNotAnsweredDialog();
+/* 001c3a9c */					isCancel = true;
+/* 001c3ab0 */				}
+/* 001c3ab0 */				break;
+/* 001c3ab6 */			case "アンケート／０３":
+/* 001c3ab6 */				if (!this.isAllAnswered(8, 12))
+/* 001c3ad2 */				{
+/* 001c3ad2 */					this.openNotAnsweredDialog();
+/* 001c3ada */					isCancel = true;
+/* 001c3aee */				}
+/* 001c3aee */				break;
+/* 001c3af4 */			case "アンケート／０４":
+/* 001c3af4 */				if (!this.isAllAnswered(13, 15))
+/* 001c3b10 */				{
+/* 001c3b10 */					this.openNotAnsweredDialog();
+/* 001c3b18 */					isCancel = true;
+/* 001c3b2c */				}
+/* 001c3b2c */				break;
+/* 001c3b32 */			}
+/* 001c3b32 */		}
+/* 001c3b38 */		else if (this.normalPage_.getClickedButton() == 0)
+/* 001c3b56 */		{
+/* 001c3b56 */			EnquiteYesNoDialog dialog;
+/* 001c3b66 */			if (!dialog.open("アンケート／送信せずに閉じる"))
+/* 001c3b84 */			{
+/* 001c3b84 */				isCancel = true;
+/* 001c3b98 */			}
+/* 001c3b98 */		}
+/* 001c3b98 */	}
+/* 001c3ba4 */	else if (this.characterPage_ !== NULL)
+/* 001c3bbc */	{
+/* 001c3bbc */		if (this.characterPage_.getClickedButton() == 0)
+/* 001c3bda */		{
+/* 001c3bda */			EnquiteYesNoDialog dialog;
+/* 001c3bea */			if (!dialog.open("アンケート／送信せずに閉じる"))
+/* 001c3c08 */			{
+/* 001c3c08 */				isCancel = true;
+/* 001c3c1c */			}
+/* 001c3c1c */		}
+/* 001c3c1c */	}
+/* 001c3c28 */	else if (this.sendingPage_ !== NULL)
+/* 001c3c40 */	{
+/* 001c3c40 */		if (this.sendingPage_.isClickExit())
+/* 001c3c56 */		{
+/* 001c3c56 */			EnquiteYesNoDialog dialog;
+/* 001c3c66 */			if (!dialog.open("アンケート／送信せずに閉じる"))
+/* 001c3c84 */			{
+/* 001c3c84 */				this.sendingPage_.resetIsClickExit();
+/* 001c3c94 */				isCancel = true;
+/* 001c3ca8 */			}
+/* 001c3ca8 */		}
+/* 001c3ca8 */	}
+/* 001c3ca8 */}
+
+void Enquite::openNotAnsweredDialog()
+/* 001c3cb6 */{
+/* 001c3cb6 */	EnquiteInfoDialog dialog;
+/* 001c3cc6 */	dialog.open("アンケート／記入漏れ");
+/* 001c3cdc */}
+
+bool Enquite::isAllAnswered(int startAnswerId, int endAnswerId)
+/* 001c3ce4 */{
+/* 001c3ce4 */	int i;
+/* 001c3cf6 */	for (i = startAnswerId; i <= endAnswerId; ++i)
+/* 001c3d44 */	{
+/* 001c3d44 */		if (!isEnquiteAnswered(i))
+/* 001c3d5c */		{
+/* 001c3d5c */			return false;
+/* 001c3d64 */		}
+/* 001c3d64 */	}
+/* 001c3d6a */	return true;
+/* 001c3d72 */}
+

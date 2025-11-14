@@ -1,0 +1,403 @@
+void SceneDungeon::init(string dungeonId, int xPos, int yPos)
+/* 00190c0c */{
+/* 00190c0c */	this.dungeonId_ = dungeonId;
+/* 00190c24 */	this.dungeon_ <- getDungeonFromId(this.dungeonId_);
+/* 00190c60 */	g_playerCommonParam.setPlaceName(this.dungeon_.getCaption());
+/* 00190c80 */	setOpenFlatCallback(this.openDungeonEffectFlat);
+/* 00190c90 */	this.dungeon_.reset();
+/* 00190ca0 */	this.commonParamView_.init();
+/* 00190cb0 */	this.hpView_.init(5200);
+/* 00190cc6 */	this.playerPiece_.init(this.dungeonId_ == "封印の間");
+/* 00190cea */	this.cursor_.init();
+/* 00190cfa */	this.miniMap_.init(this.dungeonId_);
+/* 00190d14 */	this.bg_.init(this.dungeonId_);
+/* 00190d2e */	this.initCampButton();
+/* 00190d36 */	this.setPlayerX(xPos);
+/* 00190d48 */	this.setPlayerY(yPos);
+/* 00190d5a */	this.initDungeonLine();
+/* 00190d62 */}
+
+void SceneDungeon::run()
+/* 00190d6a */{
+/* 00190d6a */	this.state_ = 1;
+/* 00190d7c */	g_music.play(this.dungeon_.getMusicId(), -2147483648, false);
+/* 00190da8 */	if (!this.dungeon_.isShowTitle())
+/* 00190dc0 */	{
+/* 00190dc0 */		this.dungeon_.setShowTitle(true);
+/* 00190dd6 */		string s = this.dungeon_.getTitleFlatName();
+/* 00190df4 */		if (s == "")
+/* 00190e0c */		{
+/* 00190e0c */			s = "システム／ダンジョン名／リーザス城地下一階";
+/* 00190e20 */		}
+/* 00190e20 */		this.flat_.init("ダンジョン名/" + s, "", false);
+/* 00190e4e */		this.flat_.run(1.0);
+/* 00190e64 */	}
+/* 00190e64 */	this.fadeTimer_.setTimer(500, this.onFinishFadeInLineView);
+/* 00190e84 */	this.fadeObject(true);
+/* 00190e92 */}
+
+void SceneDungeon::onFinishFadeInLineView()
+/* 00190e9a */{
+/* 00190e9a */	this.flat_.join(-2147483648);
+/* 00190eb0 */	this.cardSelect();
+/* 00190eb8 */}
+
+void SceneDungeon::setCardViewSelectable()
+/* 00190ec0 */{
+/* 00190ec0 */	int i;
+/* 00190ed2 */	for (i = 0; i < this.lineView_.Numof(); ++i)
+/* 00190f22 */	{
+/* 00190f22 */		this.lineView_[i].setSelectable();
+/* 00190f3e */	}
+/* 00190f44 */}
+
+void SceneDungeon::fadeInLineView(bool val)
+/* 00190f4c */{
+/* 00190f4c */	int i;
+/* 00190f5e */	for (i = 0; i < this.lineView_.Numof(); ++i)
+/* 00190fae */	{
+/* 00190fae */		this.lineView_[i].fadeIn(val, NULL);
+/* 00190fd6 */	}
+/* 00190fdc */}
+
+bool SceneDungeon::update()
+/* 00190fe4 */{
+/* 00190fe4 */	if (g_gameSceneManager.isSetNextScene())
+/* 00190ffa */	{
+/* 00190ffa */		g_music.fadeOut(1000);
+/* 00191010 */		return false;
+/* 00191018 */	}
+/* 00191018 */	if (this.state_ == 11)
+/* 00191030 */	{
+/* 00191030 */		return false;
+/* 00191038 */	}
+/* 00191038 */	if (g_mouse.getWheel() > 0)
+/* 00191056 */	{
+/* 00191056 */		openBackLog();
+/* 0019105c */	}
+/* 0019105c */	return true;
+/* 00191064 */}
+
+void SceneDungeon::initCampButton()
+/* 00191072 */{
+/* 00191072 */	this.btnCamp_.init("システム／ボタン／幅１７０", "キャンプを開く", "", true);
+/* 0019109a */	this.btnCamp_.setClickCallback(this.onClickCamp, 1);
+/* 001910ba */	this.btnCamp_.setShow(true);
+/* 001910d0 */	this.btnCamp_.setPos(840, 484);
+/* 001910ec */}
+
+void SceneDungeon::initDungeonLine()
+/* 001910f4 */{
+/* 001910f4 */	int i;
+/* 00191106 */	for (i = 0; i < this.lineView_.Numof(); ++i)
+/* 00191156 */	{
+/* 00191156 */		this.lineView_[i].init(this.dungeon_.getDungeonLine(i + this.playerY_), this.playerX_, i, this.dungeon_.getShadowR(), this.dungeon_.getShadowG(), this.dungeon_.getShadowB());
+/* 001911fa */		this.lineView_[i].setOnClickCallback(this.onClickCard);
+/* 00191220 */	}
+/* 0019122c */}
+
+void SceneDungeon::createNewDungeonLine()
+/* 00191234 */{
+/* 00191234 */	int count = this.lineView_.Numof();
+/* 00191250 */	this.lineView_.Erase(0);
+/* 00191262 */	this.lineView_.Realloc(count);
+/* 0019127c */	this.lineView_[count - 1].init(this.dungeon_.getDungeonLine((this.playerY_ + count) - 1), this.playerX_, count - 1, this.dungeon_.getShadowR(), this.dungeon_.getShadowG(), this.dungeon_.getShadowB());
+/* 00191338 */	this.lineView_[count - 1].setOnClickCallback(this.onClickCard);
+/* 00191366 */}
+
+void SceneDungeon::onClickCard(ref DungeonCard card, int xPos, int yPos)
+/* 0019136e */{
+/* 0019136e */	if (this.state_ != 2)
+/* 00191386 */	{
+/* 00191386 */		return;
+/* 00191388 */	}
+/* 00191388 */	this.cursor_.fadeIn(false);
+/* 0019139e */	this.clickedCardId_ = card.getCardTypeId();
+/* 001913bc */	this.dungeonCardEventName_ = getCardInfomationFromId(this.clickedCardId_).getEventCallback();
+/* 001913f6 */	int direction = this.playerX_ - xPos;
+/* 00191418 */	if (this.playerX_ != xPos)
+/* 00191434 */	{
+/* 00191434 */		this.setPlayerX(xPos);
+/* 00191446 */		this.playerPiece_.moveSideWays(direction > 0);
+/* 0019146a */		this.moveCardSideways();
+/* 00191472 */	}
+/* 00191478 */	else
+/* 00191478 */	{
+/* 00191478 */		this.lineView_[0].openCard(this.playerX_, this.onFinishOpenCard);
+/* 001914a4 */	}
+/* 001914a4 */}
+
+void SceneDungeon::moveCardSideways()
+/* 001914ac */{
+/* 001914ac */	int i;
+/* 001914be */	for (i = 0; i < this.lineView_.Numof(); ++i)
+/* 0019150e */	{
+/* 0019150e */		if (i == this.lineView_.Numof() - 1)
+/* 00191538 */		{
+/* 00191538 */			this.lineView_[i].moveSideways(this.playerX_, this.onFinishMoveSideways);
+/* 00191568 */		}
+/* 0019156e */		else
+/* 0019156e */		{
+/* 0019156e */			this.lineView_[i].moveSideways(this.playerX_, NULL);
+/* 00191596 */		}
+/* 00191596 */	}
+/* 0019159c */	this.state_ = 3;
+/* 001915ae */}
+
+void SceneDungeon::onFinishMoveSideways()
+/* 001915b6 */{
+/* 001915b6 */	this.lineView_[0].openCard(this.playerX_, this.onFinishOpenCard);
+/* 001915e2 */}
+
+void SceneDungeon::onFinishOpenCard()
+/* 001915ea */{
+/* 001915ea */	this.callPlayerMovedCallback();
+/* 001915f2 */	g_playerCommonParam.decBadCondition();
+/* 00191602 */	if (this.isGameOver())
+/* 00191610 */	{
+/* 00191610 */		this.fadeTimer_.setTimer(1000, this.onFinishGameOverFadeIn);
+/* 00191630 */		this.fadeObject(false);
+/* 0019163e */	}
+/* 00191644 */	else
+/* 00191644 */	{
+/* 00191644 */		this.playerPiece_.updateCharacter();
+/* 00191654 */		if (this.dungeonCardEventName_.Empty())
+/* 00191666 */		{
+/* 00191666 */			this.moveCardForward();
+/* 0019166e */		}
+/* 00191674 */		else
+/* 00191674 */		{
+/* 00191674 */			this.onMovedPlayerInFrontOfCard(getCardInfomationFromId(this.clickedCardId_));
+/* 001916a8 */		}
+/* 001916a8 */	}
+/* 001916a8 */}
+
+void SceneDungeon::moveCardForward()
+/* 001916b6 */{
+/* 001916b6 */	this.playerPiece_.moveFront();
+/* 001916c6 */	this.changeCurrentCard();
+/* 001916ce */	int i;
+/* 001916e0 */	for (i = 0; i < this.lineView_.Numof(); ++i)
+/* 00191730 */	{
+/* 00191730 */		if (i == 0)
+/* 00191748 */		{
+/* 00191748 */			this.lineView_[i].moveForward(this.onFinishMoveForward);
+/* 0019176e */		}
+/* 00191774 */		else
+/* 00191774 */		{
+/* 00191774 */			this.lineView_[i].moveForward(NULL);
+/* 00191792 */		}
+/* 00191792 */	}
+/* 00191798 */	this.state_ = 5;
+/* 001917aa */}
+
+void SceneDungeon::changeCurrentCard()
+/* 001917b2 */{
+/* 001917b2 */	CardInfomation info;
+/* 001917c2 */	info = getCardInfomationFromId(this.clickedCardId_);
+/* 00191802 */	string cId = this.dungeon_.getDefaultCardId();
+/* 00191820 */	if (info.getChangeType() == 1)
+/* 0019183e */	{
+/* 0019183e */		gameChangeCard(this.dungeonId_, this.playerX_, this.playerY_, cId);
+/* 0019186c */	}
+/* 00191872 */	else if (info.getChangeType() == 2)
+/* 00191890 */	{
+/* 00191890 */		gameChangeCardPermanent(this.dungeonId_, this.playerX_, this.playerY_, cId);
+/* 001918be */	}
+/* 001918be */}
+
+void SceneDungeon::onFinishMoveForward()
+/* 001918c6 */{
+/* 001918c6 */	this.setPlayerY(this.playerY_ + 1);
+/* 001918e0 */	this.createNewDungeonLine();
+/* 001918e8 */	this.cardSelect();
+/* 001918f0 */}
+
+void SceneDungeon::cardSelect()
+/* 001918f8 */{
+/* 001918f8 */	this.setCardViewSelectable();
+/* 00191900 */	this.cursor_.fadeIn(true);
+/* 00191916 */	this.state_ = 2;
+/* 00191928 */}
+
+void SceneDungeon::onMovedPlayerInFrontOfCard(CardInfomation info)
+/* 00191930 */{
+/* 00191930 */	if (info.getFadeOutType() != 0)
+/* 0019194e */	{
+/* 0019194e */		this.state_ = 6;
+/* 00191960 */		if (info.getFadeOutType() == 2)
+/* 0019197e */		{
+/* 0019197e */			if (!g_battleMusicNotChangeMode)
+/* 00191990 */			{
+/* 00191990 */				g_music.fadeOut(250);
+/* 001919a6 */			}
+/* 001919a6 */			this.flat_.init("システム／エンカウント", "効果音／エンカウント", false);
+/* 001919c8 */			this.flat_.run(1.0);
+/* 001919de */		}
+/* 001919e4 */		else
+/* 001919e4 */		{
+/* 001919e4 */			g_sysSound.play(6, "効果音／ダンジョンイベント");
+/* 00191a00 */		}
+/* 00191a00 */		this.fadeTimer_.setTimer(1000, this.onFinishEventFadeOut);
+/* 00191a20 */		this.fadeObject(false);
+/* 00191a2e */	}
+/* 00191a34 */	else
+/* 00191a34 */	{
+/* 00191a34 */		bool isShowMinimap = this.dungeon_.isShowMinimap();
+/* 00191a50 */		this.callEvent();
+/* 00191a58 */		if (isShowMinimap != this.dungeon_.isShowMinimap())
+/* 00191a7a */		{
+/* 00191a7a */			this.miniMap_.fadeIn(true);
+/* 00191a90 */		}
+/* 00191a90 */		this.hpView_.updateCoolTime();
+/* 00191aa0 */		this.waitTimer_.setTimer(250, this.onFinishCallEventWait);
+/* 00191ac0 */	}
+/* 00191ac0 */}
+
+void SceneDungeon::onFinishCallEventWait()
+/* 00191ac8 */{
+/* 00191ac8 */	if (this.isGameOver())
+/* 00191ad6 */	{
+/* 00191ad6 */		this.fadeTimer_.setTimer(1000, this.onFinishGameOverFadeIn);
+/* 00191af6 */		this.fadeObject(false);
+/* 00191b04 */	}
+/* 00191b0a */	else
+/* 00191b0a */	{
+/* 00191b0a */		this.playerPiece_.updateCharacter();
+/* 00191b1a */		this.moveCardForward();
+/* 00191b22 */	}
+/* 00191b22 */}
+
+void SceneDungeon::onFinishEventFadeOut()
+/* 00191b2a */{
+/* 00191b2a */	this.flat_.join(-2147483648);
+/* 00191b40 */	this.flat_.release();
+/* 00191b50 */	setGameMode(false);
+/* 00191b5c */	this.callEvent();
+/* 00191b64 */	restoreGameMode();
+/* 00191b6a */	if (!g_gameSceneManager.isSetNextScene())
+/* 00191b82 */	{
+/* 00191b82 */		this.playerPiece_.updateCharacter();
+/* 00191b92 */		this.hpView_.reset();
+/* 00191ba2 */		this.fadeTimer_.setTimer(1000, this.onFinishEventFadeIn);
+/* 00191bc2 */		this.fadeObject(true);
+/* 00191bd0 */		this.state_ = 7;
+/* 00191be2 */	}
+/* 00191be2 */}
+
+void SceneDungeon::onFinishEventFadeIn()
+/* 00191bea */{
+/* 00191bea */	this.moveCardForward();
+/* 00191bf2 */}
+
+void SceneDungeon::setPlayerY(int y)
+/* 00191bfa */{
+/* 00191bfa */	this.playerY_ = y % this.dungeon_.getDepth();
+/* 00191c22 */	this.miniMap_.setPlayerPos(this.playerX_, this.playerY_);
+/* 00191c46 */}
+
+void SceneDungeon::setPlayerX(int x)
+/* 00191c4e */{
+/* 00191c4e */	this.playerX_ = x;
+/* 00191c64 */	this.miniMap_.setPlayerPos(this.playerX_, this.playerY_);
+/* 00191c88 */}
+
+void SceneDungeon::onFinishCampFadeIn()
+/* 00191c90 */{
+/* 00191c90 */	this.state_ = 2;
+/* 00191ca2 */	this.cursor_.fadeIn(true);
+/* 00191cb8 */}
+
+void SceneDungeon::onClickCamp(int id)
+/* 00191cc0 */{
+/* 00191cc0 */	if (this.state_ == 2)
+/* 00191cd8 */	{
+/* 00191cd8 */		this.state_ = 8;
+/* 00191cea */		this.fadeTimer_.setTimer(200, this.onFinishCampFadeOut);
+/* 00191d0a */		this.fadeObject(false);
+/* 00191d18 */		this.cursor_.fadeIn(false);
+/* 00191d2e */	}
+/* 00191d2e */}
+
+void SceneDungeon::onFinishCampFadeOut()
+/* 00191d36 */{
+/* 00191d36 */	if (!openCamp(0))
+/* 00191d4a */	{
+/* 00191d4a */		g_gameSceneManager.setMap(g_gameSceneManager.getCurrentPlaceId());
+/* 00191d6a */	}
+/* 00191d70 */	else
+/* 00191d70 */	{
+/* 00191d70 */		this.playerPiece_.updateCharacter();
+/* 00191d80 */		this.hpView_.reset();
+/* 00191d90 */		this.fadeTimer_.setTimer(200, this.onFinishCampFadeIn);
+/* 00191db0 */		this.fadeObject(true);
+/* 00191dbe */		this.state_ = 9;
+/* 00191dd0 */	}
+/* 00191dd0 */}
+
+void SceneDungeon::callEvent()
+/* 00191dd8 */{
+/* 00191dd8 */	if (!this.dungeonCardEventName_.Empty())
+/* 00191dec */	{
+/* 00191dec */		DG_GeneralCallback fn;
+/* 00191df8 */		fn += this.dungeonCardEventName_;
+/* 00191e1e */		fn();
+/* 00191e3e */		g_music.play(this.dungeon_.getMusicId(), -2147483648, true);
+/* 00191e6a */		fn.Clear();
+/* 00191e76 */	}
+/* 00191e76 */	gameCheckItemMax();
+/* 00191e7c */}
+
+void SceneDungeon::fadeObject(bool val)
+/* 00191e84 */{
+/* 00191e84 */	this.hpView_.fadeIn(val);
+/* 00191e9e */	this.btnCamp_.fadeIn(val);
+/* 00191eb8 */	this.commonParamView_.fadeIn(val);
+/* 00191ed2 */	this.playerPiece_.fadeIn(val, NULL);
+/* 00191eee */	this.bg_.fadeIn(val, NULL);
+/* 00191f0a */	if (this.dungeon_.isShowMinimap())
+/* 00191f20 */	{
+/* 00191f20 */		this.miniMap_.fadeIn(val);
+/* 00191f3a */	}
+/* 00191f3a */	this.fadeInLineView(val);
+/* 00191f4c */}
+
+void SceneDungeon::callPlayerMovedCallback()
+/* 00191f54 */{
+/* 00191f54 */	DG_DungeonWalkCallback fn;
+/* 00191f60 */	string func = EX_String("ダンジョン移動時コールバック", "");
+/* 00191f80 */	fn = func;
+/* 00191fa6 */	if (fn.Numof() == 0)
+/* 00191fc0 */	{
+/* 00191fc0 */		DG_GeneralCallback fn2;
+/* 00191fcc */		fn2 = func;
+/* 00191ff2 */		fn2();
+/* 00192012 */		fn2.Clear();
+/* 0019201e */	}
+/* 00192024 */	else
+/* 00192024 */	{
+/* 00192024 */		fn(this.clickedCardId_);
+/* 0019204e */	}
+/* 0019204e */	gameCheckItemMax();
+/* 00192054 */}
+
+void SceneDungeon::onFinishGameOverFadeIn()
+/* 0019205c */{
+/* 0019205c */	this.state_ = 11;
+/* 0019206e */}
+
+bool SceneDungeon::isGameOver()
+/* 00192076 */{
+/* 00192076 */	array@string n;
+/* 00192080 */	getAlivePlayerList(n);
+/* 00192090 */	return n.Empty();
+/* 0019209e */}
+
+void SceneDungeon::openDungeonEffectFlat(string flatName)
+/* 001920ac */{
+/* 001920ac */	g_sysSound.play(1, flatName.GetPart(6, flatName.Length() - 6));
+/* 001920e6 */	this.flatEffect_.init(flatName, "", false);
+/* 0019210c */	this.flatEffect_.run(1.0);
+/* 00192122 */	this.flatEffect_.join(350);
+/* 00192138 */}
+

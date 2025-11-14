@@ -1,0 +1,96 @@
+DamageEffect::DamageEffect()
+/* 001ab428 */{
+/* 001ab430 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001ab456 */}
+
+void DamageEffect::init(string effectName)
+/* 001ab45e */{
+/* 001ab45e */	this.effectName_ = effectName;
+/* 001ab476 */	this.initParts();
+/* 001ab47e */}
+
+void DamageEffect::setPos(int x, int y)
+/* 001ab486 */{
+/* 001ab486 */	this.x_ = x;
+/* 001ab49c */	this.y_ = y;
+/* 001ab4b2 */}
+
+void DamageEffect::update()
+/* 001ab4ba */{
+/* 001ab4bc */}
+
+void DamageEffect::initParts()
+/* 001ab4c2 */{
+/* 001ab4c2 */	if (this.effectName_ != "")
+/* 001ab4da */	{
+/* 001ab4da */		this.partsEffectFlat_.initAsFlat(this.effectName_);
+/* 001ab4f4 */		this.partsEffectFlat_.setZ(30000.0);
+/* 001ab50a */	}
+/* 001ab50a */	int i;
+/* 001ab51c */	for (i = 0; i < this.line_.Numof(); ++i)
+/* 001ab56c */	{
+/* 001ab56c */		this.line_[i].init(1);
+/* 001ab58e */	}
+/* 001ab594 */	this.circleEffect_.init("システム／エフェクト／円／仮");
+/* 001ab5aa */}
+
+void DamageEffect::setPartsPos()
+/* 001ab5b2 */{
+/* 001ab5b2 */	int i;
+/* 001ab5c4 */	for (i = 0; i < this.line_.Numof(); ++i)
+/* 001ab614 */	{
+/* 001ab614 */		this.line_[i].setCenter(this.x_, this.y_);
+/* 001ab644 */	}
+/* 001ab64a */	this.circleEffect_.setPos(this.x_, this.y_);
+/* 001ab66e */	this.partsEffectFlat_.setPos(this.x_, this.y_);
+/* 001ab696 */}
+
+void DamageEffect::run(int type)
+/* 001ab69e */{
+/* 001ab69e */	this.setPartsPos();
+/* 001ab6a6 */	int i;
+/* 001ab6b8 */	if (type == 0 || type == 1)
+/* 001ab700 */	{
+/* 001ab700 */		int count = type == 1 ? 30 : 10;
+/* 001ab736 */		for (i = 0; i < count; ++i)
+/* 001ab780 */		{
+/* 001ab780 */			this.line_[i].setCenter(this.x_, this.y_);
+/* 001ab7b0 */			this.line_[i].run();
+/* 001ab7cc */		}
+/* 001ab7d2 */	}
+/* 001ab7d2 */	if (type != 3)
+/* 001ab7ea */	{
+/* 001ab7ea */		this.circleEffect_.setMaxScaling(type == 1 ? 300 : 125);
+/* 001ab826 */		this.circleEffect_.run(0);
+/* 001ab83c */	}
+/* 001ab83c */	if (type == 0)
+/* 001ab854 */	{
+/* 001ab854 */		g_sysSound.play(3, "戦闘エフェクト／通常アタック音");
+/* 001ab870 */	}
+/* 001ab876 */	else if (type == 1)
+/* 001ab88e */	{
+/* 001ab88e */		g_sysSound.play(3, "戦闘エフェクト／クリティカルアタック音");
+/* 001ab8aa */	}
+/* 001ab8aa */	this.partsEffectFlat_.setShow(true);
+/* 001ab8c0 */	this.partsEffectFlat_.startFlat(false, 1.0);
+/* 001ab8dc */	this.playSound();
+/* 001ab8e4 */}
+
+void DamageEffect::playSound()
+/* 001ab8ec */{
+/* 001ab8ec */	string name = this.effectName_.GetPart(8, this.effectName_.Length() - 8);
+/* 001ab91e */	pass("name:%s" % name);
+/* 001ab93c */	g_sysSound.play(2, name);
+/* 001ab95c */}
+
+void DamageEffect::setZ(int z)
+/* 001ab964 */{
+/* 001ab964 */	this.circleEffect_.setZ(z);
+/* 001ab97e */	this.partsEffectFlat_.setZ(z + 1);
+/* 001ab9a2 */	int i;
+/* 001ab9b4 */	for (i = 0; i < this.line_.Numof(); ++i)
+/* 001aba04 */	{
+/* 001aba04 */		this.line_[i].setZ(z);
+/* 001aba2a */	}
+/* 001aba30 */}
+

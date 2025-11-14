@@ -1,0 +1,99 @@
+void EnquiteCharacterPage::init(string activityFileName, string activityName)
+/* 001c3d86 */{
+/* 001c3d86 */	this.activityFileName_ = activityFileName;
+/* 001c3d9e */	this.activityName_ = activityName;
+/* 001c3db6 */	this.clickedButton_ = -1;
+/* 001c3dc8 */	this.initCheckBox();
+/* 001c3dd0 */	this.initCg();
+/* 001c3dd8 */	AFL_Parts_AddWholeMouseWheelEvent(this.onWheel);
+/* 001c3de8 */	this.btn_[0].init(this.activityName_, "SYS_タイトル画面に戻る", 0);
+/* 001c3e18 */	this.btn_[1].init(this.activityName_, "前へボタン", 1);
+/* 001c3e48 */	this.btn_[2].init(this.activityName_, "次へボタン", 2);
+/* 001c3e78 */	this.btn_[0].setOnClickCallback(this.onClickButton);
+/* 001c3e9a */	this.btn_[1].setOnClickCallback(this.onClickButton);
+/* 001c3ebc */	this.btn_[2].setOnClickCallback(this.onClickButton);
+/* 001c3ede */}
+
+void EnquiteCharacterPage::onClickButton(int id)
+/* 001c3ee6 */{
+/* 001c3ee6 */	this.clickedButton_ = id;
+/* 001c3efc */}
+
+void EnquiteCharacterPage::initCheckBox()
+/* 001c3f04 */{
+/* 001c3f04 */	array@string names;
+/* 001c3f0e */	getPartsNameByGUIType(names, this.activityName_, 1);
+/* 001c3f2e */	this.checkBox_.Alloc(names.Numof());
+/* 001c3f4e */	this.btnCharacter_.Alloc(names.Numof());
+/* 001c3f6e */	int i;
+/* 001c3f80 */	for (i = 0; i < this.checkBox_.Numof(); ++i)
+/* 001c3fd0 */	{
+/* 001c3fd0 */		string shortName = names[i].GetPart(9, names[i].Length() - 9);
+/* 001c401a */		ref EnquiteSelection sel = getEnquiteSelectionFromName(names[i]);
+/* 001c4068 */		this.checkBox_[i].init(this.activityName_, names[i]);
+/* 001c40a6 */		this.checkBox_[i].setCheck(sel.isChecked());
+/* 001c40d2 */		this.checkBox_[i].setOnCheckCallback(this.onCheck);
+/* 001c40f8 */		this.btnCharacter_[i].init(this.activityName_, shortName, 0);
+/* 001c4130 */		if (!ＣＧモード確認(sel.getEnableCheckCgName()))
+/* 001c414e */		{
+/* 001c414e */			this.checkBox_[i].setEnable(false);
+/* 001c4170 */			this.btnCharacter_[i].setEnable(false);
+/* 001c4192 */		}
+/* 001c4192 */	}
+/* 001c41a4 */}
+
+void EnquiteCharacterPage::initCg()
+/* 001c41ac */{
+/* 001c41ac */	array@string names;
+/* 001c41b6 */	getPartsNameByGUIType(names, this.activityName_, 11);
+/* 001c41d6 */	int i;
+/* 001c41e8 */	while (i < names.Numof())
+/* 001c420a */	{
+/* 001c420a */		if (names[i].GetPart(0, 3) != "ＣＧ＿")
+/* 001c423c */		{
+/* 001c423c */			names.Erase(i);
+/* 001c4252 */		}
+/* 001c4258 */		else
+/* 001c4258 */		{
+/* 001c4258 */			++i;
+/* 001c4268 */		}
+/* 001c4268 */	}
+/* 001c426e */	for (i = 0; i < names.Numof(); ++i)
+/* 001c42be */	{
+/* 001c42be */		string shortName = names[i].GetPart(3, names[i].Length() - 3);
+/* 001c4308 */		ref EnquiteSelection sel = getEnquiteSelectionFromName("チェックボックス＿" + shortName);
+/* 001c4352 */		pass("asdf:%s" % sel.getEnableCheckCgName());
+/* 001c4376 */		if (!ＣＧモード確認(sel.getEnableCheckCgName()))
+/* 001c4394 */		{
+/* 001c4394 */			int pn = AFL_Activity_GetPartsNumber(this.activityName_, names[i]);
+/* 001c43c6 */			Ｐ＿ＣＧ設定(pn, "システム／アンケート／顔／%s／無効" % shortName, 1);
+/* 001c43f4 */		}
+/* 001c43f4 */	}
+/* 001c4406 */}
+
+bool EnquiteCharacterPage::isCharacterKnown(string shortName)
+/* 001c440e */{
+/* 001c440e */	return ＣＧモード確認("システム／名札／%s" % shortName);
+/* 001c442e */}
+
+void EnquiteCharacterPage::onCheck(string partsName, bool isChecked)
+/* 001c443c */{
+/* 001c443c */	getEnquiteSelectionFromName(partsName).setChecked(isChecked);
+/* 001c4472 */	pass("%s %d" % partsName % getEnquiteSelectionFromName(partsName).isChecked());
+/* 001c44c4 */}
+
+void EnquiteCharacterPage::onWheel(int partsNumber, int forward, int back)
+/* 001c44cc */{
+/* 001c44cc */	int p = AFL_Activity_GetPartsNumber(this.activityName_, "SYS_縦スクロールバー");
+/* 001c44ee */	if (p != 0)
+/* 001c4506 */	{
+/* 001c4506 */		int current = Ｐ＿縦スクロールバー＿スクロール位置取得(p);
+/* 001c4522 */		Ｐ＿縦スクロールバー＿スクロール位置設定(p, (current + back * 100) - forward * 100);
+/* 001c4564 */	}
+/* 001c4564 */}
+
+int EnquiteCharacterPage::getClickedButton()
+/* 001c456c */{
+/* 001c456c */	return this.clickedButton_;
+/* 001c4578 */}
+

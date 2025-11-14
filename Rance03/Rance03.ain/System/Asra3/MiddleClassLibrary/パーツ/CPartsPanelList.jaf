@@ -1,0 +1,662 @@
+CPartsPanelList::CPartsPanelList()
+/* 0002fb82 */{
+/* 0002fb8a */	this.m_Z = 2000;
+/* 0002fb9c */	this.m_ScrollBarSize = 18;
+/* 0002fbae */	this.m_LayoutType = 1;
+/* 0002fbc0 */}
+
+CPartsPanelList::~CPartsPanelList()
+/* 0002fbc8 */{
+/* 0002fbc8 */	this.Release();
+/* 0002fbd0 */}
+
+void CPartsPanelList::PanelCaptionDragBeginEvent(int BaseNumber)
+/* 0002fbd8 */{
+/* 0002fbd8 */	this.m_DraggingPanel = BaseNumber;
+/* 0002fbee */	ref CPartsPanel Panel = this.GetPanelFromBase(BaseNumber);
+/* 0002fc32 */	if (Panel !== NULL)
+/* 0002fc4a */	{
+/* 0002fc4a */		Panel.SetZ(1);
+/* 0002fc60 */	}
+/* 0002fc60 */}
+
+void CPartsPanelList::PanelCaptionDragingEvent(int BaseNumber, int BeginMouseX, int BeginMouseY, int MouseX, int MouseY)
+/* 0002fc68 */{
+/* 0002fc68 */	switch (this.m_LayoutType)
+/* 0002fc7e */	{
+/* 0002fc7e */	case 1:
+/* 0002fc7e */		this.VerticalSort(BaseNumber, MouseY);
+/* 0002fc9a */		break;
+/* 0002fca0 */	case 2:
+/* 0002fca0 */		this.HorizonSort(BaseNumber, MouseX);
+/* 0002fcbc */		break;
+/* 0002fcc2 */	}
+/* 0002fcc2 */}
+
+void CPartsPanelList::PanelCaptionDragEndEvent(int BaseNumber)
+/* 0002fcca */{
+/* 0002fcca */	this.m_DraggingPanel = 0;
+/* 0002fcdc */	ref CPartsPanel Panel = this.GetPanelFromBase(BaseNumber);
+/* 0002fd20 */	if (Panel !== NULL)
+/* 0002fd38 */	{
+/* 0002fd38 */		Panel.SetZ(0);
+/* 0002fd4e */	}
+/* 0002fd4e */	this.m_dgUpdateLayoutEvent();
+/* 0002fd6e */}
+
+void CPartsPanelList::FloatingPanelCaptionDragEndEvent(int BaseNumber)
+/* 0002fd76 */{
+/* 0002fd76 */	this.m_dgUpdateLayoutEvent();
+/* 0002fd96 */}
+
+void CPartsPanelList::VerticalSort(int BaseNumber, int Y)
+/* 0002fd9e */{
+/* 0002fd9e */	Ｐ＿レイアウトボックス＿解放(this.m_Layout, BaseNumber);
+/* 0002fdb8 */	int i;
+/* 0002fdca */	int Numof = Ｐ＿レイアウトボックス＿個数取得(this.m_Layout);
+/* 0002fde6 */	for (i = 0; i < Numof; ++i)
+/* 0002fe30 */	{
+/* 0002fe30 */		int num = Ｐ＿レイアウトボックス＿番号取得(this.m_Layout, i);
+/* 0002fe56 */		if (Y < PARTS_GetAbsoluteY(num) + AFL_Parts_GetHeight(num, 1) / 2)
+/* 0002fea0 */		{
+/* 0002fea0 */			Ｐ＿レイアウトボックス＿挿入(this.m_Layout, i, BaseNumber);
+/* 0002fec4 */			return;
+/* 0002fec6 */		}
+/* 0002fec6 */	}
+/* 0002fecc */	Ｐ＿レイアウトボックス＿追加(this.m_Layout, BaseNumber);
+/* 0002fee6 */}
+
+void CPartsPanelList::HorizonSort(int BaseNumber, int X)
+/* 0002feee */{
+/* 0002feee */	Ｐ＿レイアウトボックス＿解放(this.m_Layout, BaseNumber);
+/* 0002ff08 */	int i;
+/* 0002ff1a */	int Numof = Ｐ＿レイアウトボックス＿個数取得(this.m_Layout);
+/* 0002ff36 */	for (i = 0; i < Numof; ++i)
+/* 0002ff80 */	{
+/* 0002ff80 */		int num = Ｐ＿レイアウトボックス＿番号取得(this.m_Layout, i);
+/* 0002ffa6 */		int left = AFL_Parts_GetUpperLeftPosX(num, 1);
+/* 0002ffca */		int right = left + AFL_Parts_GetWidth(num, 1) / 2;
+/* 00030000 */		if (X < PARTS_GetAbsoluteX(num) + AFL_Parts_GetWidth(num, 1) / 2)
+/* 0003004a */		{
+/* 0003004a */			Ｐ＿レイアウトボックス＿挿入(this.m_Layout, i, BaseNumber);
+/* 0003006e */			return;
+/* 00030070 */		}
+/* 00030070 */	}
+/* 00030076 */	Ｐ＿レイアウトボックス＿追加(this.m_Layout, BaseNumber);
+/* 00030090 */}
+
+void CPartsPanelList::PanelChangedActiveFlgEvent(int BaseNumber, bool Active)
+/* 00030098 */{
+/* 00030098 */	if (!Active)
+/* 000300aa */	{
+/* 000300aa */		return;
+/* 000300ac */	}
+/* 000300ac */	int i;
+/* 000300be */	int Numof = this.m_PanelList.Numof();
+/* 000300da */	for (i = 0; i < Numof; ++i)
+/* 00030124 */	{
+/* 00030124 */		if (this.m_PanelList[i].GetBaseParts() != BaseNumber)
+/* 00030152 */		{
+/* 00030152 */			this.m_PanelList[i].SetActive(false);
+/* 00030174 */		}
+/* 00030174 */	}
+/* 0003017a */}
+
+void CPartsPanelList::FloatingPanelChangedActiveFlgEvent(int BaseNumber, bool Active)
+/* 00030182 */{
+/* 00030182 */	if (!Active)
+/* 00030194 */	{
+/* 00030194 */		return;
+/* 00030196 */	}
+/* 00030196 */	this.PanelChangedActiveFlgEvent(BaseNumber, Active);
+/* 000301b2 */	int FindIndex = this.m_FloatingPanelLayer.Find(0, this.m_FloatingPanelLayer.Numof(), BaseNumber);
+/* 000301ee */	if (FindIndex == -1)
+/* 00030206 */	{
+/* 00030206 */		return;
+/* 00030208 */	}
+/* 00030208 */	this.m_FloatingPanelLayer.Erase(FindIndex);
+/* 0003021e */	this.m_FloatingPanelLayer.PushBack(BaseNumber);
+/* 00030232 */	this.UpdateZPos();
+/* 0003023a */}
+
+void CPartsPanelList::UpdateZPos()
+/* 00030242 */{
+/* 00030242 */	int PosZ = this.m_Z + 100;
+/* 00030260 */	int i;
+/* 00030272 */	int Numof = this.m_FloatingPanelLayer.Numof();
+/* 0003028e */	for (i = 0; i < Numof; ++i)
+/* 000302d8 */	{
+/* 000302d8 */		ref CPartsPanel Panel = this.GetPanelFromBase(this.m_FloatingPanelLayer[i]);
+/* 00030328 */		if (Panel === NULL)
+/* 00030340 */		{
+/* 00030340 */			continue;
+/* 00030352 */		}
+/* 00030352 */		Panel.SetZ(PosZ);
+/* 0003036c */		PosZ = Panel.GetLastZ() + 1;
+/* 00030390 */	}
+/* 000303a2 */}
+
+void CPartsPanelList::PanelUpdateSizeEvent(int BaseNumber, int Width, int Height)
+/* 000303aa */{
+/* 000303aa */	this.UpdateSize();
+/* 000303b2 */}
+
+void CPartsPanelList::PanelChangedCloseFlgEvent(int BaseNumber, bool Closed)
+/* 000303ba */{
+/* 000303ba */	this.m_dgUpdateLayoutEvent();
+/* 000303da */}
+
+void CPartsPanelList::Create()
+/* 000303e2 */{
+/* 000303e2 */	this.Reset(PARTS_GetFreeSystemPartsNumber());
+/* 000303f0 */}
+
+void CPartsPanelList::Reset(int Number)
+/* 000303f8 */{
+/* 000303f8 */	this.Release();
+/* 00030400 */	this.m_Base = Number;
+/* 00030416 */	Ｐ＿座標設定(this.m_Base, this.m_X, this.m_Y);
+/* 0003043a */	Ｐ＿Ｚ座標設定(this.m_Base, this.m_Z);
+/* 00030454 */	this.m_Layout = PARTS_GetFreeSystemPartsNumber();
+/* 00030466 */	Ｐ＿親設定(this.m_Layout, this.m_Base);
+/* 00030480 */	Ｐ＿Ｚ座標設定(this.m_Layout, 1);
+/* 00030496 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_Layout, this.m_LayoutType);
+/* 000304b0 */	this.UpdateSize();
+/* 000304b8 */}
+
+void CPartsPanelList::Release()
+/* 000304c0 */{
+/* 000304c0 */	PARTS_ReleaseWithInit(this.m_Base);
+/* 000304ce */	PARTS_ReleaseWithInit(this.m_Layout);
+/* 000304dc */	PARTS_ReleaseWithInit(this.m_AlphaClipper);
+/* 000304ea */	PARTS_ReleaseWithInit(this.m_HScroll);
+/* 000304f8 */	PARTS_ReleaseWithInit(this.m_VScroll);
+/* 00030506 */	this.m_DraggingPanel = 0;
+/* 00030518 */	this.ClearPanel();
+/* 00030520 */}
+
+string CPartsPanelList::GetEXString(string Key)
+/* 00030528 */{
+/* 00030528 */	string Result = "%s(key string Title, int Index, int Closed, float X, float Y)\n" % Key;
+/* 0003054e */	Result += "{\n";
+/* 00030562 */	int i;
+/* 00030574 */	int Numof = this.m_PanelList.Numof();
+/* 00030590 */	for (i = 0; i < Numof; ++i)
+/* 000305da */	{
+/* 000305da */		Result += "\t\"%s\",\t%d,\t%d,\t%f,\t%f;\n" % this.m_PanelList[i].GetTitle() % Ｐ＿子インデックス取得(this.m_Layout, this.m_PanelList[i].GetBaseParts()) % (this.m_PanelList[i].IsClosed() ? 1 : 0) % this.m_PanelList[i].GetX() % this.m_PanelList[i].GetY();
+/* 000306ca */	}
+/* 000306d0 */	Result += "}\n";
+/* 000306e4 */	return Result;
+/* 000306f0 */}
+
+bool CPartsPanelList::Restore(string Key)
+/* 000306fe */{
+/* 000306fe */	if (!this.m_Layout)
+/* 00030710 */	{
+/* 00030710 */		return false;
+/* 00030718 */	}
+/* 00030718 */	Ｐ＿レイアウトボックス＿全解放(this.m_Layout);
+/* 00030728 */	int Numof = this.m_PanelList.Numof();
+/* 00030744 */	array@int BasePartsList;
+/* 0003074e */	BasePartsList.Alloc(Numof);
+/* 00030768 */	int i;
+/* 0003077a */	for (i = 0; i < Numof; ++i)
+/* 000307c4 */	{
+/* 000307c4 */		int BaseNumber = this.m_PanelList[i].GetBaseParts();
+/* 000307ec */		string Title = this.m_PanelList[i].GetTitle();
+/* 00030816 */		if (this.m_FloatingPanelLayer.Find(0, this.m_FloatingPanelLayer.Numof(), BaseNumber) == -1)
+/* 00030854 */		{
+/* 00030854 */			int Index = EX_SA2Int(Key, Title, "Index", -1);
+/* 00030886 */			if (Index >= 0 && Index < Numof)
+/* 000308d2 */			{
+/* 000308d2 */				BasePartsList[Index] = BaseNumber;
+/* 000308f4 */			}
+/* 000308fa */			else
+/* 000308fa */			{
+/* 000308fa */				BasePartsList.PushBack(BaseNumber);
+/* 0003090e */			}
+/* 0003090e */		}
+/* 0003090e */		int IsClosed = EX_SA2Int(Key, Title, "Closed", -1);
+/* 00030940 */		if (IsClosed == 0)
+/* 00030958 */		{
+/* 00030958 */			this.m_PanelList[i].Open();
+/* 00030974 */		}
+/* 0003097a */		else if (IsClosed == 1)
+/* 00030992 */		{
+/* 00030992 */			this.m_PanelList[i].Close();
+/* 000309ae */		}
+/* 000309ae */		float X = EX_SA2Float(Key, Title, "X", -340282346638528860000000000000000000000.0);
+/* 000309e0 */		float Y = EX_SA2Float(Key, Title, "Y", -340282346638528860000000000000000000000.0);
+/* 00030a12 */		if (X != -340282346638528860000000000000000000000.0 && Y != -340282346638528860000000000000000000000.0)
+/* 00030a5a */		{
+/* 00030a5a */			this.m_PanelList[i].SetPos(X, Y);
+/* 00030a8a */		}
+/* 00030a8a */	}
+/* 00030a90 */	Numof = BasePartsList.Numof();
+/* 00030aac */	for (i = 0; i < Numof; ++i)
+/* 00030af6 */	{
+/* 00030af6 */		if (BasePartsList[i])
+/* 00030b12 */		{
+/* 00030b12 */			Ｐ＿レイアウトボックス＿追加(this.m_Layout, BasePartsList[i]);
+/* 00030b38 */		}
+/* 00030b38 */	}
+/* 00030b3e */	return true;
+/* 00030b46 */}
+
+int CPartsPanelList::GetPartsNumber()
+/* 00030b54 */{
+/* 00030b54 */	return this.m_Base;
+/* 00030b60 */}
+
+void CPartsPanelList::SetPos(float X, float Y)
+/* 00030b6e */{
+/* 00030b6e */	this.m_X = X;
+/* 00030b84 */	this.m_Y = Y;
+/* 00030b9a */	if (this.m_Base)
+/* 00030baa */	{
+/* 00030baa */		Ｐ＿座標設定(this.m_Base, this.m_X, this.m_Y);
+/* 00030bce */	}
+/* 00030bce */}
+
+void CPartsPanelList::SetZ(int Z)
+/* 00030bd6 */{
+/* 00030bd6 */	this.m_Z = Z;
+/* 00030bec */	if (this.m_Base)
+/* 00030bfc */	{
+/* 00030bfc */		Ｐ＿Ｚ座標設定(this.m_Base, this.m_Z);
+/* 00030c16 */	}
+/* 00030c16 */}
+
+int CPartsPanelList::GetX()
+/* 00030c1e */{
+/* 00030c1e */	if (this.m_Base)
+/* 00030c2e */	{
+/* 00030c2e */		this.m_X = Ｐ＿Ｘ座標取得(this.m_Base);
+/* 00030c4a */	}
+/* 00030c4a */	return this.m_X;
+/* 00030c58 */}
+
+int CPartsPanelList::GetY()
+/* 00030c66 */{
+/* 00030c66 */	if (this.m_Base)
+/* 00030c76 */	{
+/* 00030c76 */		this.m_Y = Ｐ＿Ｙ座標取得(this.m_Base);
+/* 00030c92 */	}
+/* 00030c92 */	return this.m_Y;
+/* 00030ca0 */}
+
+int CPartsPanelList::GetZ()
+/* 00030cae */{
+/* 00030cae */	if (this.m_Base)
+/* 00030cbe */	{
+/* 00030cbe */		this.m_Z = Ｐ＿Ｚ座標取得(this.m_Base);
+/* 00030cda */	}
+/* 00030cda */	return this.m_Z;
+/* 00030ce6 */}
+
+void CPartsPanelList::SetSize(int Width, int Height)
+/* 00030cf4 */{
+/* 00030cf4 */	this.m_Width = Width;
+/* 00030d0a */	this.m_Height = Height;
+/* 00030d20 */	this.UpdateSize();
+/* 00030d28 */}
+
+void CPartsPanelList::UpdateSize()
+/* 00030d30 */{
+/* 00030d30 */	int BaseWidth = this.GetWidth();
+/* 00030d44 */	int BaseHeight = this.GetHeight();
+/* 00030d58 */	Ｐ＿構築手順＿作成(this.m_Base, BaseWidth, BaseHeight, 1);
+/* 00030d82 */	Ｐ＿構築手順＿色塗り(this.m_Base, 0, 0, BaseWidth, BaseHeight, 240, 235, 235, 255, 1);
+/* 00030dd0 */	Ｐ＿構築ビルド(this.m_Base, 1);
+/* 00030de6 */	this.UpdateHScroll();
+/* 00030dee */	this.UpdateVScroll();
+/* 00030df6 */	this.UpdateAlphaClipper();
+/* 00030dfe */}
+
+void CPartsPanelList::UpdateHScroll()
+/* 00030e06 */{
+/* 00030e06 */	if (this.m_Width <= 0)
+/* 00030e1e */	{
+/* 00030e1e */		PARTS_ReleaseWithInit(this.m_HScroll);
+/* 00030e2c */		PARTS_SetScrollPosXLink(this.m_Layout, 0);
+/* 00030e42 */		return;
+/* 00030e44 */	}
+/* 00030e44 */	if (!this.m_HScroll)
+/* 00030e56 */	{
+/* 00030e56 */		this.m_HScroll = PARTS_GetFreeSystemPartsNumber();
+/* 00030e68 */		Ｐ＿親設定(this.m_HScroll, this.m_Base);
+/* 00030e82 */		Ｐ＿Ｚ座標設定(this.m_HScroll, 2);
+/* 00030e98 */		Ｐ＿原点座標設定(this.m_HScroll, 7);
+/* 00030eae */		Ｐ＿横スクロールバー＿左ボタン幅設定(this.m_HScroll, this.m_ScrollBarSize);
+/* 00030ec8 */		Ｐ＿横スクロールバー＿右ボタン幅設定(this.m_HScroll, this.m_ScrollBarSize);
+/* 00030ee2 */		PARTS_SetScrollPosXLink(this.m_Layout, this.m_HScroll);
+/* 00030efc */	}
+/* 00030efc */	Ｐ＿座標設定(this.m_HScroll, 0.0, this.GetHeight());
+/* 00030f1c */	Ｐ＿横スクロールバー＿サイズ設定(this.m_HScroll, this.GetClientWidth(), this.m_ScrollBarSize);
+/* 00030f3e */	Ｐ＿横スクロールバー＿全体量設定(this.m_HScroll, AFL_Parts_GetWidth(this.m_Layout, 1));
+/* 00030f64 */	Ｐ＿横スクロールバー＿表示量設定(this.m_HScroll, this.GetClientWidth());
+/* 00030f7c */}
+
+void CPartsPanelList::UpdateVScroll()
+/* 00030f84 */{
+/* 00030f84 */	if (this.m_Height <= 0)
+/* 00030f9c */	{
+/* 00030f9c */		PARTS_ReleaseWithInit(this.m_VScroll);
+/* 00030faa */		PARTS_SetScrollPosYLink(this.m_Layout, 0);
+/* 00030fc0 */		return;
+/* 00030fc2 */	}
+/* 00030fc2 */	if (!this.m_VScroll)
+/* 00030fd4 */	{
+/* 00030fd4 */		this.m_VScroll = PARTS_GetFreeSystemPartsNumber();
+/* 00030fe6 */		Ｐ＿親設定(this.m_VScroll, this.m_Base);
+/* 00031000 */		Ｐ＿Ｚ座標設定(this.m_VScroll, 2);
+/* 00031016 */		Ｐ＿原点座標設定(this.m_VScroll, 3);
+/* 0003102c */		Ｐ＿縦スクロールバー＿上ボタン高さ設定(this.m_VScroll, this.m_ScrollBarSize);
+/* 00031046 */		Ｐ＿縦スクロールバー＿下ボタン高さ設定(this.m_VScroll, this.m_ScrollBarSize);
+/* 00031060 */		PARTS_SetScrollPosYLink(this.m_Layout, this.m_VScroll);
+/* 0003107a */	}
+/* 0003107a */	Ｐ＿座標設定(this.m_VScroll, this.GetWidth(), 0.0);
+/* 0003109a */	Ｐ＿縦スクロールバー＿サイズ設定(this.m_VScroll, this.m_ScrollBarSize, this.GetClientHeight());
+/* 000310bc */	Ｐ＿縦スクロールバー＿全体量設定(this.m_VScroll, AFL_Parts_GetHeight(this.m_Layout, 1));
+/* 000310e2 */	Ｐ＿縦スクロールバー＿表示量設定(this.m_VScroll, this.GetClientHeight());
+/* 000310fa */}
+
+void CPartsPanelList::UpdateAlphaClipper()
+/* 00031102 */{
+/* 00031102 */	if (!this.m_AlphaClipper)
+/* 00031114 */	{
+/* 00031114 */		this.m_AlphaClipper = PARTS_GetFreeSystemPartsNumber();
+/* 00031126 */		Ｐ＿親設定(this.m_AlphaClipper, this.m_Base);
+/* 00031140 */		Ｐ＿座標設定(this.m_AlphaClipper, 0.0, 0.0);
+/* 0003115c */		Ｐ＿表示設定(this.m_AlphaClipper, false);
+/* 00031172 */		int i;
+/* 00031184 */		int Numof = this.m_PanelList.Numof();
+/* 000311a0 */		for (i = 0; i < Numof; ++i)
+/* 000311ea */		{
+/* 000311ea */			Ｐ＿アルファクリッパー設定(this.m_PanelList[i].GetBaseParts(), this.m_AlphaClipper);
+/* 00031216 */		}
+/* 0003121c */	}
+/* 0003121c */	int ClientWidth = this.GetClientWidth();
+/* 00031230 */	int ClientHeight = this.GetClientHeight();
+/* 00031244 */	Ｐ＿構築手順＿作成(this.m_AlphaClipper, ClientWidth, ClientHeight, 1);
+/* 0003126e */	Ｐ＿構築手順＿色塗り(this.m_AlphaClipper, 0, 0, ClientWidth, ClientHeight, 255, 255, 255, 255, 1);
+/* 000312bc */	Ｐ＿構築ビルド(this.m_AlphaClipper, 1);
+/* 000312d2 */}
+
+int CPartsPanelList::GetWidth()
+/* 000312da */{
+/* 000312da */	if (this.m_Width > 0)
+/* 000312f2 */	{
+/* 000312f2 */		return this.m_Width;
+/* 000312fe */	}
+/* 000312fe */	return AFL_Parts_GetWidth(this.m_Layout, 1) + (this.m_Height > 0 ? this.m_ScrollBarSize : 0);
+/* 00031346 */}
+
+int CPartsPanelList::GetHeight()
+/* 00031354 */{
+/* 00031354 */	if (this.m_Height > 0)
+/* 0003136c */	{
+/* 0003136c */		return this.m_Height;
+/* 00031378 */	}
+/* 00031378 */	return AFL_Parts_GetHeight(this.m_Layout, 1) + (this.m_Width > 0 ? this.m_ScrollBarSize : 0);
+/* 000313c0 */}
+
+int CPartsPanelList::GetClientWidth()
+/* 000313ce */{
+/* 000313ce */	if (this.m_Width <= 0)
+/* 000313e6 */	{
+/* 000313e6 */		return AFL_Parts_GetWidth(this.m_Layout, 1);
+/* 000313fe */	}
+/* 000313fe */	return this.m_Width - (this.m_Height > 0 ? this.m_ScrollBarSize : 0);
+/* 0003143a */}
+
+int CPartsPanelList::GetClientHeight()
+/* 00031448 */{
+/* 00031448 */	if (this.m_Height <= 0)
+/* 00031460 */	{
+/* 00031460 */		return AFL_Parts_GetHeight(this.m_Layout, 1);
+/* 00031478 */	}
+/* 00031478 */	return this.m_Height - (this.m_Width > 0 ? this.m_ScrollBarSize : 0);
+/* 000314b4 */}
+
+void CPartsPanelList::SetShow(bool Show)
+/* 000314c2 */{
+/* 000314c2 */	Ｐ＿表示設定(this.m_Base, Show);
+/* 000314dc */}
+
+bool CPartsPanelList::IsShow()
+/* 000314e4 */{
+/* 000314e4 */	return Ｐ＿表示設定取得(this.m_Base);
+/* 000314f6 */}
+
+void CPartsPanelList::SetLayoutType(int LayoutType)
+/* 00031504 */{
+/* 00031504 */	this.m_LayoutType = LayoutType;
+/* 0003151a */	if (this.m_Layout)
+/* 0003152a */	{
+/* 0003152a */		Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_Layout, this.m_LayoutType);
+/* 00031544 */	}
+/* 00031544 */}
+
+int CPartsPanelList::GetLayoutType()
+/* 0003154c */{
+/* 0003154c */	return this.m_LayoutType;
+/* 00031558 */}
+
+int CPartsPanelList::CreatePanel(string Title)
+/* 00031566 */{
+/* 00031566 */	return this.ResetPanel(Title, PARTS_GetFreeSystemPartsNumber());
+/* 00031580 */}
+
+int CPartsPanelList::CreateFloatingPanel(string Title)
+/* 0003158e */{
+/* 0003158e */	return this.ResetFloatingPanel(Title, PARTS_GetFreeSystemPartsNumber());
+/* 000315a8 */}
+
+int CPartsPanelList::CreateTranslucentPanel(string Title)
+/* 000315b6 */{
+/* 000315b6 */	return this.ResetTranslucentPanel(Title, PARTS_GetFreeSystemPartsNumber());
+/* 000315d0 */}
+
+int CPartsPanelList::ResetPanel(string Title, int PartsNumber)
+/* 000315de */{
+/* 000315de */	if (!this.m_Base)
+/* 000315f0 */	{
+/* 000315f0 */		this.Create();
+/* 000315f8 */		if (!this.m_Base)
+/* 0003160a */		{
+/* 0003160a */			return 0;
+/* 00031612 */		}
+/* 00031612 */	}
+/* 00031612 */	int Index = this.m_PanelList.Numof();
+/* 0003162e */	this.m_PanelList.Realloc(Index + 1);
+/* 00031650 */	ref CPartsPanel Panel = this.m_PanelList[Index];
+/* 00031682 */	Panel.Reset(PartsNumber);
+/* 0003169c */	Panel.SetTitle(Title);
+/* 000316b6 */	Panel.SetMinimizable(true);
+/* 000316cc */	Panel.AddCaptionDragBeginEvent(this.PanelCaptionDragBeginEvent);
+/* 000316e6 */	Panel.AddCaptionDragingEvent(this.PanelCaptionDragingEvent);
+/* 00031700 */	Panel.AddCaptionDragEndEvent(this.PanelCaptionDragEndEvent);
+/* 0003171a */	Panel.AddChangedActiveFlgEvent(this.PanelChangedActiveFlgEvent);
+/* 00031734 */	Panel.AddUpdateSizeEvent(this.PanelUpdateSizeEvent);
+/* 0003174e */	Panel.AddChangedCloseFlgEvent(this.PanelChangedCloseFlgEvent);
+/* 00031768 */	Ｐ＿レイアウトボックス＿追加(this.m_Layout, Panel.GetBaseParts());
+/* 00031788 */	if (this.m_AlphaClipper)
+/* 00031798 */	{
+/* 00031798 */		Ｐ＿アルファクリッパー設定(Panel.GetBaseParts(), this.m_AlphaClipper);
+/* 000317b8 */	}
+/* 000317b8 */	Panel.Open();
+/* 000317c8 */	this.UpdateSize();
+/* 000317d0 */	return Panel.GetLayout();
+/* 000317e2 */}
+
+int CPartsPanelList::ResetFloatingPanel(string Title, int PartsNumber)
+/* 000317f0 */{
+/* 000317f0 */	if (!this.m_Base)
+/* 00031802 */	{
+/* 00031802 */		this.Create();
+/* 0003180a */		if (!this.m_Base)
+/* 0003181c */		{
+/* 0003181c */			return 0;
+/* 00031824 */		}
+/* 00031824 */	}
+/* 00031824 */	int Index = this.m_PanelList.Numof();
+/* 00031840 */	this.m_PanelList.Realloc(Index + 1);
+/* 00031862 */	ref CPartsPanel Panel = this.m_PanelList[Index];
+/* 00031894 */	Panel.Reset(PartsNumber);
+/* 000318ae */	Panel.SetTitle(Title);
+/* 000318c8 */	Panel.SetMinimizable(false);
+/* 000318de */	Panel.AddCaptionDragEndEvent(this.FloatingPanelCaptionDragEndEvent);
+/* 000318f8 */	Panel.AddChangedActiveFlgEvent(this.FloatingPanelChangedActiveFlgEvent);
+/* 00031912 */	Panel.AddChangedCloseFlgEvent(this.PanelChangedCloseFlgEvent);
+/* 0003192c */	this.m_FloatingPanelLayer.PushBack(Panel.GetBaseParts());
+/* 00031946 */	this.UpdateZPos();
+/* 0003194e */	return Panel.GetLayout();
+/* 00031960 */}
+
+int CPartsPanelList::ResetTranslucentPanel(string Title, int PartsNumber)
+/* 0003196e */{
+/* 0003196e */	int LayoutNumber = this.ResetFloatingPanel(Title, PartsNumber);
+/* 00031996 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 000319da */	if (Panel === NULL)
+/* 000319f2 */	{
+/* 000319f2 */		return 0;
+/* 000319fa */	}
+/* 000319fa */	Panel.SetTranslucent(true);
+/* 00031a10 */	return LayoutNumber;
+/* 00031a1c */}
+
+void CPartsPanelList::ClearPanel()
+/* 00031a2a */{
+/* 00031a2a */	this.m_PanelList.Free();
+/* 00031a34 */	this.m_FloatingPanelLayer.Free();
+/* 00031a3e */}
+
+ref CPartsPanel CPartsPanelList::GetPanelFromBase(int BaseNumber)
+/* 00031a46 */{
+/* 00031a46 */	int i;
+/* 00031a58 */	int Numof = this.m_PanelList.Numof();
+/* 00031a74 */	for (i = 0; i < Numof; ++i)
+/* 00031abe */	{
+/* 00031abe */		if (this.m_PanelList[i].GetBaseParts() == BaseNumber)
+/* 00031aec */		{
+/* 00031aec */			return this.m_PanelList[i];
+/* 00031b08 */		}
+/* 00031b08 */	}
+/* 00031b0e */	return NULL;
+/* 00031b16 */}
+
+ref CPartsPanel CPartsPanelList::GetPanelFromLayout(int LayoutNumber)
+/* 00031b24 */{
+/* 00031b24 */	int i;
+/* 00031b36 */	int Numof = this.m_PanelList.Numof();
+/* 00031b52 */	for (i = 0; i < Numof; ++i)
+/* 00031b9c */	{
+/* 00031b9c */		if (this.m_PanelList[i].GetLayout() == LayoutNumber)
+/* 00031bca */		{
+/* 00031bca */			return this.m_PanelList[i];
+/* 00031be6 */		}
+/* 00031be6 */	}
+/* 00031bec */	return NULL;
+/* 00031bf4 */}
+
+void CPartsPanelList::OpenPanel(int LayoutNumber)
+/* 00031c02 */{
+/* 00031c02 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031c46 */	if (Panel === NULL)
+/* 00031c5e */	{
+/* 00031c5e */		return;
+/* 00031c60 */	}
+/* 00031c60 */	Panel.Open();
+/* 00031c70 */}
+
+void CPartsPanelList::ClosePanel(int LayoutNumber)
+/* 00031c78 */{
+/* 00031c78 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031cbc */	if (Panel === NULL)
+/* 00031cd4 */	{
+/* 00031cd4 */		return;
+/* 00031cd6 */	}
+/* 00031cd6 */	Panel.Close();
+/* 00031ce6 */}
+
+void CPartsPanelList::SetPanelPos(int LayoutNumber, float X, float Y)
+/* 00031cee */{
+/* 00031cee */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031d32 */	if (Panel === NULL)
+/* 00031d4a */	{
+/* 00031d4a */		return;
+/* 00031d4c */	}
+/* 00031d4c */	Panel.SetPos(X, Y);
+/* 00031d70 */}
+
+void CPartsPanelList::SetPanelSize(int LayoutNumber, int Width, int Height)
+/* 00031d78 */{
+/* 00031d78 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031dbc */	if (Panel === NULL)
+/* 00031dd4 */	{
+/* 00031dd4 */		return;
+/* 00031dd6 */	}
+/* 00031dd6 */	Panel.SetSize(Width, Height);
+/* 00031dfa */}
+
+void CPartsPanelList::SetPanelWidth(int LayoutNumber, int Width)
+/* 00031e02 */{
+/* 00031e02 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031e46 */	if (Panel === NULL)
+/* 00031e5e */	{
+/* 00031e5e */		return;
+/* 00031e60 */	}
+/* 00031e60 */	Panel.SetSize(Width, Panel.GetHeight());
+/* 00031e8a */}
+
+void CPartsPanelList::SetPanelHeight(int LayoutNumber, int Height)
+/* 00031e92 */{
+/* 00031e92 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031ed6 */	if (Panel === NULL)
+/* 00031eee */	{
+/* 00031eee */		return;
+/* 00031ef0 */	}
+/* 00031ef0 */	Panel.SetSize(Panel.GetWidth(), Height);
+/* 00031f1a */}
+
+void CPartsPanelList::SetPanelTitle(int LayoutNumber, string Title)
+/* 00031f22 */{
+/* 00031f22 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031f66 */	if (Panel === NULL)
+/* 00031f7e */	{
+/* 00031f7e */		return;
+/* 00031f80 */	}
+/* 00031f80 */	Panel.SetTitle(Title);
+/* 00031f9a */}
+
+void CPartsPanelList::SetPanelCaptionColor(int LayoutNumber, int nR, int nG, int nB)
+/* 00031fa2 */{
+/* 00031fa2 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 00031fe6 */	if (Panel === NULL)
+/* 00031ffe */	{
+/* 00031ffe */		return;
+/* 00032000 */	}
+/* 00032000 */	Panel.SetCaptionColor(nR, nG, nB);
+/* 0003202e */}
+
+void CPartsPanelList::SetPanelCaptionLightColor(int LayoutNumber, int nR, int nG, int nB)
+/* 00032036 */{
+/* 00032036 */	ref CPartsPanel Panel = this.GetPanelFromLayout(LayoutNumber);
+/* 0003207a */	if (Panel === NULL)
+/* 00032092 */	{
+/* 00032092 */		return;
+/* 00032094 */	}
+/* 00032094 */	Panel.SetCaptionLightColor(nR, nG, nB);
+/* 000320c2 */}
+
+void CPartsPanelList::AddUpdateLayoutEvent(DG_PanelList_UpdateLayoutHandler DelegateObject)
+/* 000320ca */{
+/* 000320ca */	this.m_dgUpdateLayoutEvent += DelegateObject;
+/* 000320e4 */}
+
+void CPartsPanelList::EraseUpdateLayoutEvent(DG_PanelList_UpdateLayoutHandler DelegateObject)
+/* 000320ec */{
+/* 000320ec */	this.m_dgUpdateLayoutEvent -= DelegateObject;
+/* 00032106 */}
+

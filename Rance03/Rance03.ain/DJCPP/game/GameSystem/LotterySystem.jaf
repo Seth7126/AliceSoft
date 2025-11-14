@@ -1,0 +1,90 @@
+void LotterySystem::clear()
+/* 001d7688 */{
+/* 001d7688 */	this.current_ = 0;
+/* 001d769a */	this.isReset_ = false;
+/* 001d76ac */	this.ticket_.Free();
+/* 001d76b6 */}
+
+void LotterySystem::addIntKey(int key, int probability)
+/* 001d76be */{
+/* 001d76be */	if (probability == 0)
+/* 001d76d6 */	{
+/* 001d76d6 */		return;
+/* 001d76d8 */	}
+/* 001d76d8 */	LotteryTicket t;
+/* 001d76e8 */	t.keyInt_ = key;
+/* 001d7706 */	t.probability_ = probability;
+/* 001d7724 */	this.ticket_.PushBack(t);
+/* 001d773c */}
+
+void LotterySystem::addStringKey(string key, int probability)
+/* 001d7744 */{
+/* 001d7744 */	if (probability == 0)
+/* 001d775c */	{
+/* 001d775c */		return;
+/* 001d775e */	}
+/* 001d775e */	LotteryTicket t;
+/* 001d776e */	t.keyString_ = key;
+/* 001d778e */	t.probability_ = probability;
+/* 001d77ac */	this.ticket_.PushBack(t);
+/* 001d77c4 */}
+
+int LotterySystem::drawInt(bool isEraseKey)
+/* 001d77cc */{
+/* 001d77cc */	int index = this.innerDraw();
+/* 001d77e0 */	int r = this.ticket_[index].keyInt_;
+/* 001d780a */	if (isEraseKey)
+/* 001d781a */	{
+/* 001d781a */		this.eraseKey(index);
+/* 001d782c */	}
+/* 001d782c */	return r;
+/* 001d7838 */}
+
+string LotterySystem::drawString(bool isEraseKey)
+/* 001d7846 */{
+/* 001d7846 */	int index = this.innerDraw();
+/* 001d785a */	string r = this.ticket_[index].keyString_;
+/* 001d7886 */	if (isEraseKey)
+/* 001d7896 */	{
+/* 001d7896 */		this.eraseKey(index);
+/* 001d78a8 */	}
+/* 001d78a8 */	return r;
+/* 001d78b4 */}
+
+void LotterySystem::eraseKey(int index)
+/* 001d78c2 */{
+/* 001d78c2 */	this.ticket_.Erase(index);
+/* 001d78d8 */	this.resetRange();
+/* 001d78e0 */}
+
+void LotterySystem::resetRange()
+/* 001d78e8 */{
+/* 001d78e8 */	this.current_ = 0;
+/* 001d78fa */	int i;
+/* 001d790c */	for (i = 0; i < this.ticket_.Numof(); ++i)
+/* 001d795c */	{
+/* 001d795c */		this.ticket_[i].numberMin_ = this.current_;
+/* 001d7986 */		this.ticket_[i].numberMax_ = (this.current_ + this.ticket_[i].probability_) - 1;
+/* 001d79d8 */		this.current_ = this.ticket_[i].numberMax_ + 1;
+/* 001d7a0a */	}
+/* 001d7a10 */}
+
+int LotterySystem::innerDraw()
+/* 001d7a18 */{
+/* 001d7a18 */	if (!this.isReset_)
+/* 001d7a2a */	{
+/* 001d7a2a */		this.resetRange();
+/* 001d7a32 */		this.isReset_ = true;
+/* 001d7a44 */	}
+/* 001d7a44 */	int r = RAND(this.current_) - 1;
+/* 001d7a68 */	int i;
+/* 001d7a7a */	for (i = 0; i < this.ticket_.Numof(); ++i)
+/* 001d7aca */	{
+/* 001d7aca */		if (this.ticket_[i].numberMin_ <= r && r <= this.ticket_[i].numberMax_)
+/* 001d7b42 */		{
+/* 001d7b42 */			return i;
+/* 001d7b4e */		}
+/* 001d7b4e */	}
+/* 001d7b54 */	return -1;
+/* 001d7b5c */}
+

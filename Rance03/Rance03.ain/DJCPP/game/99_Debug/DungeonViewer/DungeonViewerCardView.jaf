@@ -1,0 +1,120 @@
+DungeonViewerCardView::DungeonViewerCardView()
+/* 001c8764 */{
+/* 001c876c */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 001c879c */}
+
+void DungeonViewerCardView::setOnClickCallback(DG_DungeonViewerOnClickCallback cb)
+/* 001c87a4 */{
+/* 001c87a4 */	this.cb_ = cb;
+/* 001c87be */}
+
+void DungeonViewerCardView::init(ref DungeonCard card, int x, int y, int depth)
+/* 001c87c6 */{
+/* 001c87c6 */	this.card_ <- card;
+/* 001c87e6 */	this.depth_ = depth;
+/* 001c87fc */	this.x_ = x;
+/* 001c8812 */	this.y_ = y;
+/* 001c8828 */	this.initParts();
+/* 001c8830 */}
+
+void DungeonViewerCardView::initParts()
+/* 001c8838 */{
+/* 001c8838 */	CardInfomation info;
+/* 001c8848 */	info = getCardInfomationFromId(this.card_.getCardTypeId());
+/* 001c888e */	this.parts_[0].init(info.getImageName(), 0);
+/* 001c88bc */	this.parts_[1].initAsCgPlaneImage(info.getImageName(), 255, 255, 255);
+/* 001c88f6 */	this.parts_[6].initAsCgPlaneImage(info.getImageName(), 255, 255, 0);
+/* 001c8930 */	this.parts_[6].setAlpha(128.0);
+/* 001c894e */	this.parts_[2].initAsText("%s[%3d,%3d]" % this.getOpenTypeString(this.card_.getOpenType()) % this.x_ % this.y_, 18, false, 256, 255, 255, 255);
+/* 001c89d4 */	this.parts_[3].initAsText("[%s]" % this.card_.getDataId(), 18, false, 256, 255, 255, 255);
+/* 001c8a2e */	string ev = info.getEventCallback();
+/* 001c8a4c */	string jcb = "%s" % info.getClickableJudgeCallback();
+/* 001c8a78 */	ev = ev.GetPart(ev.Length() - 6, 6);
+/* 001c8aaa */	jcb = jcb.GetPart(jcb.Length() - 6, 6);
+/* 001c8adc */	this.parts_[4].initAsText(ev, 18, false, 256, 255, 255, 255);
+/* 001c8b22 */	this.parts_[5].initAsText(jcb, 18, false, 256, 255, 255, 255);
+/* 001c8b68 */	this.width_ = 90;
+/* 001c8b7a */	this.height_ = 144;
+/* 001c8b8c */	float s = 1.0;
+/* 001c8b9e */	s = Math.MinF(s, 90.0 / this.parts_[0].getWidth());
+/* 001c8be0 */	s = Math.MinF(s, 144.0 / this.parts_[0].getHeight());
+/* 001c8c22 */	this.parts_[0].setScaling(s * 100.0);
+/* 001c8c4c */	this.parts_[1].setScaling(s * 100.0);
+/* 001c8c76 */	this.parts_[6].setScaling(s * 100.0);
+/* 001c8ca0 */	this.parts_[1].setCgRange(0, 0, 144, 150);
+/* 001c8cd0 */	this.parts_[1].setAlpha(200.0);
+/* 001c8cee */	createPartsGroup(this.parent_, this.parts_, 1100);
+/* 001c8d0e */	if (info.getChangeType() == 1)
+/* 001c8d2c */	{
+/* 001c8d2c */		this.parts_[1].setMultiColorValue(200, 0, 0);
+/* 001c8d56 */	}
+/* 001c8d5c */	else if (info.getChangeType() == 2)
+/* 001c8d7a */	{
+/* 001c8d7a */		this.parts_[1].setMultiColorValue(160, 0, 160);
+/* 001c8da4 */	}
+/* 001c8daa */	else
+/* 001c8daa */	{
+/* 001c8daa */		this.parts_[1].setMultiColorValue(0, 0, 0);
+/* 001c8dd4 */	}
+/* 001c8dd4 */	this.setPartsShow();
+/* 001c8ddc */	this.setPartsPos();
+/* 001c8de4 */}
+
+string DungeonViewerCardView::getOpenTypeString(int type)
+/* 001c8dec */{
+/* 001c8dec */	switch (type)
+/* 001c8e02 */	{
+/* 001c8e02 */	case 0:
+/* 001c8e02 */		return "↑";
+/* 001c8e0a */	case 1:
+/* 001c8e0a */		return "↓";
+/* 001c8e12 */	case 2:
+/* 001c8e12 */		return "？";
+/* 001c8e1a */	}
+/* 001c8e1a */	return "エラー";
+/* 001c8e22 */}
+
+void DungeonViewerCardView::setPartsShow()
+/* 001c8e30 */{
+/* 001c8e30 */	int i;
+/* 001c8e42 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001c8e92 */	{
+/* 001c8e92 */		this.parts_[i].setShow(true);
+/* 001c8eb4 */	}
+/* 001c8eba */	this.parent_.setShow(true);
+/* 001c8ed0 */}
+
+void DungeonViewerCardView::setPartsPos()
+/* 001c8ed8 */{
+/* 001c8ed8 */	this.parts_[1].setPos(2.0, 10.0);
+/* 001c8efc */	int i;
+/* 001c8f0e */	int h = this.parts_[2 + i].getHeight() - 2;
+/* 001c8f46 */	for (i = 0; i < 4; ++i)
+/* 001c8f8c */	{
+/* 001c8f8c */		this.parts_[2 + i].setPos(5.0, 15 + i * h);
+/* 001c8fd6 */	}
+/* 001c8fdc */	int ws = this.width_ + 10;
+/* 001c8ffa */	int hs = this.height_ + 10;
+/* 001c9018 */	this.parent_.setPos((512 + ws * this.x_) - this.width_ / 2, (this.depth_ - this.y_ - 1) * hs);
+/* 001c9088 */}
+
+void DungeonViewerCardView::setParent(int parentPartsNumber)
+/* 001c9090 */{
+/* 001c9090 */	this.parent_.setParent(parentPartsNumber);
+/* 001c90aa */}
+
+void DungeonViewerCardView::update()
+/* 001c90b2 */{
+/* 001c90b2 */	this.isHover_ = this.parts_[0].isHit(g_mouse.getX(), g_mouse.getY());
+/* 001c90f6 */	if (this.isHover() && g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 001c913c */	{
+/* 001c913c */		this.cb_(this.x_, this.y_);
+/* 001c9170 */	}
+/* 001c9170 */	this.parts_[6].setShow(this.isHover_);
+/* 001c9192 */}
+
+bool DungeonViewerCardView::isHover()
+/* 001c919a */{
+/* 001c919a */	return this.isHover_;
+/* 001c91a6 */}
+

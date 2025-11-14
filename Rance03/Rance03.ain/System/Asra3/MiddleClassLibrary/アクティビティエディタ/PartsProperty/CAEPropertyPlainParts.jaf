@@ -1,0 +1,216 @@
+CAEPropertyPlainParts::CAEPropertyPlainParts()
+/* 00069f7a */{
+/* 00069f82 */	this.Release();
+/* 00069f8a */}
+
+CAEPropertyPlainParts::~CAEPropertyPlainParts()
+/* 00069f92 */{
+/* 00069f92 */	this.Release();
+/* 00069f9a */}
+
+void CAEPropertyPlainParts::Init(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 00069fa2 */{
+/* 00069fa2 */	this.Release();
+/* 00069faa */	if (Item === NULL)
+/* 00069fc2 */	{
+/* 00069fc2 */		return;
+/* 00069fc4 */	}
+/* 00069fc4 */	this.m_Item <- Item;
+/* 00069fe4 */	this.m_Panel.Init(LayoutID);
+/* 00069ffe */	int ID = this.m_Item.GetID();
+/* 0006a01a */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a034 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a04e */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 0006a068 */	this.m_Panel.AddButtonItem("遷移情報", this.m_Item.GetDestinationFirst());
+/* 0006a0aa */	int GUIType = this.m_Item.GetType(State);
+/* 0006a0d0 */	switch (GUIType)
+/* 0006a0e6 */	{
+/* 0006a0e6 */	case 11:
+/* 0006a0e6 */		this.SetCGPanel(LayoutID, this.m_Item, State);
+/* 0006a10c */		break;
+/* 0006a112 */	case 12:
+/* 0006a112 */		this.SetLoopCGPanel(LayoutID, this.m_Item, State);
+/* 0006a138 */		break;
+/* 0006a13e */	case 13:
+/* 0006a13e */		this.SetTextPanel(LayoutID, this.m_Item, State);
+/* 0006a164 */		break;
+/* 0006a16a */	case 14:
+/* 0006a16a */		this.SetHGaugePanel(LayoutID, this.m_Item, State);
+/* 0006a190 */		break;
+/* 0006a196 */	case 15:
+/* 0006a196 */		this.SetVGaugePanel(LayoutID, this.m_Item, State);
+/* 0006a1bc */		break;
+/* 0006a1c2 */	case 16:
+/* 0006a1c2 */		this.SetNumeralPanel(LayoutID, this.m_Item, State);
+/* 0006a1e8 */		break;
+/* 0006a1ee */	case 17:
+/* 0006a1ee */		this.SetRectDetectionPanel(LayoutID, this.m_Item);
+/* 0006a20a */		break;
+/* 0006a210 */	case 19:
+/* 0006a210 */		this.SetCGDetectionPanel(LayoutID, this.m_Item);
+/* 0006a22c */		break;
+/* 0006a232 */	case 20:
+/* 0006a232 */		this.SetFlatPanel(LayoutID, this.m_Item, State);
+/* 0006a258 */		break;
+/* 0006a25e */	case 18:
+/* 0006a25e */		this.SetConstructionPanel(LayoutID, this.m_Item, State);
+/* 0006a284 */		break;
+/* 0006a28a */	}
+/* 0006a28a */}
+
+void CAEPropertyPlainParts::Release()
+/* 0006a292 */{
+/* 0006a292 */	this.m_dgMouseWheelEvent.Clear();
+/* 0006a29e */	this.m_dgKeyDownEvent.Clear();
+/* 0006a2aa */	this.m_Item <- NULL;
+/* 0006a2c2 */	this.ReleasePropertyPanel();
+/* 0006a2ca */	this.m_Panel.Release();
+/* 0006a2da */}
+
+void CAEPropertyPlainParts::ReleasePropertyPanel()
+/* 0006a2e2 */{
+/* 0006a2e2 */	this.m_PropertyConstruction.Release();
+/* 0006a2f2 */	this.m_PropertyFlat.Release();
+/* 0006a302 */	this.m_PropertyCGDetection.Release();
+/* 0006a312 */	this.m_PropertyRectDetection.Release();
+/* 0006a322 */	this.m_PropertyNumeral.Release();
+/* 0006a332 */	this.m_PropertyVGauge.Release();
+/* 0006a342 */	this.m_PropertyHGauge.Release();
+/* 0006a352 */	this.m_PropertyText.Release();
+/* 0006a362 */	this.m_PropertyLoopCG.Release();
+/* 0006a372 */	this.m_PropertyCG.Release();
+/* 0006a382 */}
+
+void CAEPropertyPlainParts::SetCGPanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a38a */{
+/* 0006a38a */	this.m_PropertyCG.Init(LayoutID, Item, State);
+/* 0006a3b8 */	this.m_PropertyCG.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a3d2 */	this.m_PropertyCG.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a3ec */}
+
+void CAEPropertyPlainParts::SetLoopCGPanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a3f4 */{
+/* 0006a3f4 */	this.m_PropertyLoopCG.Init(LayoutID, Item, State);
+/* 0006a422 */	this.m_PropertyLoopCG.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a43c */	this.m_PropertyLoopCG.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a456 */}
+
+void CAEPropertyPlainParts::SetTextPanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a45e */{
+/* 0006a45e */	this.m_PropertyText.Init(LayoutID, Item, State);
+/* 0006a48c */	this.m_PropertyText.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a4a6 */	this.m_PropertyText.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a4c0 */}
+
+void CAEPropertyPlainParts::SetHGaugePanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a4c8 */{
+/* 0006a4c8 */	this.m_PropertyHGauge.Init(LayoutID, Item, State);
+/* 0006a4f6 */	this.m_PropertyHGauge.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a510 */	this.m_PropertyHGauge.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a52a */}
+
+void CAEPropertyPlainParts::SetVGaugePanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a532 */{
+/* 0006a532 */	this.m_PropertyVGauge.Init(LayoutID, Item, State);
+/* 0006a560 */	this.m_PropertyVGauge.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a57a */	this.m_PropertyVGauge.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a594 */}
+
+void CAEPropertyPlainParts::SetNumeralPanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a59c */{
+/* 0006a59c */	this.m_PropertyNumeral.Init(LayoutID, Item, State);
+/* 0006a5ca */	this.m_PropertyNumeral.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a5e4 */	this.m_PropertyNumeral.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a5fe */}
+
+void CAEPropertyPlainParts::SetRectDetectionPanel(int LayoutID, ref CAEInstanceItem Item)
+/* 0006a606 */{
+/* 0006a606 */	this.m_PropertyRectDetection.Init(LayoutID, Item);
+/* 0006a62a */	this.m_PropertyRectDetection.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a644 */	this.m_PropertyRectDetection.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a65e */}
+
+void CAEPropertyPlainParts::SetCGDetectionPanel(int LayoutID, ref CAEInstanceItem Item)
+/* 0006a666 */{
+/* 0006a666 */	this.m_PropertyCGDetection.Init(LayoutID, Item);
+/* 0006a68a */	this.m_PropertyCGDetection.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a6a4 */	this.m_PropertyCGDetection.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a6be */}
+
+void CAEPropertyPlainParts::SetFlatPanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a6c6 */{
+/* 0006a6c6 */	this.m_PropertyFlat.Init(LayoutID, Item, State);
+/* 0006a6f4 */	this.m_PropertyFlat.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a70e */	this.m_PropertyFlat.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a728 */}
+
+void CAEPropertyPlainParts::SetConstructionPanel(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006a730 */{
+/* 0006a730 */	this.m_PropertyConstruction.Init(LayoutID, Item, State);
+/* 0006a75e */	this.m_PropertyConstruction.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006a778 */	this.m_PropertyConstruction.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006a792 */}
+
+void CAEPropertyPlainParts::KeyDownEvent(int ID, int KeyID)
+/* 0006a79a */{
+/* 0006a79a */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 0006a7ce */}
+
+void CAEPropertyPlainParts::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0006a7d6 */{
+/* 0006a7d6 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0006a814 */}
+
+void CAEPropertyPlainParts::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0006a81c */{
+/* 0006a81c */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006a86c */	if (Item === NULL)
+/* 0006a884 */	{
+/* 0006a884 */		return;
+/* 0006a886 */	}
+/* 0006a886 */	int PartsID = this.m_Item.GetID();
+/* 0006a8a2 */	if (Item.GetLabel() == "遷移情報")
+/* 0006a8c0 */	{
+/* 0006a8c0 */		array@string DestinationList;
+/* 0006a8ca */		this.m_Item.GetDestination(DestinationList);
+/* 0006a8e4 */		CAEEditIntentDialog Form;
+/* 0006a8f4 */		Form.Show(ID, "", MouseX, MouseY, DestinationList, this.m_Item.GetIntentType(), this.SelectIntentEvent);
+/* 0006a95e */	}
+/* 0006a95e */}
+
+void CAEPropertyPlainParts::SelectIntentEvent(int ID, ref array@string DestinationList, int IntentType)
+/* 0006a966 */{
+/* 0006a966 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006a9b6 */	if (Item === NULL)
+/* 0006a9ce */	{
+/* 0006a9ce */		return;
+/* 0006a9d0 */	}
+/* 0006a9d0 */	int PartsID = this.m_Item.GetID();
+/* 0006a9ec */	if (Item.GetLabel() == "遷移情報")
+/* 0006aa0a */	{
+/* 0006aa0a */		this.m_Item.SetDestinationList(DestinationList);
+/* 0006aa24 */		this.m_Item.SetIntentType(IntentType);
+/* 0006aa3e */		Item.SetButtonText(this.m_Item.GetDestinationFirst());
+/* 0006aa5e */	}
+/* 0006aa5e */}
+
+void CAEPropertyPlainParts::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006aa66 */{
+/* 0006aa66 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0006aa80 */}
+
+void CAEPropertyPlainParts::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006aa88 */{
+/* 0006aa88 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0006aaa2 */}
+
+void CAEPropertyPlainParts::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006aaaa */{
+/* 0006aaaa */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0006aac4 */}
+
+void CAEPropertyPlainParts::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006aacc */{
+/* 0006aacc */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0006aae6 */}
+

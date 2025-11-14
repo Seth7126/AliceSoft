@@ -1,0 +1,595 @@
+void openDungeon(string id, int x, int y)
+/* 001e248c */{
+/* 001e248c */	SceneDungeon scene;
+/* 001e249c */	scene.init(id, x, y);
+/* 001e24ca */	scene.run();
+/* 001e24da */	runScene(scene.update);
+/* 001e24f2 */	array@string n;
+/* 001e2502 */	getAlivePlayerList(n);
+/* 001e2512 */	if (n.Empty())
+/* 001e2522 */	{
+/* 001e2522 */		openGameOver();
+/* 001e2528 */	}
+/* 001e2528 */}
+
+void openBackLog()
+/* 001e2536 */{
+/* 001e2536 */	if (AFL_Config_GetWheelForward() == 0)
+/* 001e254a */	{
+/* 001e254a */		Ｓ＿バックログ();
+/* 001e2550 */	}
+/* 001e2556 */	else
+/* 001e2556 */	{
+/* 001e2556 */		Ｓ＿バックシーン();
+/* 001e255c */	}
+/* 001e255c */}
+
+void openSystemMenu(bool isShowAutoSkip)
+/* 001e256a */{
+/* 001e256a */	g_gameObjectManager.pushScene();
+/* 001e257a */	int result;
+/* 001e258c */	SceneSystemMenu scene;
+/* 001e259c */	scene.init(isShowAutoSkip);
+/* 001e25b6 */	scene.run();
+/* 001e25c6 */	runScene(scene.update);
+/* 001e25de */	result = scene.getSelected();
+/* 001e25fa */	switch (result)
+/* 001e2616 */	{
+/* 001e2616 */	case 0:
+/* 001e2616 */		メッセージウィンドウ非表示();
+/* 001e261c */		break;
+/* 001e2622 */	case 1:
+/* 001e2622 */		Ｓ＿オート();
+/* 001e2628 */		break;
+/* 001e262e */	case 2:
+/* 001e262e */		Ｓ＿既読スキップ();
+/* 001e2634 */		break;
+/* 001e263a */	case 3:
+/* 001e263a */		Ｓ＿バックログ();
+/* 001e2640 */		break;
+/* 001e2646 */	case 4:
+/* 001e2646 */		Ｓ＿バックシーン();
+/* 001e264c */		break;
+/* 001e2652 */	case 5:
+/* 001e2652 */		Ｓ＿コンフィグ();
+/* 001e2658 */		break;
+/* 001e265e */	case 6:
+/* 001e265e */		Ａ＿プレイングマニュアル表示();
+/* 001e2664 */		break;
+/* 001e266a */	}
+/* 001e266a */	g_gameObjectManager.popScene();
+/* 001e267a */}
+
+int openDialog(DialogInfomation info)
+/* 001e2688 */{
+/* 001e2688 */	setGameMode(true);
+/* 001e2694 */	g_gameObjectManager.pushScene();
+/* 001e26a4 */	int result;
+/* 001e26b6 */	SceneDialog scene;
+/* 001e26c6 */	scene.init(info);
+/* 001e26e4 */	scene.run();
+/* 001e26f4 */	runScene(scene.update);
+/* 001e270c */	result = scene.getResult();
+/* 001e2728 */	g_gameObjectManager.popScene();
+/* 001e273e */	restoreGameMode();
+/* 001e2744 */	return result;
+/* 001e2750 */}
+
+void openParty(bool isShowBg)
+/* 001e2764 */{
+/* 001e2764 */	setGameMode(true);
+/* 001e2770 */	g_gameObjectManager.pushScene();
+/* 001e2780 */	SceneParty scene;
+/* 001e2790 */	scene.init(isShowBg);
+/* 001e27aa */	scene.run();
+/* 001e27ba */	runScene(scene.update);
+/* 001e27d2 */	g_gameObjectManager.popScene();
+/* 001e27e8 */	restoreGameMode();
+/* 001e27ee */	gameClearConsecutiveBattleCount();
+/* 001e27f4 */}
+
+bool openBattle2(ref BattleInfomation info)
+/* 001e2802 */{
+/* 001e2802 */	if (info.getGold() == -1)
+/* 001e2820 */	{
+/* 001e2820 */		info.setGoldFromMonster();
+/* 001e2830 */	}
+/* 001e2830 */	if (info.getExp() == -1)
+/* 001e284e */	{
+/* 001e284e */		info.setExpFromMonster();
+/* 001e285e */	}
+/* 001e285e */	g_battleResult.reset();
+/* 001e286e */	g_battleResult.setInfo(info);
+/* 001e288c */	setGameMode(true);
+/* 001e2898 */	g_gameObjectManager.pushScene();
+/* 001e28a8 */	bool result = false;
+/* 001e28ba */	SceneBattle scene;
+/* 001e28ca */	array@string mons;
+/* 001e28d4 */	info.getMonsterId(mons);
+/* 001e28ee */	scene.init(info);
+/* 001e290c */	scene.run();
+/* 001e291c */	if (!g_battleMusicNotChangeMode)
+/* 001e292e */	{
+/* 001e292e */		g_music.play(info.getMusicId(), -2147483648, false);
+/* 001e295a */	}
+/* 001e295a */	runScene(scene.update);
+/* 001e2972 */	result = scene.getBattleResult();
+/* 001e298e */	mons.Free();
+/* 001e2998 */	g_gameObjectManager.popScene();
+/* 001e29ae */	if (result)
+/* 001e29be */	{
+/* 001e29be */		if (!g_battleMusicNotChangeMode)
+/* 001e29d0 */		{
+/* 001e29d0 */			g_music.fadeOut(1000);
+/* 001e29e6 */		}
+/* 001e29e6 */		openBattleResult();
+/* 001e29ec */		gameCheckItemMax();
+/* 001e29f2 */	}
+/* 001e29f8 */	else
+/* 001e29f8 */	{
+/* 001e29f8 */		W(1000);
+/* 001e2a04 */		openGameOver();
+/* 001e2a0a */	}
+/* 001e2a0a */	restoreGameMode();
+/* 001e2a10 */	if (g_battleResult.getBattleEndEvent() != "")
+/* 001e2a2e */	{
+/* 001e2a2e */		DG_GeneralCallback fn;
+/* 001e2a3a */		fn = g_battleResult.getBattleEndEvent();
+/* 001e2a66 */		setGameMode(false);
+/* 001e2a72 */		fn();
+/* 001e2a92 */		restoreGameMode();
+/* 001e2a98 */		fn.Clear();
+/* 001e2aa4 */	}
+/* 001e2aa4 */	return result;
+/* 001e2ab0 */}
+
+bool openBattle(ref array@string monsterIdList, int gold, int exp, string itemId, int itemProbability, string battleBackGroundId)
+/* 001e2ac4 */{
+/* 001e2ac4 */	if (battleBackGroundId == "")
+/* 001e2adc */	{
+/* 001e2adc */		battleBackGroundId = "平野";
+/* 001e2af0 */	}
+/* 001e2af0 */	BattleInfomation info;
+/* 001e2b00 */	info.setMonsterArray(monsterIdList);
+/* 001e2b1c */	info.setGold(gold);
+/* 001e2b36 */	info.setExp(exp);
+/* 001e2b50 */	info.setItem(itemId, itemProbability);
+/* 001e2b74 */	info.setBattleBackGroundId(battleBackGroundId);
+/* 001e2b8e */	return openBattle2(info);
+/* 001e2ba0 */}
+
+void openShop(string id, string shopName)
+/* 001e2bb4 */{
+/* 001e2bb4 */	setGameMode(true);
+/* 001e2bc0 */	g_gameObjectManager.pushScene();
+/* 001e2bd0 */	SceneShop scene;
+/* 001e2be0 */	scene.init(id, shopName);
+/* 001e2c04 */	scene.run();
+/* 001e2c14 */	runScene(scene.update);
+/* 001e2c2c */	g_gameObjectManager.popScene();
+/* 001e2c42 */	restoreGameMode();
+/* 001e2c48 */}
+
+void openCgSwipeView(ref array@string imageName)
+/* 001e2c56 */{
+/* 001e2c56 */	g_gameObjectManager.pushScene();
+/* 001e2c66 */	SceneCgSwipeView scene;
+/* 001e2c76 */	scene.init(imageName);
+/* 001e2c92 */	scene.run();
+/* 001e2ca2 */	runScene(scene.update);
+/* 001e2cba */	g_gameObjectManager.popScene();
+/* 001e2cd0 */}
+
+void openItem()
+/* 001e2cde */{
+/* 001e2cde */	setGameMode(true);
+/* 001e2cea */	g_gameObjectManager.pushScene();
+/* 001e2cfa */	SceneItem scene;
+/* 001e2d0a */	scene.init();
+/* 001e2d1a */	scene.run();
+/* 001e2d2a */	runScene(scene.update);
+/* 001e2d42 */	g_gameObjectManager.popScene();
+/* 001e2d58 */	restoreGameMode();
+/* 001e2d5e */}
+
+string openTargetPlayerSelect(int targetMode)
+/* 001e2d6c */{
+/* 001e2d6c */	g_gameObjectManager.pushScene();
+/* 001e2d7c */	string r;
+/* 001e2d90 */	SceneTargetPlayerSelect scene;
+/* 001e2da0 */	scene.init(targetMode);
+/* 001e2dba */	scene.run();
+/* 001e2dca */	runScene(scene.update);
+/* 001e2de2 */	r = scene.getTargetPlayerId();
+/* 001e2e00 */	g_gameObjectManager.popScene();
+/* 001e2e16 */	return r;
+/* 001e2e22 */}
+
+void openMirrorPieceView()
+/* 001e2e36 */{
+/* 001e2e36 */	setGameMode(true);
+/* 001e2e42 */	g_gameObjectManager.pushScene();
+/* 001e2e52 */	SceneMirrorPieceView scene;
+/* 001e2e62 */	scene.init();
+/* 001e2e72 */	scene.run();
+/* 001e2e82 */	runScene(scene.update);
+/* 001e2e9a */	g_gameObjectManager.popScene();
+/* 001e2eb0 */	restoreGameMode();
+/* 001e2eb6 */}
+
+bool openCamp(int imageType)
+/* 001e2ec4 */{
+/* 001e2ec4 */	CampBackGround bg;
+/* 001e2ed4 */	bg.init();
+/* 001e2ee4 */	while (true)
+/* 001e2ef0 */	{
+/* 001e2ef0 */		setGameMode(true);
+/* 001e2efc */		g_gameObjectManager.pushScene();
+/* 001e2f0c */		int r;
+/* 001e2f1e */		SceneCamp scene;
+/* 001e2f2e */		scene.init(bg, imageType);
+/* 001e2f52 */		scene.run();
+/* 001e2f62 */		runScene(scene.update);
+/* 001e2f7a */		r = scene.getNextScene();
+/* 001e2f96 */		restoreGameMode();
+/* 001e2fa2 */		g_gameObjectManager.popScene();
+/* 001e2fb2 */		if (r == -1)
+/* 001e2fca */		{
+/* 001e2fca */			break;
+/* 001e2fd6 */		}
+/* 001e2fd6 */		switch (r)
+/* 001e2fec */		{
+/* 001e2fec */		case 2:
+/* 001e2fec */			bg.fadeIn(false, NULL);
+/* 001e3004 */			bg.joinFade();
+/* 001e3014 */			string current = g_music.getPlayingMusicId();
+/* 001e3032 */			g_music.fadeOut(1000);
+/* 001e3048 */			openLevelGod();
+/* 001e304e */			g_music.play(current, -2147483648, false);
+/* 001e3074 */			bg.fadeIn(true, NULL);
+/* 001e308c */			break;
+/* 001e3092 */		case 1:
+/* 001e3092 */			openItem();
+/* 001e3098 */			break;
+/* 001e309e */		case 0:
+/* 001e309e */			openParty(false);
+/* 001e30aa */			break;
+/* 001e30b0 */		case 3:
+/* 001e30b0 */			return false;
+/* 001e30b8 */		case 4:
+/* 001e30b8 */			bg.fadeIn(false, NULL);
+/* 001e30d0 */			openSave();
+/* 001e30d6 */			bg.fadeIn(true, NULL);
+/* 001e30ee */			break;
+/* 001e30f4 */		case 5:
+/* 001e30f4 */			bg.fadeIn(false, NULL);
+/* 001e310c */			openMirrorPieceView();
+/* 001e3112 */			bg.fadeIn(true, NULL);
+/* 001e312a */			break;
+/* 001e3130 */		}
+/* 001e3130 */	}
+/* 001e3136 */	return true;
+/* 001e313e */}
+
+void openTitle()
+/* 001e3152 */{
+/* 001e3152 */	while (true)
+/* 001e315e */	{
+/* 001e315e */		int r = openTitleScene();
+/* 001e3170 */		switch (r)
+/* 001e3186 */		{
+/* 001e3186 */		case 0:
+/* 001e3186 */			return;
+/* 001e3188 */		case 1:
+/* 001e3188 */			openLoad();
+/* 001e318e */			break;
+/* 001e3194 */		case 2:
+/* 001e3194 */			g_saveDataManager.loadAutoSave();
+/* 001e31a4 */			break;
+/* 001e31aa */		case 3:
+/* 001e31aa */			Ａ＿プレイングマニュアル表示();
+/* 001e31b0 */			break;
+/* 001e31b6 */		case 4:
+/* 001e31b6 */			openCg();
+/* 001e31bc */			break;
+/* 001e31c2 */		case 5:
+/* 001e31c2 */			openReplay();
+/* 001e31c8 */			break;
+/* 001e31ce */		case 6:
+/* 001e31ce */			openMusic();
+/* 001e31d4 */			break;
+/* 001e31da */		case 7:
+/* 001e31da */			Ｓ＿コンフィグ();
+/* 001e31e0 */			break;
+/* 001e31e6 */		case 8:
+/* 001e31e6 */			openEnquite();
+/* 001e31ec */			break;
+/* 001e31f2 */		case 9:
+/* 001e31f2 */			制御／アリスの館();
+/* 001e31f8 */			break;
+/* 001e31fe */		case 10:
+/* 001e31fe */			openAdvEditor();
+/* 001e3204 */			break;
+/* 001e320a */		case 11:
+/* 001e320a */			ゲーム終了();
+/* 001e3210 */			break;
+/* 001e3216 */		}
+/* 001e3216 */	}
+/* 001e321c */}
+
+int openTitleScene()
+/* 001e322a */{
+/* 001e322a */	SceneTitle scene;
+/* 001e323a */	scene.init();
+/* 001e324a */	scene.run();
+/* 001e325a */	runScene(scene.update);
+/* 001e3272 */	return scene.getSelected();
+/* 001e3284 */}
+
+void openCg()
+/* 001e3298 */{
+/* 001e3298 */	SceneCg scene;
+/* 001e32a8 */	scene.init();
+/* 001e32b8 */	scene.run();
+/* 001e32c8 */	runScene(scene.update);
+/* 001e32e0 */}
+
+void openReplay()
+/* 001e32ee */{
+/* 001e32ee */	SceneReplay scene;
+/* 001e32fe */	scene.init();
+/* 001e330e */	scene.run();
+/* 001e331e */	runScene(scene.update);
+/* 001e3336 */}
+
+int openReplayDialog(array@string n)
+/* 001e3344 */{
+/* 001e3344 */	g_gameObjectManager.pushScene();
+/* 001e3354 */	int r;
+/* 001e3366 */	SceneReplaySelection scene;
+/* 001e3376 */	scene.init(n);
+/* 001e3392 */	scene.run();
+/* 001e33a2 */	runScene(scene.update);
+/* 001e33ba */	r = scene.getClickedIndex();
+/* 001e33d6 */	g_gameObjectManager.popScene();
+/* 001e33ec */	return r;
+/* 001e33f8 */}
+
+void openMusic()
+/* 001e340c */{
+/* 001e340c */	SceneMusic scene;
+/* 001e341c */	scene.init();
+/* 001e342c */	scene.run();
+/* 001e343c */	runScene(scene.update);
+/* 001e3454 */}
+
+void openSave()
+/* 001e3462 */{
+/* 001e3462 */	setGameMode(true);
+/* 001e346e */	g_gameObjectManager.pushScene();
+/* 001e347e */	SceneSave scene;
+/* 001e348e */	scene.init();
+/* 001e349e */	scene.run();
+/* 001e34ae */	runScene(scene.update);
+/* 001e34c6 */	g_gameObjectManager.popScene();
+/* 001e34dc */	g_enquiteSender.innerGameSend();
+/* 001e34ec */	restoreGameMode();
+/* 001e34f2 */}
+
+void openLoad()
+/* 001e3500 */{
+/* 001e3500 */	setGameMode(true);
+/* 001e350c */	g_gameObjectManager.pushScene();
+/* 001e351c */	SceneLoad scene;
+/* 001e352c */	scene.init();
+/* 001e353c */	scene.run();
+/* 001e354c */	runScene(scene.update);
+/* 001e3564 */	g_gameObjectManager.popScene();
+/* 001e357a */	restoreGameMode();
+/* 001e3580 */}
+
+void openGameOver()
+/* 001e358e */{
+/* 001e358e */	g_gameObjectManager.pushScene();
+/* 001e359e */	SceneGameOver scene;
+/* 001e35ae */	scene.init();
+/* 001e35be */	scene.run();
+/* 001e35ce */	runScene(scene.update);
+/* 001e35e6 */	g_gameObjectManager.popScene();
+/* 001e35fc */}
+
+void runScene(DG_SceneUpdateMethod updateMethod)
+/* 001e360a */{
+/* 001e360a */	g_frameManager.updateFrame();
+/* 001e361a */	while (updateMethod())
+/* 001e3640 */	{
+/* 001e3640 */		g_gameObjectManager.update();
+/* 001e3650 */		g_frameManager.updateFrame();
+/* 001e3660 */	}
+/* 001e3666 */	g_frameManager.updateFrame();
+/* 001e3676 */}
+
+void openLevelGod()
+/* 001e3684 */{
+/* 001e3684 */	setGameMode(true);
+/* 001e3690 */	g_gameObjectManager.pushScene();
+/* 001e36a0 */	SceneLevelGod scene;
+/* 001e36b0 */	scene.init();
+/* 001e36c0 */	scene.run();
+/* 001e36d0 */	runScene(scene.update);
+/* 001e36e8 */	g_gameObjectManager.popScene();
+/* 001e36fe */	restoreGameMode();
+/* 001e3704 */}
+
+void openBattleResult()
+/* 001e3712 */{
+/* 001e3712 */	g_gameObjectManager.pushScene();
+/* 001e3722 */	SceneBattleResult scene;
+/* 001e3732 */	scene.init();
+/* 001e3742 */	scene.run();
+/* 001e3752 */	runScene(scene.update);
+/* 001e376a */	g_gameObjectManager.popScene();
+/* 001e3780 */}
+
+string openAdvSelection(array@string selection)
+/* 001e378e */{
+/* 001e378e */	string result;
+/* 001e37a2 */	setGameMode(true);
+/* 001e37ae */	while (true)
+/* 001e37ba */	{
+/* 001e37ba */		g_gameObjectManager.pushScene();
+/* 001e37ca */		SceneAdvSelection scene;
+/* 001e37da */		scene.init(selection);
+/* 001e37f6 */		scene.run();
+/* 001e3806 */		runScene(scene.update);
+/* 001e381e */		result = scene.getClickedId();
+/* 001e383c */		g_gameObjectManager.popScene();
+/* 001e3852 */		if (result == "キャンプを開く")
+/* 001e386a */		{
+/* 001e386a */			string s1 = g_advStand[0].getStandName();
+/* 001e3890 */			string s2 = g_advStand[1].getStandName();
+/* 001e38b6 */			string bg = g_advBackGround.getCgName();
+/* 001e38d4 */			■立ち絵背景アウト();
+/* 001e38da */			bool last = g_playerCommonParam.isEnableExitDungeon();
+/* 001e38f6 */			g_playerCommonParam.setEnableExitDungeon(false);
+/* 001e390c */			openCamp(0);
+/* 001e391a */			g_playerCommonParam.setEnableExitDungeon(last);
+/* 001e3934 */			■背景(bg, 2, 500);
+/* 001e3950 */			■全体イン(s2, s1);
+/* 001e396a */		}
+/* 001e3970 */		else
+/* 001e3970 */		{
+/* 001e3970 */			break;
+/* 001e397c */		}
+/* 001e397c */	}
+/* 001e3982 */	restoreGameMode();
+/* 001e3988 */	return result;
+/* 001e3994 */}
+
+string openAdvSelection2(array@string selection)
+/* 001e39a8 */{
+/* 001e39a8 */	string result;
+/* 001e39bc */	setGameMode(true);
+/* 001e39c8 */	while (true)
+/* 001e39d4 */	{
+/* 001e39d4 */		g_gameObjectManager.pushScene();
+/* 001e39e4 */		SceneAdvSelection2 scene;
+/* 001e39f4 */		scene.init(selection);
+/* 001e3a10 */		scene.run();
+/* 001e3a20 */		runScene(scene.update);
+/* 001e3a38 */		result = scene.getClickedId();
+/* 001e3a56 */		g_gameObjectManager.popScene();
+/* 001e3a6c */		if (result == "キャンプを開く")
+/* 001e3a84 */		{
+/* 001e3a84 */			openCamp(0);
+/* 001e3a92 */		}
+/* 001e3a98 */		else
+/* 001e3a98 */		{
+/* 001e3a98 */			break;
+/* 001e3aa4 */		}
+/* 001e3aa4 */	}
+/* 001e3aaa */	restoreGameMode();
+/* 001e3ab0 */	return result;
+/* 001e3abc */}
+
+void openMirrorPiece()
+/* 001e3ad0 */{
+/* 001e3ad0 */	g_gameObjectManager.pushScene();
+/* 001e3ae0 */	SceneMirrorPiece scene;
+/* 001e3af0 */	scene.init();
+/* 001e3b00 */	scene.run();
+/* 001e3b10 */	runScene(scene.update);
+/* 001e3b28 */	g_gameObjectManager.popScene();
+/* 001e3b3e */}
+
+void openLogo()
+/* 001e3b4c */{
+/* 001e3b4c */	if (!g_enquiteSender.isExistId())
+/* 001e3b64 */	{
+/* 001e3b64 */		g_enquiteSender.createId();
+/* 001e3b76 */	}
+/* 001e3b76 */	g_enquiteSender.sendAsync();
+/* 001e3b88 */	g_gameObjectManager.pushScene();
+/* 001e3b98 */	SceneAliceLogo scene;
+/* 001e3ba8 */	scene.init();
+/* 001e3bb8 */	scene.run();
+/* 001e3bc8 */	runScene(scene.update);
+/* 001e3be0 */	g_gameObjectManager.popScene();
+/* 001e3bf6 */	g_enquiteSender.joinSendCommand();
+/* 001e3c06 */}
+
+void setOpenFlatCallback(DG_OpenFlatCallback cb)
+/* 001e3c14 */{
+/* 001e3c14 */	g_openFlatCallback = cb;
+/* 001e3c2e */}
+
+void openFlat(string flatName)
+/* 001e3c3c */{
+/* 001e3c3c */	g_openFlatCallback(flatName);
+/* 001e3c66 */}
+
+int openAdvObjectList(ref string selected, int mode, string current)
+/* 001e3c74 */{
+/* 001e3c74 */	int r;
+/* 001e3c86 */	g_gameObjectManager.pushScene();
+/* 001e3c96 */	SceneAdvObjectListSelector scene;
+/* 001e3ca6 */	scene.init(mode, current);
+/* 001e3cca */	scene.run();
+/* 001e3cda */	runScene(scene.update);
+/* 001e3cf2 */	r = scene.getResult();
+/* 001e3d0e */	selected = scene.getSelected();
+/* 001e3d2c */	pass(selected);
+/* 001e3d3c */	g_gameObjectManager.popScene();
+/* 001e3d52 */	return r;
+/* 001e3d5e */}
+
+void openAdvEditor()
+/* 001e3d72 */{
+/* 001e3d72 */	SceneAdvEditor scene;
+/* 001e3d82 */	scene.init();
+/* 001e3d92 */	scene.run();
+/* 001e3da2 */	runScene(scene.update);
+/* 001e3dba */}
+
+void openStandViewer(string standCg)
+/* 001e3dc8 */{
+/* 001e3dc8 */	g_gameObjectManager.pushScene();
+/* 001e3dd8 */	SceneStandViewer scene;
+/* 001e3de8 */	scene.init(standCg);
+/* 001e3e02 */	scene.run();
+/* 001e3e12 */	runScene(scene.update);
+/* 001e3e2a */	g_gameObjectManager.popScene();
+/* 001e3e40 */}
+
+void openOpMovie()
+/* 001e3e4e */{
+/* 001e3e4e */	g_playedMusic.PushBack("音楽／オープニング");
+/* 001e3e5e */	ムービー("Movie/OP.apeg", true, 0, 0, 0);
+/* 001e3e82 */}
+
+void openEdMovie()
+/* 001e3e90 */{
+/* 001e3e90 */	ムービー("Movie/ED.apeg", true, 0, 0, 0);
+/* 001e3eb4 */}
+
+void openNetworkConnection()
+/* 001e3ec2 */{
+/* 001e3ec2 */	int result;
+/* 001e3ed4 */	g_gameObjectManager.pushScene();
+/* 001e3ee4 */	SceneNetworkConnection scene;
+/* 001e3ef4 */	scene.init();
+/* 001e3f04 */	scene.run();
+/* 001e3f14 */	runScene(scene.update);
+/* 001e3f2c */	result = scene.getSelected();
+/* 001e3f48 */	if (result == 0)
+/* 001e3f66 */	{
+/* 001e3f66 */		AFL_Config_Network_SetEnableConnection(true);
+/* 001e3f72 */		g_enquiteSender.createId();
+/* 001e3f84 */	}
+/* 001e3f8a */	else
+/* 001e3f8a */	{
+/* 001e3f8a */		AFL_Config_Network_SetEnableConnection(false);
+/* 001e3f96 */	}
+/* 001e3f96 */	g_gameObjectManager.popScene();
+/* 001e3fa6 */}
+

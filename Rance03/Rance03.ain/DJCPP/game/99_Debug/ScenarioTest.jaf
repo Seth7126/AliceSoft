@@ -1,0 +1,197 @@
+void debugGetScenarioFunctionName(ref array@string list)
+/* 001cba9a */{
+/* 001cba9a */	list.Free();
+/* 001cbaa4 */	array@string n;
+/* 001cbaae */	AFL_Debug_GetFunctionNameList(n);
+/* 001cbabe */	int i;
+/* 001cbad0 */	for (i = 0; i < n.Numof(); ++i)
+/* 001cbb20 */	{
+/* 001cbb20 */		if (n[i].GetPart(0, 3) == "ＥＶ／")
+/* 001cbb52 */		{
+/* 001cbb52 */			list.PushBack(n[i]);
+/* 001cbb72 */		}
+/* 001cbb72 */	}
+/* 001cbb78 */}
+
+void debugScenarioTest()
+/* 001cbb86 */{
+/* 001cbb86 */	array@DebugFunctionTextIndexMap map;
+/* 001cbb90 */	debugCreateScenarioTestTextIndexMap(map);
+/* 001cbba0 */	DebugTextIndexMapSelecter selecter;
+/* 001cbbb0 */	selecter.setBaseCategory("ＥＶ");
+/* 001cbbc6 */	selecter.run(map, "", "debugScenarioExecute");
+/* 001cbbee */}
+
+void debugScenarioTestAllRun()
+/* 001cbbfc */{
+/* 001cbbfc */	array@string list;
+/* 001cbc06 */	debugGetScenarioFunctionName(list);
+/* 001cbc16 */	int i;
+/* 001cbc28 */	for (i = 0; i < list.Numof(); ++i)
+/* 001cbc78 */	{
+/* 001cbc78 */		debugInnerScenarioExecute(list[i]);
+/* 001cbc94 */	}
+/* 001cbc9a */}
+
+void debugScenarioKidokuFlag()
+/* 001cbca8 */{
+/* 001cbca8 */	array@DebugFunctionTextIndexMap map;
+/* 001cbcb2 */	debugCreateScenarioTestTextIndexMap(map);
+/* 001cbcc2 */	DebugTextIndexMapSelecter selecter;
+/* 001cbcd2 */	selecter.setBaseCategory("ＥＶ");
+/* 001cbce8 */	selecter.run(map, "debugScenarioTestSelectShowFlag", "debugScenarioKidokuFlagExecute");
+/* 001cbd10 */}
+
+void debugInitScenarioFunc(ref array@DebugFunctionTextIndexMap textIndexMap, ref array@string tmp)
+/* 001cbd1e */{
+/* 001cbd1e */	textIndexMap.Alloc(tmp.Numof());
+/* 001cbd3e */	int i;
+/* 001cbd50 */	for (i = 0; i < textIndexMap.Numof(); ++i)
+/* 001cbda0 */	{
+/* 001cbda0 */		textIndexMap[i].init(tmp[i], tmp[i], "", "／");
+/* 001cbdf4 */	}
+/* 001cbdfa */}
+
+void debugCreateScenarioTestTextIndexMap(ref array@DebugFunctionTextIndexMap textIndexMap)
+/* 001cbe08 */{
+/* 001cbe08 */	array@string tmp;
+/* 001cbe12 */	debugGetScenarioFunctionName(tmp);
+/* 001cbe22 */	debugInitScenarioFunc(textIndexMap, tmp);
+/* 001cbe3c */}
+
+void debugScenarioExecute(ref DebugFunctionTextIndexMap stFunc)
+/* 001cbe4a */{
+/* 001cbe4a */	g_scenarioTestFunc.update(stFunc.getIndexName());
+/* 001cbe6a */	debugInnerScenarioExecute(stFunc.getIndexName());
+/* 001cbe80 */}
+
+void debugInnerScenarioExecute(string func)
+/* 001cbe8e */{
+/* 001cbe8e */	AdvFunc fn;
+/* 001cbe9a */	fn = func;
+/* 001cbec0 */	fn();
+/* 001cbee0 */	debugCheckAdvNonReleaseObject(func);
+/* 001cbef0 */	g_advCommandHistory.Free();
+/* 001cbefa */	g_advStand[0].hide(0, true);
+/* 001cbf1e */	g_advStand[1].hide(0, true);
+/* 001cbf42 */	g_advBackGround.hide(0, 200, true);
+/* 001cbf64 */	g_advNamePlate.hide();
+/* 001cbf74 */	g_advEventCg.hide(-1, 0);
+/* 001cbf90 */	g_advFullScreenEffect.hide(1, 0);
+/* 001cbfac */	■音楽停止(2000);
+/* 001cbfb8 */	■ループ効果音停止(2000);
+/* 001cbfc4 */	g_advCommandHistory.Free();
+/* 001cbfce */}
+
+void debugCheckAdvNonReleaseObject(string funcName)
+/* 001cbfdc */{
+/* 001cbfdc */	int i;
+/* 001cbfee */	for (i = 0; i < g_advStand.Numof(); ++i)
+/* 001cc03e */	{
+/* 001cc03e */		if (g_advStand[i].isShow())
+/* 001cc060 */		{
+/* 001cc060 */			advErr("%s:立ち絵が残っています" % funcName);
+/* 001cc07e */		}
+/* 001cc07e */	}
+/* 001cc084 */	if (g_advBackGround.isShow())
+/* 001cc09a */	{
+/* 001cc09a */		advErr("%s:背景が残っています" % funcName);
+/* 001cc0b8 */	}
+/* 001cc0b8 */	if (g_advMessageWindow.isShow())
+/* 001cc0ce */	{
+/* 001cc0ce */		advErr("%s:メッセージウインドウが残っています" % funcName);
+/* 001cc0ec */	}
+/* 001cc0ec */	if (g_advEventCg.isShow())
+/* 001cc102 */	{
+/* 001cc102 */		advErr("%s:ビジュアルが残っています" % funcName);
+/* 001cc120 */	}
+/* 001cc120 */	if (g_music.getPlayingMusicId() != "")
+/* 001cc13e */	{
+/* 001cc13e */		advErr("%s:音楽が残っています" % funcName);
+/* 001cc15c */	}
+/* 001cc15c */}
+
+void debugScenarioKidokuFlagExecute(ref DebugFunctionTextIndexMap stFunc)
+/* 001cc16a */{
+/* 001cc16a */	if (EV(stFunc.getIndexName(), -2147483648))
+/* 001cc18c */	{
+/* 001cc18c */		EV(stFunc.getIndexName(), 0);
+/* 001cc1aa */	}
+/* 001cc1b0 */	else
+/* 001cc1b0 */	{
+/* 001cc1b0 */		EV(stFunc.getIndexName(), 1);
+/* 001cc1ce */	}
+/* 001cc1ce */}
+
+string debugScenarioTestSelectShowFlag(ref array@string list, string head)
+/* 001cc1dc */{
+/* 001cc1dc */	int i;
+/* 001cc1ee */	for (i = 0; i < list.Numof(); ++i)
+/* 001cc23e */	{
+/* 001cc23e */		string id = head + list[i];
+/* 001cc26e */		if (isExistFunction(id))
+/* 001cc284 */		{
+/* 001cc284 */			選択肢(i, "[%s]%s" % (EV(id, -2147483648) == true ? "○" : "－") % id, 0);
+/* 001cc2f0 */		}
+/* 001cc2f6 */		else
+/* 001cc2f6 */		{
+/* 001cc2f6 */			選択肢(i, "----%s" % id, 0);
+/* 001cc324 */		}
+/* 001cc324 */	}
+/* 001cc32a */	int r = テスト選択();
+/* 001cc33c */	if (r != -1)
+/* 001cc354 */	{
+/* 001cc354 */		return list[r];
+/* 001cc36c */	}
+/* 001cc36c */	return "";
+/* 001cc374 */}
+
+void debugScenarioTest2()
+/* 001cc388 */{
+/* 001cc388 */	array@string groups;
+/* 001cc392 */	string key = "デバッグシナテス情報";
+/* 001cc3a6 */	int height = EX_Height(key);
+/* 001cc3c2 */	int i;
+/* 001cc3d4 */	for (i = 0; i < height; ++i)
+/* 001cc41e */	{
+/* 001cc41e */		string g = EX_RA2String(key, i, "group", "");
+/* 001cc452 */		if (groups.Empty() || groups[groups.Numof() - 1] != g)
+/* 001cc4b0 */		{
+/* 001cc4b0 */			groups.PushBack(g);
+/* 001cc4c4 */		}
+/* 001cc4c4 */	}
+/* 001cc4ca */	while (true)
+/* 001cc4d6 */	{
+/* 001cc4d6 */		int i;
+/* 001cc4e8 */		for (i = 0; i < groups.Numof(); ++i)
+/* 001cc538 */		{
+/* 001cc538 */			選択肢(i, groups[i], 0);
+/* 001cc564 */		}
+/* 001cc56a */		int gr = テスト選択();
+/* 001cc57c */		if (gr < 0)
+/* 001cc594 */		{
+/* 001cc594 */			break;
+/* 001cc59a */		}
+/* 001cc59a */		while (true)
+/* 001cc5a6 */		{
+/* 001cc5a6 */			for (i = 0; i < height; ++i)
+/* 001cc5f0 */			{
+/* 001cc5f0 */				if (EX_RA2String(key, i, "group", "") == groups[gr])
+/* 001cc634 */				{
+/* 001cc634 */					選択肢(i, EX_RA2String(key, i, "funcName", ""), 0);
+/* 001cc670 */				}
+/* 001cc670 */			}
+/* 001cc676 */			int r = テスト選択();
+/* 001cc688 */			if (r < 0)
+/* 001cc6a0 */			{
+/* 001cc6a0 */				break;
+/* 001cc6a6 */			}
+/* 001cc6a6 */			DG_GeneralCallback cb;
+/* 001cc6b2 */			cb = EX_RA2String(key, r, "funcName", "");
+/* 001cc6f4 */			cb();
+/* 001cc714 */			全消去();
+/* 001cc71a */			cb.Clear();
+/* 001cc726 */		}
+/* 001cc72c */	}
+/* 001cc732 */}
+

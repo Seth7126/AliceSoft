@@ -1,0 +1,159 @@
+void Ｐ＿リストボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00166c0a */{
+/* 00166c0a */	PartsEngine.SetListBoxSize(パーツ番号, 幅, 高さ);
+/* 00166c32 */}
+
+void Ｐ＿リストボックス＿行高さ設定(int パーツ番号, int 高さ)
+/* 00166c40 */{
+/* 00166c40 */	PartsEngine.SetListBoxLineHeight(パーツ番号, 高さ);
+/* 00166c5e */}
+
+int Ｐ＿リストボックス＿行高さ取得(int パーツ番号)
+/* 00166c6c */{
+/* 00166c6c */	return PartsEngine.GetListBoxLineHeight(パーツ番号);
+/* 00166c82 */}
+
+void Ｐ＿リストボックス＿行マージン設定(int パーツ番号, int 幅, int 高さ)
+/* 00166c96 */{
+/* 00166c96 */	PartsEngine.SetListBoxMargin(パーツ番号, 幅, 高さ);
+/* 00166cbe */}
+
+int Ｐ＿リストボックス＿行マージン幅取得(int パーツ番号)
+/* 00166ccc */{
+/* 00166ccc */	return PartsEngine.GetListBoxWidthMargin(パーツ番号);
+/* 00166ce2 */}
+
+int Ｐ＿リストボックス＿行マージン高さ取得(int パーツ番号)
+/* 00166cf6 */{
+/* 00166cf6 */	return PartsEngine.GetListBoxHeightMargin(パーツ番号);
+/* 00166d0c */}
+
+void Ｐ＿リストボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00166d20 */{
+/* 00166d20 */	PartsEngine.SetListBoxCGName(パーツ番号, ＣＧ名);
+/* 00166d3e */}
+
+string Ｐ＿リストボックス＿ＣＧ名取得(int パーツ番号)
+/* 00166d4c */{
+/* 00166d4c */	string Name;
+/* 00166d60 */	PartsEngine.GetListBoxCGName(パーツ番号, Name);
+/* 00166d7e */	return Name;
+/* 00166d8a */}
+
+void Ｐ＿リストボックス＿スクロール位置設定(int パーツ番号, int 位置)
+/* 00166d9e */{
+/* 00166d9e */	PartsEngine.SetListBoxScrollPos(パーツ番号, 位置);
+/* 00166dbc */}
+
+int Ｐ＿リストボックス＿スクロール位置取得(int パーツ番号)
+/* 00166dca */{
+/* 00166dca */	return PartsEngine.GetListBoxScrollPos(パーツ番号);
+/* 00166de0 */}
+
+void Ｐ＿リストボックス＿アイテム追加(int パーツ番号, string テキスト)
+/* 00166df4 */{
+/* 00166df4 */	PartsEngine.AddListBoxItem(パーツ番号, テキスト);
+/* 00166e12 */}
+
+void Ｐ＿リストボックス＿アイテムリスト追加(int パーツ番号, ref array@string テキストリスト)
+/* 00166e20 */{
+/* 00166e20 */	if (テキストリスト === NULL)
+/* 00166e38 */	{
+/* 00166e38 */		return;
+/* 00166e3a */	}
+/* 00166e3a */	int Index;
+/* 00166e4c */	for (Index = 0; Index < テキストリスト.Numof(); ++Index)
+/* 00166e9c */	{
+/* 00166e9c */		PartsEngine.AddListBoxItem(パーツ番号, テキストリスト[Index]);
+/* 00166ec6 */	}
+/* 00166ecc */}
+
+void Ｐ＿リストボックス＿アイテム挿入(int パーツ番号, int インデックス, string テキスト)
+/* 00166eda */{
+/* 00166eda */	PartsEngine.InsertListBoxItem(パーツ番号, インデックス, テキスト);
+/* 00166f02 */}
+
+void Ｐ＿リストボックス＿アイテム設定(int パーツ番号, int インデックス, string テキスト)
+/* 00166f10 */{
+/* 00166f10 */	PartsEngine.SetListBoxItem(パーツ番号, インデックス, テキスト);
+/* 00166f38 */}
+
+int Ｐ＿リストボックス＿アイテム数取得(int パーツ番号)
+/* 00166f46 */{
+/* 00166f46 */	return PartsEngine.GetListBoxItemCount(パーツ番号);
+/* 00166f5c */}
+
+string Ｐ＿リストボックス＿アイテム取得(int パーツ番号, int インデックス)
+/* 00166f70 */{
+/* 00166f70 */	string Text;
+/* 00166f84 */	PartsEngine.GetListBoxItem(パーツ番号, インデックス, Text);
+/* 00166fac */	return Text;
+/* 00166fb8 */}
+
+void Ｐ＿リストボックス＿アイテム全取得(int パーツ番号, ref array@string テキストリスト)
+/* 00166fcc */{
+/* 00166fcc */	if (テキストリスト === NULL)
+/* 00166fe4 */	{
+/* 00166fe4 */		return;
+/* 00166fe6 */	}
+/* 00166fe6 */	テキストリスト.Free();
+/* 00166ff0 */	int Index;
+/* 00167002 */	int Size = Ｐ＿リストボックス＿アイテム数取得(パーツ番号);
+/* 0016701e */	for (Index = 0; Index < Size; ++Index)
+/* 00167068 */	{
+/* 00167068 */		テキストリスト.PushBack(Ｐ＿リストボックス＿アイテム取得(パーツ番号, Index));
+/* 0016708c */	}
+/* 00167092 */}
+
+void Ｐ＿リストボックス＿アイテム削除(int パーツ番号, int インデックス)
+/* 001670a0 */{
+/* 001670a0 */	PartsEngine.EraseListBoxItem(パーツ番号, インデックス);
+/* 001670be */}
+
+void Ｐ＿リストボックス＿アイテム全削除(int パーツ番号)
+/* 001670cc */{
+/* 001670cc */	PartsEngine.ClearListBoxItem(パーツ番号);
+/* 001670e0 */}
+
+int Ｐ＿リストボックス＿オンカーソルアイテムインデックス取得(int パーツ番号)
+/* 001670ee */{
+/* 001670ee */	return PartsEngine.GetListBoxOnCursorItemIndex(パーツ番号);
+/* 00167104 */}
+
+string Ｐ＿リストボックス＿オンカーソルアイテム取得(int パーツ番号)
+/* 00167118 */{
+/* 00167118 */	string Text;
+/* 0016712c */	PartsEngine.GetListBoxOnCursorItem(パーツ番号, Text);
+/* 0016714a */	return Text;
+/* 00167156 */}
+
+void Ｐ＿リストボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, int 縁取り赤, int 縁取り緑, int 縁取り青, float 縁取り幅)
+/* 0016716a */{
+/* 0016716a */	PartsEngine.SetListBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 001671e2 */}
+
+void Ｐ＿リストボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青, ref float 縁取り幅)
+/* 001671f0 */{
+/* 001671f0 */	PartsEngine.GetListBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00167268 */}
+
+void Ｐ＿リストボックス＿選択位置設定(int パーツ番号, int 位置)
+/* 00167276 */{
+/* 00167276 */	PartsEngine.SetListBoxSelectIndex(パーツ番号, 位置);
+/* 00167294 */}
+
+int Ｐ＿リストボックス＿選択位置取得(int パーツ番号)
+/* 001672a2 */{
+/* 001672a2 */	return PartsEngine.GetListBoxSelectIndex(パーツ番号);
+/* 001672b8 */}
+
+void Ｐ＿リストボックス＿文字間隔設定(int パーツ番号, int 間隔)
+/* 001672cc */{
+/* 001672cc */	PartsEngine.SetListBoxCharSpace(パーツ番号, 間隔);
+/* 001672ea */}
+
+int Ｐ＿リストボックス＿文字間隔取得(int パーツ番号)
+/* 001672f8 */{
+/* 001672f8 */	return PartsEngine.GetListBoxCharSpace(パーツ番号);
+/* 0016730e */}
+

@@ -1,0 +1,119 @@
+CMessageWindowModelManager::CMessageWindowModelManager()
+/* 0001fffe */{
+/* 00020008 */}
+
+bool CMessageWindowModelManager::Init()
+/* 0002000e */{
+/* 0002000e */	this.m_ModelList.Alloc(40);
+/* 00020024 */	int n;
+/* 00020036 */	for (n = 0; n < this.m_ModelList.Numof(); n++)
+/* 0002008a */	{
+/* 0002008a */		this.m_ModelList[n].Init(n);
+/* 000200b0 */	}
+/* 000200b6 */	int OffsetZRange = EX_Int("Ｅ＿メッセージウィンドウ.Ｚ値増加量", 2);
+/* 000200d4 */	this.m_IncZ = Math.Max(2, OffsetZRange);
+/* 000200fa */	int OffsetZRange = this.m_IncZ;
+/* 00020110 */	int OffsetTextZRange = EX_Int("Ｅ＿メッセージウィンドウ.テキストＺ値オフセット", OffsetZRange - 1);
+/* 0002013a */	this.m_TextOffsetZ = Math.Max(1, Math.Min(OffsetZRange - 1, OffsetTextZRange));
+/* 0002017c */	this.m_MessageWindowMulColorR = EX_AInt("Ｅ＿メッセージウィンドウ.全体.乗算カラー", 0, 0);
+/* 000201a0 */	this.m_MessageWindowMulColorG = EX_AInt("Ｅ＿メッセージウィンドウ.全体.乗算カラー", 1, 0);
+/* 000201c4 */	this.m_MessageWindowMulColorB = EX_AInt("Ｅ＿メッセージウィンドウ.全体.乗算カラー", 2, 0);
+/* 000201e8 */	this.m_ReadTextColorList.Alloc(12);
+/* 000201fe */	int n;
+/* 00020210 */	for (n = 0; n < this.m_ReadTextColorList.Numof(); n++)
+/* 00020264 */	{
+/* 00020264 */		CASColor Color;
+/* 00020274 */		Color = CF_CASColor(255, 255, 255, 255);
+/* 000202a6 */		switch (n)
+/* 000202bc */		{
+/* 000202bc */		case 0:
+/* 000202bc */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 0, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 0, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 0, "青", 127), 255);
+/* 00020336 */			break;
+/* 0002033c */		case 1:
+/* 0002033c */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 1, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 1, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 1, "青", 191), 255);
+/* 000203b6 */			break;
+/* 000203bc */		case 2:
+/* 000203bc */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 2, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 2, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 2, "青", 255), 255);
+/* 00020436 */			break;
+/* 0002043c */		case 3:
+/* 0002043c */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 3, "赤", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 3, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 3, "青", 255), 255);
+/* 000204b6 */			break;
+/* 000204bc */		case 4:
+/* 000204bc */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 4, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 4, "緑", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 4, "青", 255), 255);
+/* 00020536 */			break;
+/* 0002053c */		case 5:
+/* 0002053c */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 5, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 5, "緑", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 5, "青", 255), 255);
+/* 000205b6 */			break;
+/* 000205bc */		case 6:
+/* 000205bc */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 6, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 6, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 6, "青", 255), 255);
+/* 00020636 */			break;
+/* 0002063c */		case 7:
+/* 0002063c */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 7, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 7, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 7, "青", 191), 255);
+/* 000206b6 */			break;
+/* 000206bc */		case 8:
+/* 000206bc */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 8, "赤", 127), EX_RA2Int("Ｅ＿既読メッセージ色", 8, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 8, "青", 127), 255);
+/* 00020736 */			break;
+/* 0002073c */		case 9:
+/* 0002073c */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 9, "赤", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 9, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 9, "青", 127), 255);
+/* 000207b6 */			break;
+/* 000207bc */		case 10:
+/* 000207bc */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 10, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 10, "緑", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 10, "青", 127), 255);
+/* 00020836 */			break;
+/* 0002083c */		case 11:
+/* 0002083c */			Color = CF_CASColor(EX_RA2Int("Ｅ＿既読メッセージ色", 11, "赤", 255), EX_RA2Int("Ｅ＿既読メッセージ色", 11, "緑", 191), EX_RA2Int("Ｅ＿既読メッセージ色", 11, "青", 127), 255);
+/* 000208b6 */			break;
+/* 000208bc */		}
+/* 000208bc */		this.m_ReadTextColorList[n] = Color;
+/* 000208ea */	}
+/* 000208f6 */	return true;
+/* 000208fe */}
+
+void CMessageWindowModelManager::SetZ(int Z)
+/* 0002090c */{
+/* 0002090c */	this.m_Z = Z;
+/* 00020922 */}
+
+int CMessageWindowModelManager::GetZ()
+/* 0002092a */{
+/* 0002092a */	return this.m_Z;
+/* 00020936 */}
+
+int CMessageWindowModelManager::GetIncZ()
+/* 00020944 */{
+/* 00020944 */	return this.m_IncZ;
+/* 00020950 */}
+
+int CMessageWindowModelManager::GetTextOffsetZ()
+/* 0002095e */{
+/* 0002095e */	return this.m_TextOffsetZ;
+/* 0002096a */}
+
+int CMessageWindowModelManager::GetMessageWindowMulColorR()
+/* 00020978 */{
+/* 00020978 */	return this.m_MessageWindowMulColorR;
+/* 00020984 */}
+
+int CMessageWindowModelManager::GetMessageWindowMulColorG()
+/* 00020992 */{
+/* 00020992 */	return this.m_MessageWindowMulColorG;
+/* 0002099e */}
+
+int CMessageWindowModelManager::GetMessageWindowMulColorB()
+/* 000209ac */{
+/* 000209ac */	return this.m_MessageWindowMulColorB;
+/* 000209b8 */}
+
+CASColor CMessageWindowModelManager::GetReadTextColor(int Index)
+/* 000209c6 */{
+/* 000209c6 */	if (Index < 0 || Index >= this.m_ReadTextColorList.Numof())
+/* 00020a18 */	{
+/* 00020a18 */		return CF_CASColor(255, 255, 255, 255);
+/* 00020a38 */	}
+/* 00020a38 */	return this.m_ReadTextColorList[Index];
+/* 00020a54 */}
+
+ref CMessageWindowModel CMessageWindowModelManager::GetMessageWindow(int MessageWindowNumber)
+/* 00020a62 */{
+/* 00020a62 */	return this.m_ModelList[MessageWindowNumber];
+/* 00020a7e */}
+

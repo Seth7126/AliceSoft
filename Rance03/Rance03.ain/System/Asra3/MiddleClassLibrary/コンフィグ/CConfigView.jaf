@@ -1,0 +1,793 @@
+CConfigView::CConfigView()
+/* 00032114 */{
+/* 0003211e */}
+
+void CConfigView::Execute(string ActivityNameByGame)
+/* 00032124 */{
+/* 00032124 */	this.m_Begin();
+/* 00032144 */	bool IsExistActivityByGame = SYS_Activity_IsExistFile(ActivityNameByGame);
+/* 00032160 */	bool IsExistDefaultActivity = SYS_Activity_IsExistFile("Asra\\コンフィグ／０１／メッセージ速度ページ");
+/* 00032178 */	string FileName;
+/* 0003218c */	if (IsExistActivityByGame)
+/* 0003219c */	{
+/* 0003219c */		FileName = ActivityNameByGame;
+/* 000321b4 */	}
+/* 000321ba */	else if (system.IsDebugMode() && IsExistDefaultActivity)
+/* 000321ee */	{
+/* 000321ee */		FileName = "Asra\\コンフィグ／０１／メッセージ速度ページ";
+/* 00032202 */	}
+/* 00032202 */	Ｐ＿アクティビティ実行(FileName, this.LoadedActivityEvent, this.ReleasingActivityEvent, NULL);
+/* 00032228 */	this.m_ActivityNameList.Free();
+/* 00032232 */	this.m_End();
+/* 00032252 */}
+
+void CConfigView::LoadedActivityEvent(string ActivityFileName, string ActivityName)
+/* 0003225a */{
+/* 0003225a */	this.m_ActivityNameList.PushBack(ActivityName);
+/* 0003226e */	AFL_Parts_AddBeginUpdateEvent(this.BeginUpdateEvent);
+/* 0003227e */	AFL_Parts_AddEndUpdateEvent(this.EndUpdateEvent);
+/* 0003228e */	this.AddButtonEvent(ActivityName, "SYS_メッセージ速度ボタン");
+/* 000322a6 */	this.AddButtonEvent(ActivityName, "SYS_オートモードボタン");
+/* 000322be */	this.AddButtonEvent(ActivityName, "SYS_スキップモードボタン");
+/* 000322d6 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色変更なし");
+/* 000322ee */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:0");
+/* 00032306 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:1");
+/* 0003231e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:2");
+/* 00032336 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:3");
+/* 0003234e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:4");
+/* 00032366 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:5");
+/* 0003237e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:6");
+/* 00032396 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:7");
+/* 000323ae */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:8");
+/* 000323c6 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:9");
+/* 000323de */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:10");
+/* 000323f6 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:11");
+/* 0003240e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色変更なし:蓋");
+/* 00032426 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:0:蓋");
+/* 0003243e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:1:蓋");
+/* 00032456 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:2:蓋");
+/* 0003246e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:3:蓋");
+/* 00032486 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:4:蓋");
+/* 0003249e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:5:蓋");
+/* 000324b6 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:6:蓋");
+/* 000324ce */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:7:蓋");
+/* 000324e6 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:8:蓋");
+/* 000324fe */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:9:蓋");
+/* 00032516 */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:10:蓋");
+/* 0003252e */	this.AddButtonEvent(ActivityName, "SYS_既読メッセージの色:11:蓋");
+/* 00032546 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色変更なし");
+/* 0003255e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:0");
+/* 00032576 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:1");
+/* 0003258e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:2");
+/* 000325a6 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:3");
+/* 000325be */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:4");
+/* 000325d6 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:5");
+/* 000325ee */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:6");
+/* 00032606 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:7");
+/* 0003261e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:8");
+/* 00032636 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:9");
+/* 0003264e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:10");
+/* 00032666 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:11");
+/* 0003267e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色変更なし:蓋");
+/* 00032696 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:0:蓋");
+/* 000326ae */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:1:蓋");
+/* 000326c6 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:2:蓋");
+/* 000326de */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:3:蓋");
+/* 000326f6 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:4:蓋");
+/* 0003270e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:5:蓋");
+/* 00032726 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:6:蓋");
+/* 0003273e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:7:蓋");
+/* 00032756 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:8:蓋");
+/* 0003276e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:9:蓋");
+/* 00032786 */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:10:蓋");
+/* 0003279e */	this.AddButtonEvent(ActivityName, "SYS_バックシーンメッセージの色:11:蓋");
+/* 000327b6 */	this.AddButtonEvent(ActivityName, "SYS_メッセージウィンドウの透過率ボタン");
+/* 000327ce */	this.AddButtonEvent(ActivityName, "SYS_メッセージウィンドウの明るさボタン");
+/* 000327e6 */	this.AddButtonEvent(ActivityName, "SYS_マスターボタン");
+/* 000327fe */	this.AddButtonEvent(ActivityName, "SYS_ＢＧＭボタン");
+/* 00032816 */	this.AddButtonEvent(ActivityName, "SYS_効果音ボタン");
+/* 0003282e */	this.AddButtonEvent(ActivityName, "SYS_音声ボタン");
+/* 00032846 */	this.AddButtonEvent(ActivityName, "SYS_背景音声ボタン");
+/* 0003285e */	this.AddButtonEvent(ActivityName, "SYS_バックログ");
+/* 00032876 */	this.AddButtonEvent(ActivityName, "SYS_バックシーン");
+/* 0003288e */	this.AddButtonEvent(ActivityName, "SYS_カーソル移動しない");
+/* 000328a6 */	this.AddButtonEvent(ActivityName, "SYS_カーソル移動低速");
+/* 000328be */	this.AddButtonEvent(ActivityName, "SYS_カーソル移動中速");
+/* 000328d6 */	this.AddButtonEvent(ActivityName, "SYS_カーソル移動高速");
+/* 000328ee */	this.AddButtonEvent(ActivityName, "SYS_カーソル瞬間移動");
+/* 00032906 */	this.AddButtonEvent(ActivityName, "SYS_画面比率標準");
+/* 0003291e */	this.AddButtonEvent(ActivityName, "SYS_画面比率固定");
+/* 00032936 */	this.AddButtonEvent(ActivityName, "SYS_拡大方法標準");
+/* 0003294e */	this.AddButtonEvent(ActivityName, "SYS_拡大方法バイキュービック");
+/* 00032966 */	this.AddButtonEvent(ActivityName, "SYS_ウィンドウの位置とサイズを初期化");
+/* 0003297e */	this.AddButtonEvent(ActivityName, "SYS_描画モード_チェック１");
+/* 00032996 */	this.AddButtonEvent(ActivityName, "SYS_描画モード_チェック２");
+/* 000329ae */	this.AddButtonEvent(ActivityName, "SYS_描画モード_チェック３");
+/* 000329c6 */	this.AddButtonEvent(ActivityName, "SYS_ライティング_チェック１");
+/* 000329de */	this.AddButtonEvent(ActivityName, "SYS_ライティング_チェック２");
+/* 000329f6 */	this.AddButtonEvent(ActivityName, "SYS_アンチエイリアシング_チェック１");
+/* 00032a0e */	this.AddButtonEvent(ActivityName, "SYS_アンチエイリアシング_チェック２");
+/* 00032a26 */	this.AddButtonEvent(ActivityName, "SYS_アンチエイリアシング_チェック３");
+/* 00032a3e */	this.AddButtonEvent(ActivityName, "SYS_アンチエイリアシング_チェック４");
+/* 00032a56 */	this.AddButtonEvent(ActivityName, "SYS_シャドウ_チェック１");
+/* 00032a6e */	this.AddButtonEvent(ActivityName, "SYS_シャドウ_チェック２");
+/* 00032a86 */	this.AddButtonEvent(ActivityName, "SYS_シャドウ_チェック３");
+/* 00032a9e */	this.AddButtonEvent(ActivityName, "SYS_シャドウ_チェック４");
+/* 00032ab6 */	this.AddButtonEvent(ActivityName, "SYS_シャドウマップ解像度_チェック１");
+/* 00032ace */	this.AddButtonEvent(ActivityName, "SYS_シャドウマップ解像度_チェック２");
+/* 00032ae6 */	this.AddButtonEvent(ActivityName, "SYS_シャドウマップ解像度_チェック３");
+/* 00032afe */	this.AddButtonEvent(ActivityName, "SYS_シャドウマップ解像度_チェック４");
+/* 00032b16 */	this.AddButtonEvent(ActivityName, "SYS_シャドウマップ解像度_チェック５");
+/* 00032b2e */	this.AddButtonEvent(ActivityName, "SYS_テクスチャ解像度_チェック１");
+/* 00032b46 */	this.AddButtonEvent(ActivityName, "SYS_テクスチャ解像度_チェック２");
+/* 00032b5e */	this.AddButtonEvent(ActivityName, "SYS_テクスチャ解像度_チェック３");
+/* 00032b76 */	this.AddButtonEvent(ActivityName, "SYS_テクスチャ解像度_チェック４");
+/* 00032b8e */	this.AddButtonEvent(ActivityName, "SYS_テクスチャ解像度_チェック５");
+/* 00032ba6 */	this.AddButtonEvent(ActivityName, "SYS_テクスチャフィルタリング_チェック１");
+/* 00032bbe */	this.AddButtonEvent(ActivityName, "SYS_テクスチャフィルタリング_チェック２");
+/* 00032bd6 */	this.AddButtonEvent(ActivityName, "SYS_テクスチャフィルタリング_チェック３");
+/* 00032bee */	this.AddButtonEvent(ActivityName, "SYS_テクスチャフィルタリング_チェック４");
+/* 00032c06 */	this.AddButtonEvent(ActivityName, "SYS_テクスチャフィルタリング_チェック５");
+/* 00032c1e */	this.AddButtonEvent(ActivityName, "SYS_バンプマッピング_チェック１");
+/* 00032c36 */	this.AddButtonEvent(ActivityName, "SYS_バンプマッピング_チェック２");
+/* 00032c4e */	this.AddButtonEvent(ActivityName, "SYS_バンプマッピング_チェック３");
+/* 00032c66 */	this.AddButtonEvent(ActivityName, "SYS_バンプマッピング_チェック４");
+/* 00032c7e */	this.AddButtonEvent(ActivityName, "SYS_ブルーム_チェック１");
+/* 00032c96 */	this.AddButtonEvent(ActivityName, "SYS_ブルーム_チェック２");
+/* 00032cae */	this.AddButtonEvent(ActivityName, "SYS_グレア_チェック１");
+/* 00032cc6 */	this.AddButtonEvent(ActivityName, "SYS_グレア_チェック２");
+/* 00032cde */	this.AddButtonEvent(ActivityName, "SYS_フォグ_チェック１");
+/* 00032cf6 */	this.AddButtonEvent(ActivityName, "SYS_フォグ_チェック２");
+/* 00032d0e */	this.AddButtonEvent(ActivityName, "SYS_スペキュラー_チェック１");
+/* 00032d26 */	this.AddButtonEvent(ActivityName, "SYS_スペキュラー_チェック２");
+/* 00032d3e */	this.AddButtonEvent(ActivityName, "SYS_ソフトフォグエッジ_チェック１");
+/* 00032d56 */	this.AddButtonEvent(ActivityName, "SYS_ソフトフォグエッジ_チェック２");
+/* 00032d6e */	this.AddButtonEvent(ActivityName, "SYS_アンビエントオクル－ジョン_チェック１");
+/* 00032d86 */	this.AddButtonEvent(ActivityName, "SYS_アンビエントオクル－ジョン_チェック２");
+/* 00032d9e */	this.AddButtonEvent(ActivityName, "SYS_ライトマップ_チェック１");
+/* 00032db6 */	this.AddButtonEvent(ActivityName, "SYS_ライトマップ_チェック２");
+/* 00032dce */	this.AddButtonEvent(ActivityName, "SYS_エッジ_チェック１");
+/* 00032de6 */	this.AddButtonEvent(ActivityName, "SYS_エッジ_チェック２");
+/* 00032dfe */	this.AddButtonEvent(ActivityName, "SYS_被写界深度_チェック１");
+/* 00032e16 */	this.AddButtonEvent(ActivityName, "SYS_被写界深度_チェック２");
+/* 00032e2e */	this.AddButtonEvent(ActivityName, "SYS_ゲームを終了する");
+/* 00032e46 */	this.AddButtonEvent(ActivityName, "SYS_タイトル画面に戻る");
+/* 00032e5e */	this.m_dgLoadedObject(ActivityFileName, ActivityName);
+/* 00032e92 */}
+
+void CConfigView::ReleasingActivityEvent(string ActivityFileName, string ActivityName)
+/* 00032e9a */{
+/* 00032e9a */	int Index = this.m_ActivityNameList.Find(0, this.m_ActivityNameList.Numof(), ActivityName);
+/* 00032ed6 */	if (Index == -1)
+/* 00032eee */	{
+/* 00032eee */		return;
+/* 00032ef0 */	}
+/* 00032ef0 */	this.m_ActivityNameList.Erase(Index);
+/* 00032f06 */	if (this.m_ActivityNameList.Empty())
+/* 00032f16 */	{
+/* 00032f16 */		AFL_Parts_EraseEndUpdateEvent(this.EndUpdateEvent);
+/* 00032f26 */		AFL_Parts_EraseBeginUpdateEvent(this.BeginUpdateEvent);
+/* 00032f36 */	}
+/* 00032f36 */	this.m_dgReleasingObject(ActivityFileName, ActivityName);
+/* 00032f6a */}
+
+void CConfigView::AddButtonEvent(string ActivityName, string PartsName)
+/* 00032f72 */{
+/* 00032f72 */	int Number = AFL_Activity_GetPartsNumber(ActivityName, PartsName);
+/* 00032f98 */	if (Number == 0)
+/* 00032fb0 */	{
+/* 00032fb0 */		return;
+/* 00032fb2 */	}
+/* 00032fb2 */	AFL_Parts_AddMouseLClickEvent(Number, this.ClickEvent);
+/* 00032fcc */}
+
+void CConfigView::BeginUpdateEvent(int PassedTime)
+/* 00032fd4 */{
+/* 00032fd4 */	this.SetHScrollRateForParts("SYS_メッセージ速度スライダ", &AFL_Config_GetMessageSpeedRate);
+/* 00032ff2 */	this.SetHScrollRateForParts("SYS_オートモードスライダ", &AFL_Config_GetAutoModeWaitTimeRate);
+/* 00033010 */	this.SetHScrollRateForParts("SYS_スキップモードスライダ", &AFL_Config_GetReadMessageSkipWaitTimeRate);
+/* 0003302e */	this.SetCheckStatForParts("SYS_演出カット", &AFL_Config_GetFrameSkipWhileMessageSkip);
+/* 0003304c */	this.SetCheckStatForParts("SYS_サンプルメッセージ表示", &AFL_Config_GetShowSampleMessage);
+/* 0003306a */	this.SetTextForParts("SYS_サンプルメッセージ", &AFL_Config_GetSampleMessageText);
+/* 00033088 */	this.SetCheckStatForParts("SYS_スキップモードをクリックで解除する", &AFL_Config_GetReleaseSkipModeByClick);
+/* 000330a6 */	this.SetCheckStatForParts("SYS_スキップモードを選択肢が表示された時に解除する", &AFL_Config_GetReleaseMessageSkipInSelectMenu);
+/* 000330c4 */	this.SetCheckStatForParts("SYS_未読メッセージが表示された時に解除する", &AFL_Config_GetReleaseSkipModeByReadMessage);
+/* 000330e2 */	this.SetCheckStatForParts("SYS_未読メッセージもスキップする", &AFL_Config_GetSkipAllMessage);
+/* 00033100 */	this.SetCheckStatForParts("SYS_オートモードをクリックで解除する", &AFL_Config_GetReleaseAutoModeByClick);
+/* 0003311e */	this.SetCheckStatForParts("SYS_オートモードを選択肢が表示されたときに解除する", &AFL_Config_GetReleaseAutoModeInSelectMenu);
+/* 0003313c */	this.SetCheckStatForParts("SYS_オートモード中はスクリーンセーバを起動しないようにする", &AFL_Config_GetRestrainScreensaverWhileAutoMode);
+/* 0003315a */	this.SetCheckStatForParts("SYS_メッセージウィンドウのアニメーションをおこなう", &AFL_Config_IsAnimateMessageWindow);
+/* 00033178 */	this.SetMulColorForParts("SYS_既読メッセージのサンプル", &AFL_Config_GetReadTextColorByActiveIndex);
+/* 00033196 */	this.SetCheckStatForParts("SYS_既読メッセージの色変更なし", &AFL_Config_IsReadTextColorIndexNone);
+/* 000331b4 */	this.SetCheckStatForParts("SYS_既読メッセージの色:0", &AFL_Config_IsReadTextColorIndex00);
+/* 000331d2 */	this.SetCheckStatForParts("SYS_既読メッセージの色:1", &AFL_Config_IsReadTextColorIndex01);
+/* 000331f0 */	this.SetCheckStatForParts("SYS_既読メッセージの色:2", &AFL_Config_IsReadTextColorIndex02);
+/* 0003320e */	this.SetCheckStatForParts("SYS_既読メッセージの色:3", &AFL_Config_IsReadTextColorIndex03);
+/* 0003322c */	this.SetCheckStatForParts("SYS_既読メッセージの色:4", &AFL_Config_IsReadTextColorIndex04);
+/* 0003324a */	this.SetCheckStatForParts("SYS_既読メッセージの色:5", &AFL_Config_IsReadTextColorIndex05);
+/* 00033268 */	this.SetCheckStatForParts("SYS_既読メッセージの色:6", &AFL_Config_IsReadTextColorIndex06);
+/* 00033286 */	this.SetCheckStatForParts("SYS_既読メッセージの色:7", &AFL_Config_IsReadTextColorIndex07);
+/* 000332a4 */	this.SetCheckStatForParts("SYS_既読メッセージの色:8", &AFL_Config_IsReadTextColorIndex08);
+/* 000332c2 */	this.SetCheckStatForParts("SYS_既読メッセージの色:9", &AFL_Config_IsReadTextColorIndex09);
+/* 000332e0 */	this.SetCheckStatForParts("SYS_既読メッセージの色:10", &AFL_Config_IsReadTextColorIndex10);
+/* 000332fe */	this.SetCheckStatForParts("SYS_既読メッセージの色:11", &AFL_Config_IsReadTextColorIndex11);
+/* 0003331c */	this.SetCheckStatForParts("SYS_既読メッセージの色変更なし:蓋", &AFL_Config_IsReadTextColorIndexNone);
+/* 0003333a */	this.SetCheckStatForParts("SYS_既読メッセージの色:0:蓋", &AFL_Config_IsReadTextColorIndex00);
+/* 00033358 */	this.SetCheckStatForParts("SYS_既読メッセージの色:1:蓋", &AFL_Config_IsReadTextColorIndex01);
+/* 00033376 */	this.SetCheckStatForParts("SYS_既読メッセージの色:2:蓋", &AFL_Config_IsReadTextColorIndex02);
+/* 00033394 */	this.SetCheckStatForParts("SYS_既読メッセージの色:3:蓋", &AFL_Config_IsReadTextColorIndex03);
+/* 000333b2 */	this.SetCheckStatForParts("SYS_既読メッセージの色:4:蓋", &AFL_Config_IsReadTextColorIndex04);
+/* 000333d0 */	this.SetCheckStatForParts("SYS_既読メッセージの色:5:蓋", &AFL_Config_IsReadTextColorIndex05);
+/* 000333ee */	this.SetCheckStatForParts("SYS_既読メッセージの色:6:蓋", &AFL_Config_IsReadTextColorIndex06);
+/* 0003340c */	this.SetCheckStatForParts("SYS_既読メッセージの色:7:蓋", &AFL_Config_IsReadTextColorIndex07);
+/* 0003342a */	this.SetCheckStatForParts("SYS_既読メッセージの色:8:蓋", &AFL_Config_IsReadTextColorIndex08);
+/* 00033448 */	this.SetCheckStatForParts("SYS_既読メッセージの色:9:蓋", &AFL_Config_IsReadTextColorIndex09);
+/* 00033466 */	this.SetCheckStatForParts("SYS_既読メッセージの色:10:蓋", &AFL_Config_IsReadTextColorIndex10);
+/* 00033484 */	this.SetCheckStatForParts("SYS_既読メッセージの色:11:蓋", &AFL_Config_IsReadTextColorIndex11);
+/* 000334a2 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色変更なし", &AFL_Config_GetReadTextColorNone);
+/* 000334c0 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:0", &AFL_Config_GetReadTextColor00);
+/* 000334de */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:1", &AFL_Config_GetReadTextColor01);
+/* 000334fc */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:2", &AFL_Config_GetReadTextColor02);
+/* 0003351a */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:3", &AFL_Config_GetReadTextColor03);
+/* 00033538 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:4", &AFL_Config_GetReadTextColor04);
+/* 00033556 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:5", &AFL_Config_GetReadTextColor05);
+/* 00033574 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:6", &AFL_Config_GetReadTextColor06);
+/* 00033592 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:7", &AFL_Config_GetReadTextColor07);
+/* 000335b0 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:8", &AFL_Config_GetReadTextColor08);
+/* 000335ce */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:9", &AFL_Config_GetReadTextColor09);
+/* 000335ec */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:10", &AFL_Config_GetReadTextColor10);
+/* 0003360a */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:11", &AFL_Config_GetReadTextColor11);
+/* 00033628 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色変更なし:蓋", &AFL_Config_GetReadTextColorNone);
+/* 00033646 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:0:蓋", &AFL_Config_GetReadTextColor00);
+/* 00033664 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:1:蓋", &AFL_Config_GetReadTextColor01);
+/* 00033682 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:2:蓋", &AFL_Config_GetReadTextColor02);
+/* 000336a0 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:3:蓋", &AFL_Config_GetReadTextColor03);
+/* 000336be */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:4:蓋", &AFL_Config_GetReadTextColor04);
+/* 000336dc */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:5:蓋", &AFL_Config_GetReadTextColor05);
+/* 000336fa */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:6:蓋", &AFL_Config_GetReadTextColor06);
+/* 00033718 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:7:蓋", &AFL_Config_GetReadTextColor07);
+/* 00033736 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:8:蓋", &AFL_Config_GetReadTextColor08);
+/* 00033754 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:9:蓋", &AFL_Config_GetReadTextColor09);
+/* 00033772 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:10:蓋", &AFL_Config_GetReadTextColor10);
+/* 00033790 */	this.SetCheckBoxColorForParts("SYS_既読メッセージの色:11:蓋", &AFL_Config_GetReadTextColor11);
+/* 000337ae */	this.SetMulColorForParts("SYS_バックシーンメッセージのサンプル", &AFL_Config_GetBackSceneTextColorByActiveIndex);
+/* 000337cc */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色変更なし", &AFL_Config_IsBackSceneTextColorIndexNone);
+/* 000337ea */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:0", &AFL_Config_IsBackSceneTextColorIndex00);
+/* 00033808 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:1", &AFL_Config_IsBackSceneTextColorIndex01);
+/* 00033826 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:2", &AFL_Config_IsBackSceneTextColorIndex02);
+/* 00033844 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:3", &AFL_Config_IsBackSceneTextColorIndex03);
+/* 00033862 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:4", &AFL_Config_IsBackSceneTextColorIndex04);
+/* 00033880 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:5", &AFL_Config_IsBackSceneTextColorIndex05);
+/* 0003389e */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:6", &AFL_Config_IsBackSceneTextColorIndex06);
+/* 000338bc */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:7", &AFL_Config_IsBackSceneTextColorIndex07);
+/* 000338da */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:8", &AFL_Config_IsBackSceneTextColorIndex08);
+/* 000338f8 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:9", &AFL_Config_IsBackSceneTextColorIndex09);
+/* 00033916 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:10", &AFL_Config_IsBackSceneTextColorIndex10);
+/* 00033934 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:11", &AFL_Config_IsBackSceneTextColorIndex11);
+/* 00033952 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色変更なし:蓋", &AFL_Config_IsBackSceneTextColorIndexNone);
+/* 00033970 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:0:蓋", &AFL_Config_IsBackSceneTextColorIndex00);
+/* 0003398e */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:1:蓋", &AFL_Config_IsBackSceneTextColorIndex01);
+/* 000339ac */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:2:蓋", &AFL_Config_IsBackSceneTextColorIndex02);
+/* 000339ca */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:3:蓋", &AFL_Config_IsBackSceneTextColorIndex03);
+/* 000339e8 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:4:蓋", &AFL_Config_IsBackSceneTextColorIndex04);
+/* 00033a06 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:5:蓋", &AFL_Config_IsBackSceneTextColorIndex05);
+/* 00033a24 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:6:蓋", &AFL_Config_IsBackSceneTextColorIndex06);
+/* 00033a42 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:7:蓋", &AFL_Config_IsBackSceneTextColorIndex07);
+/* 00033a60 */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:8:蓋", &AFL_Config_IsBackSceneTextColorIndex08);
+/* 00033a7e */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:9:蓋", &AFL_Config_IsBackSceneTextColorIndex09);
+/* 00033a9c */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:10:蓋", &AFL_Config_IsBackSceneTextColorIndex10);
+/* 00033aba */	this.SetCheckStatForParts("SYS_バックシーンメッセージの色:11:蓋", &AFL_Config_IsBackSceneTextColorIndex11);
+/* 00033ad8 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色変更なし", &AFL_Config_GetBackSceneTextColorNone);
+/* 00033af6 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:0", &AFL_Config_GetBackSceneTextColor00);
+/* 00033b14 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:1", &AFL_Config_GetBackSceneTextColor01);
+/* 00033b32 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:2", &AFL_Config_GetBackSceneTextColor02);
+/* 00033b50 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:3", &AFL_Config_GetBackSceneTextColor03);
+/* 00033b6e */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:4", &AFL_Config_GetBackSceneTextColor04);
+/* 00033b8c */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:5", &AFL_Config_GetBackSceneTextColor05);
+/* 00033baa */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:6", &AFL_Config_GetBackSceneTextColor06);
+/* 00033bc8 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:7", &AFL_Config_GetBackSceneTextColor07);
+/* 00033be6 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:8", &AFL_Config_GetBackSceneTextColor08);
+/* 00033c04 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:9", &AFL_Config_GetBackSceneTextColor09);
+/* 00033c22 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:10", &AFL_Config_GetBackSceneTextColor10);
+/* 00033c40 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:11", &AFL_Config_GetBackSceneTextColor11);
+/* 00033c5e */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色変更なし:蓋", &AFL_Config_GetBackSceneTextColorNone);
+/* 00033c7c */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:0:蓋", &AFL_Config_GetBackSceneTextColor00);
+/* 00033c9a */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:1:蓋", &AFL_Config_GetBackSceneTextColor01);
+/* 00033cb8 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:2:蓋", &AFL_Config_GetBackSceneTextColor02);
+/* 00033cd6 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:3:蓋", &AFL_Config_GetBackSceneTextColor03);
+/* 00033cf4 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:4:蓋", &AFL_Config_GetBackSceneTextColor04);
+/* 00033d12 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:5:蓋", &AFL_Config_GetBackSceneTextColor05);
+/* 00033d30 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:6:蓋", &AFL_Config_GetBackSceneTextColor06);
+/* 00033d4e */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:7:蓋", &AFL_Config_GetBackSceneTextColor07);
+/* 00033d6c */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:8:蓋", &AFL_Config_GetBackSceneTextColor08);
+/* 00033d8a */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:9:蓋", &AFL_Config_GetBackSceneTextColor09);
+/* 00033da8 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:10:蓋", &AFL_Config_GetBackSceneTextColor10);
+/* 00033dc6 */	this.SetCheckBoxColorForParts("SYS_バックシーンメッセージの色:11:蓋", &AFL_Config_GetBackSceneTextColor11);
+/* 00033de4 */	this.SetHScrollRateForParts("SYS_メッセージウィンドウの透過率スライダ", &AFL_Config_GetMessageWindowAlphaRate);
+/* 00033e02 */	this.SetHScrollRateForParts("SYS_メッセージウィンドウの明るさスライダ", &AFL_Config_GetMessageWindowMulColorRate);
+/* 00033e20 */	this.SetAlphaForParts("SYS_メッセージウィンドウサンプル", &AFL_Config_GetMessageWindowAlpha);
+/* 00033e3e */	this.SetMulColorForParts("SYS_メッセージウィンドウサンプル", &AFL_Config_GetMessageWindowMulColor);
+/* 00033e5c */	this.SetHScrollRateForParts("SYS_マスタースライダ", &AFL_Config_GetMasterVolume);
+/* 00033e7a */	this.SetCheckStatForParts("SYS_マスター消音", &AFL_Config_GetMasterMute);
+/* 00033e98 */	this.SetHScrollRateForParts("SYS_ＢＧＭスライダ", &AFL_Config_GetBGMVolume);
+/* 00033eb6 */	this.SetCheckStatForParts("SYS_ＢＧＭ消音", &AFL_Config_GetBGMMute);
+/* 00033ed4 */	this.SetHScrollRateForParts("SYS_効果音スライダ", &AFL_Config_GetSEVolume);
+/* 00033ef2 */	this.SetCheckStatForParts("SYS_効果音消音", &AFL_Config_GetSEMute);
+/* 00033f10 */	this.SetHScrollRateForParts("SYS_音声スライダ", &AFL_Config_GetVoiceVolume);
+/* 00033f2e */	this.SetCheckStatForParts("SYS_音声消音", &AFL_Config_GetVoiceMute);
+/* 00033f4c */	this.SetHScrollRateForParts("SYS_背景音声スライダ", &AFL_Config_GetBackVoiceVolume);
+/* 00033f6a */	this.SetCheckStatForParts("SYS_背景音声消音", &AFL_Config_GetBackVoiceMute);
+/* 00033f88 */	this.SetCheckStatForParts("SYS_メッセージを進めた時に、音声を停止する", &AFL_Config_GetStopVoiceByStatus);
+/* 00033fa6 */	this.SetCheckStatForParts("SYS_音声再生時にＢＧＭ音量を下げる", &AFL_Config_GetBGMFadeByVoice);
+/* 00033fc4 */	this.SetCheckStatForParts("SYS_ウィンドウが非アクティブの時にミュートする", &AFL_Config_IsMuteByInactiveWindow);
+/* 00033fe2 */	this.SetCheckStatForParts("SYS_一定時間マウスカーソルを動かさなければ、非表示にする", &AFL_Config_GetHideUnmoveMouseCursor);
+/* 00034000 */	this.SetCheckStatForParts("SYS_キーボード（・ジョイパッド）の入力があれば、非表示にする", &AFL_Config_GetHideKeyOrJoypadInputMouseCursor);
+/* 0003401e */	this.SetCheckStatForParts("SYS_メッセージを進めた時に非表示にする", &AFL_Config_GetHideStepMessageMouseCursor);
+/* 0003403c */	this.SetCheckStatForParts("SYS_バックログ", &AFL_Config_IsWheelForwardForBackLog);
+/* 0003405a */	this.SetCheckStatForParts("SYS_バックシーン", &AFL_Config_IsWheelForwardForBackScene);
+/* 00034078 */	this.SetCheckStatForParts("SYS_クイックセーブ時に確認をおこなう", &AFL_Config_GetQuickSaveConfirm);
+/* 00034096 */	this.SetCheckStatForParts("SYS_クイックロード時に確認をおこなう", &AFL_Config_GetQuickLoadConfirm);
+/* 000340b4 */	this.SetCheckStatForParts("SYS_セーブ時に確認をおこなう", &AFL_Config_GetSaveConfirm);
+/* 000340d2 */	this.SetCheckStatForParts("SYS_ロード時に確認をおこなう", &AFL_Config_GetLoadConfirm);
+/* 000340f0 */	this.SetCheckStatForParts("SYS_タイトル画面に戻る時に確認をおこなう", &AFL_Config_GetBackToTitleConfirm);
+/* 0003410e */	this.SetCheckStatForParts("SYS_ゲームを終了する時に確認をおこなう", &AFL_Config_GetCloseGameConfirm);
+/* 0003412c */	this.SetCheckStatForParts("SYS_カーソル移動しない", &AFL_Config_IsMoveMouseCursorSpeedForNone);
+/* 0003414a */	this.SetCheckStatForParts("SYS_カーソル移動低速", &AFL_Config_IsMoveMouseCursorSpeedForLow);
+/* 00034168 */	this.SetCheckStatForParts("SYS_カーソル移動中速", &AFL_Config_IsMoveMouseCursorSpeedForMiddle);
+/* 00034186 */	this.SetCheckStatForParts("SYS_カーソル移動高速", &AFL_Config_IsMoveMouseCursorSpeedForHigh);
+/* 000341a4 */	this.SetCheckStatForParts("SYS_カーソル瞬間移動", &AFL_Config_IsMoveMouseCursorSpeedForFast);
+/* 000341c2 */	this.SetCheckStatForParts("SYS_ウィンドウ", &AFL_Config_GetWindowMode);
+/* 000341e0 */	this.SetCheckStatForParts("SYS_画面比率標準", &AFL_Config_IsAspectRatioDefault);
+/* 000341fe */	this.SetCheckStatForParts("SYS_画面比率固定", &AFL_Config_IsAspectRatioFix);
+/* 0003421c */	this.SetCheckStatForParts("SYS_フルスクリーン", &AFL_Config_GetFullScreenMode);
+/* 0003423a */	this.SetCheckStatForParts("SYS_拡大方法標準", &AFL_Config_IsScalingDefault);
+/* 00034258 */	this.SetCheckStatForParts("SYS_拡大方法バイキュービック", &AFL_Config_IsScalingBicubic);
+/* 00034276 */	this.SetCheckStatForParts("SYS_垂直同期を待ち、ちらつきを抑える", &AFL_Config_GetWaitVSync);
+/* 00034294 */	this.SetCheckStatForParts("SYS_ウィンドウの位置とサイズを、次回起動時に復元する", &AFL_Config_GetRecordPosSize);
+/* 000342b2 */	this.SetCheckStatForParts("SYS_フルスクリーン時に非アクティブで最小化する", &AFL_Config_GetMinimizeByFullScreenInactive);
+/* 000342d0 */	this.SetCheckStatForParts("SYS_非アクティブ時にＣＰＵ使用率を下げる", &AFL_Config_GetSleepByInactive);
+/* 000342ee */	this.SetCheckStatForParts("SYS_過剰な描画処理を抑えＣＰＵ使用率を下げる", &AFL_Config_GetOverFrameRateSleep);
+/* 0003430c */	this.SetTextForParts("SYS_フルスクリーン時の画面比率固定説明文", &AFL_Config_GetWindowHelpTextForAspect);
+/* 0003432a */	this.SetTextForParts("SYS_拡大方法標準説明文", &AFL_Config_GetWindowHelpTextForScalingDefault);
+/* 00034348 */	this.SetTextForParts("SYS_拡大方法バイキュービック説明文", &AFL_Config_GetWindowHelpTextForScalingBicubic);
+/* 00034366 */	this.SetTextForParts("SYS_垂直同期を待ち、ちらつきを抑える説明文", &AFL_Config_GetWindowHelpTextForWaitVSync);
+/* 00034384 */	this.SetTextForParts("SYS_フルスクリーン時に非アクティブで最小化する説明文", &AFL_Config_GetWindowHelpTextForMinimizeByFullscreen);
+/* 000343a2 */	this.SetTextForParts("SYS_過剰な描画処理を抑えＣＰＵ使用率を下げる説明文", &AFL_Config_GetWindowHelpTextForOverFramerateSleep);
+/* 000343c0 */	this.SetCheckStatForParts("SYS_ネットワーク接続を許可する", &AFL_Config_Network_GetEnableConnection);
+/* 000343de */	this.SetCheckStatForParts("SYS_ＦＰＳ表示", &AFL_Config_GetShowFPS);
+/* 000343fc */	this.SetCheckStatForParts("SYS_メモリ使用量表示", &AFL_Config_GetShowMemorySize);
+/* 0003441a */	this.SetCheckStatForParts("SYS_フィルレート表示", &AFL_Config_GetShowFillRate);
+/* 00034438 */	this.SetCheckStatForParts("SYS_ビデオメモリ使用量表示", &AFL_Config_GetShowVideoMemorySize);
+/* 00034456 */	this.SetCheckStatForParts("SYS_強制非表示", &AFL_Config_GetDisavleDebugInfo);
+/* 00034474 */	this.SetCheckStatForParts("SYS_音声再生中表示", &AFL_Config_GetShowVoicePlaying);
+/* 00034492 */	this.SetCheckStatForParts("SYS_擬音再生中表示", &AFL_Config_GetShowSEPlaying);
+/* 000344b0 */	this.SetCheckStatForParts("SYS_背景音声再生中表示", &AFL_Config_GetShowBackVoicePlaying);
+/* 000344ce */	this.SetCheckStatForParts("SYS_ミッピマップレベル表示", &AFL_Debug_IsShowMipmapLevel);
+/* 000344ec */	this.SetCheckStatForParts("SYS_描画モード_チェック１", &AFL_Config_IsSoftwareRenderMode);
+/* 0003450a */	this.SetCheckStatForParts("SYS_描画モード_チェック２", &AFL_Config_IsFixShadeRenderMode);
+/* 00034528 */	this.SetCheckStatForParts("SYS_描画モード_チェック３", &AFL_Config_IsProgrammableShadeRenderMode);
+/* 00034546 */	this.SetTextForParts("SYS_描画モード_テキスト", &AFL_Config_Get3DHelpTextForRenderMode);
+/* 00034564 */	this.SetCheckStatForParts("SYS_ライティング_チェック１", &AFL_Config_IsLightingModeOff);
+/* 00034582 */	this.SetCheckStatForParts("SYS_ライティング_チェック２", &AFL_Config_IsLightingModeOn);
+/* 000345a0 */	this.SetCheckStatForParts("SYS_アンチエイリアシング_チェック１", &AFL_Config_IsAntiAliasingModeNone);
+/* 000345be */	this.SetCheckStatForParts("SYS_アンチエイリアシング_チェック２", &AFL_Config_IsAntiAliasingMode2);
+/* 000345dc */	this.SetCheckStatForParts("SYS_アンチエイリアシング_チェック３", &AFL_Config_IsAntiAliasingMode4);
+/* 000345fa */	this.SetCheckStatForParts("SYS_アンチエイリアシング_チェック４", &AFL_Config_IsAntiAliasingMode8);
+/* 00034618 */	this.SetTextForParts("SYS_アンチエイリアシング_テキスト", &AFL_Config_Get3DHelpTextForAntiAliasing);
+/* 00034636 */	this.SetCheckStatForParts("SYS_シャドウ_チェック１", &AFL_Config_IsShadowModeNone);
+/* 00034654 */	this.SetCheckStatForParts("SYS_シャドウ_チェック２", &AFL_Config_IsShadowModeLow);
+/* 00034672 */	this.SetCheckStatForParts("SYS_シャドウ_チェック３", &AFL_Config_IsShadowModeMiddle);
+/* 00034690 */	this.SetCheckStatForParts("SYS_シャドウ_チェック４", &AFL_Config_IsShadowModeHigh);
+/* 000346ae */	this.SetTextForParts("SYS_シャドウ_テキスト", &AFL_Config_Get3DHelpTextForShadowMode);
+/* 000346cc */	this.SetCheckStatForParts("SYS_シャドウマップ解像度_チェック１", &AFL_Config_IsShadowMapResolutionLevelMin);
+/* 000346ea */	this.SetCheckStatForParts("SYS_シャドウマップ解像度_チェック２", &AFL_Config_IsShadowMapResolutionLevelLow);
+/* 00034708 */	this.SetCheckStatForParts("SYS_シャドウマップ解像度_チェック３", &AFL_Config_IsShadowMapResolutionLevelMiddle);
+/* 00034726 */	this.SetCheckStatForParts("SYS_シャドウマップ解像度_チェック４", &AFL_Config_IsShadowMapResolutionLevelHigh);
+/* 00034744 */	this.SetCheckStatForParts("SYS_シャドウマップ解像度_チェック５", &AFL_Config_IsShadowMapResolutionLevelMax);
+/* 00034762 */	this.SetTextForParts("SYS_シャドウマップ解像度_テキスト", &AFL_Config_Get3DHelpTextForShadowmapResolutionLevel);
+/* 00034780 */	this.SetCheckStatForParts("SYS_テクスチャ解像度_チェック１", &AFL_Config_IsTextureResolutionLevelMin);
+/* 0003479e */	this.SetCheckStatForParts("SYS_テクスチャ解像度_チェック２", &AFL_Config_IsTextureResolutionLevelLow);
+/* 000347bc */	this.SetCheckStatForParts("SYS_テクスチャ解像度_チェック３", &AFL_Config_IsTextureResolutionLevelMiddle);
+/* 000347da */	this.SetCheckStatForParts("SYS_テクスチャ解像度_チェック４", &AFL_Config_IsTextureResolutionLevelHigh);
+/* 000347f8 */	this.SetCheckStatForParts("SYS_テクスチャ解像度_チェック５", &AFL_Config_IsTextureResolutionLevelMax);
+/* 00034816 */	this.SetTextForParts("SYS_テクスチャ解像度_テキスト", &AFL_Config_Get3DHelpTextForTextureResolutionLevel);
+/* 00034834 */	this.SetCheckStatForParts("SYS_テクスチャフィルタリング_チェック１", &AFL_Config_IsTextureFilterModePoint);
+/* 00034852 */	this.SetCheckStatForParts("SYS_テクスチャフィルタリング_チェック２", &AFL_Config_IsTextureFilterModeLinear);
+/* 00034870 */	this.SetCheckStatForParts("SYS_テクスチャフィルタリング_チェック３", &AFL_Config_IsTextureFilterModeAnisotropic04);
+/* 0003488e */	this.SetCheckStatForParts("SYS_テクスチャフィルタリング_チェック４", &AFL_Config_IsTextureFilterModeAnisotropic08);
+/* 000348ac */	this.SetCheckStatForParts("SYS_テクスチャフィルタリング_チェック５", &AFL_Config_IsTextureFilterModeAnisotropic16);
+/* 000348ca */	this.SetTextForParts("SYS_テクスチャフィルタリング_テキスト", &AFL_Config_Get3DHelpTextForTextureFilterMode);
+/* 000348e8 */	this.SetCheckStatForParts("SYS_バンプマッピング_チェック１", &AFL_Config_IsBumpModeOff);
+/* 00034906 */	this.SetCheckStatForParts("SYS_バンプマッピング_チェック２", &AFL_Config_IsBumpModeBumpMapping);
+/* 00034924 */	this.SetCheckStatForParts("SYS_バンプマッピング_チェック３", &AFL_Config_IsBumpModeParallaxMapping);
+/* 00034942 */	this.SetCheckStatForParts("SYS_バンプマッピング_チェック４", &AFL_Config_IsBumpModeReliefMapping);
+/* 00034960 */	this.SetTextForParts("SYS_バンプマッピング_テキスト", &AFL_Config_Get3DHelpTextForBumpMode);
+/* 0003497e */	this.SetCheckStatForParts("SYS_ブルーム_チェック１", &AFL_Config_IsBloomModeOff);
+/* 0003499c */	this.SetCheckStatForParts("SYS_ブルーム_チェック２", &AFL_Config_IsBloomModeOn);
+/* 000349ba */	this.SetTextForParts("SYS_ブルーム_テキスト", &AFL_Config_Get3DHelpTextForBloomMode);
+/* 000349d8 */	this.SetCheckStatForParts("SYS_グレア_チェック１", &AFL_Config_IsGlareModeOff);
+/* 000349f6 */	this.SetCheckStatForParts("SYS_グレア_チェック２", &AFL_Config_IsGlareModeOn);
+/* 00034a14 */	this.SetTextForParts("SYS_グレア_テキスト", &AFL_Config_Get3DHelpTextForGlareMode);
+/* 00034a32 */	this.SetCheckStatForParts("SYS_フォグ_チェック１", &AFL_Config_IsFogModeOff);
+/* 00034a50 */	this.SetCheckStatForParts("SYS_フォグ_チェック２", &AFL_Config_IsFogModeOn);
+/* 00034a6e */	this.SetTextForParts("SYS_フォグ_テキスト", &AFL_Config_Get3DHelpTextForFogMode);
+/* 00034a8c */	this.SetCheckStatForParts("SYS_スペキュラー_チェック１", &AFL_Config_IsSpecularModeOff);
+/* 00034aaa */	this.SetCheckStatForParts("SYS_スペキュラー_チェック２", &AFL_Config_IsSpecularModeOn);
+/* 00034ac8 */	this.SetTextForParts("SYS_スペキュラー_テキスト", &AFL_Config_Get3DHelpTextForSpecularMode);
+/* 00034ae6 */	this.SetCheckStatForParts("SYS_ソフトフォグエッジ_チェック１", &AFL_Config_IsSoftFogEdgeModeOff);
+/* 00034b04 */	this.SetCheckStatForParts("SYS_ソフトフォグエッジ_チェック２", &AFL_Config_IsSoftFogEdgeModeOn);
+/* 00034b22 */	this.SetTextForParts("SYS_ソフトフォグエッジ_テキスト", &AFL_Config_Get3DHelpTextForSpecularMode);
+/* 00034b40 */	this.SetCheckStatForParts("SYS_アンビエントオクル－ジョン_チェック１", &AFL_Config_IsSSAOModeOff);
+/* 00034b5e */	this.SetCheckStatForParts("SYS_アンビエントオクル－ジョン_チェック２", &AFL_Config_IsSSAOModeOn);
+/* 00034b7c */	this.SetTextForParts("SYS_アンビエントオクル－ジョン_テキスト", &AFL_Config_Get3DHelpTextForSSAOMode);
+/* 00034b9a */	this.SetCheckStatForParts("SYS_ライトマップ_チェック１", &AFL_Config_IsLightMapModeOff);
+/* 00034bb8 */	this.SetCheckStatForParts("SYS_ライトマップ_チェック２", &AFL_Config_IsLightMapModeOn);
+/* 00034bd6 */	this.SetTextForParts("SYS_ライトマップ_テキスト", &AFL_Config_Get3DHelpTextForLightMapMode);
+/* 00034bf4 */	this.SetCheckStatForParts("SYS_エッジ_チェック１", &AFL_Config_IsEdgeOff);
+/* 00034c12 */	this.SetCheckStatForParts("SYS_エッジ_チェック２", &AFL_Config_IsEdgeOn);
+/* 00034c30 */	this.SetTextForParts("SYS_エッジ_テキスト", &AFL_Config_Get3DHelpTextForEdge);
+/* 00034c4e */	this.SetCheckStatForParts("SYS_被写界深度_チェック１", &AFL_Config_IsDOFModeOff);
+/* 00034c6c */	this.SetCheckStatForParts("SYS_被写界深度_チェック２", &AFL_Config_IsDOFModeOn);
+/* 00034c8a */	this.SetTextForParts("SYS_被写界深度_テキスト", &AFL_Config_Get3DHelpTextForDOF);
+/* 00034ca8 */	int i;
+/* 00034cba */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00034d0a */	{
+/* 00034d0a */		this.m_dgSetAsraDataForParts(PassedTime, this.m_ActivityNameList[i]);
+/* 00034d4a */	}
+/* 00034d50 */}
+
+void CConfigView::SetHScrollRateForAsra(string PartsName, DG_SetFloatHandler dgObject)
+/* 00034d58 */{
+/* 00034d58 */	int i;
+/* 00034d6a */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00034dba */	{
+/* 00034dba */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 00034dec */		if (Number == 0)
+/* 00034e04 */		{
+/* 00034e04 */			continue;
+/* 00034e0a */		}
+/* 00034e0a */		dgObject(Ｐ＿横スクロールバー＿スクロールレート取得(Number));
+/* 00034e3a */	}
+/* 00034e40 */}
+
+void CConfigView::SetCheckStatForAsra(string PartsName, DG_SetBoolHandler dgObject)
+/* 00034e48 */{
+/* 00034e48 */	int i;
+/* 00034e5a */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00034eaa */	{
+/* 00034eaa */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 00034edc */		if (Number == 0)
+/* 00034ef4 */		{
+/* 00034ef4 */			continue;
+/* 00034efa */		}
+/* 00034efa */		dgObject(Ｐ＿チェックボックス＿チェック状態取得(Number));
+/* 00034f2a */	}
+/* 00034f30 */}
+
+void CConfigView::EndUpdateEvent(int PassedTime)
+/* 00034f38 */{
+/* 00034f38 */	this.SetHScrollRateForAsra("SYS_メッセージ速度スライダ", &AFL_Config_SetMessageSpeedRate);
+/* 00034f56 */	this.SetHScrollRateForAsra("SYS_オートモードスライダ", &AFL_Config_SetAutoModeWaitTimeRate);
+/* 00034f74 */	this.SetHScrollRateForAsra("SYS_スキップモードスライダ", &AFL_Config_SetReadMessageSkipWaitTimeRate);
+/* 00034f92 */	this.SetCheckStatForAsra("SYS_演出カット", &AFL_Config_SetFrameSkipWhileMessageSkip);
+/* 00034fb0 */	this.SetCheckStatForAsra("SYS_サンプルメッセージ表示", &AFL_Config_SetShowSampleMessage);
+/* 00034fce */	this.SetCheckStatForAsra("SYS_スキップモードをクリックで解除する", &AFL_Config_SetReleaseSkipModeByClick);
+/* 00034fec */	this.SetCheckStatForAsra("SYS_スキップモードを選択肢が表示された時に解除する", &AFL_Config_SetReleaseMessageSkipInSelectMenu);
+/* 0003500a */	this.SetCheckStatForAsra("SYS_未読メッセージが表示された時に解除する", &AFL_Config_SetReleaseSkipModeByReadMessage);
+/* 00035028 */	this.SetCheckStatForAsra("SYS_未読メッセージもスキップする", &AFL_Config_SetSkipAllMessage);
+/* 00035046 */	this.SetCheckStatForAsra("SYS_オートモードをクリックで解除する", &AFL_Config_SetReleaseAutoModeByClick);
+/* 00035064 */	this.SetCheckStatForAsra("SYS_オートモードを選択肢が表示されたときに解除する", &AFL_Config_SetReleaseAutoModeInSelectMenu);
+/* 00035082 */	this.SetCheckStatForAsra("SYS_オートモード中はスクリーンセーバを起動しないようにする", &AFL_Config_SetRestrainScreensaverWhileAutoMode);
+/* 000350a0 */	this.SetCheckStatForAsra("SYS_メッセージウィンドウのアニメーションをおこなう", &AFL_Config_SetAnimateMessageWindow);
+/* 000350be */	this.SetHScrollRateForAsra("SYS_メッセージウィンドウの透過率スライダ", &AFL_Config_SetMessageWindowAlphaRate);
+/* 000350dc */	this.SetHScrollRateForAsra("SYS_メッセージウィンドウの明るさスライダ", &AFL_Config_SetMessageWindowMulColorRate);
+/* 000350fa */	this.SetHScrollRateForAsra("SYS_マスタースライダ", &AFL_Config_SetMasterVolume);
+/* 00035118 */	this.SetCheckStatForAsra("SYS_マスター消音", &AFL_Config_SetMasterMute);
+/* 00035136 */	this.SetHScrollRateForAsra("SYS_ＢＧＭスライダ", &AFL_Config_SetBGMVolume);
+/* 00035154 */	this.SetCheckStatForAsra("SYS_ＢＧＭ消音", &AFL_Config_SeBGMtMute);
+/* 00035172 */	this.SetHScrollRateForAsra("SYS_効果音スライダ", &AFL_Config_SetSEVolume);
+/* 00035190 */	this.SetCheckStatForAsra("SYS_効果音消音", &AFL_Config_SetSEMute);
+/* 000351ae */	this.SetHScrollRateForAsra("SYS_音声スライダ", &AFL_Config_SetVoiceVolume);
+/* 000351cc */	this.SetCheckStatForAsra("SYS_音声消音", &AFL_Config_SetVoiceMute);
+/* 000351ea */	this.SetHScrollRateForAsra("SYS_背景音声スライダ", &AFL_Config_SetBackVoiceVolume);
+/* 00035208 */	this.SetCheckStatForAsra("SYS_背景音声消音", &AFL_Config_SetBackVoiceMute);
+/* 00035226 */	this.SetCheckStatForAsra("SYS_メッセージを進めた時に、音声を停止する", &AFL_Config_SetStopVoiceByStatus);
+/* 00035244 */	this.SetCheckStatForAsra("SYS_音声再生時にＢＧＭ音量を下げる", &AFL_Config_SetBGMFadeByVoice);
+/* 00035262 */	this.SetCheckStatForAsra("SYS_ウィンドウが非アクティブの時にミュートする", &AFL_Config_SetMuteByInactiveWindow);
+/* 00035280 */	this.SetCheckStatForAsra("SYS_一定時間マウスカーソルを動かさなければ、非表示にする", &AFL_Config_SetHideUnmoveMouseCursor);
+/* 0003529e */	this.SetCheckStatForAsra("SYS_キーボード（・ジョイパッド）の入力があれば、非表示にする", &AFL_Config_SetHideKeyOrJoypadInputMouseCursor);
+/* 000352bc */	this.SetCheckStatForAsra("SYS_メッセージを進めた時に非表示にする", &AFL_Config_SetHideStepMessageMouseCursor);
+/* 000352da */	this.SetCheckStatForAsra("SYS_クイックセーブ時に確認をおこなう", &AFL_Config_SetQuickSaveConfirm);
+/* 000352f8 */	this.SetCheckStatForAsra("SYS_クイックロード時に確認をおこなう", &AFL_Config_SetQuickLoadConfirm);
+/* 00035316 */	this.SetCheckStatForAsra("SYS_セーブ時に確認をおこなう", &AFL_Config_SetSaveConfirm);
+/* 00035334 */	this.SetCheckStatForAsra("SYS_ロード時に確認をおこなう", &AFL_Config_SetLoadConfirm);
+/* 00035352 */	this.SetCheckStatForAsra("SYS_タイトル画面に戻る時に確認をおこなう", &AFL_Config_SetBackToTitleConfirm);
+/* 00035370 */	this.SetCheckStatForAsra("SYS_ゲームを終了する時に確認をおこなう", &AFL_Config_SetCloseGameConfirm);
+/* 0003538e */	this.SetCheckStatForAsra("SYS_ウィンドウ", &AFL_Config_SetWindowMode);
+/* 000353ac */	this.SetCheckStatForAsra("SYS_垂直同期を待ち、ちらつきを抑える", &AFL_Config_SetWaitVSync);
+/* 000353ca */	this.SetCheckStatForAsra("SYS_ウィンドウの位置とサイズを、次回起動時に復元する", &AFL_Config_SetRecordPosSize);
+/* 000353e8 */	this.SetCheckStatForAsra("SYS_フルスクリーン時に非アクティブで最小化する", &AFL_Config_SetMinimizeByFullScreenInactive);
+/* 00035406 */	this.SetCheckStatForAsra("SYS_非アクティブ時にＣＰＵ使用率を下げる", &AFL_Config_SetSleepByInactive);
+/* 00035424 */	this.SetCheckStatForAsra("SYS_過剰な描画処理を抑えＣＰＵ使用率を下げる", &AFL_Config_SetOverFrameRateSleep);
+/* 00035442 */	this.SetCheckStatForAsra("SYS_ネットワーク接続を許可する", &AFL_Config_Network_SetEnableConnection);
+/* 00035460 */	this.SetCheckStatForAsra("SYS_ＦＰＳ表示", &AFL_Config_SetShowFPS);
+/* 0003547e */	this.SetCheckStatForAsra("SYS_メモリ使用量表示", &AFL_Config_SetShowMemorySize);
+/* 0003549c */	this.SetCheckStatForAsra("SYS_フィルレート表示", &AFL_Config_SetShowFillRate);
+/* 000354ba */	this.SetCheckStatForAsra("SYS_ビデオメモリ使用量表示", &AFL_Config_SetShowVideoMemorySize);
+/* 000354d8 */	this.SetCheckStatForAsra("SYS_強制非表示", &AFL_Config_SetDisavleDebugInfo);
+/* 000354f6 */	this.SetCheckStatForAsra("SYS_音声再生中表示", &AFL_Config_SetShowVoicePlaying);
+/* 00035514 */	this.SetCheckStatForAsra("SYS_擬音再生中表示", &AFL_Config_SetShowSEPlaying);
+/* 00035532 */	this.SetCheckStatForAsra("SYS_背景音声再生中表示", &AFL_Config_SetShowBackVoicePlaying);
+/* 00035550 */	this.SetCheckStatForAsra("SYS_ミッピマップレベル表示", &AFL_Debug_SetShowMipmapLevel);
+/* 0003556e */	int i;
+/* 00035580 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 000355d0 */	{
+/* 000355d0 */		this.m_dgSetPartsDataForAsra(PassedTime, this.m_ActivityNameList[i]);
+/* 00035610 */	}
+/* 00035616 */}
+
+void CConfigView::SetHScrollRateForParts(string PartsName, DG_GetFloatHandler dgObject)
+/* 0003561e */{
+/* 0003561e */	int i;
+/* 00035630 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00035680 */	{
+/* 00035680 */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 000356b2 */		if (Number == 0)
+/* 000356ca */		{
+/* 000356ca */			continue;
+/* 000356d0 */		}
+/* 000356d0 */		Ｐ＿横スクロールバー＿スクロールレート設定(Number, dgObject());
+/* 00035700 */	}
+/* 00035706 */}
+
+void CConfigView::SetCheckStatForParts(string PartsName, DG_GetBoolHandler dgObject)
+/* 0003570e */{
+/* 0003570e */	int i;
+/* 00035720 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00035770 */	{
+/* 00035770 */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 000357a2 */		if (Number == 0)
+/* 000357ba */		{
+/* 000357ba */			continue;
+/* 000357c0 */		}
+/* 000357c0 */		Ｐ＿チェックボックス＿チェック状態設定(Number, dgObject());
+/* 000357f0 */	}
+/* 000357f6 */}
+
+void CConfigView::SetTextForParts(string PartsName, DG_GetStringHandler dgObject)
+/* 000357fe */{
+/* 000357fe */	int i;
+/* 00035810 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00035860 */	{
+/* 00035860 */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 00035892 */		if (Number == 0)
+/* 000358aa */		{
+/* 000358aa */			continue;
+/* 000358b0 */		}
+/* 000358b0 */		Ｐ＿テキスト設定(Number, dgObject(), 1);
+/* 000358e6 */	}
+/* 000358ec */}
+
+void CConfigView::SetMulColorForParts(string PartsName, DG_GetColorHandler dgObject)
+/* 000358f4 */{
+/* 000358f4 */	int i;
+/* 00035906 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00035956 */	{
+/* 00035956 */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 00035988 */		if (Number == 0)
+/* 000359a0 */		{
+/* 000359a0 */			continue;
+/* 000359a6 */		}
+/* 000359a6 */		int 赤;
+/* 000359b8 */		int 緑;
+/* 000359ca */		int 青;
+/* 000359dc */		dgObject(赤, 緑, 青);
+/* 00035a14 */		Ｐ＿乗算色設定(Number, 赤, 緑, 青);
+/* 00035a42 */	}
+/* 00035a48 */}
+
+void CConfigView::SetCheckBoxColorForParts(string PartsName, DG_GetColorHandler dgObject)
+/* 00035a50 */{
+/* 00035a50 */	int i;
+/* 00035a62 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00035ab2 */	{
+/* 00035ab2 */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 00035ae4 */		if (Number == 0)
+/* 00035afc */		{
+/* 00035afc */			continue;
+/* 00035b02 */		}
+/* 00035b02 */		int 赤;
+/* 00035b14 */		int 緑;
+/* 00035b26 */		int 青;
+/* 00035b38 */		dgObject(赤, 緑, 青);
+/* 00035b70 */		Ｐ＿チェックボックス＿色設定(Number, 赤, 緑, 青);
+/* 00035b9e */	}
+/* 00035ba4 */}
+
+void CConfigView::SetAlphaForParts(string PartsName, DG_GetIntHandler dgObject)
+/* 00035bac */{
+/* 00035bac */	int i;
+/* 00035bbe */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 00035c0e */	{
+/* 00035c0e */		int Number = AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName);
+/* 00035c40 */		if (Number == 0)
+/* 00035c58 */		{
+/* 00035c58 */			continue;
+/* 00035c5e */		}
+/* 00035c5e */		Ｐ＿アルファ値設定(Number, dgObject());
+/* 00035c8e */	}
+/* 00035c94 */}
+
+void CConfigView::ClickEvent(int Number, int MouseX, int MouseY)
+/* 00035c9c */{
+/* 00035c9c */	this.CallFunction(Number, "SYS_メッセージ速度ボタン", &AFL_Config_ResetMessageSpeedRate);
+/* 00035cc4 */	this.CallFunction(Number, "SYS_オートモードボタン", &AFL_Config_ResetAutoModeWaitTimeRate);
+/* 00035cec */	this.CallFunction(Number, "SYS_スキップモードボタン", &AFL_Config_ResetReadMessageSkipWaitTimeRate);
+/* 00035d14 */	this.CallFunction(Number, "SYS_既読メッセージの色変更なし", &AFL_Config_SetReadTextColorIndexNone);
+/* 00035d3c */	this.CallFunction(Number, "SYS_既読メッセージの色:0", &AFL_Config_SetReadTextColorIndex00);
+/* 00035d64 */	this.CallFunction(Number, "SYS_既読メッセージの色:1", &AFL_Config_SetReadTextColorIndex01);
+/* 00035d8c */	this.CallFunction(Number, "SYS_既読メッセージの色:2", &AFL_Config_SetReadTextColorIndex02);
+/* 00035db4 */	this.CallFunction(Number, "SYS_既読メッセージの色:3", &AFL_Config_SetReadTextColorIndex03);
+/* 00035ddc */	this.CallFunction(Number, "SYS_既読メッセージの色:4", &AFL_Config_SetReadTextColorIndex04);
+/* 00035e04 */	this.CallFunction(Number, "SYS_既読メッセージの色:5", &AFL_Config_SetReadTextColorIndex05);
+/* 00035e2c */	this.CallFunction(Number, "SYS_既読メッセージの色:6", &AFL_Config_SetReadTextColorIndex06);
+/* 00035e54 */	this.CallFunction(Number, "SYS_既読メッセージの色:7", &AFL_Config_SetReadTextColorIndex07);
+/* 00035e7c */	this.CallFunction(Number, "SYS_既読メッセージの色:8", &AFL_Config_SetReadTextColorIndex08);
+/* 00035ea4 */	this.CallFunction(Number, "SYS_既読メッセージの色:9", &AFL_Config_SetReadTextColorIndex09);
+/* 00035ecc */	this.CallFunction(Number, "SYS_既読メッセージの色:10", &AFL_Config_SetReadTextColorIndex10);
+/* 00035ef4 */	this.CallFunction(Number, "SYS_既読メッセージの色:11", &AFL_Config_SetReadTextColorIndex11);
+/* 00035f1c */	this.CallFunction(Number, "SYS_既読メッセージの色変更なし:蓋", &AFL_Config_SetReadTextColorIndexNone);
+/* 00035f44 */	this.CallFunction(Number, "SYS_既読メッセージの色:0:蓋", &AFL_Config_SetReadTextColorIndex00);
+/* 00035f6c */	this.CallFunction(Number, "SYS_既読メッセージの色:1:蓋", &AFL_Config_SetReadTextColorIndex01);
+/* 00035f94 */	this.CallFunction(Number, "SYS_既読メッセージの色:2:蓋", &AFL_Config_SetReadTextColorIndex02);
+/* 00035fbc */	this.CallFunction(Number, "SYS_既読メッセージの色:3:蓋", &AFL_Config_SetReadTextColorIndex03);
+/* 00035fe4 */	this.CallFunction(Number, "SYS_既読メッセージの色:4:蓋", &AFL_Config_SetReadTextColorIndex04);
+/* 0003600c */	this.CallFunction(Number, "SYS_既読メッセージの色:5:蓋", &AFL_Config_SetReadTextColorIndex05);
+/* 00036034 */	this.CallFunction(Number, "SYS_既読メッセージの色:6:蓋", &AFL_Config_SetReadTextColorIndex06);
+/* 0003605c */	this.CallFunction(Number, "SYS_既読メッセージの色:7:蓋", &AFL_Config_SetReadTextColorIndex07);
+/* 00036084 */	this.CallFunction(Number, "SYS_既読メッセージの色:8:蓋", &AFL_Config_SetReadTextColorIndex08);
+/* 000360ac */	this.CallFunction(Number, "SYS_既読メッセージの色:9:蓋", &AFL_Config_SetReadTextColorIndex09);
+/* 000360d4 */	this.CallFunction(Number, "SYS_既読メッセージの色:10:蓋", &AFL_Config_SetReadTextColorIndex10);
+/* 000360fc */	this.CallFunction(Number, "SYS_既読メッセージの色:11:蓋", &AFL_Config_SetReadTextColorIndex11);
+/* 00036124 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色変更なし", &AFL_Config_SetBackSceneTextColorIndexNone);
+/* 0003614c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:0", &AFL_Config_SetBackSceneTextColorIndex00);
+/* 00036174 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:1", &AFL_Config_SetBackSceneTextColorIndex01);
+/* 0003619c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:2", &AFL_Config_SetBackSceneTextColorIndex02);
+/* 000361c4 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:3", &AFL_Config_SetBackSceneTextColorIndex03);
+/* 000361ec */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:4", &AFL_Config_SetBackSceneTextColorIndex04);
+/* 00036214 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:5", &AFL_Config_SetBackSceneTextColorIndex05);
+/* 0003623c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:6", &AFL_Config_SetBackSceneTextColorIndex06);
+/* 00036264 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:7", &AFL_Config_SetBackSceneTextColorIndex07);
+/* 0003628c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:8", &AFL_Config_SetBackSceneTextColorIndex08);
+/* 000362b4 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:9", &AFL_Config_SetBackSceneTextColorIndex09);
+/* 000362dc */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:10", &AFL_Config_SetBackSceneTextColorIndex10);
+/* 00036304 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:11", &AFL_Config_SetBackSceneTextColorIndex11);
+/* 0003632c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色変更なし:蓋", &AFL_Config_SetBackSceneTextColorIndexNone);
+/* 00036354 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:0:蓋", &AFL_Config_SetBackSceneTextColorIndex00);
+/* 0003637c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:1:蓋", &AFL_Config_SetBackSceneTextColorIndex01);
+/* 000363a4 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:2:蓋", &AFL_Config_SetBackSceneTextColorIndex02);
+/* 000363cc */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:3:蓋", &AFL_Config_SetBackSceneTextColorIndex03);
+/* 000363f4 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:4:蓋", &AFL_Config_SetBackSceneTextColorIndex04);
+/* 0003641c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:5:蓋", &AFL_Config_SetBackSceneTextColorIndex05);
+/* 00036444 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:6:蓋", &AFL_Config_SetBackSceneTextColorIndex06);
+/* 0003646c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:7:蓋", &AFL_Config_SetBackSceneTextColorIndex07);
+/* 00036494 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:8:蓋", &AFL_Config_SetBackSceneTextColorIndex08);
+/* 000364bc */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:9:蓋", &AFL_Config_SetBackSceneTextColorIndex09);
+/* 000364e4 */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:10:蓋", &AFL_Config_SetBackSceneTextColorIndex10);
+/* 0003650c */	this.CallFunction(Number, "SYS_バックシーンメッセージの色:11:蓋", &AFL_Config_SetBackSceneTextColorIndex11);
+/* 00036534 */	this.CallFunction(Number, "SYS_メッセージウィンドウの透過率ボタン", &AFL_Config_ResetMessageWindowDefaultAlphaRate);
+/* 0003655c */	this.CallFunction(Number, "SYS_メッセージウィンドウの明るさボタン", &AFL_Config_ResetMessageWindowDefaultMulColorRate);
+/* 00036584 */	this.CallFunction(Number, "SYS_マスターボタン", &AFL_Config_SetMasterDefaultVolume);
+/* 000365ac */	this.CallFunction(Number, "SYS_ＢＧＭボタン", &AFL_Config_SetBGMDefaultVolume);
+/* 000365d4 */	this.CallFunction(Number, "SYS_効果音ボタン", &AFL_Config_SetSEDefaultVolume);
+/* 000365fc */	this.CallFunction(Number, "SYS_音声ボタン", &AFL_Config_SetVoiceDefaultVolume);
+/* 00036624 */	this.CallFunction(Number, "SYS_背景音声ボタン", &AFL_Config_SetBackVoiceDefaultVolume);
+/* 0003664c */	this.CallFunction(Number, "SYS_バックログ", &AFL_Config_SetWheelForwardForBackLog);
+/* 00036674 */	this.CallFunction(Number, "SYS_バックシーン", &AFL_Config_SetWheelForwardForBackScene);
+/* 0003669c */	this.CallFunction(Number, "SYS_カーソル移動しない", &AFL_Config_SetMoveMouseCursorSpeedForNone);
+/* 000366c4 */	this.CallFunction(Number, "SYS_カーソル移動低速", &AFL_Config_SetMoveMouseCursorSpeedForLow);
+/* 000366ec */	this.CallFunction(Number, "SYS_カーソル移動中速", &AFL_Config_SetMoveMouseCursorSpeedForMiddle);
+/* 00036714 */	this.CallFunction(Number, "SYS_カーソル移動高速", &AFL_Config_SetMoveMouseCursorSpeedForHigh);
+/* 0003673c */	this.CallFunction(Number, "SYS_カーソル瞬間移動", &AFL_Config_SetMoveMouseCursorSpeedForFast);
+/* 00036764 */	this.CallFunction(Number, "SYS_画面比率標準", &AFL_Config_SetAspectRatioDefault);
+/* 0003678c */	this.CallFunction(Number, "SYS_画面比率固定", &AFL_Config_SetAspectRatioFix);
+/* 000367b4 */	this.CallFunction(Number, "SYS_拡大方法標準", &AFL_Config_SetScalingDefault);
+/* 000367dc */	this.CallFunction(Number, "SYS_拡大方法バイキュービック", &AFL_Config_SetScalingBicubic);
+/* 00036804 */	this.CallFunction(Number, "SYS_ウィンドウの位置とサイズを初期化", &AFL_Config_InitMainWindowPosAndSize);
+/* 0003682c */	this.CallFunction(Number, "SYS_描画モード_チェック１", &AFL_Config_SetSoftwareRenderMode);
+/* 00036854 */	this.CallFunction(Number, "SYS_描画モード_チェック２", &AFL_Config_SetFixShadeRenderMode);
+/* 0003687c */	this.CallFunction(Number, "SYS_描画モード_チェック３", &AFL_Config_SetProgrammableShadeRenderMode);
+/* 000368a4 */	this.CallFunction(Number, "SYS_ライティング_チェック１", &AFL_Config_SetLightingModeOff);
+/* 000368cc */	this.CallFunction(Number, "SYS_ライティング_チェック２", &AFL_Config_SetLightingModeOn);
+/* 000368f4 */	this.CallFunction(Number, "SYS_アンチエイリアシング_チェック１", &AFL_Config_SetAntiAliasingModeNone);
+/* 0003691c */	this.CallFunction(Number, "SYS_アンチエイリアシング_チェック２", &AFL_Config_SetAntiAliasingMode2);
+/* 00036944 */	this.CallFunction(Number, "SYS_アンチエイリアシング_チェック３", &AFL_Config_SetAntiAliasingMode4);
+/* 0003696c */	this.CallFunction(Number, "SYS_アンチエイリアシング_チェック４", &AFL_Config_SetAntiAliasingMode8);
+/* 00036994 */	this.CallFunction(Number, "SYS_シャドウ_チェック１", &AFL_Config_SetShadowModeNone);
+/* 000369bc */	this.CallFunction(Number, "SYS_シャドウ_チェック２", &AFL_Config_SetShadowModeLow);
+/* 000369e4 */	this.CallFunction(Number, "SYS_シャドウ_チェック３", &AFL_Config_SetShadowModeMiddle);
+/* 00036a0c */	this.CallFunction(Number, "SYS_シャドウ_チェック４", &AFL_Config_SetShadowModeHigh);
+/* 00036a34 */	this.CallFunction(Number, "SYS_シャドウマップ解像度_チェック１", &AFL_Config_SetShadowMapResolutionLevelMin);
+/* 00036a5c */	this.CallFunction(Number, "SYS_シャドウマップ解像度_チェック２", &AFL_Config_SetShadowMapResolutionLevelLow);
+/* 00036a84 */	this.CallFunction(Number, "SYS_シャドウマップ解像度_チェック３", &AFL_Config_SetShadowMapResolutionLevelMiddle);
+/* 00036aac */	this.CallFunction(Number, "SYS_シャドウマップ解像度_チェック４", &AFL_Config_SetShadowMapResolutionLevelHigh);
+/* 00036ad4 */	this.CallFunction(Number, "SYS_シャドウマップ解像度_チェック５", &AFL_Config_SetShadowMapResolutionLevelMax);
+/* 00036afc */	this.CallFunction(Number, "SYS_テクスチャ解像度_チェック１", &AFL_Config_SetTextureResolutionLevelMin);
+/* 00036b24 */	this.CallFunction(Number, "SYS_テクスチャ解像度_チェック２", &AFL_Config_SetTextureResolutionLevelLow);
+/* 00036b4c */	this.CallFunction(Number, "SYS_テクスチャ解像度_チェック３", &AFL_Config_SetTextureResolutionLevelMiddle);
+/* 00036b74 */	this.CallFunction(Number, "SYS_テクスチャ解像度_チェック４", &AFL_Config_SetTextureResolutionLevelHigh);
+/* 00036b9c */	this.CallFunction(Number, "SYS_テクスチャ解像度_チェック５", &AFL_Config_SetTextureResolutionLevelMax);
+/* 00036bc4 */	this.CallFunction(Number, "SYS_テクスチャフィルタリング_チェック１", &AFL_Config_SetTextureFilterModePoint);
+/* 00036bec */	this.CallFunction(Number, "SYS_テクスチャフィルタリング_チェック２", &AFL_Config_SetTextureFilterModeLinear);
+/* 00036c14 */	this.CallFunction(Number, "SYS_テクスチャフィルタリング_チェック３", &AFL_Config_SetTextureFilterModeAnisotropic04);
+/* 00036c3c */	this.CallFunction(Number, "SYS_テクスチャフィルタリング_チェック４", &AFL_Config_SetTextureFilterModeAnisotropic08);
+/* 00036c64 */	this.CallFunction(Number, "SYS_テクスチャフィルタリング_チェック５", &AFL_Config_SetTextureFilterModeAnisotropic16);
+/* 00036c8c */	this.CallFunction(Number, "SYS_バンプマッピング_チェック１", &AFL_Config_SetBumpModeOff);
+/* 00036cb4 */	this.CallFunction(Number, "SYS_バンプマッピング_チェック２", &AFL_Config_SetBumpModeBumpMapping);
+/* 00036cdc */	this.CallFunction(Number, "SYS_バンプマッピング_チェック３", &AFL_Config_SetBumpModeParallaxMapping);
+/* 00036d04 */	this.CallFunction(Number, "SYS_バンプマッピング_チェック４", &AFL_Config_SetBumpModeReliefMapping);
+/* 00036d2c */	this.CallFunction(Number, "SYS_ブルーム_チェック１", &AFL_Config_SetBloomModeOff);
+/* 00036d54 */	this.CallFunction(Number, "SYS_ブルーム_チェック２", &AFL_Config_SetBloomModeOn);
+/* 00036d7c */	this.CallFunction(Number, "SYS_グレア_チェック１", &AFL_Config_SetGlareModeOff);
+/* 00036da4 */	this.CallFunction(Number, "SYS_グレア_チェック２", &AFL_Config_SetGlareModeOn);
+/* 00036dcc */	this.CallFunction(Number, "SYS_フォグ_チェック１", &AFL_Config_SetFogModeOff);
+/* 00036df4 */	this.CallFunction(Number, "SYS_フォグ_チェック２", &AFL_Config_SetFogModeOn);
+/* 00036e1c */	this.CallFunction(Number, "SYS_スペキュラー_チェック１", &AFL_Config_SetSpecularModeOff);
+/* 00036e44 */	this.CallFunction(Number, "SYS_スペキュラー_チェック２", &AFL_Config_SetSpecularModeOn);
+/* 00036e6c */	this.CallFunction(Number, "SYS_ソフトフォグエッジ_チェック１", &AFL_Config_SetSoftFogEdgeModeOff);
+/* 00036e94 */	this.CallFunction(Number, "SYS_ソフトフォグエッジ_チェック２", &AFL_Config_SetSoftFogEdgeModeOn);
+/* 00036ebc */	this.CallFunction(Number, "SYS_アンビエントオクル－ジョン_チェック１", &AFL_Config_SetSSAOModeOff);
+/* 00036ee4 */	this.CallFunction(Number, "SYS_アンビエントオクル－ジョン_チェック２", &AFL_Config_SetSSAOModeOn);
+/* 00036f0c */	this.CallFunction(Number, "SYS_ライトマップ_チェック１", &AFL_Config_SetLightMapModeOff);
+/* 00036f34 */	this.CallFunction(Number, "SYS_ライトマップ_チェック２", &AFL_Config_SetLightMapModeOn);
+/* 00036f5c */	this.CallFunction(Number, "SYS_エッジ_チェック１", &AFL_Config_SetEdgeOff);
+/* 00036f84 */	this.CallFunction(Number, "SYS_エッジ_チェック２", &AFL_Config_SetEdgeOn);
+/* 00036fac */	this.CallFunction(Number, "SYS_被写界深度_チェック１", &AFL_Config_SetDOFModeOff);
+/* 00036fd4 */	this.CallFunction(Number, "SYS_被写界深度_チェック２", &AFL_Config_SetDOFModeOn);
+/* 00036ffc */	this.CallFunction(Number, "SYS_ゲームを終了する", &ゲーム終了);
+/* 00037024 */	this.CallFunction(Number, "SYS_タイトル画面に戻る", &タイトルに戻る);
+/* 0003704c */}
+
+void CConfigView::CallFunction(int Number, string PartsName, DG_NotifyHandler dgObject)
+/* 00037054 */{
+/* 00037054 */	int i;
+/* 00037066 */	for (i = 0; i < this.m_ActivityNameList.Numof(); ++i)
+/* 000370b6 */	{
+/* 000370b6 */		if (Number != AFL_Activity_GetPartsNumber(this.m_ActivityNameList[i], PartsName))
+/* 000370ee */		{
+/* 000370ee */			continue;
+/* 000370f4 */		}
+/* 000370f4 */		dgObject();
+/* 00037114 */	}
+/* 0003711a */}
+
+void CConfigView::SetBeginEvent(DG_NotifyHandler dgObject)
+/* 00037122 */{
+/* 00037122 */	this.m_Begin = dgObject;
+/* 0003713c */}
+
+void CConfigView::SetEndEvent(DG_NotifyHandler dgObject)
+/* 00037144 */{
+/* 00037144 */	this.m_End = dgObject;
+/* 0003715e */}
+
+void CConfigView::SetLoadedActivityEvent(DG_PARTS_LoadedActivityHandler dgObject)
+/* 00037166 */{
+/* 00037166 */	this.m_dgLoadedObject = dgObject;
+/* 00037180 */}
+
+void CConfigView::SetReleasingActivityEvent(DG_PARTS_ReleasingActivityHandler dgObject)
+/* 00037188 */{
+/* 00037188 */	this.m_dgReleasingObject = dgObject;
+/* 000371a2 */}
+
+void CConfigView::SetAsraDataForPartsEvent(DG_NotifyConfigUpdateHandler dgObject)
+/* 000371aa */{
+/* 000371aa */	this.m_dgSetAsraDataForParts = dgObject;
+/* 000371c4 */}
+
+void CConfigView::SetPartsDataForAsraEvent(DG_NotifyConfigUpdateHandler dgObject)
+/* 000371cc */{
+/* 000371cc */	this.m_dgSetPartsDataForAsra = dgObject;
+/* 000371e6 */}
+

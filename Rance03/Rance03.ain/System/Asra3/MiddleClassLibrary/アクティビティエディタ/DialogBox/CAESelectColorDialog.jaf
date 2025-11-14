@@ -1,0 +1,181 @@
+CAESelectColorDialog::CAESelectColorDialog()
+/* 0004de46 */{
+/* 0004de50 */}
+
+void CAESelectColorDialog::Show(int ID, int PosX, int PosY, int Red, int Green, int Blue, DG_ChangedColor dgChangedColor)
+/* 0004de56 */{
+/* 0004de56 */	AFL_Parts_AddLayer(-1);
+/* 0004de64 */	this.m_dgChangedColor = dgChangedColor;
+/* 0004de7e */	this.m_Color.Set(Red, Green, Blue, 255);
+/* 0004deb2 */	int LayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004dec4 */	Ｐ＿レイアウトボックス＿パディング設定(LayoutBox, 6, 6, 6, 6);
+/* 0004deec */	Ｐ＿レイアウトボックス＿配置設定(LayoutBox, 3);
+/* 0004df02 */	this.m_Panel.Init(LayoutBox);
+/* 0004df1c */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0004df36 */	int SliderButtonWidth = 10;
+/* 0004df48 */	int SliderWidth = 255 + SliderButtonWidth + SliderButtonWidth;
+/* 0004df72 */	int SliderHeight = 16;
+/* 0004df84 */	ref CAEPropertyItem RedItem = this.m_Panel.AddTextBoxItem("赤", 25, string(Red), 55, false);
+/* 0004dfee */	this.m_RedSlider = PARTS_GetFreeSystemPartsNumber();
+/* 0004e000 */	Ｐ＿横スクロールバー＿全体量設定(this.m_RedSlider, 256);
+/* 0004e016 */	Ｐ＿横スクロールバー＿表示量設定(this.m_RedSlider, 1);
+/* 0004e02c */	Ｐ＿横スクロールバー＿スクロール位置設定(this.m_RedSlider, Red);
+/* 0004e046 */	Ｐ＿横スクロールバー＿サイズ設定(this.m_RedSlider, SliderWidth, SliderHeight);
+/* 0004e06a */	Ｐ＿横スクロールバー＿左ボタン幅設定(this.m_RedSlider, SliderButtonWidth);
+/* 0004e084 */	Ｐ＿横スクロールバー＿右ボタン幅設定(this.m_RedSlider, SliderButtonWidth);
+/* 0004e09e */	Ｐ＿乗算色設定(this.m_RedSlider, 255, 200, 200);
+/* 0004e0c0 */	Ｐ＿マージン設定(this.m_RedSlider, 0, 0, 3, 0);
+/* 0004e0e8 */	RedItem.AddParts(this.m_RedSlider);
+/* 0004e102 */	ref CAEPropertyItem GreenItem = this.m_Panel.AddTextBoxItem("緑", 25, string(Green), 55, false);
+/* 0004e16c */	this.m_GreenSlider = PARTS_GetFreeSystemPartsNumber();
+/* 0004e17e */	Ｐ＿横スクロールバー＿全体量設定(this.m_GreenSlider, 256);
+/* 0004e194 */	Ｐ＿横スクロールバー＿表示量設定(this.m_GreenSlider, 1);
+/* 0004e1aa */	Ｐ＿横スクロールバー＿スクロール位置設定(this.m_GreenSlider, Green);
+/* 0004e1c4 */	Ｐ＿横スクロールバー＿サイズ設定(this.m_GreenSlider, SliderWidth, SliderHeight);
+/* 0004e1e8 */	Ｐ＿横スクロールバー＿左ボタン幅設定(this.m_GreenSlider, SliderButtonWidth);
+/* 0004e202 */	Ｐ＿横スクロールバー＿右ボタン幅設定(this.m_GreenSlider, SliderButtonWidth);
+/* 0004e21c */	Ｐ＿乗算色設定(this.m_GreenSlider, 200, 255, 200);
+/* 0004e23e */	Ｐ＿マージン設定(this.m_GreenSlider, 0, 0, 3, 0);
+/* 0004e266 */	GreenItem.AddParts(this.m_GreenSlider);
+/* 0004e280 */	ref CAEPropertyItem BlueItem = this.m_Panel.AddTextBoxItem("青", 25, string(Blue), 55, false);
+/* 0004e2ea */	this.m_BlueSlider = PARTS_GetFreeSystemPartsNumber();
+/* 0004e2fc */	Ｐ＿横スクロールバー＿全体量設定(this.m_BlueSlider, 256);
+/* 0004e312 */	Ｐ＿横スクロールバー＿表示量設定(this.m_BlueSlider, 1);
+/* 0004e328 */	Ｐ＿横スクロールバー＿スクロール位置設定(this.m_BlueSlider, Blue);
+/* 0004e342 */	Ｐ＿横スクロールバー＿サイズ設定(this.m_BlueSlider, SliderWidth, SliderHeight);
+/* 0004e366 */	Ｐ＿横スクロールバー＿左ボタン幅設定(this.m_BlueSlider, SliderButtonWidth);
+/* 0004e380 */	Ｐ＿横スクロールバー＿右ボタン幅設定(this.m_BlueSlider, SliderButtonWidth);
+/* 0004e39a */	Ｐ＿乗算色設定(this.m_BlueSlider, 200, 200, 255);
+/* 0004e3bc */	Ｐ＿マージン設定(this.m_BlueSlider, 0, 0, 3, 0);
+/* 0004e3e4 */	BlueItem.AddParts(this.m_BlueSlider);
+/* 0004e3fe */	int ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 0004e410 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(ButtonLayout, 2);
+/* 0004e426 */	Ｐ＿レイアウトボックス＿パディング設定(ButtonLayout, 3, 3, 3, 3);
+/* 0004e44e */	Ｐ＿レイアウトボックス＿追加(LayoutBox, ButtonLayout);
+/* 0004e468 */	int OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004e47a */	Ｐ＿ボタン＿テキスト設定(OKButton, "決定");
+/* 0004e490 */	Ｐ＿ボタン＿サイズ設定(OKButton, 65, 22);
+/* 0004e4ac */	Ｐ＿マージン設定(OKButton, 0, 0, 3, 0);
+/* 0004e4d4 */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, OKButton);
+/* 0004e4ee */	AFL_Parts_AddMouseLClickEvent(OKButton, this.ClickOKButtonEvent);
+/* 0004e508 */	int CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004e51a */	Ｐ＿ボタン＿テキスト設定(CancelButton, "キャンセル");
+/* 0004e530 */	Ｐ＿ボタン＿サイズ設定(CancelButton, 100, 22);
+/* 0004e54c */	Ｐ＿マージン設定(CancelButton, 0, 0, 3, 0);
+/* 0004e574 */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, CancelButton);
+/* 0004e58e */	AFL_Parts_AddMouseLClickEvent(CancelButton, this.ClickCancelButtonEvent);
+/* 0004e5a8 */	int Width = AFL_Parts_GetWidth(LayoutBox, 1);
+/* 0004e5ca */	int Height = AFL_Parts_GetHeight(LayoutBox, 1);
+/* 0004e5ec */	int BG = PARTS_GetFreeSystemPartsNumber();
+/* 0004e5fe */	Ｐ＿構築手順＿ピクセル作成(BG, Width, Height, 1);
+/* 0004e628 */	Ｐ＿構築手順＿色塗り(BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 0004e676 */	Ｐ＿構築ビルド(BG, 1);
+/* 0004e68c */	Ｐ＿ドラッグ可能設定(BG, true);
+/* 0004e6a2 */	Ｐ＿親設定(LayoutBox, BG);
+/* 0004e6bc */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0004e6fe */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 0004e740 */	Ｐ＿座標設定(BG, PosX, PosY);
+/* 0004e768 */	AFL_Parts_AddDragEndEvent(BG, this.DragEndEvent);
+/* 0004e782 */	this.m_OK = false;
+/* 0004e794 */	this.m_Cancel = false;
+/* 0004e7a6 */	PARTS_BeginInput();
+/* 0004e7ac */	int PrevRed = Red;
+/* 0004e7c2 */	int PrevGreen = Green;
+/* 0004e7d8 */	int PrevBlue = Blue;
+/* 0004e7ee */	for (; ; )
+/* 0004e7ee */	{
+/* 0004e7ee */		int NowRed = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_RedSlider);
+/* 0004e80a */		int NowGreen = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_GreenSlider);
+/* 0004e826 */		int NowBlue = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_BlueSlider);
+/* 0004e842 */		if (NowRed != PrevRed || NowGreen != PrevGreen || NowBlue != PrevBlue)
+/* 0004e8c6 */		{
+/* 0004e8c6 */			this.m_Color.Set(NowRed, NowGreen, NowBlue, 255);
+/* 0004e8fa */			dgChangedColor(ID, this.m_Color.GetR(), this.m_Color.GetG(), this.m_Color.GetB());
+/* 0004e954 */			PrevRed = NowRed;
+/* 0004e96a */			PrevGreen = NowGreen;
+/* 0004e980 */			PrevBlue = NowBlue;
+/* 0004e996 */			RedItem.SetTextBoxText(string(NowRed));
+/* 0004e9b2 */			GreenItem.SetTextBoxText(string(NowGreen));
+/* 0004e9ce */			BlueItem.SetTextBoxText(string(NowBlue));
+/* 0004e9ea */		}
+/* 0004e9ea */		AFL_View_Update(true);
+/* 0004e9f6 */		if (this.m_OK)
+/* 0004ea06 */		{
+/* 0004ea06 */			break;
+/* 0004ea0c */		}
+/* 0004ea0c */		if (this.m_Cancel)
+/* 0004ea1c */		{
+/* 0004ea1c */			dgChangedColor(ID, Red, Green, Blue);
+/* 0004ea64 */			break;
+/* 0004ea6a */		}
+/* 0004ea6a */	}
+/* 0004ea70 */	PARTS_EndInput();
+/* 0004ea76 */	this.m_Panel.Release();
+/* 0004ea86 */	PARTS_ReleaseWithInit(this.m_RedSlider);
+/* 0004ea94 */	PARTS_ReleaseWithInit(this.m_GreenSlider);
+/* 0004eaa2 */	PARTS_ReleaseWithInit(this.m_BlueSlider);
+/* 0004eab0 */	PARTS_ReleaseWithInit(LayoutBox);
+/* 0004eabe */	PARTS_ReleaseWithInit(CancelButton);
+/* 0004eacc */	PARTS_ReleaseWithInit(OKButton);
+/* 0004eada */	PARTS_ReleaseWithInit(ButtonLayout);
+/* 0004eae8 */	PARTS_ReleaseWithInit(BG);
+/* 0004eaf6 */	AFL_Parts_EraseLayer(-1);
+/* 0004eb02 */}
+
+void CAESelectColorDialog::ChangeTextEvent(int ID)
+/* 0004eb0a */{
+/* 0004eb0a */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0004eb5a */	if (Item === NULL)
+/* 0004eb72 */	{
+/* 0004eb72 */		return;
+/* 0004eb74 */	}
+/* 0004eb74 */	if (Item.GetLabel() == "赤")
+/* 0004eb92 */	{
+/* 0004eb92 */		Ｐ＿横スクロールバー＿スクロール位置設定(this.m_RedSlider, Item.GetTextBoxInt());
+/* 0004ebb2 */		int Value = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_RedSlider);
+/* 0004ebce */		if (Value != Item.GetTextBoxInt())
+/* 0004ebf0 */		{
+/* 0004ebf0 */			Item.SetTextBoxText(string(Value));
+/* 0004ec0c */		}
+/* 0004ec0c */	}
+/* 0004ec12 */	else if (Item.GetLabel() == "緑")
+/* 0004ec30 */	{
+/* 0004ec30 */		Ｐ＿横スクロールバー＿スクロール位置設定(this.m_GreenSlider, Item.GetTextBoxInt());
+/* 0004ec50 */		int Value = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_GreenSlider);
+/* 0004ec6c */		if (Value != Item.GetTextBoxInt())
+/* 0004ec8e */		{
+/* 0004ec8e */			Item.SetTextBoxText(string(Value));
+/* 0004ecaa */		}
+/* 0004ecaa */	}
+/* 0004ecb0 */	else if (Item.GetLabel() == "青")
+/* 0004ecce */	{
+/* 0004ecce */		Ｐ＿横スクロールバー＿スクロール位置設定(this.m_BlueSlider, Item.GetTextBoxInt());
+/* 0004ecee */		int Value = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_BlueSlider);
+/* 0004ed0a */		if (Value != Item.GetTextBoxInt())
+/* 0004ed2c */		{
+/* 0004ed2c */			Item.SetTextBoxText(string(Value));
+/* 0004ed48 */		}
+/* 0004ed48 */	}
+/* 0004ed48 */}
+
+void CAESelectColorDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 0004ed50 */{
+/* 0004ed50 */	this.m_OK = true;
+/* 0004ed62 */}
+
+void CAESelectColorDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 0004ed6a */{
+/* 0004ed6a */	this.m_Cancel = true;
+/* 0004ed7c */}
+
+void CAESelectColorDialog::DragEndEvent(int ID)
+/* 0004ed84 */{
+/* 0004ed84 */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 0004eda2 */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 0004edc0 */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 0004ede2 */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 0004ee04 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0004ee46 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 0004ee88 */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 0004eeb0 */}
+

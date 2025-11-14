@@ -1,0 +1,67 @@
+void SceneDialog::init(DialogInfomation info)
+/* 00177ed0 */{
+/* 00177ed0 */	this.result_ = -1;
+/* 00177ee2 */	this.state_ = 0;
+/* 00177ef4 */	this.dialog_.init(info);
+/* 00177f12 */	this.dialog_.setOnFinishCallback(this.onFinishDialog);
+/* 00177f2c */	this.dialog_.setOnClickCallback(this.onClick);
+/* 00177f46 */	this.isYesNo_ = info.isYesNo();
+/* 00177f62 */	if (!this.isYesNo_)
+/* 00177f74 */	{
+/* 00177f74 */		this.addToBacklog(info);
+/* 00177f86 */	}
+/* 00177f86 */}
+
+void SceneDialog::addToBacklog(ref DialogInfomation info)
+/* 00177f8e */{
+/* 00177f8e */	バックログ登録("【%s】" % info.getCaption());
+/* 00177fb2 */	array@string n;
+/* 00177fbc */	info.getMessage(n);
+/* 00177fd6 */	int i;
+/* 00177fe8 */	for (i = 0; i < n.Numof(); ++i)
+/* 00178038 */	{
+/* 00178038 */		バックログ登録(n[i]);
+/* 00178054 */	}
+/* 0017805a */	バックログ登録("");
+/* 00178066 */}
+
+void SceneDialog::onClick(int index)
+/* 0017806e */{
+/* 0017806e */	this.result_ = index;
+/* 00178084 */	this.closeDialog();
+/* 0017808c */}
+
+void SceneDialog::onFinishDialog()
+/* 00178094 */{
+/* 00178094 */	this.state_ = 2;
+/* 001780a6 */}
+
+void SceneDialog::run()
+/* 001780ae */{
+/* 001780ae */	this.dialog_.fadeIn(true);
+/* 001780c4 */}
+
+bool SceneDialog::update()
+/* 001780cc */{
+/* 001780cc */	if (!this.isYesNo_ && this.state_ == 0)
+/* 0017810e */	{
+/* 0017810e */		if (g_mouse.isClick(1) || g_mouse.isClick(0))
+/* 0017815e */		{
+/* 0017815e */			this.result_ = 0;
+/* 00178170 */			this.closeDialog();
+/* 00178178 */		}
+/* 00178178 */	}
+/* 00178178 */	return this.state_ != 2;
+/* 0017818e */}
+
+void SceneDialog::closeDialog()
+/* 0017819c */{
+/* 0017819c */	this.dialog_.fadeIn(false);
+/* 001781b2 */	this.state_ = 1;
+/* 001781c4 */}
+
+int SceneDialog::getResult()
+/* 001781cc */{
+/* 001781cc */	return this.result_;
+/* 001781d8 */}
+

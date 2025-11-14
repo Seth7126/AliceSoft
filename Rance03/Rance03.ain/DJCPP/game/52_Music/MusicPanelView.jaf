@@ -1,0 +1,76 @@
+MusicPanelView::MusicPanelView()
+/* 001c272e */{
+/* 001c2736 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001c275c */}
+
+void MusicPanelView::init()
+/* 001c2764 */{
+/* 001c2764 */	this.initParts();
+/* 001c276c */	this.changeNameParts();
+/* 001c2774 */	this.setPartsPos();
+/* 001c277c */}
+
+void MusicPanelView::initParts()
+/* 001c2784 */{
+/* 001c2784 */	NumberPartsInfomation n;
+/* 001c2794 */	n.setSameWidth(21);
+/* 001c27aa */	n.setDigit(2);
+/* 001c27c0 */	this.parts_[0].initAsNumber("システム／数字／幅２１／黒", n);
+/* 001c27e8 */	this.parts_[1].initAsNumber("システム／数字／幅２１／黒", n);
+/* 001c2810 */	this.parts_[2].initAsNumber("システム／数字／幅２１／黒", n);
+/* 001c2838 */	this.parts_[3].initAsNumber("システム／数字／幅２１／黒", n);
+/* 001c2860 */	createPartsGroup(this.parent_, this.parts_, 6000);
+/* 001c2880 */}
+
+void MusicPanelView::setPartsShow()
+/* 001c2888 */{
+/* 001c2888 */	int i;
+/* 001c289a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001c28ea */	{
+/* 001c28ea */		this.parts_[i].setShow(true);
+/* 001c290c */	}
+/* 001c2912 */	this.parent_.setShow(true);
+/* 001c2928 */}
+
+void MusicPanelView::setPartsPos()
+/* 001c2930 */{
+/* 001c2930 */	this.parts_[0].setPos(330.0, 646.0);
+/* 001c2954 */	this.parts_[1].setPos(386.0, 646.0);
+/* 001c2978 */	this.parts_[0].setOrigin(3);
+/* 001c2996 */	this.parts_[1].setOrigin(3);
+/* 001c29b4 */	this.parts_[2].setPos(464.0, 646.0);
+/* 001c29d8 */	this.parts_[3].setPos(520.0, 646.0);
+/* 001c29fc */	this.parts_[2].setOrigin(3);
+/* 001c2a1a */	this.parts_[3].setOrigin(3);
+/* 001c2a38 */}
+
+void MusicPanelView::update()
+/* 001c2a40 */{
+/* 001c2a40 */	int sec = g_music.getPlayingPosition() / 1000;
+/* 001c2a64 */	this.parts_[0].setNumber(sec / 60);
+/* 001c2a90 */	this.parts_[1].setNumber(sec % 60);
+/* 001c2abc */	sec = g_music.getLength() / 1000;
+/* 001c2ae0 */	this.parts_[2].setNumber(sec / 60);
+/* 001c2b0c */	this.parts_[3].setNumber(sec % 60);
+/* 001c2b38 */}
+
+void MusicPanelView::start()
+/* 001c2b40 */{
+/* 001c2b40 */	this.changeNameParts();
+/* 001c2b48 */}
+
+void MusicPanelView::changeNameParts()
+/* 001c2b50 */{
+/* 001c2b52 */}
+
+void MusicPanelView::stop()
+/* 001c2b58 */{
+/* 001c2b58 */	this.changeNameParts();
+/* 001c2b60 */}
+
+void MusicPanelView::fadeIn(bool val)
+/* 001c2b68 */{
+/* 001c2b68 */	this.setPartsShow();
+/* 001c2b70 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c2baa */}
+

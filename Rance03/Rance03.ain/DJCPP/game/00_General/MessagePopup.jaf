@@ -1,0 +1,98 @@
+MessagePopup::MessagePopup()
+/* 00182248 */{
+/* 00182250 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00182276 */	this.x_ = 815;
+/* 00182288 */	this.y_ = 135;
+/* 0018229a */}
+
+void MessagePopup::init(string msg)
+/* 001822a2 */{
+/* 001822a2 */	this.msg_ = msg;
+/* 001822ba */	this.initParts();
+/* 001822c2 */}
+
+void MessagePopup::initParts()
+/* 001822ca */{
+/* 001822ca */	this.parts_[0].init("システム／リザルト／メッセージ枠", 0);
+/* 001822ee */	this.parts_[1].initAsText(this.msg_, 26, false, 256, 0, 0, 0);
+/* 00182334 */	createPartsGroup(this.parent_, this.parts_, 4100);
+/* 00182354 */	this.setPartsPos();
+/* 0018235c */	this.setPos(815, 135);
+/* 00182370 */}
+
+void MessagePopup::setPartsShow()
+/* 00182378 */{
+/* 00182378 */	int i;
+/* 0018238a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001823da */	{
+/* 001823da */		this.parts_[i].setShow(true);
+/* 001823fc */	}
+/* 00182402 */	this.parent_.setShow(true);
+/* 00182418 */}
+
+void MessagePopup::setPos(int x, int y)
+/* 00182420 */{
+/* 00182420 */	x = Math.Max(x, this.parts_[0].getWidth() / 2);
+/* 00182460 */	this.parent_.setPos(x, y);
+/* 00182488 */}
+
+void MessagePopup::setZ(int z)
+/* 00182490 */{
+/* 00182490 */	this.parent_.setZ(z);
+/* 001824ac */}
+
+void MessagePopup::setPartsPos()
+/* 001824b4 */{
+/* 001824b4 */	this.parts_[0].setPos(0.0, 0.0);
+/* 001824d8 */	this.parts_[1].setPos(0.0, -84.0);
+/* 001824fc */	this.parts_[0].setOrigin(2);
+/* 0018251a */	this.parts_[1].setOrigin(5);
+/* 00182538 */}
+
+void MessagePopup::update()
+/* 00182540 */{
+/* 00182540 */	if (this.isFadeInMotion_)
+/* 00182550 */	{
+/* 00182550 */		float t = this.timer_.getTime() / 300.0;
+/* 00182576 */		if (t > 1.0)
+/* 0018258e */		{
+/* 0018258e */			this.isFadeInMotion_ = false;
+/* 001825a0 */		}
+/* 001825a0 */		float rot = Math.Sin(t * 360.0 * 3.0) * ((1 - t) * 90.0);
+/* 001825f2 */		this.parts_[0].setXYRot(rot);
+/* 00182614 */		this.parts_[1].setAlpha(-256 + t * 512.0);
+/* 0018264c */	}
+/* 00182652 */	else
+/* 00182652 */	{
+/* 00182652 */		this.parts_[0].setXYRot(0.0);
+/* 00182670 */	}
+/* 00182670 */}
+
+void MessagePopup::fadeIn(bool val)
+/* 00182678 */{
+/* 00182678 */	this.setPartsShow();
+/* 00182680 */	if (val)
+/* 00182690 */	{
+/* 00182690 */		this.timer_.reset();
+/* 001826a0 */		this.isFadeInMotion_ = true;
+/* 001826b2 */	}
+/* 001826b8 */	else
+/* 001826b8 */	{
+/* 001826b8 */		this.parent_.runMotion(getStandardMotion(1), NULL);
+/* 001826d6 */	}
+/* 001826d6 */}
+
+void MessagePopup::popup(int time, DG_GeneralCallback cb)
+/* 001826de */{
+/* 001826de */	this.cb_ = cb;
+/* 001826f8 */	this.fadeIn(true);
+/* 00182706 */	this.timerCb_.setTimer(time, this.onFinishPopup);
+/* 0018272a */}
+
+void MessagePopup::onFinishPopup()
+/* 00182732 */{
+/* 00182732 */	this.cb_();
+/* 00182752 */	this.cb_.Clear();
+/* 0018275e */	this.fadeIn(false);
+/* 0018276c */}
+

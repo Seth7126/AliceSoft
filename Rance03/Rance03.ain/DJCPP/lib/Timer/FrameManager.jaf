@@ -1,0 +1,19 @@
+FrameManager::FrameManager()
+/* 001ed276 */{
+/* 001ed27e */	this.timer_.Reset();
+/* 001ed28e */}
+
+void FrameManager::updateFrame()
+/* 001ed296 */{
+/* 001ed296 */	this.udpateInputDevices();
+/* 001ed29e */	g_partsMotionManager.update();
+/* 001ed2ae */	g_globalTimer.update();
+/* 001ed2be */	AFL_View_Update(true);
+/* 001ed2ca */}
+
+void FrameManager::udpateInputDevices()
+/* 001ed2d2 */{
+/* 001ed2d2 */	g_mouse.update();
+/* 001ed2e2 */	g_keyboard.update();
+/* 001ed2f2 */}
+

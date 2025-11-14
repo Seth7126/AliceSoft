@@ -1,0 +1,55 @@
+void SceneLevelGod::init()
+/* 001bb87e */{
+/* 001bb87e */	this.state_ = 0;
+/* 001bb890 */}
+
+void SceneLevelGod::run()
+/* 001bb898 */{
+/* 001bb898 */	setGameMode(false);
+/* 001bb8a4 */	制御／レベルアップ／入る();
+/* 001bb8aa */	restoreGameMode();
+/* 001bb8b0 */}
+
+bool SceneLevelGod::update()
+/* 001bb8b8 */{
+/* 001bb8b8 */	if (this.state_ == 0)
+/* 001bb8d0 */	{
+/* 001bb8d0 */		string r = openTargetPlayerSelect(1);
+/* 001bb8ea */		if (r != "")
+/* 001bb902 */		{
+/* 001bb902 */			this.result_ <- new LevelUpResult;
+/* 001bb936 */			this.result_.init(r);
+/* 001bb950 */			this.result_.fadeIn(true, NULL);
+/* 001bb968 */			g_sysSound.play(6, "効果音／レベルアップ");
+/* 001bb984 */			getPlayerFromId(r).levelUp();
+/* 001bb9b2 */			this.state_ = 1;
+/* 001bb9c4 */		}
+/* 001bb9d6 */		else
+/* 001bb9d6 */		{
+/* 001bb9d6 */			setGameMode(false);
+/* 001bb9e2 */			制御／レベルアップ／出る();
+/* 001bb9e8 */			restoreGameMode();
+/* 001bb9ee */			return false;
+/* 001bb9f6 */		}
+/* 001bb9f6 */	}
+/* 001bb9fc */	else if (this.state_ == 1)
+/* 001bba14 */	{
+/* 001bba14 */		if (g_mouse.isClick(0) || g_mouse.isClick(1))
+/* 001bba64 */		{
+/* 001bba64 */			this.state_ = 2;
+/* 001bba76 */			this.result_.fadeIn(false, this.onFinishFadeOut);
+/* 001bba96 */		}
+/* 001bba96 */	}
+/* 001bba96 */	return true;
+/* 001bba9e */}
+
+void SceneLevelGod::onFinishFadeOut()
+/* 001bbaac */{
+/* 001bbaac */	this.result_ <- NULL;
+/* 001bbac4 */	this.state_ = 0;
+/* 001bbad6 */}
+
+void SceneLevelGod::onClick(string playerId)
+/* 001bbade */{
+/* 001bbae0 */}
+

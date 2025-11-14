@@ -1,0 +1,81 @@
+void AdvFullScreenEffect::init(int colortype)
+/* 00174290 */{
+/* 00174290 */	int r;
+/* 001742a2 */	int g;
+/* 001742b4 */	int b;
+/* 001742c6 */	this.getColor(r, g, b, colortype);
+/* 001742f0 */	this.partsCg_.initAsPlaneImage(1024, 768, r, g, b, 255);
+/* 00174330 */	this.partsCg_.setPos(0.0, 0.0);
+/* 0017434c */	this.partsCg_.setZ(3999.0);
+/* 00174362 */}
+
+void AdvFullScreenEffect::getColor(ref int r, ref int g, ref int b, int colortype)
+/* 0017436a */{
+/* 0017436a */	switch (colortype)
+/* 00174380 */	{
+/* 00174380 */	case 0:
+/* 00174380 */		r = 0;
+/* 00174394 */		g = 0;
+/* 001743a8 */		b = 0;
+/* 001743bc */		return;
+/* 001743be */	case 1:
+/* 001743be */		r = 0;
+/* 001743d2 */		g = 0;
+/* 001743e6 */		b = 255;
+/* 001743fa */		return;
+/* 001743fc */	case 2:
+/* 001743fc */		r = 0;
+/* 00174410 */		g = 255;
+/* 00174424 */		b = 0;
+/* 00174438 */		return;
+/* 0017443a */	case 3:
+/* 0017443a */		r = 0;
+/* 0017444e */		g = 255;
+/* 00174462 */		b = 255;
+/* 00174476 */		return;
+/* 00174478 */	case 4:
+/* 00174478 */		r = 255;
+/* 0017448c */		g = 0;
+/* 001744a0 */		b = 0;
+/* 001744b4 */		return;
+/* 001744b6 */	case 5:
+/* 001744b6 */		r = 255;
+/* 001744ca */		g = 0;
+/* 001744de */		b = 255;
+/* 001744f2 */		return;
+/* 001744f4 */	case 6:
+/* 001744f4 */		r = 255;
+/* 00174508 */		g = 255;
+/* 0017451c */		b = 0;
+/* 00174530 */		return;
+/* 00174532 */	case 7:
+/* 00174532 */		r = 255;
+/* 00174546 */		g = 255;
+/* 0017455a */		b = 255;
+/* 0017456e */		return;
+/* 00174570 */	}
+/* 00174570 */}
+
+void AdvFullScreenEffect::show(int asraTransitionType, int time)
+/* 00174578 */{
+/* 00174578 */	this.partsCg_.setShow(true);
+/* 0017458e */	if (asraTransitionType != -1 && time > 0)
+/* 001745d6 */	{
+/* 001745d6 */		全表示(asraTransitionType, time * g_globalTimer.getEffectiveScalingValue());
+/* 0017460a */	}
+/* 0017460a */}
+
+void AdvFullScreenEffect::hide(int asraTransitionType, int time)
+/* 00174612 */{
+/* 00174612 */	this.partsCg_.setShow(false);
+/* 00174628 */	if (asraTransitionType != -1 && time > 0)
+/* 00174670 */	{
+/* 00174670 */		全表示(asraTransitionType, time * g_globalTimer.getEffectiveScalingValue());
+/* 001746a4 */	}
+/* 001746a4 */}
+
+void AdvFullScreenEffect::release()
+/* 001746ac */{
+/* 001746ac */	this.partsCg_.release();
+/* 001746bc */}
+

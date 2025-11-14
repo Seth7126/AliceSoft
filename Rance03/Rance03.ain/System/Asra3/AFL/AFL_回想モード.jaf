@@ -1,0 +1,19 @@
+bool AFL_MemoryModeEvent_Begin()
+/* 001712de */{
+/* 001712de */	_g_回想中 = true;
+/* 001712f0 */	return SYS_セーブ実行(-5, "", "");
+/* 0017130a */}
+
+void AFL_MemoryModeEvent_End()
+/* 0017131e */{
+/* 0017131e */	SYS_StopSE();
+/* 00171324 */	SYS_StopVoice();
+/* 0017132a */	SYS_ロード実行(-5);
+/* 00171336 */}
+
+void AFL_MemoryModeEvent_Cleanup()
+/* 00171344 */{
+/* 00171344 */	SYS_セーブファイル削除(-5);
+/* 00171350 */	_g_回想中 = false;
+/* 00171362 */}
+

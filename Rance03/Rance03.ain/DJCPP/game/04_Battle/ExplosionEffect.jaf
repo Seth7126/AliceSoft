@@ -1,0 +1,49 @@
+ExplosionEffect::ExplosionEffect()
+/* 001ac42e */{
+/* 001ac436 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001ac45c */	this.isLoop_ = true;
+/* 001ac46e */}
+
+void ExplosionEffect::init(int x, int y)
+/* 001ac476 */{
+/* 001ac476 */	int i;
+/* 001ac488 */	for (i = 0; i < this.line_.Numof(); ++i)
+/* 001ac4d8 */	{
+/* 001ac4d8 */		this.line_[i].init(1);
+/* 001ac4fa */		this.line_[i].setCenter(x, y);
+/* 001ac52a */		this.line_[i].setZ(29900);
+/* 001ac54c */	}
+/* 001ac552 */	this.circleEffect_.init("システム／エフェクト／円／仮");
+/* 001ac568 */	this.circleEffect_.setPos(x, y);
+/* 001ac58c */	this.circleEffect_.setMaxScaling(200.0);
+/* 001ac5a2 */	this.circleEffect_.setZ(29900);
+/* 001ac5b8 */}
+
+void ExplosionEffect::run(int delay)
+/* 001ac5c0 */{
+/* 001ac5c0 */	this.cbTimer_.setTimer(delay, this.innerRun);
+/* 001ac5e4 */}
+
+void ExplosionEffect::innerRun()
+/* 001ac5ec */{
+/* 001ac5ec */	this.circleEffect_.run(0);
+/* 001ac602 */	int i;
+/* 001ac614 */	for (i = 0; i < this.line_.Numof(); ++i)
+/* 001ac664 */	{
+/* 001ac664 */		this.line_[i].run();
+/* 001ac680 */	}
+/* 001ac686 */	if (this.isLoop_)
+/* 001ac696 */	{
+/* 001ac696 */		this.cbTimer_.setTimer(1000, this.innerRun);
+/* 001ac6b6 */	}
+/* 001ac6b6 */}
+
+void ExplosionEffect::update()
+/* 001ac6be */{
+/* 001ac6c0 */}
+
+void ExplosionEffect::stopLoop()
+/* 001ac6c6 */{
+/* 001ac6c6 */	this.isLoop_ = false;
+/* 001ac6d8 */}
+

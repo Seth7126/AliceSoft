@@ -1,0 +1,192 @@
+void SceneMusic::init()
+/* 001c2bb8 */{
+/* 001c2bb8 */	this.isFinish_ = false;
+/* 001c2bca */	this.lastPlayMusicId_ = "";
+/* 001c2bde */	this.isAllPlaying_ = false;
+/* 001c2bf0 */	this.initSongButton();
+/* 001c2bf8 */	this.initSysButton();
+/* 001c2c00 */	this.view_.init();
+/* 001c2c10 */	this.partsAllPlaying_.initAsCgPlaneImage("システム／音楽鑑賞／全曲再生", 255, 64, 0);
+/* 001c2c38 */	this.partsAllPlaying_.setAlpha(160.0);
+/* 001c2c4e */	int w = this.partsAllPlaying_.getWidth() / 4;
+/* 001c2c72 */	int h = this.partsAllPlaying_.getHeight();
+/* 001c2c8e */	this.partsAllPlaying_.setCgRange(0, 0, w, h);
+/* 001c2cbe */	this.partsAllPlaying_.setPos(866.0, 600.0);
+/* 001c2cda */	this.partsAllPlaying_.setZ(6100.0);
+/* 001c2cf0 */}
+
+void SceneMusic::initSongButton()
+/* 001c2cf8 */{
+/* 001c2cf8 */	this.list_.init();
+/* 001c2d08 */	this.list_.setOnClickCallback(this.onClick);
+/* 001c2d22 */}
+
+void SceneMusic::initSysButton()
+/* 001c2d2a */{
+/* 001c2d2a */	array@string n;
+/* 001c2d34 */	n.PushBack("システム／音楽鑑賞／前へ");
+/* 001c2d44 */	n.PushBack("システム／音楽鑑賞／再生");
+/* 001c2d54 */	n.PushBack("システム／音楽鑑賞／停止");
+/* 001c2d64 */	n.PushBack("システム／音楽鑑賞／次へ");
+/* 001c2d74 */	n.PushBack("システム／音楽鑑賞／全曲再生");
+/* 001c2d84 */	int i;
+/* 001c2d96 */	for (i = 0; i < this.btnSystem_.Numof(); ++i)
+/* 001c2de6 */	{
+/* 001c2de6 */		this.btnSystem_[i].init(n[i], "", "", false);
+/* 001c2e2a */		this.btnSystem_[i].setPos(578 + 72 * i, 600);
+/* 001c2e66 */		this.btnSystem_[i].setClickCallback(this.onClickSysButton, i);
+/* 001c2e96 */	}
+/* 001c2e9c */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001c2ec4 */	this.btnExit_.setPos(839, 691);
+/* 001c2ee0 */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001c2f00 */}
+
+void SceneMusic::fadeButton(bool val)
+/* 001c2f08 */{
+/* 001c2f0a */}
+
+void SceneMusic::onClickButtonExit(int id)
+/* 001c2f10 */{
+/* 001c2f10 */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001c2f28 */}
+
+void SceneMusic::run()
+/* 001c2f30 */{
+/* 001c2f30 */	this.fadeIn(true, NULL);
+/* 001c2f40 */}
+
+bool SceneMusic::update()
+/* 001c2f48 */{
+/* 001c2f48 */	if (this.isAllPlaying_)
+/* 001c2f58 */	{
+/* 001c2f58 */		if (g_music.getPlayingPosition() < this.lastPlayTime_)
+/* 001c2f7a */		{
+/* 001c2f7a */			string n = this.getNextMusicId(this.lastPlayMusicId_);
+/* 001c2f9a */			this.play(n, 1000);
+/* 001c2fb2 */		}
+/* 001c2fb2 */		this.lastPlayTime_ = g_music.getPlayingPosition();
+/* 001c2fce */	}
+/* 001c2fce */	if (!this.timerCb_.isRunning() && g_mouse.isClick(1))
+/* 001c301a */	{
+/* 001c301a */		playCancel();
+/* 001c3020 */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c3038 */	}
+/* 001c3038 */	this.partsAllPlaying_.setShow(this.isAllPlaying_);
+/* 001c3052 */	return !this.isFinish_;
+/* 001c3062 */}
+
+void SceneMusic::fadeIn(bool val, DG_GeneralCallback onFinishCallback)
+/* 001c3070 */{
+/* 001c3070 */	this.list_.fadeIn(val, NULL);
+/* 001c308c */	this.btnExit_.fadeIn(val);
+/* 001c30a6 */	this.view_.fadeIn(val);
+/* 001c30c0 */	int i;
+/* 001c30d2 */	for (i = 0; i < this.btnSystem_.Numof(); ++i)
+/* 001c3122 */	{
+/* 001c3122 */		this.btnSystem_[i].fadeIn(val);
+/* 001c3148 */	}
+/* 001c314e */	if (onFinishCallback.Numof() != 0)
+/* 001c316a */	{
+/* 001c316a */		this.timerCb_.setTimer(300, onFinishCallback);
+/* 001c318c */	}
+/* 001c318c */}
+
+void SceneMusic::onFinishFadeOut()
+/* 001c3194 */{
+/* 001c3194 */	this.isFinish_ = true;
+/* 001c31a6 */}
+
+string SceneMusic::getNextMusicId(string current)
+/* 001c31ae */{
+/* 001c31ae */	int index = this.getCurrentMusicIndex(current) + 1;
+/* 001c31d4 */	while (!g_musicInfo[this.getCycleValue(index)].isPlayed())
+/* 001c3200 */	{
+/* 001c3200 */		++index;
+/* 001c3210 */	}
+/* 001c3216 */	return g_musicInfo[this.getCycleValue(index)].getId();
+/* 001c323c */}
+
+string SceneMusic::getPrevMusicId(string current)
+/* 001c324a */{
+/* 001c324a */	int index = this.getCurrentMusicIndex(current) - 1;
+/* 001c3270 */	while (!g_musicInfo[this.getCycleValue(index)].isPlayed())
+/* 001c329c */	{
+/* 001c329c */		--index;
+/* 001c32ac */	}
+/* 001c32b2 */	return g_musicInfo[this.getCycleValue(index)].getId();
+/* 001c32d8 */}
+
+int SceneMusic::getCycleValue(int n)
+/* 001c32e6 */{
+/* 001c32e6 */	int c = g_musicInfo.Numof();
+/* 001c3302 */	return (n + c) % c;
+/* 001c3326 */}
+
+int SceneMusic::getCurrentMusicIndex(string current)
+/* 001c3334 */{
+/* 001c3334 */	int i;
+/* 001c3346 */	for (i = 0; i < g_musicInfo.Numof(); ++i)
+/* 001c3396 */	{
+/* 001c3396 */		if (current == g_musicInfo[i].getId())
+/* 001c33c4 */		{
+/* 001c33c4 */			return i;
+/* 001c33d0 */		}
+/* 001c33d0 */	}
+/* 001c33d6 */	return -1;
+/* 001c33de */}
+
+void SceneMusic::play(string id, int time)
+/* 001c33ec */{
+/* 001c33ec */	if (id != "")
+/* 001c3404 */	{
+/* 001c3404 */		this.lastPlayMusicId_ = id;
+/* 001c341c */		int index = getMusicInfoFromId(id).getIndex();
+/* 001c3454 */		string key = "音楽%02d" % (index + 1);
+/* 001c3482 */		g_globalGameFlag.setInt(key, g_globalGameFlag.getInt(key) + 1);
+/* 001c34be */	}
+/* 001c34c4 */	this.lastPlayTime_ = 0;
+/* 001c34d6 */	g_music.play(id, time, false);
+/* 001c3500 */	this.list_.setPlaying(this.getCurrentMusicIndex(id));
+/* 001c3522 */	this.view_.start();
+/* 001c3532 */}
+
+void SceneMusic::onClick(int index)
+/* 001c353a */{
+/* 001c353a */	string n = g_musicInfo[index].getId();
+/* 001c3564 */	this.play(n, 0);
+/* 001c357c */	this.view_.start();
+/* 001c358c */}
+
+void SceneMusic::onClickSysButton(int index)
+/* 001c3594 */{
+/* 001c3594 */	switch (index)
+/* 001c35aa */	{
+/* 001c35aa */	case 0:
+/* 001c35aa */		this.play(this.getPrevMusicId(this.lastPlayMusicId_), 0);
+/* 001c35ca */		break;
+/* 001c35d0 */	case 1:
+/* 001c35d0 */		this.play(this.lastPlayMusicId_, 0);
+/* 001c35e8 */		break;
+/* 001c35ee */	case 2:
+/* 001c35ee */		this.play("", 0);
+/* 001c3602 */		break;
+/* 001c3608 */	case 3:
+/* 001c3608 */		this.play(this.getNextMusicId(this.lastPlayMusicId_), 0);
+/* 001c3628 */		break;
+/* 001c362e */	case 4:
+/* 001c362e */		if (this.isAllPlaying_)
+/* 001c363e */		{
+/* 001c363e */			this.isAllPlaying_ = false;
+/* 001c3650 */		}
+/* 001c3656 */		else
+/* 001c3656 */		{
+/* 001c3656 */			this.isAllPlaying_ = true;
+/* 001c3668 */			if (g_music.getPlayingMusicId() == "")
+/* 001c3686 */			{
+/* 001c3686 */				this.play(this.lastPlayMusicId_, 0);
+/* 001c369e */			}
+/* 001c369e */		}
+/* 001c369e */		break;
+/* 001c36a4 */	}
+/* 001c36a4 */}
+

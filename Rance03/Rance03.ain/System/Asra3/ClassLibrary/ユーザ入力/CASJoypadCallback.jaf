@@ -1,0 +1,15 @@
+bool CASJoypadCallback::Empty()
+/* 00001042 */{
+/* 00001042 */	return this.m_Callback.Numof() == 0;
+/* 00001058 */}
+
+void CASJoypadCallback::SetCallback(sys_btn_fnc_t Callback)
+/* 00001066 */{
+/* 00001066 */	this.m_Callback = Callback;
+/* 00001080 */}
+
+sys_btn_fnc_t CASJoypadCallback::GetCallback()
+/* 00001088 */{
+/* 00001088 */	return this.m_Callback;
+/* 00001096 */}
+

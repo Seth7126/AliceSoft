@@ -1,0 +1,68 @@
+void DialogInfomation::setCaption(string val)
+/* 00177d30 */{
+/* 00177d30 */	this.caption_ = val;
+/* 00177d48 */}
+
+void DialogInfomation::setMessage(string val)
+/* 00177d50 */{
+/* 00177d50 */	this.msg_ = val;
+/* 00177d68 */}
+
+string DialogInfomation::getCaption()
+/* 00177d70 */{
+/* 00177d70 */	return this.caption_;
+/* 00177d7c */}
+
+void DialogInfomation::getMessage(ref array@string msg)
+/* 00177d8a */{
+/* 00177d8a */	splitToken(msg, this.msg_, "|");
+/* 00177daa */}
+
+void DialogInfomation::setPictureImageType(int pictureImageType)
+/* 00177db2 */{
+/* 00177db2 */	this.pictureImageType_ = pictureImageType;
+/* 00177dc8 */}
+
+void DialogInfomation::setItemId(string itemId)
+/* 00177dd0 */{
+/* 00177dd0 */	this.itemId_ = itemId;
+/* 00177de8 */	this.setPictureImageType(3);
+/* 00177df6 */}
+
+void DialogInfomation::setAnswerTypeYesNo(bool val)
+/* 00177dfe */{
+/* 00177dfe */	this.isYesNo_ = val;
+/* 00177e14 */}
+
+string DialogInfomation::getPictureImageName()
+/* 00177e1c */{
+/* 00177e1c */	if (this.imageName_.Empty())
+/* 00177e2e */	{
+/* 00177e2e */		switch (this.pictureImageType_)
+/* 00177e44 */		{
+/* 00177e44 */		case 1:
+/* 00177e44 */			return "システム／ダイアログ／写真／情報";
+/* 00177e4c */		case 2:
+/* 00177e4c */			return "システム／ダイアログ／写真／罠";
+/* 00177e54 */		case 3:
+/* 00177e54 */			return "システム／ダイアログ／写真／宝箱";
+/* 00177e5c */		}
+/* 00177e5c */	}
+/* 00177e5c */	return this.imageName_;
+/* 00177e68 */}
+
+string DialogInfomation::getItemId()
+/* 00177e76 */{
+/* 00177e76 */	return this.itemId_;
+/* 00177e82 */}
+
+bool DialogInfomation::isYesNo()
+/* 00177e90 */{
+/* 00177e90 */	return this.isYesNo_;
+/* 00177e9c */}
+
+void DialogInfomation::setPictureImageName(string imageName)
+/* 00177eaa */{
+/* 00177eaa */	this.imageName_ = imageName;
+/* 00177ec2 */}
+

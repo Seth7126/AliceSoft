@@ -1,0 +1,132 @@
+void test_Map_Place()
+/* 001f9626 */{
+/* 001f9626 */	int i;
+/* 001f9638 */	for (i = 0; i < g_mapPlace.Numof(); ++i)
+/* 001f9688 */	{
+/* 001f9688 */		string n = "caption:%s x:%d y:%d image:%s" % g_mapPlace[i].getCaption() % g_mapPlace[i].getX() % g_mapPlace[i].getY() % g_mapPlace[i].getImageName();
+/* 001f972c */		pass(n);
+/* 001f973c */	}
+/* 001f9742 */}
+
+void test_Map_PlaceButton()
+/* 001f9750 */{
+/* 001f9750 */	array@MapPlaceButton btn;
+/* 001f975a */	btn.Alloc(g_mapPlace.Numof());
+/* 001f977a */	int i;
+/* 001f978c */	for (i = 0; i < btn.Numof(); ++i)
+/* 001f97dc */	{
+/* 001f97dc */		btn[i].init(0, g_mapPlace[i].getId(), NULL, 0);
+/* 001f9822 */		btn[i].fadeIn(true);
+/* 001f9844 */	}
+/* 001f984a */	while (true)
+/* 001f9856 */	{
+/* 001f9856 */		g_frameManager.updateFrame();
+/* 001f9866 */		g_gameObjectManager.update();
+/* 001f9876 */	}
+/* 001f987c */}
+
+void test_Map_Background()
+/* 001f988a */{
+/* 001f988a */	testMapBg.init();
+/* 001f989a */	testMapBg.fadeIn(true, NULL);
+/* 001f98b2 */	int i;
+/* 001f98c4 */	while (true)
+/* 001f98d0 */	{
+/* 001f98d0 */		g_frameManager.updateFrame();
+/* 001f98e0 */		g_gameObjectManager.update();
+/* 001f98f0 */		if (g_mouse.isClick(0))
+/* 001f990c */		{
+/* 001f990c */			testMapBg.setFocus(g_mapPlace[i].getX(), g_mapPlace[i].getY());
+/* 001f9954 */			i = (i + 1) % g_mapPlace.Numof();
+/* 001f9984 */		}
+/* 001f9984 */	}
+/* 001f998a */}
+
+void test_Map_BgAndButton()
+/* 001f9998 */{
+/* 001f9998 */	testMapBg.init();
+/* 001f99a8 */	testMapBg.fadeIn(true, NULL);
+/* 001f99c0 */	array@MapPlaceButton btn;
+/* 001f99ca */	btn.Alloc(g_mapPlace.Numof());
+/* 001f99ea */	int i;
+/* 001f99fc */	for (i = 0; i < btn.Numof(); ++i)
+/* 001f9a4c */	{
+/* 001f9a4c */		btn[i].init(testMapBg.getParentPartsNumber(), g_mapPlace[i].getId(), "test_Map_ButtonClick", i);
+/* 001f9ab6 */		btn[i].fadeIn(true);
+/* 001f9ad8 */		btn[i].setParent(testMapBg.getParentPartsNumber());
+/* 001f9b04 */	}
+/* 001f9b0a */	i = 0;
+/* 001f9b1c */	while (true)
+/* 001f9b28 */	{
+/* 001f9b28 */		g_frameManager.updateFrame();
+/* 001f9b38 */		g_gameObjectManager.update();
+/* 001f9b48 */	}
+/* 001f9b4e */}
+
+void test_Map_ButtonClick(int id)
+/* 001f9b5c */{
+/* 001f9b5c */	testMapBg.setFocus(g_mapPlace[id].getX(), g_mapPlace[id].getY());
+/* 001f9ba4 */}
+
+void test_Map_EncountProbability()
+/* 001f9bb2 */{
+/* 001f9bb2 */	int i;
+/* 001f9bc4 */	for (i = 0; i < g_mapEncountProbability.Numof(); ++i)
+/* 001f9c14 */	{
+/* 001f9c14 */		array@int hit[4];
+/* 001f9c2a */		int j;
+/* 001f9c3c */		for (j = 0; j < 10000; ++j)
+/* 001f9c82 */		{
+/* 001f9c82 */			hit[g_mapEncountProbability[i].getHitCount()]++;
+/* 001f9cb4 */		}
+/* 001f9cba */		pass("nodeCount:%d 0:%d 1:%d 2:%d 3:%d" % g_mapEncountProbability[i].getNodeCount() % hit[0] % hit[1] % hit[2] % hit[3]);
+/* 001f9d5c */	}
+/* 001f9d62 */}
+
+void debugSetMapAllChain()
+/* 001f9d70 */{
+/* 001f9d70 */	g_mapChain.addChain("アイス", "烈火鉱山", true);
+/* 001f9d92 */	g_mapChain.addChain("アイス", "ティティ湖", true);
+/* 001f9db4 */	g_mapChain.addChain("アイス", "カンラ", true);
+/* 001f9dd6 */	g_mapChain.addChain("烈火鉱山", "ティティ湖", true);
+/* 001f9df8 */	g_mapChain.addChain("烈火鉱山", "リスの洞窟", true);
+/* 001f9e1a */	g_mapChain.addChain("ティティ湖", "カンラ", true);
+/* 001f9e3c */	g_mapChain.addChain("カンラ", "悪魔回廊", true);
+/* 001f9e5e */	g_mapChain.addChain("カンラ", "ラジール", true);
+/* 001f9e80 */	g_mapChain.addChain("悪魔回廊", "カスタム", true);
+/* 001f9ea2 */	g_mapChain.addChain("ラジール", "カスタム", true);
+/* 001f9ec4 */	g_mapChain.addChain("ラジール", "地上灯台", true);
+/* 001f9ee6 */	g_mapChain.addChain("ラジール", "迷子の森", true);
+/* 001f9f08 */	g_mapChain.addChain("ラジール", "レッド", true);
+/* 001f9f2a */	g_mapChain.addChain("レッド", "ハイパービル", true);
+/* 001f9f4c */	g_mapChain.addChain("レッド", "ジオ", true);
+/* 001f9f6e */	g_mapChain.addChain("ジオ", "Mランド", true);
+/* 001f9f90 */	g_mapChain.addChain("ジオ", "オク", true);
+/* 001f9fb2 */	g_mapChain.addChain("オク", "ノース", true);
+/* 001f9fd4 */	g_mapChain.addChain("オク", "サウス", true);
+/* 001f9ff6 */	g_mapChain.addChain("ノース", "城下町", true);
+/* 001fa018 */	g_mapChain.addChain("サウス", "城下町", true);
+/* 001fa03a */	g_mapChain.addChain("城下町", "居館", true);
+/* 001fa05c */	int i;
+/* 001fa06e */	for (i = 0; i < g_mapChain.getCount(); ++i)
+/* 001fa0be */	{
+/* 001fa0be */		g_mapChain.setNew(i, i % 3 == 0);
+/* 001fa0f4 */	}
+/* 001fa0fa */}
+
+void test_ExLoading_MapEncountMonsterGroup()
+/* 001fa108 */{
+/* 001fa108 */	int i;
+/* 001fa11a */	for (i = 0; i < g_mapEncountMonsterGroup.Numof(); ++i)
+/* 001fa16a */	{
+/* 001fa16a */		string s = "%s" % g_mapEncountMonsterGroup[i].getId();
+/* 001fa1a2 */		int j;
+/* 001fa1b4 */		for (j = 0; j < g_mapEncountMonsterGroup[i].getMonsterCount(); ++j)
+/* 001fa210 */		{
+/* 001fa210 */			s += "|%d:%s" % j % g_mapEncountMonsterGroup[i].getMonsterId(j);
+/* 001fa264 */		}
+/* 001fa26a */		s += "|exp:%d|gold:%d|item:%s|prob:%d" % g_mapEncountMonsterGroup[i].getExp() % g_mapEncountMonsterGroup[i].getGold() % g_mapEncountMonsterGroup[i].getItemId() % g_mapEncountMonsterGroup[i].getItemProbability();
+/* 001fa30e */		pass(s);
+/* 001fa31e */	}
+/* 001fa324 */}
+

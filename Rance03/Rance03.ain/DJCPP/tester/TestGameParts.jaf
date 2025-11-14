@@ -1,0 +1,1246 @@
+void test_Button_NormalButton()
+/* 001f35c6 */{
+/* 001f35c6 */	NormalButton btn;
+/* 001f35d6 */	btn.init("システム／ボタン／幅２００", "テキスト", "", true);
+/* 001f35fe */	btn.setPos(512, 384);
+/* 001f361a */	btn.fadeIn(true);
+/* 001f3630 */	g_frameManager.updateFrame();
+/* 001f3640 */	while (!g_mouse.isClick(1))
+/* 001f365e */	{
+/* 001f365e */		g_gameObjectManager.update();
+/* 001f366e */		g_frameManager.updateFrame();
+/* 001f367e */		if (btn.isClick())
+/* 001f3694 */		{
+/* 001f3694 */			pass("clicked");
+/* 001f36a0 */		}
+/* 001f36a0 */	}
+/* 001f36a6 */	btn.setEnable(false);
+/* 001f36bc */	g_frameManager.updateFrame();
+/* 001f36cc */	while (!g_mouse.isClick(1))
+/* 001f36ea */	{
+/* 001f36ea */		g_gameObjectManager.update();
+/* 001f36fa */		g_frameManager.updateFrame();
+/* 001f370a */	}
+/* 001f3710 */}
+
+void test_Game_FlagMap()
+/* 001f371e */{
+/* 001f371e */	g_gameFlagMap.setInt("テストABC", 100);
+/* 001f373a */	assert(g_gameFlagMap.getInt("テストABC") == 100);
+/* 001f376c */	g_gameFlagMap.setInt("テストABC", 200);
+/* 001f3788 */	assert(g_gameFlagMap.getInt("テストABC") == 200);
+/* 001f37ba */	g_gameFlagMap.setInt("テストBCD", 456456);
+/* 001f37d6 */	assert(g_gameFlagMap.getInt("テストBCD") == 456456);
+/* 001f3808 */	g_gameFlagMap.setString("テストHOGE", "asdfasdf");
+/* 001f3824 */	assert(g_gameFlagMap.getString("テストHOGE") == "asdfasdf");
+/* 001f3856 */}
+
+void test_Map_Chain()
+/* 001f3864 */{
+/* 001f3864 */	MapChain chain;
+/* 001f3874 */	chain.addChain("1", "2", true);
+/* 001f3896 */	chain.addChain("1", "5", true);
+/* 001f38b8 */	chain.addChain("1", "4", true);
+/* 001f38da */	chain.addChain("2", "3", true);
+/* 001f38fc */	chain.addChain("5", "3", true);
+/* 001f391e */	chain.addChain("6", "3", true);
+/* 001f3940 */	chain.addChain("7", "8", true);
+/* 001f3962 */	int i;
+/* 001f3974 */	for (i = 1; i <= 6; ++i)
+/* 001f39ba */	{
+/* 001f39ba */		string current = "%d" % i;
+/* 001f39e0 */		array@string n;
+/* 001f39ea */		chain.getNeighbor(n, current);
+/* 001f3a0e */		int j;
+/* 001f3a20 */		for (j = 0; j < n.Numof(); ++j)
+/* 001f3a70 */		{
+/* 001f3a70 */			pass("nord:%s neighbor:%s" % current % n[j]);
+/* 001f3aac */		}
+/* 001f3abc */	}
+/* 001f3ac2 */	array@string route;
+/* 001f3acc */	pass("1-2");
+/* 001f3ad8 */	chain.getRoute(route, "1", "2");
+/* 001f3b00 */	for (i = 0; i < route.Numof(); ++i)
+/* 001f3b50 */	{
+/* 001f3b50 */		pass("route: %s" % route[i]);
+/* 001f3b7a */	}
+/* 001f3b80 */	pass("6-4");
+/* 001f3b8c */	chain.getRoute(route, "6", "4");
+/* 001f3bb4 */	for (i = 0; i < route.Numof(); ++i)
+/* 001f3c04 */	{
+/* 001f3c04 */		pass("route: %s" % route[i]);
+/* 001f3c2e */	}
+/* 001f3c34 */	pass("5-6");
+/* 001f3c40 */	chain.getRoute(route, "5", "6");
+/* 001f3c68 */	for (i = 0; i < route.Numof(); ++i)
+/* 001f3cb8 */	{
+/* 001f3cb8 */		pass("route: %s" % route[i]);
+/* 001f3ce2 */	}
+/* 001f3ce8 */	pass("4-5");
+/* 001f3cf4 */	chain.getRoute(route, "4", "5");
+/* 001f3d1c */	for (i = 0; i < route.Numof(); ++i)
+/* 001f3d6c */	{
+/* 001f3d6c */		pass("route: %s" % route[i]);
+/* 001f3d96 */	}
+/* 001f3d9c */	pass("3-4");
+/* 001f3da8 */	chain.getRoute(route, "3", "4");
+/* 001f3dd0 */	for (i = 0; i < route.Numof(); ++i)
+/* 001f3e20 */	{
+/* 001f3e20 */		pass("route: %s" % route[i]);
+/* 001f3e4a */	}
+/* 001f3e50 */	pass("1-7");
+/* 001f3e5c */	chain.getRoute(route, "1", "7");
+/* 001f3e84 */	for (i = 0; i < route.Numof(); ++i)
+/* 001f3ed4 */	{
+/* 001f3ed4 */		pass("route: %s" % route[i]);
+/* 001f3efe */	}
+/* 001f3f04 */}
+
+void test_Branch()
+/* 001f3f12 */{
+/* 001f3f12 */	PartsBranch parts_;
+/* 001f3f22 */	parts_.init(0);
+/* 001f3f38 */	while (true)
+/* 001f3f44 */	{
+/* 001f3f44 */		parts_.setPos(512, 384, g_mouse.getX(), g_mouse.getY());
+/* 001f3f80 */		g_frameManager.updateFrame();
+/* 001f3f90 */		g_gameObjectManager.update();
+/* 001f3fa0 */	}
+/* 001f3fa6 */}
+
+void test_Scene_Party()
+/* 001f3fb4 */{
+/* 001f3fb4 */	debugPlayerJoinAll();
+/* 001f3fba */	openParty(false);
+/* 001f3fc6 */}
+
+void test_Party_PlayerStatusView()
+/* 001f3fd4 */{
+/* 001f3fd4 */	PlayerStatusView view;
+/* 001f3fe4 */	array@string n;
+/* 001f3fee */	getAlivePlayerList(n);
+/* 001f3ffe */	view.init(n);
+/* 001f401a */	view.fadeIn(true);
+/* 001f4030 */	while (true)
+/* 001f403c */	{
+/* 001f403c */		if (g_mouse.isClick(1))
+/* 001f4058 */		{
+/* 001f4058 */			break;
+/* 001f405e */		}
+/* 001f405e */		g_frameManager.updateFrame();
+/* 001f406e */		g_gameObjectManager.update();
+/* 001f407e */	}
+/* 001f4084 */}
+
+void test_Party_PlayerStandView()
+/* 001f4092 */{
+/* 001f4092 */	PlayerStandView view;
+/* 001f40a2 */	view.init("ランス");
+/* 001f40b8 */	view.setGroupPos(512, 300, true);
+/* 001f40da */	float n;
+/* 001f40ec */	while (true)
+/* 001f40f8 */	{
+/* 001f40f8 */		if (g_mouse.isClick(1))
+/* 001f4114 */		{
+/* 001f4114 */			break;
+/* 001f411a */		}
+/* 001f411a */		g_frameManager.updateFrame();
+/* 001f412a */		g_gameObjectManager.update();
+/* 001f413a */		view.setVirtualPos(n);
+/* 001f4154 */		if (g_mouse.getWheel() < 0)
+/* 001f4172 */		{
+/* 001f4172 */			n += 0.3;
+/* 001f4184 */		}
+/* 001f418a */		else if (g_mouse.getWheel() > 0)
+/* 001f41a8 */		{
+/* 001f41a8 */			n -= 0.3;
+/* 001f41ba */		}
+/* 001f41ba */	}
+/* 001f41c0 */}
+
+void test_Party_PlayerStandGroup()
+/* 001f41ce */{
+/* 001f41ce */	PlayerStandGroup grp;
+/* 001f41de */	debugPlayerJoinAll();
+/* 001f41e4 */	grp.init();
+/* 001f41f4 */	int n;
+/* 001f4206 */	while (true)
+/* 001f4212 */	{
+/* 001f4212 */		if (g_mouse.isClick(1))
+/* 001f422e */		{
+/* 001f422e */			break;
+/* 001f4234 */		}
+/* 001f4234 */		g_frameManager.updateFrame();
+/* 001f4244 */		g_gameObjectManager.update();
+/* 001f4254 */		if (g_mouse.getWheel() < 0)
+/* 001f4272 */		{
+/* 001f4272 */			n++;
+/* 001f4286 */		}
+/* 001f428c */		else if (g_mouse.getWheel() > 0)
+/* 001f42aa */		{
+/* 001f42aa */			n--;
+/* 001f42be */		}
+/* 001f42be */		grp.setPos(n);
+/* 001f42d8 */	}
+/* 001f42de */}
+
+void test_Button_BalloonButton()
+/* 001f42ec */{
+/* 001f42ec */	BalloonButton btn;
+/* 001f42fc */	btn.init("システム／吹き出し／仮", "仮テキスト", NULL, 0);
+/* 001f4320 */	btn.setPos(100, 100);
+/* 001f433c */	while (true)
+/* 001f4348 */	{
+/* 001f4348 */		if (g_mouse.isClick(1))
+/* 001f4364 */		{
+/* 001f4364 */			break;
+/* 001f436a */		}
+/* 001f436a */		g_frameManager.updateFrame();
+/* 001f437a */		g_gameObjectManager.update();
+/* 001f438a */	}
+/* 001f4390 */}
+
+void test_Player_Button()
+/* 001f439e */{
+/* 001f439e */	PlayerButton btn;
+/* 001f43ae */	btn.init("ランス", NULL);
+/* 001f43c6 */	btn.setPos(100, 100);
+/* 001f43e2 */	while (true)
+/* 001f43ee */	{
+/* 001f43ee */		if (g_mouse.isClick(1))
+/* 001f440a */		{
+/* 001f440a */			break;
+/* 001f4410 */		}
+/* 001f4410 */		g_frameManager.updateFrame();
+/* 001f4420 */		g_gameObjectManager.update();
+/* 001f4430 */	}
+/* 001f4436 */}
+
+void test_Scene_TargetCharacterSelect()
+/* 001f4444 */{
+/* 001f4444 */	int joinCount = 1;
+/* 001f4456 */	while (true)
+/* 001f4462 */	{
+/* 001f4462 */		int i;
+/* 001f4474 */		for (i = 0; i < Math.Min(joinCount, g_player.Numof()); ++i)
+/* 001f44d8 */		{
+/* 001f44d8 */			g_player[i].setJoin(true);
+/* 001f44fa */		}
+/* 001f4500 */		string r = openTargetPlayerSelect(0);
+/* 001f451a */		if (r == "")
+/* 001f4532 */		{
+/* 001f4532 */			return;
+/* 001f4534 */		}
+/* 001f4534 */		++joinCount;
+/* 001f4544 */	}
+/* 001f454a */}
+
+void test_Scene_LevelGod()
+/* 001f4558 */{
+/* 001f4558 */	while (true)
+/* 001f4564 */	{
+/* 001f4564 */		int j;
+/* 001f4576 */		for (j = 0; j < g_player.Numof(); ++j)
+/* 001f45c6 */		{
+/* 001f45c6 */			g_player[j].setJoin(true);
+/* 001f45e8 */			g_player[j].setMaxLevel(999);
+/* 001f460a */			g_player[j].setExp(10000000);
+/* 001f462c */		}
+/* 001f4632 */		openLevelGod();
+/* 001f4638 */	}
+/* 001f463e */}
+
+void test_LevelUpResult()
+/* 001f464c */{
+/* 001f464c */	ref LevelUpResult result;
+/* 001f4664 */	result <- new LevelUpResult;
+/* 001f4698 */	制御／プロローグ／初期設定／レベル();
+/* 001f469e */	getPlayerFromId("ランス").setExp(getPlayerFromId("ランス").getNextExp());
+/* 001f46ee */	result.init("ランス");
+/* 001f4704 */	getPlayerFromId("ランス").levelUp();
+/* 001f472e */	while (true)
+/* 001f473a */	{
+/* 001f473a */		if (g_mouse.isClick(1))
+/* 001f4756 */		{
+/* 001f4756 */			break;
+/* 001f475c */		}
+/* 001f475c */		if (g_mouse.isClick(0))
+/* 001f4778 */		{
+/* 001f4778 */			result <- NULL;
+/* 001f4790 */			result <- new LevelUpResult;
+/* 001f47c4 */			getPlayerFromId("ランス").setExp(getPlayerFromId("ランス").getNextExp());
+/* 001f4814 */			result.init("ランス");
+/* 001f482a */		}
+/* 001f483c */		g_frameManager.updateFrame();
+/* 001f484c */		g_gameObjectManager.update();
+/* 001f485c */	}
+/* 001f4862 */}
+
+void test_VerticalScroller()
+/* 001f4870 */{
+/* 001f4870 */	VerticalScroller vscroll;
+/* 001f4880 */	Parts p;
+/* 001f4890 */	p.init("立ち絵／ありす／基本", 0);
+/* 001f48ac */	p.setShow(true);
+/* 001f48c2 */	vscroll.init(0, 0, 1024, 768, p.getHeight(), 100, true);
+/* 001f4906 */	p.setParent(vscroll.getPartsNumber());
+/* 001f4926 */	while (true)
+/* 001f4932 */	{
+/* 001f4932 */		if (g_mouse.isClick(1))
+/* 001f494e */		{
+/* 001f494e */			break;
+/* 001f4954 */		}
+/* 001f4954 */		g_frameManager.updateFrame();
+/* 001f4964 */		g_gameObjectManager.update();
+/* 001f4974 */	}
+/* 001f497a */}
+
+void test_FloatingLayout()
+/* 001f4988 */{
+/* 001f4988 */	array@string p;
+/* 001f4992 */	p.PushBack("システム／スキル／弱点／物理弱点");
+/* 001f49a2 */	p.PushBack("システム／戦闘／バフ／攻撃上昇");
+/* 001f49b2 */	p.PushBack("システム／戦闘／背中／ミリ");
+/* 001f49c2 */	p.PushBack("システム／マップ／ランス");
+/* 001f49d2 */	p.PushBack("システム／所持金");
+/* 001f49e2 */	p.PushBack("システム／戦闘／攻撃告知／射程外");
+/* 001f49f2 */	p.PushBack("システム／編成／スキル装備");
+/* 001f4a02 */	PartsFloatingLayout layout;
+/* 001f4a12 */	array@Parts parts;
+/* 001f4a1c */	parts.Alloc(p.Numof());
+/* 001f4a3c */	int i;
+/* 001f4a4e */	for (i = 0; i < parts.Numof(); ++i)
+/* 001f4a9e */	{
+/* 001f4a9e */		parts[i].init(p[i], 0);
+/* 001f4ad6 */		parts[i].setShow(true);
+/* 001f4af8 */	}
+/* 001f4afe */	layout.reset(100, 100, true);
+/* 001f4b20 */	layout.add(parts[0]);
+/* 001f4b42 */	layout.add(parts[1]);
+/* 001f4b64 */	layout.add(parts[2]);
+/* 001f4b86 */	layout.add(parts[3]);
+/* 001f4ba8 */	layout.br();
+/* 001f4bb8 */	layout.add(parts[4]);
+/* 001f4bda */	layout.add(parts[5]);
+/* 001f4bfc */	layout.br();
+/* 001f4c0c */	layout.add(parts[6]);
+/* 001f4c2e */	while (true)
+/* 001f4c3a */	{
+/* 001f4c3a */		if (g_mouse.isClick(1))
+/* 001f4c56 */		{
+/* 001f4c56 */			break;
+/* 001f4c5c */		}
+/* 001f4c5c */		g_frameManager.updateFrame();
+/* 001f4c6c */		g_gameObjectManager.update();
+/* 001f4c7c */	}
+/* 001f4c82 */}
+
+void test_Battle_ResultView()
+/* 001f4c90 */{
+/* 001f4c90 */	BattleResultView br;
+/* 001f4ca0 */	array@BattleBonus expBonus;
+/* 001f4caa */	array@BattleBonus goldBonus;
+/* 001f4cb4 */	int exp;
+/* 001f4cc6 */	int gold;
+/* 001f4cd8 */	int prob;
+/* 001f4cea */	string itemId;
+/* 001f4cfe */	BattleBonus t;
+/* 001f4d0e */	t.init("テストボーナス１", 100);
+/* 001f4d2a */	expBonus.PushBack(t);
+/* 001f4d42 */	t.init("テストボーナス２", 50);
+/* 001f4d5e */	expBonus.PushBack(t);
+/* 001f4d76 */	t.init("テストボーナス３", 25);
+/* 001f4d92 */	expBonus.PushBack(t);
+/* 001f4daa */	t.init("ゴールドボーナス１", 100);
+/* 001f4dc6 */	goldBonus.PushBack(t);
+/* 001f4dde */	t.init("ゴールドボーナス２", 50);
+/* 001f4dfa */	goldBonus.PushBack(t);
+/* 001f4e12 */	exp = 1000;
+/* 001f4e24 */	gold = 12345;
+/* 001f4e36 */	itemId = g_item[0].getId();
+/* 001f4e5c */	br.init(expBonus, goldBonus, exp, gold, itemId);
+/* 001f4e9e */	while (true)
+/* 001f4eaa */	{
+/* 001f4eaa */		if (g_mouse.isClick(1))
+/* 001f4ec6 */		{
+/* 001f4ec6 */			break;
+/* 001f4ecc */		}
+/* 001f4ecc */		g_frameManager.updateFrame();
+/* 001f4edc */		g_gameObjectManager.update();
+/* 001f4eec */	}
+/* 001f4ef2 */}
+
+void test_Scene_BattleResult()
+/* 001f4f00 */{
+/* 001f4f00 */	int n;
+/* 001f4f12 */	while (n < 16)
+/* 001f4f2a */	{
+/* 001f4f2a */		g_battleResult.reset();
+/* 001f4f3a */		int p = n & 1;
+/* 001f4f58 */		if (p)
+/* 001f4f68 */		{
+/* 001f4f68 */			g_battleResult.addExpBonus("tesuto1", 30);
+/* 001f4f84 */			g_battleResult.addExpBonus("tesuto2", 40);
+/* 001f4fa0 */			g_battleResult.addExpBonus("tesuto3", 50);
+/* 001f4fbc */		}
+/* 001f4fbc */		int r = n & 2;
+/* 001f4fda */		if (r)
+/* 001f4fea */		{
+/* 001f4fea */			g_battleResult.addGoldBonus("tesusdfdto1", 30);
+/* 001f5006 */			g_battleResult.addGoldBonus("asdftesuto2", 50);
+/* 001f5022 */			g_battleResult.addGoldBonus("tesusdfdto3", 30);
+/* 001f503e */			g_battleResult.addGoldBonus("asdftesuto4", 50);
+/* 001f505a */			g_battleResult.addGoldBonus("tesusdfdto5", 30);
+/* 001f5076 */			g_battleResult.addGoldBonus("asdftesuto6", 50);
+/* 001f5092 */		}
+/* 001f5092 */		g_battleResult.setFinalAttacker("リア");
+/* 001f50a8 */		BattleInfomation info;
+/* 001f50b8 */		info.setExp(1000);
+/* 001f50ce */		info.setGold(10000);
+/* 001f50e4 */		int s = n & 4;
+/* 001f5102 */		if (s)
+/* 001f5112 */		{
+/* 001f5112 */			info.setItem(g_item[0].getId(), 100);
+/* 001f5140 */		}
+/* 001f5140 */		int t = n & 8;
+/* 001f515e */		if (t)
+/* 001f516e */		{
+/* 001f516e */			g_battleResult.addBattleEndMessage("テストメッセージ");
+/* 001f5184 */		}
+/* 001f5184 */		g_battleResult.setInfo(info);
+/* 001f51a2 */		openBattleResult();
+/* 001f51a8 */		++n;
+/* 001f51b8 */	}
+/* 001f51c4 */}
+
+void test_Dungeon_PlayerPiece()
+/* 001f51d2 */{
+/* 001f51d2 */	DungeonPlayerPiece piece;
+/* 001f51e2 */	piece.init("ランス", 0);
+/* 001f51fe */	piece.fadeIn(true);
+/* 001f5214 */	int z;
+/* 001f5226 */	while (true)
+/* 001f5232 */	{
+/* 001f5232 */		if (g_mouse.isClick(1))
+/* 001f524e */		{
+/* 001f524e */			break;
+/* 001f5254 */		}
+/* 001f5254 */		if (g_mouse.isClick(0))
+/* 001f5270 */		{
+/* 001f5270 */			if (z == 0)
+/* 001f5288 */			{
+/* 001f5288 */				piece.moveSideWays(RAND(2) - 1);
+/* 001f52ae */				++z;
+/* 001f52be */			}
+/* 001f52c4 */			else if (z == 1)
+/* 001f52dc */			{
+/* 001f52dc */				piece.moveFront();
+/* 001f52ec */				z = 0;
+/* 001f52fe */			}
+/* 001f52fe */		}
+/* 001f52fe */		g_frameManager.updateFrame();
+/* 001f530e */		g_gameObjectManager.update();
+/* 001f531e */	}
+/* 001f5324 */}
+
+void test_Dungeon_CenterCursor()
+/* 001f5332 */{
+/* 001f5332 */	DungeonCenterCursor cur;
+/* 001f5342 */	cur.init();
+/* 001f5352 */	int z;
+/* 001f5364 */	while (true)
+/* 001f5370 */	{
+/* 001f5370 */		if (g_mouse.isClick(1))
+/* 001f538c */		{
+/* 001f538c */			break;
+/* 001f5392 */		}
+/* 001f5392 */		if (g_mouse.isClick(0))
+/* 001f53ae */		{
+/* 001f53ae */			if (z == 0)
+/* 001f53c6 */			{
+/* 001f53c6 */				cur.fadeIn(true);
+/* 001f53dc */				++z;
+/* 001f53ec */			}
+/* 001f53f2 */			else if (z == 1)
+/* 001f540a */			{
+/* 001f540a */				cur.fadeIn(false);
+/* 001f5420 */				z = 0;
+/* 001f5432 */			}
+/* 001f5432 */		}
+/* 001f5432 */		g_frameManager.updateFrame();
+/* 001f5442 */		g_gameObjectManager.update();
+/* 001f5452 */	}
+/* 001f5458 */}
+
+void test_SkillSelector_All()
+/* 001f5466 */{
+/* 001f5466 */	array@SkillSelector ss;
+/* 001f5470 */	int page = -1;
+/* 001f5482 */	int maxPage = (g_attackSkill.Numof() + 7) / 8 - 1;
+/* 001f54b6 */	while (true)
+/* 001f54c2 */	{
+/* 001f54c2 */		if (g_mouse.isClick(1))
+/* 001f54de */		{
+/* 001f54de */			break;
+/* 001f54e4 */		}
+/* 001f54e4 */		if (g_mouse.isClick(0))
+/* 001f5500 */		{
+/* 001f5500 */			if (page == maxPage)
+/* 001f551c */			{
+/* 001f551c */				page = 0;
+/* 001f552e */			}
+/* 001f5534 */			else
+/* 001f5534 */			{
+/* 001f5534 */				++page;
+/* 001f5544 */			}
+/* 001f5544 */			int count = 8;
+/* 001f5556 */			if (page == maxPage && g_attackSkill.Numof() % 8 != 0)
+/* 001f55b0 */			{
+/* 001f55b0 */				count = g_attackSkill.Numof() % 8;
+/* 001f55d4 */			}
+/* 001f55d4 */			ss.Free();
+/* 001f55de */			ss.Alloc(count);
+/* 001f55f8 */			int i;
+/* 001f560a */			for (i = 0; i < count; ++i)
+/* 001f5654 */			{
+/* 001f5654 */				ss[i].init(g_attackSkill[page * 8 + i].getId(), g_attackSkill[page * 8 + i].getPlayerId(), i, false);
+/* 001f56e0 */				ss[i].fadeIn(true, false);
+/* 001f5708 */			}
+/* 001f570e */		}
+/* 001f570e */		g_frameManager.updateFrame();
+/* 001f571e */		g_gameObjectManager.update();
+/* 001f572e */	}
+/* 001f5734 */}
+
+void test_Dialog()
+/* 001f5742 */{
+/* 001f5742 */	while (true)
+/* 001f574e */	{
+/* 001f574e */		DialogInfomation info;
+/* 001f575e */		info.setCaption("０１２３４５６７８９０１２３４５６７８９０");
+/* 001f5774 */		info.setMessage("宝箱からアイテムを取得|やったね|アイテムが増えるよ！");
+/* 001f578a */		info.setItemId(g_item[0].getId());
+/* 001f57b2 */		info.setAnswerTypeYesNo(true);
+/* 001f57c8 */		int result = openDialog(info);
+/* 001f57e8 */		if (result == 1)
+/* 001f5800 */		{
+/* 001f5800 */			return;
+/* 001f5802 */		}
+/* 001f5802 */		DialogInfomation info;
+/* 001f5818 */		info.setCaption("ダメージを食らった");
+/* 001f582e */		info.setMessage("あｓｄｆ|２行テスト");
+/* 001f5844 */		info.setPictureImageType(2);
+/* 001f585a */		openDialog(info);
+/* 001f5870 */		DialogInfomation info;
+/* 001f5886 */		info.setCaption("情報だよ");
+/* 001f589c */		info.setMessage("１行テスト");
+/* 001f58b2 */		info.setPictureImageType(0);
+/* 001f58c8 */		openDialog(info);
+/* 001f58de */	}
+/* 001f58ea */}
+
+void test_MessagePopup()
+/* 001f58f8 */{
+/* 001f58f8 */	MessagePopup popup;
+/* 001f5908 */	popup.init("ああ＾～ こころがぴょんぴょんするんじゃあ～");
+/* 001f591e */	bool v = true;
+/* 001f5930 */	popup.setPos(512, 384);
+/* 001f594c */	while (true)
+/* 001f5958 */	{
+/* 001f5958 */		if (g_mouse.isClick(1))
+/* 001f5974 */		{
+/* 001f5974 */			break;
+/* 001f597a */		}
+/* 001f597a */		if (g_mouse.isClick(0))
+/* 001f5996 */		{
+/* 001f5996 */			popup.fadeIn(v);
+/* 001f59b0 */			v = v ? false : true;
+/* 001f59de */			pass("%d" % v);
+/* 001f59fc */		}
+/* 001f59fc */		g_frameManager.updateFrame();
+/* 001f5a0c */		g_gameObjectManager.update();
+/* 001f5a1c */	}
+/* 001f5a22 */}
+
+void test_Adv_SelectionButton()
+/* 001f5a30 */{
+/* 001f5a30 */	array@string n;
+/* 001f5a3a */	n.PushBack("キースギルドへ行く");
+/* 001f5a4a */	n.PushBack("自宅へ帰る");
+/* 001f5a5a */	n.PushBack("宿屋へ行く");
+/* 001f5a6a */	n.PushBack("ラジール屋敷へ行く");
+/* 001f5a7a */	n.PushBack("解放軍司令部へ行く");
+/* 001f5a8a */	n.PushBack("解放軍司令部へ行く");
+/* 001f5a9a */	n.PushBack("ああへ行く");
+/* 001f5aaa */	n.PushBack("いい軍司令部へ行く");
+/* 001f5aba */	array@AdvSelectionButton btn;
+/* 001f5ac4 */	btn.Alloc(n.Numof());
+/* 001f5ae4 */	int i;
+/* 001f5af6 */	for (i = 0; i < btn.Numof(); ++i)
+/* 001f5b46 */	{
+/* 001f5b46 */		btn[i].init(n[i], i, btn.Numof(), true);
+/* 001f5b98 */	}
+/* 001f5b9e */	bool b = true;
+/* 001f5bb0 */	while (true)
+/* 001f5bbc */	{
+/* 001f5bbc */		if (g_mouse.isClick(1))
+/* 001f5bd8 */		{
+/* 001f5bd8 */			break;
+/* 001f5bde */		}
+/* 001f5bde */		if (g_mouse.isClick(0))
+/* 001f5bfa */		{
+/* 001f5bfa */			int i;
+/* 001f5c0c */			for (i = 0; i < btn.Numof(); ++i)
+/* 001f5c5c */			{
+/* 001f5c5c */				btn[i].fadeIn(b, i * 50);
+/* 001f5c94 */			}
+/* 001f5c9a */			b = !b;
+/* 001f5cb4 */		}
+/* 001f5cb4 */		g_frameManager.updateFrame();
+/* 001f5cc4 */		g_gameObjectManager.update();
+/* 001f5cd4 */	}
+/* 001f5cda */}
+
+void test_testAdvSelection()
+/* 001f5ce8 */{
+/* 001f5ce8 */	gameAddAdvSelection(0, "キースギルドへ行く");
+/* 001f5cfa */	gameAddAdvSelection(1, "自宅へ帰る");
+/* 001f5d0c */	gameAddAdvSelection(2, "宿屋へ行く");
+/* 001f5d1e */	gameAddAdvSelection(3, "ラジール屋敷へ行く");
+/* 001f5d30 */	gameAddAdvSelection(4, "解放軍司令部へ行く");
+/* 001f5d42 */	gameAddAdvSelection(5, "解放軍司令部へ行く");
+/* 001f5d54 */	gameAddAdvSelection(6, "ああへ行く");
+/* 001f5d66 */	gameAddAdvSelection(7, "いい軍司令部へ行く");
+/* 001f5d78 */	gameAddAdvSelection(9, "セーブの碑へ行く");
+/* 001f5d8a */	gameAddAdvSelection(10, "ロードの碑へ行く");
+/* 001f5d9c */	gameAddAdvSelection(99, "居館一階を出る");
+/* 001f5dae */	g_gameSceneManager.setCurrentPos("居館");
+/* 001f5dc4 */	int result = gameAdvSelection();
+/* 001f5dd6 */}
+
+void test_Dungeon_DotView()
+/* 001f5de4 */{
+/* 001f5de4 */	DungeonDotView dv;
+/* 001f5df4 */	dv.init(g_dungeon[0].getId());
+/* 001f5e1c */	while (true)
+/* 001f5e28 */	{
+/* 001f5e28 */		if (g_mouse.isClick(1))
+/* 001f5e44 */		{
+/* 001f5e44 */			break;
+/* 001f5e4a */		}
+/* 001f5e4a */		g_frameManager.updateFrame();
+/* 001f5e5a */		g_gameObjectManager.update();
+/* 001f5e6a */	}
+/* 001f5e70 */}
+
+void test_HVScoller()
+/* 001f5e7e */{
+/* 001f5e7e */	HVScroller hv;
+/* 001f5e8e */	hv.init(1024.0, 768.0, 2048.0, 1536.0);
+/* 001f5eb6 */	Parts p;
+/* 001f5ec6 */	p.init("システム／マップ", 0);
+/* 001f5ee2 */	p.setParent(hv.getPartsNumber());
+/* 001f5f02 */	p.setShow(true);
+/* 001f5f18 */	while (!g_mouse.isClick(1))
+/* 001f5f36 */	{
+/* 001f5f36 */		if (g_mouse.isClick(0))
+/* 001f5f52 */		{
+/* 001f5f52 */			hv.moveFocus(RAND(2048), RAND(1536), NULL);
+/* 001f5f80 */		}
+/* 001f5f80 */		g_frameManager.updateFrame();
+/* 001f5f90 */		g_gameObjectManager.update();
+/* 001f5fa0 */	}
+/* 001f5fa6 */}
+
+void test_WorldMap()
+/* 001f5fb4 */{
+/* 001f5fb4 */	debugSetMapAllChain();
+/* 001f5fba */	WorldMap wm;
+/* 001f5fca */	wm.init(g_mapPlace[0].getId());
+/* 001f5ff2 */	wm.fadeIn(true, 1000, NULL);
+/* 001f6010 */	wm.showNewBranch(NULL);
+/* 001f6022 */	while (!g_mouse.isClick(1))
+/* 001f6040 */	{
+/* 001f6040 */		g_frameManager.updateFrame();
+/* 001f6050 */		g_gameObjectManager.update();
+/* 001f6060 */	}
+/* 001f6066 */}
+
+void test_FollowCamera()
+/* 001f6074 */{
+/* 001f6074 */	FollowCamera fc;
+/* 001f6084 */	fc.setPos(0, 0);
+/* 001f60a0 */	Parts p;
+/* 001f60b0 */	p.init("システム／マップ／ランス", 0);
+/* 001f60cc */	p.setShow(true);
+/* 001f60e2 */	while (!g_mouse.isClick(1))
+/* 001f6100 */	{
+/* 001f6100 */		p.setPos(fc.getX(), fc.getY());
+/* 001f6134 */		fc.setFollowPos(g_mouse.getX(), g_mouse.getY());
+/* 001f6164 */		g_frameManager.updateFrame();
+/* 001f6174 */		g_gameObjectManager.update();
+/* 001f6184 */	}
+/* 001f618a */}
+
+void test_VirtualPositionConverter()
+/* 001f6198 */{
+/* 001f6198 */	float x;
+/* 001f61aa */	float y;
+/* 001f61bc */	float s;
+/* 001f61ce */	float a;
+/* 001f61e0 */	int i;
+/* 001f61f2 */	for (i = -4; i <= 4; ++i)
+/* 001f6238 */	{
+/* 001f6238 */		convertVirtualPartyPositionToXY(i, x, y, s, a);
+/* 001f626a */		pass("x:%f, y:%f, s:%f, a:%f" % x % y % s % a);
+/* 001f62be */	}
+/* 001f62c4 */}
+
+void test_ResultMessagePopup()
+/* 001f62d2 */{
+/* 001f62d2 */	MessagePopup popup;
+/* 001f62e2 */	popup.init("テストメッセージ");
+/* 001f62f8 */	popup.fadeIn(true);
+/* 001f630e */	while (!g_mouse.isClick(1))
+/* 001f632c */	{
+/* 001f632c */		g_frameManager.updateFrame();
+/* 001f633c */		g_gameObjectManager.update();
+/* 001f634c */	}
+/* 001f6352 */}
+
+void test_ResultNewSkill()
+/* 001f6360 */{
+/* 001f6360 */	ReulstNewSkill ns;
+/* 001f6370 */	ns.init("", -1);
+/* 001f638c */	ns.fadeIn(true);
+/* 001f63a2 */	while (!g_mouse.isClick(1))
+/* 001f63c0 */	{
+/* 001f63c0 */		g_frameManager.updateFrame();
+/* 001f63d0 */		g_gameObjectManager.update();
+/* 001f63e0 */	}
+/* 001f63e6 */}
+
+void test_BattleResult_BonusView()
+/* 001f63f4 */{
+/* 001f63f4 */	BattleBonus bonus;
+/* 001f6404 */	bonus.init("テストあｓｄｆ", 123);
+/* 001f6420 */	array@BonusView view[8];
+/* 001f6436 */	int i;
+/* 001f6448 */	for (i = 0; i < view.Numof(); ++i)
+/* 001f6498 */	{
+/* 001f6498 */		view[i].init(bonus, false);
+/* 001f64c8 */		view[i].setPos(100, 100 + i * 50);
+/* 001f6504 */		view[i].fadeIn(true, 50 * i, NULL);
+/* 001f653a */	}
+/* 001f6540 */	while (!g_mouse.isClick(1))
+/* 001f655e */	{
+/* 001f655e */		if (g_mouse.isClick(0))
+/* 001f657a */		{
+/* 001f657a */			int i;
+/* 001f658c */			for (i = 0; i < view.Numof(); ++i)
+/* 001f65dc */			{
+/* 001f65dc */				view[i].fadeIn(false, 0, NULL);
+/* 001f6606 */			}
+/* 001f660c */		}
+/* 001f660c */		g_frameManager.updateFrame();
+/* 001f661c */		g_gameObjectManager.update();
+/* 001f662c */	}
+/* 001f6632 */}
+
+void test_BattleResult_BonusGroupView()
+/* 001f6640 */{
+/* 001f6640 */	array@BonusGroupView groupView[2];
+/* 001f6656 */	array@BattleBonus bonus[5];
+/* 001f666c */	int i;
+/* 001f667e */	for (i = 0; i < bonus.Numof(); ++i)
+/* 001f66ce */	{
+/* 001f66ce */		bonus[i].init("テスト%d" % i, RAND(100));
+/* 001f670e */	}
+/* 001f6714 */	groupView[0].init(bonus, 1234, 10, false);
+/* 001f6748 */	groupView[1].init(bonus, 1234, 10, true);
+/* 001f677c */	groupView[0].fadeIn(true, NULL);
+/* 001f679c */	groupView[1].fadeIn(true, NULL);
+/* 001f67bc */	while (!g_mouse.isClick(1))
+/* 001f67da */	{
+/* 001f67da */		if (g_mouse.isClick(0))
+/* 001f67f6 */		{
+/* 001f67f6 */			groupView[0].fadeIn(false, NULL);
+/* 001f6816 */			groupView[1].fadeIn(false, NULL);
+/* 001f6836 */		}
+/* 001f6836 */		g_frameManager.updateFrame();
+/* 001f6846 */		g_gameObjectManager.update();
+/* 001f6856 */	}
+/* 001f685c */}
+
+void test_PartsMovePow()
+/* 001f686a */{
+/* 001f686a */	array@Parts p[3];
+/* 001f6880 */	int i;
+/* 001f6892 */	for (i = 0; i < p.Numof(); ++i)
+/* 001f68e2 */	{
+/* 001f68e2 */		p[i].initAsPlaneImage(50, 50, 255, 255, 255, 255);
+/* 001f6922 */		p[i].setShow(true);
+/* 001f6944 */	}
+/* 001f694a */	LocalTimer t;
+/* 001f695a */	t.reset();
+/* 001f696a */	while (!g_mouse.isClick(1))
+/* 001f6988 */	{
+/* 001f6988 */		if (t.getTime() > 1000)
+/* 001f69a6 */		{
+/* 001f69a6 */			t.reset();
+/* 001f69b6 */		}
+/* 001f69b6 */		float tt = t.getTime() / 1000.0;
+/* 001f69e0 */		int i;
+/* 001f69f2 */		for (i = 0; i < p.Numof(); ++i)
+/* 001f6a42 */		{
+/* 001f6a42 */			int type;
+/* 001f6a54 */			switch (i)
+/* 001f6a6a */			{
+/* 001f6a6a */			case 0:
+/* 001f6a6a */				type = 1;
+/* 001f6a7c */				break;
+/* 001f6a82 */			case 1:
+/* 001f6a82 */				type = 2;
+/* 001f6a94 */				break;
+/* 001f6a9a */			case 2:
+/* 001f6a9a */				type = 7;
+/* 001f6aac */				break;
+/* 001f6ab2 */			}
+/* 001f6ab2 */			p[i].setPos(getMotionValue(type, 0.0, 512.0, tt), i * 100);
+/* 001f6b08 */		}
+/* 001f6b0e */		g_frameManager.updateFrame();
+/* 001f6b1e */		g_gameObjectManager.update();
+/* 001f6b2e */	}
+/* 001f6b34 */}
+
+void test_BattleResult_BonusItemView()
+/* 001f6b42 */{
+/* 001f6b42 */	BonusItemView view;
+/* 001f6b52 */	view.init(g_item[0].getId());
+/* 001f6b7a */	view.fadeIn(true, NULL);
+/* 001f6b92 */	while (!g_mouse.isClick(1))
+/* 001f6bb0 */	{
+/* 001f6bb0 */		g_frameManager.updateFrame();
+/* 001f6bc0 */		g_gameObjectManager.update();
+/* 001f6bd0 */	}
+/* 001f6bd6 */}
+
+testT::testT()
+/* 001f6be4 */{
+/* 001f6bec */	this.t = 2;
+/* 001f6bfe */}
+
+testT::~testT()
+/* 001f6c06 */{
+/* 001f6c06 */	this.t = 3;
+/* 001f6c18 */}
+
+void test_ReferenceContainer()
+/* 001f6c20 */{
+/* 001f6c20 */	array@testContainer c;
+/* 001f6c2a */	testContainer t;
+/* 001f6c3a */	c.Insert(0, t);
+/* 001f6c58 */}
+
+void test_testHorizontalLine()
+/* 001f6c66 */{
+/* 001f6c66 */	array@HorizontalLine line;
+/* 001f6c70 */	line.Alloc(50);
+/* 001f6c86 */	int i;
+/* 001f6c98 */	for (i = 0; i < line.Numof(); ++i)
+/* 001f6ce8 */	{
+/* 001f6ce8 */		line[i].init();
+/* 001f6d04 */		line[i].setRot(10);
+/* 001f6d26 */	}
+/* 001f6d2c */	while (!g_mouse.isClick(1))
+/* 001f6d4a */	{
+/* 001f6d4a */		g_frameManager.updateFrame();
+/* 001f6d5a */		g_gameObjectManager.update();
+/* 001f6d6a */		int rot = calcAngle(g_mouse.getX() - 512, g_mouse.getY() - 384);
+/* 001f6db2 */		int i;
+/* 001f6dc4 */		for (i = 0; i < line.Numof(); ++i)
+/* 001f6e14 */		{
+/* 001f6e14 */			line[i].setRot(rot);
+/* 001f6e3a */		}
+/* 001f6e40 */	}
+/* 001f6e46 */}
+
+void test_testEmissionLine()
+/* 001f6e54 */{
+/* 001f6e54 */	array@EmissionLine line;
+/* 001f6e5e */	line.Alloc(50);
+/* 001f6e74 */	int i;
+/* 001f6e86 */	for (i = 0; i < line.Numof(); ++i)
+/* 001f6ed6 */	{
+/* 001f6ed6 */		line[i].init(2);
+/* 001f6ef8 */		line[i].setLoopMode(true);
+/* 001f6f1a */		line[i].setCenter(768, 256);
+/* 001f6f42 */		line[i].run();
+/* 001f6f5e */	}
+/* 001f6f64 */	while (!g_mouse.isClick(1))
+/* 001f6f82 */	{
+/* 001f6f82 */		g_frameManager.updateFrame();
+/* 001f6f92 */		g_gameObjectManager.update();
+/* 001f6fa2 */	}
+/* 001f6fa8 */}
+
+void test_testCircleEffect()
+/* 001f6fb6 */{
+/* 001f6fb6 */	CircleEffect ef;
+/* 001f6fc6 */	PhotonEmittor pe;
+/* 001f6fd6 */	pe.init(30);
+/* 001f6fec */	ef.init("システム／エフェクト／円／仮");
+/* 001f7002 */	array@EmissionLine line;
+/* 001f700c */	line.Alloc(20);
+/* 001f7022 */	int i;
+/* 001f7034 */	for (i = 0; i < line.Numof(); ++i)
+/* 001f7084 */	{
+/* 001f7084 */		line[i].init(1);
+/* 001f70a6 */		line[i].setCenter(512, 384);
+/* 001f70ce */		line[i].setLoopMode(false);
+/* 001f70f0 */	}
+/* 001f70f6 */	while (!g_mouse.isClick(1))
+/* 001f7114 */	{
+/* 001f7114 */		g_frameManager.updateFrame();
+/* 001f7124 */		g_gameObjectManager.update();
+/* 001f7134 */		if (g_mouse.isClick(0))
+/* 001f7150 */		{
+/* 001f7150 */			ef.setPos(512, 384);
+/* 001f716c */			ef.setYZRot(-60);
+/* 001f7182 */			ef.setMaxScaling(300 + RAND(100));
+/* 001f71a8 */			ef.run(0);
+/* 001f71be */			pe.setPos(512, 384);
+/* 001f71da */			pe.run();
+/* 001f71ea */			int i;
+/* 001f71fc */			for (i = 0; i < line.Numof(); ++i)
+/* 001f724c */			{
+/* 001f724c */				line[i].run();
+/* 001f7268 */			}
+/* 001f726e */		}
+/* 001f726e */	}
+/* 001f7274 */}
+
+void test_testRotateCircle()
+/* 001f7282 */{
+/* 001f7282 */	Parts p;
+/* 001f7292 */	p.init("システム／エフェクト／回転円", 0);
+/* 001f72ae */	p.setShow(true);
+/* 001f72c4 */	p.setOrigin(5);
+/* 001f72da */	p.setPos(512.0, 384.0);
+/* 001f72f6 */	PhotonEmittor pe;
+/* 001f7306 */	pe.init(30);
+/* 001f731c */	while (!g_mouse.isClick(1))
+/* 001f733a */	{
+/* 001f733a */		g_frameManager.updateFrame();
+/* 001f734a */		g_gameObjectManager.update();
+/* 001f735a */		if (g_mouse.isClick(0))
+/* 001f7376 */		{
+/* 001f7376 */			PartsMotion m;
+/* 001f7386 */			m.setKey(3, 0, 360, 1);
+/* 001f73ae */			m.setAlpha(255, 0, 0);
+/* 001f73d0 */			p.runMotion(m, NULL);
+/* 001f73f0 */			pe.setPos(512, 384);
+/* 001f740c */			pe.run();
+/* 001f741c */		}
+/* 001f741c */	}
+/* 001f7428 */}
+
+void test_testMiniCircle()
+/* 001f7436 */{
+/* 001f7436 */	Parts p;
+/* 001f7446 */	p.init("システム／エフェクト／円小", 0);
+/* 001f7462 */	p.setShow(true);
+/* 001f7478 */	p.setOrigin(5);
+/* 001f748e */	p.setPos(512.0, 384.0);
+/* 001f74aa */	PhotonEmittor pe;
+/* 001f74ba */	pe.init(30);
+/* 001f74d0 */	while (!g_mouse.isClick(1))
+/* 001f74ee */	{
+/* 001f74ee */		g_frameManager.updateFrame();
+/* 001f74fe */		g_gameObjectManager.update();
+/* 001f750e */		if (g_mouse.isClick(0))
+/* 001f752a */		{
+/* 001f752a */			PartsMotion m;
+/* 001f753a */			m.setTime(700);
+/* 001f7550 */			m.setScaling(0, 300, 2);
+/* 001f7572 */			m.setAlpha(255, 0, 1);
+/* 001f7594 */			p.runMotion(m, NULL);
+/* 001f75b4 */			pe.setPos(512, 384);
+/* 001f75d0 */			pe.run();
+/* 001f75e0 */		}
+/* 001f75e0 */	}
+/* 001f75ec */}
+
+void test_testHScroller()
+/* 001f75fa */{
+/* 001f75fa */	VerticalScroller v;
+/* 001f760a */	v.init(0, 0, 1024, 768, 300 * g_player.Numof(), 300, false);
+/* 001f7656 */	array@Parts p;
+/* 001f7660 */	p.Alloc(g_player.Numof());
+/* 001f7680 */	int i;
+/* 001f7692 */	for (i = 0; i < p.Numof(); ++i)
+/* 001f76e2 */	{
+/* 001f76e2 */		p[i].init("システム／立ち絵／%s" % g_player[i].getShortName(), 0);
+/* 001f772e */		p[i].setShow(true);
+/* 001f7750 */		p[i].setPos(i * 300, 0.0);
+/* 001f7786 */		p[i].setParent(v.getPartsNumber());
+/* 001f77b2 */	}
+/* 001f77b8 */	while (!g_mouse.isClick(1))
+/* 001f77d6 */	{
+/* 001f77d6 */		g_frameManager.updateFrame();
+/* 001f77e6 */		g_gameObjectManager.update();
+/* 001f77f6 */	}
+/* 001f77fc */}
+
+void test_SkillIconView2()
+/* 001f780a */{
+/* 001f780a */	array@AttackSkillIconView v[20];
+/* 001f7820 */	int i;
+/* 001f7832 */	for (i = 0; i < v.Numof(); ++i)
+/* 001f7882 */	{
+/* 001f7882 */		v[i].init(g_attackSkill[i].getId(), 0, 0, 0);
+/* 001f78cc */		v[i].setPos(512, 384);
+/* 001f78f4 */		v[i].setState(0);
+/* 001f7916 */	}
+/* 001f791c */	while (!g_mouse.isClick(1))
+/* 001f793a */	{
+/* 001f793a */		g_frameManager.updateFrame();
+/* 001f794a */		g_gameObjectManager.update();
+/* 001f795a */		float m;
+/* 001f796c */		int i;
+/* 001f797e */		for (i = 0; i < v.Numof(); ++i)
+/* 001f79ce */		{
+/* 001f79ce */			v[i].setViewValue(m - i);
+/* 001f7a02 */		}
+/* 001f7a08 */	}
+/* 001f7a0e */}
+
+void test_MapCloud()
+/* 001f7a1c */{
+/* 001f7a1c */	array@MapCloud c[10];
+/* 001f7a32 */	Parts p;
+/* 001f7a42 */	p.initAsDummy();
+/* 001f7a52 */	p.setShow(true);
+/* 001f7a68 */	int i;
+/* 001f7a7a */	for (i = 0; i < c.Numof(); ++i)
+/* 001f7aca */	{
+/* 001f7aca */		c[i].init(p.getPartsNumber());
+/* 001f7af6 */	}
+/* 001f7afc */	while (!g_mouse.isClick(1))
+/* 001f7b1a */	{
+/* 001f7b1a */		g_frameManager.updateFrame();
+/* 001f7b2a */		g_gameObjectManager.update();
+/* 001f7b3a */	}
+/* 001f7b40 */}
+
+void test_testCloud()
+/* 001f7b4e */{
+/* 001f7b4e */	array@Parts p[10];
+/* 001f7b64 */	int i;
+/* 001f7b76 */	for (i = 0; i < p.Numof(); ++i)
+/* 001f7bc6 */	{
+/* 001f7bc6 */		p[i].init("システム／マップ／雲%D" % (i % 4 + 1), 0);
+/* 001f7c10 */		p[i].setShow(true);
+/* 001f7c32 */		p[i].setOrigin(5);
+/* 001f7c54 */	}
+/* 001f7c5a */	while (!g_mouse.isClick(1))
+/* 001f7c78 */	{
+/* 001f7c78 */		g_frameManager.updateFrame();
+/* 001f7c88 */		g_gameObjectManager.update();
+/* 001f7c98 */		int i;
+/* 001f7caa */		for (i = 0; i < p.Numof(); ++i)
+/* 001f7cfa */		{
+/* 001f7cfa */			if (!p[i].isMotion())
+/* 001f7d1e */			{
+/* 001f7d1e */				array@PartsMotion m;
+/* 001f7d28 */				test_testCloudGetMotion(m);
+/* 001f7d38 */				p[i].setScaling(RAND(50) + 50);
+/* 001f7d6a */				p[i].runMotionArray(m, NULL);
+/* 001f7d9e */			}
+/* 001f7d9e */		}
+/* 001f7da4 */	}
+/* 001f7daa */}
+
+void test_testCloudGetMotion(ref array@PartsMotion m)
+/* 001f7db8 */{
+/* 001f7db8 */	m.Free();
+/* 001f7dc2 */	m.Alloc(3);
+/* 001f7dd8 */	int rot = RAND(60) - 30;
+/* 001f7df8 */	int x = (512 + RAND(100)) - 50;
+/* 001f7e20 */	int y = (384 + RAND(100)) - 50;
+/* 001f7e48 */	int mx = 50 + RAND(50);
+/* 001f7e68 */	int my = RAND(15);
+/* 001f7e80 */	int time = 1000 + RAND(1000);
+/* 001f7ea0 */	m[0].setTime(time);
+/* 001f7ec2 */	m[0].setAlpha(0, 128, 0);
+/* 001f7eec */	m[0].setKey(3, 0, rot, 0);
+/* 001f7f20 */	m[0].setMove(x, y, x + mx, y + my, 0);
+/* 001f7f7e */	m[1].setTime(time);
+/* 001f7fa0 */	m[1].setKey(3, rot, rot * 2, 0);
+/* 001f7fe0 */	m[1].setMove(x + mx, y + my, x + mx * 2, y + my * 2, 0);
+/* 001f8066 */	m[2].setTime(time);
+/* 001f8088 */	m[2].setAlpha(128, 0, 0);
+/* 001f80b2 */	m[2].setKey(3, rot * 2, rot * 3, 0);
+/* 001f80fa */	m[2].setMove(x + mx * 2, y + my * 2, x + mx * 3, y + my * 3, 0);
+/* 001f8190 */}
+
+void test_SkillIconVirtualHorizontalView()
+/* 001f819e */{
+/* 001f819e */	debugPlayerJoinAll();
+/* 001f81a4 */	array@SkillIconVirtualHorizontalView v[4];
+/* 001f81ba */	PlayerStandGroup gp;
+/* 001f81ca */	gp.init();
+/* 001f81da */	array@string pId;
+/* 001f81e4 */	int i;
+/* 001f81f6 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001f8246 */	{
+/* 001f8246 */		pId.PushBack(g_player[i].getId());
+/* 001f826c */	}
+/* 001f8272 */	for (i = 0; i < v.Numof(); ++i)
+/* 001f82c2 */	{
+/* 001f82c2 */		v[i].init(pId, i);
+/* 001f82f4 */	}
+/* 001f82fa */	while (!g_mouse.isClick(1))
+/* 001f8318 */	{
+/* 001f8318 */		g_frameManager.updateFrame();
+/* 001f8328 */		g_gameObjectManager.update();
+/* 001f8338 */		int i;
+/* 001f834a */		for (i = 0; i < v.Numof(); ++i)
+/* 001f839a */		{
+/* 001f839a */			v[i].setFloatingPosition(gp.getFloatingPosition());
+/* 001f83c6 */		}
+/* 001f83cc */	}
+/* 001f83d2 */}
+
+void test_AttackSkillInfomation()
+/* 001f83e0 */{
+/* 001f83e0 */	debugPlayerJoinAll();
+/* 001f83e6 */	array@AttackSkillInfomation v;
+/* 001f83f0 */	array@string n;
+/* 001f83fa */	int i;
+/* 001f840c */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001f845c */	{
+/* 001f845c */		if (g_player[i].isJoin())
+/* 001f847e */		{
+/* 001f847e */			n.PushBack(g_player[i].getAttackSkillId(0));
+/* 001f84aa */		}
+/* 001f84aa */	}
+/* 001f84b0 */	v.Alloc(n.Numof());
+/* 001f84d0 */	for (i = 0; i < v.Numof(); ++i)
+/* 001f8520 */	{
+/* 001f8520 */		v[i].init(n[i]);
+/* 001f8552 */	}
+/* 001f8558 */	PlayerStandGroup gp;
+/* 001f8568 */	gp.init();
+/* 001f8578 */	while (!g_mouse.isClick(1))
+/* 001f8596 */	{
+/* 001f8596 */		g_frameManager.updateFrame();
+/* 001f85a6 */		g_gameObjectManager.update();
+/* 001f85b6 */		int i;
+/* 001f85c8 */		for (i = 0; i < v.Numof(); ++i)
+/* 001f8618 */		{
+/* 001f8618 */			v[i].setViewValue(gp.getFloatingPosition() - i);
+/* 001f8652 */		}
+/* 001f8658 */	}
+/* 001f865e */}
+
+void test_testBattleEndMessage()
+/* 001f866c */{
+/* 001f866c */	g_battleResult.addBattleEndMessage("リアがお茶会を開催！全員のクールタイムがリセット！");
+/* 001f8682 */	g_battleResult.addBattleEndMessage("セルの応急回復の雨！%sは%d回復！");
+/* 001f8698 */	g_battleResult.addBattleEndMessage("シィルの応急ヒール！%sは%d回復！");
+/* 001f86ae */	BattleResultMessage msg;
+/* 001f86be */	msg.init();
+/* 001f86ce */	msg.fadeIn(true, NULL);
+/* 001f86e6 */	while (!g_mouse.isClick(1))
+/* 001f8704 */	{
+/* 001f8704 */		g_frameManager.updateFrame();
+/* 001f8714 */		g_gameObjectManager.update();
+/* 001f8724 */	}
+/* 001f872a */}
+
+void test_testDungeonSideObject()
+/* 001f8738 */{
+/* 001f8738 */	array@DungeonSideObject obj[3];
+/* 001f874e */	obj[0].init("システム／ダンジョン／森／左", 0);
+/* 001f8772 */	obj[1].init("システム／ダンジョン／森／右", 1);
+/* 001f8796 */	obj[2].init("システム／ダンジョン／月光／上", 2);
+/* 001f87ba */	bool val = true;
+/* 001f87cc */	while (!g_mouse.isClick(1))
+/* 001f87ea */	{
+/* 001f87ea */		if (g_mouse.isClick(0))
+/* 001f8806 */		{
+/* 001f8806 */			int i;
+/* 001f8818 */			for (i = 0; i < obj.Numof(); ++i)
+/* 001f8868 */			{
+/* 001f8868 */				obj[i].fadeIn(val, NULL);
+/* 001f8890 */			}
+/* 001f8896 */			val = !val;
+/* 001f88b0 */		}
+/* 001f88b0 */		g_frameManager.updateFrame();
+/* 001f88c0 */		g_gameObjectManager.update();
+/* 001f88d0 */	}
+/* 001f88d6 */}
+
+void test_testDungeonPlayerPieceGroup()
+/* 001f88e4 */{
+/* 001f88e4 */	debugPlayerJoinAll();
+/* 001f88ea */	int i;
+/* 001f88fc */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001f894c */	{
+/* 001f894c */		g_party.add(g_player[i].getAttackSkillId(0));
+/* 001f8980 */	}
+/* 001f8986 */	DungeonPlayerPieceGroup g;
+/* 001f8996 */	g.init(true);
+/* 001f89ac */	while (!g_mouse.isClick(1))
+/* 001f89ca */	{
+/* 001f89ca */		if (g_mouse.isClick(0))
+/* 001f89e6 */		{
+/* 001f89e6 */			openParty(false);
+/* 001f89f2 */			g.updateCharacter();
+/* 001f8a02 */		}
+/* 001f8a02 */		g_frameManager.updateFrame();
+/* 001f8a12 */		g_gameObjectManager.update();
+/* 001f8a22 */	}
+/* 001f8a28 */}
+
+void test_OmakeMode_Tab()
+/* 001f8a36 */{
+/* 001f8a36 */	OmakeModeTab tab;
+/* 001f8a46 */	tab.init(8, false);
+/* 001f8a62 */	tab.setOnClickCallback("test_onClickTab");
+/* 001f8a8a */	tab.fadeIn(true, NULL);
+/* 001f8aa2 */	while (!g_mouse.isClick(1))
+/* 001f8ac0 */	{
+/* 001f8ac0 */		g_frameManager.updateFrame();
+/* 001f8ad0 */		g_gameObjectManager.update();
+/* 001f8ae0 */	}
+/* 001f8ae6 */}
+
+void test_onClickTab(int index)
+/* 001f8af4 */{
+/* 001f8af4 */	pass("%d" % index);
+/* 001f8b12 */}
+
+void test_MirrorPieceView()
+/* 001f8b20 */{
+/* 001f8b20 */	openMirrorPieceView();
+/* 001f8b26 */}
+
+void test_openFlat()
+/* 001f8b34 */{
+/* 001f8b34 */	openFlat("システム／エンカウント");
+/* 001f8b40 */}
+
+void test_HelperCountView()
+/* 001f8b4e */{
+/* 001f8b4e */	HelperCountView v;
+/* 001f8b5e */	v.init();
+/* 001f8b6e */	v.fadeIn(true, NULL);
+/* 001f8b86 */	while (!g_mouse.isClick(1))
+/* 001f8ba4 */	{
+/* 001f8ba4 */		g_frameManager.updateFrame();
+/* 001f8bb4 */		g_gameObjectManager.update();
+/* 001f8bc4 */	}
+/* 001f8bca */}
+

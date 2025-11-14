@@ -1,0 +1,98 @@
+ThumbnailButton::ThumbnailButton()
+/* 001c0aee */{
+/* 001c0af6 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 001c0b26 */}
+
+void ThumbnailButton::init(string thumbnailCg, bool isAvailable, int parentPartsNumber)
+/* 001c0b2e */{
+/* 001c0b2e */	this.imageName_ = thumbnailCg;
+/* 001c0b46 */	this.isAvailable_ = isAvailable;
+/* 001c0b5c */	this.parentPartsNumber_ = parentPartsNumber;
+/* 001c0b72 */	this.initParts();
+/* 001c0b7a */	this.setPartsShow();
+/* 001c0b82 */}
+
+void ThumbnailButton::initParts()
+/* 001c0b8a */{
+/* 001c0b8a */	this.parts_[0].init("システム／サムネイル／下地", 0);
+/* 001c0bae */	if (this.isAvailable_)
+/* 001c0bbe */	{
+/* 001c0bbe */		if (Ａ＿ＣＧ存在確認(this.imageName_))
+/* 001c0bd4 */		{
+/* 001c0bd4 */			this.parts_[1].init(this.imageName_, 0);
+/* 001c0bfc */		}
+/* 001c0c02 */		else
+/* 001c0c02 */		{
+/* 001c0c02 */			pass("noimage" + this.imageName_);
+/* 001c0c1a */			this.parts_[1].initAsPlaneImage(205, 154, 200, 128, 128, 255);
+/* 001c0c56 */		}
+/* 001c0c56 */	}
+/* 001c0c56 */	this.parts_[2].initAsCgPlaneImage("システム／サムネイル／下地", 255, 255, 0);
+/* 001c0c86 */	this.parts_[2].setAlpha(128.0);
+/* 001c0ca4 */	createPartsGroup(this.parent_, this.parts_, 6000);
+/* 001c0cc4 */	this.parent_.setParent(this.parentPartsNumber_);
+/* 001c0cde */	this.setPartsPos();
+/* 001c0ce6 */}
+
+void ThumbnailButton::setPartsShow()
+/* 001c0cee */{
+/* 001c0cee */	int i;
+/* 001c0d00 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001c0d50 */	{
+/* 001c0d50 */		this.parts_[i].setShow(true);
+/* 001c0d72 */	}
+/* 001c0d78 */	this.parent_.setShow(true);
+/* 001c0d8e */}
+
+void ThumbnailButton::setPartsPos()
+/* 001c0d96 */{
+/* 001c0d96 */	this.parts_[1].setPos(3.0, 3.0);
+/* 001c0dba */}
+
+void ThumbnailButton::update()
+/* 001c0dc2 */{
+/* 001c0dc2 */	this.updateHover();
+/* 001c0dca */	this.parts_[2].setShow(this.isHover_);
+/* 001c0dec */	if (g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 001c0e0c */	{
+/* 001c0e0c */		this.cb_(this.index_);
+/* 001c0e36 */	}
+/* 001c0e36 */	if (!this.lastHover_ && this.isHover_)
+/* 001c0e70 */	{
+/* 001c0e70 */		playCursor();
+/* 001c0e76 */	}
+/* 001c0e76 */	if (this.isHover_ && g_mouse.onDown(0))
+/* 001c0eba */	{
+/* 001c0eba */		playClick();
+/* 001c0ec0 */	}
+/* 001c0ec0 */	this.lastHover_ = this.isHover_;
+/* 001c0ed6 */}
+
+void ThumbnailButton::updateHover()
+/* 001c0ede */{
+/* 001c0ede */	this.isHover_ = this.parent_.getAlpha() == 255 && this.isAvailable_ && AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 001c0f8e */}
+
+bool ThumbnailButton::isHover()
+/* 001c0f96 */{
+/* 001c0f96 */	this.updateHover();
+/* 001c0f9e */	return this.isHover_;
+/* 001c0faa */}
+
+void ThumbnailButton::setPos(int x, int y)
+/* 001c0fb8 */{
+/* 001c0fb8 */	this.parent_.setPos(x, y);
+/* 001c0fe0 */}
+
+void ThumbnailButton::setOnClickCallback(DG_ThumbnailButtonClickCallback cb, int index)
+/* 001c0fe8 */{
+/* 001c0fe8 */	this.cb_ = cb;
+/* 001c1002 */	this.index_ = index;
+/* 001c1018 */}
+
+void ThumbnailButton::fadeIn(bool val)
+/* 001c1020 */{
+/* 001c1020 */	this.setPartsShow();
+/* 001c1028 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c1062 */}
+

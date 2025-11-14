@@ -1,0 +1,10 @@
+void AFL_CombineTexture()
+/* 0016a25e */{
+/* 0016a25e */	ChipmunkSpriteEngine.CombineTexture();
+/* 0016a268 */}
+
+void AFL_ReleaseCombinedTexture()
+/* 0016a276 */{
+/* 0016a276 */	ChipmunkSpriteEngine.ReleaseCombinedTexture();
+/* 0016a280 */}
+

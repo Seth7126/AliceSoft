@@ -1,0 +1,240 @@
+void SceneBattleResult::init()
+/* 001a36fc */{
+/* 001a36fc */	this.isFinish_ = false;
+/* 001a370e */	g_battleResult.getExpBonus(this.exp_);
+/* 001a3728 */	g_battleResult.getGoldBonus(this.gold_);
+/* 001a3742 */	if (g_battleResult.isGetItemByLot())
+/* 001a3758 */	{
+/* 001a3758 */		this.item_ = g_battleResult.getItemId();
+/* 001a3776 */	}
+/* 001a3776 */	this.initBackGround();
+/* 001a377e */	this.initStand();
+/* 001a3786 */	this.bonusView_[0].init(this.exp_, g_battleResult.getExpCountedBonus(), g_battleResult.getExp(), true);
+/* 001a37ce */	this.bonusView_[1].init(this.gold_, g_battleResult.getGoldCountedBonus(), g_battleResult.getGold(), false);
+/* 001a3816 */	this.itemView_.init(this.item_);
+/* 001a3830 */	this.msg_.init();
+/* 001a3840 */	this.popup_.init(g_battleResult.getResultMessage());
+/* 001a3860 */}
+
+void SceneBattleResult::initStand()
+/* 001a3868 */{
+/* 001a3868 */	string sn = getPlayerFromId(g_battleResult.getFinalAttacker()).getShortName();
+/* 001a38a8 */	this.parts_[1].init("trim_システム／立ち絵／%s" % sn, 0);
+/* 001a38de */	this.parts_[1].setOrigin(2);
+/* 001a38fc */	this.parts_[1].setZ(3510.0);
+/* 001a391a */}
+
+void SceneBattleResult::initBackGround()
+/* 001a3922 */{
+/* 001a3922 */	this.parts_[0].initAsFlat("システム／リザルト／背景");
+/* 001a3940 */	this.parts_[0].setZ(3500.0);
+/* 001a395e */}
+
+void SceneBattleResult::run()
+/* 001a3966 */{
+/* 001a3966 */	if (!this.exp_.Empty())
+/* 001a3978 */	{
+/* 001a3978 */		this.fadeInExpBonusBig();
+/* 001a3980 */	}
+/* 001a3986 */	else
+/* 001a3986 */	{
+/* 001a3986 */		this.fadeInExpBonus();
+/* 001a398e */	}
+/* 001a398e */	this.fadeInBg(true);
+/* 001a399c */	this.fadeInStand(true);
+/* 001a39aa */	this.popup_.fadeIn(true);
+/* 001a39c0 */	string msg = g_battleResult.getResultMessage();
+/* 001a39de */	int num = getVoiceFinderFromId(g_battleResult.getFinalAttacker()).getFromText(msg);
+/* 001a3a26 */	g_sysSound.play(6, "効果音／リザルト");
+/* 001a3a42 */	g_sysSound.playVoice(num);
+/* 001a3a5c */}
+
+void SceneBattleResult::fadeInExpBonusBig()
+/* 001a3a64 */{
+/* 001a3a64 */	this.state_ = 0;
+/* 001a3a76 */	this.fadeInBonusBig(this.exp_, this.onFinishExpBonusViewBig);
+/* 001a3a92 */}
+
+void SceneBattleResult::onFinishExpBonusViewBig()
+/* 001a3a9a */{
+/* 001a3a9a */	this.fadeOutBonusViewBig(NULL);
+/* 001a3aa4 */	this.fadeInExpBonus();
+/* 001a3aac */}
+
+void SceneBattleResult::fadeInExpBonus()
+/* 001a3ab4 */{
+/* 001a3ab4 */	this.state_ = 1;
+/* 001a3ac6 */	this.bonusView_[0].fadeIn(true, this.onFinishExpBonusFadeIn);
+/* 001a3aee */}
+
+void SceneBattleResult::onFinishExpBonusFadeIn()
+/* 001a3af6 */{
+/* 001a3af6 */	if (!this.gold_.Empty())
+/* 001a3b08 */	{
+/* 001a3b08 */		this.fadeInGoldBonusBig();
+/* 001a3b10 */	}
+/* 001a3b16 */	else
+/* 001a3b16 */	{
+/* 001a3b16 */		this.fadeInGoldBonus();
+/* 001a3b1e */	}
+/* 001a3b1e */}
+
+void SceneBattleResult::fadeInGoldBonusBig()
+/* 001a3b26 */{
+/* 001a3b26 */	this.state_ = 2;
+/* 001a3b38 */	this.fadeInBonusBig(this.gold_, this.onFinishGoldBonusViewBig);
+/* 001a3b54 */}
+
+void SceneBattleResult::onFinishGoldBonusViewBig()
+/* 001a3b5c */{
+/* 001a3b5c */	this.fadeOutBonusViewBig(NULL);
+/* 001a3b66 */	this.fadeInGoldBonus();
+/* 001a3b6e */}
+
+void SceneBattleResult::fadeInGoldBonus()
+/* 001a3b76 */{
+/* 001a3b76 */	this.state_ = 3;
+/* 001a3b88 */	this.bonusView_[1].fadeIn(true, this.onFinishGoldBonusFadeIn);
+/* 001a3bb0 */}
+
+void SceneBattleResult::onFinishGoldBonusFadeIn()
+/* 001a3bb8 */{
+/* 001a3bb8 */	this.state_ = 4;
+/* 001a3bca */	this.itemView_.fadeIn(true, this.onFinishFadeInItemView);
+/* 001a3bea */}
+
+void SceneBattleResult::onFinishFadeInItemView()
+/* 001a3bf2 */{
+/* 001a3bf2 */	this.state_ = 5;
+/* 001a3c04 */	this.msg_.fadeIn(true, NULL);
+/* 001a3c1c */}
+
+void SceneBattleResult::fadeInStand(bool val)
+/* 001a3c24 */{
+/* 001a3c24 */	if (val)
+/* 001a3c34 */	{
+/* 001a3c34 */		PartsMotion m;
+/* 001a3c44 */		m.setMove(1500, 980, 771, 980, 1);
+/* 001a3c72 */		this.parts_[1].setShow(true);
+/* 001a3c90 */		this.parts_[1].runMotion(m, NULL);
+/* 001a3cb8 */	}
+/* 001a3cc4 */	else
+/* 001a3cc4 */	{
+/* 001a3cc4 */		this.parts_[1].runMotion(getStandardMotion(1), NULL);
+/* 001a3cea */	}
+/* 001a3cea */}
+
+void SceneBattleResult::fadeInBg(bool val)
+/* 001a3cf2 */{
+/* 001a3cf2 */	if (val)
+/* 001a3d02 */	{
+/* 001a3d02 */		this.parts_[0].setShow(true);
+/* 001a3d20 */		this.parts_[0].startFlat(false, 1.0);
+/* 001a3d44 */	}
+/* 001a3d4a */	else
+/* 001a3d4a */	{
+/* 001a3d4a */		this.parts_[0].runMotion(getStandardMotion(1), NULL);
+/* 001a3d70 */	}
+/* 001a3d70 */}
+
+void SceneBattleResult::fadeInBonusBig(ref array@BattleBonus b, DG_GeneralCallback cb)
+/* 001a3d78 */{
+/* 001a3d78 */	this.bonusViewBig_.Alloc(b.Numof());
+/* 001a3d98 */	int h = 50 * b.Numof() - 8;
+/* 001a3dc4 */	int i;
+/* 001a3dd6 */	for (i = 0; i < this.bonusViewBig_.Numof(); ++i)
+/* 001a3e26 */	{
+/* 001a3e26 */		this.bonusViewBig_[i].init(b[i], true);
+/* 001a3e62 */		this.bonusViewBig_[i].setPos(92, ((384 - h / 2) + i * 50) - 21);
+/* 001a3eba */		if (i == this.bonusViewBig_.Numof() - 1)
+/* 001a3ee4 */		{
+/* 001a3ee4 */			this.bonusViewBig_[i].fadeIn(true, i * 50, cb);
+/* 001a3f24 */		}
+/* 001a3f2a */		else
+/* 001a3f2a */		{
+/* 001a3f2a */			this.bonusViewBig_[i].fadeIn(true, i * 50, NULL);
+/* 001a3f60 */		}
+/* 001a3f60 */	}
+/* 001a3f66 */}
+
+void SceneBattleResult::fadeOutBonusViewBig(DG_GeneralCallback cb)
+/* 001a3f6e */{
+/* 001a3f6e */	int i;
+/* 001a3f80 */	for (i = 0; i < this.bonusViewBig_.Numof(); ++i)
+/* 001a3fd0 */	{
+/* 001a3fd0 */		if (i == this.bonusViewBig_.Numof() - 1)
+/* 001a3ffa */		{
+/* 001a3ffa */			this.bonusViewBig_[i].fadeIn(false, 0, cb);
+/* 001a402e */		}
+/* 001a4034 */		else
+/* 001a4034 */		{
+/* 001a4034 */			this.bonusViewBig_[i].fadeIn(false, 0, NULL);
+/* 001a405e */		}
+/* 001a405e */	}
+/* 001a4064 */}
+
+void SceneBattleResult::fadeOut()
+/* 001a406c */{
+/* 001a406c */	int i;
+/* 001a407e */	for (i = 0; i < this.bonusView_.Numof(); ++i)
+/* 001a40ce */	{
+/* 001a40ce */		this.bonusView_[i].fadeIn(false, NULL);
+/* 001a40f2 */	}
+/* 001a40f8 */	this.itemView_.fadeIn(false, NULL);
+/* 001a4110 */	this.fadeInStand(false);
+/* 001a411e */	this.fadeInBg(false);
+/* 001a412c */	this.popup_.fadeIn(false);
+/* 001a4142 */	this.msg_.fadeIn(false, NULL);
+/* 001a415a */}
+
+bool SceneBattleResult::update()
+/* 001a4162 */{
+/* 001a4162 */	if (g_mouse.isClick(0) || g_mouse.isClick(1))
+/* 001a41b2 */	{
+/* 001a41b2 */		if (this.state_ == 5)
+/* 001a41ca */		{
+/* 001a41ca */			this.state_ = 6;
+/* 001a41dc */			this.fadeOut();
+/* 001a41e4 */			this.timerCb_.setTimer(300, this.onFinishFadeOut);
+/* 001a4204 */		}
+/* 001a420a */		else
+/* 001a420a */		{
+/* 001a420a */			g_globalTimer.setScaling(8.0);
+/* 001a4220 */		}
+/* 001a4220 */	}
+/* 001a4220 */	if (this.isFinish_)
+/* 001a4230 */	{
+/* 001a4230 */		g_globalTimer.setScaling(1.0);
+/* 001a4246 */	}
+/* 001a4246 */	return !this.isFinish_;
+/* 001a4256 */}
+
+void SceneBattleResult::onFinishFadeOut()
+/* 001a4264 */{
+/* 001a4264 */	applyBattleResult(this.item_);
+/* 001a4274 */	this.isFinish_ = true;
+/* 001a4286 */}
+
+void applyBattleResult(string item)
+/* 001a428e */{
+/* 001a428e */	g_playerCommonParam.addGold(g_battleResult.getGoldCountedBonus());
+/* 001a42ae */	array@string pId;
+/* 001a42b8 */	getAliveOrganizedPlayerId(pId);
+/* 001a42c8 */	int exp = g_battleResult.getExpCountedBonus();
+/* 001a42e4 */	int i;
+/* 001a42f6 */	for (i = 0; i < pId.Numof(); ++i)
+/* 001a4346 */	{
+/* 001a4346 */		getPlayerFromId(pId[i]).addExp(exp / pId.Numof());
+/* 001a439a */	}
+/* 001a43a6 */	if (item != "")
+/* 001a43be */	{
+/* 001a43be */		g_playerCommonParam.addItem(item);
+/* 001a43d8 */	}
+/* 001a43d8 */	gameAddBattleCount();
+/* 001a43de */	gameClearConsecutiveBattleCount();
+/* 001a43e4 */}
+
+void SceneBattleResult::onFinishItemFadeIn()
+/* 001a43f2 */{
+/* 001a43f4 */}
+

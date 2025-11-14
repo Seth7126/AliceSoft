@@ -1,0 +1,124 @@
+void SYS_Test_CallAll()
+/* 00154e5a */{
+/* 00154e5a */	array@string FunctionNameList;
+/* 00154e64 */	Sys43VM.GetFunctionNameList(FunctionNameList);
+/* 00154e7a */	string Prefix = "TEST_";
+/* 00154e8e */	int CallCount;
+/* 00154ea0 */	g_Test_NumofError = 0;
+/* 00154eb2 */	int n;
+/* 00154ec4 */	for (n = 0; n < FunctionNameList.Numof(); n++)
+/* 00154f18 */	{
+/* 00154f18 */		if (FunctionNameList[n].GetPart(0, Prefix.Length()) != Prefix)
+/* 00154f52 */		{
+/* 00154f52 */			continue;
+/* 00154f58 */		}
+/* 00154f58 */		FTTest Func;
+/* 00154f64 */		Func = FunctionNameList[n];
+/* 00154f96 */		if (Func.Numof() == 0)
+/* 00154fb0 */		{
+/* 00154fb0 */			system.Error("テスト関数【 %s 】の関数型がvoid xxx(void)ではありません" % FunctionNameList[n]);
+/* 00154fdc */			Func.Clear();
+/* 00154fe8 */			continue;
+/* 00154fee */		}
+/* 00154fee */		Func();
+/* 0015500e */		CallCount++;
+/* 00155022 */		Func.Clear();
+/* 0015502e */	}
+/* 00155034 */	if (g_Test_NumofError > 0)
+/* 0015504c */	{
+/* 0015504c */		system.Output("テスト エラー / エラー個数 = %d, 全個数 = %d\n" % g_Test_NumofError % CallCount);
+/* 0015507e */	}
+/* 00155084 */	else
+/* 00155084 */	{
+/* 00155084 */		system.Output("テスト OK / 全個数 = %d\n" % CallCount);
+/* 001550a4 */	}
+/* 001550a4 */	g_Test_NumofError = 0;
+/* 001550b6 */}
+
+void SYS_Test_Error(string Result)
+/* 001550c4 */{
+/* 001550c4 */	string FunctionName = system.GetFuncStackName(2);
+/* 001550de */	system.Output("【 %s 】 %s\n" % FunctionName % Result);
+/* 00155110 */	g_Test_NumofError++;
+/* 00155124 */}
+
+void EXPECT_TRUE(bool Value)
+/* 00155132 */{
+/* 00155132 */	if (!Value)
+/* 00155144 */	{
+/* 00155144 */		SYS_Test_Error("EXPECT_TRUE エラー\n結果 : %b" % Value);
+/* 00155162 */	}
+/* 00155162 */}
+
+void EXPECT_FALSE(bool Value)
+/* 00155170 */{
+/* 00155170 */	if (Value)
+/* 00155180 */	{
+/* 00155180 */		SYS_Test_Error("EXPECT_FALSE エラー\n結果 : %b" % Value);
+/* 0015519e */	}
+/* 0015519e */}
+
+void EXPECT_INT_EQ(int Value1, int Value2)
+/* 001551ac */{
+/* 001551ac */	if (Value1 != Value2)
+/* 001551c8 */	{
+/* 001551c8 */		SYS_Test_Error("EXPECT_INT_EQ エラー\n結果 : %d != %d" % Value1 % Value2);
+/* 001551f8 */	}
+/* 001551f8 */}
+
+void EXPECT_INT_NE(int Value1, int Value2)
+/* 00155206 */{
+/* 00155206 */	if (Value1 == Value2)
+/* 00155222 */	{
+/* 00155222 */		SYS_Test_Error("EXPECT_INT_NE エラー\n結果 : %d == %d" % Value1 % Value2);
+/* 00155252 */	}
+/* 00155252 */}
+
+void EXPECT_INT_LT(int Value1, int Value2)
+/* 00155260 */{
+/* 00155260 */	if (Value1 >= Value2)
+/* 0015527c */	{
+/* 0015527c */		SYS_Test_Error("EXPECT_INT_LT エラー\n結果 : %d >= %d" % Value1 % Value2);
+/* 001552ac */	}
+/* 001552ac */}
+
+void EXPECT_INT_LE(int Value1, int Value2)
+/* 001552ba */{
+/* 001552ba */	if (Value1 > Value2)
+/* 001552d6 */	{
+/* 001552d6 */		SYS_Test_Error("EXPECT_INT_LE エラー\n結果 : %d > %d" % Value1 % Value2);
+/* 00155306 */	}
+/* 00155306 */}
+
+void EXPECT_INT_GT(int Value1, int Value2)
+/* 00155314 */{
+/* 00155314 */	if (Value1 <= Value2)
+/* 00155330 */	{
+/* 00155330 */		SYS_Test_Error("EXPECT_INT_GT エラー\n結果 : %d <= %d" % Value1 % Value2);
+/* 00155360 */	}
+/* 00155360 */}
+
+void EXPECT_INT_GE(int Value1, int Value2)
+/* 0015536e */{
+/* 0015536e */	if (Value1 < Value2)
+/* 0015538a */	{
+/* 0015538a */		SYS_Test_Error("EXPECT_INT_GE エラー\n結果 : %d < %d" % Value1 % Value2);
+/* 001553ba */	}
+/* 001553ba */}
+
+void EXPECT_STRING_EQ(string Value1, string Value2)
+/* 001553c8 */{
+/* 001553c8 */	if (Value1 != Value2)
+/* 001553e4 */	{
+/* 001553e4 */		SYS_Test_Error("EXPECT_STRING_EQ エラー\n結果 : \"%s\" != \"%s\"" % Value1 % Value2);
+/* 00155414 */	}
+/* 00155414 */}
+
+void EXPECT_STRING_NE(string Value1, string Value2)
+/* 00155422 */{
+/* 00155422 */	if (Value1 == Value2)
+/* 0015543e */	{
+/* 0015543e */		SYS_Test_Error("EXPECT_STRING_NE エラー\n結果 : \"%s\" == \"%s\"" % Value1 % Value2);
+/* 0015546e */	}
+/* 0015546e */}
+

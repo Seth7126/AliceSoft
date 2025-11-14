@@ -1,0 +1,208 @@
+CAEEditConstructionProcess::CAEEditConstructionProcess()
+/* 00055a4e */{
+/* 00055a56 */	this.Release();
+/* 00055a5e */}
+
+void CAEEditConstructionProcess::Create(int LayoutID, int ProcessNameAlphaClipper, int ProcessAlphaClipper, int NameWidth, ref CASConstructionProcess Process)
+/* 00055a66 */{
+/* 00055a66 */	this.Release();
+/* 00055a6e */	this.m_RefProcess <- Process;
+/* 00055a8e */	this.m_ProcessName = PARTS_GetFreeSystemPartsNumber();
+/* 00055aa0 */	Ｐ＿フォント色設定(this.m_ProcessName, 0, 0, 0, 1);
+/* 00055ac8 */	Ｐ＿テキスト設定(this.m_ProcessName, this.GetProcessName(Process), 1);
+/* 00055af0 */	Ｐ＿座標設定(this.m_ProcessName, 0.0, 2.0);
+/* 00055b0c */	Ｐ＿Ｚ座標設定(this.m_ProcessName, 1);
+/* 00055b22 */	Ｐ＿オンカーソル透過設定(this.m_ProcessName, true);
+/* 00055b38 */	this.m_ProcessNameWidth = NameWidth;
+/* 00055b4e */	this.m_ProcessLayout = PARTS_GetFreeSystemPartsNumber();
+/* 00055b60 */	Ｐ＿レイアウトボックス＿パディング設定(this.m_ProcessLayout, 0, 0, 6, 6);
+/* 00055b88 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_ProcessLayout, 2);
+/* 00055b9e */	this.CreateProcessEdit(this.m_ProcessLayout, Process);
+/* 00055bba */	int Width = NameWidth;
+/* 00055bd0 */	int Height = 24;
+/* 00055be2 */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 00055bf4 */	Ｐ＿構築手順＿作成(this.m_BG, Width, Height, 1);
+/* 00055c1e */	Ｐ＿構築手順＿色塗り(this.m_BG, 0, 0, Width, Height, 255, 255, 255, 255, 1);
+/* 00055c6c */	Ｐ＿構築ビルド(this.m_BG, 1);
+/* 00055c82 */	Ｐ＿親設定(this.m_ProcessName, this.m_BG);
+/* 00055c9c */	Ｐ＿親設定(this.m_ProcessLayout, this.m_BG);
+/* 00055cb6 */	Ｐ＿クリック可能設定(this.m_BG, true);
+/* 00055ccc */	Ｐ＿レイアウトボックス＿追加(LayoutID, this.m_BG);
+/* 00055ce6 */	Ｐ＿アルファクリッパー設定(this.m_BG, ProcessNameAlphaClipper);
+/* 00055d00 */	Ｐ＿アルファクリッパー設定(this.m_ProcessLayout, ProcessAlphaClipper);
+/* 00055d1a */	Ｐ＿アルファクリッパー設定(this.m_ProcessName, ProcessNameAlphaClipper);
+/* 00055d34 */	AFL_Parts_AddMouseLClickEvent(this.m_BG, this.MouseClick);
+/* 00055d4e */	AFL_Parts_AddMouseEnterEvent(this.m_BG, this.MouseEnter);
+/* 00055d68 */	AFL_Parts_AddMouseLeaveEvent(this.m_BG, this.MouseLeave);
+/* 00055d82 */	AFL_Parts_AddMouseWheelEvent(this.m_BG, this.MouseWheelEvent);
+/* 00055d9c */	AFL_Parts_AddMouseWheelEvent(this.m_ProcessName, this.MouseWheelEvent);
+/* 00055db6 */	AFL_Parts_AddMouseWheelEvent(this.m_ProcessLayout, this.MouseWheelEvent);
+/* 00055dd0 */}
+
+void CAEEditConstructionProcess::Release()
+/* 00055dd8 */{
+/* 00055dd8 */	this.m_RefProcess <- NULL;
+/* 00055df0 */	PARTS_ReleaseWithInit(this.m_BG);
+/* 00055dfe */	PARTS_ReleaseWithInit(this.m_ProcessLayout);
+/* 00055e0c */	PARTS_ReleaseWithInit(this.m_ProcessName);
+/* 00055e1a */	this.m_Focus = false;
+/* 00055e2c */	this.ReleaseProcessEdit();
+/* 00055e34 */	this.m_dgChangedEvent.Clear();
+/* 00055e40 */	this.m_dgMouseWheelEvent.Clear();
+/* 00055e4c */	this.m_dgMouseClickEvent.Clear();
+/* 00055e58 */}
+
+string CAEEditConstructionProcess::GetProcessName(ref CASConstructionProcess Process)
+/* 00055e60 */{
+/* 00055e60 */	int Command = Process.GetCommand();
+/* 00055e7c */	switch (Command)
+/* 00055e92 */	{
+/* 00055e92 */	case 0:
+/* 00055e92 */		return "作成";
+/* 00055e9a */	case 1:
+/* 00055e9a */		return "ピクセル作成";
+/* 00055ea2 */	case 2:
+/* 00055ea2 */		return "ＣＧ設定";
+/* 00055eaa */	case 3:
+/* 00055eaa */		return "ＲＧＢ色塗り";
+/* 00055eb2 */	case 4:
+/* 00055eb2 */		return "ブレンド塗り";
+/* 00055eba */	case 5:
+/* 00055eba */		return "アルファ塗り";
+/* 00055ec2 */	case 6:
+/* 00055ec2 */		return "ＲＧＢＡ色塗り";
+/* 00055eca */	case 7:
+/* 00055eca */		return "テキストブレンド";
+/* 00055ed2 */	case 8:
+/* 00055ed2 */		return "テキストコピー";
+/* 00055eda */	case 9:
+/* 00055eda */		return "グラデーション";
+/* 00055ee2 */	case 10:
+/* 00055ee2 */		return "矩形";
+/* 00055eea */	case 11:
+/* 00055eea */		return "ＣＧ部分ブレンド";
+/* 00055ef2 */	case 13:
+/* 00055ef2 */		return "ＣＧ部分拡大縮小ブレンド";
+/* 00055efa */	case 12:
+/* 00055efa */		return "ＣＧ部分コピー";
+/* 00055f02 */	case 14:
+/* 00055f02 */		return "ＣＧ部分拡大縮小コピー";
+/* 00055f0a */	case 19:
+/* 00055f0a */		return "ＣＧ部分アルファブレンド";
+/* 00055f12 */	case 20:
+/* 00055f12 */		return "ＣＧ部分拡大縮小アルファブレンド";
+/* 00055f1a */	case 21:
+/* 00055f1a */		return "ＣＧ部分アルファ塗り";
+/* 00055f22 */	case 22:
+/* 00055f22 */		return "ＣＧ部分拡大縮小アルファ塗り";
+/* 00055f2a */	case 15:
+/* 00055f2a */		if (Process.IsFullSize())
+/* 00055f40 */		{
+/* 00055f40 */			return "白黒フィルタ全";
+/* 00055f48 */		}
+/* 00055f4e */		else
+/* 00055f4e */		{
+/* 00055f4e */			return "白黒フィルタ";
+/* 00055f56 */		}
+/* 00055f56 */	case 16:
+/* 00055f56 */		if (Process.IsFullSize())
+/* 00055f6c */		{
+/* 00055f6c */			return "加算フィルタ全";
+/* 00055f74 */		}
+/* 00055f7a */		else
+/* 00055f7a */		{
+/* 00055f7a */			return "加算フィルタ";
+/* 00055f82 */		}
+/* 00055f82 */	case 17:
+/* 00055f82 */		if (Process.IsFullSize())
+/* 00055f98 */		{
+/* 00055f98 */			return "乗算フィルタ全";
+/* 00055fa0 */		}
+/* 00055fa6 */		else
+/* 00055fa6 */		{
+/* 00055fa6 */			return "乗算フィルタ";
+/* 00055fae */		}
+/* 00055fae */	case 18:
+/* 00055fae */		return "線";
+/* 00055fb6 */	}
+/* 00055fb6 */	return "不明";
+/* 00055fbe */}
+
+void CAEEditConstructionProcess::ReleaseProcessEdit()
+/* 00055fcc */{
+/* 00055fcc */	this.m_ProcessEdit.Release();
+/* 00055fdc */}
+
+void CAEEditConstructionProcess::CreateProcessEdit(int LayoutID, ref CASConstructionProcess Process)
+/* 00055fe4 */{
+/* 00055fe4 */	this.m_ProcessEdit.Create(LayoutID, Process);
+/* 00056008 */	this.m_ProcessEdit.SetChangedEvent(this.ChangedEvent);
+/* 00056022 */	this.m_ProcessEdit.SetMouseWheelEvent(this.MouseWheelEvent);
+/* 0005603c */}
+
+int CAEEditConstructionProcess::GetProcessLabelWidth()
+/* 00056044 */{
+/* 00056044 */	return AFL_Parts_GetWidth(this.m_ProcessLayout, 1);
+/* 0005605c */}
+
+void CAEEditConstructionProcess::SetProcessLabelX(int PosX)
+/* 0005606a */{
+/* 0005606a */	Ｐ＿座標設定(this.m_ProcessLayout, this.m_ProcessNameWidth + PosX, 2.0);
+/* 00056098 */}
+
+void CAEEditConstructionProcess::MouseEnter(int ID, int MouseX, int MouseY)
+/* 000560a0 */{
+/* 000560a0 */	Ｐ＿乗算色設定(this.m_BG, 200, 200, 255);
+/* 000560c2 */}
+
+void CAEEditConstructionProcess::MouseLeave(int ID, int MouseX, int MouseY)
+/* 000560ca */{
+/* 000560ca */	Ｐ＿乗算色設定(this.m_BG, 255, 255, this.m_Focus ? 200 : 255);
+/* 00056108 */}
+
+void CAEEditConstructionProcess::MouseClick(int ID, int MouseX, int MouseY)
+/* 00056110 */{
+/* 00056110 */	this.m_dgMouseClickEvent(this.m_BG, MouseX, MouseY);
+/* 0005614e */}
+
+void CAEEditConstructionProcess::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00056156 */{
+/* 00056156 */	this.m_dgMouseWheelEvent(this.GetID(), Forward, Back);
+/* 00056192 */}
+
+void CAEEditConstructionProcess::ChangedEvent(int ID)
+/* 0005619a */{
+/* 0005619a */	this.m_dgChangedEvent(this.GetID());
+/* 000561c2 */}
+
+void CAEEditConstructionProcess::SetActive(bool Active)
+/* 000561ca */{
+/* 000561ca */	this.m_Focus = Active;
+/* 000561e0 */	Ｐ＿乗算色設定(this.m_BG, 255, 255, this.m_Focus ? 200 : 255);
+/* 0005621e */}
+
+bool CAEEditConstructionProcess::IsActive()
+/* 00056226 */{
+/* 00056226 */	return this.m_Focus;
+/* 00056232 */}
+
+int CAEEditConstructionProcess::GetID()
+/* 00056240 */{
+/* 00056240 */	return this.m_BG;
+/* 0005624c */}
+
+void CAEEditConstructionProcess::SetLButtonClick(DG_MouseClickHandler dgObject)
+/* 0005625a */{
+/* 0005625a */	this.m_dgMouseClickEvent = dgObject;
+/* 00056274 */}
+
+void CAEEditConstructionProcess::SetMouseWheelEvent(DG_MouseWheelHandler dgObject)
+/* 0005627c */{
+/* 0005627c */	this.m_dgMouseWheelEvent = dgObject;
+/* 00056296 */}
+
+void CAEEditConstructionProcess::SetChangedEvent(DG_ChangedHandler dgObject)
+/* 0005629e */{
+/* 0005629e */	this.m_dgChangedEvent = dgObject;
+/* 000562b8 */}
+

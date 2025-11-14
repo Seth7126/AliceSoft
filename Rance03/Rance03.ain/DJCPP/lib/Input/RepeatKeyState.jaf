@@ -1,0 +1,25 @@
+RepeatKeyState::RepeatKeyState()
+/* 001e6890 */{
+/* 001e6898 */	this.pressedFrameCount_ = 0;
+/* 001e68aa */	this.isPress_ = false;
+/* 001e68bc */}
+
+bool RepeatKeyState::isPress()
+/* 001e68c4 */{
+/* 001e68c4 */	return this.isPress_;
+/* 001e68d0 */}
+
+void RepeatKeyState::update(bool newState)
+/* 001e68de */{
+/* 001e68de */	if (!newState)
+/* 001e68f0 */	{
+/* 001e68f0 */		this.pressedFrameCount_ = 0;
+/* 001e6902 */		this.isPress_ = false;
+/* 001e6914 */	}
+/* 001e691a */	else
+/* 001e691a */	{
+/* 001e691a */		this.isPress_ = this.pressedFrameCount_ == 0 || this.pressedFrameCount_ > 40 && this.pressedFrameCount_ % 6 == 0;
+/* 001e69a2 */		++this.pressedFrameCount_;
+/* 001e69b2 */	}
+/* 001e69b2 */}
+

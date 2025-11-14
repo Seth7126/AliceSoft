@@ -1,0 +1,105 @@
+void MirrorPiece::init(string id)
+/* 001d92a8 */{
+/* 001d92a8 */	int count = EX_Int("鏡の破片枚数", 0);
+/* 001d92c6 */	this.isOpen_.Alloc(count);
+/* 001d92e0 */	this.isOpen_.Fill(0, this.isOpen_.Numof(), false);
+/* 001d9308 */	this.isShownAtViewer_ = true;
+/* 001d931a */	this.baseCgName_ = id;
+/* 001d9332 */	this.loadParam();
+/* 001d933a */}
+
+int MirrorPiece::open()
+/* 001d9342 */{
+/* 001d9342 */	if (this.isComplete())
+/* 001d9350 */	{
+/* 001d9350 */		return -1;
+/* 001d9358 */	}
+/* 001d9358 */	this.isShownAtViewer_ = false;
+/* 001d936a */	array@int indexes;
+/* 001d9374 */	int i;
+/* 001d9386 */	for (i = 0; i < this.isOpen_.Numof(); ++i)
+/* 001d93d6 */	{
+/* 001d93d6 */		if (!this.isOpen_[i])
+/* 001d93f4 */		{
+/* 001d93f4 */			indexes.PushBack(i);
+/* 001d9408 */		}
+/* 001d9408 */	}
+/* 001d940e */	int openIndex = indexes[RAND(indexes.Numof()) - 1];
+/* 001d9444 */	this.isOpen_[openIndex] = true;
+/* 001d9462 */	return openIndex;
+/* 001d946e */}
+
+void MirrorPiece::setShownAtViewer(bool val)
+/* 001d947c */{
+/* 001d947c */	this.isShownAtViewer_ = val;
+/* 001d9492 */}
+
+bool MirrorPiece::isComplete()
+/* 001d949a */{
+/* 001d949a */	int i;
+/* 001d94ac */	for (i = 0; i < this.isOpen_.Numof(); ++i)
+/* 001d94fc */	{
+/* 001d94fc */		if (!this.isOpen_[i])
+/* 001d951a */		{
+/* 001d951a */			return false;
+/* 001d9522 */		}
+/* 001d9522 */	}
+/* 001d9528 */	return true;
+/* 001d9530 */}
+
+void MirrorPiece::loadParam()
+/* 001d953e */{
+/* 001d953e */	this.completeCgName_ = EX_SA2String("鏡の破片情報", this.baseCgName_, "completeCgName", "");
+/* 001d956e */	this.advFunctionName_ = EX_SA2String("鏡の破片情報", this.baseCgName_, "advFunctionName", "");
+/* 001d959e */	this.bgCgName_ = EX_SA2String("鏡の破片情報", this.baseCgName_, "bgCgName", "");
+/* 001d95ce */}
+
+string MirrorPiece::getCgName(int index)
+/* 001d95d6 */{
+/* 001d95d6 */	return "%s%02D" % this.baseCgName_ % (index + 1);
+/* 001d960a */}
+
+string MirrorPiece::getCompleteCgName()
+/* 001d9618 */{
+/* 001d9618 */	return this.completeCgName_;
+/* 001d9624 */}
+
+string MirrorPiece::getAdvFunctionName()
+/* 001d9632 */{
+/* 001d9632 */	return this.advFunctionName_;
+/* 001d963e */}
+
+bool MirrorPiece::isPieceOpen(int index)
+/* 001d964c */{
+/* 001d964c */	return this.isOpen_[index];
+/* 001d9664 */}
+
+int MirrorPiece::getPieceCount()
+/* 001d9672 */{
+/* 001d9672 */	return this.isOpen_.Numof();
+/* 001d9684 */}
+
+string MirrorPiece::getBgCgName()
+/* 001d9692 */{
+/* 001d9692 */	return this.bgCgName_;
+/* 001d969e */}
+
+bool MirrorPiece::isShownAtViewer()
+/* 001d96ac */{
+/* 001d96ac */	return this.isShownAtViewer_;
+/* 001d96b8 */}
+
+int MirrorPiece::getCount()
+/* 001d96c6 */{
+/* 001d96c6 */	int n;
+/* 001d96d8 */	int i;
+/* 001d96ea */	for (i = 0; i < this.isOpen_.Numof(); ++i)
+/* 001d973a */	{
+/* 001d973a */		if (this.isOpen_[i])
+/* 001d9756 */		{
+/* 001d9756 */			++n;
+/* 001d9766 */		}
+/* 001d9766 */	}
+/* 001d976c */	return n;
+/* 001d9778 */}
+

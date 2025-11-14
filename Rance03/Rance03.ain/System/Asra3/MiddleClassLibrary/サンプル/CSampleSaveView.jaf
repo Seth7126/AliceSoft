@@ -1,0 +1,50 @@
+void CSampleSaveView::Run()
+/* 00040510 */{
+/* 00040510 */	int NumofViewList = 20;
+/* 00040522 */	int ViewIndex;
+/* 00040534 */	for (ViewIndex = 0; ViewIndex < NumofViewList; ViewIndex++)
+/* 00040582 */	{
+/* 00040582 */		int SaveNumber = ViewIndex + 1;
+/* 000405a0 */		string Title;
+/* 000405b4 */		if (AFL_GameSave_IsExistFile(SaveNumber))
+/* 000405ca */		{
+/* 000405ca */			int Year;
+/* 000405dc */			int Month;
+/* 000405ee */			int Day;
+/* 00040600 */			int Week;
+/* 00040612 */			int Hour;
+/* 00040624 */			int Min;
+/* 00040636 */			int Sec;
+/* 00040648 */			string TimeInGameText;
+/* 0004065c */			string UserComment;
+/* 00040670 */			int PlayMinuteTime;
+/* 00040682 */			AFL_GameSave_GetFileInfo(SaveNumber, Year, Month, Day, Week, Hour, Min, Sec, TimeInGameText, UserComment, PlayMinuteTime);
+/* 000406e8 */			array@string WeekTextList;
+/* 000406f2 */			WeekTextList.PushBack("日");
+/* 00040702 */			WeekTextList.PushBack("月");
+/* 00040712 */			WeekTextList.PushBack("火");
+/* 00040722 */			WeekTextList.PushBack("水");
+/* 00040732 */			WeekTextList.PushBack("木");
+/* 00040742 */			WeekTextList.PushBack("金");
+/* 00040752 */			WeekTextList.PushBack("土");
+/* 00040762 */			Title = "%4d年%2d月%2d日(%s) %2d時%2d分%2d秒 [%s][%s] プレイ%d分" % Year % Month % Day % WeekTextList[Week] % Hour % Min % Sec % TimeInGameText % UserComment % PlayMinuteTime;
+/* 00040840 */		}
+/* 00040846 */		else
+/* 00040846 */		{
+/* 00040846 */			Title = "<empty>";
+/* 0004085a */		}
+/* 0004085a */		if (SaveNumber == SYS_最終セーブ番号取得())
+/* 00040872 */		{
+/* 00040872 */			Title += " NEW!";
+/* 00040886 */		}
+/* 00040886 */		選択肢(SaveNumber, Title, 0);
+/* 000408a6 */	}
+/* 000408ac */	int Result = テスト選択();
+/* 000408be */	if (Result >= 1 && Result < 1 + NumofViewList)
+/* 00040912 */	{
+/* 00040912 */		int SaveNumber = Result;
+/* 00040928 */		string Comment;
+/* 0004093c */		AFL_GameSave_Save(SaveNumber, Comment);
+/* 00040958 */	}
+/* 00040958 */}
+

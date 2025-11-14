@@ -1,0 +1,861 @@
+CMessageTextView::CMessageTextView()
+/* 00015d92 */{
+/* 00015d9a */	this.m_DrawSpriteFadeTotalTime = 200;
+/* 00015dac */}
+
+void CMessageTextView::Clear()
+/* 00015db4 */{
+/* 00015db4 */	this.m_MessageDrawParts.Free();
+/* 00015dbe */	this.m_DrawCharList.Free();
+/* 00015dc8 */}
+
+void CMessageTextView::CreateDrawCharList(ref CMessageTextModel MessageTextModel)
+/* 00015dd0 */{
+/* 00015dd0 */	this.Clear();
+/* 00015dd8 */	int Time;
+/* 00015dea */	int CurrentMessageWindowNumber = -1;
+/* 00015dfc */	int NumofMessage = MessageTextModel.GetNumofMessage();
+/* 00015e18 */	int DrawX;
+/* 00015e2a */	int DrawY;
+/* 00015e3c */	int Message;
+/* 00015e4e */	for (Message = 0; Message < NumofMessage; )
+/* 00015e88 */	{
+/* 00015e88 */		ref CMessageText MessageText = MessageTextModel.GetMessage(Message);
+/* 00015ed8 */		if (MessageText.nType == 3)
+/* 00015ef8 */		{
+/* 00015ef8 */			this.FreezeDrawCharListBeforeC();
+/* 00015f00 */			Time = 0;
+/* 00015f12 */			Message++;
+/* 00015f26 */			continue;
+/* 00015f38 */		}
+/* 00015f38 */		int MessageEnd;
+/* 00015f4a */		for (MessageEnd = Message; MessageEnd < NumofMessage; MessageEnd++)
+/* 00015f9c */		{
+/* 00015f9c */			if (MessageTextModel.GetMessage(MessageEnd).nType == 1)
+/* 00015fe6 */			{
+/* 00015fe6 */				MessageEnd++;
+/* 00015ffa */				break;
+/* 00016006 */			}
+/* 0001600c */			else if (MessageTextModel.GetMessage(MessageEnd).nType == 3)
+/* 00016056 */			{
+/* 00016056 */				break;
+/* 00016068 */			}
+/* 00016068 */		}
+/* 0001607a */		int Index;
+/* 0001608c */		for (Index = Message; Index < MessageEnd; Index++)
+/* 000160de */		{
+/* 000160de */			ref CMessageText MessageText = MessageTextModel.GetMessage(Index);
+/* 0001612e */			if (CurrentMessageWindowNumber != MessageText.MessageWindowNumber)
+/* 00016152 */			{
+/* 00016152 */				this.GetHomePosition(MessageText.MessageWindowNumber, DrawX, DrawY);
+/* 0001617c */				CurrentMessageWindowNumber = MessageText.MessageWindowNumber;
+/* 0001619a */			}
+/* 0001619a */		}
+/* 000161ac */		int MaxCharHeight = this.CalcMaxCharHeight(MessageTextModel, Message, MessageEnd, CurrentMessageWindowNumber);
+/* 000161e8 */		this.CreateDrawChar(MessageTextModel, Message, MessageEnd, MaxCharHeight, Time, DrawX, DrawY);
+/* 00016230 */		Message = MessageEnd;
+/* 00016246 */	}
+/* 00016258 */	this.MoveTextPosForLayout(MessageTextModel);
+/* 0001626a */}
+
+void CMessageTextView::GetHomePosition(int MessageWindowNumber, ref int DrawX, ref int DrawY)
+/* 00016272 */{
+/* 00016272 */	int Index;
+/* 00016284 */	for (Index = this.m_DrawCharList.Numof() - 1; Index >= 0; --Index)
+/* 000162dc */	{
+/* 000162dc */		ref SDrawChar Char = this.m_DrawCharList[Index];
+/* 0001630e */		if (Char.nType != 0)
+/* 0001632e */		{
+/* 0001632e */			continue;
+/* 0001633a */		}
+/* 0001633a */		if (Char.MessageWindowNumber != MessageWindowNumber)
+/* 0001635e */		{
+/* 0001635e */			continue;
+/* 0001636a */		}
+/* 0001636a */		DrawX = Char.nX + Char.nWidth + Char.CharSpace;
+/* 000163b2 */		DrawY = Char.nY;
+/* 000163d2 */		return;
+/* 000163d4 */	}
+/* 000163e0 */	ref CMessageWindowModel MessageWindow = g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber);
+/* 00016430 */	CASRect TextAreaRect;
+/* 00016440 */	TextAreaRect = MessageWindow.GetTextAreaRect();
+/* 00016464 */	DrawX = TextAreaRect.GetX();
+/* 00016482 */	DrawY = TextAreaRect.GetY();
+/* 000164a0 */}
+
+int CMessageTextView::CalcMaxCharHeight(ref CMessageTextModel MessageTextModel, int Begin, int End, int MessageWindowNumber)
+/* 000164a8 */{
+/* 000164a8 */	int Result = g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber).GetFontSize();
+/* 000164ee */	int Index;
+/* 00016500 */	for (Index = Begin; Index < End; Index++)
+/* 00016552 */	{
+/* 00016552 */		ref CMessageText Message = MessageTextModel.GetMessage(Index);
+/* 000165a2 */		if (Message.nType != 0 && Message.nType != 1)
+/* 000165fa */		{
+/* 000165fa */			continue;
+/* 0001660c */		}
+/* 0001660c */		int Height = this.CalcCharHeight(Message);
+/* 0001662a */		if (Result < Height)
+/* 00016646 */		{
+/* 00016646 */			Result = Height;
+/* 0001665c */		}
+/* 0001665c */	}
+/* 0001666e */	return Result;
+/* 0001667a */}
+
+int CMessageTextView::CalcCharHeight(ref CMessageText Message)
+/* 00016688 */{
+/* 00016688 */	int nMaxSize = Math.Max(Math.Ceil(this.DecideFontWeight(Message)), Math.Ceil(this.DecideFontEdgeWeight(Message))) * 2;
+/* 000166de */	return this.DecideFontSize(Message) + nMaxSize;
+/* 000166fe */}
+
+void CMessageTextView::CreateDrawChar(ref CMessageTextModel MessageTextModel, int Begin, int End, int MaxCharHeight, ref int Time, ref int DrawX, ref int DrawY)
+/* 0001670c */{
+/* 0001670c */	float _fSpeedRatio = SYS_メッセージ速度比率();
+/* 0001671e */	int Index;
+/* 00016730 */	for (Index = Begin; Index < End; Index++)
+/* 00016782 */	{
+/* 00016782 */		ref CMessageText Message = MessageTextModel.GetMessage(Index);
+/* 000167d2 */		int CharSpeed = this.CalcCharSpeed(Message) * _fSpeedRatio;
+/* 00016804 */		switch (Message.nType)
+/* 00016822 */		{
+/* 00016822 */		case 0:
+/* 00016822 */			this.CreateDrawCharFromMessage(Message, MaxCharHeight, Time, CharSpeed, MessageTextModel, DrawX, DrawY);
+/* 00016870 */			break;
+/* 00016876 */		case 1:
+/* 00016876 */			this.CreateDrawCharNewLine(Message, MaxCharHeight, DrawX, DrawY);
+/* 000168a6 */			break;
+/* 000168ac */		case 2:
+/* 000168ac */			SDrawChar _Char;
+/* 000168bc */			_Char.nType = 1;
+/* 000168d6 */			_Char.MessageWindowNumber = Message.MessageWindowNumber;
+/* 000168fc */			_Char.Voice = Message.Voice;
+/* 00016924 */			this.m_DrawCharList.PushBack(_Char);
+/* 0001693c */			break;
+/* 00016948 */		case 3:
+/* 00016948 */			break;
+/* 0001694e */		}
+/* 0001694e */	}
+/* 00016960 */}
+
+void CMessageTextView::CreateDrawCharFromMessage(ref CMessageText Message, int MaxCharHeight, ref int Time, int CharSpeed, ref CMessageTextModel MessageTextModel, ref int DrawX, ref int DrawY)
+/* 00016968 */{
+/* 00016968 */	int nWeightSize = Math.Max(Math.Ceil(this.DecideFontWeight(Message)), Math.Ceil(this.DecideFontEdgeWeight(Message))) * 2;
+/* 000169be */	int CharHeight = this.DecideFontSize(Message) + nWeightSize;
+/* 000169e8 */	int nCharSpaceWidth = g_MessageWindowModelManager.GetMessageWindow(Message.MessageWindowNumber).字間;
+/* 00016a38 */	SDrawChar _Char;
+/* 00016a48 */	_Char.nType = 0;
+/* 00016a62 */	_Char.MessageWindowNumber = Message.MessageWindowNumber;
+/* 00016a88 */	_Char.CharSpace = nCharSpaceWidth;
+/* 00016aa6 */	_Char.Height = CharHeight;
+/* 00016ac4 */	_Char.MaxHeightInLine = MaxCharHeight;
+/* 00016ae2 */	this.SetCharSpritePropertyFromMessageText(_Char, Message, MessageTextModel);
+/* 00016b08 */	ref string MessageText = Message.MessageText;
+/* 00016b36 */	int nMessageLength = MessageText.Length();
+/* 00016b4c */	int Char;
+/* 00016b5e */	for (Char = 0; Char < nMessageLength; Char++)
+/* 00016bac */	{
+/* 00016bac */		_Char.CharText = MessageText.GetPart(Char, 1);
+/* 00016bde */		_Char.nX = DrawX;
+/* 00016bfe */		_Char.nY = DrawY;
+/* 00016c1e */		if (_Char.CharText == "―")
+/* 00016c3e */		{
+/* 00016c3e */			int nNumofDashChar;
+/* 00016c50 */			++Char;
+/* 00016c60 */			for (; Char < MessageText.Length(); ++Char)
+/* 00016c98 */			{
+/* 00016c98 */				if (MessageText.GetPart(Char, 1) != "―")
+/* 00016cc2 */				{
+/* 00016cc2 */					--Char;
+/* 00016cd2 */					break;
+/* 00016cd8 */				}
+/* 00016cd8 */				_Char.CharText += "―";
+/* 00016cf4 */				nNumofDashChar++;
+/* 00016d08 */			}
+/* 00016d0e */			int TextWidth;
+/* 00016d20 */			int TextHeight;
+/* 00016d32 */			PARTS_TextParts_CalcSize(_Char.Property, _Char.CharText, TextWidth, TextHeight, nCharSpaceWidth, 0);
+/* 00016d7c */			_Char.nWidth = TextWidth + nCharSpaceWidth;
+/* 00016da6 */			DrawX += TextWidth + nCharSpaceWidth;
+/* 00016dca */			_Char.nTime = Time;
+/* 00016dea */			Time += CharSpeed * nNumofDashChar;
+/* 00016e0e */		}
+/* 00016e14 */		else
+/* 00016e14 */		{
+/* 00016e14 */			int TextWidth;
+/* 00016e26 */			int TextHeight;
+/* 00016e38 */			PARTS_TextParts_CalcSize(_Char.Property, _Char.CharText, TextWidth, TextHeight, 0, 0);
+/* 00016e7e */			_Char.nWidth = TextWidth;
+/* 00016e9c */			DrawX += TextWidth + nCharSpaceWidth;
+/* 00016ec0 */			_Char.nTime = Time;
+/* 00016ee0 */			Time += CharSpeed;
+/* 00016ef8 */		}
+/* 00016ef8 */		this.m_DrawCharList.PushBack(_Char);
+/* 00016f10 */	}
+/* 00016f16 */}
+
+void CMessageTextView::CreateDrawCharNewLine(ref CMessageText Message, int MaxCharHeight, ref int DrawX, ref int DrawY)
+/* 00016f1e */{
+/* 00016f1e */	ref CMessageWindowModel MessageWindow = g_MessageWindowModelManager.GetMessageWindow(Message.MessageWindowNumber);
+/* 00016f76 */	CASRect TextAreaRect;
+/* 00016f86 */	TextAreaRect = MessageWindow.GetTextAreaRect();
+/* 00016faa */	DrawX = TextAreaRect.GetX();
+/* 00016fc8 */	DrawY += MaxCharHeight;
+/* 00016fe0 */	DrawY += MessageWindow.行間;
+/* 00017000 */}
+
+void CMessageTextView::FreezeDrawCharListBeforeC()
+/* 00017008 */{
+/* 00017008 */	int Index;
+/* 0001701a */	for (Index = 0; Index < this.m_DrawCharList.Numof(); )
+/* 0001705a */	{
+/* 0001705a */		switch (this.m_DrawCharList[Index].nType)
+/* 00017084 */		{
+/* 00017084 */		case 0:
+/* 00017084 */			this.m_DrawCharList[Index].nTime = 0;
+/* 000170aa */			Index++;
+/* 000170be */			break;
+/* 000170c4 */		case 1:
+/* 000170c4 */			this.m_DrawCharList.Erase(Index);
+/* 000170da */			break;
+/* 000170e0 */		default:
+/* 000170e0 */			Index++;
+/* 000170f4 */		}
+/* 000170f4 */	}
+/* 000170fa */}
+
+void CMessageTextView::SetCharSpritePropertyFromMessageText(ref SDrawChar _Char, ref CMessageText Message, ref CMessageTextModel MessageTextModel)
+/* 00017102 */{
+/* 00017102 */	int Red = this.DecideFontColorR(Message);
+/* 00017120 */	int Green = this.DecideFontColorG(Message);
+/* 0001713e */	int Blue = this.DecideFontColorB(Message);
+/* 0001715c */	_Char.DefaultRed = Red;
+/* 0001717a */	_Char.DefaultGreen = Green;
+/* 00017198 */	_Char.DefaultBlue = Blue;
+/* 000171b6 */	if (AFL_Config_ChangesReadTextColor() && MessageTextModel.IsReadMessage(Message))
+/* 000171fa */	{
+/* 000171fa */		AFL_Config_GetReadTextColor(AFL_Config_GetReadTextColorIndex(), Red, Green, Blue);
+/* 0001721e */	}
+/* 0001721e */	_Char.Property.SetType(this.DecideFontType(Message));
+/* 00017248 */	_Char.Property.SetSize(this.DecideFontSize(Message));
+/* 00017272 */	_Char.Property.SetColor(CF_CASColor(Red, Green, Blue, 255));
+/* 000172b4 */	_Char.Property.SetBoldWeight(this.DecideFontWeight(Message));
+/* 000172de */	_Char.Property.SetEdgeWeight(this.DecideFontEdgeWeight(Message));
+/* 00017308 */	_Char.Property.SetEdgeColor(CF_CASColor(this.DecideFontEdgeColorR(Message), this.DecideFontEdgeColorG(Message), this.DecideFontEdgeColorB(Message), 255));
+/* 00017362 */}
+
+int CMessageTextView::DecideFontType(ref CMessageText MessageText)
+/* 0001736a */{
+/* 0001736a */	if (MessageText.Ｍフォント != -1)
+/* 0001738a */	{
+/* 0001738a */		return MessageText.Ｍフォント;
+/* 0001739e */	}
+/* 0001739e */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).フォント;
+/* 000173e4 */}
+
+int CMessageTextView::DecideFontSize(ref CMessageText MessageText)
+/* 000173f2 */{
+/* 000173f2 */	if (MessageText.Ｍサイズ != -1)
+/* 00017412 */	{
+/* 00017412 */		return MessageText.Ｍサイズ;
+/* 00017426 */	}
+/* 00017426 */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).GetFontSize();
+/* 0001746a */}
+
+int CMessageTextView::DecideFontColorR(ref CMessageText MessageText)
+/* 00017478 */{
+/* 00017478 */	if (MessageText.ＭＲ != -1)
+/* 00017498 */	{
+/* 00017498 */		return MessageText.ＭＲ;
+/* 000174ac */	}
+/* 000174ac */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).文字Ｒ;
+/* 000174f2 */}
+
+int CMessageTextView::DecideFontColorG(ref CMessageText MessageText)
+/* 00017500 */{
+/* 00017500 */	if (MessageText.ＭＧ != -1)
+/* 00017520 */	{
+/* 00017520 */		return MessageText.ＭＧ;
+/* 00017534 */	}
+/* 00017534 */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).文字Ｇ;
+/* 0001757a */}
+
+int CMessageTextView::DecideFontColorB(ref CMessageText MessageText)
+/* 00017588 */{
+/* 00017588 */	if (MessageText.ＭＢ != -1)
+/* 000175a8 */	{
+/* 000175a8 */		return MessageText.ＭＢ;
+/* 000175bc */	}
+/* 000175bc */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).文字Ｂ;
+/* 00017602 */}
+
+float CMessageTextView::DecideFontWeight(ref CMessageText MessageText)
+/* 00017610 */{
+/* 00017610 */	if (MessageText.Ｍ太さ != -1 && MessageText.Ｍ太さ != -2147483648)
+/* 00017668 */	{
+/* 00017668 */		return this.CalcFontWeight(MessageText.Ｍ太さ);
+/* 00017684 */	}
+/* 00017684 */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).GetFontRealWeight();
+/* 000176c8 */}
+
+float CMessageTextView::DecideFontEdgeWeight(ref CMessageText MessageText)
+/* 000176d6 */{
+/* 000176d6 */	if (MessageText.Ｍ縁取り幅 >= 0.0)
+/* 000176f6 */	{
+/* 000176f6 */		return MessageText.Ｍ縁取り幅;
+/* 0001770a */	}
+/* 0001770a */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).GetEdgeWeight();
+/* 0001774e */}
+
+int CMessageTextView::DecideFontEdgeColorR(ref CMessageText MessageText)
+/* 0001775c */{
+/* 0001775c */	if (MessageText.Ｍ縁取りＲ != -1)
+/* 0001777c */	{
+/* 0001777c */		return MessageText.Ｍ縁取りＲ;
+/* 00017790 */	}
+/* 00017790 */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).GetEdgeColorR();
+/* 000177d4 */}
+
+int CMessageTextView::DecideFontEdgeColorG(ref CMessageText MessageText)
+/* 000177e2 */{
+/* 000177e2 */	if (MessageText.Ｍ縁取りＧ != -1)
+/* 00017802 */	{
+/* 00017802 */		return MessageText.Ｍ縁取りＧ;
+/* 00017816 */	}
+/* 00017816 */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).GetEdgeColorG();
+/* 0001785a */}
+
+int CMessageTextView::DecideFontEdgeColorB(ref CMessageText MessageText)
+/* 00017868 */{
+/* 00017868 */	if (MessageText.Ｍ縁取りＢ != -1)
+/* 00017888 */	{
+/* 00017888 */		return MessageText.Ｍ縁取りＢ;
+/* 0001789c */	}
+/* 0001789c */	return g_MessageWindowModelManager.GetMessageWindow(MessageText.MessageWindowNumber).GetEdgeColorB();
+/* 000178e0 */}
+
+float CMessageTextView::CalcFontWeight(int Weight)
+/* 000178ee */{
+/* 000178ee */	if (Weight <= 400)
+/* 00017906 */	{
+/* 00017906 */		return 0.0;
+/* 0001790e */	}
+/* 0001790e */	float fWeight = ((Weight - 400) * 2.0) / 600.0;
+/* 00017942 */	if (fWeight > 2.0)
+/* 0001795a */	{
+/* 0001795a */		fWeight = 2.0;
+/* 0001796c */	}
+/* 0001796c */	return fWeight;
+/* 00017978 */}
+
+int CMessageTextView::CalcCharSpeed(ref CMessageText Message)
+/* 00017986 */{
+/* 00017986 */	if (Message.Ｍ速度 != -1)
+/* 000179a6 */	{
+/* 000179a6 */		return Message.Ｍ速度;
+/* 000179ba */	}
+/* 000179ba */	return g_MessageWindowModelManager.GetMessageWindow(Message.MessageWindowNumber).文字速度;
+/* 00017a00 */}
+
+void CMessageTextView::Draw(ref CMessageTextModel MessageTextModel)
+/* 00017a0e */{
+/* 00017a0e */	this.CreateDrawCharList(MessageTextModel);
+/* 00017a20 */	PARTS_BeginMotion();
+/* 00017a26 */	this.DrawCharList();
+/* 00017a2e */}
+
+void CMessageTextView::DrawAll(ref CMessageTextModel MessageTextModel)
+/* 00017a36 */{
+/* 00017a36 */	this.CreateDrawCharList(MessageTextModel);
+/* 00017a48 */	this.DrawCharListAll();
+/* 00017a50 */}
+
+int CMessageTextView::CalcTotalTime()
+/* 00017a58 */{
+/* 00017a58 */	int TotalTime;
+/* 00017a6a */	int Index;
+/* 00017a7c */	for (Index = 0; Index < this.m_DrawCharList.Numof(); Index++)
+/* 00017ad0 */	{
+/* 00017ad0 */		TotalTime += this.m_DrawCharList[Index].nTime;
+/* 00017afa */	}
+/* 00017b00 */	return TotalTime;
+/* 00017b0c */}
+
+void CMessageTextView::DrawCharList()
+/* 00017b1a */{
+/* 00017b1a */	SYS_メッセージモード更新();
+/* 00017b20 */	int Index;
+/* 00017b32 */	float _fSpeedRatio = SYS_メッセージ速度比率();
+/* 00017b44 */	int TotalTime = this.CalcTotalTime();
+/* 00017b58 */	if (_fSpeedRatio > 0.0 && g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()).文字速度 != 0 && TotalTime != 0)
+/* 00017c08 */	{
+/* 00017c08 */		CASTimer Timer;
+/* 00017c18 */		Timer.Reset();
+/* 00017c28 */		for (; Index < this.m_DrawCharList.Numof(); Index++)
+/* 00017c6a */		{
+/* 00017c6a */			if (this.m_DrawCharList[Index].nTime > 0)
+/* 00017c96 */			{
+/* 00017c96 */				break;
+/* 00017c9c */			}
+/* 00017c9c */			this.DrawChar(this.m_DrawCharList[Index], true, false);
+/* 00017cc8 */		}
+/* 00017cce */		this.FixAllDrawCharListAlphaRate();
+/* 00017cd6 */		sys_btn_fnc_t OnCursorSystemButton;
+/* 00017ce2 */		for (; ; )
+/* 00017ce2 */		{
+/* 00017ce2 */			if (this.IsWheelRotate())
+/* 00017cf0 */			{
+/* 00017cf0 */				break;
+/* 00017cf6 */			}
+/* 00017cf6 */			if (Index >= this.m_DrawCharList.Numof() && this.IsFinishedDrawCharListFadeIn())
+/* 00017d3e */			{
+/* 00017d3e */				break;
+/* 00017d44 */			}
+/* 00017d44 */			if (SYS_全文スキップ中確認())
+/* 00017d50 */			{
+/* 00017d50 */				break;
+/* 00017d56 */			}
+/* 00017d56 */			if (SYS_スキップ中確認())
+/* 00017d62 */			{
+/* 00017d62 */				break;
+/* 00017d68 */			}
+/* 00017d68 */			if (this.IsKeysDown())
+/* 00017d76 */			{
+/* 00017d76 */				break;
+/* 00017d7c */			}
+/* 00017d7c */			if (this.IsJoyKeysDown())
+/* 00017d8a */			{
+/* 00017d8a */				break;
+/* 00017d90 */			}
+/* 00017d90 */			float _fTime = Timer.Get();
+/* 00017dae */			if (Index < this.m_DrawCharList.Numof())
+/* 00017dd0 */			{
+/* 00017dd0 */				if (this.m_DrawCharList[Index].nTime <= _fTime)
+/* 00017e02 */				{
+/* 00017e02 */					if (this.DrawChar(this.m_DrawCharList[Index], true, true))
+/* 00017e32 */					{
+/* 00017e32 */						Index++;
+/* 00017e46 */					}
+/* 00017e46 */				}
+/* 00017e46 */			}
+/* 00017e46 */			sys_btn_fnc_t PrevOnCursorSystemButton = OnCursorSystemButton;
+/* 00017e66 */			g_SystemButtonViewList.Update();
+/* 00017e76 */			OnCursorSystemButton = g_SystemButtonViewList.GetSelectedFunc();
+/* 00017e94 */			if (!SYS_IsSame_sys_btn_fnc_t(PrevOnCursorSystemButton, OnCursorSystemButton) && OnCursorSystemButton.Numof() != 0)
+/* 00017eee */			{
+/* 00017eee */				g_SystemButtonViewList.PlayOnCursorSound();
+/* 00017efe */			}
+/* 00017efe */			this.UpdateDrawCharListAlphaRate(_fTime, this.m_DrawSpriteFadeTotalTime);
+/* 00017f1c */			PARTS_UpdateMotion(true);
+/* 00017f28 */			AFL_View_Update(true);
+/* 00017f34 */			PrevOnCursorSystemButton.Clear();
+/* 00017f40 */		}
+/* 00017f46 */		OnCursorSystemButton.Clear();
+/* 00017f52 */	}
+/* 00017f58 */	for (; Index < this.m_DrawCharList.Numof(); Index++)
+/* 00017f9a */	{
+/* 00017f9a */		this.DrawChar(this.m_DrawCharList[Index], true, false);
+/* 00017fc6 */	}
+/* 00017fcc */	this.FixAllDrawCharListAlphaRate();
+/* 00017fd4 */	PARTS_UpdateMotion(true);
+/* 00017fe0 */	AFL_View_Update(true);
+/* 00017fec */}
+
+bool CMessageTextView::IsFinishedDrawCharListFadeIn()
+/* 00017ff4 */{
+/* 00017ff4 */	int nIndex;
+/* 00018006 */	for (nIndex = 0; nIndex < this.m_MessageDrawParts.Numof(); nIndex++)
+/* 0001805a */	{
+/* 0001805a */		ref CMessageDrawParts MessageDrawParts = this.m_MessageDrawParts[nIndex];
+/* 0001808c */		if (MessageDrawParts.IsFixed())
+/* 000180a2 */		{
+/* 000180a2 */			continue;
+/* 000180ae */		}
+/* 000180ae */		if (MessageDrawParts.GetAlphaRate() < 255)
+/* 000180cc */		{
+/* 000180cc */			return false;
+/* 000180d4 */		}
+/* 000180d4 */	}
+/* 000180e0 */	return true;
+/* 000180e8 */}
+
+void CMessageTextView::UpdateDrawCharListAlphaRate(float fTime, float fTimeLength)
+/* 000180f6 */{
+/* 000180f6 */	int nIndex;
+/* 00018108 */	for (nIndex = 0; nIndex < this.m_MessageDrawParts.Numof(); nIndex++)
+/* 0001815c */	{
+/* 0001815c */		ref CMessageDrawParts MessageDrawParts = this.m_MessageDrawParts[nIndex];
+/* 0001818e */		if (MessageDrawParts.IsFixed())
+/* 000181a4 */		{
+/* 000181a4 */			continue;
+/* 000181b0 */		}
+/* 000181b0 */		int nTime = MessageDrawParts.GetTime();
+/* 000181cc */		int nAlphaRate = Math.Min(Math.Max(((fTime - nTime) * 255.0) / fTimeLength, 0), 255);
+/* 00018226 */		MessageDrawParts.SetAlphaRate(nAlphaRate);
+/* 00018240 */	}
+/* 0001824c */}
+
+void CMessageTextView::FixAllDrawCharListAlphaRate()
+/* 00018254 */{
+/* 00018254 */	int nIndex;
+/* 00018266 */	for (nIndex = 0; nIndex < this.m_MessageDrawParts.Numof(); nIndex++)
+/* 000182ba */	{
+/* 000182ba */		this.m_MessageDrawParts[nIndex].SetFixed();
+/* 000182d6 */	}
+/* 000182dc */}
+
+void CMessageTextView::DrawCharListAll()
+/* 000182e4 */{
+/* 000182e4 */	int Index;
+/* 000182f6 */	for (Index = 0; Index < this.m_DrawCharList.Numof(); Index++)
+/* 0001834a */	{
+/* 0001834a */		this.DrawChar(this.m_DrawCharList[Index], false, false);
+/* 00018376 */	}
+/* 0001837c */}
+
+bool CMessageTextView::DrawChar(ref SDrawChar _Char, bool _bEffect, bool bAlphaFadeInFinishedCheck)
+/* 00018384 */{
+/* 00018384 */	switch (_Char.nType)
+/* 000183a2 */	{
+/* 000183a2 */	case 0:
+/* 000183a2 */		this.m_MessageDrawParts.Realloc(this.m_MessageDrawParts.Numof() + 1);
+/* 000183ca */		ref CMessageDrawParts MessageDrawParts = this.m_MessageDrawParts[this.m_MessageDrawParts.Numof() - 1];
+/* 0001840a */		MessageDrawParts.SetCharSprite(_Char.nTime, _Char.MessageWindowNumber);
+/* 0001843e */		MessageDrawParts.SetFontProperty(_Char.Property);
+/* 00018460 */		MessageDrawParts.SetFontCharSpace(_Char.CharSpace);
+/* 00018482 */		MessageDrawParts.SetText(_Char.CharText);
+/* 000184a4 */		int nBaseX = g_MessageWindowModelManager.GetMessageWindow(_Char.MessageWindowNumber).GetX();
+/* 000184f2 */		int nBaseY = g_MessageWindowModelManager.GetMessageWindow(_Char.MessageWindowNumber).GetY();
+/* 00018540 */		int nBaseZ = g_MessageWindowModelManager.GetZ() + g_MessageWindowManager.GetOffsetZ(_Char.MessageWindowNumber);
+/* 00018580 */		int OffsetTextZRange = g_MessageWindowModelManager.GetTextOffsetZ();
+/* 0001859c */		int CharX = nBaseX + _Char.nX;
+/* 000185c6 */		int CharY = nBaseY + _Char.nY + (_Char.MaxHeightInLine - _Char.Height);
+/* 00018618 */		MessageDrawParts.SetPos(CharX, CharY);
+/* 0001863c */		MessageDrawParts.SetZ(nBaseZ + OffsetTextZRange);
+/* 00018662 */		MessageDrawParts.SetShow(true);
+/* 00018678 */		MessageDrawParts.SetAlphaRate(255);
+/* 0001868e */		MessageDrawParts.SetDefaultFontColor(_Char.DefaultRed, _Char.DefaultGreen, _Char.DefaultBlue);
+/* 000186d4 */		MessageDrawParts.SetAddColor(_Char.Red, _Char.Green, _Char.Blue);
+/* 0001871a */		if (g_DrawMessageCharFunction.Numof() != 0)
+/* 00018736 */		{
+/* 00018736 */			g_DrawMessageCharFunction(_Char.CharText);
+/* 00018768 */		}
+/* 00018768 */		break;
+/* 00018780 */	case 1:
+/* 00018780 */		if (_bEffect && !_Char.Voice.Empty() && !SYS_スキップ中確認() && !SYS_全文スキップ中確認())
+/* 00018810 */		{
+/* 00018810 */			SYS_PlayVoice(_Char.Voice);
+/* 00018828 */		}
+/* 00018828 */		break;
+/* 00018840 */	}
+/* 00018852 */	return true;
+/* 0001885a */}
+
+bool CMessageTextView::IsKeysDown()
+/* 00018868 */{
+/* 00018868 */	if (AFL_IsKeyDown(1) || AFL_IsKeyDown(13) || AFL_IsKeyDown(2) || AFL_IsKeyDown(27) || AFL_IsKeyDown(32) || AFL_IsKeyDown(65) || AFL_IsKeyDown(83) || AFL_IsKeyDown(4) || AFL_IsKeyDown(90) || AFL_IsKeyDown(33) || AFL_IsKeyDown(8) || AFL_IsKeyDown(36) || AFL_IsKeyDown(38) || AFL_IsKeyDown(40))
+/* 00018a9c */	{
+/* 00018a9c */		return true;
+/* 00018aa4 */	}
+/* 00018aa4 */	return false;
+/* 00018aac */}
+
+bool CMessageTextView::IsJoyKeysDown()
+/* 00018aba */{
+/* 00018aba */	int JoyKey;
+/* 00018acc */	for (JoyKey = 5; JoyKey <= 20; JoyKey++)
+/* 00018b16 */	{
+/* 00018b16 */		if (AFL_Joystick_IsKeyDown(0, JoyKey))
+/* 00018b32 */		{
+/* 00018b32 */			return true;
+/* 00018b3a */		}
+/* 00018b3a */	}
+/* 00018b40 */	return false;
+/* 00018b48 */}
+
+bool CMessageTextView::IsWheelRotate()
+/* 00018b56 */{
+/* 00018b56 */	if (SYS_ホイールフォア即確認())
+/* 00018b62 */	{
+/* 00018b62 */		SYS_バックログオープン通知();
+/* 00018b68 */		return true;
+/* 00018b70 */	}
+/* 00018b70 */	if (!SYS_スキップ中確認())
+/* 00018b7e */	{
+/* 00018b7e */		if (SYS_ホイールバック確認())
+/* 00018b8a */		{
+/* 00018b8a */			return true;
+/* 00018b92 */		}
+/* 00018b92 */	}
+/* 00018b92 */	return false;
+/* 00018b9a */}
+
+void CMessageTextView::ClearMessageTextAndSetHome(int MessageWindowNumber)
+/* 00018ba8 */{
+/* 00018ba8 */	int Index;
+/* 00018bba */	for (Index = 0; Index < this.m_MessageDrawParts.Numof(); )
+/* 00018bfa */	{
+/* 00018bfa */		if (this.m_MessageDrawParts[Index].GetMessageWindowNumber() == MessageWindowNumber)
+/* 00018c28 */		{
+/* 00018c28 */			this.m_MessageDrawParts.Erase(Index);
+/* 00018c3e */		}
+/* 00018c44 */		else
+/* 00018c44 */		{
+/* 00018c44 */			Index++;
+/* 00018c58 */		}
+/* 00018c58 */	}
+/* 00018c5e */	this.m_DrawCharList.Free();
+/* 00018c68 */}
+
+void CMessageTextView::SetShow(bool bShow)
+/* 00018c70 */{
+/* 00018c70 */	int Index;
+/* 00018c82 */	for (Index = 0; Index < this.m_MessageDrawParts.Numof(); Index++)
+/* 00018cd6 */	{
+/* 00018cd6 */		this.m_MessageDrawParts[Index].SetShow(bShow);
+/* 00018cfc */	}
+/* 00018d02 */}
+
+void CMessageTextView::UpdateZByMessageWindowZChanged()
+/* 00018d0a */{
+/* 00018d0a */	int Index;
+/* 00018d1c */	for (Index = 0; Index < this.m_MessageDrawParts.Numof(); Index++)
+/* 00018d70 */	{
+/* 00018d70 */		this.m_MessageDrawParts[Index].UpdateZByMessageWindowZChanged();
+/* 00018d8c */	}
+/* 00018d92 */}
+
+void CMessageTextView::MoveTextPosForLayout(ref CMessageTextModel MessageTextModel)
+/* 00018d9a */{
+/* 00018d9a */	array@int MessageWindowNumberList;
+/* 00018da4 */	array@int LayoutTypeList;
+/* 00018dae */	this.GetNeedLayoutMessageWindowNumberList(MessageWindowNumberList, LayoutTypeList, MessageTextModel);
+/* 00018dd4 */	if (MessageWindowNumberList.Empty())
+/* 00018de4 */	{
+/* 00018de4 */		return;
+/* 00018de6 */	}
+/* 00018de6 */	this.MoveTextXPosForLayout(MessageWindowNumberList, LayoutTypeList);
+/* 00018e02 */	this.MoveTextYPosForLayout(MessageWindowNumberList, LayoutTypeList);
+/* 00018e1e */}
+
+void CMessageTextView::GetNeedLayoutMessageWindowNumberList(ref array@int MessageWindowNumberList, ref array@int LayoutTypeList, ref CMessageTextModel MessageTextModel)
+/* 00018e26 */{
+/* 00018e26 */	int NumofMessage = MessageTextModel.GetNumofMessage();
+/* 00018e42 */	int Message;
+/* 00018e54 */	for (Message = 0; Message < NumofMessage; Message++)
+/* 00018ea2 */	{
+/* 00018ea2 */		ref CMessageText MessageText = MessageTextModel.GetMessage(Message);
+/* 00018ef2 */		if (MessageText.nType != 0)
+/* 00018f12 */		{
+/* 00018f12 */			continue;
+/* 00018f24 */		}
+/* 00018f24 */		if (MessageText.Ｍ配置 == 1)
+/* 00018f44 */		{
+/* 00018f44 */			continue;
+/* 00018f56 */		}
+/* 00018f56 */		if (MessageWindowNumberList.Find(0, MessageWindowNumberList.Numof(), MessageText.MessageWindowNumber) != -1)
+/* 00018f9c */		{
+/* 00018f9c */			continue;
+/* 00018fae */		}
+/* 00018fae */		MessageWindowNumberList.PushBack(MessageText.MessageWindowNumber);
+/* 00018fca */		LayoutTypeList.PushBack(MessageText.Ｍ配置);
+/* 00018fe6 */	}
+/* 00018ff8 */}
+
+void CMessageTextView::MoveTextXPosForLayout(ref array@int MessageWindowNumberList, ref array@int LayoutTypeList)
+/* 00019000 */{
+/* 00019000 */	int WindowIndex;
+/* 00019012 */	for (WindowIndex = 0; WindowIndex < MessageWindowNumberList.Numof(); WindowIndex++)
+/* 00019066 */	{
+/* 00019066 */		int MessageWindowNumber = MessageWindowNumberList[WindowIndex];
+/* 00019088 */		int LayoutType = LayoutTypeList[WindowIndex];
+/* 000190aa */		this.MoveTextXPosOnWindow(MessageWindowNumber, LayoutType);
+/* 000190c6 */	}
+/* 000190cc */}
+
+void CMessageTextView::MoveTextXPosOnWindow(int MessageWindowNumber, int LayoutType)
+/* 000190d4 */{
+/* 000190d4 */	ref CMessageWindowModel MessageWindow = g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber);
+/* 00019124 */	CASRect TextAreaRect;
+/* 00019134 */	TextAreaRect = MessageWindow.GetTextAreaRect();
+/* 00019158 */	if (TextAreaRect.GetWidth() <= 0 || TextAreaRect.GetHeight() <= 0)
+/* 000191ac */	{
+/* 000191ac */		return;
+/* 000191ae */	}
+/* 000191ae */	if (LayoutType == 1 || LayoutType == 4 || LayoutType == 7)
+/* 00019226 */	{
+/* 00019226 */		return;
+/* 00019228 */	}
+/* 00019228 */	int TargetY = -2147483648;
+/* 0001923a */	int TotalWidth;
+/* 0001924c */	int LastCharSpace;
+/* 0001925e */	int BeginIndex;
+/* 00019270 */	int CharIndex;
+/* 00019282 */	for (CharIndex = 0; CharIndex < this.m_DrawCharList.Numof(); )
+/* 000192c2 */	{
+/* 000192c2 */		ref SDrawChar Char = this.m_DrawCharList[CharIndex];
+/* 000192f4 */		if (Char.MessageWindowNumber != MessageWindowNumber)
+/* 00019318 */		{
+/* 00019318 */			continue;
+/* 00019324 */		}
+/* 00019324 */		if (TargetY == -2147483648)
+/* 0001933c */		{
+/* 0001933c */			TargetY = Char.nY;
+/* 0001935a */		}
+/* 00019360 */		else if (TargetY != Char.nY)
+/* 00019384 */		{
+/* 00019384 */			TotalWidth -= LastCharSpace;
+/* 0001939a */			int OffsetX = this.CalcOffsetX(TextAreaRect.GetWidth() - TotalWidth, LayoutType);
+/* 000193d4 */			int n;
+/* 000193e6 */			for (n = BeginIndex; n < CharIndex; n++)
+/* 00019438 */			{
+/* 00019438 */				ref SDrawChar TargetChar = this.m_DrawCharList[n];
+/* 0001946a */				if (TargetChar.MessageWindowNumber != MessageWindowNumber)
+/* 0001948e */				{
+/* 0001948e */					continue;
+/* 0001949a */				}
+/* 0001949a */				TargetChar.nX += OffsetX;
+/* 000194b8 */			}
+/* 000194c4 */			TargetY = -2147483648;
+/* 000194d6 */			TotalWidth = 0;
+/* 000194e8 */			LastCharSpace = 0;
+/* 000194fa */			BeginIndex = CharIndex;
+/* 00019510 */			continue;
+/* 0001951c */		}
+/* 0001951c */		TotalWidth += Char.nWidth + Char.CharSpace;
+/* 0001954e */		LastCharSpace = Char.CharSpace;
+/* 0001956c */		++CharIndex;
+/* 0001957c */	}
+/* 00019588 */	TotalWidth -= LastCharSpace;
+/* 0001959e */	int OffsetX = this.CalcOffsetX(TextAreaRect.GetWidth() - TotalWidth, LayoutType);
+/* 000195d8 */	int n;
+/* 000195ea */	for (n = BeginIndex; n < CharIndex; n++)
+/* 0001963c */	{
+/* 0001963c */		ref SDrawChar TargetChar = this.m_DrawCharList[n];
+/* 0001966e */		if (TargetChar.MessageWindowNumber != MessageWindowNumber)
+/* 00019692 */		{
+/* 00019692 */			continue;
+/* 0001969e */		}
+/* 0001969e */		TargetChar.nX += OffsetX;
+/* 000196bc */	}
+/* 000196c8 */}
+
+int CMessageTextView::CalcOffsetX(int Width, int LayoutType)
+/* 000196d0 */{
+/* 000196d0 */	switch (LayoutType)
+/* 000196e6 */	{
+/* 000196e6 */	case 1:
+/* 000196e6 */	case 4:
+/* 000196e6 */	case 7:
+/* 000196e6 */		return 0;
+/* 000196ee */	case 2:
+/* 000196ee */	case 5:
+/* 000196ee */	case 8:
+/* 000196ee */		return Width / 2;
+/* 00019702 */	}
+/* 00019702 */	return Width;
+/* 0001970e */}
+
+void CMessageTextView::MoveTextYPosForLayout(ref array@int MessageWindowNumberList, ref array@int LayoutTypeList)
+/* 0001971c */{
+/* 0001971c */	int WindowIndex;
+/* 0001972e */	for (WindowIndex = 0; WindowIndex < MessageWindowNumberList.Numof(); WindowIndex++)
+/* 00019782 */	{
+/* 00019782 */		int MessageWindowNumber = MessageWindowNumberList[WindowIndex];
+/* 000197a4 */		int LayoutType = LayoutTypeList[WindowIndex];
+/* 000197c6 */		this.MoveTextYPosOnWindow(MessageWindowNumber, LayoutType);
+/* 000197e2 */	}
+/* 000197e8 */}
+
+void CMessageTextView::MoveTextYPosOnWindow(int MessageWindowNumber, int LayoutType)
+/* 000197f0 */{
+/* 000197f0 */	ref CMessageWindowModel MessageWindow = g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber);
+/* 00019840 */	CASRect TextAreaRect;
+/* 00019850 */	TextAreaRect = MessageWindow.GetTextAreaRect();
+/* 00019874 */	if (TextAreaRect.GetWidth() <= 0 || TextAreaRect.GetHeight() <= 0)
+/* 000198c8 */	{
+/* 000198c8 */		return;
+/* 000198ca */	}
+/* 000198ca */	if (LayoutType == 1 || LayoutType == 2 || LayoutType == 3)
+/* 00019942 */	{
+/* 00019942 */		return;
+/* 00019944 */	}
+/* 00019944 */	int MinY = 2147483647;
+/* 00019956 */	int MaxY = -2147483648;
+/* 00019968 */	int CharIndex;
+/* 0001997a */	for (CharIndex = 0; CharIndex < this.m_DrawCharList.Numof(); CharIndex++)
+/* 000199ce */	{
+/* 000199ce */		ref SDrawChar Char = this.m_DrawCharList[CharIndex];
+/* 00019a00 */		if (Char.MessageWindowNumber != MessageWindowNumber)
+/* 00019a24 */		{
+/* 00019a24 */			continue;
+/* 00019a30 */		}
+/* 00019a30 */		if (MinY > Char.nY)
+/* 00019a54 */		{
+/* 00019a54 */			MinY = Char.nY;
+/* 00019a72 */		}
+/* 00019a72 */		if (MaxY < Char.nY + Char.MaxHeightInLine)
+/* 00019aaa */		{
+/* 00019aaa */			MaxY = Char.nY + Char.MaxHeightInLine;
+/* 00019adc */		}
+/* 00019adc */	}
+/* 00019ae8 */	if (MinY == 2147483647 || MaxY == -2147483648)
+/* 00019b30 */	{
+/* 00019b30 */		return;
+/* 00019b32 */	}
+/* 00019b32 */	int TotalHeight = MaxY - MinY;
+/* 00019b54 */	int OffsetY = this.CalcOffsetY(TextAreaRect.GetHeight() - TotalHeight, LayoutType);
+/* 00019b8e */	for (CharIndex = 0; CharIndex < this.m_DrawCharList.Numof(); CharIndex++)
+/* 00019be2 */	{
+/* 00019be2 */		ref SDrawChar Char = this.m_DrawCharList[CharIndex];
+/* 00019c14 */		if (Char.MessageWindowNumber != MessageWindowNumber)
+/* 00019c38 */		{
+/* 00019c38 */			continue;
+/* 00019c44 */		}
+/* 00019c44 */		Char.nY += OffsetY;
+/* 00019c62 */	}
+/* 00019c6e */}
+
+int CMessageTextView::CalcOffsetY(int Height, int LayoutType)
+/* 00019c76 */{
+/* 00019c76 */	switch (LayoutType)
+/* 00019c8c */	{
+/* 00019c8c */	case 1:
+/* 00019c8c */	case 2:
+/* 00019c8c */	case 3:
+/* 00019c8c */		return 0;
+/* 00019c94 */	case 4:
+/* 00019c94 */	case 5:
+/* 00019c94 */	case 6:
+/* 00019c94 */		return Height / 2;
+/* 00019ca8 */	}
+/* 00019ca8 */	return Height;
+/* 00019cb4 */}
+
+void CMessageTextView::GetTextPartsNumberList(ref array@int List)
+/* 00019cc2 */{
+/* 00019cc2 */	int Index;
+/* 00019cd4 */	for (Index = 0; Index < this.m_MessageDrawParts.Numof(); Index++)
+/* 00019d28 */	{
+/* 00019d28 */		List.PushBack(this.m_MessageDrawParts[Index].GetPartsNumber());
+/* 00019d4e */	}
+/* 00019d54 */}
+
+void CMessageTextView::GetTextFontColorList(ref array@CASColor List)
+/* 00019d5c */{
+/* 00019d5c */	int Index;
+/* 00019d6e */	for (Index = 0; Index < this.m_MessageDrawParts.Numof(); Index++)
+/* 00019dc2 */	{
+/* 00019dc2 */		List.PushBack(CF_CASColor(this.m_MessageDrawParts[Index].GetDefaultFontRed(), this.m_MessageDrawParts[Index].GetDefaultFontGreen(), this.m_MessageDrawParts[Index].GetDefaultFontBlue(), 255));
+/* 00019e2c */	}
+/* 00019e32 */}
+
+void CMessageTextView::SetPartsLayer(int ID)
+/* 00019e3a */{
+/* 00019e3a */	int Index;
+/* 00019e4c */	for (Index = 0; Index < this.m_MessageDrawParts.Numof(); Index++)
+/* 00019ea0 */	{
+/* 00019ea0 */		Ｐ＿親設定(this.m_MessageDrawParts[Index].GetPartsNumber(), ID);
+/* 00019ecc */	}
+/* 00019ed2 */}
+

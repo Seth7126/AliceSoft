@@ -1,0 +1,39 @@
+PartsNumberProvider::PartsNumberProvider()
+/* 001ec50a */{
+/* 001ec512 */	this.max_ = 100000;
+/* 001ec524 */}
+
+int PartsNumberProvider::getNumber()
+/* 001ec52c */{
+/* 001ec52c */	if (this.emptyList_.Empty())
+/* 001ec53c */	{
+/* 001ec53c */		int num = this.max_;
+/* 001ec552 */		this.list_.PushBack(num);
+/* 001ec566 */		++this.max_;
+/* 001ec576 */		return num;
+/* 001ec582 */	}
+/* 001ec582 */	int n = this.emptyList_[0];
+/* 001ec5a0 */	this.emptyList_.Erase(0);
+/* 001ec5b2 */	this.list_.PushBack(n);
+/* 001ec5c6 */	return n;
+/* 001ec5d2 */}
+
+void PartsNumberProvider::releaseNumber(int number)
+/* 001ec5e0 */{
+/* 001ec5e0 */	if (number == 0)
+/* 001ec5f8 */	{
+/* 001ec5f8 */		return;
+/* 001ec5fa */	}
+/* 001ec5fa */	int index = this.list_.Find(0, this.list_.Numof(), number);
+/* 001ec636 */	if (index != -1)
+/* 001ec64e */	{
+/* 001ec64e */		Ｐ＿削除(number);
+/* 001ec65e */		this.list_.Erase(index);
+/* 001ec674 */		this.emptyList_.PushBack(number);
+/* 001ec688 */	}
+/* 001ec68e */	else
+/* 001ec68e */	{
+/* 001ec68e */		system.Output("エラー見つかりません\n");
+/* 001ec69c */	}
+/* 001ec69c */}
+

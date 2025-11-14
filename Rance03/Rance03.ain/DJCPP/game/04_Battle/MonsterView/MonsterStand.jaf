@@ -1,0 +1,506 @@
+MonsterStand::MonsterStand()
+/* 0019a002 */{
+/* 0019a00a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019a030 */	this.position_ = -1;
+/* 0019a042 */	this.isFocus_ = true;
+/* 0019a054 */	this.isChangedFill_ = false;
+/* 0019a066 */}
+
+void MonsterStand::movePosition()
+/* 0019a06e */{
+/* 0019a06e */	this.move();
+/* 0019a076 */}
+
+void MonsterStand::changeIn()
+/* 0019a07e */{
+/* 0019a07e */	this.isChangedFill_ = false;
+/* 0019a090 */	this.loadOffsetPosition();
+/* 0019a098 */	this.position_ = this.instance_.getPosition();
+/* 0019a0b4 */	this.setParentPartsPosition(this.instance_.getPosition());
+/* 0019a0cc */	this.setPartsZ(this.instance_.getPosition());
+/* 0019a0e4 */	this.parts_[3].setAlpha(0.0);
+/* 0019a102 */	int alpha = this.getAmbientPartsAlpha(this.instance_.getPosition());
+/* 0019a126 */	this.parts_[2].setAlpha(alpha);
+/* 0019a14a */	this.runMotionChangeIn();
+/* 0019a152 */}
+
+void MonsterStand::runMotionChangeIn()
+/* 0019a15a */{
+/* 0019a15a */	PartsMotion m;
+/* 0019a16a */	m.setTime(500);
+/* 0019a180 */	m.setKey(16, 255, 0, 0);
+/* 0019a1a8 */	this.parent_.runMotion(m, NULL);
+/* 0019a1c8 */}
+
+void MonsterStand::setParentPartsPosition(int pos)
+/* 0019a1d0 */{
+/* 0019a1d0 */	int x;
+/* 0019a1e2 */	int y;
+/* 0019a1f4 */	this.getParentPartsPosition(x, y, pos);
+/* 0019a216 */	this.parent_.setPos(x, y);
+/* 0019a23e */	this.parent_.setScaling(this.getParentPartsScaling(pos));
+/* 0019a262 */	this.parent_.setAlpha(this.getParentPartsAlpha(pos));
+/* 0019a286 */}
+
+void MonsterStand::init(ref MonsterInstance instance, string battleBackGroundId)
+/* 0019a28e */{
+/* 0019a28e */	this.instance_ <- instance;
+/* 0019a2ae */	this.bgId_ = battleBackGroundId;
+/* 0019a2c6 */	this.isFixedPosition_ = getMonsterFromId(this.instance_.getId()).isFixedPosition();
+/* 0019a304 */	this.initParts();
+/* 0019a30c */}
+
+void MonsterStand::setFixedPosition(int x, int y)
+/* 0019a314 */{
+/* 0019a314 */	this.parent_.setPos(x, y);
+/* 0019a33c */}
+
+void MonsterStand::initParts()
+/* 0019a344 */{
+/* 0019a344 */	ref Monster m = getMonsterFromId(this.instance_.getId());
+/* 0019a38c */	string imgOriginal = m.getImageName();
+/* 0019a3aa */	string img = "trim_" + imgOriginal;
+/* 0019a3ca */	this.parts_[0].init(img, 0);
+/* 0019a3f2 */	this.parts_[3].initAsCgPlaneImage(img, 255, 255, 255);
+/* 0019a426 */	this.parts_[4].initAsCgPlaneImage(img, 255, 0, 0);
+/* 0019a45a */	this.parts_[1].initAsCgPlaneImage(img, 255, 0, 0);
+/* 0019a48e */	this.parts_[5].initAsCgPlaneImage(img, 0, 0, 0);
+/* 0019a4c2 */	this.parts_[5].setAlpha(0.0);
+/* 0019a4e0 */	this.parts_[5].setFilterType(2);
+/* 0019a4fe */	ref BattleBackgroundInfomation bg = getBattleBackGroundInfomationFromId(this.bgId_);
+/* 0019a540 */	this.ambientMaxAlpha_ = bg.getAmbientMaxAlpha();
+/* 0019a55c */	if (!this.isFixedPosition_)
+/* 0019a56e */	{
+/* 0019a56e */		this.parts_[2].initAsCgPlaneImage(img, bg.getAmbientR(), bg.getAmbientG(), bg.getAmbientB());
+/* 0019a5c0 */		this.parts_[2].setAlpha(this.ambientMaxAlpha_);
+/* 0019a5e4 */	}
+/* 0019a5e4 */	createPartsGroup(this.offsetParent_, this.parts_, 0);
+/* 0019a604 */	this.parts_[3].setAlpha(0.0);
+/* 0019a622 */	this.parts_[4].setAlpha(0.0);
+/* 0019a640 */	this.parent_.initAsDummy();
+/* 0019a650 */	this.offsetParent_.setParent(this.parent_.getPartsNumber());
+/* 0019a670 */	if (this.isFixedPosition_)
+/* 0019a680 */	{
+/* 0019a680 */		int x;
+/* 0019a692 */		int y;
+/* 0019a6a4 */		m.getStandPosition(x, y);
+/* 0019a6c4 */		this.setFixedPosition(x, y);
+/* 0019a6e0 */	}
+/* 0019a6e6 */	else
+/* 0019a6e6 */	{
+/* 0019a6e6 */		this.setPartsOrigin();
+/* 0019a6ee */		this.loadOffsetPosition();
+/* 0019a6f6 */		this.setOffsetParentPos();
+/* 0019a6fe */	}
+/* 0019a6fe */	this.setPartsZ(this.instance_.getPosition());
+/* 0019a716 */	this.setPartsShow();
+/* 0019a71e */}
+
+void MonsterStand::setOffsetParentPos()
+/* 0019a726 */{
+/* 0019a726 */	float x;
+/* 0019a738 */	float y;
+/* 0019a74a */	this.getOffsetParentPosition(x, y, this.instance_.getPosition());
+/* 0019a772 */	this.offsetParent_.setPos(x, y);
+/* 0019a796 */}
+
+void MonsterStand::setPartsZ(int pos)
+/* 0019a79e */{
+/* 0019a79e */	int i;
+/* 0019a7b0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019a800 */	{
+/* 0019a800 */		this.parts_[i].setZ(2150 + (3 - pos) * 30 + i);
+/* 0019a84c */	}
+/* 0019a852 */	this.parts_[5].setZ(2100 + (3 - pos));
+/* 0019a886 */}
+
+void MonsterStand::setPartsShow()
+/* 0019a88e */{
+/* 0019a88e */	int i;
+/* 0019a8a0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019a8f0 */	{
+/* 0019a8f0 */		this.parts_[i].setShow(true);
+/* 0019a912 */	}
+/* 0019a918 */	this.parent_.setShow(true);
+/* 0019a92e */	this.offsetParent_.setShow(true);
+/* 0019a944 */	this.parts_[1].setShow(false);
+/* 0019a962 */}
+
+void MonsterStand::update()
+/* 0019a96a */{
+/* 0019a96a */	if (this.isChangedFill_)
+/* 0019a97a */	{
+/* 0019a97a */		int t = (this.timer_.getTime() / 1000.0) * 360.0;
+/* 0019a9ae */		int v = Math.Sin(t) * 64.0 + 200.0;
+/* 0019a9e2 */		this.parts_[3].setAddColorValue(0, v, v);
+/* 0019aa14 */	}
+/* 0019aa14 */	if (this.parts_[1].isShow())
+/* 0019aa32 */	{
+/* 0019aa32 */		int t = this.timer_.getTime() % 1000;
+/* 0019aa56 */		float r = (1000 - t) / 1000.0;
+/* 0019aa7e */		this.parts_[1].setAlpha(r * 128.0);
+/* 0019aaa8 */	}
+/* 0019aaa8 */}
+
+void MonsterStand::setPartsOrigin()
+/* 0019aab0 */{
+/* 0019aab0 */	int i;
+/* 0019aac2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019ab12 */	{
+/* 0019ab12 */		this.parts_[i].setOrigin(1);
+/* 0019ab34 */	}
+/* 0019ab3a */}
+
+float MonsterStand::getRealWidth()
+/* 0019ab42 */{
+/* 0019ab42 */	return (this.parts_[0].getWidth() * this.parent_.getScaling()) / 100.0;
+/* 0019ab7c */}
+
+float MonsterStand::getRealHeight()
+/* 0019ab8a */{
+/* 0019ab8a */	return (this.parts_[0].getHeight() * this.parent_.getScaling()) / 100.0;
+/* 0019abc4 */}
+
+void MonsterStand::move()
+/* 0019abd2 */{
+/* 0019abd2 */	if (this.isFixedPosition_)
+/* 7fffffffffffffff */	{
+/* 7fffffffffffffff */	}
+/* 0019abe8 */	else
+/* 0019abe8 */	{
+/* 0019abe8 */		this.runMoveMotion(this.position_, this.instance_.getPosition());
+/* 0019ac0a */		this.position_ = this.instance_.getPosition();
+/* 0019ac26 */	}
+/* 0019ac26 */}
+
+void MonsterStand::runMoveMotion(int from, int to)
+/* 0019ac2e */{
+/* 0019ac2e */	this.resetWhiteFillPosition();
+/* 0019ac36 */	this.parent_.runMotion(this.createParentPartsMoveMotion(from, to), NULL);
+/* 0019ac64 */	this.offsetParent_.runMotion(this.createOffsetParentPartsMoveMotion(from, to), NULL);
+/* 0019ac92 */	this.parts_[2].runMotion(this.createAmbientPartsMoveMotion(from, to), NULL);
+/* 0019acc8 */	this.setPartsZ(to);
+/* 0019acda */}
+
+PartsMotion MonsterStand::createOffsetParentPartsMoveMotion(int from, int to)
+/* 0019ace2 */{
+/* 0019ace2 */	float fx;
+/* 0019acf4 */	float fy;
+/* 0019ad06 */	float tx;
+/* 0019ad18 */	float ty;
+/* 0019ad2a */	this.getOffsetParentPosition(fx, fy, from);
+/* 0019ad4c */	this.getOffsetParentPosition(tx, ty, to);
+/* 0019ad6e */	PartsMotion m;
+/* 0019ad7e */	m.setTime(450);
+/* 0019ad94 */	m.setMove(fx, fy, tx, ty, 7);
+/* 0019adda */	return m;
+/* 0019adea */}
+
+void MonsterStand::getOffsetParentPosition(ref float x, ref float y, int pos)
+/* 0019adf8 */{
+/* 0019adf8 */	float s = this.getParentPartsScaling(pos) / 100.0;
+/* 0019ae24 */	x = this.offsetX_ * s;
+/* 0019ae4e */	y = this.offsetY_ * s;
+/* 0019ae78 */}
+
+void MonsterStand::loadOffsetPosition()
+/* 0019ae80 */{
+/* 0019ae80 */	string id = getMonsterFromId(this.instance_.getId()).getImageName();
+/* 0019aec0 */	string key = "モンスターオフセット情報";
+/* 0019aed4 */	this.offsetX_ = EX_SA2Int(key, id, "x", 0);
+/* 0019af06 */	this.offsetY_ = (EX_SA2Int(key, id, "y", 0) + this.parts_[0].getHeight()) - 960;
+/* 0019af5a */}
+
+PartsMotion MonsterStand::createParentPartsMoveMotion(int from, int to)
+/* 0019af62 */{
+/* 0019af62 */	int fromX;
+/* 0019af74 */	int fromY;
+/* 0019af86 */	int toX;
+/* 0019af98 */	int toY;
+/* 0019afaa */	this.getParentPartsPosition(fromX, fromY, from);
+/* 0019afcc */	this.getParentPartsPosition(toX, toY, to);
+/* 0019afee */	PartsMotion m;
+/* 0019affe */	m.setTime(450);
+/* 0019b014 */	m.setMove(fromX, fromY, toX, toY, 7);
+/* 0019b052 */	m.setAlpha(this.getParentPartsAlpha(from), this.getParentPartsAlpha(to), 0);
+/* 0019b08c */	m.setScaling(this.getParentPartsScaling(from), this.getParentPartsScaling(to), 7);
+/* 0019b0c6 */	return m;
+/* 0019b0d6 */}
+
+PartsMotion MonsterStand::createAmbientPartsMoveMotion(int from, int to)
+/* 0019b0e4 */{
+/* 0019b0e4 */	PartsMotion m;
+/* 0019b0f4 */	m.setTime(450);
+/* 0019b10a */	m.setAlpha(this.getAmbientPartsAlpha(from), this.getAmbientPartsAlpha(to), 0);
+/* 0019b144 */	return m;
+/* 0019b154 */}
+
+int MonsterStand::getAmbientPartsAlpha(int pos)
+/* 0019b162 */{
+/* 0019b162 */	if (pos < 0)
+/* 0019b17a */	{
+/* 0019b17a */		pos = 2;
+/* 0019b18c */	}
+/* 0019b18c */	return this.ambientMaxAlpha_ * (pos / 2.0);
+/* 0019b1b6 */}
+
+void MonsterStand::showAttack()
+/* 0019b1c4 */{
+/* 0019b1c4 */	if (this.isFixedPosition_)
+/* 0019b1d4 */	{
+/* 0019b1d4 */		PartsMotion m;
+/* 0019b1e4 */		m.setAlpha(255, 0, 0);
+/* 0019b206 */		m.setTime(400);
+/* 0019b21c */		this.parts_[3].runMotion(m, NULL);
+/* 0019b244 */	}
+/* 0019b250 */	else
+/* 0019b250 */	{
+/* 0019b250 */		PartsMotion m;
+/* 0019b260 */		int x = this.parts_[0].getX();
+/* 0019b286 */		int y = this.parts_[0].getY();
+/* 0019b2ac */		m.setMove(x, y, x - this.getRealWidth() * 0.2, y + this.getRealHeight() * 0.2, 1);
+/* 0019b31e */		m.setAlpha(255, 0, 0);
+/* 0019b340 */		m.setTime(250);
+/* 0019b356 */		m.setScaling(100, 140, 1);
+/* 0019b378 */		this.resetWhiteFillPosition();
+/* 0019b380 */		this.parts_[3].runMotion(m, NULL);
+/* 0019b3a8 */	}
+/* 0019b3a8 */}
+
+void MonsterStand::showDamage(DG_GeneralCallback cb)
+/* 0019b3b6 */{
+/* 0019b3b6 */	PartsMotion m2;
+/* 0019b3c6 */	m2.setShakeLevel(100, 0, 0);
+/* 0019b3e8 */	m2.setTime(200);
+/* 0019b3fe */	this.parent_.runMotion(m2, NULL);
+/* 0019b41e */	if (this.instance_.getHp() > 0)
+/* 0019b43c */	{
+/* 0019b43c */		PartsMotion m;
+/* 0019b44c */		m.setAlpha(255, 0, 0);
+/* 0019b46e */		m.setTime(500);
+/* 0019b484 */		this.parts_[4].runMotion(m, cb);
+/* 0019b4b6 */	}
+/* 0019b4c2 */	else
+/* 0019b4c2 */	{
+/* 0019b4c2 */		PartsMotion m;
+/* 0019b4d2 */		m.setAlpha(255, 0, 0);
+/* 0019b4f4 */		m.setTime(500);
+/* 0019b50a */		this.parts_[4].runMotion(m, NULL);
+/* 0019b532 */		this.onFinishShowDamageCallback_ = cb;
+/* 0019b54c */		this.cbTimer_.setTimer(300, this.onFinishShowDamage);
+/* 0019b56c */	}
+/* 0019b56c */}
+
+void MonsterStand::resetWhiteFillPosition()
+/* 0019b57a */{
+/* 0019b57a */	this.parts_[3].setPos(this.parts_[0].getX(), this.parts_[0].getY());
+/* 0019b5c2 */}
+
+void MonsterStand::onFinishShowDamage()
+/* 0019b5ca */{
+/* 0019b5ca */	this.showDeadMotion();
+/* 0019b5d2 */}
+
+void MonsterStand::showDeadMotion()
+/* 0019b5da */{
+/* 0019b5da */	ref Monster m = getMonsterFromId(this.instance_.getId());
+/* 0019b622 */	if (m.getChangeToMonsterId() == "")
+/* 0019b640 */	{
+/* 0019b640 */		if (m.isFixedPosition())
+/* 0019b656 */		{
+/* 0019b656 */			this.showFixedDeadMotion(m.getDeadMotionType());
+/* 0019b66e */		}
+/* 0019b674 */		else
+/* 0019b674 */		{
+/* 0019b674 */			this.showNormalDeadMotion();
+/* 0019b67c */		}
+/* 0019b67c */	}
+/* 0019b682 */	else
+/* 0019b682 */	{
+/* 0019b682 */		this.showDeadMotionChangeIn();
+/* 0019b68a */	}
+/* 0019b68a */}
+
+void MonsterStand::showNormalDeadMotion()
+/* 0019b692 */{
+/* 0019b692 */	this.resetWhiteFillPosition();
+/* 0019b69a */	PartsMotion m;
+/* 0019b6aa */	m.setTime(1000);
+/* 0019b6c0 */	m.setScaling(100, 100, 1);
+/* 0019b6e2 */	m.setAlpha(255, 0, 0);
+/* 0019b704 */	this.parts_[3].runMotion(m, this.onFinishShowDamageCallback_);
+/* 0019b736 */	this.parts_[0].setShow(false);
+/* 0019b754 */	this.parts_[2].setShow(false);
+/* 0019b772 */	int x;
+/* 0019b784 */	int y;
+/* 0019b796 */	this.getCenter(x, y);
+/* 0019b7ae */	this.photonEmittor_.init(50);
+/* 0019b7c4 */	this.photonEmittor_.setPos(x, y);
+/* 0019b7e8 */	this.photonEmittor_.run();
+/* 0019b7f8 */	g_sysSound.play(3, "効果音／敵を倒す");
+/* 0019b814 */}
+
+void MonsterStand::showDeadMotionChangeIn()
+/* 0019b81c */{
+/* 0019b81c */	this.resetWhiteFillPosition();
+/* 0019b824 */	PartsMotion m;
+/* 0019b834 */	m.setTime(500);
+/* 0019b84a */	m.setScaling(100, 100, 1);
+/* 0019b86c */	m.setAlpha(255, 200, 0);
+/* 0019b88e */	this.parts_[3].setMultiColorValue(0, 0, 255);
+/* 0019b8b8 */	this.parts_[3].runMotion(m, this.onFinishShowDamageCallback_);
+/* 0019b8ea */	this.isChangedFill_ = true;
+/* 0019b8fc */	this.timer_.reset();
+/* 0019b90c */	this.parts_[0].setShow(false);
+/* 0019b92a */	this.parts_[2].setShow(false);
+/* 0019b948 */}
+
+void MonsterStand::getCenter(ref int x, ref int y)
+/* 0019b950 */{
+/* 0019b950 */	ref Monster m = getMonsterFromId(this.instance_.getId());
+/* 0019b998 */	int ofx;
+/* 0019b9aa */	int ofy;
+/* 0019b9bc */	m.getEffectOffset(ofx, ofy);
+/* 0019b9dc */	float s = this.parent_.getScaling() / 100.0;
+/* 0019ba00 */	ofx = ofx * s;
+/* 0019ba2a */	ofy = ofy * s;
+/* 0019ba54 */	x = this.parts_[0].getScreenX() + this.getRealWidth() / 2.0 + ofx;
+/* 0019baa2 */	y = ((this.parts_[0].getScreenY() + this.parts_[0].getHeight()) - this.getRealHeight() / 2.0) + ofy;
+/* 0019bb0a */}
+
+void MonsterStand::showFixedDeadMotion(int type)
+/* 0019bb12 */{
+/* 0019bb12 */	if (type == 0)
+/* 0019bb2a */	{
+/* 0019bb2a */		this.showNormalDeadMotion();
+/* 0019bb32 */	}
+/* 0019bb38 */	else if (type == 1)
+/* 0019bb50 */	{
+/* 0019bb50 */		PartsMotion m;
+/* 0019bb60 */		m.setKey(17, 255, 64, 0);
+/* 0019bb88 */		m.setTime(1000);
+/* 0019bb9e */		this.parts_[0].runMotion(m, this.onFinishShowDamageCallback_);
+/* 0019bbd0 */	}
+/* 0019bbdc */	else if (type == 2)
+/* 0019bbf4 */	{
+/* 0019bbf4 */		g_sysSound.play(3, "効果音／ボスを倒す");
+/* 0019bc10 */		this.deadEffect_.init();
+/* 0019bc20 */		this.deadEffect_.run(this.onFinishShowDamageCallback_);
+/* 0019bc3c */		PartsMotion m2;
+/* 0019bc4c */		m2.setShakeLevel(10, 80, 0);
+/* 0019bc6e */		m2.setTime(4000);
+/* 0019bc84 */		this.parent_.runMotion(m2, NULL);
+/* 0019bca4 */	}
+/* 0019bca4 */}
+
+void MonsterStand::getParentPartsPosition(ref int x, ref int y, int pos)
+/* 0019bcb2 */{
+/* 0019bcb2 */	switch (pos)
+/* 0019bcc8 */	{
+/* 0019bcc8 */	case 0:
+/* 0019bcc8 */		x = -128;
+/* 0019bcdc */		y = 864;
+/* 0019bcf0 */		break;
+/* 0019bcf6 */	case 1:
+/* 0019bcf6 */		x = 120;
+/* 0019bd0a */		y = 707;
+/* 0019bd1e */		break;
+/* 0019bd24 */	case 2:
+/* 0019bd24 */		x = 329;
+/* 0019bd38 */		y = 574;
+/* 0019bd4c */		break;
+/* 0019bd52 */	case -1:
+/* 0019bd52 */		x = 520;
+/* 0019bd66 */		y = 456;
+/* 0019bd7a */		break;
+/* 0019bd80 */	}
+/* 0019bd80 */}
+
+int MonsterStand::getParentPartsScaling(int pos)
+/* 0019bd88 */{
+/* 0019bd88 */	switch (pos)
+/* 0019bd9e */	{
+/* 0019bd9e */	case 0:
+/* 0019bd9e */		return 100;
+/* 0019bda6 */	case 1:
+/* 0019bda6 */		return 85;
+/* 0019bdae */	case 2:
+/* 0019bdae */		return 70;
+/* 0019bdb6 */	case -1:
+/* 0019bdb6 */		return 55;
+/* 0019bdbe */	}
+/* 0019bdbe */	return 100;
+/* 0019bdc6 */}
+
+void MonsterStand::setFocus(bool val)
+/* 0019bdd4 */{
+/* 0019bdd4 */	if (this.isFocus_ == val)
+/* 0019bdf0 */	{
+/* 0019bdf0 */		return;
+/* 0019bdf2 */	}
+/* 0019bdf2 */	if (this.isFixedPosition_)
+/* 0019be02 */	{
+/* 0019be02 */		return;
+/* 0019be04 */	}
+/* 0019be04 */	this.isFocus_ = val;
+/* 0019be1a */	this.showFocusMotion(val);
+/* 0019be2c */}
+
+int MonsterStand::getParentPartsAlpha(int pos)
+/* 0019be34 */{
+/* 0019be34 */	switch (pos)
+/* 0019be4a */	{
+/* 0019be4a */	case -1:
+/* 0019be4a */		return 0;
+/* 0019be52 */	case 0:
+/* 0019be52 */		return 255;
+/* 0019be5a */	case 1:
+/* 0019be5a */		return 255;
+/* 0019be62 */	case 2:
+/* 0019be62 */		return 255;
+/* 0019be6a */	}
+/* 0019be6a */	return 0;
+/* 0019be72 */}
+
+void MonsterStand::showFocusMotion(bool val)
+/* 0019be80 */{
+/* 0019be80 */	if (val)
+/* 0019be90 */	{
+/* 0019be90 */		this.parts_[0].runMotion(createAlphaMotion(0, 255), NULL);
+/* 0019bebc */		this.parts_[2].runMotion(createAlphaMotion(0, this.getAmbientPartsAlpha(this.instance_.getPosition())), NULL);
+/* 0019befa */		this.parts_[5].runMotion(createAlphaMotion(80, 0), NULL);
+/* 0019bf26 */	}
+/* 0019bf2c */	else
+/* 0019bf2c */	{
+/* 0019bf2c */		this.parts_[0].runMotion(createAlphaMotion(255, 0), NULL);
+/* 0019bf58 */		this.parts_[2].runMotion(createAlphaMotion(this.getAmbientPartsAlpha(this.instance_.getPosition()), 0), NULL);
+/* 0019bf96 */		this.parts_[5].runMotion(createAlphaMotion(0, 80), NULL);
+/* 0019bfc2 */	}
+/* 0019bfc2 */}
+
+PartsMotion createAlphaMotion(int from, int to)
+/* 0019bfca */{
+/* 0019bfca */	PartsMotion m;
+/* 0019bfda */	m.setAlpha(from, to, 0);
+/* 0019c004 */	return m;
+/* 0019c014 */}
+
+void MonsterStand::showTargetMark(bool val)
+/* 0019c028 */{
+/* 0019c028 */	if (val)
+/* 0019c038 */	{
+/* 0019c038 */		this.timer_.reset();
+/* 0019c048 */	}
+/* 0019c048 */	this.parts_[1].setShow(val);
+/* 0019c06a */}
+
+int MonsterStand::getBaseZ()
+/* 0019c072 */{
+/* 0019c072 */	return this.parts_[0].getZ();
+/* 0019c08c */}
+
+void MonsterStand::fadeOut()
+/* 0019c09a */{
+/* 0019c09a */	this.parent_.runMotion(getStandardMotion(1), NULL);
+/* 0019c0b8 */}
+

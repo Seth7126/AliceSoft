@@ -1,0 +1,24 @@
+bool isMonsterAttackAvailable(ref MonsterAttack atk, int position)
+/* 001d41d6 */{
+/* 001d41d6 */	if (position == 0)
+/* 001d41ee */	{
+/* 001d41ee */		return true;
+/* 001d41f6 */	}
+/* 001d41f6 */	return atk.getTargetType() >= 11;
+/* 001d4212 */}
+
+void getAliveOrganizedPlayerId(ref array@string result)
+/* 001d4226 */{
+/* 001d4226 */	array@string temp;
+/* 001d4230 */	g_party.getPlayerIdList(temp);
+/* 001d424a */	result.Free();
+/* 001d4254 */	int i;
+/* 001d4266 */	for (i = 0; i < temp.Numof(); ++i)
+/* 001d42b6 */	{
+/* 001d42b6 */		if (getPlayerFromId(temp[i]).getHp() > 0)
+/* 001d42fc */		{
+/* 001d42fc */			result.PushBack(temp[i]);
+/* 001d431c */		}
+/* 001d431c */	}
+/* 001d4328 */}
+

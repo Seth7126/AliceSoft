@@ -1,0 +1,77 @@
+NumberPartsInfomation::NumberPartsInfomation()
+/* 001e7938 */{
+/* 001e7940 */	this.cg_ = "";
+/* 001e7954 */	this.span_ = 0;
+/* 001e7966 */	this.isUseComma_ = false;
+/* 001e7978 */}
+
+void NumberPartsInfomation::setCgName(string cgName)
+/* 001e7980 */{
+/* 001e7980 */	this.cg_ = cgName;
+/* 001e7998 */}
+
+void NumberPartsInfomation::setWidth(int w0, int w1, int w2, int w3, int w4, int w5, int w6, int w7, int w8, int w9, int wMinus, int wComma)
+/* 001e79a0 */{
+/* 001e79a0 */	this.w_[0] = w0;
+/* 001e79be */	this.w_[1] = w1;
+/* 001e79dc */	this.w_[2] = w2;
+/* 001e79fa */	this.w_[3] = w3;
+/* 001e7a18 */	this.w_[4] = w4;
+/* 001e7a36 */	this.w_[5] = w5;
+/* 001e7a54 */	this.w_[6] = w6;
+/* 001e7a72 */	this.w_[7] = w7;
+/* 001e7a90 */	this.w_[8] = w8;
+/* 001e7aae */	this.w_[9] = w9;
+/* 001e7acc */	this.w_[10] = wMinus;
+/* 001e7aea */	this.w_[11] = wComma;
+/* 001e7b08 */}
+
+void NumberPartsInfomation::setUseComma(bool val)
+/* 001e7b10 */{
+/* 001e7b10 */	this.isUseComma_ = val;
+/* 001e7b26 */}
+
+void NumberPartsInfomation::setSpan(int val)
+/* 001e7b2e */{
+/* 001e7b2e */	this.span_ = val;
+/* 001e7b44 */}
+
+string NumberPartsInfomation::getCgName()
+/* 001e7b4c */{
+/* 001e7b4c */	return this.cg_;
+/* 001e7b58 */}
+
+int NumberPartsInfomation::getWidth(int index)
+/* 001e7b66 */{
+/* 001e7b66 */	return this.w_[index];
+/* 001e7b7e */}
+
+bool NumberPartsInfomation::isUseComma()
+/* 001e7b8c */{
+/* 001e7b8c */	return this.isUseComma_;
+/* 001e7b98 */}
+
+int NumberPartsInfomation::getSpan()
+/* 001e7ba6 */{
+/* 001e7ba6 */	return this.span_;
+/* 001e7bb2 */}
+
+void NumberPartsInfomation::setSameWidth(int w)
+/* 001e7bc0 */{
+/* 001e7bc0 */	int i;
+/* 001e7bd2 */	for (i = 0; i < this.w_.Numof(); ++i)
+/* 001e7c22 */	{
+/* 001e7c22 */		this.w_[i] = w;
+/* 001e7c44 */	}
+/* 001e7c4a */}
+
+void NumberPartsInfomation::setDigit(int val)
+/* 001e7c52 */{
+/* 001e7c52 */	this.digit_ = val;
+/* 001e7c68 */}
+
+int NumberPartsInfomation::getDigit()
+/* 001e7c70 */{
+/* 001e7c70 */	return this.digit_;
+/* 001e7c7c */}
+

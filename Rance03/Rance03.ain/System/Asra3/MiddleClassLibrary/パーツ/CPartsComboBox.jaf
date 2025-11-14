@@ -1,0 +1,732 @@
+CPartsComboBox::CPartsComboBox()
+/* 00026662 */{
+/* 0002666a */	this.Create();
+/* 00026672 */}
+
+CPartsComboBox::~CPartsComboBox()
+/* 0002667a */{
+/* 0002667a */	this.Release();
+/* 00026682 */}
+
+void CPartsComboBox::Create()
+/* 0002668a */{
+/* 0002668a */	this.Reset(PARTS_GetFreeSystemPartsNumber());
+/* 00026698 */	Ｐ＿座標設定(this.m_ComboNumber, 0.0, 0.0);
+/* 000266b4 */	Ｐ＿Ｚ座標設定(this.m_ComboNumber, 0);
+/* 000266ca */	Ｐ＿コンボボックス＿サイズ設定(this.m_ComboNumber, 200, 16);
+/* 000266e6 */	Ｐ＿コンボボックス＿マージン設定(this.m_ComboNumber, 2, 2);
+/* 00026702 */	Ｐ＿コンボボックス＿フォント設定(this.m_ComboNumber, 0, 16, 0, 0, 0, 0.0, 0, 0, 0, 0.0);
+/* 0002674e */}
+
+void CPartsComboBox::Reset(int nNumber)
+/* 00026756 */{
+/* 00026756 */	this.Release();
+/* 0002675e */	this.m_ComboNumber = nNumber;
+/* 00026774 */	g_PartsMessageManager.AddMouseMoveEvent(this.m_ComboNumber, this.MouseMoveEvent);
+/* 00026798 */	g_PartsMessageManager.AddMouseLeaveEvent(this.m_ComboNumber, this.MouseLeaveEvent);
+/* 000267bc */	g_PartsMessageManager.AddMouseEnterEvent(this.m_ComboNumber, this.MouseEnterEvent);
+/* 000267e0 */	g_PartsMessageManager.AddMouseLClickEvent(this.m_ComboNumber, this.MouseClickEvent);
+/* 00026804 */	g_PartsMessageManager.AddMouseWheelEvent(this.m_ComboNumber, this.MouseWheelEvent);
+/* 00026828 */	g_PartsMessageManager.AddMouseOnEvent(this.m_ComboNumber, this.MouseOnEvent);
+/* 0002684c */	g_PartsMessageManager.AddDropEnterEvent(this.m_ComboNumber, this.DropEnterEvent);
+/* 00026870 */	g_PartsMessageManager.AddDropOnEvent(this.m_ComboNumber, this.DropOnEvent);
+/* 00026894 */	g_PartsMessageManager.AddDroppedEvent(this.m_ComboNumber, this.DroppedEvent);
+/* 000268b8 */	g_PartsMessageManager.AddDropLeaveEvent(this.m_ComboNumber, this.DropLeaveEvent);
+/* 000268dc */	g_PartsMessageManager.AddKeyTriggerEvent(this.m_ComboNumber, this.KeyTriggerEvent);
+/* 00026900 */	g_PartsMessageManager.AddKeyDownEvent(this.m_ComboNumber, this.KeyDownEvent);
+/* 00026924 */	g_PartsMessageManager.AddKeyPressEvent(this.m_ComboNumber, this.KeyPressEvent);
+/* 00026948 */	g_PartsMessageManager.AddKeyUpEvent(this.m_ComboNumber, this.KeyUpEvent);
+/* 0002696c */}
+
+void CPartsComboBox::Release()
+/* 00026974 */{
+/* 00026974 */	this.DG_MouseMoveEvent.Clear();
+/* 00026980 */	this.DG_MouseLeaveEvent.Clear();
+/* 0002698c */	this.DG_MouseEnterEvent.Clear();
+/* 00026998 */	this.DG_MouseClickEvent.Clear();
+/* 000269a4 */	this.DG_MouseWheelEvent.Clear();
+/* 000269b0 */	this.DG_MouseOnEvent.Clear();
+/* 000269bc */	this.DG_DragBeginEvent.Clear();
+/* 000269c8 */	this.DG_DragingEvent.Clear();
+/* 000269d4 */	this.DG_DragEndEvent.Clear();
+/* 000269e0 */	this.DG_DropEnterEvent.Clear();
+/* 000269ec */	this.DG_DropOnEvent.Clear();
+/* 000269f8 */	this.DG_DroppedEvent.Clear();
+/* 00026a04 */	this.DG_DropLeaveEvent.Clear();
+/* 00026a10 */	this.DG_KeyTriggerEvent.Clear();
+/* 00026a1c */	this.DG_KeyDownEvent.Clear();
+/* 00026a28 */	this.DG_KeyPressEvent.Clear();
+/* 00026a34 */	this.DG_KeyUpEvent.Clear();
+/* 00026a40 */	this.DG_ScrollEvent.Clear();
+/* 00026a4c */	this.DG_SelectedEvent.Clear();
+/* 00026a58 */	this.m_OnCursorTime = -1;
+/* 00026a6a */	this.m_OnCursorTimeCombo = -1;
+/* 00026a7c */	this.m_OnCursorTimeList = -1;
+/* 00026a8e */	PARTS_ReleaseWithInit(this.m_ListNumber);
+/* 00026a9c */	PARTS_ReleaseWithInit(this.m_ComboNumber);
+/* 00026aaa */	this.m_SelectedIndex = -1;
+/* 00026abc */	this.m_LineHeight = 16;
+/* 00026ace */	this.m_BoxHeight = 200;
+/* 00026ae0 */	this.m_ListBoxCGName = "";
+/* 00026af4 */	this.m_MarginListWidth = 0;
+/* 00026b06 */	this.m_MarginListHeight = 0;
+/* 00026b18 */	CASCharSpriteProperty Font;
+/* 00026b28 */	this.m_ListFontProperty = Font;
+/* 00026b4a */	this.m_ListFontProperty.SetColor(CF_CASColor(0, 0, 0, 255));
+/* 00026b78 */	this.m_OpenList = false;
+/* 00026b8a */}
+
+int CPartsComboBox::GetPartsNumber()
+/* 00026b92 */{
+/* 00026b92 */	return this.m_ComboNumber;
+/* 00026b9e */}
+
+void CPartsComboBox::SetFocus()
+/* 00026bac */{
+/* 00026bac */	Ｐ＿フォーカス設定(this.m_ComboNumber);
+/* 00026bbc */}
+
+bool CPartsComboBox::IsFocus()
+/* 00026bc4 */{
+/* 00026bc4 */	if (Ｐ＿フォーカス確認(this.m_ComboNumber))
+/* 00026bda */	{
+/* 00026bda */		return true;
+/* 00026be2 */	}
+/* 00026be2 */	if (Ｐ＿フォーカス確認(this.m_ListNumber))
+/* 00026bf8 */	{
+/* 00026bf8 */		return true;
+/* 00026c00 */	}
+/* 00026c00 */	return false;
+/* 00026c08 */}
+
+bool CPartsComboBox::IsOnCursor()
+/* 00026c16 */{
+/* 00026c16 */	return false;
+/* 00026c1e */}
+
+bool CPartsComboBox::IsClick()
+/* 00026c2c */{
+/* 00026c2c */	return false;
+/* 00026c34 */}
+
+void CPartsComboBox::MouseMoveEvent(int PartsNumber, int UIMouseX, int UIMouseY)
+/* 00026c42 */{
+/* 00026c42 */	this.DG_MouseMoveEvent(this.GetPartsNumber(), UIMouseX, UIMouseY);
+/* 00026c7e */}
+
+void CPartsComboBox::MouseLeaveEvent(int PartsNumber, int UIMouseX, int UIMouseY)
+/* 00026c86 */{
+/* 00026c86 */	if (PartsNumber == this.m_ComboNumber)
+/* 00026ca2 */	{
+/* 00026ca2 */		this.m_OnCursorTime += this.m_OnCursorTimeCombo;
+/* 00026cb8 */		this.m_OnCursorTimeCombo = -1;
+/* 00026cca */	}
+/* 00026cd0 */	else if (PartsNumber == this.m_ListNumber)
+/* 00026cec */	{
+/* 00026cec */		this.m_OnCursorTime += this.m_OnCursorTimeList;
+/* 00026d02 */		this.m_OnCursorTimeList = -1;
+/* 00026d14 */	}
+/* 00026d14 */}
+
+void CPartsComboBox::MouseEnterEvent(int PartsNumber, int UIMouseX, int UIMouseY)
+/* 00026d1c */{
+/* 00026d1e */}
+
+void CPartsComboBox::MouseClickEvent(int PartsNumber, int UIMouseX, int UIMouseY)
+/* 00026d24 */{
+/* 00026d24 */	this.DG_MouseClickEvent(this.GetPartsNumber(), PartsNumber, UIMouseX);
+/* 00026d60 */	if (this.m_OpenList)
+/* 00026d70 */	{
+/* 00026d70 */		return;
+/* 00026d72 */	}
+/* 00026d72 */	AFL_Parts_AddLayer(-1);
+/* 00026d80 */	this.m_ListNumber = PARTS_GetFreeSystemPartsNumber();
+/* 00026d92 */	int PosX = AFL_Parts_GetUpperLeftPosX(this.m_ComboNumber, 1);
+/* 00026db6 */	int PosY = AFL_Parts_GetUpperLeftPosY(this.m_ComboNumber, 1);
+/* 00026dda */	int Width = this.GetWidth();
+/* 00026dee */	int Height = this.GetHeight();
+/* 00026e02 */	int LineHeight = this.GetLineHeight();
+/* 00026e16 */	int BoxHehgit = this.GetBoxHeight();
+/* 00026e2a */	int BoxMargin = this.GetHeightMarginFromList();
+/* 00026e3e */	if (PosY + Height + BoxHehgit + 4 <= AFL_View_GetHeight())
+/* 00026e76 */	{
+/* 00026e76 */		Ｐ＿座標設定(this.m_ListNumber, PosX, PosY + Height + 4);
+/* 00026eb2 */	}
+/* 00026eb8 */	else
+/* 00026eb8 */	{
+/* 00026eb8 */		Ｐ＿座標設定(this.m_ListNumber, PosX, PosY - (BoxHehgit + 4));
+/* 00026ef4 */	}
+/* 00026ef4 */	CASCharSpriteProperty ListFontProperty;
+/* 00026f04 */	this.GetFontPropertyFromList(ListFontProperty);
+/* 00026f16 */	ListFontProperty.SetSize(LineHeight - BoxMargin * 2);
+/* 00026f44 */	this.SetFontPropertyForList(ListFontProperty);
+/* 00026f56 */	CASColor Color;
+/* 00026f66 */	Color = ListFontProperty.GetColor();
+/* 00026f8a */	CASColor EdgeColor;
+/* 00026f9a */	EdgeColor = ListFontProperty.GetEdgeColor();
+/* 00026fbe */	Ｐ＿Ｚ座標設定(this.m_ListNumber, 1);
+/* 00026fd4 */	Ｐ＿リストボックス＿サイズ設定(this.m_ListNumber, Width, BoxHehgit);
+/* 00026ff8 */	Ｐ＿表示設定(this.m_ListNumber, true);
+/* 0002700e */	Ｐ＿リストボックス＿行高さ設定(this.m_ListNumber, this.m_LineHeight);
+/* 00027028 */	Ｐ＿リストボックス＿サイズ設定(this.m_ListNumber, AFL_Parts_GetWidth(this.m_ListNumber, 1), this.m_BoxHeight);
+/* 00027058 */	Ｐ＿リストボックス＿ＣＧ名設定(this.m_ListNumber, this.m_ListBoxCGName);
+/* 00027072 */	Ｐ＿リストボックス＿行マージン設定(this.m_ListNumber, this.m_MarginListWidth, this.m_MarginListHeight);
+/* 00027096 */	Ｐ＿リストボックス＿フォント設定(this.m_ListNumber, ListFontProperty.GetType(), ListFontProperty.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), ListFontProperty.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), ListFontProperty.GetEdgeWeight());
+/* 00027146 */	int Index;
+/* 00027146 */	for (Index = 0; Index < this.m_ItemList.Numof(); ++Index)
+/* 00027196 */	{
+/* 00027196 */		Ｐ＿リストボックス＿アイテム追加(this.m_ListNumber, this.m_ItemList[Index]);
+/* 000271bc */	}
+/* 000271c2 */	Ｐ＿リストボックス＿選択位置設定(this.m_ListNumber, this.m_SelectedIndex);
+/* 000271dc */	g_PartsMessageManager.AddMouseMoveEvent(this.m_ListNumber, this.MouseMoveEvent);
+/* 00027200 */	g_PartsMessageManager.AddMouseLeaveEvent(this.m_ListNumber, this.MouseLeaveEvent);
+/* 00027224 */	g_PartsMessageManager.AddMouseEnterEvent(this.m_ListNumber, this.MouseEnterEvent);
+/* 00027248 */	g_PartsMessageManager.AddMouseWheelEvent(this.m_ListNumber, this.MouseWheelEvent);
+/* 0002726c */	g_PartsMessageManager.AddMouseOnEvent(this.m_ListNumber, this.MouseOnEvent);
+/* 00027290 */	g_PartsMessageManager.AddDropEnterEvent(this.m_ListNumber, this.DropEnterEvent);
+/* 000272b4 */	g_PartsMessageManager.AddDroppedEvent(this.m_ListNumber, this.DroppedEvent);
+/* 000272d8 */	g_PartsMessageManager.AddDropLeaveEvent(this.m_ListNumber, this.DropLeaveEvent);
+/* 000272fc */	g_PartsMessageManager.AddKeyTriggerEvent(this.m_ListNumber, this.KeyTriggerEvent);
+/* 00027320 */	g_PartsMessageManager.AddKeyDownEvent(this.m_ListNumber, this.KeyDownEvent);
+/* 00027344 */	g_PartsMessageManager.AddKeyPressEvent(this.m_ListNumber, this.KeyPressEvent);
+/* 00027368 */	g_PartsMessageManager.AddKeyUpEvent(this.m_ListNumber, this.KeyUpEvent);
+/* 0002738c */	g_PartsMessageManager.AddLostFocusEvent(this.m_ListNumber, this.LostFocusEvent);
+/* 000273b0 */	g_PartsMessageManager.AddCreatedEvent(this.m_ListNumber, this.CreatedEvent);
+/* 000273d4 */	g_PartsMessageManager.AddSelectedEvent(this.m_ListNumber, this.SelectedEvent);
+/* 000273f8 */	this.m_OpenList = true;
+/* 0002740a */}
+
+void CPartsComboBox::MouseWheelEvent(int PartsNumber, int Forward, int Back)
+/* 00027412 */{
+/* 00027412 */	if (!this.m_OpenList)
+/* 00027424 */	{
+/* 00027424 */		int nSelectedIndex = (this.SelectedIndex() - Forward) + Back;
+/* 00027450 */		if (nSelectedIndex < 0)
+/* 00027468 */		{
+/* 00027468 */			nSelectedIndex = 0;
+/* 0002747a */		}
+/* 0002747a */		this.Select(nSelectedIndex);
+/* 0002748c */	}
+/* 0002748c */	this.DG_MouseWheelEvent(this.GetPartsNumber(), Forward, Back);
+/* 000274c8 */}
+
+void CPartsComboBox::MouseOnEvent(int PartsNumber, int UIMouseX, int UIMouseY, int Time)
+/* 000274d0 */{
+/* 000274d0 */	if (PartsNumber == this.m_ComboNumber)
+/* 000274ec */	{
+/* 000274ec */		this.m_OnCursorTimeCombo = Time;
+/* 00027502 */	}
+/* 00027508 */	else if (PartsNumber == this.m_ListNumber)
+/* 00027524 */	{
+/* 00027524 */		this.m_OnCursorTimeList = Time;
+/* 0002753a */	}
+/* 0002753a */}
+
+void CPartsComboBox::DragBeginEvent(int PartsNumber)
+/* 00027542 */{
+/* 00027542 */	this.DG_DragBeginEvent(this.GetPartsNumber());
+/* 0002756a */}
+
+void CPartsComboBox::DragingEvent(int PartsNumber, int BeginMouseX, int BeginMouseY, int MouseX, int MouseY)
+/* 00027572 */{
+/* 00027572 */	this.DG_DragingEvent(this.GetPartsNumber(), BeginMouseX, BeginMouseY, MouseX, MouseY);
+/* 000275c2 */}
+
+void CPartsComboBox::DragEndEvent(int PartsNumber)
+/* 000275ca */{
+/* 000275ca */	this.DG_DragEndEvent(this.GetPartsNumber());
+/* 000275f2 */}
+
+void CPartsComboBox::DropEnterEvent(int DropUINumber, int DragUINumber)
+/* 000275fa */{
+/* 000275fa */	this.DG_DropEnterEvent(this.GetPartsNumber(), DragUINumber);
+/* 0002762c */}
+
+void CPartsComboBox::DropOnEvent(int DropUINumber, int DragUINumber, int MouseX, int MouseY)
+/* 00027634 */{
+/* 00027634 */	this.DG_DropOnEvent(this.GetPartsNumber(), DragUINumber, MouseX, MouseY);
+/* 0002767a */}
+
+void CPartsComboBox::DroppedEvent(int DropUINumber, int DragUINumber, int MouseX, int MouseY)
+/* 00027682 */{
+/* 00027682 */	this.DG_DroppedEvent(this.GetPartsNumber(), DragUINumber, MouseX, MouseY);
+/* 000276c8 */}
+
+void CPartsComboBox::DropLeaveEvent(int DropUINumber, int DragUINumber)
+/* 000276d0 */{
+/* 000276d0 */	this.DG_DropLeaveEvent(this.GetPartsNumber(), DragUINumber);
+/* 00027702 */}
+
+void CPartsComboBox::KeyTriggerEvent(int PartsNumber, int KeyCode)
+/* 0002770a */{
+/* 0002770a */	this.DG_KeyTriggerEvent(this.GetPartsNumber(), KeyCode);
+/* 0002773c */}
+
+void CPartsComboBox::KeyDownEvent(int PartsNumber, int KeyCode)
+/* 00027744 */{
+/* 00027744 */	this.DG_KeyDownEvent(this.GetPartsNumber(), KeyCode);
+/* 00027776 */}
+
+void CPartsComboBox::KeyPressEvent(int PartsNumber, int KeyCode)
+/* 0002777e */{
+/* 0002777e */	this.DG_KeyPressEvent(this.GetPartsNumber(), KeyCode);
+/* 000277b0 */}
+
+void CPartsComboBox::KeyUpEvent(int PartsNumber, int KeyCode)
+/* 000277b8 */{
+/* 000277b8 */	this.DG_KeyUpEvent(this.GetPartsNumber(), KeyCode);
+/* 000277ea */}
+
+void CPartsComboBox::SelectedEvent(int PartsNumber, int nSelectedIndex)
+/* 000277f2 */{
+/* 000277f2 */	if (0 <= nSelectedIndex)
+/* 0002780a */	{
+/* 0002780a */		this.Select(nSelectedIndex);
+/* 0002781c */	}
+/* 0002781c */}
+
+void CPartsComboBox::CreatedEvent(int PartsNumber)
+/* 00027824 */{
+/* 00027824 */	if (this.m_ListNumber != 0)
+/* 0002783c */	{
+/* 0002783c */		Ｐ＿フォーカス設定(this.m_ListNumber);
+/* 0002784c */	}
+/* 0002784c */}
+
+void CPartsComboBox::LostFocusEvent(int PartsNumber)
+/* 00027854 */{
+/* 00027854 */	if (PartsNumber != this.m_ListNumber)
+/* 00027870 */	{
+/* 00027870 */		return;
+/* 00027872 */	}
+/* 00027872 */	this.Select(this.SelectedIndex());
+/* 00027882 */	for (; AFL_IsKeyDown(1); )
+/* 000278a0 */	{
+/* 000278a0 */		AFL_View_Update(true);
+/* 000278ac */	}
+/* 000278b2 */}
+
+void CPartsComboBox::SetPos(int PosX, int PosY)
+/* 000278ba */{
+/* 000278ba */	Ｐ＿座標設定(this.m_ComboNumber, PosX, PosY);
+/* 000278e2 */}
+
+void CPartsComboBox::SetZ(int PosZ)
+/* 000278ea */{
+/* 000278ea */	Ｐ＿Ｚ座標設定(this.m_ComboNumber, PosZ);
+/* 00027904 */}
+
+int CPartsComboBox::GetX()
+/* 0002790c */{
+/* 0002790c */	return Ｐ＿Ｘ座標取得(this.m_ComboNumber);
+/* 00027920 */}
+
+int CPartsComboBox::GetY()
+/* 0002792e */{
+/* 0002792e */	return Ｐ＿Ｙ座標取得(this.m_ComboNumber);
+/* 00027942 */}
+
+int CPartsComboBox::GetZ()
+/* 00027950 */{
+/* 00027950 */	return Ｐ＿Ｚ座標取得(this.m_ComboNumber);
+/* 00027962 */}
+
+void CPartsComboBox::SetSize(int Width, int Height)
+/* 00027970 */{
+/* 00027970 */	Ｐ＿コンボボックス＿サイズ設定(this.m_ComboNumber, Width, Height);
+/* 00027994 */}
+
+void CPartsComboBox::SetLineHeight(int Height)
+/* 0002799c */{
+/* 0002799c */	this.m_LineHeight = Height;
+/* 000279b2 */}
+
+void CPartsComboBox::SetBoxHeight(int Height)
+/* 000279ba */{
+/* 000279ba */	this.m_BoxHeight = Height;
+/* 000279d0 */}
+
+int CPartsComboBox::GetWidth()
+/* 000279d8 */{
+/* 000279d8 */	return AFL_Parts_GetWidth(this.m_ComboNumber, 1);
+/* 000279f0 */}
+
+int CPartsComboBox::GetHeight()
+/* 000279fe */{
+/* 000279fe */	return AFL_Parts_GetHeight(this.m_ComboNumber, 1);
+/* 00027a16 */}
+
+int CPartsComboBox::GetLineHeight()
+/* 00027a24 */{
+/* 00027a24 */	return this.m_LineHeight;
+/* 00027a30 */}
+
+int CPartsComboBox::GetBoxHeight()
+/* 00027a3e */{
+/* 00027a3e */	return this.m_BoxHeight;
+/* 00027a4a */}
+
+void CPartsComboBox::SetMarginForBox(int Width, int Height)
+/* 00027a58 */{
+/* 00027a58 */	Ｐ＿コンボボックス＿マージン設定(this.m_ComboNumber, Width, Height);
+/* 00027a7c */}
+
+int CPartsComboBox::GetWidthMarginFromBox()
+/* 00027a84 */{
+/* 00027a84 */	return Ｐ＿コンボボックス＿マージン幅取得(this.m_ComboNumber);
+/* 00027a96 */}
+
+int CPartsComboBox::GetHeightMarginFromBox()
+/* 00027aa4 */{
+/* 00027aa4 */	return Ｐ＿コンボボックス＿マージン高さ取得(this.m_ComboNumber);
+/* 00027ab6 */}
+
+void CPartsComboBox::SetMarginForList(int Width, int Height)
+/* 00027ac4 */{
+/* 00027ac4 */	this.m_MarginListWidth = Width;
+/* 00027ada */	this.m_MarginListHeight = Height;
+/* 00027af0 */}
+
+int CPartsComboBox::GetWidthMarginFromList()
+/* 00027af8 */{
+/* 00027af8 */	return this.m_MarginListWidth;
+/* 00027b04 */}
+
+int CPartsComboBox::GetHeightMarginFromList()
+/* 00027b12 */{
+/* 00027b12 */	return this.m_MarginListHeight;
+/* 00027b1e */}
+
+void CPartsComboBox::SetShow(bool Show)
+/* 00027b2c */{
+/* 00027b2c */	Ｐ＿表示設定(this.m_ComboNumber, Show);
+/* 00027b46 */	if (this.m_ListNumber != 0)
+/* 00027b5e */	{
+/* 00027b5e */		Ｐ＿表示設定(this.m_ListNumber, Show);
+/* 00027b78 */	}
+/* 00027b78 */}
+
+bool CPartsComboBox::IsShow()
+/* 00027b80 */{
+/* 00027b80 */	return Ｐ＿表示設定取得(this.m_ComboNumber);
+/* 00027b92 */}
+
+void CPartsComboBox::SetBoxCGName(string Name)
+/* 00027ba0 */{
+/* 00027ba0 */	Ｐ＿コンボボックス＿ＣＧ名設定(this.m_ComboNumber, Name);
+/* 00027bba */}
+
+string CPartsComboBox::GetBoxCGName()
+/* 00027bc2 */{
+/* 00027bc2 */	return Ｐ＿コンボボックス＿ＣＧ名取得(this.m_ComboNumber);
+/* 00027bd4 */}
+
+void CPartsComboBox::SetListCGName(string Name)
+/* 00027be2 */{
+/* 00027be2 */	this.m_ListBoxCGName = Name;
+/* 00027bfa */}
+
+string CPartsComboBox::GetListCGName()
+/* 00027c02 */{
+/* 00027c02 */	return this.m_ListBoxCGName;
+/* 00027c0e */}
+
+void CPartsComboBox::SetFontPropertyForBox(ref CASCharSpriteProperty FontProperty)
+/* 00027c1c */{
+/* 00027c1c */	CASColor Color;
+/* 00027c2c */	Color = FontProperty.GetColor();
+/* 00027c50 */	CASColor EdgeColor;
+/* 00027c60 */	EdgeColor = FontProperty.GetEdgeColor();
+/* 00027c84 */	Ｐ＿コンボボックス＿フォント設定(this.m_ComboNumber, FontProperty.GetType(), FontProperty.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), FontProperty.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), FontProperty.GetEdgeWeight());
+/* 00027d34 */}
+
+void CPartsComboBox::GetFontPropertyFromBox(ref CASCharSpriteProperty FontProperty)
+/* 00027d3c */{
+/* 00027d3c */	int Type;
+/* 00027d4e */	int Size;
+/* 00027d60 */	int ColorR;
+/* 00027d72 */	int ColorG;
+/* 00027d84 */	int ColorB;
+/* 00027d96 */	int EdgeR;
+/* 00027da8 */	int EdgeG;
+/* 00027dba */	int EdgeB;
+/* 00027dcc */	float Bold;
+/* 00027dde */	float Edge;
+/* 00027df0 */	Ｐ＿コンボボックス＿フォント取得(this.m_ComboNumber, Type, Size, ColorR, ColorG, ColorB, Bold, EdgeR, EdgeG, EdgeB, Edge);
+/* 00027e50 */	FontProperty.SetType(Type);
+/* 00027e6a */	FontProperty.SetSize(Size);
+/* 00027e84 */	FontProperty.SetColor(CF_CASColor(ColorR, ColorG, ColorB, 255));
+/* 00027ebe */	FontProperty.SetBoldWeight(Bold);
+/* 00027ed8 */	FontProperty.SetEdgeWeight(Edge);
+/* 00027ef2 */	FontProperty.SetEdgeColor(CF_CASColor(EdgeR, EdgeG, EdgeB, 255));
+/* 00027f2c */}
+
+void CPartsComboBox::SetFontPropertyForList(ref CASCharSpriteProperty FontProperty)
+/* 00027f34 */{
+/* 00027f34 */	this.m_ListFontProperty = FontProperty;
+/* 00027f56 */}
+
+void CPartsComboBox::GetFontPropertyFromList(ref CASCharSpriteProperty FontProperty)
+/* 00027f5e */{
+/* 00027f5e */	FontProperty = this.m_ListFontProperty;
+/* 00027f80 */}
+
+void CPartsComboBox::AddItem(string _Item_)
+/* 00027f88 */{
+/* 00027f88 */	this.m_ItemList.PushBack(_Item_);
+/* 00027f9c */}
+
+string CPartsComboBox::GetItem(int Index)
+/* 00027fa4 */{
+/* 00027fa4 */	if (this.m_ItemList.Numof() <= Index)
+/* 00027fc6 */	{
+/* 00027fc6 */		return "";
+/* 00027fce */	}
+/* 00027fce */	if (Index < 0)
+/* 00027fe6 */	{
+/* 00027fe6 */		return "";
+/* 00027fee */	}
+/* 00027fee */	return this.m_ItemList[Index];
+/* 00028006 */}
+
+void CPartsComboBox::ClearItem()
+/* 00028014 */{
+/* 00028014 */	if (this.m_ListNumber != 0)
+/* 0002802c */	{
+/* 0002802c */		Ｐ＿リストボックス＿アイテム全削除(this.m_ListNumber);
+/* 0002803c */	}
+/* 0002803c */	this.m_ItemList.Free();
+/* 00028046 */	this.Select(-1);
+/* 00028054 */}
+
+int CPartsComboBox::Numof()
+/* 0002805c */{
+/* 0002805c */	return this.m_ItemList.Numof();
+/* 0002806e */}
+
+void CPartsComboBox::Select(int Index)
+/* 0002807c */{
+/* 0002807c */	int PrevIndex = this.m_SelectedIndex;
+/* 00028092 */	this.m_SelectedIndex = Index;
+/* 000280a8 */	if (this.m_ItemList.Numof() <= this.m_SelectedIndex)
+/* 000280ca */	{
+/* 000280ca */		this.m_SelectedIndex = this.m_ItemList.Numof() - 1;
+/* 000280ee */	}
+/* 000280ee */	if (Index < -1)
+/* 00028106 */	{
+/* 00028106 */		this.m_SelectedIndex = -1;
+/* 00028118 */	}
+/* 00028118 */	Ｐ＿コンボボックス＿テキスト設定(this.m_ComboNumber, this.SelectedItem());
+/* 00028130 */	if (this.m_OpenList)
+/* 00028140 */	{
+/* 00028140 */		AFL_Parts_EraseLayer(-1);
+/* 0002814c */		PARTS_ReleaseWithInit(this.m_ListNumber);
+/* 0002815a */		Ｐ＿フォーカス設定(this.m_ComboNumber);
+/* 0002816a */		this.m_OpenList = false;
+/* 0002817c */	}
+/* 0002817c */	if (PrevIndex != this.m_SelectedIndex)
+/* 00028198 */	{
+/* 00028198 */		this.DG_SelectedEvent(this.GetPartsNumber(), this.SelectedIndex());
+/* 000281c8 */	}
+/* 000281c8 */}
+
+int CPartsComboBox::SelectedIndex()
+/* 000281d0 */{
+/* 000281d0 */	return this.m_SelectedIndex;
+/* 000281dc */}
+
+string CPartsComboBox::SelectedItem()
+/* 000281ea */{
+/* 000281ea */	return this.GetItem(this.SelectedIndex());
+/* 000281fc */}
+
+void CPartsComboBox::AddMouseMoveEvent(DG_MouseMoveHandler DelegateObject)
+/* 0002820a */{
+/* 0002820a */	this.DG_MouseMoveEvent += DelegateObject;
+/* 00028224 */}
+
+void CPartsComboBox::EraseMouseMoveEvent(DG_MouseMoveHandler DelegateObject)
+/* 0002822c */{
+/* 0002822c */	this.DG_MouseMoveEvent -= DelegateObject;
+/* 00028246 */}
+
+void CPartsComboBox::AddMouseLeaveEvent(unknown_delegate DelegateObject)
+/* 0002824e */{
+/* 0002824e */	this.DG_MouseLeaveEvent += DelegateObject;
+/* 00028268 */}
+
+void CPartsComboBox::EraseMouseLeaveEvent(unknown_delegate DelegateObject)
+/* 00028270 */{
+/* 00028270 */	this.DG_MouseLeaveEvent -= DelegateObject;
+/* 0002828a */}
+
+void CPartsComboBox::AddMouseEnterEvent(unknown_delegate DelegateObject)
+/* 00028292 */{
+/* 00028292 */	this.DG_MouseEnterEvent += DelegateObject;
+/* 000282ac */}
+
+void CPartsComboBox::EraseMouseEnterEvent(unknown_delegate DelegateObject)
+/* 000282b4 */{
+/* 000282b4 */	this.DG_MouseEnterEvent -= DelegateObject;
+/* 000282ce */}
+
+void CPartsComboBox::AddMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 000282d6 */{
+/* 000282d6 */	this.DG_MouseClickEvent += DelegateObject;
+/* 000282f0 */}
+
+void CPartsComboBox::EraseMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 000282f8 */{
+/* 000282f8 */	this.DG_MouseClickEvent -= DelegateObject;
+/* 00028312 */}
+
+void CPartsComboBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0002831a */{
+/* 0002831a */	this.DG_MouseWheelEvent += DelegateObject;
+/* 00028334 */}
+
+void CPartsComboBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0002833c */{
+/* 0002833c */	this.DG_MouseWheelEvent -= DelegateObject;
+/* 00028356 */}
+
+void CPartsComboBox::AddMouseOnEvent(unknown_delegate DelegateObject)
+/* 0002835e */{
+/* 0002835e */	this.DG_MouseOnEvent += DelegateObject;
+/* 00028378 */}
+
+void CPartsComboBox::EraseMouseOnEvent(unknown_delegate DelegateObject)
+/* 00028380 */{
+/* 00028380 */	this.DG_MouseOnEvent -= DelegateObject;
+/* 0002839a */}
+
+void CPartsComboBox::AddDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 000283a2 */{
+/* 000283a2 */	this.DG_DragBeginEvent += DelegateObject;
+/* 000283bc */}
+
+void CPartsComboBox::EraseDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 000283c4 */{
+/* 000283c4 */	this.DG_DragBeginEvent -= DelegateObject;
+/* 000283de */}
+
+void CPartsComboBox::AddDragingEvent(DG_DragingHandler DelegateObject)
+/* 000283e6 */{
+/* 000283e6 */	this.DG_DragingEvent += DelegateObject;
+/* 00028400 */}
+
+void CPartsComboBox::EraseDragingEvent(DG_DragingHandler DelegateObject)
+/* 00028408 */{
+/* 00028408 */	this.DG_DragingEvent -= DelegateObject;
+/* 00028422 */}
+
+void CPartsComboBox::AddDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 0002842a */{
+/* 0002842a */	this.DG_DragEndEvent += DelegateObject;
+/* 00028444 */}
+
+void CPartsComboBox::EraseDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 0002844c */{
+/* 0002844c */	this.DG_DragEndEvent -= DelegateObject;
+/* 00028466 */}
+
+void CPartsComboBox::AddDropEnterEvent(DG_DropEnterHandler DelegateObject)
+/* 0002846e */{
+/* 0002846e */	this.DG_DropEnterEvent += DelegateObject;
+/* 00028488 */}
+
+void CPartsComboBox::EraseDropEnterEvent(DG_DropEnterHandler DelegateObject)
+/* 00028490 */{
+/* 00028490 */	this.DG_DropEnterEvent -= DelegateObject;
+/* 000284aa */}
+
+void CPartsComboBox::AddDropOnEvent(DG_DropOnHandler DelegateObject)
+/* 000284b2 */{
+/* 000284b2 */	this.DG_DropOnEvent += DelegateObject;
+/* 000284cc */}
+
+void CPartsComboBox::EraseDropOnEvent(DG_DropOnHandler DelegateObject)
+/* 000284d4 */{
+/* 000284d4 */	this.DG_DropOnEvent -= DelegateObject;
+/* 000284ee */}
+
+void CPartsComboBox::AddDroppedEvent(DG_DroppedHandler DelegateObject)
+/* 000284f6 */{
+/* 000284f6 */	this.DG_DroppedEvent += DelegateObject;
+/* 00028510 */}
+
+void CPartsComboBox::EraseDroppedEvent(DG_DroppedHandler DelegateObject)
+/* 00028518 */{
+/* 00028518 */	this.DG_DroppedEvent -= DelegateObject;
+/* 00028532 */}
+
+void CPartsComboBox::AddDropLeaveEvent(DG_DropLeaveHandler DelegateObject)
+/* 0002853a */{
+/* 0002853a */	this.DG_DropLeaveEvent += DelegateObject;
+/* 00028554 */}
+
+void CPartsComboBox::EraseDropLeaveEvent(DG_DropLeaveHandler DelegateObject)
+/* 0002855c */{
+/* 0002855c */	this.DG_DropLeaveEvent -= DelegateObject;
+/* 00028576 */}
+
+void CPartsComboBox::AddKeyTriggerEvent(DG_KeyTriggerHandler DelegateObject)
+/* 0002857e */{
+/* 0002857e */	this.DG_KeyTriggerEvent += DelegateObject;
+/* 00028598 */}
+
+void CPartsComboBox::EraseKeyTriggerEvent(DG_KeyTriggerHandler DelegateObject)
+/* 000285a0 */{
+/* 000285a0 */	this.DG_KeyTriggerEvent -= DelegateObject;
+/* 000285ba */}
+
+void CPartsComboBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000285c2 */{
+/* 000285c2 */	this.DG_KeyDownEvent += DelegateObject;
+/* 000285dc */}
+
+void CPartsComboBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000285e4 */{
+/* 000285e4 */	this.DG_KeyDownEvent -= DelegateObject;
+/* 000285fe */}
+
+void CPartsComboBox::AddKeyPressEvent(DG_KeyPressHandler DelegateObject)
+/* 00028606 */{
+/* 00028606 */	this.DG_KeyPressEvent += DelegateObject;
+/* 00028620 */}
+
+void CPartsComboBox::EraseKeyPressEvent(DG_KeyPressHandler DelegateObject)
+/* 00028628 */{
+/* 00028628 */	this.DG_KeyPressEvent -= DelegateObject;
+/* 00028642 */}
+
+void CPartsComboBox::AddKeyUpEvent(DG_KeyUpHandler DelegateObject)
+/* 0002864a */{
+/* 0002864a */	this.DG_KeyUpEvent += DelegateObject;
+/* 00028664 */}
+
+void CPartsComboBox::EraseKeyUpEvent(DG_KeyUpHandler DelegateObject)
+/* 0002866c */{
+/* 0002866c */	this.DG_KeyUpEvent -= DelegateObject;
+/* 00028686 */}
+
+void CPartsComboBox::AddScrollEvent(unknown_delegate DelegateObject)
+/* 0002868e */{
+/* 0002868e */	this.DG_ScrollEvent += DelegateObject;
+/* 000286a8 */}
+
+void CPartsComboBox::EraseScrollEvent(unknown_delegate DelegateObject)
+/* 000286b0 */{
+/* 000286b0 */	this.DG_ScrollEvent -= DelegateObject;
+/* 000286ca */}
+
+void CPartsComboBox::AddSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 000286d2 */{
+/* 000286d2 */	this.DG_SelectedEvent += DelegateObject;
+/* 000286ec */}
+
+void CPartsComboBox::EraseSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 000286f4 */{
+/* 000286f4 */	this.DG_SelectedEvent -= DelegateObject;
+/* 0002870e */}
+

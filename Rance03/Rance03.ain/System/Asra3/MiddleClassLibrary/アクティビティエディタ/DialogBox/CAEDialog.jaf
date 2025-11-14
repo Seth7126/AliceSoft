@@ -1,0 +1,338 @@
+void DIALOG_OK(string Text)
+/* 0004c746 */{
+/* 0004c746 */	CAEDialog Dialog;
+/* 0004c756 */	Dialog.ShowDialogOK(Text);
+/* 0004c770 */}
+
+bool DIALOG_OKCANCEL(string Text)
+/* 0004c77e */{
+/* 0004c77e */	CAEDialog Dialog;
+/* 0004c78e */	return Dialog.ShowDialogOKCancel(Text);
+/* 0004c7aa */}
+
+bool DIALOG_YESNO(string Text)
+/* 0004c7be */{
+/* 0004c7be */	CAEDialog Dialog;
+/* 0004c7ce */	return Dialog.ShowDialogYESNO(Text);
+/* 0004c7ea */}
+
+bool DIALOG_GETTEXT(string Text, ref string OutText)
+/* 0004c7fe */{
+/* 0004c7fe */	CAEDialog Dialog;
+/* 0004c80e */	if (Dialog.ShowDialogGetText(Text, OutText))
+/* 0004c838 */	{
+/* 0004c838 */		OutText = Dialog.GetText();
+/* 0004c856 */		return true;
+/* 0004c85e */	}
+/* 0004c85e */	return false;
+/* 0004c866 */}
+
+CAEDialog::CAEDialog()
+/* 0004c87a */{
+/* 0004c882 */	this.m_Padding = 24;
+/* 0004c894 */	this.m_ButtonWidth = 150;
+/* 0004c8a6 */	this.m_ButtonHeight = 35;
+/* 0004c8b8 */}
+
+CAEDialog::~CAEDialog()
+/* 0004c8c0 */{
+/* 0004c8c0 */	AFL_Parts_EraseWholeKeyUpEvent(this.KeyUpEvent);
+/* 0004c8d0 */}
+
+int CAEDialog::CreateMessateLabel(string Message)
+/* 0004c8d8 */{
+/* 0004c8d8 */	int MessageText = PARTS_GetFreeSystemPartsNumber();
+/* 0004c8ea */	Ｐ＿フォント設定(MessageText, 0, 22, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1);
+/* 0004c93c */	Ｐ＿テキスト設定(MessageText, Message, 1);
+/* 0004c95c */	Ｐ＿マージン設定(MessageText, this.m_Padding, this.m_Padding / 2, this.m_Padding, this.m_Padding);
+/* 0004c99c */	return MessageText;
+/* 0004c9a8 */}
+
+int CAEDialog::CreateSeparator(int Width)
+/* 0004c9b6 */{
+/* 0004c9b6 */	int Separator = PARTS_GetFreeSystemPartsNumber();
+/* 0004c9c8 */	Ｐ＿構築手順＿ピクセル作成(Separator, Width, 2, 1);
+/* 0004c9ee */	Ｐ＿構築手順＿色塗り(Separator, 0, 0, Width, 2, 0, 0, 0, -1, 1);
+/* 0004ca38 */	Ｐ＿構築ビルド(Separator, 1);
+/* 0004ca4e */	Ｐ＿マージン設定(Separator, 0, 0, this.m_Padding / 2, this.m_Padding / 2);
+/* 0004ca8e */	return Separator;
+/* 0004ca9a */}
+
+int CAEDialog::CreateOkButton(bool EnableHotKey)
+/* 0004caa8 */{
+/* 0004caa8 */	int OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004caba */	Ｐ＿ボタン＿サイズ設定(OKButton, this.m_ButtonWidth, this.m_ButtonHeight);
+/* 0004cade */	Ｐ＿ボタン＿テキスト設定(OKButton, "ＯＫ" + (EnableHotKey ? "(Enter)" : ""));
+/* 0004cb18 */	AFL_Parts_AddMouseLClickEvent(OKButton, this.MouseOkClickEvent);
+/* 0004cb32 */	return OKButton;
+/* 0004cb3e */}
+
+int CAEDialog::CreateCancelButton(bool EnableHotKey)
+/* 0004cb4c */{
+/* 0004cb4c */	int CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004cb5e */	Ｐ＿ボタン＿サイズ設定(CancelButton, this.m_ButtonWidth, this.m_ButtonHeight);
+/* 0004cb82 */	Ｐ＿ボタン＿テキスト設定(CancelButton, "キャンセル" + (EnableHotKey ? "(Esc)" : ""));
+/* 0004cbbc */	Ｐ＿マージン設定(CancelButton, 0, 0, this.m_Padding / 2, 0);
+/* 0004cbf0 */	AFL_Parts_AddMouseLClickEvent(CancelButton, this.MouseCancelClickEvent);
+/* 0004cc0a */	return CancelButton;
+/* 0004cc16 */}
+
+int CAEDialog::CreateYesButton()
+/* 0004cc24 */{
+/* 0004cc24 */	int YesButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004cc36 */	Ｐ＿ボタン＿サイズ設定(YesButton, this.m_ButtonWidth, this.m_ButtonHeight);
+/* 0004cc5a */	Ｐ＿ボタン＿テキスト設定(YesButton, "はい(Enter)");
+/* 0004cc70 */	Ｐ＿マージン設定(YesButton, 0, 0, this.m_Padding / 2, 0);
+/* 0004cca4 */	AFL_Parts_AddMouseLClickEvent(YesButton, this.MouseYesClickEvent);
+/* 0004ccbe */	return YesButton;
+/* 0004ccca */}
+
+int CAEDialog::CreateNoButton()
+/* 0004ccd8 */{
+/* 0004ccd8 */	int NoButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004ccea */	Ｐ＿ボタン＿サイズ設定(NoButton, this.m_ButtonWidth, this.m_ButtonHeight);
+/* 0004cd0e */	Ｐ＿ボタン＿テキスト設定(NoButton, "いいえ(Esc)");
+/* 0004cd24 */	Ｐ＿マージン設定(NoButton, 0, 0, this.m_Padding / 2, 0);
+/* 0004cd58 */	AFL_Parts_AddMouseLClickEvent(NoButton, this.MouseNoClickEvent);
+/* 0004cd72 */	return NoButton;
+/* 0004cd7e */}
+
+int CAEDialog::CreateButtonLayoutBox()
+/* 0004cd8c */{
+/* 0004cd8c */	int ButtonLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004cd9e */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(ButtonLayoutBox, 2);
+/* 0004cdb4 */	Ｐ＿マージン設定(ButtonLayoutBox, this.m_Padding / 2, this.m_Padding, this.m_Padding, this.m_Padding);
+/* 0004cdf4 */	return ButtonLayoutBox;
+/* 0004ce00 */}
+
+int CAEDialog::CreateLayoutBox()
+/* 0004ce0e */{
+/* 0004ce0e */	int TotalLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004ce20 */	Ｐ＿原点座標設定(TotalLayoutBox, 5);
+/* 0004ce36 */	Ｐ＿レイアウトボックス＿配置設定(TotalLayoutBox, 2);
+/* 0004ce4c */	return TotalLayoutBox;
+/* 0004ce58 */}
+
+int CAEDialog::CreateBG(int Width, int Height)
+/* 0004ce66 */{
+/* 0004ce66 */	int BGNumber = PARTS_GetFreeSystemPartsNumber();
+/* 0004ce78 */	Ｐ＿構築手順＿ピクセル作成(BGNumber, Width, Height, 1);
+/* 0004cea2 */	Ｐ＿構築手順＿色塗り(BGNumber, 0, 0, Width, Height, 80, 80, 150, -1, 1);
+/* 0004cef0 */	Ｐ＿構築手順＿色塗り(BGNumber, 2, 2, Width - 4, Height - 4, 200, 200, 255, -1, 1);
+/* 0004cf4e */	Ｐ＿構築ビルド(BGNumber, 1);
+/* 0004cf64 */	Ｐ＿原点座標設定(BGNumber, 5);
+/* 0004cf7a */	return BGNumber;
+/* 0004cf86 */}
+
+void CAEDialog::ShowDialogOK(string Message)
+/* 0004cf94 */{
+/* 0004cf94 */	this.m_Result = false;
+/* 0004cfa6 */	AFL_Parts_AddLayer(-1);
+/* 0004cfb4 */	int MessageText = this.CreateMessateLabel(Message);
+/* 0004cfd2 */	int Separator = this.CreateSeparator(AFL_Parts_GetWidth(MessageText, 1) + this.m_Padding);
+/* 0004d008 */	int OKButton = this.CreateOkButton(true);
+/* 0004d022 */	int ButtonLayoutBox = this.CreateButtonLayoutBox();
+/* 0004d036 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, OKButton);
+/* 0004d050 */	int HookLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004d062 */	this.m_CreateContentEvent(HookLayoutBox);
+/* 0004d08c */	int TotalLayoutBox = this.CreateLayoutBox();
+/* 0004d0a0 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, MessageText);
+/* 0004d0ba */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, HookLayoutBox);
+/* 0004d0d4 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, Separator);
+/* 0004d0ee */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, ButtonLayoutBox);
+/* 0004d108 */	Ｐ＿座標設定(TotalLayoutBox, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004d138 */	Ｐ＿Ｚ座標設定(TotalLayoutBox, 1);
+/* 0004d14e */	int BGNumber = this.CreateBG(AFL_Parts_GetWidth(TotalLayoutBox, 1), AFL_Parts_GetHeight(TotalLayoutBox, 1));
+/* 0004d18e */	Ｐ＿座標設定(BGNumber, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004d1be */	Ｐ＿Ｚ座標設定(BGNumber, 0);
+/* 0004d1d4 */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 0004d1e4 */	Ｐ＿クリック実行(false);
+/* 0004d1f2 */	AFL_Parts_EraseLayer(-1);
+/* 0004d1fe */	PARTS_ReleaseWithInit(OKButton);
+/* 0004d20c */	PARTS_ReleaseWithInit(ButtonLayoutBox);
+/* 0004d21a */	PARTS_ReleaseWithInit(MessageText);
+/* 0004d228 */	PARTS_ReleaseWithInit(TotalLayoutBox);
+/* 0004d236 */	PARTS_ReleaseWithInit(BGNumber);
+/* 0004d244 */}
+
+bool CAEDialog::ShowDialogOKCancel(string Message)
+/* 0004d24c */{
+/* 0004d24c */	this.m_Result = false;
+/* 0004d25e */	AFL_Parts_AddLayer(-1);
+/* 0004d26c */	int MessageText = this.CreateMessateLabel(Message);
+/* 0004d28a */	int Separator = this.CreateSeparator(AFL_Parts_GetWidth(MessageText, 1) + this.m_Padding);
+/* 0004d2c0 */	int OKButton = this.CreateOkButton(true);
+/* 0004d2da */	int CancelButton = this.CreateCancelButton(true);
+/* 0004d2f4 */	int ButtonLayoutBox = this.CreateButtonLayoutBox();
+/* 0004d308 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, OKButton);
+/* 0004d322 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, CancelButton);
+/* 0004d33c */	int HookLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004d34e */	this.m_CreateContentEvent(HookLayoutBox);
+/* 0004d378 */	int TotalLayoutBox = this.CreateLayoutBox();
+/* 0004d38c */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, MessageText);
+/* 0004d3a6 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, HookLayoutBox);
+/* 0004d3c0 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, Separator);
+/* 0004d3da */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, ButtonLayoutBox);
+/* 0004d3f4 */	Ｐ＿座標設定(TotalLayoutBox, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004d424 */	Ｐ＿Ｚ座標設定(TotalLayoutBox, 1);
+/* 0004d43a */	int BGNumber = this.CreateBG(AFL_Parts_GetWidth(TotalLayoutBox, 1), AFL_Parts_GetHeight(TotalLayoutBox, 1));
+/* 0004d47a */	Ｐ＿座標設定(BGNumber, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004d4aa */	Ｐ＿Ｚ座標設定(BGNumber, 0);
+/* 0004d4c0 */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 0004d4d0 */	Ｐ＿クリック実行(false);
+/* 0004d4de */	AFL_Parts_EraseLayer(-1);
+/* 0004d4ea */	PARTS_ReleaseWithInit(CancelButton);
+/* 0004d4f8 */	PARTS_ReleaseWithInit(OKButton);
+/* 0004d506 */	PARTS_ReleaseWithInit(ButtonLayoutBox);
+/* 0004d514 */	PARTS_ReleaseWithInit(MessageText);
+/* 0004d522 */	PARTS_ReleaseWithInit(TotalLayoutBox);
+/* 0004d530 */	PARTS_ReleaseWithInit(BGNumber);
+/* 0004d53e */	return this.m_Result;
+/* 0004d54a */}
+
+bool CAEDialog::ShowDialogYESNO(string Message)
+/* 0004d558 */{
+/* 0004d558 */	this.m_Result = false;
+/* 0004d56a */	AFL_Parts_AddLayer(-1);
+/* 0004d578 */	int MessageText = this.CreateMessateLabel(Message);
+/* 0004d596 */	int Separator = this.CreateSeparator(AFL_Parts_GetWidth(MessageText, 1) + this.m_Padding);
+/* 0004d5cc */	int YesButton = this.CreateYesButton();
+/* 0004d5e0 */	int NoButton = this.CreateNoButton();
+/* 0004d5f4 */	int ButtonLayoutBox = this.CreateButtonLayoutBox();
+/* 0004d608 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, YesButton);
+/* 0004d622 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, NoButton);
+/* 0004d63c */	int HookLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004d64e */	this.m_CreateContentEvent(HookLayoutBox);
+/* 0004d678 */	int TotalLayoutBox = this.CreateLayoutBox();
+/* 0004d68c */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, MessageText);
+/* 0004d6a6 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, HookLayoutBox);
+/* 0004d6c0 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, Separator);
+/* 0004d6da */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, ButtonLayoutBox);
+/* 0004d6f4 */	Ｐ＿座標設定(TotalLayoutBox, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004d724 */	Ｐ＿Ｚ座標設定(TotalLayoutBox, 1);
+/* 0004d73a */	int BGNumber = this.CreateBG(AFL_Parts_GetWidth(TotalLayoutBox, 1), AFL_Parts_GetHeight(TotalLayoutBox, 1));
+/* 0004d77a */	Ｐ＿座標設定(BGNumber, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004d7aa */	Ｐ＿Ｚ座標設定(BGNumber, 0);
+/* 0004d7c0 */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 0004d7d0 */	Ｐ＿クリック実行(false);
+/* 0004d7de */	AFL_Parts_EraseLayer(-1);
+/* 0004d7ea */	PARTS_ReleaseWithInit(NoButton);
+/* 0004d7f8 */	PARTS_ReleaseWithInit(YesButton);
+/* 0004d806 */	PARTS_ReleaseWithInit(ButtonLayoutBox);
+/* 0004d814 */	PARTS_ReleaseWithInit(MessageText);
+/* 0004d822 */	PARTS_ReleaseWithInit(TotalLayoutBox);
+/* 0004d830 */	PARTS_ReleaseWithInit(BGNumber);
+/* 0004d83e */	return this.m_Result;
+/* 0004d84a */}
+
+void CAEDialog::ShowDialogOKWithComponent(string Message, DG_CreateContentHandler dgObject)
+/* 0004d858 */{
+/* 0004d858 */	this.m_CreateContentEvent = dgObject;
+/* 0004d872 */	this.ShowDialogOK(Message);
+/* 0004d884 */}
+
+bool CAEDialog::ShowDialogOKCancelWithComponent(string Message, DG_CreateContentHandler dgObject)
+/* 0004d88c */{
+/* 0004d88c */	this.m_CreateContentEvent = dgObject;
+/* 0004d8a6 */	return this.ShowDialogOKCancel(Message);
+/* 0004d8ba */}
+
+bool CAEDialog::ShowDialogGetText(string Message, string Text)
+/* 0004d8c8 */{
+/* 0004d8c8 */	this.m_Result = false;
+/* 0004d8da */	AFL_Parts_AddLayer(-1);
+/* 0004d8e8 */	int MessageText = this.CreateMessateLabel(Message);
+/* 0004d906 */	int TextBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004d918 */	Ｐ＿テキストボックス＿テキスト設定(TextBox, Text);
+/* 0004d932 */	Ｐ＿テキストボックス＿全選択(TextBox);
+/* 0004d942 */	Ｐ＿テキストボックス＿サイズ設定(TextBox, AFL_Parts_GetWidth(MessageText, 1), 22);
+/* 0004d96e */	Ｐ＿テキストボックス＿フォント設定(TextBox, 0, 0, 0, 0, 0.0, 0, 0, 0, 0.0);
+/* 0004d9b4 */	Ｐ＿マージン設定(TextBox, 0, this.m_Padding / 2, this.m_Padding, this.m_Padding);
+/* 0004d9f0 */	AFL_Parts_AddFixedEvent(TextBox, this.TextBoxFixedEvent);
+/* 0004da0a */	int Separator = this.CreateSeparator(AFL_Parts_GetWidth(MessageText, 1) + this.m_Padding);
+/* 0004da40 */	int OKButton = this.CreateOkButton(false);
+/* 0004da5a */	int CancelButton = this.CreateCancelButton(false);
+/* 0004da74 */	int ButtonLayoutBox = this.CreateButtonLayoutBox();
+/* 0004da88 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, OKButton);
+/* 0004daa2 */	Ｐ＿レイアウトボックス＿追加(ButtonLayoutBox, CancelButton);
+/* 0004dabc */	int HookLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004dace */	this.m_CreateContentEvent(HookLayoutBox);
+/* 0004daf8 */	int TotalLayoutBox = this.CreateLayoutBox();
+/* 0004db0c */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, MessageText);
+/* 0004db26 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, HookLayoutBox);
+/* 0004db40 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, TextBox);
+/* 0004db5a */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, Separator);
+/* 0004db74 */	Ｐ＿レイアウトボックス＿追加(TotalLayoutBox, ButtonLayoutBox);
+/* 0004db8e */	Ｐ＿座標設定(TotalLayoutBox, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004dbbe */	Ｐ＿Ｚ座標設定(TotalLayoutBox, 1);
+/* 0004dbd4 */	int BGNumber = this.CreateBG(AFL_Parts_GetWidth(TotalLayoutBox, 1), AFL_Parts_GetHeight(TotalLayoutBox, 1));
+/* 0004dc14 */	Ｐ＿座標設定(BGNumber, AFL_View_GetWidth() / 2, AFL_View_GetHeight() / 2);
+/* 0004dc44 */	Ｐ＿Ｚ座標設定(BGNumber, 0);
+/* 0004dc5a */	Ｐ＿フォーカス設定(TextBox);
+/* 0004dc6a */	Ｐ＿クリック実行(false);
+/* 0004dc78 */	if (this.m_Result)
+/* 0004dc88 */	{
+/* 0004dc88 */		this.m_Text = Ｐ＿テキストボックス＿テキスト取得(TextBox);
+/* 0004dca6 */	}
+/* 0004dca6 */	AFL_Parts_EraseLayer(-1);
+/* 0004dcb2 */	PARTS_ReleaseWithInit(OKButton);
+/* 0004dcc0 */	PARTS_ReleaseWithInit(ButtonLayoutBox);
+/* 0004dcce */	PARTS_ReleaseWithInit(TextBox);
+/* 0004dcdc */	PARTS_ReleaseWithInit(MessageText);
+/* 0004dcea */	PARTS_ReleaseWithInit(TotalLayoutBox);
+/* 0004dcf8 */	PARTS_ReleaseWithInit(BGNumber);
+/* 0004dd06 */	return this.m_Result;
+/* 0004dd12 */}
+
+void CAEDialog::MouseOkClickEvent(int ID, int MouseX, int MouseY)
+/* 0004dd20 */{
+/* 0004dd20 */	this.End(true);
+/* 0004dd2e */}
+
+void CAEDialog::MouseCancelClickEvent(int ID, int MouseX, int MouseY)
+/* 0004dd36 */{
+/* 0004dd36 */	this.End(false);
+/* 0004dd44 */}
+
+void CAEDialog::MouseYesClickEvent(int ID, int MouseX, int MouseY)
+/* 0004dd4c */{
+/* 0004dd4c */	this.End(true);
+/* 0004dd5a */}
+
+void CAEDialog::MouseNoClickEvent(int ID, int MouseX, int MouseY)
+/* 0004dd62 */{
+/* 0004dd62 */	this.End(false);
+/* 0004dd70 */}
+
+string CAEDialog::GetText()
+/* 0004dd78 */{
+/* 0004dd78 */	return this.m_Text;
+/* 0004dd84 */}
+
+void CAEDialog::TextBoxFixedEvent(int PartsNumber)
+/* 0004dd92 */{
+/* 0004dd92 */	if (!Ｐ＿フォーカス確認(PartsNumber))
+/* 0004ddaa */	{
+/* 0004ddaa */		return;
+/* 0004ddac */	}
+/* 0004ddac */	this.End(true);
+/* 0004ddba */}
+
+void CAEDialog::KeyUpEvent(int PartsNumber, int KeyCode)
+/* 0004ddc2 */{
+/* 0004ddc2 */	if (KeyCode == 13)
+/* 0004ddda */	{
+/* 0004ddda */		this.End(true);
+/* 0004dde8 */	}
+/* 0004dde8 */	if (KeyCode == 27)
+/* 0004de00 */	{
+/* 0004de00 */		this.End(false);
+/* 0004de0e */	}
+/* 0004de0e */}
+
+void CAEDialog::End(bool Result)
+/* 0004de16 */{
+/* 0004de16 */	this.m_Result = Result;
+/* 0004de2c */	AFL_Parts_EndWaitForClick(0);
+/* 0004de38 */}
+

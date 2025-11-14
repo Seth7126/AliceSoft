@@ -1,0 +1,176 @@
+PartsMotion::PartsMotion()
+/* 001ea85e */{
+/* 001ea866 */	this.clear();
+/* 001ea86e */}
+
+void PartsMotion::clear()
+/* 001ea876 */{
+/* 001ea876 */	this.delay_ = 0;
+/* 001ea888 */	this.time_ = 200;
+/* 001ea89a */	this.swingCount_ = 5;
+/* 001ea8ac */	this.soundName_ = "";
+/* 001ea8c0 */	this.key_.Free();
+/* 001ea8ca */	this.key_.Alloc(18);
+/* 001ea8e0 */}
+
+void PartsMotion::setMove(int fromX, int fromY, int toX, int toY, int motionType)
+/* 001ea8e8 */{
+/* 001ea8e8 */	this.key_[0].set(fromX, toX, motionType);
+/* 001ea91e */	this.key_[1].set(fromY, toY, motionType);
+/* 001ea954 */}
+
+void PartsMotion::setCgRangeMove(int fromLeft, int fromTop, int fromRight, int fromBottom, int toLeft, int toTop, int toRight, int toBottom, int motionType)
+/* 001ea95c */{
+/* 001ea95c */	this.key_[11].set(fromLeft, toLeft, motionType);
+/* 001ea992 */	this.key_[13].set(fromRight, toRight, motionType);
+/* 001ea9c8 */	this.key_[12].set(fromTop, toTop, motionType);
+/* 001ea9fe */	this.key_[14].set(fromBottom, toBottom, motionType);
+/* 001eaa34 */}
+
+void PartsMotion::setSwingCount(int val)
+/* 001eaa3c */{
+/* 001eaa3c */	this.swingCount_ = val;
+/* 001eaa52 */}
+
+int PartsMotion::getKeyFrom(int key)
+/* 001eaa5a */{
+/* 001eaa5a */	return this.key_[key].getFrom();
+/* 001eaa78 */}
+
+int PartsMotion::getKeyMotionType(int key)
+/* 001eaa86 */{
+/* 001eaa86 */	return this.key_[key].getMotionType();
+/* 001eaaa4 */}
+
+int PartsMotion::getKeyTo(int key)
+/* 001eaab2 */{
+/* 001eaab2 */	return this.key_[key].getTo();
+/* 001eaad0 */}
+
+bool PartsMotion::isKeyEnable(int key)
+/* 001eaade */{
+/* 001eaade */	return this.key_[key].isEnable();
+/* 001eaafc */}
+
+void PartsMotion::setSoundName(string soundName)
+/* 001eab0a */{
+/* 001eab0a */	this.soundName_ = soundName;
+/* 001eab22 */}
+
+string PartsMotion::getSoundName()
+/* 001eab2a */{
+/* 001eab2a */	return this.soundName_;
+/* 001eab36 */}
+
+void PartsMotion::setLoopSoundNumber(int number)
+/* 001eab44 */{
+/* 001eab44 */	this.loopSoundNumber_ = number;
+/* 001eab5a */}
+
+int PartsMotion::getLoopSoundNumber()
+/* 001eab62 */{
+/* 001eab62 */	return this.loopSoundNumber_;
+/* 001eab6e */}
+
+int PartsMotion::getSwingCount()
+/* 001eab7c */{
+/* 001eab7c */	return this.swingCount_;
+/* 001eab88 */}
+
+void PartsMotion::setTime(int time)
+/* 001eab96 */{
+/* 001eab96 */	this.time_ = time;
+/* 001eabac */}
+
+int PartsMotion::getTime()
+/* 001eabb4 */{
+/* 001eabb4 */	return this.time_;
+/* 001eabc0 */}
+
+void PartsMotion::setDelay(int delay)
+/* 001eabce */{
+/* 001eabce */	this.delay_ = delay;
+/* 001eabe4 */}
+
+int PartsMotion::getDelay()
+/* 001eabec */{
+/* 001eabec */	return this.delay_;
+/* 001eabf8 */}
+
+void PartsMotion::setKey(int key, int from, int to, int motionType)
+/* 001eac06 */{
+/* 001eac06 */	this.key_[key].set(from, to, motionType);
+/* 001eac40 */}
+
+void PartsMotion::setAlpha(int from, int to, int motionType)
+/* 001eac48 */{
+/* 001eac48 */	this.setKey(2, from, to, motionType);
+/* 001eac74 */}
+
+void PartsMotion::setScaling(int from, int to, int motionType)
+/* 001eac7c */{
+/* 001eac7c */	this.setKey(6, from, to, motionType);
+/* 001eaca8 */}
+
+void PartsMotion::setShakeLevel(int from, int to, int motionType)
+/* 001eacb0 */{
+/* 001eacb0 */	this.setKey(7, from, to, motionType);
+/* 001eacdc */	this.setKey(8, from, to, motionType);
+/* 001ead08 */}
+
+void PartsMotion::loadFromEx(string keyBaseName)
+/* 001ead10 */{
+/* 001ead10 */	array@string keyName;
+/* 001ead1a */	keyName.PushBack("X");
+/* 001ead2a */	keyName.PushBack("Y");
+/* 001ead3a */	keyName.PushBack("ALPHA");
+/* 001ead4a */	keyName.PushBack("ROT_XY");
+/* 001ead5a */	keyName.PushBack("ROT_XZ");
+/* 001ead6a */	keyName.PushBack("ROT_YZ");
+/* 001ead7a */	keyName.PushBack("SCALING");
+/* 001ead8a */	keyName.PushBack("SHAKE_X");
+/* 001ead9a */	keyName.PushBack("SHAKE_Y");
+/* 001eadaa */	keyName.PushBack("SWING_X");
+/* 001eadba */	keyName.PushBack("SWING_Y");
+/* 001eadca */	keyName.PushBack("CGRANGE_LEFT");
+/* 001eadda */	keyName.PushBack("CGRANGE_TOP");
+/* 001eadea */	keyName.PushBack("CGRANGE_RIGHT");
+/* 001eadfa */	keyName.PushBack("CGRANGE_BOTTOM");
+/* 001eae0a */	keyName.PushBack("NUMBER");
+/* 001eae1a */	keyName.PushBack("SPECULAR");
+/* 001eae2a */	int i;
+/* 001eae3c */	for (i = 0; i < keyName.Numof(); ++i)
+/* 001eae8c */	{
+/* 001eae8c */		string key = keyBaseName + keyName[i];
+/* 001eaebc */		if (EX_IsExist(key))
+/* 001eaed2 */		{
+/* 001eaed2 */			int from = EX_AInt(key, 0, -2147483648);
+/* 001eaefa */			int to = EX_AInt(key, 1, -2147483648);
+/* 001eaf22 */			int type = EX_AInt(key, 2, 0);
+/* 001eaf4a */			this.setKey(i, from, to, type);
+/* 001eaf7a */		}
+/* 001eaf7a */	}
+/* 001eaf80 */	if (EX_IsExist(keyBaseName + "TIME"))
+/* 001eaf9e */	{
+/* 001eaf9e */		this.setTime(EX_Int(keyBaseName + "TIME", 0));
+/* 001eafc4 */	}
+/* 001eafc4 */	if (EX_IsExist(keyBaseName + "DELAY"))
+/* 001eafe2 */	{
+/* 001eafe2 */		this.setTime(EX_Int(keyBaseName + "DELAY", 0));
+/* 001eb008 */	}
+/* 001eb008 */}
+
+void loadPartsMotionArrayFromEx(string defineName, ref array@PartsMotion motionArray)
+/* 001eb010 */{
+/* 001eb010 */	array@string nodeName;
+/* 001eb01a */	EX_GetNodeNameList(defineName, nodeName);
+/* 001eb034 */	motionArray.Free();
+/* 001eb03e */	motionArray.Alloc(nodeName.Numof());
+/* 001eb05e */	int i;
+/* 001eb070 */	for (i = 0; i < nodeName.Numof(); ++i)
+/* 001eb0c0 */	{
+/* 001eb0c0 */		string keyBaseName = "%s.%s." % defineName % nodeName[i];
+/* 001eb104 */		motionArray[i].loadFromEx(keyBaseName);
+/* 001eb12a */	}
+/* 001eb130 */}
+

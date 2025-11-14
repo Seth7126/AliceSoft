@@ -1,0 +1,679 @@
+void SYS_InitSound()
+/* 0014b0f4 */{
+/* 0014b0f4 */	g_BGM.InitChannel(1, 2);
+/* 0014b110 */	g_LoopSE.Alloc(3);
+/* 0014b126 */	int i;
+/* 0014b138 */	for (i = 0; i < 3; ++i)
+/* 0014b17e */	{
+/* 0014b17e */		g_LoopSE[i].InitChannel(3 + i * 2, 4 + i * 2);
+/* 0014b1ce */	}
+/* 0014b1d4 */	g_SE.InitChannel(10, 11);
+/* 0014b1f0 */	SYS_InitSystemSE();
+/* 0014b1f6 */	BackSE_t AddData_t;
+/* 0014b206 */	AddData_t.Group = SYS_SOUNDGROUP_SE();
+/* 0014b220 */	AddData_t.FadeChannel = 20;
+/* 0014b23a */	AddData_t.PlayIndex = 0;
+/* 0014b254 */	AddData_t.PlayList.PushBack("");
+/* 0014b26c */	AddData_t.bStop = true;
+/* 0014b286 */	AddData_t.bRunSoundFadeByVoice = false;
+/* 0014b2a0 */	g_サウンド再生リスト.PushBack(AddData_t);
+/* 0014b2b8 */}
+
+void SYS_PlaySE(string _効果音名, bool WaitEnd, bool KeyOrReadSkip, bool ContinueToPlay, int 効果タイプ, int 効果時間)
+/* 0014b2c6 */{
+/* 0014b2c6 */	g_ContinueToPlaySE = ContinueToPlay;
+/* 0014b2dc */	if (!_効果音名.Empty() && !KiwiSoundEngine.IsExistFile(_効果音名))
+/* 0014b324 */	{
+/* 0014b324 */		SYS_ERROR("効果音[%s]ロード失敗\n" % _効果音名, 0);
+/* 0014b348 */		_効果音名 = "";
+/* 0014b35c */	}
+/* 0014b35c */	if (効果タイプ == -1)
+/* 0014b374 */	{
+/* 0014b374 */		効果タイプ = g_SE.GetTransitionType();
+/* 0014b390 */	}
+/* 0014b390 */	if (効果時間 == -1)
+/* 0014b3a8 */	{
+/* 0014b3a8 */		効果時間 = g_SE.GetTransitionTotalTime();
+/* 0014b3c4 */	}
+/* 0014b3c4 */	if (効果タイプ == 0)
+/* 0014b3dc */	{
+/* 0014b3dc */		効果時間 = 0;
+/* 0014b3ee */	}
+/* 0014b3ee */	if (KeyOrReadSkip)
+/* 0014b3fe */	{
+/* 0014b3fe */		if (SYS_全文スキップ中確認())
+/* 0014b40a */		{
+/* 0014b40a */			return;
+/* 0014b40c */		}
+/* 0014b40c */		if (SYS_スキップ中確認())
+/* 0014b418 */		{
+/* 0014b418 */			return;
+/* 0014b41a */		}
+/* 0014b41a */	}
+/* 0014b41a */	switch (効果タイプ)
+/* 0014b430 */	{
+/* 0014b430 */	case 0:
+/* 0014b430 */		SYS_StopSE();
+/* 0014b436 */		break;
+/* 0014b43c */	case 1:
+/* 0014b43c */	case 2:
+/* 0014b43c */	case 3:
+/* 0014b43c */		g_SE.Fade(効果時間, 0.0, true, 0);
+/* 0014b468 */		break;
+/* 0014b46e */	}
+/* 0014b46e */	switch (効果タイプ)
+/* 0014b484 */	{
+/* 0014b484 */	case 0:
+/* 0014b484 */		g_SE.PlayNext(_効果音名, 0, -1);
+/* 0014b4aa */		break;
+/* 0014b4b0 */	case 1:
+/* 0014b4b0 */		g_SE.PlayNext(_効果音名, 効果時間, 0);
+/* 0014b4da */		break;
+/* 0014b4e0 */	case 2:
+/* 0014b4e0 */		g_SE.ReserveNext(_効果音名, 効果時間, g_SE.GetVolume(), 0);
+/* 0014b51a */		break;
+/* 0014b520 */	case 3:
+/* 0014b520 */		g_SE.ReserveNext(_効果音名, 0, g_SE.GetVolume(), -1);
+/* 0014b556 */		break;
+/* 0014b55c */	}
+/* 0014b55c */	if (!WaitEnd)
+/* 0014b56e */	{
+/* 0014b56e */		return;
+/* 0014b570 */	}
+/* 0014b570 */	CASClick LButtonClick;
+/* 0014b580 */	CASClick RButtonClick;
+/* 0014b590 */	CASClick SpaceKeyClick;
+/* 0014b5a0 */	CASClick ReturnKeyClick;
+/* 0014b5b0 */	LButtonClick.Init(1, true);
+/* 0014b5cc */	RButtonClick.Init(2, true);
+/* 0014b5e8 */	SpaceKeyClick.Init(32, true);
+/* 0014b604 */	ReturnKeyClick.Init(13, true);
+/* 0014b620 */	for (; ; )
+/* 0014b620 */	{
+/* 0014b620 */		if (!g_SE.IsPlay() && !g_SE.IsReserve())
+/* 0014b668 */		{
+/* 0014b668 */			break;
+/* 0014b66e */		}
+/* 0014b66e */		if (KeyOrReadSkip)
+/* 0014b67e */		{
+/* 0014b67e */			if (SYS_ホイールフォア即確認())
+/* 0014b68a */			{
+/* 0014b68a */				SYS_バックログオープン通知();
+/* 0014b690 */				break;
+/* 0014b696 */			}
+/* 0014b696 */			if (SYS_ホイールバック確認())
+/* 0014b6a2 */			{
+/* 0014b6a2 */				break;
+/* 0014b6a8 */			}
+/* 0014b6a8 */			if (SYS_全文スキップ中確認())
+/* 0014b6b4 */			{
+/* 0014b6b4 */				break;
+/* 0014b6ba */			}
+/* 0014b6ba */			if (SYS_スキップ中確認())
+/* 0014b6c6 */			{
+/* 0014b6c6 */				break;
+/* 0014b6cc */			}
+/* 0014b6cc */			if (LButtonClick.IsClick(-2147483648))
+/* 0014b6e8 */			{
+/* 0014b6e8 */				break;
+/* 0014b6ee */			}
+/* 0014b6ee */			if (RButtonClick.IsClick(-2147483648))
+/* 0014b70a */			{
+/* 0014b70a */				break;
+/* 0014b710 */			}
+/* 0014b710 */			if (SpaceKeyClick.IsClick(-2147483648))
+/* 0014b72c */			{
+/* 0014b72c */				break;
+/* 0014b732 */			}
+/* 0014b732 */			if (ReturnKeyClick.IsClick(-2147483648))
+/* 0014b74e */			{
+/* 0014b74e */				break;
+/* 0014b754 */			}
+/* 0014b754 */		}
+/* 0014b754 */		AFL_View_Update(true);
+/* 0014b760 */	}
+/* 0014b766 */	SYS_StopSE();
+/* 0014b76c */}
+
+void SYS_StopSE()
+/* 0014b77a */{
+/* 0014b77a */	g_SE.Stop();
+/* 0014b78a */}
+
+bool SYS_IsPlaySE()
+/* 0014b798 */{
+/* 0014b798 */	return g_SE.IsPlay();
+/* 0014b7aa */}
+
+void SYS_StopUncontinuedSE()
+/* 0014b7be */{
+/* 0014b7be */	if (g_ContinueToPlaySE)
+/* 0014b7ce */	{
+/* 0014b7ce */		return;
+/* 0014b7d0 */	}
+/* 0014b7d0 */	SYS_StopSE();
+/* 0014b7d6 */}
+
+bool SYS_IsPlayGimicSE()
+/* 0014b7e4 */{
+/* 0014b7e4 */	return KiwiSoundEngine.IsPlay(20);
+/* 0014b7f6 */}
+
+bool SYS_IsPlayBackVoice()
+/* 0014b80a */{
+/* 0014b80a */	int Count;
+/* 0014b80a */	for (Count = 21; Count <= g_ch背景音声; Count++)
+/* 0014b858 */	{
+/* 0014b858 */		if (KiwiSoundEngine.IsPlay(Count))
+/* 0014b872 */		{
+/* 0014b872 */			return true;
+/* 0014b87a */		}
+/* 0014b87a */	}
+/* 0014b880 */	return false;
+/* 0014b888 */}
+
+int SYS_GetIndexBackSE(int GroupNumber)
+/* 0014b89c */{
+/* 0014b89c */	BackSE_t Search_t;
+/* 0014b8ac */	Search_t.Group = GroupNumber;
+/* 0014b8ca */	int Index = g_サウンド再生リスト.Find(0, g_サウンド再生リスト.Numof(), Search_t, &SYS_SearchBackSE_Group);
+/* 0014b906 */	return Index;
+/* 0014b912 */}
+
+BackSE_t SYS_GetBackSE(int FadeChannel)
+/* 0014b926 */{
+/* 0014b926 */	BackSE_t Search;
+/* 0014b936 */	BackSE_t Default;
+/* 0014b946 */	Search.FadeChannel = FadeChannel;
+/* 0014b964 */	int Index = g_サウンド再生リスト.Find(0, g_サウンド再生リスト.Numof(), Search, &SYS_SearchBackSE_FadeChannel);
+/* 0014b9a0 */	if (Index == -1)
+/* 0014b9b8 */	{
+/* 0014b9b8 */		return Default;
+/* 0014b9c8 */	}
+/* 0014b9c8 */	return g_サウンド再生リスト[Index];
+/* 0014b9e4 */}
+
+bool SYS_SearchBackSE_Group(ref BackSE_t Search, ref BackSE_t Data)
+/* 0014b9f8 */{
+/* 0014b9f8 */	if (Search.Group == Data.Group)
+/* 0014ba24 */	{
+/* 0014ba24 */		return true;
+/* 0014ba2c */	}
+/* 0014ba2c */	return false;
+/* 0014ba34 */}
+
+bool SYS_SearchBackSE_FadeChannel(ref BackSE_t Search, ref BackSE_t Data)
+/* 0014ba48 */{
+/* 0014ba48 */	if (Search.FadeChannel == Data.FadeChannel)
+/* 0014ba74 */	{
+/* 0014ba74 */		return true;
+/* 0014ba7c */	}
+/* 0014ba7c */	return false;
+/* 0014ba84 */}
+
+int SYS_Sound_GetChannel(int GroupNumber, array@string SoundList, bool bStop)
+/* 0014ba98 */{
+/* 0014ba98 */	int FadeChannel = -1;
+/* 0014baaa */	if (g_ch背景音声 > 999)
+/* 0014bac2 */	{
+/* 0014bac2 */		return FadeChannel;
+/* 0014bace */	}
+/* 0014bace */	int Index = SYS_GetIndexBackSE(GroupNumber);
+/* 0014baea */	if (Index == -1)
+/* 0014bb02 */	{
+/* 0014bb02 */		BackSE_t AddData_t;
+/* 0014bb12 */		AddData_t.Group = GroupNumber;
+/* 0014bb30 */		AddData_t.FadeChannel = g_ch背景音声;
+/* 0014bb4e */		AddData_t.PlayIndex = 0;
+/* 0014bb68 */		AddData_t.PlayList.Alloc(SoundList.Numof());
+/* 0014bb90 */		AddData_t.PlayList.Copy(0, SoundList, 0, SoundList.Numof());
+/* 0014bbca */		AddData_t.bStop = bStop;
+/* 0014bbe8 */		AddData_t.bRunSoundFadeByVoice = false;
+/* 0014bc02 */		g_サウンド再生リスト.PushBack(AddData_t);
+/* 0014bc1a */		FadeChannel = AddData_t.FadeChannel;
+/* 0014bc38 */		g_ch背景音声++;
+/* 0014bc4c */	}
+/* 0014bc58 */	else
+/* 0014bc58 */	{
+/* 0014bc58 */		g_サウンド再生リスト[Index].PlayIndex = 0;
+/* 0014bc7e */		g_サウンド再生リスト[Index].bStop = bStop;
+/* 0014bca8 */		if (!bStop)
+/* 0014bcba */		{
+/* 0014bcba */			g_サウンド再生リスト[Index].PlayList.Free();
+/* 0014bcd8 */			g_サウンド再生リスト[Index].PlayList.Alloc(SoundList.Numof());
+/* 0014bd0c */			g_サウンド再生リスト[Index].PlayList.Copy(0, SoundList, 0, SoundList.Numof());
+/* 0014bd52 */			g_サウンド再生リスト[Index].bRunSoundFadeByVoice = false;
+/* 0014bd78 */		}
+/* 0014bd78 */		FadeChannel = g_サウンド再生リスト[Index].FadeChannel;
+/* 0014bda2 */	}
+/* 0014bda2 */	return FadeChannel;
+/* 0014bdae */}
+
+void SYS_Sound_BeginFade(int _チャンネル番号, int TotalTime, float VolumeCapRate, int FadeType)
+/* 0014bdc2 */{
+/* 0014bdc2 */	KiwiSoundEngine.Fade(_チャンネル番号, TotalTime, VolumeCapRate, false, FadeType);
+/* 0014bdfc */}
+
+void SYS_ShuffleSoundList(ref array@string SoundList)
+/* 0014be0a */{
+/* 0014be0a */	array@string TempList;
+/* 0014be14 */	int Numof = SoundList.Numof();
+/* 0014be30 */	int Count;
+/* 0014be42 */	TempList.Alloc(Numof);
+/* 0014be5c */	TempList.Copy(0, SoundList, 0, Numof);
+/* 0014be88 */	SoundList.Free();
+/* 0014be92 */	for (Count = 0; Count < Numof; Count++)
+/* 0014bee0 */	{
+/* 0014bee0 */		int TempNumof = TempList.Numof();
+/* 0014befc */		int RandTempNo = RAND(TempNumof) - 1;
+/* 0014bf20 */		SoundList.PushBack(TempList[RandTempNo]);
+/* 0014bf40 */		TempList.Erase(RandTempNo);
+/* 0014bf56 */	}
+/* 0014bf5c */}
+
+int SYS_GetParentGroupNumber(int _サウンドグループ番号)
+/* 0014bf6a */{
+/* 0014bf6a */	int ParentGroupNumber;
+/* 0014bf7c */	if (_サウンドグループ番号 == SYS_SOUNDGROUP_SE())
+/* 0014bf94 */	{
+/* 0014bf94 */		ParentGroupNumber = _サウンドグループ番号;
+/* 0014bfaa */	}
+/* 0014bfb0 */	else
+/* 0014bfb0 */	{
+/* 0014bfb0 */		ParentGroupNumber = SYS_GetBackVoiceGroupNumber(_サウンドグループ番号);
+/* 0014bfcc */		if (ParentGroupNumber == -1)
+/* 0014bfe4 */		{
+/* 0014bfe4 */			SYS_ERROR("サウンドグループ[%d]関連付け失敗\n" % _サウンドグループ番号, 0);
+/* 0014c008 */			return 0;
+/* 0014c010 */		}
+/* 0014c010 */	}
+/* 0014c010 */	return ParentGroupNumber;
+/* 0014c01c */}
+
+int SYS_GetBackVoiceGroupNumber(int _音声グループ番号)
+/* 0014c030 */{
+/* 0014c030 */	if (!EX_IsExist("Ｅ＿サウンドグループ設定"))
+/* 0014c044 */	{
+/* 0014c044 */		return EX_IA2Int("Ｅ＿ＳＥ背景音声関連付け", _音声グループ番号, "背景音声グループ番号", -1);
+/* 0014c068 */	}
+/* 0014c068 */	int i = SYS_SOUNDGROUP_BACKVOICE() + 1;
+/* 0014c082 */	while (EX_IsExistIA2("Ｅ＿サウンドグループ設定", i, "対応音声グループ番号"))
+/* 0014c0a4 */	{
+/* 0014c0a4 */		if (_音声グループ番号 == EX_IA2Int("Ｅ＿サウンドグループ設定", i, "対応音声グループ番号", -1))
+/* 0014c0d8 */		{
+/* 0014c0d8 */			return i;
+/* 0014c0e4 */		}
+/* 0014c0e4 */		++i;
+/* 0014c0f4 */	}
+/* 0014c0fa */	return -1;
+/* 0014c102 */}
+
+bool SYS_IsExistSoundList(int _サウンドグループ番号, ref array@string SoundList)
+/* 0014c116 */{
+/* 0014c116 */	int Count;
+/* 0014c128 */	int ParentGroupNumber = SYS_GetParentGroupNumber(_サウンドグループ番号);
+/* 0014c144 */	int Numof = SoundList.Numof();
+/* 0014c160 */	bool Result = false;
+/* 0014c172 */	for (Count = 0; Count < Numof; Count++)
+/* 0014c1c0 */	{
+/* 0014c1c0 */		string SoundName = SoundList[Count];
+/* 0014c1e4 */		int SoundGroup = KiwiSoundEngine.GetGroupNumFromFile(SoundName);
+/* 0014c204 */		if (SoundName.Empty())
+/* 0014c216 */		{
+/* 0014c216 */			Result = true;
+/* 0014c228 */			break;
+/* 0014c22e */		}
+/* 0014c234 */		else if (!KiwiSoundEngine.IsExistFile(SoundName))
+/* 0014c250 */		{
+/* 0014c250 */			if (_サウンドグループ番号 == SYS_SOUNDGROUP_SE())
+/* 0014c268 */			{
+/* 0014c268 */				SYS_ERROR("擬音[%s]ロード失敗\n" % SoundName, 0);
+/* 0014c28c */			}
+/* 0014c292 */			else
+/* 0014c292 */			{
+/* 0014c292 */				SYS_ERROR("背景音声[%s]ロード失敗\n" % SoundName, 0);
+/* 0014c2b6 */			}
+/* 0014c2b6 */			SoundList.Erase(Count);
+/* 0014c2cc */			Numof = SoundList.Numof();
+/* 0014c2e8 */			Count -= 1;
+/* 0014c2fa */			continue;
+/* 0014c300 */		}
+/* 0014c306 */		else if (SoundGroup != ParentGroupNumber)
+/* 0014c322 */		{
+/* 0014c322 */			if (_サウンドグループ番号 == SYS_SOUNDGROUP_SE())
+/* 0014c33a */			{
+/* 0014c33a */				SYS_ERROR("擬音[%s]関連付け失敗\n" % SoundName, 0);
+/* 0014c35e */			}
+/* 0014c364 */			else
+/* 0014c364 */			{
+/* 0014c364 */				SYS_ERROR("背景音声[%s]関連付け失敗\n" % SoundName, 0);
+/* 0014c388 */			}
+/* 0014c388 */			if (!system.IsDebugMode())
+/* 0014c396 */			{
+/* 0014c396 */				SoundList.Erase(Count);
+/* 0014c3ac */				Numof = SoundList.Numof();
+/* 0014c3c8 */				Count -= 1;
+/* 0014c3da */			}
+/* 0014c3da */			continue;
+/* 0014c3e0 */		}
+/* 0014c3e0 */	}
+/* 0014c3e6 */	return Result;
+/* 0014c3f2 */}
+
+bool SYS_SameSoundList(array@string FirstData_t, array@string SecondData_t)
+/* 0014c406 */{
+/* 0014c406 */	int Count;
+/* 0014c418 */	int Index;
+/* 0014c42a */	int NowNumof = FirstData_t.Numof();
+/* 0014c446 */	int PrevNumof = SecondData_t.Numof();
+/* 0014c462 */	for (Count = 0; Count < NowNumof; Count++)
+/* 0014c4b0 */	{
+/* 0014c4b0 */		Index = SecondData_t.Find(0, PrevNumof, FirstData_t[0]);
+/* 0014c4ee */		if (Index == -1)
+/* 0014c506 */		{
+/* 0014c506 */			break;
+/* 0014c50c */		}
+/* 0014c512 */		else
+/* 0014c512 */		{
+/* 0014c512 */			FirstData_t.Erase(0);
+/* 0014c524 */			SecondData_t.Erase(Index);
+/* 0014c53a */			NowNumof = FirstData_t.Numof();
+/* 0014c556 */			PrevNumof = SecondData_t.Numof();
+/* 0014c572 */			Count -= 1;
+/* 0014c584 */			continue;
+/* 0014c58a */		}
+/* 0014c58a */	}
+/* 0014c590 */	if (Index == -1)
+/* 0014c5a8 */	{
+/* 0014c5a8 */		return false;
+/* 0014c5b0 */	}
+/* 0014c5b0 */	return true;
+/* 0014c5b8 */}
+
+void SYS_PlayBackSE(int _サウンドグループ番号, array@string SoundList)
+/* 0014c5cc */{
+/* 0014c5cc */	int Numof = SoundList.Numof();
+/* 0014c5e8 */	int PlayIndex;
+/* 0014c5fa */	int ParentGroupNumber;
+/* 0014c60c */	bool bStop = false;
+/* 0014c61e */	if (Numof < 1)
+/* 0014c636 */	{
+/* 0014c636 */		return;
+/* 0014c638 */	}
+/* 0014c638 */	bStop = SYS_IsExistSoundList(_サウンドグループ番号, SoundList);
+/* 0014c65e */	Numof = SoundList.Numof();
+/* 0014c67a */	if (Numof < 1)
+/* 0014c692 */	{
+/* 0014c692 */		return;
+/* 0014c694 */	}
+/* 0014c694 */	SYS_ShuffleSoundList(SoundList);
+/* 0014c6a4 */	int Channel = SYS_Sound_GetChannel(_サウンドグループ番号, SoundList, bStop);
+/* 0014c6d6 */	if (Channel == -1)
+/* 0014c6ee */	{
+/* 0014c6ee */		if (_サウンドグループ番号 == SYS_SOUNDGROUP_SE())
+/* 0014c706 */		{
+/* 0014c706 */			SYS_ERROR("擬音再生チャンネル取得失敗\n", 0);
+/* 0014c718 */		}
+/* 0014c71e */		else
+/* 0014c71e */		{
+/* 0014c71e */			SYS_ERROR("背景音声チャンネル取得失敗\n", 0);
+/* 0014c730 */		}
+/* 0014c730 */		return;
+/* 0014c732 */	}
+/* 0014c732 */	if (bStop)
+/* 0014c742 */	{
+/* 0014c742 */		KiwiSoundEngine.Fade(Channel, 1000, 0.0, true, 0);
+/* 0014c770 */		return;
+/* 0014c772 */	}
+/* 0014c772 */	g_BGMVolumeCapManager.BeginBGMFade(Channel, SoundList[0]);
+/* 0014c79e */	SYS_Sound_BeginFade(Channel, 0, 1.0, -1);
+/* 0014c7c0 */	KiwiSoundEngine.Prepare(Channel, SoundList[0], false);
+/* 0014c7ee */	KiwiSoundEngine.Play(Channel);
+/* 0014c804 */}
+
+bool SYS_IsMuteVoice(string VoiceName)
+/* 0014c812 */{
+/* 0014c812 */	bool Mute = false;
+/* 0014c824 */	if (SystemService.GetMixerMute(SYS_SOUNDGROUP_MASTER(), Mute) && Mute)
+/* 0014c86a */	{
+/* 0014c86a */		return true;
+/* 0014c872 */	}
+/* 0014c872 */	bool Mute = false;
+/* 0014c884 */	if (SystemService.GetMixerMute(SYS_SOUNDGROUP_VOICE(), Mute) && Mute)
+/* 0014c8ca */	{
+/* 0014c8ca */		return true;
+/* 0014c8d2 */	}
+/* 0014c8d2 */	int nGroup = KiwiSoundEngine.GetGroupNumFromFile(VoiceName);
+/* 0014c8f2 */	bool Mute = false;
+/* 0014c904 */	if (SystemService.GetMixerMute(nGroup, Mute) && Mute)
+/* 0014c94e */	{
+/* 0014c94e */		return true;
+/* 0014c956 */	}
+/* 0014c956 */	return false;
+/* 0014c95e */}
+
+void SYS_PlayVoice(string VoiceName)
+/* 0014c972 */{
+/* 0014c972 */	if (VoiceName.Empty())
+/* 0014c984 */	{
+/* 0014c984 */		return;
+/* 0014c986 */	}
+/* 0014c986 */	if (SYS_IsMuteVoice(VoiceName))
+/* 0014c99c */	{
+/* 0014c99c */		return;
+/* 0014c99e */	}
+/* 0014c99e */	KiwiSoundEngine.Prepare(12, VoiceName, false);
+/* 0014c9c0 */	KiwiSoundEngine.Play(12);
+/* 0014c9d2 */	g_BGMVolumeCapManager.BeginBGMFade(12, VoiceName);
+/* 0014c9f2 */	g_SoundVolumeCapManager.BeginSoundFade(12, VoiceName);
+/* 0014ca12 */}
+
+void SYS_StopVoice()
+/* 0014ca20 */{
+/* 0014ca20 */	KiwiSoundEngine.Stop(12);
+/* 0014ca32 */}
+
+void SYS_StopVoiceBySkipMessage()
+/* 0014ca40 */{
+/* 0014ca40 */	if (!g_ConfigStopVoiceBySkipMessage)
+/* 0014ca52 */	{
+/* 0014ca52 */		return;
+/* 0014ca54 */	}
+/* 0014ca54 */	KiwiSoundEngine.Stop(12);
+/* 0014ca66 */}
+
+bool SYS_IsPlayVoice()
+/* 0014ca74 */{
+/* 0014ca74 */	return KiwiSoundEngine.IsPlay(12);
+/* 0014ca86 */}
+
+void SYS_Sound_Stop(bool bMusicStop)
+/* 0014ca9a */{
+/* 0014ca9a */	if (bMusicStop)
+/* 0014caaa */	{
+/* 0014caaa */		音楽("", -1, -1);
+/* 0014cac2 */	}
+/* 0014cac2 */	Ａ＿ループ効果音停止(-1);
+/* 0014cace */	SYS_StopSE();
+/* 0014cad4 */	SYS_StopVoice();
+/* 0014cada */	SYS_擬音停止();
+/* 0014cae0 */	SYS_背景音声停止();
+/* 0014cae6 */	PARTS_StopSoundWithoutSystemsound();
+/* 0014caec */}
+
+void SYS_Sound_Suspend(bool bMusicStop)
+/* 0014cafa */{
+/* 0014cafa */	ADVSoundData SoundData;
+/* 0014cb0a */	SYS_SaveAdvSoundData(SoundData);
+/* 0014cb1a */	g_SuspendSoundData.PushBack(SoundData);
+/* 0014cb32 */	SYS_Sound_Stop(bMusicStop);
+/* 0014cb42 */}
+
+void SYS_Sound_Resume()
+/* 0014cb50 */{
+/* 0014cb50 */	if (g_SuspendSoundData.Empty())
+/* 0014cb60 */	{
+/* 0014cb60 */		return;
+/* 0014cb62 */	}
+/* 0014cb62 */	ADVSoundData SoundData;
+/* 0014cb72 */	SoundData = g_SuspendSoundData[g_SuspendSoundData.Numof() - 1];
+/* 0014cbae */	g_SuspendSoundData.PopBack();
+/* 0014cbb8 */	SYS_LoadAdvSoundData(SoundData);
+/* 0014cbc8 */	PARTS_StopSoundWithoutSystemsound();
+/* 0014cbce */	SYS_StopSE();
+/* 0014cbd4 */	SYS_StopVoice();
+/* 0014cbda */}
+
+int SYS_SOUNDGROUP_MASTER()
+/* 0014cbe8 */{
+/* 0014cbe8 */	return 0;
+/* 0014cbf0 */}
+
+int SYS_SOUNDGROUP_BGM()
+/* 0014cc04 */{
+/* 0014cc04 */	return 1;
+/* 0014cc0c */}
+
+int SYS_SOUNDGROUP_SE()
+/* 0014cc20 */{
+/* 0014cc20 */	return 2;
+/* 0014cc28 */}
+
+int SYS_SOUNDGROUP_VOICE()
+/* 0014cc3c */{
+/* 0014cc3c */	return 3;
+/* 0014cc44 */}
+
+int SYS_SOUNDGROUP_BACKVOICE()
+/* 0014cc58 */{
+/* 0014cc58 */	return 5;
+/* 0014cc60 */}
+
+void SYS_RePlayBackSE(array@BackSE_t SoundList)
+/* 0014cc74 */{
+/* 0014cc74 */	int Count;
+/* 0014cc86 */	for (Count = 20; Count < 999; Count++)
+/* 0014ccd0 */	{
+/* 0014ccd0 */		BackSE_t NowData;
+/* 0014cce0 */		NowData = SYS_GetBackSE(Count);
+/* 0014cd04 */		if (NowData.FadeChannel < 20)
+/* 0014cd24 */		{
+/* 0014cd24 */			break;
+/* 0014cd30 */		}
+/* 0014cd30 */		int Index = SoundList.Find(0, SoundList.Numof(), NowData, &SYS_SearchBackSE_Group);
+/* 0014cd6c */		if (Index == -1)
+/* 0014cd84 */		{
+/* 0014cd84 */			if (Count == 20)
+/* 0014cd9c */			{
+/* 0014cd9c */				Ａ＿擬音終了();
+/* 0014cda2 */			}
+/* 0014cda8 */			else
+/* 0014cda8 */			{
+/* 0014cda8 */				Ａ＿背景音声終了(NowData.Group);
+/* 0014cdc0 */			}
+/* 0014cdc0 */			continue;
+/* 0014cdcc */		}
+/* 0014cdcc */		BackSE_t NextData;
+/* 0014cddc */		NextData = SoundList[Index];
+/* 0014ce0a */		if (NextData.bStop)
+/* 0014ce22 */		{
+/* 0014ce22 */			if (Count == 20)
+/* 0014ce3a */			{
+/* 0014ce3a */				Ａ＿擬音終了();
+/* 0014ce40 */			}
+/* 0014ce46 */			else
+/* 0014ce46 */			{
+/* 0014ce46 */				Ａ＿背景音声終了(NowData.Group);
+/* 0014ce5e */			}
+/* 0014ce5e */			continue;
+/* 0014ce70 */		}
+/* 0014ce70 */		int NowNumof = NowData.PlayList.Numof();
+/* 0014ce94 */		int NextNumof = NextData.PlayList.Numof();
+/* 0014ceb8 */		if (NowNumof != NextNumof)
+/* 0014ced4 */		{
+/* 0014ced4 */			SYS_PlayBackSE(NextData.Group, NextData.PlayList);
+/* 0014cf00 */			continue;
+/* 0014cf12 */		}
+/* 0014cf12 */		if (!SYS_SameSoundList(NowData.PlayList, NextData.PlayList))
+/* 0014cf48 */		{
+/* 0014cf48 */			SYS_PlayBackSE(NextData.Group, NextData.PlayList);
+/* 0014cf74 */			continue;
+/* 0014cf86 */		}
+/* 0014cf86 */		if (NowData.bStop && !NextData.bStop)
+/* 0014cfd0 */		{
+/* 0014cfd0 */			SYS_PlayBackSE(NextData.Group, NextData.PlayList);
+/* 0014cffc */		}
+/* 0014cffc */	}
+/* 0014d00e */}
+
+void SYS_InitSystemSE()
+/* 0014d01c */{
+/* 0014d01c */	int Numof = EX_Height("Ｅ＿システム効果音設定");
+/* 0014d034 */	int i;
+/* 0014d046 */	for (i = 0; i < Numof; ++i)
+/* 0014d090 */	{
+/* 0014d090 */		int SeID = EX_A2Int("Ｅ＿システム効果音設定", 0, i, -1);
+/* 0014d0be */		if (SeID < 0)
+/* 0014d0d6 */		{
+/* 0014d0d6 */			continue;
+/* 0014d0dc */		}
+/* 0014d0dc */		KiwiSoundEngine.SetSeParam(5 + SeID, EX_A2Int("Ｅ＿システム効果音設定", 1, i, 0), EX_A2Int("Ｅ＿システム効果音設定", 2, i, 1));
+/* 0014d140 */	}
+/* 0014d146 */}
+
+void SYS_PlaySystemSE(int SeID, string _効果音名)
+/* 0014d154 */{
+/* 0014d154 */	if (!KiwiSoundEngine.IsExistFile(_効果音名))
+/* 0014d170 */	{
+/* 0014d170 */		SYS_ERROR("効果音[%s]ロード失敗\n" % _効果音名, 0);
+/* 0014d194 */		return;
+/* 0014d196 */	}
+/* 0014d196 */	int nGroup = KiwiSoundEngine.GetGroupNumFromFile(_効果音名);
+/* 0014d1b6 */	bool Mute = false;
+/* 0014d1c8 */	if (SystemService.GetMixerMute(nGroup, Mute) && Mute)
+/* 0014d212 */	{
+/* 0014d212 */		return;
+/* 0014d214 */	}
+/* 0014d214 */	if (nGroup > SYS_SOUNDGROUP_BACKVOICE())
+/* 0014d22c */	{
+/* 0014d22c */		if (EX_IA2Int("Ｅ＿サウンドグループ設定", nGroup, "対応音声グループ番号", -1) != -1)
+/* 0014d25c */		{
+/* 0014d25c */			if (SystemService.GetMixerMute(SYS_SOUNDGROUP_BACKVOICE(), Mute) && Mute)
+/* 0014d2a2 */			{
+/* 0014d2a2 */				return;
+/* 0014d2a4 */			}
+/* 0014d2a4 */		}
+/* 0014d2aa */		else if (SystemService.GetMixerMute(SYS_SOUNDGROUP_VOICE(), Mute) && Mute)
+/* 0014d2f0 */		{
+/* 0014d2f0 */			return;
+/* 0014d2f2 */		}
+/* 0014d2f2 */	}
+/* 0014d2f2 */	KiwiSoundEngine.PlaySe(5 + SeID, _効果音名);
+/* 0014d31a */	g_BGMVolumeCapManager.BeginBGMFadeBySystemSE(5 + SeID, _効果音名);
+/* 0014d346 */}
+
+void SYS_StopSystemSE(int SeID)
+/* 0014d354 */{
+/* 0014d354 */	KiwiSoundEngine.StopSe(5 + SeID);
+/* 0014d372 */}
+
+bool SYS_IsPlaySystemSE(int SeID)
+/* 0014d380 */{
+/* 0014d380 */	return KiwiSoundEngine.IsPlaySe(5 + SeID);
+/* 0014d39e */}
+
+string SYS_Sound_GetFileName(int SoundNumber)
+/* 0014d3b2 */{
+/* 0014d3b2 */	if (SoundNumber == 0)
+/* 0014d3ca */	{
+/* 0014d3ca */		return "";
+/* 0014d3d2 */	}
+/* 0014d3d2 */	string 音楽名;
+/* 0014d3e6 */	if (!KiwiSoundEngine.GetSoundFileName(SoundNumber, 音楽名))
+/* 0014d40c */	{
+/* 0014d40c */		system.Output("【 %d 】番の音楽名取得に失敗しました\n" % SoundNumber);
+/* 0014d42c */		音楽名 = "不正な音楽番号【 %d 】" % SoundNumber;
+/* 0014d452 */	}
+/* 0014d452 */	return 音楽名;
+/* 0014d45e */}
+

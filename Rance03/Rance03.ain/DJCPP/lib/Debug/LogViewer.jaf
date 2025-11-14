@@ -1,0 +1,15 @@
+void LogViewer::init(string title)
+/* 001e5296 */{
+/* 001e5296 */	this.handle_ = OutputLog.Create(title);
+/* 001e52b6 */}
+
+void LogViewer::add(string val)
+/* 001e52be */{
+/* 001e52be */	OutputLog.Output(this.handle_, val);
+/* 001e52dc */}
+
+void LogViewer::clear()
+/* 001e52e4 */{
+/* 001e52e4 */	OutputLog.Clear(this.handle_);
+/* 001e52f8 */}
+

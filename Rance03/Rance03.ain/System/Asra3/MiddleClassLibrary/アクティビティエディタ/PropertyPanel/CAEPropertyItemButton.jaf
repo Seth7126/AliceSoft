@@ -1,0 +1,126 @@
+CAEPropertyItemButton::CAEPropertyItemButton()
+/* 00074bc6 */{
+/* 00074bd0 */}
+
+CAEPropertyItemButton::~CAEPropertyItemButton()
+/* 00074bd6 */{
+/* 00074bd6 */	this.Release();
+/* 00074bde */}
+
+int CAEPropertyItemButton::Init(string Name, int LabelWidth, int ButtonWidth, int TextPos, ref CAEPropertyToolTip ToolTip)
+/* 00074be6 */{
+/* 00074be6 */	this.Release();
+/* 00074bee */	this.m_LayoutID = PARTS_GetFreeSystemPartsNumber();
+/* 00074c00 */	this.m_Label = PARTS_GetFreeSystemPartsNumber();
+/* 00074c12 */	this.m_Button = PARTS_GetFreeSystemPartsNumber();
+/* 00074c24 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_LayoutID, 2);
+/* 00074c3a */	Ｐ＿レイアウトボックス＿配置設定(this.m_LayoutID, 4);
+/* 00074c50 */	Ｐ＿マージン設定(this.m_LayoutID, 1, 1, 3, 3);
+/* 00074c78 */	Ｐ＿フォント設定(this.m_Label, 0, 14, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1);
+/* 00074cca */	Ｐ＿テキスト設定(this.m_Label, Name, 1);
+/* 00074cea */	Ｐ＿オンカーソル透過設定(this.m_Label, true);
+/* 00074d00 */	Ｐ＿マージン設定(this.m_Label, 0, 0, 0, LabelWidth - AFL_Parts_GetWidth(this.m_Label, 1));
+/* 00074d44 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, this.m_Label);
+/* 00074d5e */	Ｐ＿ボタン＿サイズ設定(this.m_Button, ButtonWidth, 18);
+/* 00074d7e */	Ｐ＿ボタン＿フォント設定(this.m_Button, 0, 14, 0, 0, 0, 0.0, 0, 0, 0, 0.0);
+/* 00074dca */	Ｐ＿ボタン＿テキスト位置設定(this.m_Button, TextPos);
+/* 00074de4 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, this.m_Button);
+/* 00074dfe */	AFL_Parts_AddKeyDownEvent(this.m_LayoutID, this.KeyDownEvent);
+/* 00074e18 */	AFL_Parts_AddKeyDownEvent(this.m_Label, this.KeyDownEvent);
+/* 00074e32 */	AFL_Parts_AddKeyDownEvent(this.m_Button, this.KeyDownEvent);
+/* 00074e4c */	AFL_Parts_AddMouseWheelEvent(this.m_LayoutID, this.MouseWheelEvent);
+/* 00074e66 */	AFL_Parts_AddMouseWheelEvent(this.m_Label, this.MouseWheelEvent);
+/* 00074e80 */	AFL_Parts_AddMouseWheelEvent(this.m_Button, this.MouseWheelEvent);
+/* 00074e9a */	AFL_Parts_AddMouseLClickEvent(this.m_Button, this.MouseLClickEvent);
+/* 00074eb4 */	if (ToolTip !== NULL)
+/* 00074ecc */	{
+/* 00074ecc */		ToolTip.AddParts(this.m_Button);
+/* 00074ee6 */	}
+/* 00074ee6 */	return this.m_LayoutID;
+/* 00074ef2 */}
+
+void CAEPropertyItemButton::Release()
+/* 00074f00 */{
+/* 00074f00 */	this.m_dgMouseClickEvent.Clear();
+/* 00074f0c */	this.m_dgMouseWheelEvent.Clear();
+/* 00074f18 */	this.m_dgKeyDownEvent.Clear();
+/* 00074f24 */	PARTS_ReleaseWithInit(this.m_Button);
+/* 00074f32 */	PARTS_ReleaseWithInit(this.m_Label);
+/* 00074f40 */	PARTS_ReleaseWithInit(this.m_LayoutID);
+/* 00074f4e */}
+
+int CAEPropertyItemButton::GetID()
+/* 00074f56 */{
+/* 00074f56 */	return this.m_LayoutID;
+/* 00074f62 */}
+
+string CAEPropertyItemButton::GetLabel()
+/* 00074f70 */{
+/* 00074f70 */	return Ｐ＿テキスト取得(this.m_Label, 1);
+/* 00074f88 */}
+
+void CAEPropertyItemButton::SetText(string Text)
+/* 00074f96 */{
+/* 00074f96 */	Ｐ＿ボタン＿テキスト設定(this.m_Button, Text);
+/* 00074fb0 */}
+
+string CAEPropertyItemButton::GetText()
+/* 00074fb8 */{
+/* 00074fb8 */	return Ｐ＿ボタン＿テキスト取得(this.m_Button);
+/* 00074fca */}
+
+string CAEPropertyItemButton::GetToolTipText()
+/* 00074fd8 */{
+/* 00074fd8 */	return this.GetText();
+/* 00074fe2 */}
+
+void CAEPropertyItemButton::AddParts(int Number)
+/* 00074ff0 */{
+/* 00074ff0 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, Number);
+/* 0007500a */}
+
+void CAEPropertyItemButton::KeyDownEvent(int ID, int KeyID)
+/* 00075012 */{
+/* 00075012 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00075046 */}
+
+void CAEPropertyItemButton::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0007504e */{
+/* 0007504e */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0007508c */}
+
+void CAEPropertyItemButton::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00075094 */{
+/* 00075094 */	this.m_dgMouseClickEvent(ID, MouseX, MouseY);
+/* 000750d2 */}
+
+void CAEPropertyItemButton::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000750da */{
+/* 000750da */	this.m_dgKeyDownEvent += DelegateObject;
+/* 000750f4 */}
+
+void CAEPropertyItemButton::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000750fc */{
+/* 000750fc */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00075116 */}
+
+void CAEPropertyItemButton::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0007511e */{
+/* 0007511e */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00075138 */}
+
+void CAEPropertyItemButton::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00075140 */{
+/* 00075140 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0007515a */}
+
+void CAEPropertyItemButton::AddMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00075162 */{
+/* 00075162 */	this.m_dgMouseClickEvent += DelegateObject;
+/* 0007517c */}
+
+void CAEPropertyItemButton::EraseMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00075184 */{
+/* 00075184 */	this.m_dgMouseClickEvent -= DelegateObject;
+/* 0007519e */}
+

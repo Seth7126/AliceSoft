@@ -1,0 +1,142 @@
+CSystemButtonViewList::CSystemButtonViewList()
+/* 0001e2da */{
+/* 0001e2e2 */	this.m_MessageWindowNumber = -2147483648;
+/* 0001e2f4 */	this.m_SelectButtonID = -2147483648;
+/* 0001e306 */	this.m_Show = true;
+/* 0001e318 */}
+
+void CSystemButtonViewList::Clear()
+/* 0001e320 */{
+/* 0001e320 */	if (this.m_MessageWindowNumber == -2147483648)
+/* 0001e338 */	{
+/* 0001e338 */		return;
+/* 0001e33a */	}
+/* 0001e33a */	int Index;
+/* 0001e34c */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001e39c */	{
+/* 0001e39c */		this.m_ViewList[Index].Delete();
+/* 0001e3b8 */	}
+/* 0001e3be */	this.m_ViewList.Free();
+/* 0001e3c8 */	this.m_MessageWindowNumber = -2147483648;
+/* 0001e3da */	this.m_SelectButtonID = -2147483648;
+/* 0001e3ec */}
+
+void CSystemButtonViewList::SetMessageWindowNumber(int MessageWindowNumber)
+/* 0001e3f4 */{
+/* 0001e3f4 */	if (MessageWindowNumber == this.m_MessageWindowNumber)
+/* 0001e410 */	{
+/* 0001e410 */		return;
+/* 0001e412 */	}
+/* 0001e412 */	this.Clear();
+/* 0001e41a */	this.m_MessageWindowNumber = MessageWindowNumber;
+/* 0001e430 */	this.Create();
+/* 0001e438 */}
+
+void CSystemButtonViewList::Create()
+/* 0001e440 */{
+/* 0001e440 */	this.m_ViewList.Alloc(g_SystemButtonModelMap.GetButtonCount(this.m_MessageWindowNumber));
+/* 0001e46a */	int Index;
+/* 0001e47c */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001e4cc */	{
+/* 0001e4cc */		this.m_ViewList[Index].Create(Index);
+/* 0001e4f2 */	}
+/* 0001e4f8 */}
+
+void CSystemButtonViewList::Update()
+/* 0001e500 */{
+/* 0001e500 */	if (this.m_MessageWindowNumber == -2147483648)
+/* 0001e518 */	{
+/* 0001e518 */		return;
+/* 0001e51a */	}
+/* 0001e51a */	int Index;
+/* 0001e52c */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001e57c */	{
+/* 0001e57c */		this.m_ViewList[Index].Update();
+/* 0001e598 */	}
+/* 0001e59e */	this.m_SelectButtonID = -2147483648;
+/* 0001e5b0 */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001e600 */	{
+/* 0001e600 */		if (this.m_ViewList[Index].IsSelecting())
+/* 0001e622 */		{
+/* 0001e622 */			this.m_SelectButtonID = Index;
+/* 0001e638 */			break;
+/* 0001e63e */		}
+/* 0001e63e */	}
+/* 0001e644 */}
+
+int CSystemButtonViewList::GetMessageWindowNumber()
+/* 0001e64c */{
+/* 0001e64c */	return this.m_MessageWindowNumber;
+/* 0001e658 */}
+
+sys_btn_fnc_t CSystemButtonViewList::GetSelectedFunc()
+/* 0001e666 */{
+/* 0001e666 */	if (this.m_SelectButtonID == -2147483648)
+/* 0001e67e */	{
+/* 0001e67e */		return NULL;
+/* 0001e682 */	}
+/* 0001e682 */	return g_SystemButtonModelMap.GetFunction(this.m_MessageWindowNumber, this.m_SelectButtonID);
+/* 0001e6a8 */}
+
+void CSystemButtonViewList::Hide()
+/* 0001e6b6 */{
+/* 0001e6b6 */	this.SetShow(false);
+/* 0001e6c4 */}
+
+void CSystemButtonViewList::Show()
+/* 0001e6cc */{
+/* 0001e6cc */	this.SetShow(true);
+/* 0001e6da */}
+
+void CSystemButtonViewList::SetShow(bool ShowFlg)
+/* 0001e6e2 */{
+/* 0001e6e2 */	this.m_Show = ShowFlg;
+/* 0001e6f8 */	int Index;
+/* 0001e70a */	for (Index = 0; Index < this.m_ViewList.Numof(); ++Index)
+/* 0001e75a */	{
+/* 0001e75a */		this.m_ViewList[Index].SetShow(this.m_Show);
+/* 0001e780 */	}
+/* 0001e786 */}
+
+void CSystemButtonViewList::SetPartsLayer(int ID)
+/* 0001e78e */{
+/* 0001e78e */	int Index;
+/* 0001e7a0 */	for (Index = 0; Index < this.m_ViewList.Numof(); Index++)
+/* 0001e7f4 */	{
+/* 0001e7f4 */		this.m_ViewList[Index].SetPartsLayer(ID);
+/* 0001e81a */	}
+/* 0001e820 */}
+
+bool CSystemButtonViewList::IsShow()
+/* 0001e828 */{
+/* 0001e828 */	return this.m_Show;
+/* 0001e834 */}
+
+void CSystemButtonViewList::SetOnCursorSoundName(string OnCursorSoundName)
+/* 0001e842 */{
+/* 0001e842 */	this.m_OnCursorSoundName = OnCursorSoundName;
+/* 0001e85a */}
+
+void CSystemButtonViewList::SetClickSoundName(string ClickSoundName)
+/* 0001e862 */{
+/* 0001e862 */	this.m_ClickSoundName = ClickSoundName;
+/* 0001e87a */}
+
+void CSystemButtonViewList::PlayOnCursorSound()
+/* 0001e882 */{
+/* 0001e882 */	if (this.m_OnCursorSoundName.Empty())
+/* 0001e894 */	{
+/* 0001e894 */		return;
+/* 0001e896 */	}
+/* 0001e896 */	システム効果音(this.m_OnCursorSoundName);
+/* 0001e8a6 */}
+
+void CSystemButtonViewList::PlayClickSound()
+/* 0001e8ae */{
+/* 0001e8ae */	if (this.m_ClickSoundName.Empty())
+/* 0001e8c0 */	{
+/* 0001e8c0 */		return;
+/* 0001e8c2 */	}
+/* 0001e8c2 */	システム効果音(this.m_ClickSoundName);
+/* 0001e8d2 */}
+

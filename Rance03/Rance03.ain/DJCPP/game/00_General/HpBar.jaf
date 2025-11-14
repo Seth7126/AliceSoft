@@ -1,0 +1,183 @@
+HpBar::HpBar()
+/* 00181820 */{
+/* 00181828 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018184e */}
+
+void HpBar::init(int current, int max, bool isShowNumber, string baseCgName)
+/* 00181856 */{
+/* 00181856 */	this.current_ = current;
+/* 0018186c */	this.max_ = max;
+/* 00181882 */	this.isShowNumber_ = isShowNumber;
+/* 00181898 */	this.baseCgName_ = baseCgName;
+/* 001818b0 */	this.initParts();
+/* 001818b8 */}
+
+void HpBar::initAsPlayer(ref Player player)
+/* 001818c0 */{
+/* 001818c0 */	this.init(player.getHp(), player.getMaxHp(), true, "システム／ＨＰ／下地／%s" % player.getShortName());
+/* 0018190c */	player.setOnChangeHpCallback(this.onChangeHpCallback);
+/* 00181926 */}
+
+void HpBar::update()
+/* 0018192e */{
+/* 00181930 */}
+
+void HpBar::changeValue(int to, DG_GeneralCallback onFinish)
+/* 00181936 */{
+/* 00181936 */	this.onFinish_ = onFinish;
+/* 00181950 */	this.updateValue(true, this.current_, to);
+/* 00181972 */	this.current_ = to;
+/* 00181988 */}
+
+void HpBar::onChangeHpCallback(int val)
+/* 00181990 */{
+/* 00181990 */	this.onFinish_.Clear();
+/* 0018199c */	this.updateValue(true, this.current_, val);
+/* 001819be */	this.current_ = val;
+/* 001819d4 */}
+
+void HpBar::setPos(int x, int y)
+/* 001819dc */{
+/* 001819dc */	this.x_ = x;
+/* 001819f2 */	this.y_ = y;
+/* 00181a08 */	this.parent_.setPos(x, y);
+/* 00181a30 */}
+
+void HpBar::move(int x, int y)
+/* 00181a38 */{
+/* 00181a38 */	PartsMotion m;
+/* 00181a48 */	m.setMove(this.x_, this.y_, x, y, 1);
+/* 00181a86 */	this.parent_.runMotion(m, NULL);
+/* 00181aa6 */	this.x_ = x;
+/* 00181abc */	this.y_ = y;
+/* 00181ad2 */}
+
+int HpBar::getX()
+/* 00181ada */{
+/* 00181ada */	return this.x_;
+/* 00181ae6 */}
+
+int HpBar::getY()
+/* 00181af4 */{
+/* 00181af4 */	return this.y_;
+/* 00181b00 */}
+
+void HpBar::setZ(int z)
+/* 00181b0e */{
+/* 00181b0e */	this.parent_.setZ(z);
+/* 00181b2a */}
+
+void HpBar::initParts()
+/* 00181b32 */{
+/* 00181b32 */	this.parts_[0].init(this.baseCgName_, 0);
+/* 00181b5a */	this.parts_[1].init("システム／ＨＰ／バー", 0);
+/* 00181b7e */	NumberPartsInfomation n;
+/* 00181b8e */	n.setSameWidth(15);
+/* 00181ba4 */	n.setSpan(-2);
+/* 00181bba */	this.parts_[2].initAsNumber("システム／数字／幅１５／白", n);
+/* 00181be2 */	createPartsGroup(this.parent_, this.parts_, 2750);
+/* 00181c02 */	this.barHeight_ = this.parts_[1].getHeight();
+/* 00181c26 */	if (this.current_ == 0)
+/* 00181c3e */	{
+/* 00181c3e */		this.setPartsFadeState();
+/* 00181c46 */	}
+/* 00181c46 */	this.setPartsPos();
+/* 00181c4e */}
+
+void HpBar::setPartsShow()
+/* 00181c56 */{
+/* 00181c56 */	int i;
+/* 00181c68 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00181cb8 */	{
+/* 00181cb8 */		this.parts_[i].setShow(true);
+/* 00181cda */	}
+/* 00181ce0 */	this.parts_[2].setShow(this.isShowNumber_);
+/* 00181d02 */	this.parent_.setShow(true);
+/* 00181d18 */}
+
+void HpBar::setPartsPos()
+/* 00181d20 */{
+/* 00181d20 */	this.parts_[1].setPos(11.0, 25.0);
+/* 00181d44 */	this.parts_[2].setPos(110.0, 35.0);
+/* 00181d68 */	this.parts_[2].setOrigin(9);
+/* 00181d86 */}
+
+void HpBar::updateValue(bool isMotion, int valueFrom, int valueTo)
+/* 00181d8e */{
+/* 00181d8e */	if (isMotion)
+/* 00181d9e */	{
+/* 00181d9e */		PartsMotion m1;
+/* 00181dae */		m1.setKey(15, valueFrom, valueTo, 0);
+/* 00181dde */		this.parts_[2].runMotion(m1, NULL);
+/* 00181e06 */		PartsMotion m2;
+/* 00181e16 */		int to = this.getBarWidth(valueTo);
+/* 00181e34 */		m2.setCgRangeMove(0, 0, this.getBarWidth(valueFrom), this.barHeight_, 0, 0, this.getBarWidth(valueTo), this.barHeight_, 1);
+/* 00181e9a */		this.parts_[1].runMotion(m2, this.onFinishMotion);
+/* 00181eca */	}
+/* 00181edc */	else
+/* 00181edc */	{
+/* 00181edc */		this.parts_[2].setNumber(valueTo);
+/* 00181f00 */		this.parts_[1].setCgRange(0, 0, this.getBarWidth(valueTo), this.barHeight_);
+/* 00181f40 */		this.setPartsFadeState();
+/* 00181f48 */	}
+/* 00181f48 */}
+
+void HpBar::onFinishMotion()
+/* 00181f50 */{
+/* 00181f50 */	this.onFinish_();
+/* 00181f70 */	this.onFinish_.Clear();
+/* 00181f7c */	this.setPartsFadeState();
+/* 00181f84 */}
+
+void HpBar::setPartsFadeState()
+/* 00181f8c */{
+/* 00181f8c */	int v = 255;
+/* 00181f9e */	if (this.parts_[2].getNumber() == 0)
+/* 00181fc4 */	{
+/* 00181fc4 */		v = 140;
+/* 00181fd6 */	}
+/* 00181fd6 */	int i;
+/* 00181fe8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00182038 */	{
+/* 00182038 */		this.parts_[i].setMultiColorValue(v, v, v);
+/* 00182072 */	}
+/* 00182078 */}
+
+int HpBar::getBarWidth(int value)
+/* 00182080 */{
+/* 00182080 */	float r = float(value) / float(this.max_);
+/* 001820a6 */	int w = this.parts_[1].getWidth() * r;
+/* 001820de */	if (w == 0 && value > 0)
+/* 00182126 */	{
+/* 00182126 */		return 1;
+/* 0018212e */	}
+/* 0018212e */	return w;
+/* 0018213a */}
+
+void HpBar::setShow(bool val)
+/* 00182148 */{
+/* 00182148 */	this.parent_.setShow(val);
+/* 00182162 */}
+
+void HpBar::setParent(int parentPartsNumber)
+/* 0018216a */{
+/* 0018216a */	this.parent_.setParent(parentPartsNumber);
+/* 00182184 */}
+
+void HpBar::fadeIn(bool val, ref PartsMotion m)
+/* 0018218c */{
+/* 0018218c */	this.setPartsShow();
+/* 00182194 */	if (val)
+/* 001821a4 */	{
+/* 001821a4 */		this.updateValue(true, 0, this.current_);
+/* 001821c2 */	}
+/* 001821c2 */	if (m === NULL)
+/* 001821da */	{
+/* 001821da */		this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 00182214 */	}
+/* 0018221a */	else
+/* 0018221a */	{
+/* 0018221a */		this.parent_.runMotion(m, NULL);
+/* 0018223a */	}
+/* 0018223a */}
+

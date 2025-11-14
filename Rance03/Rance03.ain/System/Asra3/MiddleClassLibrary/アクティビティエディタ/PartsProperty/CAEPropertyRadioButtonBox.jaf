@@ -1,0 +1,124 @@
+CAEPropertyRadioButtonBox::CAEPropertyRadioButtonBox()
+/* 000698ba */{
+/* 000698c2 */	this.Release();
+/* 000698ca */}
+
+CAEPropertyRadioButtonBox::~CAEPropertyRadioButtonBox()
+/* 000698d2 */{
+/* 000698d2 */	this.Release();
+/* 000698da */}
+
+void CAEPropertyRadioButtonBox::Init(int LayoutID, ref CAEInstanceItem Item, ref CAEInstanceItemList InstanceList)
+/* 000698e2 */{
+/* 000698e2 */	this.Release();
+/* 000698ea */	if (Item === NULL)
+/* 00069902 */	{
+/* 00069902 */		return;
+/* 00069904 */	}
+/* 00069904 */	if (InstanceList === NULL)
+/* 0006991c */	{
+/* 0006991c */		return;
+/* 0006991e */	}
+/* 0006991e */	this.m_Item <- Item;
+/* 0006993e */	this.m_InstanceItemList <- InstanceList;
+/* 0006995e */	this.m_Panel.Init(LayoutID);
+/* 00069978 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00069992 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 000699ac */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 000699c6 */	int ID = this.m_Item.GetID();
+/* 000699e2 */	this.m_Panel.AddButtonItem("チェックボックスリスト", "編集");
+/* 00069a1a */}
+
+void CAEPropertyRadioButtonBox::Release()
+/* 00069a22 */{
+/* 00069a22 */	this.m_dgMouseWheelEvent.Clear();
+/* 00069a2e */	this.m_dgKeyDownEvent.Clear();
+/* 00069a3a */	this.m_InstanceItemList <- NULL;
+/* 00069a52 */	this.m_Item <- NULL;
+/* 00069a6a */	this.m_Panel.Release();
+/* 00069a7a */}
+
+void CAEPropertyRadioButtonBox::KeyDownEvent(int ID, int KeyID)
+/* 00069a82 */{
+/* 00069a82 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00069ab6 */}
+
+void CAEPropertyRadioButtonBox::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00069abe */{
+/* 00069abe */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00069afc */}
+
+void CAEPropertyRadioButtonBox::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00069b04 */{
+/* 00069b04 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00069b54 */	if (Item === NULL)
+/* 00069b6c */	{
+/* 00069b6c */		return;
+/* 00069b6e */	}
+/* 00069b6e */	int PartsID = this.m_Item.GetID();
+/* 00069b8a */	if (Item.GetLabel() == "チェックボックスリスト")
+/* 00069ba8 */	{
+/* 00069ba8 */		array@string ItemList;
+/* 00069bb2 */		int Index;
+/* 00069bc4 */		int Numof = Ｐ＿ラジオボタンボックス＿個数取得(PartsID);
+/* 00069be0 */		for (Index = 0; Index < Numof; ++Index)
+/* 00069c2a */		{
+/* 00069c2a */			string Name = this.m_InstanceItemList.GetName(Ｐ＿ラジオボタンボックス＿番号取得(PartsID, Index));
+/* 00069c62 */			if (Name.Empty())
+/* 00069c74 */			{
+/* 00069c74 */				continue;
+/* 00069c7a */			}
+/* 00069c7a */			ItemList.PushBack(Name);
+/* 00069c8e */		}
+/* 00069c94 */		array@string List;
+/* 00069c9e */		this.m_InstanceItemList.GetPartsNameList(List, 1, this.m_Item.GetID());
+/* 00069cce */		CAEEditTextListListDialog Form;
+/* 00069cde */		Form.SetSelectList(List);
+/* 00069cf8 */		Form.Show(ID, MouseX, MouseY, ItemList, this.ChangedItemListEvent);
+/* 00069d56 */	}
+/* 00069d56 */}
+
+void CAEPropertyRadioButtonBox::ChangedItemListEvent(int ID, ref array@string List)
+/* 00069d5e */{
+/* 00069d5e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00069dae */	if (Item === NULL)
+/* 00069dc6 */	{
+/* 00069dc6 */		return;
+/* 00069dc8 */	}
+/* 00069dc8 */	int PartsID = this.m_Item.GetID();
+/* 00069de4 */	if (Item.GetLabel() == "チェックボックスリスト")
+/* 00069e02 */	{
+/* 00069e02 */		Ｐ＿ラジオボタンボックス＿開放(PartsID);
+/* 00069e12 */		int Index;
+/* 00069e24 */		for (Index = 0; Index < List.Numof(); ++Index)
+/* 00069e74 */		{
+/* 00069e74 */			int Number = this.m_InstanceItemList.GetNumber(List[Index]);
+/* 00069ea6 */			if (Number == 0)
+/* 00069ebe */			{
+/* 00069ebe */				continue;
+/* 00069ec4 */			}
+/* 00069ec4 */			Ｐ＿ラジオボタンボックス＿追加(PartsID, Number);
+/* 00069ede */		}
+/* 00069ee4 */	}
+/* 00069ee4 */}
+
+void CAEPropertyRadioButtonBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00069eec */{
+/* 00069eec */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00069f06 */}
+
+void CAEPropertyRadioButtonBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00069f0e */{
+/* 00069f0e */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00069f28 */}
+
+void CAEPropertyRadioButtonBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00069f30 */{
+/* 00069f30 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00069f4a */}
+
+void CAEPropertyRadioButtonBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00069f52 */{
+/* 00069f52 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 00069f6c */}
+

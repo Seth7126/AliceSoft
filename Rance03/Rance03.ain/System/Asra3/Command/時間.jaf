@@ -1,0 +1,44 @@
+void W(int 時間)
+/* 0015eedc */{
+/* 0015eedc */	AFL_View_Update(true);
+/* 0015eee8 */	if (時間 < 1)
+/* 0015ef00 */	{
+/* 0015ef00 */		return;
+/* 0015ef02 */	}
+/* 0015ef02 */	CASClick LButtonClick;
+/* 0015ef12 */	CASClick ReturnKeyClick;
+/* 0015ef22 */	CASClick DownKeyClick;
+/* 0015ef32 */	LButtonClick.Init(1, !SYS_IsClickModeCancel());
+/* 0015ef52 */	ReturnKeyClick.Init(13, !SYS_IsClickModeCancel());
+/* 0015ef72 */	DownKeyClick.Init(40, !SYS_IsClickModeCancel());
+/* 0015ef92 */	CASJoyClickAssignedKey JoyOkClick;
+/* 0015efa2 */	JoyOkClick.Init(4, true);
+/* 0015efbe */	int t = system.GetTime();
+/* 0015efd0 */	while (system.GetTime() - t < 時間)
+/* 0015eff4 */	{
+/* 0015eff4 */		if (SYS_ホイールフォア即確認())
+/* 0015f000 */		{
+/* 0015f000 */			SYS_バックログオープン通知();
+/* 0015f006 */			break;
+/* 0015f00c */		}
+/* 0015f00c */		if (SYS_ホイールバック確認())
+/* 0015f018 */		{
+/* 0015f018 */			break;
+/* 0015f01e */		}
+/* 0015f01e */		if (SYS_全文スキップ中確認())
+/* 0015f02a */		{
+/* 0015f02a */			break;
+/* 0015f030 */		}
+/* 0015f030 */		if (SYS_スキップ中確認())
+/* 0015f03c */		{
+/* 0015f03c */			break;
+/* 0015f042 */		}
+/* 0015f042 */		if (LButtonClick.IsClick(-2147483648) || ReturnKeyClick.IsClick(-2147483648) || DownKeyClick.IsClick(-2147483648) || JoyOkClick.IsClick(-2147483648))
+/* 0015f0fa */		{
+/* 0015f0fa */			SYS_ReleaseModeByClickCancel();
+/* 0015f100 */			break;
+/* 0015f106 */		}
+/* 0015f106 */		AFL_View_Update(true);
+/* 0015f112 */	}
+/* 0015f118 */}
+

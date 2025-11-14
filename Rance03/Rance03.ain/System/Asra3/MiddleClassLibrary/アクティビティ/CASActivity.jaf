@@ -1,0 +1,342 @@
+CActivityDestinationData::CActivityDestinationData()
+/* 0007996a */{
+/* 00079974 */}
+
+void CActivityDestinationData::SetDestinationName(string ActivityName)
+/* 0007997a */{
+/* 0007997a */	this.m_DestinationName = ActivityName;
+/* 00079992 */}
+
+string CActivityDestinationData::GetDestinationName()
+/* 0007999a */{
+/* 0007999a */	return this.m_DestinationName;
+/* 000799a6 */}
+
+void CActivityDestinationData::SetDestinationData(string Data)
+/* 000799b4 */{
+/* 000799b4 */	this.m_DestinationData = Data;
+/* 000799cc */}
+
+string CActivityDestinationData::GetDestinationData()
+/* 000799d4 */{
+/* 000799d4 */	return this.m_DestinationData;
+/* 000799e0 */}
+
+CActivityIntentData::CActivityIntentData()
+/* 000799ee */{
+/* 000799f6 */	this.Clear();
+/* 000799fe */}
+
+void CActivityIntentData::Clear()
+/* 00079a06 */{
+/* 00079a06 */	this.m_Destination.Free();
+/* 00079a10 */	this.m_IntentType = 0;
+/* 00079a22 */}
+
+bool CActivityIntentData::Empty()
+/* 00079a2a */{
+/* 00079a2a */	if (!this.m_Destination.Empty())
+/* 00079a3c */	{
+/* 00079a3c */		return false;
+/* 00079a44 */	}
+/* 00079a44 */	if (this.m_IntentType != 0)
+/* 00079a5c */	{
+/* 00079a5c */		return false;
+/* 00079a64 */	}
+/* 00079a64 */	return true;
+/* 00079a6c */}
+
+void CActivityIntentData::AddDestination(string ActivityName)
+/* 00079a7a */{
+/* 00079a7a */	if (ActivityName.Empty())
+/* 00079a8c */	{
+/* 00079a8c */		return;
+/* 00079a8e */	}
+/* 00079a8e */	this.m_Destination.Realloc(this.m_Destination.Numof() + 1);
+/* 00079ab6 */	this.m_Destination[this.m_Destination.Numof() - 1].SetDestinationName(ActivityName);
+/* 00079aea */}
+
+void CActivityIntentData::AddRangeDestination(ref array@string NameList)
+/* 00079af2 */{
+/* 00079af2 */	if (NameList === NULL)
+/* 00079b0a */	{
+/* 00079b0a */		return;
+/* 00079b0c */	}
+/* 00079b0c */	int Index;
+/* 00079b1e */	for (Index = 0; Index < NameList.Numof(); ++Index)
+/* 00079b6e */	{
+/* 00079b6e */		this.AddDestination(NameList[Index]);
+/* 00079b8c */	}
+/* 00079b92 */}
+
+void CActivityIntentData::AddDestinationData(string Data)
+/* 00079b9a */{
+/* 00079b9a */	this.m_Destination.Realloc(this.m_Destination.Numof() + 1);
+/* 00079bc2 */	this.m_Destination[this.m_Destination.Numof() - 1].SetDestinationData(Data);
+/* 00079bf6 */}
+
+bool CActivityIntentData::IsExistDestination()
+/* 00079bfe */{
+/* 00079bfe */	return !this.m_Destination.Empty();
+/* 00079c0e */}
+
+void CActivityIntentData::SetIntentType(int Type)
+/* 00079c1c */{
+/* 00079c1c */	this.m_IntentType = Type;
+/* 00079c32 */}
+
+int CActivityIntentData::GetIntentType()
+/* 00079c3a */{
+/* 00079c3a */	return this.m_IntentType;
+/* 00079c46 */}
+
+bool CActivityIntentData::IsSaveActivity()
+/* 00079c54 */{
+/* 00079c54 */	return this.m_IntentType == 0;
+/* 00079c6a */}
+
+bool CActivityIntentData::IsRemoveActivity()
+/* 00079c78 */{
+/* 00079c78 */	return this.m_IntentType == 1;
+/* 00079c8e */}
+
+bool CActivityIntentData::IsRemoveAllActivity()
+/* 00079c9c */{
+/* 00079c9c */	return this.m_IntentType == 2;
+/* 00079cb2 */}
+
+void SActivityNamePair::Set(string FileName, string Name)
+/* 00079cc0 */{
+/* 00079cc0 */	this.m_FileName = FileName;
+/* 00079cd8 */	this.m_Name = Name;
+/* 00079cf0 */}
+
+CASPartsActivity::CASPartsActivity()
+/* 00079cf8 */{
+/* 00079d00 */	this.m_EndKey.Free();
+/* 00079d0a */	this.m_ActivityName.Free();
+/* 00079d14 */	this.m_IntentData.Clear();
+/* 00079d24 */}
+
+CActivityIntentData CASPartsActivity::Run(CActivityIntentData IntentData, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00079d2c */{
+/* 00079d2c */	CASPartsLayer Layer;
+/* 00079d3c */	if (!this.LoadActivity(IntentData, dgLoadedObject))
+/* 00079d66 */	{
+/* 00079d66 */		return this.m_EmptyIntentData;
+/* 00079d76 */	}
+/* 00079d76 */	IntentData = this.RunLoop(IntentData, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00079dc4 */	if (!this.ReleaseActivity(dgReleasingObject))
+/* 00079de0 */	{
+/* 00079de0 */		return this.m_EmptyIntentData;
+/* 00079df0 */	}
+/* 00079df0 */	return IntentData;
+/* 00079e00 */}
+
+CActivityIntentData CASPartsActivity::RunLoop(CActivityIntentData IntentData, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00079e0e */{
+/* 00079e0e */	for (; ; )
+/* 00079e0e */	{
+/* 00079e0e */		全表示(1, 100);
+/* 00079e20 */		IntentData = this.UpdateActivity(dgIntentActivityEvent);
+/* 00079e48 */		if (!IntentData.IsSaveActivity())
+/* 00079e60 */		{
+/* 00079e60 */			break;
+/* 00079e66 */		}
+/* 00079e66 */		for (; ; )
+/* 00079e66 */		{
+/* 00079e66 */			CASPartsActivity PartsActivity;
+/* 00079e76 */			IntentData = PartsActivity.Run(IntentData, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00079ecc */			if (IntentData.IsRemoveAllActivity())
+/* 00079ee2 */			{
+/* 00079ee2 */				return IntentData;
+/* 00079ef2 */			}
+/* 00079ef2 */			if (IntentData.IsRemoveActivity() && !IntentData.IsExistDestination())
+/* 00079f38 */			{
+/* 00079f38 */				break;
+/* 00079f44 */			}
+/* 00079f44 */		}
+/* 00079f50 */	}
+/* 00079f56 */	return IntentData;
+/* 00079f66 */}
+
+CActivityIntentData CASPartsActivity::UpdateActivity(DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00079f74 */{
+/* 00079f74 */	this.m_IntentData.Clear();
+/* 00079f84 */	g_EndActivity = false;
+/* 00079f96 */	PARTS_BeginInput();
+/* 00079f9c */	for (; ; )
+/* 00079f9c */	{
+/* 00079f9c */		AFL_View_Update(true);
+/* 00079fa8 */		if (this.IsClickEndKey() || g_EndActivity)
+/* 00079fde */		{
+/* 00079fde */			this.m_IntentData.SetIntentType(1);
+/* 00079ff4 */		}
+/* 00079ff4 */		if (!this.m_IntentData.Empty())
+/* 0007a00c */		{
+/* 0007a00c */			bool Cancel = false;
+/* 0007a01e */			dgIntentActivityEvent(Cancel);
+/* 0007a046 */			if (Cancel)
+/* 0007a056 */			{
+/* 0007a056 */				g_EndActivity = false;
+/* 0007a068 */				this.m_IntentData.Clear();
+/* 0007a078 */				continue;
+/* 0007a07e */			}
+/* 0007a07e */			break;
+/* 0007a084 */		}
+/* 0007a084 */	}
+/* 0007a08a */	PARTS_EndInput();
+/* 0007a090 */	g_EndActivity = false;
+/* 0007a0a2 */	return this.m_IntentData;
+/* 0007a0b2 */}
+
+bool CASPartsActivity::IsClickEndKey()
+/* 0007a0c0 */{
+/* 0007a0c0 */	int Index;
+/* 0007a0d2 */	for (Index = 0; Index < this.m_EndKey.Numof(); ++Index)
+/* 0007a122 */	{
+/* 0007a122 */		if (this.m_EndKey[Index].IsClick(-2147483648))
+/* 0007a14a */		{
+/* 0007a14a */			return true;
+/* 0007a152 */		}
+/* 0007a152 */	}
+/* 0007a158 */	return false;
+/* 0007a160 */}
+
+bool CASPartsActivity::LoadActivity(CActivityIntentData ActivityIntentData, DG_PARTS_LoadedActivityHandler dgObject)
+/* 0007a16e */{
+/* 0007a16e */	int LastZ;
+/* 0007a180 */	this.m_ActivityName.Free();
+/* 0007a18a */	int i;
+/* 0007a19c */	for (i = 0; i < ActivityIntentData.m_Destination.Numof(); ++i)
+/* 0007a1f4 */	{
+/* 0007a1f4 */		ref CActivityDestinationData Destination = ActivityIntentData.m_Destination[i];
+/* 0007a22e */		string FileName = Destination.GetDestinationName();
+/* 0007a24c */		string Data = Destination.GetDestinationData();
+/* 0007a26a */		string Name = SYS_Activity_GetFreeName(FileName);
+/* 0007a288 */		if (Data.Empty())
+/* 0007a29a */		{
+/* 0007a29a */			if (!SYS_Activity_ReadFile(Name, FileName))
+/* 0007a2bc */			{
+/* 0007a2bc */				DIALOG_OK("アクティビティの読み込みに失敗しました【%s】" % FileName);
+/* 0007a2da */				return false;
+/* 0007a2e2 */			}
+/* 0007a2e2 */		}
+/* 0007a2e8 */		else if (!SYS_Activity_LoadEXText(Name, Data))
+/* 0007a30a */		{
+/* 0007a30a */			DIALOG_OK("バイナリアクティビティの読み込みに失敗しました");
+/* 0007a316 */			return false;
+/* 0007a31e */		}
+/* 0007a31e */		if (!this.BindEndType(Name))
+/* 0007a338 */		{
+/* 0007a338 */			DIALOG_OK("終了条件の構築に失敗しました【%s】" % FileName);
+/* 0007a356 */			return false;
+/* 0007a35e */		}
+/* 0007a35e */		if (!this.BindEndEvent(Name))
+/* 0007a378 */		{
+/* 0007a378 */			DIALOG_OK("終了用のイベント構築に失敗しました【%s】" % FileName);
+/* 0007a396 */			return false;
+/* 0007a39e */		}
+/* 0007a39e */		int RootPartsNumber = SYS_Activity_GetPartsNumber(Name, "ルートパーツ");
+/* 0007a3c0 */		if (RootPartsNumber == 0)
+/* 0007a3d8 */		{
+/* 0007a3d8 */			DIALOG_OK("アクティビティデータにルートパーツが存在しませんでした【%s】" % FileName);
+/* 0007a3f6 */			return false;
+/* 0007a3fe */		}
+/* 0007a3fe */		Ｐ＿Ｚ座標設定(RootPartsNumber, LastZ);
+/* 0007a418 */		LastZ = PARTS_GetAbsoluteMaxZ(RootPartsNumber) + 1;
+/* 0007a43c */		int Find = FileName.Find(".pact");
+/* 0007a45a */		if (Find != -1 && FileName.Length() - 5 == Find)
+/* 0007a4ae */		{
+/* 0007a4ae */			FileName = FileName.GetPart(0, Find);
+/* 0007a4d8 */		}
+/* 0007a4d8 */		SActivityNamePair Pair;
+/* 0007a4e8 */		Pair.Set(FileName, Name);
+/* 0007a50c */		this.m_ActivityName.PushBack(Pair);
+/* 0007a524 */	}
+/* 0007a536 */	for (i = 0; i < this.m_ActivityName.Numof(); ++i)
+/* 0007a586 */	{
+/* 0007a586 */		dgObject(this.m_ActivityName[i].m_FileName, this.m_ActivityName[i].m_Name);
+/* 0007a5e2 */	}
+/* 0007a5e8 */	return true;
+/* 0007a5f0 */}
+
+bool CASPartsActivity::BindEndEvent(string ActivityName)
+/* 0007a5fe */{
+/* 0007a5fe */	int NumofParts = SYS_Activity_NumofParts(ActivityName);
+/* 0007a61a */	int Index;
+/* 0007a62c */	for (Index = 0; Index < NumofParts; ++Index)
+/* 0007a676 */	{
+/* 0007a676 */		string PartsName;
+/* 0007a68a */		int PartsNumber;
+/* 0007a69c */		if (!SYS_Activity_GetParts(Index, ActivityName, PartsName, PartsNumber))
+/* 0007a6d0 */		{
+/* 0007a6d0 */			DIALOG_OK("パーツの取得に失敗しました");
+/* 0007a6dc */			return false;
+/* 0007a6e4 */		}
+/* 0007a6e4 */		if (!SYS_Activity_IsExistIntentData(ActivityName, PartsName))
+/* 0007a706 */		{
+/* 0007a706 */			continue;
+/* 0007a70c */		}
+/* 0007a70c */		AFL_Parts_AddMouseLClickEvent(PartsNumber, this.MouseLClickEvent);
+/* 0007a726 */	}
+/* 0007a72c */	return true;
+/* 0007a734 */}
+
+bool CASPartsActivity::BindEndType(string ActivityName)
+/* 0007a742 */{
+/* 0007a742 */	array@int KeyList;
+/* 0007a74c */	SYS_Activity_GetEndKeyList(ActivityName, KeyList);
+/* 0007a766 */	int Index;
+/* 0007a778 */	for (Index = 0; Index < KeyList.Numof(); ++Index)
+/* 0007a7c8 */	{
+/* 0007a7c8 */		this.m_EndKey.Realloc(this.m_EndKey.Numof() + 1);
+/* 0007a7f0 */		this.m_EndKey[this.m_EndKey.Numof() - 1].Init(KeyList[Index], true);
+/* 0007a836 */	}
+/* 0007a83c */	return true;
+/* 0007a844 */}
+
+bool CASPartsActivity::ReleaseActivity(DG_PARTS_ReleasingActivityHandler dgReleasingObject)
+/* 0007a852 */{
+/* 0007a852 */	int ActivityIndex;
+/* 0007a864 */	for (ActivityIndex = 0; ActivityIndex < this.m_ActivityName.Numof(); ++ActivityIndex)
+/* 0007a8b4 */	{
+/* 0007a8b4 */		string FileName = this.m_ActivityName[ActivityIndex].m_FileName;
+/* 0007a8e0 */		string Name = this.m_ActivityName[ActivityIndex].m_Name;
+/* 0007a90c */		dgReleasingObject(FileName, Name);
+/* 0007a940 */		if (!SYS_Activity_Release(Name))
+/* 0007a958 */		{
+/* 0007a958 */			DIALOG_OK("アクティビティの開放に失敗しました【%s】\n" % Name);
+/* 0007a976 */			return false;
+/* 0007a97e */		}
+/* 0007a97e */	}
+/* 0007a984 */	return true;
+/* 0007a98c */}
+
+void CASPartsActivity::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0007a99a */{
+/* 0007a99a */	string ActivityName = this.GetActivityName(ID);
+/* 0007a9ba */	string PartsName = SYS_Activity_GetPartsName(ActivityName, ID);
+/* 0007a9e2 */	if (SYS_Activity_IsExistIntentData(ActivityName, PartsName))
+/* 0007aa02 */	{
+/* 0007aa02 */		array@string List;
+/* 0007aa0c */		SYS_Activity_GetIntentDataDestination(ActivityName, PartsName, List);
+/* 0007aa30 */		this.m_IntentData.AddRangeDestination(List);
+/* 0007aa4a */		this.m_IntentData.SetIntentType(SYS_Activity_GetIntentDataType(ActivityName, PartsName));
+/* 0007aa7e */	}
+/* 0007aa7e */}
+
+string CASPartsActivity::GetActivityName(int PartsNumber)
+/* 0007aa86 */{
+/* 0007aa86 */	int ActivityIndex;
+/* 0007aa98 */	for (ActivityIndex = 0; ActivityIndex < this.m_ActivityName.Numof(); ++ActivityIndex)
+/* 0007aae8 */	{
+/* 0007aae8 */		string Name = this.m_ActivityName[ActivityIndex].m_Name;
+/* 0007ab14 */		if (SYS_Activity_IsExistPartsByNumber(Name, PartsNumber))
+/* 0007ab34 */		{
+/* 0007ab34 */			return Name;
+/* 0007ab40 */		}
+/* 0007ab40 */	}
+/* 0007ab46 */	return "";
+/* 0007ab4e */}
+

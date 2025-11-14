@@ -1,0 +1,137 @@
+bool AFL_AFA_IsExist(string ArchiveName)
+/* 00171376 */{
+/* 00171376 */	return AFAFactory.IsExistArchive(ArchiveName);
+/* 0017138c */}
+
+bool AFL_AFA_CG_Add(string ArchiveName)
+/* 001713a0 */{
+/* 001713a0 */	return AFAFactory.LoadArchive(2, ArchiveName);
+/* 001713bc */}
+
+bool AFL_AFA_Flat_Add(string ArchiveName)
+/* 001713d0 */{
+/* 001713d0 */	return AFAFactory.LoadArchive(3, ArchiveName);
+/* 001713ec */}
+
+bool AFL_AFA_Sound_Add(string ArchiveName)
+/* 00171400 */{
+/* 00171400 */	return AFAFactory.LoadArchive(5, ArchiveName);
+/* 0017141c */}
+
+int AFL_AFA_CG_Numof()
+/* 00171430 */{
+/* 00171430 */	return AFAFactory.GetCountOfData(2);
+/* 00171442 */}
+
+int AFL_AFA_Flat_Numof()
+/* 00171456 */{
+/* 00171456 */	return AFAFactory.GetCountOfData(3);
+/* 00171468 */}
+
+int AFL_AFA_Sound_Numof()
+/* 0017147c */{
+/* 0017147c */	return AFAFactory.GetCountOfData(5);
+/* 0017148e */}
+
+string AFL_AFA_CG_GetTitle(int Index)
+/* 001714a2 */{
+/* 001714a2 */	string Title;
+/* 001714b6 */	AFAFactory.GetTitleByIndex(2, Index, Title);
+/* 001714da */	return Title;
+/* 001714e6 */}
+
+string AFL_AFA_Flat_GetTitle(int Index)
+/* 001714fa */{
+/* 001714fa */	string Title;
+/* 0017150e */	AFAFactory.GetTitleByIndex(3, Index, Title);
+/* 00171532 */	return Title;
+/* 0017153e */}
+
+string AFL_AFA_Sound_GetTitle(int Index)
+/* 00171552 */{
+/* 00171552 */	string Title;
+/* 00171566 */	AFAFactory.GetTitleByIndex(5, Index, Title);
+/* 0017158a */	return Title;
+/* 00171596 */}
+
+int AFL_AFA_CG_SearchTitle(string Title)
+/* 001715aa */{
+/* 001715aa */	return AFAFactory.SearchTitle(2, Title);
+/* 001715c6 */}
+
+int AFL_AFA_Flat_SearchTitle(string Title)
+/* 001715da */{
+/* 001715da */	return AFAFactory.SearchTitle(3, Title);
+/* 001715f6 */}
+
+int AFL_AFA_Sound_SearchTitle(string Title)
+/* 0017160a */{
+/* 0017160a */	return AFAFactory.SearchTitle(5, Title);
+/* 00171626 */}
+
+int AFL_AFA_CG_PrefixSearchTitle(string Title)
+/* 0017163a */{
+/* 0017163a */	return AFAFactory.PrefixSearchTitle(2, Title);
+/* 00171656 */}
+
+int AFL_AFA_Flat_PrefixSearchTitle(string Title)
+/* 0017166a */{
+/* 0017166a */	return AFAFactory.PrefixSearchTitle(3, Title);
+/* 00171686 */}
+
+int AFL_AFA_Sound_PrefixSearchTitle(string Title)
+/* 0017169a */{
+/* 0017169a */	return AFAFactory.PrefixSearchTitle(5, Title);
+/* 001716b6 */}
+
+int AFL_AFA_CG_SuffixSearchTitle(string Title)
+/* 001716ca */{
+/* 001716ca */	return AFAFactory.SuffixSearchTitle(2, Title);
+/* 001716e6 */}
+
+int AFL_AFA_Flat_SuffixSearchTitle(string Title)
+/* 001716fa */{
+/* 001716fa */	return AFAFactory.SuffixSearchTitle(3, Title);
+/* 00171716 */}
+
+int AFL_AFA_Sound_SuffixSearchTitle(string Title)
+/* 0017172a */{
+/* 0017172a */	return AFAFactory.SuffixSearchTitle(5, Title);
+/* 00171746 */}
+
+int AFL_AFA_CG_GetCountOfSearchData()
+/* 0017175a */{
+/* 0017175a */	return AFAFactory.GetCountOfSearchData(2);
+/* 0017176c */}
+
+int AFL_AFA_Flat_GetCountOfSearchData()
+/* 00171780 */{
+/* 00171780 */	return AFAFactory.GetCountOfSearchData(3);
+/* 00171792 */}
+
+int AFL_AFA_Sound_GetCountOfSearchData()
+/* 001717a6 */{
+/* 001717a6 */	return AFAFactory.GetCountOfSearchData(5);
+/* 001717b8 */}
+
+string AFL_AFA_CG_GetSearchTitleByIndex(int Index)
+/* 001717cc */{
+/* 001717cc */	string Title;
+/* 001717e0 */	AFAFactory.GetSearchTitleByIndex(2, Index, Title);
+/* 00171804 */	return Title;
+/* 00171810 */}
+
+string AFL_AFA_Flat_GetSearchTitleByIndex(int Index)
+/* 00171824 */{
+/* 00171824 */	string Title;
+/* 00171838 */	AFAFactory.GetSearchTitleByIndex(3, Index, Title);
+/* 0017185c */	return Title;
+/* 00171868 */}
+
+string AFL_AFA_Sound_GetSearchTitleByIndex(int Index)
+/* 0017187c */{
+/* 0017187c */	string Title;
+/* 00171890 */	AFAFactory.GetSearchTitleByIndex(5, Index, Title);
+/* 001718b4 */	return Title;
+/* 001718c0 */}
+

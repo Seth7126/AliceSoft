@@ -1,0 +1,89 @@
+FullScreenDeadEffect::FullScreenDeadEffect()
+/* 001ac6e6 */{
+/* 001ac6ee */	this.isFinish_ = false;
+/* 001ac700 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001ac726 */}
+
+void FullScreenDeadEffect::init()
+/* 001ac72e */{
+/* 001ac72e */	int i;
+/* 001ac740 */	for (i = 0; i < this.ef.Numof(); ++i)
+/* 001ac790 */	{
+/* 001ac790 */		this.ef[i].init(RAND(1024), RAND(768));
+/* 001ac7c4 */	}
+/* 001ac7ca */	this.initParts();
+/* 001ac7d2 */}
+
+void FullScreenDeadEffect::update()
+/* 001ac7da */{
+/* 001ac7dc */}
+
+void FullScreenDeadEffect::showOverlay(DG_GeneralCallback onFinish)
+/* 001ac7e2 */{
+/* 001ac7e2 */	array@PartsMotion m[2];
+/* 001ac7f8 */	m[0].setTime(2500);
+/* 001ac816 */	m[0].setAlpha(0, 255, 0);
+/* 001ac840 */	m[1].setTime(1000);
+/* 001ac85e */	this.setPartsShow();
+/* 001ac866 */	this.parts_[1].setShow(false);
+/* 001ac884 */	this.parent_.runMotionArray(m, onFinish);
+/* 001ac8ac */}
+
+void FullScreenDeadEffect::initParts()
+/* 001ac8b4 */{
+/* 001ac8b4 */	this.parts_[0].initAsPlaneImage(1024, 768, 255, 255, 255, 255);
+/* 001ac8f0 */	this.parts_[1].initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 001ac92c */	createPartsGroup(this.parent_, this.parts_, 30000);
+/* 001ac94c */	this.setPartsPos();
+/* 001ac954 */}
+
+void FullScreenDeadEffect::setPartsShow()
+/* 001ac95c */{
+/* 001ac95c */	int i;
+/* 001ac96e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001ac9be */	{
+/* 001ac9be */		this.parts_[i].setShow(true);
+/* 001ac9e0 */	}
+/* 001ac9e6 */	this.parent_.setShow(true);
+/* 001ac9fc */}
+
+void FullScreenDeadEffect::setPartsPos()
+/* 001aca04 */{
+/* 001aca06 */}
+
+void FullScreenDeadEffect::run(DG_GeneralCallback onFinish)
+/* 001aca0c */{
+/* 001aca0c */	this.onFinish_ = onFinish;
+/* 001aca26 */	int i;
+/* 001aca38 */	for (i = 0; i < this.ef.Numof(); ++i)
+/* 001aca88 */	{
+/* 001aca88 */		this.ef[i].run(i * 100);
+/* 001acab6 */	}
+/* 001acabc */	this.showOverlay(this.onFinishFlashIn);
+/* 001acace */}
+
+void FullScreenDeadEffect::onFinishFlashIn()
+/* 001acad6 */{
+/* 001acad6 */	int i;
+/* 001acae8 */	for (i = 0; i < this.ef.Numof(); ++i)
+/* 001acb38 */	{
+/* 001acb38 */		this.ef[i].stopLoop();
+/* 001acb54 */	}
+/* 001acb5a */	PartsMotion m;
+/* 001acb6a */	m = getStandardMotion(0);
+/* 001acb8a */	m.setTime(2500);
+/* 001acba0 */	this.parts_[1].setShow(true);
+/* 001acbbe */	this.parts_[1].runMotion(m, this.onFinishFadeOut);
+/* 001acbee */}
+
+void FullScreenDeadEffect::onFinishFadeOut()
+/* 001acbf6 */{
+/* 001acbf6 */	this.isFinish_ = true;
+/* 001acc08 */	this.onFinish_();
+/* 001acc28 */}
+
+bool FullScreenDeadEffect::isFinish()
+/* 001acc30 */{
+/* 001acc30 */	return this.isFinish_;
+/* 001acc3c */}
+

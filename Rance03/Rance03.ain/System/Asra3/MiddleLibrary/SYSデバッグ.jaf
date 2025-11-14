@@ -1,0 +1,70 @@
+void SYS_SelectEXNode(string TreePath, string NodeName, DG_SelectedEXNodeHandler dgObject)
+/* 0015660c */{
+/* 0015660c */	if (!system.IsDebugMode())
+/* 0015661a */	{
+/* 0015661a */		return;
+/* 0015661c */	}
+/* 0015661c */	for (; ; )
+/* 0015661c */	{
+/* 0015661c */		array@string NodeList;
+/* 00156626 */		EX_GetNodeNameList(TreePath, NodeList);
+/* 00156640 */		array@string EXNameList;
+/* 0015664a */		EX_GetEXNameList(TreePath, EXNameList);
+/* 00156664 */		if (NodeList.Empty() && EXNameList.Empty())
+/* 0015669c */		{
+/* 0015669c */			dgObject(TreePath, NodeName);
+/* 001566d0 */			EXNameList.Free();
+/* 001566da */			NodeList.Free();
+/* 001566e4 */			break;
+/* 001566ea */		}
+/* 001566ea */		int Index;
+/* 001566fc */		選択肢(2147483647, "■■■■■ ノードリスト ■■■■■", 0);
+/* 00156714 */		int NodeListBase = Index;
+/* 0015672a */		int NodeListIndex;
+/* 0015673c */		for (NodeListIndex = 0; NodeListIndex < NodeList.Numof(); ++Index, ++NodeListIndex)
+/* 0015679c */		{
+/* 0015679c */			選択肢(Index, NodeList[NodeListIndex], 0);
+/* 001567c8 */		}
+/* 001567ce */		選択肢(2147483647, "", 0);
+/* 001567e6 */		選択肢(2147483647, "■■■■■  定義リスト ■■■■■", 0);
+/* 001567fe */		int EXNameListBase = Index;
+/* 00156814 */		int EXNameListIndex;
+/* 00156826 */		for (EXNameListIndex = 0; EXNameListIndex < EXNameList.Numof(); ++Index, ++EXNameListIndex)
+/* 00156886 */		{
+/* 00156886 */			選択肢(Index, EXNameList[EXNameListIndex], 0);
+/* 001568b2 */		}
+/* 001568b8 */		選択肢(2147483647, "", 0);
+/* 001568d0 */		選択肢(2147483647, "-----------------", 0);
+/* 001568e8 */		選択肢(Index, "戻る", 0);
+/* 00156904 */		int 結果 = テスト選択();
+/* 00156916 */		if (Index < 結果)
+/* 00156932 */		{
+/* 00156932 */			EXNameList.Free();
+/* 0015693c */			NodeList.Free();
+/* 00156946 */			continue;
+/* 0015694c */		}
+/* 0015694c */		if (結果 < 0 || Index == 結果)
+/* 00156998 */		{
+/* 00156998 */			EXNameList.Free();
+/* 001569a2 */			NodeList.Free();
+/* 001569ac */			break;
+/* 001569b2 */		}
+/* 001569b2 */		NodeListIndex = 結果 - NodeListBase;
+/* 001569d4 */		if (0 <= NodeListIndex && NodeListIndex < NodeList.Numof())
+/* 00156a26 */		{
+/* 00156a26 */			SYS_SelectEXNode(TreePath + "." + NodeList[NodeListIndex], NodeList[NodeListIndex], dgObject);
+/* 00156a78 */			EXNameList.Free();
+/* 00156a82 */			NodeList.Free();
+/* 00156a8c */			continue;
+/* 00156a92 */		}
+/* 00156a92 */		EXNameListIndex = 結果 - EXNameListBase;
+/* 00156ab4 */		if (0 <= EXNameListIndex && EXNameListIndex < EXNameList.Numof())
+/* 00156b06 */		{
+/* 00156b06 */			dgObject(TreePath + "." + EXNameList[EXNameListIndex], EXNameList[EXNameListIndex]);
+/* 00156b66 */			EXNameList.Free();
+/* 00156b70 */			NodeList.Free();
+/* 00156b7a */			continue;
+/* 00156b80 */		}
+/* 00156b94 */	}
+/* 00156b94 */}
+

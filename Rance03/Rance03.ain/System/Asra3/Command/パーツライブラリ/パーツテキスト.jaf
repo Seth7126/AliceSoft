@@ -1,0 +1,173 @@
+void Ｐ＿テキスト設定(int パーツ番号, string テキスト, int 状態)
+/* 001617cc */{
+/* 001617cc */	PartsEngine.Parts_SetText(パーツ番号, テキスト, 状態);
+/* 001617f6 */}
+
+void Ｐ＿テキスト追加(int パーツ番号, string テキスト, int 状態)
+/* 00161804 */{
+/* 00161804 */	PartsEngine.Parts_AddPartsText(パーツ番号, テキスト, 状態);
+/* 0016182e */}
+
+string Ｐ＿テキスト取得(int パーツ番号, int 状態)
+/* 0016183c */{
+/* 0016183c */	string Out;
+/* 00161850 */	PartsEngine.GetTextPartsText(Out, パーツ番号, 状態);
+/* 00161878 */	return Out;
+/* 00161884 */}
+
+void Ｐ＿テキスト追加表示(int パーツ番号, string テキスト, int 時間, int 状態)
+/* 00161898 */{
+/* 00161898 */	int TotalTime = テキスト.Length() * 時間;
+/* 001618ba */	int EndIndex;
+/* 001618cc */	CASTimer Timer;
+/* 001618dc */	Timer.Reset();
+/* 001618ec */	for (; ; )
+/* 001618ec */	{
+/* 001618ec */		int Time = Timer.Get();
+/* 00161908 */		int Index = (テキスト.Length() * Time) / TotalTime;
+/* 00161936 */		if (Index >= テキスト.Length())
+/* 00161952 */		{
+/* 00161952 */			Index = テキスト.Length() - 1;
+/* 00161970 */		}
+/* 00161970 */		while (Index >= EndIndex)
+/* 0016198c */		{
+/* 0016198c */			string OneChar = テキスト.GetPart(EndIndex, 1);
+/* 001619b6 */			if (!OneChar.Empty())
+/* 001619ca */			{
+/* 001619ca */				Ｐ＿テキスト追加(パーツ番号, OneChar, 状態);
+/* 001619ee */			}
+/* 001619ee */			EndIndex++;
+/* 00161a02 */		}
+/* 00161a08 */		AFL_View_Update(true);
+/* 00161a14 */		if (Time >= TotalTime)
+/* 00161a30 */		{
+/* 00161a30 */			break;
+/* 00161a36 */		}
+/* 00161a36 */	}
+/* 00161a36 */}
+
+void Ｐ＿テキスト先頭行削除(int パーツ番号, int 状態)
+/* 00161a4a */{
+/* 00161a4a */	PartsEngine.Parts_DeletePartsTopTextLine(パーツ番号, 状態);
+/* 00161a6a */}
+
+void Ｐ＿テキスト表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 00161a78 */{
+/* 00161a78 */	PartsEngine.Parts_SetPartsTextSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 00161ac0 */}
+
+void Ｐ＿テキスト表示範囲取得(int パーツ番号, ref int Ｘ, ref int Ｙ, ref int 幅, ref int 高さ, int 状態)
+/* 00161ace */{
+/* 00161ace */	PartsEngine.GetPartsTextSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 00161b14 */}
+
+void Ｐ＿フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 00161b22 */{
+/* 00161b22 */	PartsEngine.Parts_SetFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 00161ba6 */}
+
+void Ｐ＿フォント種類設定(int パーツ番号, int 種類, int 状態)
+/* 00161bb4 */{
+/* 00161bb4 */	PartsEngine.Parts_SetPartsFontType(パーツ番号, 種類, 状態);
+/* 00161bde */}
+
+void Ｐ＿フォントサイズ設定(int パーツ番号, int サイズ, int 状態)
+/* 00161bec */{
+/* 00161bec */	PartsEngine.Parts_SetPartsFontSize(パーツ番号, サイズ, 状態);
+/* 00161c16 */}
+
+void Ｐ＿フォント色設定(int パーツ番号, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 00161c24 */{
+/* 00161c24 */	PartsEngine.Parts_SetPartsFontColor(パーツ番号, Ｒ, Ｇ, Ｂ, 状態);
+/* 00161c62 */}
+
+void Ｐ＿フォント太字幅設定(int パーツ番号, float 太字幅, int 状態)
+/* 00161c70 */{
+/* 00161c70 */	PartsEngine.Parts_SetPartsFontBoldWeight(パーツ番号, 太字幅, 状態);
+/* 00161c9a */}
+
+void Ｐ＿フォント縁取り色設定(int パーツ番号, int Ｒ, int Ｇ, int Ｂ, int 状態)
+/* 00161ca8 */{
+/* 00161ca8 */	PartsEngine.Parts_SetPartsFontEdgeColor(パーツ番号, Ｒ, Ｇ, Ｂ, 状態);
+/* 00161ce6 */}
+
+void Ｐ＿フォント縁取り幅設定(int パーツ番号, float 縁取り幅, int 状態)
+/* 00161cf4 */{
+/* 00161cf4 */	PartsEngine.Parts_SetPartsFontEdgeWeight(パーツ番号, 縁取り幅, 状態);
+/* 00161d1e */}
+
+void Ｐ＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int Ｒ, ref int Ｇ, ref int Ｂ, ref float 太字幅, ref int 縁取りＲ, ref int 縁取りＧ, ref int 縁取りＢ, ref float 縁取り幅, int 状態)
+/* 00161d2c */{
+/* 00161d2c */	PartsEngine.GetPartsTextFontProperty(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 00161dae */}
+
+void Ｐ＿テキスト字間隔設定(int パーツ番号, int _字間隔, int 状態)
+/* 00161dbc */{
+/* 00161dbc */	PartsEngine.Parts_SetTextCharSpace(パーツ番号, _字間隔, 状態);
+/* 00161de6 */}
+
+int Ｐ＿テキスト字間隔取得(int パーツ番号, int 状態)
+/* 00161df4 */{
+/* 00161df4 */	return PartsEngine.Parts_GetTextCharSpace(パーツ番号, 状態);
+/* 00161e14 */}
+
+void Ｐ＿テキスト行間隔設定(int パーツ番号, int _行間隔, int 状態)
+/* 00161e28 */{
+/* 00161e28 */	PartsEngine.Parts_SetTextLineSpace(パーツ番号, _行間隔, 状態);
+/* 00161e52 */}
+
+int Ｐ＿テキスト行間隔取得(int パーツ番号, int 状態)
+/* 00161e60 */{
+/* 00161e60 */	return PartsEngine.Parts_GetTextLineSpace(パーツ番号, 状態);
+/* 00161e80 */}
+
+void Ｐ＿テキスト表示時間設定(int パーツ番号, int 時間, int 状態)
+/* 00161e94 */{
+/* 00161e94 */	PartsEngine.Parts_SetTextShowTime(パーツ番号, 時間, 状態);
+/* 00161ebc */}
+
+int Ｐ＿テキスト表示時間取得(int パーツ番号, int 状態)
+/* 00161eca */{
+/* 00161eca */	return PartsEngine.Parts_GetTextShowTime(パーツ番号, 状態);
+/* 00161eea */}
+
+void Ｐ＿テキスト位置設定(int パーツ番号, int 位置, int 状態)
+/* 00161efe */{
+/* 00161efe */	PartsEngine.Parts_SetTextPos(パーツ番号, 位置, 状態);
+/* 00161f26 */}
+
+int Ｐ＿テキスト位置取得(int パーツ番号, int 状態)
+/* 00161f34 */{
+/* 00161f34 */	return PartsEngine.Parts_GetTextPos(パーツ番号, 状態);
+/* 00161f54 */}
+
+void Ｐ＿テキストタグ有効設定(int パーツ番号, bool 有効, int 状態)
+/* 00161f68 */{
+/* 00161f68 */	PartsEngine.Parts_SetTextEnableTag(パーツ番号, 有効, 状態);
+/* 00161f90 */}
+
+bool Ｐ＿テキストタグ有効設定取得(int パーツ番号, int 状態)
+/* 00161f9e */{
+/* 00161f9e */	return PartsEngine.Parts_IsTextEnableTag(パーツ番号, 状態);
+/* 00161fbe */}
+
+void Ｐ＿テキストルビフォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 00161fd2 */{
+/* 00161fd2 */	PartsEngine.Parts_SetRubyFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 00162054 */}
+
+void Ｐ＿テキストルビフォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int Ｒ, ref int Ｇ, ref int Ｂ, ref float 太字幅, ref int 縁取りＲ, ref int 縁取りＧ, ref int 縁取りＢ, ref float 縁取り幅, int 状態)
+/* 00162062 */{
+/* 00162062 */	PartsEngine.Parts_GetRubyFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 001620e4 */}
+
+void Ｐ＿テキストルビ字間隔設定(int パーツ番号, int _字間隔, int 状態)
+/* 001620f2 */{
+/* 001620f2 */	PartsEngine.Parts_SetRubyCharSpace(パーツ番号, _字間隔, 状態);
+/* 0016211a */}
+
+int Ｐ＿テキストルビ字間隔取得(int パーツ番号, int 状態)
+/* 00162128 */{
+/* 00162128 */	return PartsEngine.Parts_GetRubyCharSpace(パーツ番号, 状態);
+/* 00162148 */}
+

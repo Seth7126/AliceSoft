@@ -1,0 +1,161 @@
+void 制御／プロローグ／初期設定()
+/* 00236994 */{
+/* 00236994 */	プロット設定();
+/* 0023699a */	g_party.setMaxCount(5);
+/* 002369b0 */	制御／パーティ／プレイヤー設定("かなみ", false);
+/* 002369c2 */	制御／マップ／経路追加("アイス", "烈火鉱山", true);
+/* 002369da */	制御／マップ／経路追加("烈火鉱山", "リスの洞窟", true);
+/* 002369f2 */	g_playerCommonParam.addGold(256);
+/* 00236a08 */	字初期値(0, 256);
+/* 00236a1a */	字サイズ初期値(0, 36);
+/* 00236a2c */	字間隔(0, -1, 5);
+/* 00236a44 */	選択文字設定(1, 256, 30, 255, 255, 255);
+/* 00236a6e */	制御／プロローグ／リア();
+/* 00236a74 */}
+
+void 制御／プロローグ／初期設定／レベル()
+/* 00236a82 */{
+/* 00236a82 */	getPlayerFromId("３号").setMaxHp(8800);
+/* 00236ab0 */	getPlayerFromId("３号").setHp(8800);
+/* 00236ae0 */	getPlayerFromId("３号").setStrength(1600);
+/* 00236b0e */	getPlayerFromId("３号").setMind(0);
+/* 00236b3c */	getPlayerFromId("３号").setDexterity(40);
+/* 00236b6a */	getPlayerFromId("ランス").setMaxHp(24);
+/* 00236b98 */	getPlayerFromId("ランス").setStrength(3);
+/* 00236bc6 */	getPlayerFromId("ランス").setMind(3);
+/* 00236bf4 */	getPlayerFromId("ランス").setDexterity(2);
+/* 00236c22 */	制御／レベル設定("ランス", 9);
+/* 00236c34 */	getPlayerFromId("シィル").setMaxHp(18);
+/* 00236c62 */	getPlayerFromId("シィル").setStrength(2);
+/* 00236c90 */	getPlayerFromId("シィル").setMind(4);
+/* 00236cbe */	getPlayerFromId("シィル").setDexterity(2);
+/* 00236cec */	制御／レベル設定("シィル", 10);
+/* 00236cfe */	getPlayerFromId("リア").setMaxHp(12);
+/* 00236d2c */	getPlayerFromId("リア").setStrength(1);
+/* 00236d5a */	getPlayerFromId("リア").setMind(4);
+/* 00236d88 */	getPlayerFromId("リア").setDexterity(2);
+/* 00236db6 */	制御／レベル設定("リア", 17);
+/* 00236dc8 */	getPlayerFromId("マリス").setMaxHp(24);
+/* 00236df6 */	getPlayerFromId("マリス").setStrength(3);
+/* 00236e24 */	getPlayerFromId("マリス").setMind(5);
+/* 00236e52 */	getPlayerFromId("マリス").setDexterity(4);
+/* 00236e80 */	制御／レベル設定("マリス", 35);
+/* 00236e92 */	getPlayerFromId("かなみ").setMaxHp(21);
+/* 00236ec0 */	getPlayerFromId("かなみ").setStrength(2);
+/* 00236eee */	getPlayerFromId("かなみ").setMind(2);
+/* 00236f1c */	getPlayerFromId("かなみ").setDexterity(5);
+/* 00236f4a */	制御／レベル設定("かなみ", 11);
+/* 00236f5c */	getPlayerFromId("フェリス").setMaxHp(24);
+/* 00236f8a */	getPlayerFromId("フェリス").setStrength(4);
+/* 00236fb8 */	getPlayerFromId("フェリス").setMind(5);
+/* 00236fe6 */	getPlayerFromId("フェリス").setDexterity(3);
+/* 00237014 */	制御／レベル設定("フェリス", 20);
+/* 00237026 */	getPlayerFromId("マリア").setMaxHp(18);
+/* 00237054 */	getPlayerFromId("マリア").setStrength(2);
+/* 00237082 */	getPlayerFromId("マリア").setMind(4);
+/* 002370b0 */	getPlayerFromId("マリア").setDexterity(3);
+/* 002370de */	制御／レベル設定("マリア", 21);
+/* 002370f0 */	getPlayerFromId("志津香").setMaxHp(15);
+/* 0023711e */	getPlayerFromId("志津香").setStrength(3);
+/* 0023714c */	getPlayerFromId("志津香").setMind(5);
+/* 0023717a */	getPlayerFromId("志津香").setDexterity(3);
+/* 002371a8 */	制御／レベル設定("志津香", 19);
+/* 002371ba */	getPlayerFromId("ミリ").setMaxHp(15);
+/* 002371e8 */	getPlayerFromId("ミリ").setStrength(5);
+/* 00237216 */	getPlayerFromId("ミリ").setMind(2);
+/* 00237244 */	getPlayerFromId("ミリ").setDexterity(4);
+/* 00237272 */	制御／レベル設定("ミリ", 19);
+/* 00237284 */	getPlayerFromId("ミル").setMaxHp(18);
+/* 002372b2 */	getPlayerFromId("ミル").setStrength(4);
+/* 002372e0 */	getPlayerFromId("ミル").setMind(4);
+/* 0023730e */	getPlayerFromId("ミル").setDexterity(4);
+/* 0023733c */	制御／レベル設定("ミル", 21);
+/* 0023734e */	getPlayerFromId("セル").setMaxHp(15);
+/* 0023737c */	getPlayerFromId("セル").setStrength(5);
+/* 002373aa */	getPlayerFromId("セル").setMind(2);
+/* 002373d8 */	getPlayerFromId("セル").setDexterity(1);
+/* 00237406 */	制御／レベル設定("セル", 24);
+/* 00237418 */	getPlayerFromId("バレス").setMaxHp(18);
+/* 00237446 */	getPlayerFromId("バレス").setStrength(40);
+/* 00237474 */	getPlayerFromId("バレス").setMind(2);
+/* 002374a2 */	getPlayerFromId("バレス").setDexterity(58);
+/* 002374d0 */	制御／レベル設定("バレス", 36);
+/* 002374e2 */	getPlayerFromId("スー").setMaxHp(18);
+/* 00237510 */	getPlayerFromId("スー").setStrength(4);
+/* 0023753e */	getPlayerFromId("スー").setMind(5);
+/* 0023756c */	getPlayerFromId("スー").setDexterity(4);
+/* 0023759a */	制御／レベル設定("スー", 24);
+/* 002375ac */	getPlayerFromId("リック").setMaxHp(21);
+/* 002375da */	getPlayerFromId("リック").setStrength(3);
+/* 00237608 */	getPlayerFromId("リック").setMind(1);
+/* 00237636 */	getPlayerFromId("リック").setDexterity(3);
+/* 00237664 */	制御／レベル設定("リック", 31);
+/* 00237676 */	getPlayerFromId("メナド").setMaxHp(18);
+/* 002376a4 */	getPlayerFromId("メナド").setStrength(3);
+/* 002376d2 */	getPlayerFromId("メナド").setMind(2);
+/* 00237700 */	getPlayerFromId("メナド").setDexterity(4);
+/* 0023772e */	制御／レベル設定("メナド", 24);
+/* 00237740 */	getPlayerFromId("ユラン").setMaxHp(15);
+/* 0023776e */	getPlayerFromId("ユラン").setStrength(4);
+/* 0023779c */	getPlayerFromId("ユラン").setMind(3);
+/* 002377ca */	getPlayerFromId("ユラン").setDexterity(5);
+/* 002377f8 */	制御／レベル設定("ユラン", 26);
+/* 0023780a */	getPlayerFromId("レイラ").setMaxHp(12);
+/* 00237838 */	getPlayerFromId("レイラ").setStrength(3);
+/* 00237866 */	getPlayerFromId("レイラ").setMind(2);
+/* 00237894 */	getPlayerFromId("レイラ").setDexterity(4);
+/* 002378c2 */	制御／レベル設定("レイラ", 16);
+/* 002378d4 */	getPlayerFromId("ジュリア").setMaxHp(18);
+/* 00237902 */	getPlayerFromId("ジュリア").setStrength(1);
+/* 00237930 */	getPlayerFromId("ジュリア").setMind(1);
+/* 0023795e */	getPlayerFromId("ジュリア").setDexterity(1);
+/* 0023798c */	制御／レベル設定("ジュリア", 9);
+/* 0023799e */	getPlayerFromId("アテン").setMaxHp(21);
+/* 002379cc */	getPlayerFromId("アテン").setStrength(1);
+/* 002379fa */	getPlayerFromId("アテン").setMind(5);
+/* 00237a28 */	getPlayerFromId("アテン").setDexterity(2);
+/* 00237a56 */	制御／レベル設定("アテン", 25);
+/* 00237a68 */	getPlayerFromId("ネカイ").setMaxHp(12);
+/* 00237a96 */	getPlayerFromId("ネカイ").setStrength(2);
+/* 00237ac4 */	getPlayerFromId("ネカイ").setMind(1);
+/* 00237af2 */	getPlayerFromId("ネカイ").setDexterity(5);
+/* 00237b20 */	制御／レベル設定("ネカイ", 21);
+/* 00237b32 */	getPlayerFromId("バーニング").setMaxHp(30);
+/* 00237b60 */	getPlayerFromId("バーニング").setStrength(4);
+/* 00237b8e */	getPlayerFromId("バーニング").setMind(1);
+/* 00237bbc */	getPlayerFromId("バーニング").setDexterity(4);
+/* 00237bea */	制御／レベル設定("バーニング", 15);
+/* 00237bfc */	getPlayerFromId("イェリコ").setMaxHp(18);
+/* 00237c2a */	getPlayerFromId("イェリコ").setStrength(4);
+/* 00237c58 */	getPlayerFromId("イェリコ").setMind(1);
+/* 00237c86 */	getPlayerFromId("イェリコ").setDexterity(5);
+/* 00237cb4 */	制御／レベル設定("イェリコ", 1);
+/* 00237cc6 */}
+
+void 制御／プロローグ／リア()
+/* 00237cd4 */{
+/* 00237cd4 */	ＥＶ／プロローグ／リア();
+/* 00237cda */	ＥＶ／リア／祈る();
+/* 00237ce0 */	制御／文字列フラグ設定("俺のメモ", "急いでここから脱出しないと！", 1000);
+/* 00237cf8 */	制御／シーン設定／ダンジョン("プロローグ", 0, 0);
+/* 00237d10 */}
+
+void 制御／プロローグ／ランス()
+/* 00237d1e */{
+/* 00237d1e */	制御／数値フラグ設定("レイラ経験値", getPlayerFromId("レイラ").getExp());
+/* 00237d52 */	制御／パーティ／プレイヤー削除("レイラ", false);
+/* 00237d64 */	制御／パーティ／プレイヤー設定("ランス", false);
+/* 00237d76 */	制御／パーティ／プレイヤー設定("シィル", false);
+/* 00237d88 */	制御／ＨＰ回復／最大("かなみ");
+/* 00237d94 */	制御／ウィリス設定(true);
+/* 00237da0 */	ＥＶ／プロローグ／アイゼル();
+/* 00237da6 */	ＥＶ／プロローグ／ランス();
+/* 00237dac */	ＥＶ／シィル／台所Ｈ／初回();
+/* 00237db2 */	ＥＶ／プロローグ／ランス／Ｈ後／初回();
+/* 00237db8 */	ＥＶ／かなみ／フェラチオＨ／初回();
+/* 00237dbe */	ＥＶ／プロローグ／ランス／Ｈ後／二回目();
+/* 00237dc4 */	制御／アイテム設定("リーザス聖盾");
+/* 00237dd0 */	制御／文字列フラグ設定("俺のメモ", "まずは近くの武器屋に行って、|売っぱらった聖剣と聖鎧を買い戻すぞ", 1010);
+/* 00237de8 */	g_gameSceneManager.setMapAdv("アイス");
+/* 00237dfe */}
+

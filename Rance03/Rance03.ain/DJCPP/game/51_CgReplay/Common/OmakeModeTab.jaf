@@ -1,0 +1,82 @@
+OmakeModeTab::OmakeModeTab()
+/* 001c009e */{
+/* 001c00a6 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001c00cc */}
+
+void OmakeModeTab::init(int count, bool isMirrorPieceMode)
+/* 001c00d4 */{
+/* 001c00d4 */	this.tab_.Alloc(count);
+/* 001c00ee */	int i;
+/* 001c0100 */	for (i = 0; i < this.tab_.Numof(); ++i)
+/* 001c0150 */	{
+/* 001c0150 */		string n;
+/* 001c0164 */		if (isMirrorPieceMode)
+/* 001c0174 */		{
+/* 001c0174 */			array@string p;
+/* 001c017e */			p.PushBack("Ａ");
+/* 001c018e */			p.PushBack("Ｂ");
+/* 001c019e */			p.PushBack("Ｃ");
+/* 001c01ae */			n = "システム／タブ／%s" % p[i];
+/* 001c01ea */		}
+/* 001c01f0 */		else
+/* 001c01f0 */		{
+/* 001c01f0 */			n = "システム／タブ／%D" % (i + 1);
+/* 001c021e */		}
+/* 001c021e */		this.tab_[i].init(n, "", "", false);
+/* 001c0256 */		this.tab_[i].setPos(15 + i * 125, 36);
+/* 001c0292 */		this.tab_[i].setClickCallback(this.onClick, i);
+/* 001c02c2 */	}
+/* 001c02c8 */}
+
+void OmakeModeTab::setOnClickCallback(DG_OnClickOmakeModeTab cb)
+/* 001c02d0 */{
+/* 001c02d0 */	this.cb_ = cb;
+/* 001c02ea */}
+
+void OmakeModeTab::update()
+/* 001c02f2 */{
+/* 001c02f4 */}
+
+void OmakeModeTab::fadeIn(bool val, unknown_delegate onFinish)
+/* 001c02fa */{
+/* 001c02fa */	this.setPartsShow();
+/* 001c0302 */	int i;
+/* 001c0314 */	for (i = 0; i < this.tab_.Numof(); ++i)
+/* 001c0364 */	{
+/* 001c0364 */		this.tab_[i].fadeIn(val);
+/* 001c038a */	}
+/* 001c0390 */}
+
+void OmakeModeTab::initParts()
+/* 001c0398 */{
+/* 001c0398 */	this.setPartsPos();
+/* 001c03a0 */}
+
+void OmakeModeTab::setPartsShow()
+/* 001c03a8 */{
+/* 001c03a8 */	int i;
+/* 001c03ba */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001c040a */	{
+/* 001c040a */		this.parts_[i].setShow(true);
+/* 001c042c */	}
+/* 001c0432 */	this.parent_.setShow(true);
+/* 001c0448 */}
+
+void OmakeModeTab::setPartsPos()
+/* 001c0450 */{
+/* 001c0452 */}
+
+void OmakeModeTab::onClick(int index)
+/* 001c0458 */{
+/* 001c0458 */	this.cb_(index);
+/* 001c0482 */}
+
+void OmakeModeTab::setCurrentPage(int page)
+/* 001c048a */{
+/* 001c048a */	int i;
+/* 001c049c */	for (i = 0; i < this.tab_.Numof(); ++i)
+/* 001c04ec */	{
+/* 001c04ec */		this.tab_[i].setEnable(page != i);
+/* 001c0520 */	}
+/* 001c0526 */}
+

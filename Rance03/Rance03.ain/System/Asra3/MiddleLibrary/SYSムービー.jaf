@@ -1,0 +1,23 @@
+void SYS_Movie_Play(string ファイル名, bool キーキャンセル, int nBackColorR, int nBackColorG, int nBackColorB, int nSoundGroupNum)
+/* 0014d478 */{
+/* 0014d478 */	if (AFL_IsKeyDown(27))
+/* 0014d48a */	{
+/* 0014d48a */		return;
+/* 0014d48c */	}
+/* 0014d48c */	bool bPrevInvalidateFrameSkip = AFL_GetInvalidateFrameSkipWhileMessageSkip();
+/* 0014d49e */	AFL_SetInvalidateFrameSkipWhileMessageSkip(true);
+/* 0014d4aa */	bool bPrev既読スキップモードマーク表示許可 = SYS_スキップモードマーク表示許可フラグ取得();
+/* 0014d4bc */	bool bPrevオートモードマーク表示許可 = SYS_オートモードマーク表示許可フラグ取得();
+/* 0014d4ce */	既読スキップモードマーク表示許可設定(false);
+/* 0014d4da */	オートモードマーク表示許可設定(false);
+/* 0014d4e6 */	CDrawMovie MovieObject;
+/* 0014d4f6 */	MovieObject.SetBackColor(nBackColorR, nBackColorG, nBackColorB);
+/* 0014d524 */	if (!MovieObject.Play(ファイル名, nSoundGroupNum, キーキャンセル))
+/* 0014d55a */	{
+/* 0014d55a */		system.Error("【 %s 】\nムービー再生に失敗しました" % ファイル名);
+/* 0014d57a */	}
+/* 0014d57a */	既読スキップモードマーク表示許可設定(bPrev既読スキップモードマーク表示許可);
+/* 0014d58a */	オートモードマーク表示許可設定(bPrevオートモードマーク表示許可);
+/* 0014d59a */	AFL_SetInvalidateFrameSkipWhileMessageSkip(bPrevInvalidateFrameSkip);
+/* 0014d5aa */}
+

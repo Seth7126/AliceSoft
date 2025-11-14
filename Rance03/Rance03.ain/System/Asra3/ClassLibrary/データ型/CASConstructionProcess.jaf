@@ -1,0 +1,586 @@
+CASConstructionProcess::CASConstructionProcess()
+/* 000021e0 */{
+/* 000021e8 */	this.Clear();
+/* 000021f0 */}
+
+void CASConstructionProcess::Clear()
+/* 000021f8 */{
+/* 000021f8 */	this.m_Command = -1;
+/* 0000220a */	this.m_InterpolationType = 1;
+/* 0000221c */	this.m_nSrcX = 0;
+/* 0000222e */	this.m_nSrcY = 0;
+/* 00002240 */	this.m_nSrcWidth = 0;
+/* 00002252 */	this.m_nSrcHeight = 0;
+/* 00002264 */	this.m_nDestX = 0;
+/* 00002276 */	this.m_nDestY = 0;
+/* 00002288 */	this.m_nDestX2 = 0;
+/* 0000229a */	this.m_nDestY2 = 0;
+/* 000022ac */	this.m_nDestWidth = 0;
+/* 000022be */	this.m_nDestHeight = 0;
+/* 000022d0 */	this.m_nR = 0;
+/* 000022e2 */	this.m_nG = 0;
+/* 000022f4 */	this.m_nB = 0;
+/* 00002306 */	this.m_nA = 0;
+/* 00002318 */	this.m_nR2 = 0;
+/* 0000232a */	this.m_nG2 = 0;
+/* 0000233c */	this.m_nB2 = 0;
+/* 0000234e */	this.m_CharSpace = 0;
+/* 00002360 */	this.m_LineSpace = 0;
+/* 00002372 */	this.m_FullSize = false;
+/* 00002384 */	this.m_Text = "";
+/* 00002398 */	this.m_CGName = "";
+/* 000023ac */	CASCharSpriteProperty Property;
+/* 000023bc */	this.m_Font = Property;
+/* 000023de */}
+
+void CASConstructionProcess::SetCreate(int nWidth, int nHeight)
+/* 000023e6 */{
+/* 000023e6 */	this.Clear();
+/* 000023ee */	this.m_Command = 0;
+/* 00002400 */	this.m_nDestWidth = nWidth;
+/* 00002416 */	this.m_nDestHeight = nHeight;
+/* 0000242c */}
+
+void CASConstructionProcess::SetCreatePixelOnly(int nWidth, int nHeight)
+/* 00002434 */{
+/* 00002434 */	this.Clear();
+/* 0000243c */	this.m_Command = 1;
+/* 0000244e */	this.m_nDestWidth = nWidth;
+/* 00002464 */	this.m_nDestHeight = nHeight;
+/* 0000247a */}
+
+void CASConstructionProcess::SetCreateCG(string CGName)
+/* 00002482 */{
+/* 00002482 */	this.Clear();
+/* 0000248a */	this.m_Command = 2;
+/* 0000249c */	this.m_CGName = CGName;
+/* 000024b4 */}
+
+void CASConstructionProcess::SetFill(int nX, int nY, int nWidth, int nHeight, int nR, int nG, int nB)
+/* 000024bc */{
+/* 000024bc */	this.Clear();
+/* 000024c4 */	this.m_Command = 3;
+/* 000024d6 */	this.m_nDestX = nX;
+/* 000024ec */	this.m_nDestY = nY;
+/* 00002502 */	this.m_nDestWidth = nWidth;
+/* 00002518 */	this.m_nDestHeight = nHeight;
+/* 0000252e */	this.m_nR = nR;
+/* 00002544 */	this.m_nG = nG;
+/* 0000255a */	this.m_nB = nB;
+/* 00002570 */}
+
+void CASConstructionProcess::SetFillAlphaColor(int nX, int nY, int nWidth, int nHeight, int nR, int nG, int nB, int nA)
+/* 00002578 */{
+/* 00002578 */	this.Clear();
+/* 00002580 */	this.m_Command = 4;
+/* 00002592 */	this.m_nDestX = nX;
+/* 000025a8 */	this.m_nDestY = nY;
+/* 000025be */	this.m_nDestWidth = nWidth;
+/* 000025d4 */	this.m_nDestHeight = nHeight;
+/* 000025ea */	this.m_nR = nR;
+/* 00002600 */	this.m_nG = nG;
+/* 00002616 */	this.m_nB = nB;
+/* 0000262c */	this.m_nA = nA;
+/* 00002642 */}
+
+void CASConstructionProcess::SetFillAMap(int nX, int nY, int nWidth, int nHeight, int nAlpha)
+/* 0000264a */{
+/* 0000264a */	this.Clear();
+/* 00002652 */	this.m_Command = 5;
+/* 00002664 */	this.m_nDestX = nX;
+/* 0000267a */	this.m_nDestY = nY;
+/* 00002690 */	this.m_nDestWidth = nWidth;
+/* 000026a6 */	this.m_nDestHeight = nHeight;
+/* 000026bc */	this.m_nA = nAlpha;
+/* 000026d2 */}
+
+void CASConstructionProcess::SetFillWithAlpha(int nX, int nY, int nWidth, int nHeight, int nR, int nG, int nB, int nA)
+/* 000026da */{
+/* 000026da */	this.Clear();
+/* 000026e2 */	this.m_Command = 6;
+/* 000026f4 */	this.m_nDestX = nX;
+/* 0000270a */	this.m_nDestY = nY;
+/* 00002720 */	this.m_nDestWidth = nWidth;
+/* 00002736 */	this.m_nDestHeight = nHeight;
+/* 0000274c */	this.m_nR = nR;
+/* 00002762 */	this.m_nG = nG;
+/* 00002778 */	this.m_nB = nB;
+/* 0000278e */	this.m_nA = nA;
+/* 000027a4 */}
+
+void CASConstructionProcess::SetFillGradationHorizon(int nX, int nY, int nWidth, int nHeight, int nTopR, int nTopG, int nTopB, int nBottomR, int nBottomG, int nBottomB)
+/* 000027ac */{
+/* 000027ac */	this.Clear();
+/* 000027b4 */	this.m_Command = 9;
+/* 000027c6 */	this.m_nDestX = nX;
+/* 000027dc */	this.m_nDestY = nY;
+/* 000027f2 */	this.m_nDestWidth = nWidth;
+/* 00002808 */	this.m_nDestHeight = nHeight;
+/* 0000281e */	this.m_nR = nTopR;
+/* 00002834 */	this.m_nG = nTopG;
+/* 0000284a */	this.m_nB = nTopB;
+/* 00002860 */	this.m_nR2 = nBottomR;
+/* 00002876 */	this.m_nG2 = nBottomG;
+/* 0000288c */	this.m_nB2 = nBottomB;
+/* 000028a2 */}
+
+void CASConstructionProcess::SetDrawRect(int nX, int nY, int nWidth, int nHeight, int nR, int nG, int nB)
+/* 000028aa */{
+/* 000028aa */	this.Clear();
+/* 000028b2 */	this.m_Command = 10;
+/* 000028c4 */	this.m_nDestX = nX;
+/* 000028da */	this.m_nDestY = nY;
+/* 000028f0 */	this.m_nDestWidth = nWidth;
+/* 00002906 */	this.m_nDestHeight = nHeight;
+/* 0000291c */	this.m_nR = nR;
+/* 00002932 */	this.m_nG = nG;
+/* 00002948 */	this.m_nB = nB;
+/* 0000295e */}
+
+void CASConstructionProcess::SetCutCGBlend(string CGName, int DestX, int DestY, int SrcX, int SrcY, int DestWidth, int DestHeight, int InterpolationType)
+/* 00002966 */{
+/* 00002966 */	this.Clear();
+/* 0000296e */	this.m_Command = 11;
+/* 00002980 */	this.m_CGName = CGName;
+/* 00002998 */	this.m_nDestX = DestX;
+/* 000029ae */	this.m_nDestY = DestY;
+/* 000029c4 */	this.m_nDestWidth = DestWidth;
+/* 000029da */	this.m_nDestHeight = DestHeight;
+/* 000029f0 */	this.m_nSrcX = SrcX;
+/* 00002a06 */	this.m_nSrcY = SrcY;
+/* 00002a1c */	this.m_InterpolationType = InterpolationType;
+/* 00002a32 */}
+
+void CASConstructionProcess::SetCutCGCopy(string CGName, int DestX, int DestY, int SrcX, int SrcY, int DestWidth, int DestHeight, int InterpolationType)
+/* 00002a3a */{
+/* 00002a3a */	this.Clear();
+/* 00002a42 */	this.m_Command = 12;
+/* 00002a54 */	this.m_CGName = CGName;
+/* 00002a6c */	this.m_nDestX = DestX;
+/* 00002a82 */	this.m_nDestY = DestY;
+/* 00002a98 */	this.m_nDestWidth = DestWidth;
+/* 00002aae */	this.m_nDestHeight = DestHeight;
+/* 00002ac4 */	this.m_nSrcX = SrcX;
+/* 00002ada */	this.m_nSrcY = SrcY;
+/* 00002af0 */	this.m_InterpolationType = InterpolationType;
+/* 00002b06 */}
+
+void CASConstructionProcess::SetCutCGScaleBlend(string CGName, int DestX, int DestY, int DestWidth, int DestHeight, int SrcX, int SrcY, int SrcWidth, int SrcHeight, int InterpolationType)
+/* 00002b0e */{
+/* 00002b0e */	this.Clear();
+/* 00002b16 */	this.m_Command = 13;
+/* 00002b28 */	this.m_CGName = CGName;
+/* 00002b40 */	this.m_nDestX = DestX;
+/* 00002b56 */	this.m_nDestY = DestY;
+/* 00002b6c */	this.m_nDestWidth = DestWidth;
+/* 00002b82 */	this.m_nDestHeight = DestHeight;
+/* 00002b98 */	this.m_nSrcX = SrcX;
+/* 00002bae */	this.m_nSrcY = SrcY;
+/* 00002bc4 */	this.m_nSrcWidth = SrcWidth;
+/* 00002bda */	this.m_nSrcHeight = SrcHeight;
+/* 00002bf0 */	this.m_InterpolationType = InterpolationType;
+/* 00002c06 */}
+
+void CASConstructionProcess::SetCutCGScaleCopy(string CGName, int DestX, int DestY, int DestWidth, int DestHeight, int SrcX, int SrcY, int SrcWidth, int SrcHeight, int InterpolationType)
+/* 00002c0e */{
+/* 00002c0e */	this.Clear();
+/* 00002c16 */	this.m_Command = 14;
+/* 00002c28 */	this.m_CGName = CGName;
+/* 00002c40 */	this.m_nDestX = DestX;
+/* 00002c56 */	this.m_nDestY = DestY;
+/* 00002c6c */	this.m_nDestWidth = DestWidth;
+/* 00002c82 */	this.m_nDestHeight = DestHeight;
+/* 00002c98 */	this.m_nSrcX = SrcX;
+/* 00002cae */	this.m_nSrcY = SrcY;
+/* 00002cc4 */	this.m_nSrcWidth = SrcWidth;
+/* 00002cda */	this.m_nSrcHeight = SrcHeight;
+/* 00002cf0 */	this.m_InterpolationType = InterpolationType;
+/* 00002d06 */}
+
+void CASConstructionProcess::SetGrayFilter(int nX, int nY, int nWidth, int nHeight, bool FullSize)
+/* 00002d0e */{
+/* 00002d0e */	this.Clear();
+/* 00002d16 */	this.m_Command = 15;
+/* 00002d28 */	this.m_nDestX = nX;
+/* 00002d3e */	this.m_nDestY = nY;
+/* 00002d54 */	this.m_nDestWidth = nWidth;
+/* 00002d6a */	this.m_nDestHeight = nHeight;
+/* 00002d80 */	this.m_FullSize = FullSize;
+/* 00002d96 */}
+
+void CASConstructionProcess::SetAddFilter(int nX, int nY, int nWidth, int nHeight, int nR, int nG, int nB, bool FullSize)
+/* 00002d9e */{
+/* 00002d9e */	this.Clear();
+/* 00002da6 */	this.m_Command = 16;
+/* 00002db8 */	this.m_nDestX = nX;
+/* 00002dce */	this.m_nDestY = nY;
+/* 00002de4 */	this.m_nDestWidth = nWidth;
+/* 00002dfa */	this.m_nDestHeight = nHeight;
+/* 00002e10 */	this.m_nR = nR;
+/* 00002e26 */	this.m_nG = nG;
+/* 00002e3c */	this.m_nB = nB;
+/* 00002e52 */	this.m_FullSize = FullSize;
+/* 00002e68 */}
+
+void CASConstructionProcess::SetMulFilter(int nX, int nY, int nWidth, int nHeight, int nR, int nG, int nB, bool FullSize)
+/* 00002e70 */{
+/* 00002e70 */	this.Clear();
+/* 00002e78 */	this.m_Command = 17;
+/* 00002e8a */	this.m_nDestX = nX;
+/* 00002ea0 */	this.m_nDestY = nY;
+/* 00002eb6 */	this.m_nDestWidth = nWidth;
+/* 00002ecc */	this.m_nDestHeight = nHeight;
+/* 00002ee2 */	this.m_nR = nR;
+/* 00002ef8 */	this.m_nG = nG;
+/* 00002f0e */	this.m_nB = nB;
+/* 00002f24 */	this.m_FullSize = FullSize;
+/* 00002f3a */}
+
+void CASConstructionProcess::SetDrawLine(int nX1, int nY1, int nX2, int nY2, int nR, int nG, int nB, int nA)
+/* 00002f42 */{
+/* 00002f42 */	this.Clear();
+/* 00002f4a */	this.m_Command = 18;
+/* 00002f5c */	this.m_nDestX = nX1;
+/* 00002f72 */	this.m_nDestY = nY1;
+/* 00002f88 */	this.m_nDestX2 = nX2;
+/* 00002f9e */	this.m_nDestY2 = nY2;
+/* 00002fb4 */	this.m_nR = nR;
+/* 00002fca */	this.m_nG = nG;
+/* 00002fe0 */	this.m_nB = nB;
+/* 00002ff6 */	this.m_nA = nA;
+/* 0000300c */}
+
+void CASConstructionProcess::SetDrawText(int nX, int nY, string Text, ref CASCharSpriteProperty Property, int CharSpace, int LineSpace)
+/* 00003014 */{
+/* 00003014 */	this.Clear();
+/* 0000301c */	this.m_Command = 7;
+/* 0000302e */	this.m_nDestX = nX;
+/* 00003044 */	this.m_nDestY = nY;
+/* 0000305a */	this.m_Text = Text;
+/* 00003072 */	this.m_Font = Property;
+/* 00003094 */	this.m_CharSpace = CharSpace;
+/* 000030aa */	this.m_LineSpace = LineSpace;
+/* 000030c0 */}
+
+void CASConstructionProcess::SetCopyText(int nX, int nY, string Text, ref CASCharSpriteProperty Property, int CharSpace, int LineSpace)
+/* 000030c8 */{
+/* 000030c8 */	this.Clear();
+/* 000030d0 */	this.m_Command = 8;
+/* 000030e2 */	this.m_nDestX = nX;
+/* 000030f8 */	this.m_nDestY = nY;
+/* 0000310e */	this.m_Text = Text;
+/* 00003126 */	this.m_Font = Property;
+/* 00003148 */	this.m_CharSpace = CharSpace;
+/* 0000315e */	this.m_LineSpace = LineSpace;
+/* 00003174 */}
+
+void CASConstructionProcess::SetCutCGAlphaBlend(string CGName, int DestX, int DestY, int SrcX, int SrcY, int DestWidth, int DestHeight, int InterpolationType)
+/* 0000317c */{
+/* 0000317c */	this.Clear();
+/* 00003184 */	this.m_Command = 19;
+/* 00003196 */	this.m_CGName = CGName;
+/* 000031ae */	this.m_nDestX = DestX;
+/* 000031c4 */	this.m_nDestY = DestY;
+/* 000031da */	this.m_nDestWidth = DestWidth;
+/* 000031f0 */	this.m_nDestHeight = DestHeight;
+/* 00003206 */	this.m_nSrcX = SrcX;
+/* 0000321c */	this.m_nSrcY = SrcY;
+/* 00003232 */	this.m_InterpolationType = InterpolationType;
+/* 00003248 */}
+
+void CASConstructionProcess::SetCutCGScaleAlphaBlend(string CGName, int DestX, int DestY, int DestWidth, int DestHeight, int SrcX, int SrcY, int SrcWidth, int SrcHeight, int InterpolationType)
+/* 00003250 */{
+/* 00003250 */	this.Clear();
+/* 00003258 */	this.m_Command = 20;
+/* 0000326a */	this.m_CGName = CGName;
+/* 00003282 */	this.m_nDestX = DestX;
+/* 00003298 */	this.m_nDestY = DestY;
+/* 000032ae */	this.m_nDestWidth = DestWidth;
+/* 000032c4 */	this.m_nDestHeight = DestHeight;
+/* 000032da */	this.m_nSrcX = SrcX;
+/* 000032f0 */	this.m_nSrcY = SrcY;
+/* 00003306 */	this.m_nSrcWidth = SrcWidth;
+/* 0000331c */	this.m_nSrcHeight = SrcHeight;
+/* 00003332 */	this.m_InterpolationType = InterpolationType;
+/* 00003348 */}
+
+void CASConstructionProcess::SetCutCGOnlyAlpha(string CGName, int DestX, int DestY, int SrcX, int SrcY, int DestWidth, int DestHeight, int InterpolationType)
+/* 00003350 */{
+/* 00003350 */	this.Clear();
+/* 00003358 */	this.m_Command = 21;
+/* 0000336a */	this.m_CGName = CGName;
+/* 00003382 */	this.m_nDestX = DestX;
+/* 00003398 */	this.m_nDestY = DestY;
+/* 000033ae */	this.m_nDestWidth = DestWidth;
+/* 000033c4 */	this.m_nDestHeight = DestHeight;
+/* 000033da */	this.m_nSrcX = SrcX;
+/* 000033f0 */	this.m_nSrcY = SrcY;
+/* 00003406 */	this.m_InterpolationType = InterpolationType;
+/* 0000341c */}
+
+void CASConstructionProcess::SetCutCGScaleOnlyAlpha(string CGName, int DestX, int DestY, int DestWidth, int DestHeight, int SrcX, int SrcY, int SrcWidth, int SrcHeight, int InterpolationType)
+/* 00003424 */{
+/* 00003424 */	this.Clear();
+/* 0000342c */	this.m_Command = 22;
+/* 0000343e */	this.m_CGName = CGName;
+/* 00003456 */	this.m_nDestX = DestX;
+/* 0000346c */	this.m_nDestY = DestY;
+/* 00003482 */	this.m_nDestWidth = DestWidth;
+/* 00003498 */	this.m_nDestHeight = DestHeight;
+/* 000034ae */	this.m_nSrcX = SrcX;
+/* 000034c4 */	this.m_nSrcY = SrcY;
+/* 000034da */	this.m_nSrcWidth = SrcWidth;
+/* 000034f0 */	this.m_nSrcHeight = SrcHeight;
+/* 00003506 */	this.m_InterpolationType = InterpolationType;
+/* 0000351c */}
+
+int CASConstructionProcess::GetCommand()
+/* 00003524 */{
+/* 00003524 */	return this.m_Command;
+/* 00003530 */}
+
+int CASConstructionProcess::GetInterpolationType()
+/* 0000353e */{
+/* 0000353e */	return this.m_InterpolationType;
+/* 0000354a */}
+
+int CASConstructionProcess::GetSrcX()
+/* 00003558 */{
+/* 00003558 */	return this.m_nSrcX;
+/* 00003564 */}
+
+int CASConstructionProcess::GetSrcY()
+/* 00003572 */{
+/* 00003572 */	return this.m_nSrcY;
+/* 0000357e */}
+
+int CASConstructionProcess::GetSrcWidth()
+/* 0000358c */{
+/* 0000358c */	return this.m_nSrcWidth;
+/* 00003598 */}
+
+int CASConstructionProcess::GetSrcHeight()
+/* 000035a6 */{
+/* 000035a6 */	return this.m_nSrcHeight;
+/* 000035b2 */}
+
+int CASConstructionProcess::GetDestX()
+/* 000035c0 */{
+/* 000035c0 */	return this.m_nDestX;
+/* 000035cc */}
+
+int CASConstructionProcess::GetDestY()
+/* 000035da */{
+/* 000035da */	return this.m_nDestY;
+/* 000035e6 */}
+
+int CASConstructionProcess::GetDestX2()
+/* 000035f4 */{
+/* 000035f4 */	return this.m_nDestX2;
+/* 00003600 */}
+
+int CASConstructionProcess::GetDestY2()
+/* 0000360e */{
+/* 0000360e */	return this.m_nDestY2;
+/* 0000361a */}
+
+int CASConstructionProcess::GetDestWidth()
+/* 00003628 */{
+/* 00003628 */	return this.m_nDestWidth;
+/* 00003634 */}
+
+int CASConstructionProcess::GetDestHeight()
+/* 00003642 */{
+/* 00003642 */	return this.m_nDestHeight;
+/* 0000364e */}
+
+int CASConstructionProcess::GetR()
+/* 0000365c */{
+/* 0000365c */	return this.m_nR;
+/* 00003668 */}
+
+int CASConstructionProcess::GetG()
+/* 00003676 */{
+/* 00003676 */	return this.m_nG;
+/* 00003682 */}
+
+int CASConstructionProcess::GetB()
+/* 00003690 */{
+/* 00003690 */	return this.m_nB;
+/* 0000369c */}
+
+int CASConstructionProcess::GetA()
+/* 000036aa */{
+/* 000036aa */	return this.m_nA;
+/* 000036b6 */}
+
+int CASConstructionProcess::GetR2()
+/* 000036c4 */{
+/* 000036c4 */	return this.m_nR2;
+/* 000036d0 */}
+
+int CASConstructionProcess::GetG2()
+/* 000036de */{
+/* 000036de */	return this.m_nG2;
+/* 000036ea */}
+
+int CASConstructionProcess::GetB2()
+/* 000036f8 */{
+/* 000036f8 */	return this.m_nB2;
+/* 00003704 */}
+
+int CASConstructionProcess::GetCharSpace()
+/* 00003712 */{
+/* 00003712 */	return this.m_CharSpace;
+/* 0000371e */}
+
+int CASConstructionProcess::GetLineSpace()
+/* 0000372c */{
+/* 0000372c */	return this.m_LineSpace;
+/* 00003738 */}
+
+ref CASCharSpriteProperty CASConstructionProcess::GetFontProperty()
+/* 00003746 */{
+/* 00003746 */	return this.m_Font;
+/* 00003756 */}
+
+string CASConstructionProcess::GetText()
+/* 00003764 */{
+/* 00003764 */	return this.m_Text;
+/* 00003770 */}
+
+string CASConstructionProcess::GetCGName()
+/* 0000377e */{
+/* 0000377e */	return this.m_CGName;
+/* 0000378a */}
+
+bool CASConstructionProcess::IsFullSize()
+/* 00003798 */{
+/* 00003798 */	return this.m_FullSize;
+/* 000037a4 */}
+
+void CASConstructionProcess::SetCommand(int Type)
+/* 000037b2 */{
+/* 000037b2 */	this.m_Command = Type;
+/* 000037c8 */}
+
+void CASConstructionProcess::SetInterpolationType(int Type)
+/* 000037d0 */{
+/* 000037d0 */	this.m_InterpolationType = Type;
+/* 000037e6 */}
+
+void CASConstructionProcess::SetSrcX(int PosX)
+/* 000037ee */{
+/* 000037ee */	this.m_nSrcX = PosX;
+/* 00003804 */}
+
+void CASConstructionProcess::SetSrcY(int PosY)
+/* 0000380c */{
+/* 0000380c */	this.m_nSrcY = PosY;
+/* 00003822 */}
+
+void CASConstructionProcess::SetSrcWidth(int Width)
+/* 0000382a */{
+/* 0000382a */	this.m_nSrcWidth = Width;
+/* 00003840 */}
+
+void CASConstructionProcess::SetSrcHeight(int Height)
+/* 00003848 */{
+/* 00003848 */	this.m_nSrcHeight = Height;
+/* 0000385e */}
+
+void CASConstructionProcess::SetDestX(int PosX)
+/* 00003866 */{
+/* 00003866 */	this.m_nDestX = PosX;
+/* 0000387c */}
+
+void CASConstructionProcess::SetDestY(int PosY)
+/* 00003884 */{
+/* 00003884 */	this.m_nDestY = PosY;
+/* 0000389a */}
+
+void CASConstructionProcess::SetDestX2(int PosX)
+/* 000038a2 */{
+/* 000038a2 */	this.m_nDestX2 = PosX;
+/* 000038b8 */}
+
+void CASConstructionProcess::SetDestY2(int PosY)
+/* 000038c0 */{
+/* 000038c0 */	this.m_nDestY2 = PosY;
+/* 000038d6 */}
+
+void CASConstructionProcess::SetDestWidth(int Width)
+/* 000038de */{
+/* 000038de */	this.m_nDestWidth = Width;
+/* 000038f4 */}
+
+void CASConstructionProcess::SetDestHeight(int Height)
+/* 000038fc */{
+/* 000038fc */	this.m_nDestHeight = Height;
+/* 00003912 */}
+
+void CASConstructionProcess::SetR(int Red)
+/* 0000391a */{
+/* 0000391a */	this.m_nR = Red;
+/* 00003930 */}
+
+void CASConstructionProcess::SetG(int Green)
+/* 00003938 */{
+/* 00003938 */	this.m_nG = Green;
+/* 0000394e */}
+
+void CASConstructionProcess::SetB(int Blue)
+/* 00003956 */{
+/* 00003956 */	this.m_nB = Blue;
+/* 0000396c */}
+
+void CASConstructionProcess::SetA(int Alpha)
+/* 00003974 */{
+/* 00003974 */	this.m_nA = Alpha;
+/* 0000398a */}
+
+void CASConstructionProcess::SetR2(int Red)
+/* 00003992 */{
+/* 00003992 */	this.m_nR2 = Red;
+/* 000039a8 */}
+
+void CASConstructionProcess::SetG2(int Green)
+/* 000039b0 */{
+/* 000039b0 */	this.m_nG2 = Green;
+/* 000039c6 */}
+
+void CASConstructionProcess::SetB2(int Blue)
+/* 000039ce */{
+/* 000039ce */	this.m_nB2 = Blue;
+/* 000039e4 */}
+
+void CASConstructionProcess::SetCharSpace(int Space)
+/* 000039ec */{
+/* 000039ec */	this.m_CharSpace = Space;
+/* 00003a02 */}
+
+void CASConstructionProcess::SetLineSpace(int Space)
+/* 00003a0a */{
+/* 00003a0a */	this.m_LineSpace = Space;
+/* 00003a20 */}
+
+void CASConstructionProcess::SetFontProperty(ref CASCharSpriteProperty Property)
+/* 00003a28 */{
+/* 00003a28 */	this.m_Font = Property;
+/* 00003a4a */}
+
+void CASConstructionProcess::SetText(string Text)
+/* 00003a52 */{
+/* 00003a52 */	this.m_Text = Text;
+/* 00003a6a */}
+
+void CASConstructionProcess::SetCGName(string Name)
+/* 00003a72 */{
+/* 00003a72 */	this.m_CGName = Name;
+/* 00003a8a */}
+
+void CASConstructionProcess::SetFullSize(bool Full)
+/* 00003a92 */{
+/* 00003a92 */	this.m_FullSize = Full;
+/* 00003aa8 */}
+

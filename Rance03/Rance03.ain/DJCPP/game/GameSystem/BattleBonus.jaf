@@ -1,0 +1,16 @@
+void BattleBonus::init(string name, int value)
+/* 001ccc52 */{
+/* 001ccc52 */	this.name_ = name;
+/* 001ccc6a */	this.value_ = value;
+/* 001ccc80 */}
+
+string BattleBonus::getName()
+/* 001ccc88 */{
+/* 001ccc88 */	return this.name_;
+/* 001ccc94 */}
+
+int BattleBonus::getValue()
+/* 001ccca2 */{
+/* 001ccca2 */	return this.value_;
+/* 001cccae */}
+

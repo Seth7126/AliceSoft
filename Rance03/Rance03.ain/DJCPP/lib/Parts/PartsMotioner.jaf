@@ -1,0 +1,297 @@
+PartsMotioner::PartsMotioner()
+/* 001eb144 */{
+/* 001eb14c */	this.isLoopMotionActive_ = false;
+/* 001eb15e */	this.isMotion_ = false;
+/* 001eb170 */	this.motions_.Free();
+/* 001eb17a */}
+
+void PartsMotioner::run(ref Parts parts, PartsMotion motionInfo)
+/* 001eb182 */{
+/* 001eb182 */	this.parts_ <- parts;
+/* 001eb1a2 */	if (!this.isAvailable())
+/* 001eb1b2 */	{
+/* 001eb1b2 */		return;
+/* 001eb1b4 */	}
+/* 001eb1b4 */	this.addMotion(motionInfo);
+/* 001eb1ca */	this.startMotion();
+/* 001eb1d2 */}
+
+void PartsMotioner::runArray(ref Parts parts, ref array@PartsMotion motions)
+/* 001eb1da */{
+/* 001eb1da */	this.parts_ <- parts;
+/* 001eb1fa */	if (!this.isAvailable())
+/* 001eb20a */	{
+/* 001eb20a */		return;
+/* 001eb20c */	}
+/* 001eb20c */	this.addMotionArray(motions);
+/* 001eb21e */	this.startMotion();
+/* 001eb226 */}
+
+void PartsMotioner::addMotion(PartsMotion motionInfo)
+/* 001eb22e */{
+/* 001eb22e */	if (this.isMotion())
+/* 001eb23c */	{
+/* 001eb23c */		this.finalize();
+/* 001eb244 */	}
+/* 001eb244 */	this.motions_.PushBack(motionInfo);
+/* 001eb25c */}
+
+void PartsMotioner::addMotionArray(ref array@PartsMotion motions)
+/* 001eb264 */{
+/* 001eb264 */	if (this.isMotion())
+/* 001eb272 */	{
+/* 001eb272 */		this.finalize();
+/* 001eb27a */	}
+/* 001eb27a */	int i;
+/* 001eb28c */	for (i = 0; i < motions.Numof(); ++i)
+/* 001eb2dc */	{
+/* 001eb2dc */		this.addMotion(motions[i]);
+/* 001eb2fe */	}
+/* 001eb304 */}
+
+void PartsMotioner::update()
+/* 001eb30c */{
+/* 001eb30c */	if (!this.isAvailable())
+/* 001eb31c */	{
+/* 001eb31c */		return;
+/* 001eb31e */	}
+/* 001eb31e */	if (!this.motions_.Empty())
+/* 001eb330 */	{
+/* 001eb330 */		int now = this.motionTimer_.getTime();
+/* 001eb34c */		if (now > this.motions_[0].getTime() + this.motions_[0].getDelay())
+/* 001eb390 */		{
+/* 001eb390 */			this.onMotionFinish();
+/* 001eb398 */		}
+/* 001eb39e */		else
+/* 001eb39e */		{
+/* 001eb39e */			this.onMotion(now);
+/* 001eb3b0 */		}
+/* 001eb3b0 */	}
+/* 001eb3b0 */	this.updateLoopMotion(this.loopMotionTimer_.getTime());
+/* 001eb3c8 */}
+
+void PartsMotioner::startMotion()
+/* 001eb3d0 */{
+/* 001eb3d0 */	if (this.motions_.Empty())
+/* 001eb3e0 */	{
+/* 001eb3e0 */		return;
+/* 001eb3e2 */	}
+/* 001eb3e2 */	this.centerX_ = this.parts_.getX();
+/* 001eb400 */	this.centerY_ = this.parts_.getY();
+/* 001eb41e */	this.playMotionSound(this.motions_[0]);
+/* 001eb438 */	this.isMotion_ = true;
+/* 001eb44a */	this.motionTimer_.reset();
+/* 001eb45a */}
+
+void PartsMotioner::onMotion(int now)
+/* 001eb462 */{
+/* 001eb462 */	float t;
+/* 001eb474 */	int rx;
+/* 001eb486 */	int ry;
+/* 001eb498 */	int sx;
+/* 001eb4aa */	int sy;
+/* 001eb4bc */	ref PartsMotion m = this.motions_[0];
+/* 001eb4ea */	if (now >= m.getDelay() + m.getTime())
+/* 001eb51e */	{
+/* 001eb51e */		t = 1.0;
+/* 001eb530 */	}
+/* 001eb536 */	else
+/* 001eb536 */	{
+/* 001eb536 */		t = Math.MaxF(0.0, float(now - m.getDelay()) / float(m.getTime()));
+/* 001eb584 */	}
+/* 001eb584 */	this.updateMotionKey(this.parts_.setX, m, 0, t);
+/* 001eb5b8 */	this.updateMotionKey(this.parts_.setY, m, 1, t);
+/* 001eb5ec */	this.updateMotionKey(this.parts_.setAlpha, m, 2, t);
+/* 001eb620 */	this.updateMotionKey(this.parts_.setXYRot, m, 3, t);
+/* 001eb654 */	this.updateMotionKey(this.parts_.setXZRot, m, 4, t);
+/* 001eb688 */	this.updateMotionKey(this.parts_.setYZRot, m, 5, t);
+/* 001eb6bc */	this.updateMotionKey(this.parts_.setScaling, m, 6, t);
+/* 001eb6f0 */	this.updateMotionKey(this.parts_.setNumber, m, 15, t);
+/* 001eb724 */	this.updateMotionKey(this.parts_.setCgRangeLeft, m, 11, t);
+/* 001eb758 */	this.updateMotionKey(this.parts_.setCgRangeRight, m, 13, t);
+/* 001eb78c */	this.updateMotionKey(this.parts_.setCgRangeTop, m, 12, t);
+/* 001eb7c0 */	this.updateMotionKey(this.parts_.setCgRangeBottom, m, 14, t);
+/* 001eb7f4 */	if (m.isKeyEnable(16))
+/* 001eb810 */	{
+/* 001eb810 */		int c = getMotionValue(m.getKeyMotionType(16), m.getKeyFrom(16), m.getKeyTo(16), t);
+/* 001eb874 */		this.parts_.setAddColorValue(c, c, c);
+/* 001eb8a2 */	}
+/* 001eb8a2 */	if (m.isKeyEnable(17))
+/* 001eb8be */	{
+/* 001eb8be */		int c = getMotionValue(m.getKeyMotionType(17), m.getKeyFrom(17), m.getKeyTo(17), t);
+/* 001eb922 */		this.parts_.setMultiColorValue(c, c, c);
+/* 001eb950 */	}
+/* 001eb950 */	if (m.isKeyEnable(7))
+/* 001eb96c */	{
+/* 001eb96c */		int sx = this.getShakeValue(m, 7, t);
+/* 001eb99c */		if (m.isKeyEnable(0))
+/* 001eb9b8 */		{
+/* 001eb9b8 */			this.parts_.setX(this.parts_.getX() + sx);
+/* 001eb9e6 */		}
+/* 001eb9ec */		else
+/* 001eb9ec */		{
+/* 001eb9ec */			this.parts_.setX(this.centerX_ + sx);
+/* 001eba14 */		}
+/* 001eba14 */	}
+/* 001eba14 */	if (m.isKeyEnable(8))
+/* 001eba30 */	{
+/* 001eba30 */		int sy = this.getShakeValue(m, 8, t);
+/* 001eba60 */		if (m.isKeyEnable(1))
+/* 001eba7c */		{
+/* 001eba7c */			this.parts_.setY(this.parts_.getY() + sy);
+/* 001ebaaa */		}
+/* 001ebab0 */		else
+/* 001ebab0 */		{
+/* 001ebab0 */			this.parts_.setY(this.centerY_ + sy);
+/* 001ebad8 */		}
+/* 001ebad8 */	}
+/* 001ebad8 */}
+
+float PartsMotioner::getShakeValue(ref PartsMotion m, int key, float t)
+/* 001ebae0 */{
+/* 001ebae0 */	if (t >= 1.0)
+/* 001ebaf8 */	{
+/* 001ebaf8 */		return 0.0;
+/* 001ebb00 */	}
+/* 001ebb00 */	int shake = getMotionValue(m.getKeyMotionType(key), m.getKeyFrom(key), m.getKeyTo(key), t);
+/* 001ebb70 */	return RAND(Math.Max(1, shake)) - shake / 2;
+/* 001ebba8 */}
+
+void PartsMotioner::updateMotionKey(DG_MOTION_UPDATE_METHOD method, ref PartsMotion m, int key, float t)
+/* 001ebbb6 */{
+/* 001ebbb6 */	if (m.isKeyEnable(key))
+/* 001ebbd6 */	{
+/* 001ebbd6 */		method(getMotionValue(m.getKeyMotionType(key), m.getKeyFrom(key), m.getKeyTo(key), t));
+/* 001ebc58 */	}
+/* 001ebc58 */}
+
+void PartsMotioner::onMotionFinish()
+/* 001ebc60 */{
+/* 001ebc60 */	this.setMotionLastFrame(this.motions_[0]);
+/* 001ebc7a */	this.motions_.Erase(0);
+/* 001ebc8c */	if (this.motions_.Empty())
+/* 001ebc9c */	{
+/* 001ebc9c */		this.isMotion_ = false;
+/* 001ebcae */		this.parts_ <- NULL;
+/* 001ebcc6 */		DG_GeneralCallback cb;
+/* 001ebcd2 */		cb = this.dgOnFinish_;
+/* 001ebcec */		this.dgOnFinish_.Clear();
+/* 001ebcf8 */		cb();
+/* 001ebd18 */		cb.Clear();
+/* 001ebd24 */	}
+/* 001ebd2a */	else
+/* 001ebd2a */	{
+/* 001ebd2a */		this.playMotionSound(this.motions_[0]);
+/* 001ebd44 */		this.motionTimer_.reset();
+/* 001ebd54 */	}
+/* 001ebd54 */}
+
+bool PartsMotioner::isMotion()
+/* 001ebd5c */{
+/* 001ebd5c */	return this.isMotion_;
+/* 001ebd68 */}
+
+void PartsMotioner::setMotionLastFrame(ref PartsMotion m)
+/* 001ebd76 */{
+/* 001ebd76 */	this.onMotion(m.getDelay() + m.getTime() + 1000);
+/* 001ebda8 */	int n = m.getLoopSoundNumber();
+/* 001ebdc4 */	if (n != 0)
+/* 001ebddc */	{
+/* 001ebddc */		g_loopSound.stopSound(n);
+/* 001ebdf6 */	}
+/* 001ebdf6 */}
+
+void PartsMotioner::finalize()
+/* 001ebdfe */{
+/* 001ebdfe */	if (!this.isAvailable())
+/* 001ebe0e */	{
+/* 001ebe0e */		return;
+/* 001ebe10 */	}
+/* 001ebe10 */	if (!this.isMotion())
+/* 001ebe20 */	{
+/* 001ebe20 */		return;
+/* 001ebe22 */	}
+/* 001ebe22 */	while (!this.motions_.Empty())
+/* 001ebe34 */	{
+/* 001ebe34 */		this.onMotionFinish();
+/* 001ebe3c */	}
+/* 001ebe42 */}
+
+void PartsMotioner::playMotionSound(ref PartsMotion motionInfo)
+/* 001ebe4a */{
+/* 001ebe4a */	string n = motionInfo.getSoundName();
+/* 001ebe68 */	if (n != "")
+/* 001ebe80 */	{
+/* 001ebe80 */		g_sysSound.play(0, n);
+/* 001ebea0 */	}
+/* 001ebea0 */}
+
+void PartsMotioner::updateLoopMotion(int nowTime)
+/* 001ebea8 */{
+/* 001ebea8 */	if (!this.isLoopMotionActive_)
+/* 001ebeba */	{
+/* 001ebeba */		return;
+/* 001ebebc */	}
+/* 001ebebc */	if (this.loopMotion_.isEnable(2))
+/* 001ebed8 */	{
+/* 001ebed8 */		int c = this.loopMotion_.get(2, nowTime);
+/* 001ebf04 */		this.parts_.setAddColorValue(c, c, c);
+/* 001ebf32 */	}
+/* 001ebf32 */	if (this.loopMotion_.isEnable(3))
+/* 001ebf4e */	{
+/* 001ebf4e */		this.parts_.setScaling(this.loopMotion_.get(3, nowTime));
+/* 001ebf80 */	}
+/* 001ebf80 */}
+
+void PartsMotioner::setLoopMotion(ref LoopMotionInfomation loopMotion)
+/* 001ebf88 */{
+/* 001ebf88 */	this.loopMotion_ = loopMotion;
+/* 001ebfaa */}
+
+void PartsMotioner::setActiveLoopMotion(bool val)
+/* 001ebfb2 */{
+/* 001ebfb2 */	if (!this.isAvailable())
+/* 001ebfc2 */	{
+/* 001ebfc2 */		return;
+/* 001ebfc4 */	}
+/* 001ebfc4 */	this.isLoopMotionActive_ = val;
+/* 001ebfda */	if (!val)
+/* 001ebfec */	{
+/* 001ebfec */		this.parts_.setAddColorValue(0, 0, 0);
+/* 001ec00e */		this.parts_.setScaling(100.0);
+/* 001ec024 */	}
+/* 001ec024 */}
+
+void PartsMotioner::runEx(ref Parts parts, string defineName)
+/* 001ec02c */{
+/* 001ec02c */	array@PartsMotion m;
+/* 001ec036 */	loadPartsMotionArrayFromEx(defineName, m);
+/* 001ec050 */	this.runArray(parts, m);
+/* 001ec06c */}
+
+void PartsMotioner::setDelegateOnMotionFinish(DG_GeneralCallback onFinish)
+/* 001ec074 */{
+/* 001ec074 */	this.dgOnFinish_ += onFinish;
+/* 001ec08e */}
+
+int PartsMotioner::getPartsNumber()
+/* 001ec096 */{
+/* 001ec096 */	if (!this.isAvailable())
+/* 001ec0a6 */	{
+/* 001ec0a6 */		return -1;
+/* 001ec0ae */	}
+/* 001ec0ae */	return this.parts_.getPartsNumber();
+/* 001ec0c0 */}
+
+bool PartsMotioner::isAvailable()
+/* 001ec0ce */{
+/* 001ec0ce */	if (this.parts_ !== NULL)
+/* 001ec0e6 */	{
+/* 001ec0e6 */		if (this.parts_.isInitialized())
+/* 001ec0fc */		{
+/* 001ec0fc */			return true;
+/* 001ec104 */		}
+/* 001ec104 */	}
+/* 001ec104 */	return false;
+/* 001ec10c */}
+

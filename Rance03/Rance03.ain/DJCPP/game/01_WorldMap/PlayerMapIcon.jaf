@@ -1,0 +1,88 @@
+PlayerMapIcon::PlayerMapIcon()
+/* 0018913c */{
+/* 00189144 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018916a */}
+
+void PlayerMapIcon::init(int type, int parentPartsNumber, string placeId)
+/* 00189172 */{
+/* 00189172 */	this.placeId_ = placeId;
+/* 0018918a */	if (type == 0)
+/* 001891a2 */	{
+/* 001891a2 */		this.parts_[0].init("システム／マップ／ランス", 0);
+/* 001891c6 */		this.parts_[1].init("システム／マップ／ランス", 2);
+/* 001891ea */	}
+/* 001891f0 */	else
+/* 001891f0 */	{
+/* 001891f0 */		this.parts_[0].init("システム／マップ／かなみ", 0);
+/* 00189214 */		this.parts_[1].init("システム／マップ／かなみ", 2);
+/* 00189238 */	}
+/* 00189238 */	this.w_ = this.parts_[0].getWidth() / 4;
+/* 00189264 */	int i;
+/* 00189276 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001892c6 */	{
+/* 001892c6 */		this.parts_[i].setOrigin(2);
+/* 001892e8 */	}
+/* 001892ee */	createPartsGroup(this.parent_, this.parts_, 50);
+/* 0018930e */	this.parent_.setParent(parentPartsNumber);
+/* 00189328 */	this.setDirection(true);
+/* 00189336 */	this.setCurrentPlacePos();
+/* 0018933e */}
+
+void PlayerMapIcon::update()
+/* 00189346 */{
+/* 00189346 */	int t = (this.t_.getTime() / 300) % 4;
+/* 00189372 */	int i;
+/* 00189384 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001893d4 */	{
+/* 001893d4 */		this.parts_[i].setCgRange(t * this.w_, 0, this.w_, this.parts_[i].getHeight());
+/* 00189432 */	}
+/* 00189438 */}
+
+void PlayerMapIcon::setCurrentPlacePos()
+/* 00189440 */{
+/* 00189440 */	ref MapPlace m = getMapPlaceFromId(this.placeId_);
+/* 00189482 */	this.parent_.setPos(m.getX(), m.getY());
+/* 001894b6 */}
+
+void PlayerMapIcon::fadeIn(bool val)
+/* 001894be */{
+/* 001894be */	PartsMotion m;
+/* 001894ce */	m = getStandardMotion(val ? 0 : 1);
+/* 0018950a */	this.parent_.setShow(true);
+/* 00189520 */	this.parent_.runMotion(m, this.onFadeInFinish);
+/* 00189548 */}
+
+void PlayerMapIcon::moveTo(int fx, int fy, int tx, int ty, DG_GeneralCallback onFinishMoveCallback)
+/* 00189550 */{
+/* 00189550 */	this.onFinishMoveCallback_ = onFinishMoveCallback;
+/* 0018956a */	PartsMotion m;
+/* 0018957a */	m.setMove(fx, fy, tx, ty, 0);
+/* 001895b8 */	m.setTime(getDest(fx, fy, tx, ty) * 4.0);
+/* 00189600 */	this.setDirection(fx > tx);
+/* 00189620 */	this.parent_.runMotion(m, this.onFinishMove);
+/* 00189648 */	this.state_ = 3;
+/* 0018965a */}
+
+void PlayerMapIcon::setDirection(bool isLeft)
+/* 00189662 */{
+/* 00189662 */	this.parts_[0].setShow(isLeft);
+/* 00189684 */	this.parts_[1].setShow(!isLeft);
+/* 001896aa */}
+
+void PlayerMapIcon::onFadeInFinish()
+/* 001896b2 */{
+/* 001896b2 */	this.state_ = 2;
+/* 001896c4 */}
+
+void PlayerMapIcon::onFinishMove()
+/* 001896cc */{
+/* 001896cc */	this.onFinishMoveCallback_();
+/* 001896ec */	this.state_ = 2;
+/* 001896fe */}
+
+void PlayerMapIcon::getCurrentPos(ref int x, ref int y)
+/* 00189706 */{
+/* 00189706 */	x = this.parent_.getX();
+/* 00189726 */	y = this.parent_.getY();
+/* 00189746 */}
+

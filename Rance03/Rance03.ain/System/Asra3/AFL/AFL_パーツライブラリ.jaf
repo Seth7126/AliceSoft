@@ -1,0 +1,119 @@
+float AFL_Parts_GetUpperLeftPosX(int PartsNumber, int State)
+/* 0016aa86 */{
+/* 0016aa86 */	return PartsEngine.Parts_GetPartsUpperLeftPosX(PartsNumber, 1);
+/* 0016aaa2 */}
+
+float AFL_Parts_GetUpperLeftPosY(int PartsNumber, int State)
+/* 0016aab6 */{
+/* 0016aab6 */	return PartsEngine.Parts_GetPartsUpperLeftPosY(PartsNumber, 1);
+/* 0016aad2 */}
+
+int AFL_Parts_GetWidth(int PartsNumber, int State)
+/* 0016aae6 */{
+/* 0016aae6 */	return PartsEngine.Parts_GetPartsWidth(PartsNumber, State);
+/* 0016ab06 */}
+
+int AFL_Parts_GetHeight(int PartsNumber, int State)
+/* 0016ab1a */{
+/* 0016ab1a */	return PartsEngine.Parts_GetPartsHeight(PartsNumber, State);
+/* 0016ab3a */}
+
+int AFL_Parts_WaitForClick(FTPARTS_WaitForClickCallback Func, bool キーキャンセル)
+/* 0016ab4e */{
+/* 0016ab4e */	return PARTS_WaitForClick(Func, キーキャンセル);
+/* 0016ab6c */}
+
+void AFL_Parts_EndWaitForClick(int PartsNumber)
+/* 0016ab80 */{
+/* 0016ab80 */	PARTS_EndWaitForClick(PartsNumber);
+/* 0016ab90 */}
+
+void AFL_Parts_SetStatus(int PartsNumber, int State)
+/* 0016ab9e */{
+/* 0016ab9e */	PartsEngine.Parts_SetInputState(PartsNumber, State);
+/* 0016abbc */}
+
+int AFL_Parts_GetStatus(int PartsNumber)
+/* 0016abca */{
+/* 0016abca */	return PartsEngine.Parts_GetInputState(PartsNumber);
+/* 0016abe0 */}
+
+void AFL_Parts_SetLockInputState(int PartsNumber, bool Lock)
+/* 0016abf4 */{
+/* 0016abf4 */	PARTS_SetLockInputState(PartsNumber, Lock);
+/* 0016ac0e */}
+
+bool AFL_Parts_IsLockInputState(int PartsNumber)
+/* 0016ac1c */{
+/* 0016ac1c */	return PARTS_IsLockInputState(PartsNumber);
+/* 0016ac2e */}
+
+void AFL_Parts_PlaySound(int PartsNumber, int State)
+/* 0016ac42 */{
+/* 0016ac42 */	PartsEngine.Parts_PlaySound(PartsNumber, State);
+/* 0016ac60 */}
+
+void AFL_Parts_PlayOnCursorSound(int PartsNumber)
+/* 0016ac6e */{
+/* 0016ac6e */	PartsEngine.Parts_PlaySound(PartsNumber, 2);
+/* 0016ac88 */}
+
+void AFL_Parts_PlayClickSound(int PartsNumber)
+/* 0016ac96 */{
+/* 0016ac96 */	PartsEngine.Parts_PlaySound(PartsNumber, 3);
+/* 0016acb0 */}
+
+bool AFL_Parts_IsPointIn(int PartsNumber, int nX, int nY, int State)
+/* 0016acbe */{
+/* 0016acbe */	return PartsEngine.Parts_IsCursorIn(PartsNumber, nX, nY, State);
+/* 0016acf2 */}
+
+void AFL_Parts_SetZByBaseZ(int PartsNumber, int PosZ, int BasePosZ)
+/* 0016ad06 */{
+/* 0016ad06 */	SYS_ASSERTE_Z(PosZ);
+/* 0016ad14 */	SYS_ASSERTE_BASEZ(BasePosZ);
+/* 0016ad22 */	PartsEngine.SetComponentPosZ(PartsNumber, PosZ + BasePosZ);
+/* 0016ad4c */}
+
+int AFL_Parts_AddLayer(int ID)
+/* 0016ad5a */{
+/* 0016ad5a */	return PARTS_AddLayer(ID);
+/* 0016ad6c */}
+
+int AFL_Parts_AddTopLayer()
+/* 0016ad80 */{
+/* 0016ad80 */	int Numof = AFL_Parts_NumofLayer();
+/* 0016ad92 */	int TopLayer = AFL_Parts_GetLayerID(Numof - 1);
+/* 0016adb6 */	return AFL_Parts_AddLayer(TopLayer);
+/* 0016adc8 */}
+
+void AFL_Parts_EraseLayer(int ID)
+/* 0016addc */{
+/* 0016addc */	PARTS_EraseLayer(ID);
+/* 0016adec */}
+
+int AFL_Parts_SetActiveLayer(int ID)
+/* 0016adfa */{
+/* 0016adfa */	return PARTS_SetActiveLayer(ID);
+/* 0016ae0c */}
+
+int AFL_Parts_GetActiveLayer()
+/* 0016ae20 */{
+/* 0016ae20 */	return PARTS_GetActiveLayer();
+/* 0016ae28 */}
+
+int AFL_Parts_GetLayerIndex(int ID)
+/* 0016ae3c */{
+/* 0016ae3c */	return PARTS_GetLayerIndex(ID);
+/* 0016ae4e */}
+
+int AFL_Parts_GetLayerID(int Index)
+/* 0016ae62 */{
+/* 0016ae62 */	return PARTS_GetLayerID(Index);
+/* 0016ae74 */}
+
+int AFL_Parts_NumofLayer()
+/* 0016ae88 */{
+/* 0016ae88 */	return PARTS_NumofLayer();
+/* 0016ae90 */}
+

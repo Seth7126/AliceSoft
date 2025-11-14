@@ -1,0 +1,63 @@
+void test_Flat()
+/* 001f3232 */{
+/* 001f3232 */	int n = g_partsNumberProvider.getNumber();
+/* 001f324e */	g_gameObjectManager.update();
+/* 001f325e */	Parts p;
+/* 001f326e */	Parts flat;
+/* 001f327e */	Parts parent;
+/* 001f328e */	parent.initAsDummy();
+/* 001f329e */	parent.setAlpha(128.0);
+/* 001f32b4 */	parent.setShow(true);
+/* 001f32ca */	p.initAsPlaneImage(1024, 768, 100, 100, 100, 255);
+/* 001f32fe */	p.setShow(true);
+/* 001f3314 */	parent.setZ(100.0);
+/* 001f332a */	parent.setScaling(10.0);
+/* 001f3340 */	while (true)
+/* 001f334c */	{
+/* 001f334c */		if (g_mouse.isClick(1))
+/* 001f3368 */		{
+/* 001f3368 */			break;
+/* 001f336e */		}
+/* 001f336e */		if (g_mouse.isClick(0))
+/* 001f338a */		{
+/* 001f338a */			flat.initAsFlat("システム／戦闘／フレーム／開始");
+/* 001f33a0 */			flat.setShow(true);
+/* 001f33b6 */			flat.setParent(parent.getPartsNumber());
+/* 001f33d6 */			flat.startFlat(false, 1.0);
+/* 001f33f2 */		}
+/* 001f33f2 */		if (g_keyboard.isPress(90))
+/* 001f340e */		{
+/* 001f340e */			flat.initAsFlat("システム／戦闘／フレーム／終了");
+/* 001f3424 */			flat.setShow(true);
+/* 001f343a */			flat.setParent(parent.getPartsNumber());
+/* 001f345a */			flat.startFlat(false, 1.0);
+/* 001f3476 */		}
+/* 001f3476 */		g_gameObjectManager.update();
+/* 001f3486 */		g_frameManager.updateFrame();
+/* 001f3496 */	}
+/* 001f349c */	Ｐ＿削除(n);
+/* 001f34ac */}
+
+void test_FullScreenFlat()
+/* 001f34ba */{
+/* 001f34ba */	FullScreenFlat flat;
+/* 001f34ca */	flat.init("システム／エンカウント", "", false);
+/* 001f34ec */	flat.run(1.0);
+/* 001f3502 */	flat.join(100);
+/* 001f3518 */}
+
+void test_Flat2()
+/* 001f3526 */{
+/* 001f3526 */	Parts p;
+/* 001f3536 */	p.loadAndStartFlat("戦闘エフェクト/戦闘エフェクト／物理攻撃", 512, 384, 30000);
+/* 001f355e */	while (true)
+/* 001f356a */	{
+/* 001f356a */		if (g_mouse.isClick(1))
+/* 001f3586 */		{
+/* 001f3586 */			break;
+/* 001f358c */		}
+/* 001f358c */		g_gameObjectManager.update();
+/* 001f359c */		g_frameManager.updateFrame();
+/* 001f35ac */	}
+/* 001f35b2 */}
+

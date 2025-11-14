@@ -1,0 +1,161 @@
+CMessageDrawParts::CMessageDrawParts()
+/* 000157a8 */{
+/* 000157b0 */	this.m_bFixed = false;
+/* 000157c2 */	this.m_PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 000157d4 */}
+
+CMessageDrawParts::~CMessageDrawParts()
+/* 000157dc */{
+/* 000157dc */	if (this.m_PartsNumber == -1)
+/* 000157f4 */	{
+/* 000157f4 */		return;
+/* 000157f6 */	}
+/* 000157f6 */	PARTS_Release(this.m_PartsNumber);
+/* 00015806 */	this.m_PartsNumber = -1;
+/* 00015818 */}
+
+void CMessageDrawParts::SetCharSprite(int nTime, int MessageWindowNumber)
+/* 00015820 */{
+/* 00015820 */	this.m_MessageWindowNumber = MessageWindowNumber;
+/* 00015836 */	this.m_nTime = nTime;
+/* 0001584c */	this.m_bFixed = false;
+/* 0001585e */}
+
+void CMessageDrawParts::SetFixed()
+/* 00015866 */{
+/* 00015866 */	this.m_bFixed = true;
+/* 00015878 */	Ｐ＿アルファ値設定(this.m_PartsNumber, 255);
+/* 0001588e */}
+
+int CMessageDrawParts::GetTime()
+/* 00015896 */{
+/* 00015896 */	return this.m_nTime;
+/* 000158a2 */}
+
+int CMessageDrawParts::GetMessageWindowNumber()
+/* 000158b0 */{
+/* 000158b0 */	return this.m_MessageWindowNumber;
+/* 000158bc */}
+
+bool CMessageDrawParts::IsFixed()
+/* 000158ca */{
+/* 000158ca */	return this.m_bFixed;
+/* 000158d6 */}
+
+void CMessageDrawParts::SetAlphaRate(int AlphaRate)
+/* 000158e4 */{
+/* 000158e4 */	Ｐ＿アルファ値設定(this.m_PartsNumber, AlphaRate);
+/* 000158fe */}
+
+int CMessageDrawParts::GetAlphaRate()
+/* 00015906 */{
+/* 00015906 */	return Ｐ＿アルファ値取得(this.m_PartsNumber);
+/* 00015918 */}
+
+void CMessageDrawParts::SetPos(int X, int Y)
+/* 00015926 */{
+/* 00015926 */	Ｐ＿座標設定(this.m_PartsNumber, X, Y);
+/* 0001594e */}
+
+void CMessageDrawParts::SetZ(int Z)
+/* 00015956 */{
+/* 00015956 */	Ｐ＿Ｚ座標設定(this.m_PartsNumber, Z);
+/* 00015970 */}
+
+void CMessageDrawParts::SetShow(bool Show)
+/* 00015978 */{
+/* 00015978 */	Ｐ＿表示設定(this.m_PartsNumber, Show);
+/* 00015992 */}
+
+void CMessageDrawParts::SetAddColor(int Red, int Green, int Blue)
+/* 0001599a */{
+/* 0001599a */	Ｐ＿加算色設定(this.m_PartsNumber, Red, Green, Blue);
+/* 000159c8 */}
+
+void CMessageDrawParts::UpdateZByMessageWindowZChanged()
+/* 000159d0 */{
+/* 000159d0 */	int Z = g_MessageWindowModelManager.GetZ() + g_MessageWindowManager.GetOffsetZ(this.m_MessageWindowNumber) + 1;
+/* 00015a10 */	Ｐ＿Ｚ座標設定(this.m_PartsNumber, Z);
+/* 00015a2a */}
+
+void CMessageDrawParts::SetText(string Text)
+/* 00015a32 */{
+/* 00015a32 */	Ｐ＿テキスト設定(this.m_PartsNumber, Text, 1);
+/* 00015a52 */}
+
+void CMessageDrawParts::SetFontProperty(ref CASCharSpriteProperty Property)
+/* 00015a5a */{
+/* 00015a5a */	CASColor Color;
+/* 00015a6a */	Color = Property.GetColor();
+/* 00015a8e */	CASColor EdgeColor;
+/* 00015a9e */	EdgeColor = Property.GetEdgeColor();
+/* 00015ac2 */	this.SetFont(Property.GetType());
+/* 00015ada */	this.SetFontSize(Property.GetSize());
+/* 00015af2 */	this.SetFontBoldWeight(Property.GetBoldWeight());
+/* 00015b0a */	this.SetFontEdgeWeight(Property.GetEdgeWeight());
+/* 00015b22 */	this.SetFontColor(Color.GetR(), Color.GetG(), Color.GetB());
+/* 00015b5a */	this.SetFontEdgeColor(EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB());
+/* 00015b92 */}
+
+void CMessageDrawParts::SetFont(int Type)
+/* 00015b9a */{
+/* 00015b9a */	Ｐ＿フォント種類設定(this.m_PartsNumber, Type, 1);
+/* 00015bba */}
+
+void CMessageDrawParts::SetFontSize(int Size)
+/* 00015bc2 */{
+/* 00015bc2 */	Ｐ＿フォントサイズ設定(this.m_PartsNumber, Size, 1);
+/* 00015be2 */}
+
+void CMessageDrawParts::SetFontBoldWeight(float Weight)
+/* 00015bea */{
+/* 00015bea */	Ｐ＿フォント太字幅設定(this.m_PartsNumber, Weight, 1);
+/* 00015c0a */}
+
+void CMessageDrawParts::SetFontEdgeWeight(float Weight)
+/* 00015c12 */{
+/* 00015c12 */	Ｐ＿フォント縁取り幅設定(this.m_PartsNumber, Weight, 1);
+/* 00015c32 */}
+
+void CMessageDrawParts::SetFontColor(int ColorR, int ColorG, int ColorB)
+/* 00015c3a */{
+/* 00015c3a */	Ｐ＿フォント色設定(this.m_PartsNumber, ColorR, ColorG, ColorB, 1);
+/* 00015c6e */}
+
+void CMessageDrawParts::SetFontEdgeColor(int ColorR, int ColorG, int ColorB)
+/* 00015c76 */{
+/* 00015c76 */	Ｐ＿フォント縁取り色設定(this.m_PartsNumber, ColorR, ColorG, ColorB, 1);
+/* 00015caa */}
+
+void CMessageDrawParts::SetFontCharSpace(int Space)
+/* 00015cb2 */{
+/* 00015cb2 */	Ｐ＿テキスト字間隔設定(this.m_PartsNumber, Space, 1);
+/* 00015cd2 */}
+
+void CMessageDrawParts::SetDefaultFontColor(int Red, int Green, int Blue)
+/* 00015cda */{
+/* 00015cda */	this.m_DefaultRed = Red;
+/* 00015cf0 */	this.m_DefaultGreen = Green;
+/* 00015d06 */	this.m_DefaultBlue = Blue;
+/* 00015d1c */}
+
+int CMessageDrawParts::GetDefaultFontRed()
+/* 00015d24 */{
+/* 00015d24 */	return this.m_DefaultRed;
+/* 00015d30 */}
+
+int CMessageDrawParts::GetDefaultFontGreen()
+/* 00015d3e */{
+/* 00015d3e */	return this.m_DefaultGreen;
+/* 00015d4a */}
+
+int CMessageDrawParts::GetDefaultFontBlue()
+/* 00015d58 */{
+/* 00015d58 */	return this.m_DefaultBlue;
+/* 00015d64 */}
+
+int CMessageDrawParts::GetPartsNumber()
+/* 00015d72 */{
+/* 00015d72 */	return this.m_PartsNumber;
+/* 00015d7e */}
+

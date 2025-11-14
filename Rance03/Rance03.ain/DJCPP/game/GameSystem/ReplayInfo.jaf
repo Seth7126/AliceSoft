@@ -1,0 +1,65 @@
+void ReplayInfo::init(int index)
+/* 001e11ce */{
+/* 001e11ce */	this.load(index);
+/* 001e11e0 */}
+
+void ReplayInfo::load(int index)
+/* 001e11e8 */{
+/* 001e11e8 */	string key = "回想モード情報";
+/* 001e11fc */	this.thumbnail_ = EX_RA2String(key, index, "thumbnail", "");
+/* 001e1230 */	int i;
+/* 001e1242 */	for (i = 0; i < 10; ++i)
+/* 001e1288 */	{
+/* 001e1288 */		string n1 = EX_RA2String(key, index, "event%d" % (i + 1), "");
+/* 001e12d6 */		string n2 = EX_RA2String(key, index, "name%d" % (i + 1), "");
+/* 001e1324 */		if (n1 != "")
+/* 001e133c */		{
+/* 001e133c */			this.event_.PushBack("ＥＶ／" + n1);
+/* 001e1358 */			this.name_.PushBack(n2);
+/* 001e136c */		}
+/* 001e136c */	}
+/* 001e1372 */}
+
+string ReplayInfo::getThumbnailCg()
+/* 001e137a */{
+/* 001e137a */	return this.thumbnail_;
+/* 001e1386 */}
+
+void ReplayInfo::getAvailableEventList(ref array@string functionList, ref array@string nameList)
+/* 001e1394 */{
+/* 001e1394 */	functionList.Free();
+/* 001e139e */	int i;
+/* 001e13b0 */	for (i = 0; i < this.event_.Numof(); ++i)
+/* 001e1400 */	{
+/* 001e1400 */		if (g_replayEvent.Find(0, g_replayEvent.Numof(), this.event_[i]) != -1)
+/* 001e144a */		{
+/* 001e144a */			functionList.PushBack(this.event_[i]);
+/* 001e146a */			nameList.PushBack(this.name_[i]);
+/* 001e148a */		}
+/* 001e148a */	}
+/* 001e1490 */}
+
+bool ReplayInfo::isAvailable()
+/* 001e1498 */{
+/* 001e1498 */	int i;
+/* 001e14aa */	for (i = 0; i < this.event_.Numof(); ++i)
+/* 001e14fa */	{
+/* 001e14fa */		if (g_replayEvent.Find(0, g_replayEvent.Numof(), this.event_[i]) != -1)
+/* 001e1544 */		{
+/* 001e1544 */			return true;
+/* 001e154c */		}
+/* 001e154c */	}
+/* 001e1552 */	return false;
+/* 001e155a */}
+
+bool ReplayInfo::isEventExist(string funcName)
+/* 001e1568 */{
+/* 001e1568 */	return this.event_.Find(0, this.event_.Numof(), funcName) != -1;
+/* 001e15a4 */}
+
+void ReplayInfo::getFunctionList(ref array@string functionList)
+/* 001e15b2 */{
+/* 001e15b2 */	functionList.Alloc(this.event_.Numof());
+/* 001e15d2 */	functionList.Copy(0, this.event_, 0, this.event_.Numof());
+/* 001e1604 */}
+

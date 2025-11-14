@@ -1,0 +1,286 @@
+ref MapPlace getMapPlaceFromId(string id)
+/* 001db68e */{
+/* 001db68e */	int i;
+/* 001db6a0 */	for (i = 0; i < g_mapPlace.Numof(); ++i)
+/* 001db6f0 */	{
+/* 001db6f0 */		if (g_mapPlace[i].getId() == id)
+/* 001db71e */		{
+/* 001db71e */			return g_mapPlace[i];
+/* 001db73a */		}
+/* 001db73a */	}
+/* 001db740 */	return NULL;
+/* 001db748 */}
+
+ref CardInfomation getCardInfomationFromId(string cardId)
+/* 001db75c */{
+/* 001db75c */	int i;
+/* 001db76e */	for (i = 0; i < g_cardInfomation.Numof(); ++i)
+/* 001db7be */	{
+/* 001db7be */		if (g_cardInfomation[i].getId() == cardId)
+/* 001db7ec */		{
+/* 001db7ec */			return g_cardInfomation[i];
+/* 001db808 */		}
+/* 001db808 */	}
+/* 001db80e */	return NULL;
+/* 001db816 */}
+
+ref Dungeon getDungeonFromId(string dungeonId)
+/* 001db82a */{
+/* 001db82a */	int i;
+/* 001db83c */	for (i = 0; i < g_dungeon.Numof(); ++i)
+/* 001db88c */	{
+/* 001db88c */		if (g_dungeon[i].getId() == dungeonId)
+/* 001db8ba */		{
+/* 001db8ba */			return g_dungeon[i];
+/* 001db8d6 */		}
+/* 001db8d6 */	}
+/* 001db8dc */	return NULL;
+/* 001db8e4 */}
+
+ref PlayerSkill getPlayerSkillFromId(string attackSkillId)
+/* 001db8f8 */{
+/* 001db8f8 */	int l;
+/* 001db90a */	int r = g_attackSkill.Numof() - 1;
+/* 001db92e */	int m;
+/* 001db940 */	while (l <= r)
+/* 001db95c */	{
+/* 001db95c */		m = (l + r) / 2;
+/* 001db986 */		string mId = g_attackSkill[m].getId();
+/* 001db9b0 */		if (attackSkillId == mId)
+/* 001db9cc */		{
+/* 001db9cc */			return g_attackSkill[m];
+/* 001db9e8 */		}
+/* 001db9ee */		else if (attackSkillId < mId)
+/* 001dba0a */		{
+/* 001dba0a */			r = m - 1;
+/* 001dba28 */		}
+/* 001dba2e */		else
+/* 001dba2e */		{
+/* 001dba2e */			l = m + 1;
+/* 001dba4c */		}
+/* 001dba4c */	}
+/* 001dba52 */	return NULL;
+/* 001dba5a */}
+
+ref Player getPlayerFromId(string characterId)
+/* 001dba6e */{
+/* 001dba6e */	int i;
+/* 001dba80 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001dbad0 */	{
+/* 001dbad0 */		if (g_player[i].getId() == characterId)
+/* 001dbafe */		{
+/* 001dbafe */			return g_player[i];
+/* 001dbb1a */		}
+/* 001dbb1a */	}
+/* 001dbb20 */	return NULL;
+/* 001dbb28 */}
+
+ref Monster getMonsterFromId(string monsterId)
+/* 001dbb3c */{
+/* 001dbb3c */	int i;
+/* 001dbb4e */	for (i = 0; i < g_monster.Numof(); ++i)
+/* 001dbb9e */	{
+/* 001dbb9e */		if (g_monster[i].getId() == monsterId)
+/* 001dbbcc */		{
+/* 001dbbcc */			return g_monster[i];
+/* 001dbbe8 */		}
+/* 001dbbe8 */	}
+/* 001dbbee */	return NULL;
+/* 001dbbf6 */}
+
+ref MonsterAttackAttribute getMonsterAttackAttributeFromId(string attrId)
+/* 001dbc0a */{
+/* 001dbc0a */	int i;
+/* 001dbc1c */	for (i = 0; i < g_monsterAttackAttribute.Numof(); ++i)
+/* 001dbc6c */	{
+/* 001dbc6c */		if (g_monsterAttackAttribute[i].getId() == attrId)
+/* 001dbc9a */		{
+/* 001dbc9a */			return g_monsterAttackAttribute[i];
+/* 001dbcb6 */		}
+/* 001dbcb6 */	}
+/* 001dbcbc */	return NULL;
+/* 001dbcc4 */}
+
+ref PlayerSkillAttribute getPlayerSkillAttributeFromId(string attrId)
+/* 001dbcd8 */{
+/* 001dbcd8 */	int i;
+/* 001dbcea */	for (i = 0; i < g_playerAttackAttribute.Numof(); ++i)
+/* 001dbd3a */	{
+/* 001dbd3a */		if (g_playerAttackAttribute[i].getId() == attrId)
+/* 001dbd68 */		{
+/* 001dbd68 */			return g_playerAttackAttribute[i];
+/* 001dbd84 */		}
+/* 001dbd84 */	}
+/* 001dbd8a */	return NULL;
+/* 001dbd92 */}
+
+ref PlayerBuff getPlayerBuffFromId(string id)
+/* 001dbda6 */{
+/* 001dbda6 */	int i;
+/* 001dbdb8 */	for (i = 0; i < g_playerBuff.Numof(); ++i)
+/* 001dbe08 */	{
+/* 001dbe08 */		if (g_playerBuff[i].getId() == id)
+/* 001dbe36 */		{
+/* 001dbe36 */			return g_playerBuff[i];
+/* 001dbe52 */		}
+/* 001dbe52 */	}
+/* 001dbe58 */	return NULL;
+/* 001dbe60 */}
+
+ref MonsterBuff getMonsterBuffFromId(string id)
+/* 001dbe74 */{
+/* 001dbe74 */	int i;
+/* 001dbe86 */	for (i = 0; i < g_monsterBuff.Numof(); ++i)
+/* 001dbed6 */	{
+/* 001dbed6 */		if (g_monsterBuff[i].getId() == id)
+/* 001dbf04 */		{
+/* 001dbf04 */			return g_monsterBuff[i];
+/* 001dbf20 */		}
+/* 001dbf20 */	}
+/* 001dbf26 */	return NULL;
+/* 001dbf2e */}
+
+ref Item getItemFromId(string id)
+/* 001dbf42 */{
+/* 001dbf42 */	int i;
+/* 001dbf54 */	for (i = 0; i < g_item.Numof(); ++i)
+/* 001dbfa4 */	{
+/* 001dbfa4 */		if (g_item[i].getId() == id)
+/* 001dbfd2 */		{
+/* 001dbfd2 */			return g_item[i];
+/* 001dbfee */		}
+/* 001dbfee */	}
+/* 001dbff4 */	pass("ItemId[%s]が見つかりません" % id);
+/* 001dc012 */	return NULL;
+/* 001dc01a */}
+
+ref Shop getShopFromId(string id)
+/* 001dc02e */{
+/* 001dc02e */	int i;
+/* 001dc040 */	for (i = 0; i < g_shop.Numof(); ++i)
+/* 001dc090 */	{
+/* 001dc090 */		if (g_shop[i].getId() == id)
+/* 001dc0be */		{
+/* 001dc0be */			return g_shop[i];
+/* 001dc0da */		}
+/* 001dc0da */	}
+/* 001dc0e0 */	return NULL;
+/* 001dc0e8 */}
+
+ref MapEncountMonsterGroup getMapEncountMonsterGroupFromId(string id)
+/* 001dc0fc */{
+/* 001dc0fc */	int i;
+/* 001dc10e */	for (i = 0; i < g_mapEncountMonsterGroup.Numof(); ++i)
+/* 001dc15e */	{
+/* 001dc15e */		if (g_mapEncountMonsterGroup[i].getId() == id)
+/* 001dc18c */		{
+/* 001dc18c */			return g_mapEncountMonsterGroup[i];
+/* 001dc1a8 */		}
+/* 001dc1a8 */	}
+/* 001dc1ae */	return NULL;
+/* 001dc1b6 */}
+
+int getPlayerIndexFromId(string playerId)
+/* 001dc1ca */{
+/* 001dc1ca */	int i;
+/* 001dc1dc */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001dc22c */	{
+/* 001dc22c */		if (g_player[i].getId() == playerId)
+/* 001dc25a */		{
+/* 001dc25a */			return i;
+/* 001dc266 */		}
+/* 001dc266 */	}
+/* 001dc26c */	return -1;
+/* 001dc274 */}
+
+ref BattleBackgroundInfomation getBattleBackGroundInfomationFromId(string id)
+/* 001dc288 */{
+/* 001dc288 */	int i;
+/* 001dc29a */	for (i = 0; i < g_battleBackgroundInfomation.Numof(); ++i)
+/* 001dc2ea */	{
+/* 001dc2ea */		if (g_battleBackgroundInfomation[i].getId() == id)
+/* 001dc318 */		{
+/* 001dc318 */			return g_battleBackgroundInfomation[i];
+/* 001dc334 */		}
+/* 001dc334 */	}
+/* 001dc33a */	return NULL;
+/* 001dc342 */}
+
+ref ZeroThreeSkill getZeroThreeSkillFromId(string id)
+/* 001dc356 */{
+/* 001dc356 */	int i;
+/* 001dc368 */	for (i = 0; i < g_zeroThreeSkill.Numof(); ++i)
+/* 001dc3b8 */	{
+/* 001dc3b8 */		if (g_zeroThreeSkill[i].getId() == id)
+/* 001dc3e6 */		{
+/* 001dc3e6 */			return g_zeroThreeSkill[i];
+/* 001dc402 */		}
+/* 001dc402 */	}
+/* 001dc408 */	return NULL;
+/* 001dc410 */}
+
+ref MonsterAttribute getMonsterAttributeFromId(string id)
+/* 001dc424 */{
+/* 001dc424 */	int i;
+/* 001dc436 */	for (i = 0; i < g_monsterAttribute.Numof(); ++i)
+/* 001dc486 */	{
+/* 001dc486 */		if (g_monsterAttribute[i].getId() == id)
+/* 001dc4b4 */		{
+/* 001dc4b4 */			return g_monsterAttribute[i];
+/* 001dc4d0 */		}
+/* 001dc4d0 */	}
+/* 001dc4d6 */	return NULL;
+/* 001dc4de */}
+
+ref AdvSelectionButtonInfomation getAdvSelectionButtonInfomationFromId(string id)
+/* 001dc4f2 */{
+/* 001dc4f2 */	int i;
+/* 001dc504 */	for (i = 0; i < g_advSelectionButtonInfomation.Numof(); ++i)
+/* 001dc554 */	{
+/* 001dc554 */		if (g_advSelectionButtonInfomation[i].getId() == id)
+/* 001dc582 */		{
+/* 001dc582 */			return g_advSelectionButtonInfomation[i];
+/* 001dc59e */		}
+/* 001dc59e */	}
+/* 001dc5a4 */	return NULL;
+/* 001dc5ac */}
+
+ref MusicInfo getMusicInfoFromId(string id)
+/* 001dc5c0 */{
+/* 001dc5c0 */	int i;
+/* 001dc5d2 */	for (i = 0; i < g_musicInfo.Numof(); ++i)
+/* 001dc622 */	{
+/* 001dc622 */		if (g_musicInfo[i].getId() == id)
+/* 001dc650 */		{
+/* 001dc650 */			return g_musicInfo[i];
+/* 001dc66c */		}
+/* 001dc66c */	}
+/* 001dc672 */	return NULL;
+/* 001dc67a */}
+
+ref EnquiteSelection getEnquiteSelectionFromName(string name)
+/* 001dc68e */{
+/* 001dc68e */	int i;
+/* 001dc6a0 */	for (i = 0; i < g_enquiteSelection.Numof(); ++i)
+/* 001dc6f0 */	{
+/* 001dc6f0 */		if (g_enquiteSelection[i].getCheckBoxName() == name)
+/* 001dc71e */		{
+/* 001dc71e */			return g_enquiteSelection[i];
+/* 001dc73a */		}
+/* 001dc73a */	}
+/* 001dc740 */	return NULL;
+/* 001dc748 */}
+
+ref PlayerVoiceFinder getVoiceFinderFromId(string id)
+/* 001dc75c */{
+/* 001dc75c */	int i;
+/* 001dc76e */	for (i = 0; i < g_voiceFinder.Numof(); ++i)
+/* 001dc7be */	{
+/* 001dc7be */		if (g_voiceFinder[i].getId() == id)
+/* 001dc7ec */		{
+/* 001dc7ec */			return g_voiceFinder[i];
+/* 001dc808 */		}
+/* 001dc808 */	}
+/* 001dc80e */	return NULL;
+/* 001dc816 */}
+

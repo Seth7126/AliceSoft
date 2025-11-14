@@ -1,0 +1,84 @@
+void SYS_Init_JoystickButtonAssignment()
+/* 00145216 */{
+/* 00145216 */	g_JoystickButtonAssignmentTable.Alloc(50);
+/* 0014522c */	g_JoystickButtonAssignmentTable.Fill(0, g_JoystickButtonAssignmentTable.Numof(), -1);
+/* 00145254 */	g_JoystickButtonAssignmentTable[0] = SYS_GetDefaultJoystickButtonAssignment(0);
+/* 00145274 */	g_JoystickButtonAssignmentTable[1] = SYS_GetDefaultJoystickButtonAssignment(1);
+/* 00145294 */	g_JoystickButtonAssignmentTable[2] = SYS_GetDefaultJoystickButtonAssignment(2);
+/* 001452b4 */	g_JoystickButtonAssignmentTable[3] = SYS_GetDefaultJoystickButtonAssignment(3);
+/* 001452d4 */	g_JoystickButtonAssignmentTable[4] = SYS_GetDefaultJoystickButtonAssignment(4);
+/* 001452f4 */	g_JoystickButtonAssignmentTable[5] = SYS_GetDefaultJoystickButtonAssignment(5);
+/* 00145314 */	g_JoystickButtonAssignmentTable[6] = SYS_GetDefaultJoystickButtonAssignment(6);
+/* 00145334 */	g_JoystickButtonAssignmentTable[7] = SYS_GetDefaultJoystickButtonAssignment(7);
+/* 00145354 */	g_JoystickButtonAssignmentTable[8] = SYS_GetDefaultJoystickButtonAssignment(8);
+/* 00145374 */	g_JoystickButtonAssignmentTable[15] = SYS_GetDefaultJoystickButtonAssignment(15);
+/* 00145394 */	g_JoystickButtonAssignmentTable[16] = SYS_GetDefaultJoystickButtonAssignment(16);
+/* 001453b4 */	g_JoystickButtonAssignmentTable[17] = SYS_GetDefaultJoystickButtonAssignment(17);
+/* 001453d4 */	g_JoystickButtonAssignmentTable[18] = SYS_GetDefaultJoystickButtonAssignment(18);
+/* 001453f4 */	g_JoystickButtonAssignmentTable[19] = SYS_GetDefaultJoystickButtonAssignment(19);
+/* 00145414 */	g_JoystickButtonAssignmentTable[9] = SYS_GetDefaultJoystickButtonAssignment(9);
+/* 00145434 */	g_JoystickButtonAssignmentTable[10] = SYS_GetDefaultJoystickButtonAssignment(10);
+/* 00145454 */	g_JoystickButtonAssignmentTable[11] = SYS_GetDefaultJoystickButtonAssignment(11);
+/* 00145474 */	g_JoystickButtonAssignmentTable[12] = SYS_GetDefaultJoystickButtonAssignment(12);
+/* 00145494 */	g_JoystickButtonAssignmentTable[20] = SYS_GetDefaultJoystickButtonAssignment(20);
+/* 001454b4 */	g_JoystickButtonAssignmentTable[21] = SYS_GetDefaultJoystickButtonAssignment(21);
+/* 001454d4 */	g_JoystickButtonAssignmentTable[40] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION01", "デフォルトキー", 0);
+/* 00145506 */	g_JoystickButtonAssignmentTable[41] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION02", "デフォルトキー", 0);
+/* 00145538 */	g_JoystickButtonAssignmentTable[42] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION03", "デフォルトキー", 0);
+/* 0014556a */	g_JoystickButtonAssignmentTable[43] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION04", "デフォルトキー", 0);
+/* 0014559c */	g_JoystickButtonAssignmentTable[44] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION05", "デフォルトキー", 0);
+/* 001455ce */	g_JoystickButtonAssignmentTable[45] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION06", "デフォルトキー", 0);
+/* 00145600 */	g_JoystickButtonAssignmentTable[46] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION07", "デフォルトキー", 0);
+/* 00145632 */	g_JoystickButtonAssignmentTable[47] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION08", "デフォルトキー", 0);
+/* 00145664 */	g_JoystickButtonAssignmentTable[48] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION09", "デフォルトキー", 0);
+/* 00145696 */	g_JoystickButtonAssignmentTable[49] = EX_SA2Int("Ｅ＿ジョイパッド＿アサインコード＿ゲーム機能", "JOYBUTTONASSIGN_GAMEFUNCTION10", "デフォルトキー", 0);
+/* 001456c8 */}
+
+int SYS_GetDefaultJoystickButtonAssignment(int JoystickCode)
+/* 001456d6 */{
+/* 001456d6 */	switch (JoystickCode)
+/* 001456ec */	{
+/* 001456ec */	case 0:
+/* 001456ec */		return 1;
+/* 001456f4 */	case 1:
+/* 001456f4 */		return 2;
+/* 001456fc */	case 2:
+/* 001456fc */		return 3;
+/* 00145704 */	case 3:
+/* 00145704 */		return 4;
+/* 0014570c */	case 4:
+/* 0014570c */		return 6;
+/* 00145714 */	case 5:
+/* 00145714 */		return 7;
+/* 0014571c */	case 6:
+/* 0014571c */		return 5;
+/* 00145724 */	case 7:
+/* 00145724 */		return 8;
+/* 0014572c */	case 8:
+/* 0014572c */		return 9;
+/* 00145734 */	case 15:
+/* 00145734 */		return 10;
+/* 0014573c */	case 16:
+/* 0014573c */		return 3;
+/* 00145744 */	case 17:
+/* 00145744 */		return 4;
+/* 0014574c */	case 18:
+/* 0014574c */		return 11;
+/* 00145754 */	case 19:
+/* 00145754 */		return 12;
+/* 0014575c */	case 9:
+/* 0014575c */		return 3;
+/* 00145764 */	case 10:
+/* 00145764 */		return 4;
+/* 0014576c */	case 11:
+/* 0014576c */		return 11;
+/* 00145774 */	case 12:
+/* 00145774 */		return 12;
+/* 0014577c */	case 20:
+/* 0014577c */		return 5;
+/* 00145784 */	case 21:
+/* 00145784 */		return 6;
+/* 0014578c */	}
+/* 0014578c */	return -1;
+/* 00145794 */}
+

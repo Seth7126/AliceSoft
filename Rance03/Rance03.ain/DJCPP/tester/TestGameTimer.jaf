@@ -1,0 +1,33 @@
+void TestGameTimer::setTimer(int time, DG_GeneralCallback cb)
+/* 001f8bde */{
+/* 001f8bde */	this.cb_ = cb;
+/* 001f8bf8 */	this.timerCb_.setTimer(time, this.onFinish);
+/* 001f8c1c */}
+
+void TestGameTimer::onFinish()
+/* 001f8c24 */{
+/* 001f8c24 */	this.cb_();
+/* 001f8c44 */}
+
+void test_Game_Timer()
+/* 001f8c4c */{
+/* 001f8c4c */	array@TestGameTimer t[10];
+/* 001f8c62 */	LocalTimer timer;
+/* 001f8c72 */	while (true)
+/* 001f8c7e */	{
+/* 001f8c7e */		if (timer.getTime() > 100)
+/* 001f8c9c */		{
+/* 001f8c9c */			timer.reset();
+/* 001f8cac */			int index = RAND(t.Numof()) - 1;
+/* 001f8cd6 */			t[index].setTimer(RAND(200) + 50, "test_Game_TimerCallback");
+/* 001f8d1e */		}
+/* 001f8d1e */		g_gameObjectManager.update();
+/* 001f8d2e */		g_frameManager.updateFrame();
+/* 001f8d3e */	}
+/* 001f8d44 */}
+
+void test_Game_TimerCallback()
+/* 001f8d52 */{
+/* 001f8d52 */	pass("finish timer(callback)");
+/* 001f8d5e */}
+

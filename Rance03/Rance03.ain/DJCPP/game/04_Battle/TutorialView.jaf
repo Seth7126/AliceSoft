@@ -1,0 +1,51 @@
+TutorialView::TutorialView()
+/* 001b3f8a */{
+/* 001b3f92 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b3fb8 */}
+
+void TutorialView::init(int skillCount)
+/* 001b3fc0 */{
+/* 001b3fc0 */	if (skillCount == 1)
+/* 001b3fd8 */	{
+/* 001b3fd8 */		string key = "戦闘チュートリアル１";
+/* 001b3fec */		if (g_globalGameFlag.getInt(key) == 0)
+/* 001b4014 */		{
+/* 001b4014 */			this.parts_.init("システム／チュートリアル０１", 0);
+/* 001b4030 */			this.parts_.setZ(3150.0);
+/* 001b4046 */			g_globalGameFlag.setInt(key, 1);
+/* 001b4066 */		}
+/* 001b4066 */	}
+/* 001b406c */	else
+/* 001b406c */	{
+/* 001b406c */		string key = "戦闘チュートリアル２";
+/* 001b4080 */		if (g_globalGameFlag.getInt(key) == 0)
+/* 001b40a8 */		{
+/* 001b40a8 */			this.parts_.init("システム／チュートリアル０２", 0);
+/* 001b40c4 */			this.parts_.setZ(3150.0);
+/* 001b40da */			g_globalGameFlag.setInt(key, 1);
+/* 001b40fa */		}
+/* 001b40fa */	}
+/* 001b40fa */}
+
+void TutorialView::update()
+/* 001b4102 */{
+/* 001b4104 */}
+
+void TutorialView::fadeIn(bool val)
+/* 001b410a */{
+/* 001b410a */	if (!this.parts_.isInitialized())
+/* 001b4122 */	{
+/* 001b4122 */		return;
+/* 001b4124 */	}
+/* 001b4124 */	this.parts_.setShow(true);
+/* 001b413a */	if (!val)
+/* 001b414c */	{
+/* 001b414c */		this.parts_.runMotion(getStandardMotion(val ? 0 : 1), this.onFinishFadeOut);
+/* 001b418e */	}
+/* 001b418e */}
+
+void TutorialView::onFinishFadeOut()
+/* 001b4196 */{
+/* 001b4196 */	this.parts_.release();
+/* 001b41a6 */}
+

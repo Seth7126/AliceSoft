@@ -1,0 +1,60 @@
+string DebugFunctionTextIndexMap::getIndexName()
+/* 001ca568 */{
+/* 001ca568 */	return this.indexText_;
+/* 001ca574 */}
+
+string DebugFunctionTextIndexMap::getSplitter()
+/* 001ca582 */{
+/* 001ca582 */	return this.splitter_;
+/* 001ca58e */}
+
+void DebugFunctionTextIndexMap::init(string index, string functionName, string functionParam, string splitter)
+/* 001ca59c */{
+/* 001ca59c */	this.indexText_ = index;
+/* 001ca5b4 */	this.funcName_ = functionName;
+/* 001ca5cc */	this.splitter_ = splitter;
+/* 001ca5e4 */	this.funcParam_ = functionParam;
+/* 001ca5fc */	splitToken(this.categoryList_, this.indexText_, this.splitter_);
+/* 001ca620 */}
+
+string DebugFunctionTextIndexMap::getCategory(int level)
+/* 001ca628 */{
+/* 001ca628 */	if (0 <= level && level < this.categoryList_.Numof())
+/* 001ca67a */	{
+/* 001ca67a */		return this.categoryList_[level];
+/* 001ca692 */	}
+/* 001ca692 */	return "ERROR";
+/* 001ca69a */}
+
+int DebugFunctionTextIndexMap::getCategoryDepth()
+/* 001ca6a8 */{
+/* 001ca6a8 */	return this.categoryList_.Numof();
+/* 001ca6ba */}
+
+string DebugFunctionTextIndexMap::getFunctionName()
+/* 001ca6c8 */{
+/* 001ca6c8 */	return this.funcName_;
+/* 001ca6d4 */}
+
+bool DebugFunctionTextIndexMap::isMatchCategory(ref array@string category)
+/* 001ca6e2 */{
+/* 001ca6e2 */	if (category.Numof() > this.categoryList_.Numof())
+/* 001ca70a */	{
+/* 001ca70a */		return false;
+/* 001ca712 */	}
+/* 001ca712 */	int i;
+/* 001ca724 */	for (i = 0; i < category.Numof(); ++i)
+/* 001ca774 */	{
+/* 001ca774 */		if (category[i] != this.categoryList_[i])
+/* 001ca7a8 */		{
+/* 001ca7a8 */			return false;
+/* 001ca7b0 */		}
+/* 001ca7b0 */	}
+/* 001ca7b6 */	return true;
+/* 001ca7be */}
+
+string DebugFunctionTextIndexMap::getFunctionParam()
+/* 001ca7cc */{
+/* 001ca7cc */	return this.funcParam_;
+/* 001ca7d8 */}
+

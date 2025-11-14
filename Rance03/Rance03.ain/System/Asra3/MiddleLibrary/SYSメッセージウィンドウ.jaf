@@ -1,0 +1,864 @@
+void SYS_Message(int nMsgNum, string szText)
+/* 001457ae */{
+/* 001457ae */	if (!g_MessageWindowStatusManager.IsExistActiveMessageWindow())
+/* 001457c6 */	{
+/* 001457c6 */		system.Output("【警告】message関数：字枠が設定されていないので字枠(1)を使用します。\n　　　　'%s'\n" % szText);
+/* 001457e6 */		字枠セット(1, -2147483648);
+/* 001457f8 */	}
+/* 001457f8 */	g_MessageTextModel.AddMessageText(nMsgNum, szText, g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 0014582c */	SYS_既読メッセージフラグ更新(nMsgNum);
+/* 0014583c */	if (SYS_デフォルトセーブコメント要更新())
+/* 00145848 */	{
+/* 00145848 */		SYS_デフォルトセーブコメント設定(szText);
+/* 00145858 */	}
+/* 00145858 */	AnteaterADVEngine.ADVLogList_AddText(szText, g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 0014587c */}
+
+void SYS_VOICE(string Voice)
+/* 0014588a */{
+/* 0014588a */	_g_最終音声名 = Voice;
+/* 001458a2 */	if (!Voice.Empty() && !KiwiSoundEngine.IsExistFile(Voice))
+/* 001458ea */	{
+/* 001458ea */		SYS_ERROR("VOICE[%s]ロード失敗" % Voice, 0);
+/* 0014590e */		Voice = "";
+/* 00145922 */	}
+/* 00145922 */	g_MessageTextModel.AddVoice(Voice, g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 0014594c */	AnteaterADVEngine.ADVLogList_AddVoice(Voice);
+/* 00145960 */	if (system.IsDebugMode() && !Voice.Empty())
+/* 00145998 */	{
+/* 00145998 */		string DebugOutputText = "[%s]" % Voice;
+/* 001459be */		AnteaterADVEngine.ADVLogList_AddText(DebugOutputText, g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 001459e2 */	}
+/* 001459e2 */}
+
+void SYS_R()
+/* 001459f0 */{
+/* 001459f0 */	if (!g_MessageWindowStatusManager.IsExistActiveMessageWindow())
+/* 00145a08 */	{
+/* 00145a08 */		system.Output("【警告】R関数：字枠が設定されていないので字枠(1)を使用します。\n");
+/* 00145a16 */		字枠セット(1, -2147483648);
+/* 00145a28 */	}
+/* 00145a28 */	g_MessageTextModel.AddNewLine(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145a48 */	AnteaterADVEngine.ADVLogList_AddNewLine();
+/* 00145a52 */}
+
+void SYS_A()
+/* 00145a60 */{
+/* 00145a60 */	SYS_メッセージ表示();
+/* 00145a66 */	SYS_メッセージキー待ち(false);
+/* 00145a72 */	SYS_メッセージスキップ待ち();
+/* 00145a78 */	PARTS_EndMotionFociby();
+/* 00145a7e */	SYS_バックシーン登録();
+/* 00145a84 */	g_MessageTextModel.SetMessageReadFlag();
+/* 00145a94 */	SYS_Ｍ消去(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145aaa */	AnteaterADVEngine.ADVLogList_AddNewPage();
+/* 00145ab4 */	SYS_StopVoiceBySkipMessage();
+/* 00145aba */	SYS_StopUncontinuedSE();
+/* 00145ac0 */	_g_最終音声名 = "";
+/* 00145ad4 */}
+
+void SYS_AA()
+/* 00145ae2 */{
+/* 00145ae2 */	SYS_メッセージ表示();
+/* 00145ae8 */	SYS_メッセージキー待ち(true);
+/* 00145af4 */	PARTS_EndMotionFociby();
+/* 00145afa */	SYS_バックシーン登録();
+/* 00145b00 */	g_MessageTextModel.SetMessageReadFlag();
+/* 00145b10 */	SYS_Ｍ消去(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145b26 */	AnteaterADVEngine.ADVLogList_AddNewPage();
+/* 00145b30 */	SYS_StopVoiceBySkipMessage();
+/* 00145b36 */	SYS_StopUncontinuedSE();
+/* 00145b3c */	_g_最終音声名 = "";
+/* 00145b50 */}
+
+void SYS_B()
+/* 00145b5e */{
+/* 00145b5e */	SYS_メッセージ表示();
+/* 00145b64 */	PARTS_EndMotionFociby();
+/* 00145b6a */	g_MessageTextModel.SetMessageReadFlag();
+/* 00145b7a */	g_MessageTextModel.AddC(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145b9a */	_g_最終音声名 = "";
+/* 00145bae */}
+
+void SYS_C()
+/* 00145bbc */{
+/* 00145bbc */	SYS_メッセージ表示();
+/* 00145bc2 */	SYS_メッセージキー待ち(false);
+/* 00145bce */	SYS_メッセージスキップ待ち();
+/* 00145bd4 */	PARTS_EndMotionFociby();
+/* 00145bda */	SYS_バックシーン登録();
+/* 00145be0 */	g_MessageTextModel.SetMessageReadFlag();
+/* 00145bf0 */	g_MessageTextModel.AddC(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145c10 */	SYS_StopVoiceBySkipMessage();
+/* 00145c16 */	SYS_StopUncontinuedSE();
+/* 00145c1c */	_g_最終音声名 = "";
+/* 00145c30 */}
+
+void SYS_D()
+/* 00145c3e */{
+/* 00145c3e */	SYS_メッセージ表示();
+/* 00145c44 */	SYS_メッセージキー待ち(false);
+/* 00145c50 */	SYS_メッセージスキップ待ち();
+/* 00145c56 */	PARTS_EndMotionFociby();
+/* 00145c5c */	SYS_バックシーン登録();
+/* 00145c62 */	g_MessageTextModel.SetMessageReadFlag();
+/* 00145c72 */	g_MessageTextModel.AddNewLine(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145c92 */	g_MessageTextModel.AddNewLine(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145cb2 */}
+
+void SYS_字枠セット(int Ｍ番号, int 動作)
+/* 00145cc0 */{
+/* 00145cc0 */	if (動作 == -2147483648)
+/* 00145cd8 */	{
+/* 00145cd8 */		動作 = 2;
+/* 00145cea */	}
+/* 00145cea */	if (Ｍ番号 == 0)
+/* 00145d02 */	{
+/* 00145d02 */		g_SystemButtonViewList.Clear();
+/* 00145d12 */		g_SystemButtonViewList.Update();
+/* 00145d22 */		g_MessageTextModel.Clear();
+/* 00145d32 */		g_MessageWindowStatusManager.Clear();
+/* 00145d42 */		g_MessageWindowManager.Update(g_MessageWindowStatusManager);
+/* 00145d5c */		return;
+/* 00145d5e */	}
+/* 00145d5e */	if (g_MessageWindowStatusManager.GetActiveMessageWindowNumber() == Ｍ番号 && 動作 == 0)
+/* 00145db0 */	{
+/* 00145db0 */		g_SystemButtonViewList.Clear();
+/* 00145dc0 */		g_SystemButtonViewList.Update();
+/* 00145dd0 */	}
+/* 00145dd6 */	else if (動作 != 0)
+/* 00145dee */	{
+/* 00145dee */		g_SystemButtonViewList.SetMessageWindowNumber(Ｍ番号);
+/* 00145e08 */		g_SystemButtonViewList.Update();
+/* 00145e18 */	}
+/* 00145e18 */	switch (動作)
+/* 00145e2e */	{
+/* 00145e2e */	case 0:
+/* 00145e2e */		g_MessageWindowStatusManager.HideMessageWindow(Ｍ番号);
+/* 00145e48 */		g_MessageWindowManager.Update(g_MessageWindowStatusManager);
+/* 00145e62 */		SYS_Ｍ消去(Ｍ番号);
+/* 00145e72 */		break;
+/* 00145e78 */	case 1:
+/* 00145e78 */		SYS_字枠表示(Ｍ番号, false);
+/* 00145e8e */		SYS_Ｍ消去(Ｍ番号);
+/* 00145e9e */		break;
+/* 00145ea4 */	case 2:
+/* 00145ea4 */		if (g_MessageWindowStatusManager.GetActiveMessageWindowNumber() != Ｍ番号)
+/* 00145ec6 */		{
+/* 00145ec6 */			SYS_Ｍ消去(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145edc */		}
+/* 00145edc */		SYS_字枠表示(Ｍ番号, true);
+/* 00145ef2 */		SYS_Ｍ消去(Ｍ番号);
+/* 00145f02 */		break;
+/* 00145f08 */	case 3:
+/* 00145f08 */		SYS_字枠表示(Ｍ番号, false);
+/* 00145f1e */		break;
+/* 00145f24 */	default:
+/* 00145f24 */		system.Error("未対応のメッセージウィンドウの切り替え設定がおこなわれました %d" % 動作);
+/* 00145f44 */	}
+/* 00145f44 */	g_MessageTextView.UpdateZByMessageWindowZChanged();
+/* 00145f54 */	SYS_スキップモードマーク表示更新();
+/* 00145f5a */	SYS_オートモードマーク表示更新();
+/* 00145f60 */}
+
+void SYS_字枠表示(int Ｍ番号, bool ClearPrevMessageWindow)
+/* 00145f6e */{
+/* 00145f6e */	SYS_ASSERTE_AREA_ID(Ｍ番号);
+/* 00145f7c */	if (g_MessageWindowStatusManager.GetActiveMessageWindowNumber() != Ｍ番号)
+/* 00145f9e */	{
+/* 00145f9e */		if (ClearPrevMessageWindow)
+/* 00145fae */		{
+/* 00145fae */			g_MessageWindowStatusManager.HideMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 00145fce */		}
+/* 00145fce */		g_MessageWindowStatusManager.ShowMessageWindow(Ｍ番号);
+/* 00145fe8 */	}
+/* 00145fe8 */	g_MessageWindowManager.Update(g_MessageWindowStatusManager);
+/* 00146002 */}
+
+void SYS_メッセージウィンドウ非表示()
+/* 00146010 */{
+/* 00146010 */	g_MessageWindowManager.HideAll();
+/* 00146020 */	CASClick LButtonClick;
+/* 00146030 */	CASClick RButtonClick;
+/* 00146040 */	CASClick ReturnKeyClick;
+/* 00146050 */	CASClick ZKeyClick;
+/* 00146060 */	CASClick SpaceKeyClick;
+/* 00146070 */	LButtonClick.Init(1, true);
+/* 0014608c */	RButtonClick.Init(2, true);
+/* 001460a8 */	ReturnKeyClick.Init(13, true);
+/* 001460c4 */	ZKeyClick.Init(90, true);
+/* 001460e0 */	SpaceKeyClick.Init(32, true);
+/* 001460fc */	CASJoyClickAssignedKey m_OKJoyClick;
+/* 0014610c */	CASJoyClickAssignedKey m_CancelJoyClick;
+/* 0014611c */	CASJoyClickAssignedKey m_HideMessageWindowJoyClick;
+/* 0014612c */	m_OKJoyClick.Init(4, true);
+/* 00146148 */	m_CancelJoyClick.Init(5, true);
+/* 00146164 */	m_HideMessageWindowJoyClick.Init(6, true);
+/* 00146180 */	bool bPrev既読スキップモードマーク表示許可 = SYS_スキップモードマーク表示許可フラグ取得();
+/* 00146192 */	bool bPrevオートモードマーク表示許可 = SYS_オートモードマーク表示許可フラグ取得();
+/* 001461a4 */	既読スキップモードマーク表示許可設定(false);
+/* 001461b0 */	オートモードマーク表示許可設定(false);
+/* 001461bc */	for (; ; )
+/* 001461bc */	{
+/* 001461bc */		if (LButtonClick.IsClick(-2147483648))
+/* 001461d8 */		{
+/* 001461d8 */			break;
+/* 001461de */		}
+/* 001461de */		if (RButtonClick.IsClick(-2147483648))
+/* 001461fa */		{
+/* 001461fa */			break;
+/* 00146200 */		}
+/* 00146200 */		if (ReturnKeyClick.IsClick(-2147483648))
+/* 0014621c */		{
+/* 0014621c */			break;
+/* 00146222 */		}
+/* 00146222 */		if (ZKeyClick.IsClick(-2147483648))
+/* 0014623e */		{
+/* 0014623e */			break;
+/* 00146244 */		}
+/* 00146244 */		if (SpaceKeyClick.IsClick(-2147483648))
+/* 00146260 */		{
+/* 00146260 */			break;
+/* 00146266 */		}
+/* 00146266 */		if (m_OKJoyClick.IsClick(-2147483648))
+/* 00146282 */		{
+/* 00146282 */			break;
+/* 00146288 */		}
+/* 00146288 */		if (m_CancelJoyClick.IsClick(-2147483648))
+/* 001462a4 */		{
+/* 001462a4 */			break;
+/* 001462aa */		}
+/* 001462aa */		if (m_HideMessageWindowJoyClick.IsClick(-2147483648))
+/* 001462c6 */		{
+/* 001462c6 */			break;
+/* 001462cc */		}
+/* 001462cc */		AFL_View_Update(true);
+/* 001462d8 */	}
+/* 001462de */	既読スキップモードマーク表示許可設定(bPrev既読スキップモードマーク表示許可);
+/* 001462ee */	オートモードマーク表示許可設定(bPrevオートモードマーク表示許可);
+/* 001462fe */	g_MessageWindowManager.ShowAll();
+/* 0014630e */	AFL_View_Update(true);
+/* 0014631a */}
+
+void SYS_CallShowMessageWindowCallbackFuncList(bool bShow)
+/* 00146328 */{
+/* 00146328 */	g_ShowMessageWindowCallbackFuncList(bShow);
+/* 00146352 */}
+
+void SYS_Ｍ消去(int MessageWindowNumber)
+/* 00146360 */{
+/* 00146360 */	SYS_デフォルトセーブコメント更新フラグセット();
+/* 00146366 */	g_MessageTextModel.ClearMessageText(MessageWindowNumber);
+/* 00146380 */	g_MessageTextView.DrawAll(g_MessageTextModel);
+/* 0014639a */}
+
+void SYS_メッセージ表示()
+/* 001463a8 */{
+/* 001463a8 */	if (AFL_Config_IsAnimateMessageWindow())
+/* 001463b4 */	{
+/* 001463b4 */		g_MessageWindowManager.WaitShowFlat();
+/* 001463c4 */	}
+/* 001463ca */	else
+/* 001463ca */	{
+/* 001463ca */		g_MessageWindowManager.StepAllFlatFinalFrame();
+/* 001463da */	}
+/* 001463da */	if (SYS_バックログオープン確認())
+/* 001463e6 */	{
+/* 001463e6 */		SYS_RunCommandMouseWheelForward();
+/* 001463ec */	}
+/* 001463ec */	g_MessageTextView.Draw(g_MessageTextModel);
+/* 00146406 */}
+
+void SYS_メッセージ全表示()
+/* 00146414 */{
+/* 00146414 */	g_MessageTextView.DrawAll(g_MessageTextModel);
+/* 0014642e */	AFL_View_Update(true);
+/* 0014643a */}
+
+void SYS_SetMessageWindowPos(int MessageWindowNumber, int X, int Y)
+/* 00146448 */{
+/* 00146448 */	SYS_ASSERTE_AREA_ID(MessageWindowNumber);
+/* 00146456 */	g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber).SetX(X);
+/* 0014649a */	g_MessageWindowModelManager.GetMessageWindow(MessageWindowNumber).SetY(Y);
+/* 001464de */}
+
+void SYS_InitMessageWindow()
+/* 001464ec */{
+/* 001464ec */	int MessageWindowNumber;
+/* 001464ec */	for (MessageWindowNumber = 1; MessageWindowNumber < 40; ++MessageWindowNumber)
+/* 00146532 */	{
+/* 00146532 */		string EXBaseName = "Ｅ＿メッセージウィンドウ.全体.座標";
+/* 00146546 */		string EXName = "Ｅ＿メッセージウィンドウ.%D番.座標" % MessageWindowNumber;
+/* 0014656c */		if (EX_IsExist(EXName + ".Ｘ") && EX_IsExist(EXName + ".Ｙ"))
+/* 001465c0 */		{
+/* 001465c0 */			SYS_SetMessageWindowPos(MessageWindowNumber, EX_Int(EXName + ".Ｘ", 0), EX_Int(EXName + ".Ｙ", 0));
+/* 0014660c */		}
+/* 00146612 */		else if (EX_IsExist(EXBaseName + ".Ｘ") && EX_IsExist(EXBaseName + ".Ｙ"))
+/* 00146666 */		{
+/* 00146666 */			SYS_SetMessageWindowPos(MessageWindowNumber, EX_Int(EXBaseName + ".Ｘ", 0), EX_Int(EXBaseName + ".Ｙ", 0));
+/* 001466b2 */		}
+/* 001466b2 */	}
+/* 001466b8 */}
+
+float SYS_GetMessageWindowDefaultAlphaRate()
+/* 001466c6 */{
+/* 001466c6 */	return EX_Float("Ｅ＿メッセージウィンドウ.透明率初期値", 1.0);
+/* 001466da */}
+
+float SYS_GetMessageWindowDefaultMulColorRate()
+/* 001466ee */{
+/* 001466ee */	return EX_Float("Ｅ＿メッセージウィンドウ.明るさ初期値", 1.0);
+/* 00146702 */}
+
+void SYS_メッセージエリア(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ, string ＣＧ名)
+/* 00146716 */{
+/* 00146716 */	if (Ｘ != -2147483648)
+/* 0014672e */	{
+/* 0014672e */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).SetX(Ｘ);
+/* 00146772 */	}
+/* 00146778 */	if (Ｙ != -2147483648)
+/* 00146790 */	{
+/* 00146790 */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).SetY(Ｙ);
+/* 001467d4 */	}
+/* 001467da */	if (Ｚ != -2147483648)
+/* 001467f2 */	{
+/* 001467f2 */		if (g_MessageWindowModelManager.GetZ() == 0 || Ｚ < g_MessageWindowModelManager.GetZ())
+/* 0014684a */		{
+/* 0014684a */			Ａ＿メッセージウィンドウＺ座標設定(Ｚ);
+/* 0014685a */		}
+/* 0014685a */	}
+/* 0014685a */	if (!ＣＧ名.Empty())
+/* 0014686e */	{
+/* 0014686e */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).SetCGName(ＣＧ名);
+/* 001468b2 */	}
+/* 001468b2 */}
+
+void SYS_メッセージエリア余白(int Ｍ番号, int t, int r, int b, int l)
+/* 001468c6 */{
+/* 001468c6 */	CASRect TextAreaRect;
+/* 001468d6 */	TextAreaRect = g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).GetTextAreaRect();
+/* 00146924 */	if (l != -2147483648)
+/* 0014693c */	{
+/* 0014693c */		TextAreaRect.Set(l, TextAreaRect.GetY(), TextAreaRect.GetWidth(), TextAreaRect.GetHeight());
+/* 00146986 */	}
+/* 00146986 */	if (t != -2147483648)
+/* 0014699e */	{
+/* 0014699e */		TextAreaRect.Set(TextAreaRect.GetX(), t, TextAreaRect.GetWidth(), TextAreaRect.GetHeight());
+/* 001469e8 */	}
+/* 001469e8 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).SetTextAreaRect(TextAreaRect);
+/* 00146a30 */}
+
+void SYS_字間隔(int Ｍ番号, int 字間, int 行間)
+/* 00146a3e */{
+/* 00146a3e */	if (字間 != -2147483648)
+/* 00146a56 */	{
+/* 00146a56 */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).字間 = 字間;
+/* 00146a9e */	}
+/* 00146aa4 */	if (行間 != -2147483648)
+/* 00146abc */	{
+/* 00146abc */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).行間 = 行間;
+/* 00146b04 */	}
+/* 00146b04 */}
+
+void SYS_キー待ちマーク(int Ｍ番号, string 基準ＣＧ名, int 開始番号, int ＣＧ枚数, int 時間)
+/* 00146b18 */{
+/* 00146b18 */	ref CMessageWindowModel MessageWindowModel = g_MessageWindowModelManager.GetMessageWindow(Ｍ番号);
+/* 00146b68 */	if (!基準ＣＧ名.Empty())
+/* 00146b7c */	{
+/* 00146b7c */		MessageWindowModel.基準ＣＧ名 = 基準ＣＧ名;
+/* 00146b9c */	}
+/* 00146b9c */	if (開始番号 != -2147483648)
+/* 00146bb4 */	{
+/* 00146bb4 */		MessageWindowModel.開始番号 = 開始番号;
+/* 00146bd2 */	}
+/* 00146bd2 */	if (ＣＧ枚数 != -2147483648)
+/* 00146bea */	{
+/* 00146bea */		MessageWindowModel.マーク枚数 = ＣＧ枚数;
+/* 00146c08 */	}
+/* 00146c08 */	if (時間 != -2147483648)
+/* 00146c20 */	{
+/* 00146c20 */		MessageWindowModel.マーク速度 = 時間;
+/* 00146c3e */	}
+/* 00146c3e */}
+
+void SYS_キー待ちマークフラット設定(int メッセージウィンドウ番号, string フラットファイル名)
+/* 00146c4c */{
+/* 00146c4c */	ref CMessageWindowModel MessageWindowModel = g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号);
+/* 00146c9c */	MessageWindowModel.SetKeyWaitMarkFlatName(フラットファイル名);
+/* 00146cb6 */}
+
+void SYS_キー待ちマーク位置(int Ｍ番号, int Ｘ, int Ｙ)
+/* 00146cc4 */{
+/* 00146cc4 */	if (Ｘ != -2147483648)
+/* 00146cdc */	{
+/* 00146cdc */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).マークＸ = Ｘ;
+/* 00146d24 */	}
+/* 00146d2a */	if (Ｙ != -2147483648)
+/* 00146d42 */	{
+/* 00146d42 */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).マークＹ = Ｙ;
+/* 00146d8a */	}
+/* 00146d8a */}
+
+bool SYS_キー待ちマーク表示状態取得()
+/* 00146d9e */{
+/* 00146d9e */	return _g_MsgKeyWaitAnime.IsShow();
+/* 00146db0 */}
+
+void SYS_キー待ちマーク表示設定(bool bShow)
+/* 00146dc4 */{
+/* 00146dc4 */	_g_MsgKeyWaitAnime._SetShow(bShow);
+/* 00146dde */}
+
+void SYS_オートモードマーク＿ＣＧ設定(int Ｍ番号, string ＣＧ名)
+/* 00146dec */{
+/* 00146dec */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ基準名 = ＣＧ名;
+/* 00146e36 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿フラット名 = "";
+/* 00146e7c */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ開始番号 = 0;
+/* 00146ec0 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ枚数 = 0;
+/* 00146f04 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ切り替え時間 = 0;
+/* 00146f48 */}
+
+void SYS_オートモードマーク＿ループＣＧ設定(int Ｍ番号, string ＣＧ名, int 開始番号, int 枚数, int 切り替え時間)
+/* 00146f56 */{
+/* 00146f56 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ基準名 = ＣＧ名;
+/* 00146fa0 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿フラット名 = "";
+/* 00146fe6 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ開始番号 = 開始番号;
+/* 0014702e */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ枚数 = 枚数;
+/* 00147076 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ切り替え時間 = 切り替え時間;
+/* 001470be */}
+
+void SYS_オートモードマーク＿フラット設定(int Ｍ番号, string フラット名)
+/* 001470cc */{
+/* 001470cc */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿ＣＧ基準名 = "";
+/* 00147112 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿フラット名 = フラット名;
+/* 0014715c */}
+
+void SYS_オートモードマーク表示位置(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ)
+/* 0014716a */{
+/* 0014716a */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿Ｘ = Ｘ;
+/* 001471b2 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿Ｙ = Ｙ;
+/* 001471fa */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).オートモードマーク＿Ｚ = Ｚ;
+/* 00147242 */}
+
+void SYS_スキップモードマーク＿ＣＧ設定(int Ｍ番号, string ＣＧ名)
+/* 00147250 */{
+/* 00147250 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ基準名 = ＣＧ名;
+/* 0014729a */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿フラット名 = "";
+/* 001472e0 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ開始番号 = 0;
+/* 00147324 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ枚数 = 0;
+/* 00147368 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ切り替え時間 = 0;
+/* 001473ac */}
+
+void SYS_スキップモードマーク＿ループＣＧ設定(int Ｍ番号, string ＣＧ名, int 開始番号, int 枚数, int 切り替え時間)
+/* 001473ba */{
+/* 001473ba */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ基準名 = ＣＧ名;
+/* 00147404 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿フラット名 = "";
+/* 0014744a */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ開始番号 = 開始番号;
+/* 00147492 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ枚数 = 枚数;
+/* 001474da */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ切り替え時間 = 切り替え時間;
+/* 00147522 */}
+
+void SYS_スキップモードマーク＿フラット設定(int Ｍ番号, string フラット名)
+/* 00147530 */{
+/* 00147530 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿ＣＧ基準名 = "";
+/* 00147576 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿フラット名 = フラット名;
+/* 001475c0 */}
+
+void SYS_スキップモードマーク表示位置(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ)
+/* 001475ce */{
+/* 001475ce */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿Ｘ = Ｘ;
+/* 00147616 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿Ｙ = Ｙ;
+/* 0014765e */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).スキップモードマーク＿Ｚ = Ｚ;
+/* 001476a6 */}
+
+void SYS_字初期値(int Ｍ番号, int フォント)
+/* 001476b4 */{
+/* 001476b4 */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).フォント = フォント;
+/* 001476fc */}
+
+void SYS_字サイズ初期値(int Ｍ番号, int サイズ)
+/* 0014770a */{
+/* 0014770a */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).SetFontSize(サイズ);
+/* 0014774e */}
+
+void SYS_字太初期値(int Ｍ番号, int _太さ)
+/* 0014775c */{
+/* 0014775c */	g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).SetFontWeight(_太さ);
+/* 001477a0 */}
+
+void SYS_字色初期値(int Ｍ番号, int Ｒ, int Ｇ, int Ｂ)
+/* 001477ae */{
+/* 001477ae */	ref CMessageWindowModel MessageWindowModel = g_MessageWindowModelManager.GetMessageWindow(Ｍ番号);
+/* 001477fe */	MessageWindowModel.文字Ｒ = Ｒ;
+/* 0014781c */	MessageWindowModel.文字Ｇ = Ｇ;
+/* 0014783a */	MessageWindowModel.文字Ｂ = Ｂ;
+/* 00147858 */}
+
+void SYS_字速度初期値(int Ｍ番号, int 時間)
+/* 00147866 */{
+/* 00147866 */	if (時間 == 0)
+/* 0014787e */	{
+/* 0014787e */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).文字速度 = 時間;
+/* 001478c6 */	}
+/* 001478c6 */}
+
+void SYS_字飾り初期値(int Ｍ番号, float EdgeWeight, int pＲ, int pＧ, int pＢ)
+/* 001478da */{
+/* 001478da */	ref CMessageWindowModel MessageWindowModel = g_MessageWindowModelManager.GetMessageWindow(Ｍ番号);
+/* 0014792a */	MessageWindowModel.SetEdgeWeight(EdgeWeight);
+/* 00147944 */	MessageWindowModel.SetEdgeColor(pＲ, pＧ, pＢ);
+/* 00147972 */}
+
+void SYS_メッセージキー待ち(bool _ignore_read_skip_mode)
+/* 00147980 */{
+/* 00147980 */	if (!SYS_全文スキップ中確認() || _ignore_read_skip_mode)
+/* 001479b6 */	{
+/* 001479b6 */		_g_MsgKeyWait._Execute(_ignore_read_skip_mode);
+/* 001479d0 */	}
+/* 001479d0 */	SYS_文字表示後画面揺らしクリア();
+/* 001479d6 */}
+
+float SYS_メッセージ速度比率()
+/* 001479e4 */{
+/* 001479e4 */	if (g_fMessageSpeedRate >= 0.5)
+/* 001479fc */	{
+/* 001479fc */		return (1.0 - g_fMessageSpeedRate) * 2.0;
+/* 00147a18 */	}
+/* 00147a18 */	return (0.5 - g_fMessageSpeedRate) * 6.0 + 1.0;
+/* 00147a3c */}
+
+int SYS_既読メッセージスキップ待ち時間比率()
+/* 00147a50 */{
+/* 00147a50 */	return 150.0 - g_fReadMessageSkipWaitTimeRate * 150.0;
+/* 00147a6e */}
+
+int SYS_全文スキップ待ち時間比率()
+/* 00147a82 */{
+/* 00147a82 */	return SYS_既読メッセージスキップ待ち時間比率();
+/* 00147a8a */}
+
+void SYS_メッセージスキップ待ち()
+/* 00147a9e */{
+/* 00147a9e */	if (SYS_IsFrameSkipMode())
+/* 00147aaa */	{
+/* 00147aaa */		return;
+/* 00147aac */	}
+/* 00147aac */	int 待ち時間;
+/* 00147abe */	if (SYS_全文スキップ中確認())
+/* 00147aca */	{
+/* 00147aca */		待ち時間 = SYS_全文スキップ待ち時間比率();
+/* 00147adc */	}
+/* 00147ae2 */	else if (SYS_スキップ中確認())
+/* 00147aee */	{
+/* 00147aee */		if (AFL_Config_GetSkipAllMessage())
+/* 00147afa */		{
+/* 00147afa */			待ち時間 = SYS_全文スキップ待ち時間比率();
+/* 00147b0c */		}
+/* 00147b12 */		else
+/* 00147b12 */		{
+/* 00147b12 */			待ち時間 = SYS_既読メッセージスキップ待ち時間比率();
+/* 00147b24 */		}
+/* 00147b24 */	}
+/* 00147b24 */	if (待ち時間 < 1)
+/* 00147b3c */	{
+/* 00147b3c */		return;
+/* 00147b3e */	}
+/* 00147b3e */	CASClick LButtonClick;
+/* 00147b4e */	CASClick ReturnKeyClick;
+/* 00147b5e */	CASClick DownKeyClick;
+/* 00147b6e */	LButtonClick.Init(1, !SYS_IsClickModeCancel());
+/* 00147b8e */	ReturnKeyClick.Init(13, !SYS_IsClickModeCancel());
+/* 00147bae */	DownKeyClick.Init(40, !SYS_IsClickModeCancel());
+/* 00147bce */	CASJoyClickAssignedKey JoyOkClick;
+/* 00147bde */	JoyOkClick.Init(4, true);
+/* 00147bfa */	int t = system.GetTime();
+/* 00147c0c */	while (system.GetTime() - t < 待ち時間)
+/* 00147c30 */	{
+/* 00147c30 */		if (SYS_ホイールフォア即確認())
+/* 00147c3c */		{
+/* 00147c3c */			SYS_RunCommandMouseWheelForward();
+/* 00147c42 */			break;
+/* 00147c48 */		}
+/* 00147c48 */		if (SYS_ホイールバック確認())
+/* 00147c54 */		{
+/* 00147c54 */			break;
+/* 00147c5a */		}
+/* 00147c5a */		if (LButtonClick.IsClick(-2147483648) || ReturnKeyClick.IsClick(-2147483648) || DownKeyClick.IsClick(-2147483648) || JoyOkClick.IsClick(-2147483648))
+/* 00147d12 */		{
+/* 00147d12 */			SYS_ReleaseModeByClickCancel();
+/* 00147d18 */			break;
+/* 00147d1e */		}
+/* 00147d1e */		AFL_View_Update(true);
+/* 00147d2a */	}
+/* 00147d30 */}
+
+int SYS_オートモード待機時間計算(int TextLength)
+/* 00147d3e */{
+/* 00147d3e */	float fRate = (1.0 - g_fAutoModeWaitTimeRate) * 2.0 - 1.0;
+/* 00147d6c */	int WaitMessageLength = TextLength + 5;
+/* 00147d8a */	int TotalTime = WaitMessageLength * (100 + 100 * fRate);
+/* 00147dd0 */	return TotalTime;
+/* 00147ddc */}
+
+bool SYS_IsClickModeCancel()
+/* 00147df0 */{
+/* 00147df0 */	if (AFL_Config_GetReleaseSkipModeByClick() && SYS_スキップ中確認())
+/* 00147e20 */	{
+/* 00147e20 */		return true;
+/* 00147e28 */	}
+/* 00147e28 */	if (AFL_Config_GetReleaseAutoModeByClick() && Ａ＿オートモード中確認())
+/* 00147e58 */	{
+/* 00147e58 */		return true;
+/* 00147e60 */	}
+/* 00147e60 */	return false;
+/* 00147e68 */}
+
+void SYS_ReleaseModeByClickCancel()
+/* 00147e7c */{
+/* 00147e7c */	if (AFL_Config_GetReleaseSkipModeByClick())
+/* 00147e88 */	{
+/* 00147e88 */		SYS_スキップモード設定(false);
+/* 00147e94 */	}
+/* 00147e94 */	if (AFL_Config_GetReleaseAutoModeByClick())
+/* 00147ea0 */	{
+/* 00147ea0 */		SYS_オート設定(false);
+/* 00147eac */	}
+/* 00147eac */}
+
+void SYS_メッセージモード更新()
+/* 00147eba */{
+/* 00147eba */	SYS_スキップ中フラグ更新();
+/* 00147ec0 */}
+
+void SYS_スキップモードマーク表示許可設定(bool Flag)
+/* 00147ece */{
+/* 00147ece */	if (g_bスキップモードマーク表示許可 == Flag)
+/* 00147eea */	{
+/* 00147eea */		return;
+/* 00147eec */	}
+/* 00147eec */	g_bスキップモードマーク表示許可 = Flag;
+/* 00147f02 */	SYS_スキップモードマーク表示更新();
+/* 00147f08 */}
+
+bool SYS_スキップモードマーク表示許可フラグ取得()
+/* 00147f16 */{
+/* 00147f16 */	return g_bスキップモードマーク表示許可;
+/* 00147f22 */}
+
+void SYS_スキップモードマーク表示更新()
+/* 00147f36 */{
+/* 00147f36 */	if (g_bスキップモードマーク表示許可 && SYS_スキップモード確認())
+/* 00147f6a */	{
+/* 00147f6a */		if (g_MessageWindowStatusManager.IsExistActiveMessageWindow())
+/* 00147f80 */		{
+/* 00147f80 */			SYS_スキップモードマーク作成(g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()));
+/* 00147fc0 */			_g_MsgSkipModeCGList.SetShow(true);
+/* 00147fd6 */		}
+/* 00147fd6 */	}
+/* 00147fe2 */	else
+/* 00147fe2 */	{
+/* 00147fe2 */		SYS_スキップモードマーク非表示();
+/* 00147fe8 */	}
+/* 00147fe8 */}
+
+void SYS_スキップモードマーク作成(ref CMessageWindowModel _a)
+/* 00147ff6 */{
+/* 00147ff6 */	CModeCGModel Info;
+/* 00148006 */	Info.SetCG(_a.スキップモードマーク＿ＣＧ基準名);
+/* 00148028 */	Info.SetFlatName(_a.スキップモードマーク＿フラット名);
+/* 0014804a */	Info.SetX(_a.スキップモードマーク＿Ｘ);
+/* 0014806c */	Info.SetY(_a.スキップモードマーク＿Ｙ);
+/* 0014808e */	Info.SetZ(_a.スキップモードマーク＿Ｚ);
+/* 001480b0 */	Info.SetShow(true);
+/* 001480c6 */	Info.SetCGBeginNumber(_a.スキップモードマーク＿ＣＧ開始番号);
+/* 001480e8 */	Info.SetCGCount(_a.スキップモードマーク＿ＣＧ枚数);
+/* 0014810a */	Info.SetCGSwitchTime(_a.スキップモードマーク＿ＣＧ切り替え時間);
+/* 0014812c */	_g_MsgSkipModeCGList.Create(Info);
+/* 0014814a */}
+
+void SYS_スキップモードマーク非表示()
+/* 00148158 */{
+/* 00148158 */	_g_MsgSkipModeCGList.SetShow(false);
+/* 0014816e */}
+
+void SYS_オートモードマーク表示許可設定(bool Flag)
+/* 0014817c */{
+/* 0014817c */	if (g_bオートモードマーク表示許可 == Flag)
+/* 00148198 */	{
+/* 00148198 */		return;
+/* 0014819a */	}
+/* 0014819a */	g_bオートモードマーク表示許可 = Flag;
+/* 001481b0 */	SYS_オートモードマーク表示更新();
+/* 001481b6 */}
+
+bool SYS_オートモードマーク表示許可フラグ取得()
+/* 001481c4 */{
+/* 001481c4 */	return g_bオートモードマーク表示許可;
+/* 001481d0 */}
+
+void SYS_オートモードマーク表示更新()
+/* 001481e4 */{
+/* 001481e4 */	if (g_bオートモードマーク表示許可 && Ａ＿オートモード中確認())
+/* 00148218 */	{
+/* 00148218 */		if (g_MessageWindowStatusManager.IsExistActiveMessageWindow())
+/* 0014822e */		{
+/* 0014822e */			SYS_オートモードマーク作成(g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()));
+/* 0014826e */			_g_AutoModeCGList.SetShow(true);
+/* 00148284 */		}
+/* 00148284 */	}
+/* 00148290 */	else
+/* 00148290 */	{
+/* 00148290 */		SYS_オートモードマーク非表示();
+/* 00148296 */	}
+/* 00148296 */}
+
+void SYS_オートモードマーク作成(ref CMessageWindowModel _a)
+/* 001482a4 */{
+/* 001482a4 */	CModeCGModel Info;
+/* 001482b4 */	Info.SetCG(_a.オートモードマーク＿ＣＧ基準名);
+/* 001482d6 */	Info.SetFlatName(_a.オートモードマーク＿フラット名);
+/* 001482f8 */	Info.SetX(_a.オートモードマーク＿Ｘ);
+/* 0014831a */	Info.SetY(_a.オートモードマーク＿Ｙ);
+/* 0014833c */	Info.SetZ(_a.オートモードマーク＿Ｚ);
+/* 0014835e */	Info.SetShow(true);
+/* 00148374 */	Info.SetCGBeginNumber(_a.オートモードマーク＿ＣＧ開始番号);
+/* 00148396 */	Info.SetCGCount(_a.オートモードマーク＿ＣＧ枚数);
+/* 001483b8 */	Info.SetCGSwitchTime(_a.オートモードマーク＿ＣＧ切り替え時間);
+/* 001483da */	_g_AutoModeCGList.Create(Info);
+/* 001483f8 */}
+
+void SYS_オートモードマーク非表示()
+/* 00148406 */{
+/* 00148406 */	_g_AutoModeCGList.SetShow(false);
+/* 0014841c */}
+
+bool SYS_スキップ中確認()
+/* 0014842a */{
+/* 0014842a */	if (!SYS_IsMessageSkipPermission())
+/* 00148438 */	{
+/* 00148438 */		return false;
+/* 00148440 */	}
+/* 00148440 */	return g_bスキップ中;
+/* 0014844c */}
+
+bool SYS_全文スキップ中確認()
+/* 00148460 */{
+/* 00148460 */	if (!SYS_IsMessageSkipPermission())
+/* 0014846e */	{
+/* 0014846e */		return false;
+/* 00148476 */	}
+/* 00148476 */	if (AFL_IsKeyDown(17))
+/* 00148488 */	{
+/* 00148488 */		return true;
+/* 00148490 */	}
+/* 00148490 */	if (system.IsDebugMode() && g_SkipKeyWait)
+/* 001484c4 */	{
+/* 001484c4 */		return true;
+/* 001484cc */	}
+/* 001484cc */	if (AFL_Joystick_IsKeyDown(0, AFL_Joystick_GetButtonAssignment(7)))
+/* 001484ea */	{
+/* 001484ea */		return true;
+/* 001484f2 */	}
+/* 001484f2 */	return false;
+/* 001484fa */}
+
+void SYS_SetMessageSkipPermission(bool MessageSkipPermission)
+/* 0014850e */{
+/* 0014850e */	g_MessageSkipPermission = MessageSkipPermission;
+/* 00148524 */}
+
+bool SYS_IsMessageSkipPermission()
+/* 00148532 */{
+/* 00148532 */	return g_MessageSkipPermission;
+/* 0014853e */}
+
+bool SYS_スキップモード確認()
+/* 00148552 */{
+/* 00148552 */	return g_MessageSkipMode;
+/* 0014855e */}
+
+void SYS_スキップモード設定(bool _on)
+/* 00148572 */{
+/* 00148572 */	if (g_MessageSkipMode == _on)
+/* 0014858e */	{
+/* 0014858e */		return;
+/* 00148590 */	}
+/* 00148590 */	if (_on)
+/* 001485a0 */	{
+/* 001485a0 */		g_Ｍスキップタイマー.Reset();
+/* 001485b0 */	}
+/* 001485b0 */	g_MessageSkipMode = _on;
+/* 001485c6 */	SYS_スキップモードマーク表示更新();
+/* 001485cc */}
+
+void SYS_スキップモード反転()
+/* 001485da */{
+/* 001485da */	if (AFL_Config_GetReleaseSkipModeByReadMessage() && !g_既読メッセージ)
+/* 00148610 */	{
+/* 00148610 */		SYS_スキップモード設定(false);
+/* 0014861c */		return;
+/* 0014861e */	}
+/* 0014861e */	SYS_スキップモード設定(!SYS_スキップモード確認());
+/* 0014862e */}
+
+void SYS_オート設定(bool _on)
+/* 0014863c */{
+/* 0014863c */	if (g_オートモード == _on)
+/* 00148658 */	{
+/* 00148658 */		return;
+/* 0014865a */	}
+/* 0014865a */	if (_on)
+/* 0014866a */	{
+/* 0014866a */		g_Ｍオートタイマー.Reset();
+/* 0014867a */	}
+/* 0014867a */	g_オートモード = _on;
+/* 00148690 */	SYS_オートモードマーク表示更新();
+/* 00148696 */}
+
+void SYS_スキップ中フラグ更新()
+/* 001486a4 */{
+/* 001486a4 */	g_bスキップ中 = SYS_スキップモード確認() && g_既読メッセージ | AFL_Config_GetSkipAllMessage();
+/* 001486e8 */}
+
+void SYS_スキップ中フラグクリア()
+/* 001486f6 */{
+/* 001486f6 */	g_既読メッセージ = false;
+/* 00148708 */	g_bスキップ中 = false;
+/* 0014871a */}
+
+void SYS_既読メッセージフラグ更新(int MessageNumber)
+/* 00148728 */{
+/* 00148728 */	if (MessageNumber != 0)
+/* 00148740 */	{
+/* 00148740 */		g_既読メッセージ = MsgSkip.GetFlag(MessageNumber) != 0;
+/* 0014876a */	}
+/* 0014876a */	if (AFL_Config_GetReleaseSkipModeByReadMessage() && !g_既読メッセージ)
+/* 001487a0 */	{
+/* 001487a0 */		SYS_スキップモード設定(false);
+/* 001487ac */	}
+/* 001487ac */}
+
+void SYS_既読メッセージフラグクリア()
+/* 001487ba */{
+/* 001487ba */	g_既読メッセージ = false;
+/* 001487cc */}
+
+string SYS_MessageText_Replace(string BaseText)
+/* 001487da */{
+/* 001487da */	int i;
+/* 001487ec */	for (i = 0; i < g_ReplacePair.Numof(); ++i)
+/* 0014883c */	{
+/* 0014883c */		string Src = g_ReplacePair[i].GetSrc();
+/* 00148866 */		int Index = BaseText.Find(Src);
+/* 00148888 */		if (Index == -1)
+/* 001488a0 */		{
+/* 001488a0 */			continue;
+/* 001488a6 */		}
+/* 001488a6 */		string Dest = BaseText.GetPart(0, Index);
+/* 001488d0 */		Dest += g_ReplacePair[i].GetDest();
+/* 001488fa */		Dest += BaseText.GetPart(Index + Src.Length(), BaseText.Length());
+/* 00148934 */		BaseText = Dest;
+/* 0014894c */	}
+/* 00148952 */	return BaseText;
+/* 0014895e */}
+

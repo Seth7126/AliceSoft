@@ -1,0 +1,83 @@
+PlayerBuffView::PlayerBuffView()
+/* 0019ee1c */{
+/* 0019ee24 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019ee4a */}
+
+void PlayerBuffView::init(string playerId)
+/* 0019ee52 */{
+/* 0019ee52 */	this.player_ <- getPlayerFromId(playerId);
+/* 0019ee8e */	this.player_.getBuffIdList(this.idList_, -1);
+/* 0019eeae */	this.player_.setBuffCallback(this.onAddBuff, this.onEraseBuff);
+/* 0019eed2 */	this.parent_.initAsDummy();
+/* 0019eee2 */	this.parent_.setZ(2850.0);
+/* 0019eef8 */	this.initParts();
+/* 0019ef00 */}
+
+void PlayerBuffView::initParts()
+/* 0019ef08 */{
+/* 0019ef08 */	this.parts_.Free();
+/* 0019ef12 */	this.parts_.Alloc(this.idList_.Numof());
+/* 0019ef32 */	int i;
+/* 0019ef44 */	for (i = 0; i < this.idList_.Numof(); ++i)
+/* 0019ef94 */	{
+/* 0019ef94 */		this.parts_[i].init(getPlayerBuffFromId(this.idList_[i]).getImageName(), 0);
+/* 0019efee */		this.parts_[i].setPos(-(i % 4) * 20, -(i / 4) * 25);
+/* 0019f046 */		this.parts_[i].setOrigin(9);
+/* 0019f068 */		this.parts_[i].setParent(this.parent_.getPartsNumber());
+/* 0019f094 */	}
+/* 0019f0a0 */	this.setPartsShow();
+/* 0019f0a8 */}
+
+void PlayerBuffView::setPartsShow()
+/* 0019f0b0 */{
+/* 0019f0b0 */	int i;
+/* 0019f0c2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019f112 */	{
+/* 0019f112 */		this.parts_[i].setShow(true);
+/* 0019f134 */	}
+/* 0019f13a */	this.parent_.setShow(true);
+/* 0019f150 */}
+
+void PlayerBuffView::setPartsPos()
+/* 0019f158 */{
+/* 0019f15a */}
+
+void PlayerBuffView::update()
+/* 0019f160 */{
+/* 0019f162 */}
+
+void PlayerBuffView::onAddBuff(string id)
+/* 0019f168 */{
+/* 0019f16a */}
+
+void PlayerBuffView::onEraseBuff(string id)
+/* 0019f170 */{
+/* 0019f172 */}
+
+void PlayerBuffView::updateState()
+/* 0019f178 */{
+/* 0019f178 */	this.player_.getBuffIdList(this.idList_, -1);
+/* 0019f198 */	this.initParts();
+/* 0019f1a0 */}
+
+void PlayerBuffView::setPos(int x, int y)
+/* 0019f1a8 */{
+/* 0019f1a8 */	this.x_ = x;
+/* 0019f1be */	this.y_ = y;
+/* 0019f1d4 */	this.parent_.setPos(x, y);
+/* 0019f1fc */}
+
+void PlayerBuffView::move(int x, int y)
+/* 0019f204 */{
+/* 0019f204 */	PartsMotion m;
+/* 0019f214 */	m.setMove(this.x_, this.y_, x, y, 1);
+/* 0019f252 */	this.parent_.runMotion(m, NULL);
+/* 0019f272 */	this.x_ = x;
+/* 0019f288 */	this.y_ = y;
+/* 0019f29e */}
+
+void PlayerBuffView::fadeIn(bool val)
+/* 0019f2a6 */{
+/* 0019f2a6 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 0019f2e0 */}
+

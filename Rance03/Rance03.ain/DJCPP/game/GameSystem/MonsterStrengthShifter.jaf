@@ -1,0 +1,149 @@
+MonsterStrengthShifter::MonsterStrengthShifter()
+/* 001db16c */{
+/* 001db174 */	this.resetLocalRatio();
+/* 001db17c */	this.resetGlobalRatio();
+/* 001db184 */}
+
+void MonsterStrengthShifter::setLocalHpRatio(float ratio)
+/* 001db18c */{
+/* 001db18c */	this.localHpRatio_ = ratio;
+/* 001db1a2 */}
+
+void MonsterStrengthShifter::setLocalAtkRatio(float ratio)
+/* 001db1aa */{
+/* 001db1aa */	this.localAtkRatio_ = ratio;
+/* 001db1c0 */}
+
+void MonsterStrengthShifter::setLocalGoldRatio(float ratio)
+/* 001db1c8 */{
+/* 001db1c8 */	this.localGoldRatio_ = ratio;
+/* 001db1de */}
+
+void MonsterStrengthShifter::setLocalExpRatio(float ratio)
+/* 001db1e6 */{
+/* 001db1e6 */	this.localExpRatio_ = ratio;
+/* 001db1fc */}
+
+void MonsterStrengthShifter::setLocalBuffRatio(float ratio)
+/* 001db204 */{
+/* 001db204 */	this.localBuffRatio_ = ratio;
+/* 001db21a */}
+
+void MonsterStrengthShifter::setGlobalHpRatio(float ratio)
+/* 001db222 */{
+/* 001db222 */	this.globalHpRatio_ = ratio;
+/* 001db238 */}
+
+void MonsterStrengthShifter::setGlobalAtkRatio(float ratio)
+/* 001db240 */{
+/* 001db240 */	this.globalAtkRatio_ = ratio;
+/* 001db256 */}
+
+void MonsterStrengthShifter::setGlobalGoldRatio(float ratio)
+/* 001db25e */{
+/* 001db25e */	this.globalGoldRatio_ = ratio;
+/* 001db274 */}
+
+void MonsterStrengthShifter::setGlobalExpRatio(float ratio)
+/* 001db27c */{
+/* 001db27c */	this.globalExpRatio_ = ratio;
+/* 001db292 */}
+
+void MonsterStrengthShifter::setGlobalBuffRatio(float ratio)
+/* 001db29a */{
+/* 001db29a */	this.globalBuffRatio_ = ratio;
+/* 001db2b0 */}
+
+float MonsterStrengthShifter::getHpRatio()
+/* 001db2b8 */{
+/* 001db2b8 */	return this.localHpRatio_ * this.globalHpRatio_;
+/* 001db2d0 */}
+
+float MonsterStrengthShifter::getAtkRatio()
+/* 001db2de */{
+/* 001db2de */	return this.localAtkRatio_ * this.globalAtkRatio_;
+/* 001db2f6 */}
+
+float MonsterStrengthShifter::getGoldRatio()
+/* 001db304 */{
+/* 001db304 */	return this.localGoldRatio_ * this.globalGoldRatio_;
+/* 001db31c */}
+
+float MonsterStrengthShifter::getExpRatio()
+/* 001db32a */{
+/* 001db32a */	return this.localExpRatio_ * this.globalExpRatio_;
+/* 001db342 */}
+
+float MonsterStrengthShifter::getBuffRatio()
+/* 001db350 */{
+/* 001db350 */	return this.localBuffRatio_ * this.globalBuffRatio_;
+/* 001db368 */}
+
+float MonsterStrengthShifter::getLocalHpRatio()
+/* 001db376 */{
+/* 001db376 */	return this.localHpRatio_;
+/* 001db382 */}
+
+float MonsterStrengthShifter::getLocalAtkRatio()
+/* 001db390 */{
+/* 001db390 */	return this.localAtkRatio_;
+/* 001db39c */}
+
+float MonsterStrengthShifter::getLocalGoldRatio()
+/* 001db3aa */{
+/* 001db3aa */	return this.localGoldRatio_;
+/* 001db3b6 */}
+
+float MonsterStrengthShifter::getLocalExpRatio()
+/* 001db3c4 */{
+/* 001db3c4 */	return this.localExpRatio_;
+/* 001db3d0 */}
+
+float MonsterStrengthShifter::getLocalBuffRatio()
+/* 001db3de */{
+/* 001db3de */	return this.localBuffRatio_;
+/* 001db3ea */}
+
+float MonsterStrengthShifter::getGlobalHpRatio()
+/* 001db3f8 */{
+/* 001db3f8 */	return this.globalHpRatio_;
+/* 001db404 */}
+
+float MonsterStrengthShifter::getGlobalAtkRatio()
+/* 001db412 */{
+/* 001db412 */	return this.globalAtkRatio_;
+/* 001db41e */}
+
+float MonsterStrengthShifter::getGlobalGoldRatio()
+/* 001db42c */{
+/* 001db42c */	return this.globalGoldRatio_;
+/* 001db438 */}
+
+float MonsterStrengthShifter::getGlobalExpRatio()
+/* 001db446 */{
+/* 001db446 */	return this.globalExpRatio_;
+/* 001db452 */}
+
+float MonsterStrengthShifter::getGlobalBuffRatio()
+/* 001db460 */{
+/* 001db460 */	return this.globalBuffRatio_;
+/* 001db46c */}
+
+void MonsterStrengthShifter::resetGlobalRatio()
+/* 001db47a */{
+/* 001db47a */	this.globalHpRatio_ = 1.0;
+/* 001db48c */	this.globalAtkRatio_ = 1.0;
+/* 001db49e */	this.globalGoldRatio_ = 1.0;
+/* 001db4b0 */	this.globalExpRatio_ = 1.0;
+/* 001db4c2 */	this.globalBuffRatio_ = 1.0;
+/* 001db4d4 */}
+
+void MonsterStrengthShifter::resetLocalRatio()
+/* 001db4dc */{
+/* 001db4dc */	this.localHpRatio_ = 1.0;
+/* 001db4ee */	this.localAtkRatio_ = 1.0;
+/* 001db500 */	this.localGoldRatio_ = 1.0;
+/* 001db512 */	this.localExpRatio_ = 1.0;
+/* 001db524 */	this.localBuffRatio_ = 1.0;
+/* 001db536 */}
+

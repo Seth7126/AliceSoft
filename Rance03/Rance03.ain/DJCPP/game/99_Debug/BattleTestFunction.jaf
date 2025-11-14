@@ -1,0 +1,89 @@
+int testCalcPlayerAttackDamage(ref Player player, ref PlayerSkill skill, ref MonsterInstance monster, int count)
+/* 001c9c70 */{
+/* 001c9c70 */	string attrId = skill.getAttributeId();
+/* 001c9c8e */	int val;
+/* 001c9ca0 */	if (attrId == "PATTR_ATK_P" || attrId == "PATTR_ATK_B")
+/* 001c9ce8 */	{
+/* 001c9ce8 */		val = (player.getStrength() * skill.getParam()) / count;
+/* 001c9d2c */	}
+/* 001c9d32 */	else
+/* 001c9d32 */	{
+/* 001c9d32 */		val = (player.getMind() * skill.getParam()) / count;
+/* 001c9d76 */	}
+/* 001c9d76 */	Monster m;
+/* 001c9d86 */	m = getMonsterFromId(monster.getId());
+/* 001c9dcc */	g_battleLog.add("%sの攻撃:%sに%dダメージ" % player.getName() % m.getName() % val, 0);
+/* 001c9e2a */	return val;
+/* 001c9e36 */}
+
+int testCalcPlayerHeal(ref Player healer, ref Player target, ref PlayerSkill skill, int count)
+/* 001c9e4a */{
+/* 001c9e4a */	string attrId = skill.getAttributeId();
+/* 001c9e68 */	int val;
+/* 001c9e7a */	if (attrId == "PATTR_HEAL_P")
+/* 001c9e92 */	{
+/* 001c9e92 */		val = (healer.getStrength() * skill.getParam()) / count;
+/* 001c9ed6 */	}
+/* 001c9edc */	else
+/* 001c9edc */	{
+/* 001c9edc */		val = (healer.getMind() * skill.getParam()) / count;
+/* 001c9f20 */	}
+/* 001c9f20 */	g_battleLog.add("%sの回復:%sは%d回復" % healer.getName() % target.getName() % val, 0);
+/* 001c9f7e */	return val;
+/* 001c9f8a */}
+
+int testCalcMonsterAttack(ref MonsterInstance monster, ref MonsterAttack atk, ref Player target, int count)
+/* 001c9f9e */{
+/* 001c9f9e */	MonsterAttackAttribute attr;
+/* 001c9fae */	attr = getMonsterAttackAttributeFromId(atk.getAttributeId());
+/* 001c9ff4 */	int val = atk.getParam() / count;
+/* 001ca01c */	Monster m;
+/* 001ca02c */	m = getMonsterFromId(monster.getId());
+/* 001ca072 */	g_battleLog.add("%sの攻撃:%sに%dダメージ" % m.getName() % target.getName() % val, 0);
+/* 001ca0d0 */	return val;
+/* 001ca0dc */}
+
+int testCalcMonsterHealMulti(ref Monster healer, ref Monster target, MonsterAttack atk, int count)
+/* 001ca0f0 */{
+/* 001ca0f0 */	int val = atk.getParam();
+/* 001ca10c */	g_battleLog.add("%sの回復:%sは%d回復" % healer.getName() % target.getName() % val, 0);
+/* 001ca16a */	return val;
+/* 001ca176 */}
+
+void testUseItem(string itemId, ref Player target)
+/* 001ca18a */{
+/* 001ca18a */	switch (itemId)
+/* 001ca1a0 */	{
+/* 001ca1a0 */	case "ITEM_U_001":
+/* 001ca1a0 */		target.setHp(target.getHp() + 10);
+/* 001ca1ca */		break;
+/* 001ca1d0 */	case "ITEM_U_002":
+/* 001ca1d0 */		int i;
+/* 001ca1e2 */		for (i = 0; i < g_player.Numof(); ++i)
+/* 001ca232 */		{
+/* 001ca232 */			if (g_player[i].isJoin())
+/* 001ca254 */			{
+/* 001ca254 */				g_player[i].setHp(g_player[i].getHp() + 30);
+/* 001ca296 */			}
+/* 001ca296 */		}
+/* 001ca29c */		break;
+/* 001ca2a2 */	case "ITEM_U_003":
+/* 001ca2a2 */		target.setHp(target.getHp() + 100);
+/* 001ca2cc */		break;
+/* 001ca2d2 */	case "ITEM_U_004":
+/* 001ca2d2 */		int i;
+/* 001ca2e4 */		for (i = 0; i < g_player.Numof(); ++i)
+/* 001ca334 */		{
+/* 001ca334 */			if (g_player[i].isJoin())
+/* 001ca356 */			{
+/* 001ca356 */				g_player[i].setHp(g_player[i].getHp() + 100);
+/* 001ca398 */			}
+/* 001ca398 */		}
+/* 001ca39e */		break;
+/* 001ca3a4 */	case "ITEM_K_001":
+/* 001ca3a4 */		break;
+/* 001ca3aa */	case "ITEM_K_002":
+/* 001ca3aa */		break;
+/* 001ca3b0 */	}
+/* 001ca3b0 */}
+

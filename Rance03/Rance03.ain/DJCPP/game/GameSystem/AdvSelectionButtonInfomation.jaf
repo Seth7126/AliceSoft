@@ -1,0 +1,22 @@
+void AdvSelectionButtonInfomation::init(string id, string caption, string imageName)
+/* 001cc822 */{
+/* 001cc822 */	this.id_ = id;
+/* 001cc83a */	this.caption_ = caption;
+/* 001cc852 */	this.imageName_ = imageName;
+/* 001cc86a */}
+
+string AdvSelectionButtonInfomation::getId()
+/* 001cc872 */{
+/* 001cc872 */	return this.id_;
+/* 001cc87e */}
+
+string AdvSelectionButtonInfomation::getCaption()
+/* 001cc88c */{
+/* 001cc88c */	return this.caption_;
+/* 001cc898 */}
+
+string AdvSelectionButtonInfomation::getImageName()
+/* 001cc8a6 */{
+/* 001cc8a6 */	return this.imageName_;
+/* 001cc8b2 */}
+

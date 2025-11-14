@@ -1,0 +1,150 @@
+CAEPropertyHScrollBar::CAEPropertyHScrollBar()
+/* 00063712 */{
+/* 0006371a */	this.Init(0, NULL);
+/* 0006372e */}
+
+CAEPropertyHScrollBar::~CAEPropertyHScrollBar()
+/* 00063736 */{
+/* 00063736 */	this.Release();
+/* 0006373e */}
+
+void CAEPropertyHScrollBar::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 00063746 */{
+/* 00063746 */	this.Release();
+/* 0006374e */	if (Item === NULL)
+/* 00063766 */	{
+/* 00063766 */		return;
+/* 00063768 */	}
+/* 00063768 */	this.m_Item <- Item;
+/* 00063788 */	this.m_Panel.Init(LayoutID);
+/* 000637a2 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 000637bc */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 000637d6 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 000637f0 */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 0006380a */	int ID = this.m_Item.GetID();
+/* 00063826 */	this.m_Panel.AddTextBoxItem("幅", string(AFL_Parts_GetWidth(ID, 1)), false);
+/* 00063876 */	this.m_Panel.AddTextBoxItem("高さ", string(AFL_Parts_GetHeight(ID, 1)), false);
+/* 000638c6 */	this.m_Panel.AddTextBoxItem("左ボタンの幅", string(Ｐ＿横スクロールバー＿左ボタン幅取得(ID)), false);
+/* 00063910 */	this.m_Panel.AddTextBoxItem("右ボタンの幅", string(Ｐ＿横スクロールバー＿右ボタン幅取得(ID)), false);
+/* 0006395a */	this.m_Panel.AddTextBoxItem("全体量", string(Ｐ＿横スクロールバー＿全体量取得(ID)), false);
+/* 000639a4 */	this.m_Panel.AddTextBoxItem("表示量", string(Ｐ＿横スクロールバー＿表示量取得(ID)), false);
+/* 000639ee */	this.m_Panel.AddTextBoxItem("スクロール位置", string(Ｐ＿横スクロールバー＿スクロール位置取得(ID)), false);
+/* 00063a38 */	ref CAEPropertyItem PanelItem = this.m_Panel.AddTextBoxItem("スクロールレート", Ｐ＿横スクロールバー＿スクロールレート取得(ID).String(), false);
+/* 00063aa2 */	this.m_Panel.AddTextBoxItem("ボタンクリック移動量", string(Ｐ＿横スクロールバー＿ボタンクリック移動量取得(ID)), false);
+/* 00063aec */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿横スクロールバー＿ＣＧ名取得(ID), true);
+/* 00063b34 */	this.m_Panel.AddTextBoxItem("フラット名", Ｐ＿横スクロールバー＿フラット名取得(ID), true);
+/* 00063b7c */	PanelItem.SetTextBoxReadOnly(true);
+/* 00063b92 */}
+
+void CAEPropertyHScrollBar::Release()
+/* 00063b9a */{
+/* 00063b9a */	this.m_dgMouseWheelEvent.Clear();
+/* 00063ba6 */	this.m_dgKeyDownEvent.Clear();
+/* 00063bb2 */	this.m_Item <- NULL;
+/* 00063bca */	this.m_Panel.Release();
+/* 00063bda */}
+
+void CAEPropertyHScrollBar::KeyDownEvent(int ID, int KeyID)
+/* 00063be2 */{
+/* 00063be2 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00063c16 */}
+
+void CAEPropertyHScrollBar::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00063c1e */{
+/* 00063c1e */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00063c5c */}
+
+void CAEPropertyHScrollBar::ChangeTextEvent(int ID)
+/* 00063c64 */{
+/* 00063c64 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00063cb4 */	if (Item === NULL)
+/* 00063ccc */	{
+/* 00063ccc */		return;
+/* 00063cce */	}
+/* 00063cce */	int PartsID = this.m_Item.GetID();
+/* 00063cea */	if (Item.GetLabel() == "幅")
+/* 00063d08 */	{
+/* 00063d08 */		Ｐ＿横スクロールバー＿サイズ設定(PartsID, Item.GetTextBoxInt(), AFL_Parts_GetHeight(PartsID, 1));
+/* 00063d3e */	}
+/* 00063d44 */	else if (Item.GetLabel() == "高さ")
+/* 00063d62 */	{
+/* 00063d62 */		Ｐ＿横スクロールバー＿サイズ設定(PartsID, AFL_Parts_GetWidth(PartsID, 1), Item.GetTextBoxInt());
+/* 00063d98 */	}
+/* 00063d9e */	else if (Item.GetLabel() == "左ボタンの幅")
+/* 00063dbc */	{
+/* 00063dbc */		Ｐ＿横スクロールバー＿左ボタン幅設定(PartsID, Item.GetTextBoxInt());
+/* 00063ddc */	}
+/* 00063de2 */	else if (Item.GetLabel() == "右ボタンの幅")
+/* 00063e00 */	{
+/* 00063e00 */		Ｐ＿横スクロールバー＿右ボタン幅設定(PartsID, Item.GetTextBoxInt());
+/* 00063e20 */	}
+/* 00063e26 */	else if (Item.GetLabel() == "全体量")
+/* 00063e44 */	{
+/* 00063e44 */		Ｐ＿横スクロールバー＿全体量設定(PartsID, Item.GetTextBoxInt());
+/* 00063e64 */	}
+/* 00063e6a */	else if (Item.GetLabel() == "表示量")
+/* 00063e88 */	{
+/* 00063e88 */		Ｐ＿横スクロールバー＿表示量設定(PartsID, Item.GetTextBoxInt());
+/* 00063ea8 */	}
+/* 00063eae */	else if (Item.GetLabel() == "スクロール位置")
+/* 00063ecc */	{
+/* 00063ecc */		Ｐ＿横スクロールバー＿スクロール位置設定(PartsID, Item.GetTextBoxInt());
+/* 00063eec */		this.m_Panel.GetItemByLabel("スクロールレート").SetTextBoxText(Ｐ＿横スクロールバー＿スクロールレート取得(PartsID).String());
+/* 00063f3a */	}
+/* 00063f46 */	else if (Item.GetLabel() == "ボタンクリック移動量")
+/* 00063f64 */	{
+/* 00063f64 */		Ｐ＿横スクロールバー＿ボタンクリック移動量設定(PartsID, Item.GetTextBoxInt());
+/* 00063f84 */	}
+/* 00063f8a */	else if (Item.GetLabel() == "ＣＧ名")
+/* 00063fa8 */	{
+/* 00063fa8 */		Ｐ＿横スクロールバー＿ＣＧ名設定(PartsID, Item.GetTextBoxText());
+/* 00063fc8 */	}
+/* 00063fce */	else if (Item.GetLabel() == "フラット名")
+/* 00063fec */	{
+/* 00063fec */		Ｐ＿横スクロールバー＿フラット名設定(PartsID, Item.GetTextBoxText());
+/* 0006400c */	}
+/* 0006400c */	if (Item.GetLabel() == "全体量" || Item.GetLabel() == "表示量")
+/* 00064060 */	{
+/* 00064060 */		this.m_Panel.GetItemByLabel("スクロール位置").SetTextBoxText(string(Ｐ＿横スクロールバー＿スクロール位置取得(PartsID)));
+/* 000640a8 */		this.m_Panel.GetItemByLabel("スクロールレート").SetTextBoxText(Ｐ＿横スクロールバー＿スクロールレート取得(PartsID).String());
+/* 000640f6 */	}
+/* 000640f6 */}
+
+void CAEPropertyHScrollBar::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0006410a */{
+/* 0006410a */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006415a */	if (Item === NULL)
+/* 00064172 */	{
+/* 00064172 */		return;
+/* 00064174 */	}
+/* 00064174 */}
+
+void CAEPropertyHScrollBar::SelecteTextEvent(int ID, string Name)
+/* 0006417c */{
+/* 0006417c */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000641cc */	if (Item === NULL)
+/* 000641e4 */	{
+/* 000641e4 */		return;
+/* 000641e6 */	}
+/* 000641e6 */}
+
+void CAEPropertyHScrollBar::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000641ee */{
+/* 000641ee */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00064208 */}
+
+void CAEPropertyHScrollBar::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00064210 */{
+/* 00064210 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0006422a */}
+
+void CAEPropertyHScrollBar::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00064232 */{
+/* 00064232 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0006424c */}
+
+void CAEPropertyHScrollBar::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00064254 */{
+/* 00064254 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0006426e */}
+

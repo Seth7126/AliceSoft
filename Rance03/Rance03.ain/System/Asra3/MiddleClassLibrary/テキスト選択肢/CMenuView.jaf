@@ -1,0 +1,708 @@
+SYS_選択_result_t CMenuView::_GetResult()
+/* 00039750 */{
+/* 00039750 */	return this._m_result;
+/* 00039760 */}
+
+CMenuView::CMenuView()
+/* 0003976e */{
+/* 00039776 */	this._m_bCreate = true;
+/* 0003978a */}
+
+bool CMenuView::_IsCreate()
+/* 00039792 */{
+/* 00039792 */	return this._m_bCreate;
+/* 0003979e */}
+
+void CMenuView::_Release()
+/* 000397ac */{
+/* 000397ac */	if (!this._m_bCreate)
+/* 000397be */	{
+/* 000397be */		return;
+/* 000397c0 */	}
+/* 000397c0 */	SYS_選択_result_t _temp_result;
+/* 000397d0 */	this._m_result = _temp_result;
+/* 000397f2 */	this._m_ox = 0;
+/* 00039804 */	this._m_oy = 0;
+/* 00039816 */	this._m_total_w = 0;
+/* 00039828 */	this._m_total_h = 0;
+/* 0003983a */	this._ClearItem();
+/* 00039842 */	this._m_sel_item = 0;
+/* 00039854 */	this._m_click = false;
+/* 00039868 */	this._m_cancel_click = false;
+/* 0003987c */	this._m_move = 0;
+/* 0003988e */	this._m_exit = false;
+/* 000398a2 */	sact_text_metrics_t _temp_tm;
+/* 000398b2 */	this._m_tm1 = _temp_tm;
+/* 000398d4 */	this._m_tm2 = _temp_tm;
+/* 000398f6 */	this._m_tm3 = _temp_tm;
+/* 00039918 */	this.m_fBoldWeight = 0.0;
+/* 0003992a */	this.m_fSelectedBoldWeight = 0.0;
+/* 0003993c */	this.m_fUnselectableBoldWeight = 0.0;
+/* 0003994e */	this.m_nCharSpace = 0;
+/* 00039960 */	this.m_nSelectedCharSpace = 0;
+/* 00039972 */	this.m_nUnselectableCharSpace = 0;
+/* 00039984 */	this._m_bCreate = false;
+/* 00039998 */}
+
+void CMenuView::_Clear()
+/* 000399a0 */{
+/* 000399a0 */	this._m_result.fnc.Clear();
+/* 000399b4 */	this._m_result.値 = 0;
+/* 000399ce */}
+
+void CMenuView::_Execute(bool _キャンセルあり, int _キャンセル値)
+/* 000399d6 */{
+/* 000399d6 */	this._m_bCreate = true;
+/* 000399e8 */	this._Open();
+/* 000399f0 */	this._Loop(_キャンセルあり, _キャンセル値);
+/* 00039a0c */	this._Close();
+/* 00039a14 */}
+
+void CMenuView::_Open()
+/* 00039a1c */{
+/* 00039a1c */	this._Clear();
+/* 00039a24 */	if (_選択肢.Empty())
+/* 00039a34 */	{
+/* 00039a34 */		SYS_ERROR("選択肢が登録されていない", 0);
+/* 00039a46 */		選択肢(0, "キャンセル", 0);
+/* 00039a5e */	}
+/* 00039a5e */	string SaveCommentText = "選択：" + _選択肢[0].テキスト;
+/* 00039a8e */	SYS_デフォルトセーブコメント設定(SaveCommentText);
+/* 00039a9e */	if (g_bBeginSelect)
+/* 00039aae */	{
+/* 00039aae */		if (SYS_セーブファイル存在(-2))
+/* 00039ac0 */		{
+/* 00039ac0 */			SYS_追加セーブ(-2, _ゲーム時間, SaveCommentText);
+/* 00039ae2 */		}
+/* 00039ae2 */		if (SYS_セーブファイル存在(-3))
+/* 00039af4 */		{
+/* 00039af4 */			SYS_追加セーブ(-3, _ゲーム時間, SaveCommentText);
+/* 00039b16 */		}
+/* 00039b16 */	}
+/* 00039b16 */	this._SetTextMetrics();
+/* 00039b1e */	this._CalcAreaMetrics();
+/* 00039b26 */	this._CreateFrame();
+/* 00039b2e */	this._CreateItems(_選択エリア[_選択枠]);
+/* 00039b4c */	this._ShowFrame();
+/* 00039b54 */	this.CreateCGCursor();
+/* 00039b5c */	this._m_sel_item = -2147483648;
+/* 00039b6e */	this._m_click = false;
+/* 00039b82 */	this._m_cancel_click = false;
+/* 00039b96 */	this._m_move = 1;
+/* 00039ba8 */	this._m_exit = false;
+/* 00039bbc */	AFL_MouseWheel_ClearCount();
+/* 00039bc2 */	this.m_LButtonClick.Init(1, true);
+/* 00039bde */	this.m_EnterKeyClick.Init(13, true);
+/* 00039bfa */	this.m_RButtonClick.Init(2, true);
+/* 00039c16 */	this.m_SpaceKeyClick.Init(32, true);
+/* 00039c32 */	this.m_EscapeKeyClick.Init(27, true);
+/* 00039c4e */	this.m_PageUpKeyClick.Init(33, true);
+/* 00039c6a */	this.m_HomeKeyClick.Init(36, true);
+/* 00039c86 */	this.m_UpKeyPress.Init(38, true);
+/* 00039ca2 */	this.m_DownKeyPress.Init(40, true);
+/* 00039cbe */	AFL_Mouse_GetPos(this.m_PrevMouseX, this.m_PrevMouseY);
+/* 00039cd6 */}
+
+void CMenuView::_Close()
+/* 00039cde */{
+/* 00039cde */	this._ClearItem();
+/* 00039ce6 */	this.m_CGCursorParts.Release();
+/* 00039cf6 */	this.m_BackParts.Release();
+/* 00039d06 */	SYS_デフォルトセーブコメント更新フラグセット();
+/* 00039d0c */}
+
+void CMenuView::SetShow(bool bShow)
+/* 00039d14 */{
+/* 00039d14 */	if (!this._m_bCreate)
+/* 00039d26 */	{
+/* 00039d26 */		return;
+/* 00039d28 */	}
+/* 00039d28 */	this.m_BackParts.SetShow(bShow);
+/* 00039d42 */	int nItem;
+/* 00039d54 */	for (nItem = 0; nItem < this._m_item.Numof(); nItem++)
+/* 00039da8 */	{
+/* 00039da8 */		if (bShow)
+/* 00039db8 */		{
+/* 00039db8 */			this._m_item[nItem].SetSelectedState(false);
+/* 00039dda */		}
+/* 00039de0 */		else
+/* 00039de0 */		{
+/* 00039de0 */			this._m_item[nItem].SetShow(false);
+/* 00039e02 */		}
+/* 00039e02 */	}
+/* 00039e08 */}
+
+void CMenuView::_Loop(bool _キャンセルあり, int _キャンセル値)
+/* 00039e10 */{
+/* 00039e10 */	while (!this._m_exit)
+/* 00039e22 */	{
+/* 00039e22 */		this._Update(_キャンセルあり, _キャンセル値);
+/* 00039e3e */	}
+/* 00039e44 */}
+
+void CMenuView::_Update(bool _キャンセルあり, int _キャンセル値)
+/* 00039e4c */{
+/* 00039e4c */	int MouseX;
+/* 00039e5e */	int MouseY;
+/* 00039e70 */	AFL_Mouse_GetPos(MouseX, MouseY);
+/* 00039e88 */	bool MouseMoved = MouseX != this.m_PrevMouseX || MouseY != this.m_PrevMouseY;
+/* 00039ee0 */	this.m_PrevMouseX = MouseX;
+/* 00039ef6 */	this.m_PrevMouseY = MouseY;
+/* 00039f0c */	int s = this._m_sel_item;
+/* 00039f22 */	if (MouseMoved)
+/* 00039f32 */	{
+/* 00039f32 */		s = this._ComputeCurSelByMouse();
+/* 00039f46 */	}
+/* 00039f4c */	else
+/* 00039f4c */	{
+/* 00039f4c */		s = this._ComputeCurSelByKey();
+/* 00039f60 */	}
+/* 00039f60 */	this._UpdateItem(s);
+/* 00039f72 */	g_SystemButtonViewList.Update();
+/* 00039f82 */	sys_btn_fnc_t _fn = this._m_result.fnc;
+/* 00039faa */	this._m_result.fnc = g_SystemButtonViewList.GetSelectedFunc();
+/* 00039fd0 */	if (this._m_result.fnc.Numof() != 0)
+/* 00039ff4 */	{
+/* 00039ff4 */		s = -2147483648;
+/* 0003a006 */	}
+/* 0003a006 */	if (!SYS_IsSame_sys_btn_fnc_t(this._m_result.fnc, _fn) && this._m_result.fnc.Numof() != 0)
+/* 0003a070 */	{
+/* 0003a070 */		g_SystemButtonViewList.PlayOnCursorSound();
+/* 0003a080 */	}
+/* 0003a080 */	if (s != this._m_sel_item && s != -2147483648)
+/* 0003a0cc */	{
+/* 0003a0cc */		if (this._m_move == 1)
+/* 0003a0e4 */		{
+/* 0003a0e4 */			if (!_選択エリア[_選択枠].音移動１.Empty())
+/* 0003a10c */			{
+/* 0003a10c */				システム効果音(_選択エリア[_選択枠].音移動１);
+/* 0003a130 */			}
+/* 0003a130 */			if (!_選択エリア[_選択枠].音移動２.Empty())
+/* 0003a158 */			{
+/* 0003a158 */				this._m_move = 2;
+/* 0003a16a */			}
+/* 0003a16a */		}
+/* 0003a170 */		else
+/* 0003a170 */		{
+/* 0003a170 */			if (!_選択エリア[_選択枠].音移動２.Empty())
+/* 0003a198 */			{
+/* 0003a198 */				システム効果音(_選択エリア[_選択枠].音移動２);
+/* 0003a1bc */			}
+/* 0003a1bc */			if (!_選択エリア[_選択枠].音移動１.Empty())
+/* 0003a1e4 */			{
+/* 0003a1e4 */				this._m_move = 1;
+/* 0003a1f6 */			}
+/* 0003a1f6 */		}
+/* 0003a1f6 */	}
+/* 0003a1f6 */	AFL_View_Update(true);
+/* 0003a202 */	if (SYS_ホイールフォア即確認())
+/* 0003a20e */	{
+/* 0003a20e */		this._m_result.fnc = &SYS_RunCommandMouseWheelForward;
+/* 0003a230 */		this._m_exit = true;
+/* 0003a244 */		return;
+/* 0003a246 */	}
+/* 0003a246 */	if (this.m_PageUpKeyClick.IsClick(-2147483648))
+/* 0003a262 */	{
+/* 0003a262 */		this._m_result.fnc = &Ｓ＿バックログ;
+/* 0003a284 */		this._m_exit = true;
+/* 0003a298 */		return;
+/* 0003a29a */	}
+/* 0003a29a */	if (this.m_HomeKeyClick.IsClick(-2147483648))
+/* 0003a2b6 */	{
+/* 0003a2b6 */		this._m_result.fnc = &Ｓ＿バックシーン;
+/* 0003a2d8 */		this._m_exit = true;
+/* 0003a2ec */		return;
+/* 0003a2ee */	}
+/* 0003a2ee */	if (this.m_EscapeKeyClick.IsClick(-2147483648))
+/* 0003a30a */	{
+/* 0003a30a */		this._m_result.fnc = &Ｓ＿コンフィグ;
+/* 0003a32c */		this._m_exit = true;
+/* 0003a340 */		return;
+/* 0003a342 */	}
+/* 0003a342 */	this._m_sel_item = s;
+/* 0003a358 */	if (this.m_LButtonClick.IsClick(s) || this.m_EnterKeyClick.IsClick(s))
+/* 0003a3b0 */	{
+/* 0003a3b0 */		if (this._m_result.fnc.Numof() != 0)
+/* 0003a3d4 */		{
+/* 0003a3d4 */			g_SystemButtonViewList.PlayClickSound();
+/* 0003a3e4 */			this._SetResultValue();
+/* 0003a3ec */			this._m_exit = true;
+/* 0003a400 */			return;
+/* 0003a402 */		}
+/* 0003a402 */		if (s != -2147483648)
+/* 0003a41a */		{
+/* 0003a41a */			if (!_選択エリア[_選択枠].音決定.Empty())
+/* 0003a442 */			{
+/* 0003a442 */				システム効果音(_選択エリア[_選択枠].音決定);
+/* 0003a466 */			}
+/* 0003a466 */			this._SetResultValue();
+/* 0003a46e */			this._m_exit = true;
+/* 0003a482 */			return;
+/* 0003a484 */		}
+/* 0003a484 */		if (!_選択エリア[_選択枠].音無効.Empty())
+/* 0003a4ac */		{
+/* 0003a4ac */			システム効果音(_選択エリア[_選択枠].音無効);
+/* 0003a4d0 */		}
+/* 0003a4d0 */	}
+/* 0003a4d0 */	if (this.m_RButtonClick.IsClick(-2147483648) || this.m_SpaceKeyClick.IsClick(-2147483648))
+/* 0003a520 */	{
+/* 0003a520 */		if (_キャンセルあり)
+/* 0003a530 */		{
+/* 0003a530 */			this._m_result.値 = _キャンセル値;
+/* 0003a54e */			this._m_exit = true;
+/* 0003a562 */			return;
+/* 0003a564 */		}
+/* 0003a56a */		else
+/* 0003a56a */		{
+/* 0003a56a */			_g_menu_rbutton_callback_fnc();
+/* 0003a58a */		}
+/* 0003a58a */	}
+/* 0003a58a */	if (system.IsDebugMode())
+/* 0003a596 */	{
+/* 0003a596 */		int i;
+/* 0003a5a8 */		for (i = 0; i < this.m_SelectClick.Numof(); i++)
+/* 0003a5fc */		{
+/* 0003a5fc */			if (this.m_SelectClick[i].IsClick(-2147483648))
+/* 0003a624 */			{
+/* 0003a624 */				this._m_sel_item = i;
+/* 0003a63a */				this._SetResultValue();
+/* 0003a642 */				this._m_exit = true;
+/* 0003a656 */				return;
+/* 0003a658 */			}
+/* 0003a658 */		}
+/* 0003a65e */	}
+/* 0003a65e */}
+
+void CMenuView::_SetResultValue()
+/* 0003a666 */{
+/* 0003a666 */	if (this._m_sel_item != -2147483648)
+/* 0003a67e */	{
+/* 0003a67e */		this._m_result.値 = _選択肢[this._m_sel_item].番号;
+/* 0003a6b0 */	}
+/* 0003a6b0 */}
+
+void CMenuView::CreateCGCursor()
+/* 0003a6b8 */{
+/* 0003a6b8 */	ref 選択エリア_t MenuArea = _選択エリア[_選択枠];
+/* 0003a6ea */	if (MenuArea.CursorCG.Empty())
+/* 0003a704 */	{
+/* 0003a704 */		return;
+/* 0003a706 */	}
+/* 0003a706 */	this.m_CGCursorParts.SetCG(MenuArea.CursorCG, 1);
+/* 0003a72e */	this.m_CGCursorParts.SetPos(MenuArea.nCursorOffsetX, MenuArea.nCursorOffsetY);
+/* 0003a762 */	this.m_CGCursorParts.SetZByBaseZ(2 + MenuArea.nCursorOffsetZ, 32768);
+/* 0003a792 */	this.m_CGCursorParts.SetShow(false);
+/* 0003a7a8 */}
+
+void CMenuView::_CreateItems(ref 選択エリア_t _area)
+/* 0003a7b0 */{
+/* 0003a7b0 */	this._m_item.Free();
+/* 0003a7ba */	this._m_item.Alloc(_選択肢.Numof());
+/* 0003a7da */	int _i;
+/* 0003a7ec */	for (_i = 0; _i < _選択肢.Numof(); ++_i)
+/* 0003a83c */	{
+/* 0003a83c */		this._m_item[_i]._Create(_選択肢[_i], this._m_tm1, this._m_tm2, this._m_tm3, this.m_fBoldWeight, this.m_fSelectedBoldWeight, this.m_fUnselectableBoldWeight, this.m_nCharSpace, this.m_nSelectedCharSpace, this.m_nUnselectableCharSpace, 2, 32768, (this._m_ox + _area.余白左) - 1, (this._m_oy + _area.余白上 + _i * (_area.文字サイズ + _area.行間)) - 1, this._m_total_w);
+/* 0003a95e */	}
+/* 0003a964 */	if (system.IsDebugMode())
+/* 0003a970 */	{
+/* 0003a970 */		this.m_SelectClick.Alloc(_選択肢.Numof());
+/* 0003a990 */		int i;
+/* 0003a9a2 */		for (i = 0; i < this.m_SelectClick.Numof(); i++)
+/* 0003a9f6 */		{
+/* 0003a9f6 */			if (_選択肢[i].キーコード == 0)
+/* 0003aa22 */			{
+/* 0003aa22 */				continue;
+/* 0003aa28 */			}
+/* 0003aa28 */			this.m_SelectClick[i].Init(_選択肢[i].キーコード, true);
+/* 0003aa68 */		}
+/* 0003aa6e */	}
+/* 0003aa6e */}
+
+void CMenuView::_ClearItem()
+/* 0003aa76 */{
+/* 0003aa76 */	this._m_item.Free();
+/* 0003aa80 */	this.m_SelectClick.Free();
+/* 0003aa8a */}
+
+void CMenuView::_CalcAreaMetrics()
+/* 0003aa92 */{
+/* 0003aa92 */	this._CalcAreaSize();
+/* 0003aa9a */	this._CalcAreaPos();
+/* 0003aaa2 */	this._SetAreaZ();
+/* 0003aaaa */}
+
+int CMenuView::CalcMaxWidth(ref sact_text_metrics_t tm, float Weight)
+/* 0003aab2 */{
+/* 0003aab2 */	CASCharSpriteProperty Property;
+/* 0003aac2 */	Property = SYS_TransCharSpriteProperty(tm);
+/* 0003aaea */	Property.SetBoldWeight(Weight);
+/* 0003ab04 */	Property.SetProperty();
+/* 0003ab14 */	int MaxSelectWidth;
+/* 0003ab26 */	int SelectIndex;
+/* 0003ab38 */	for (SelectIndex = 0; SelectIndex < _選択肢.Numof(); SelectIndex++)
+/* 0003ab8c */	{
+/* 0003ab8c */		ref string SelectText = _選択肢[SelectIndex].テキスト;
+/* 0003abc6 */		int SelectWidth;
+/* 0003abd8 */		int TextIndex;
+/* 0003abea */		for (TextIndex = 0; TextIndex < SelectText.Length(); TextIndex++)
+/* 0003ac38 */		{
+/* 0003ac38 */			string Char = SelectText.GetPart(TextIndex, 1);
+/* 0003ac62 */			int CharWidth = Property.GetFontWidth(Char);
+/* 0003ac88 */			SelectWidth += CharWidth;
+/* 0003ac9e */			if (TextIndex < SelectText.Length() - 1)
+/* 0003acc2 */			{
+/* 0003acc2 */				SelectWidth += this.m_nCharSpace;
+/* 0003acd8 */			}
+/* 0003acd8 */		}
+/* 0003acde */		if (MaxSelectWidth < SelectWidth)
+/* 0003acfa */		{
+/* 0003acfa */			MaxSelectWidth = SelectWidth;
+/* 0003ad10 */		}
+/* 0003ad10 */	}
+/* 0003ad1c */	return MaxSelectWidth;
+/* 0003ad28 */}
+
+void CMenuView::_CalcAreaSize()
+/* 0003ad36 */{
+/* 0003ad36 */	ref 選択エリア_t SelectArea = _選択エリア[_選択枠];
+/* 0003ad68 */	if (SelectArea.幅フラグ == 1)
+/* 0003ad88 */	{
+/* 0003ad88 */		int MaxSelectWidth1 = this.CalcMaxWidth(this._m_tm1, this.m_fBoldWeight);
+/* 0003adb0 */		int MaxSelectWidth2 = this.CalcMaxWidth(this._m_tm2, this.m_fSelectedBoldWeight);
+/* 0003add8 */		int MaxSelectWidth3 = this.CalcMaxWidth(this._m_tm3, this.m_fUnselectableBoldWeight);
+/* 0003ae00 */		int MaxSelectWidth = Math.Max(Math.Max(MaxSelectWidth1, MaxSelectWidth2), MaxSelectWidth3);
+/* 0003ae3e */		this._m_total_w = MaxSelectWidth + SelectArea.余白左 + SelectArea.余白右;
+/* 0003ae7c */	}
+/* 0003ae82 */	else
+/* 0003ae82 */	{
+/* 0003ae82 */		this._m_total_w = SelectArea.幅;
+/* 0003aea0 */	}
+/* 0003aea0 */	if (SelectArea.高フラグ == 1)
+/* 0003aec0 */	{
+/* 0003aec0 */		this._m_total_h = _選択肢.Numof() * SelectArea.文字サイズ + SelectArea.余白上 + SelectArea.余白下 + SelectArea.行間 * (_選択肢.Numof() - 1);
+/* 0003af46 */	}
+/* 0003af4c */	else
+/* 0003af4c */	{
+/* 0003af4c */		this._m_total_h = SelectArea.高;
+/* 0003af6a */	}
+/* 0003af6a */}
+
+void CMenuView::_CalcAreaPos()
+/* 0003af72 */{
+/* 0003af72 */	switch (_選択エリア[_選択枠].座標フラグ)
+/* 0003af9c */	{
+/* 0003af9c */	case 1:
+/* 0003af9c */		this._SetAreaPos左上();
+/* 0003afa4 */		break;
+/* 0003afaa */	case 2:
+/* 0003afaa */		this._SetAreaPos中上();
+/* 0003afb2 */		break;
+/* 0003afb8 */	case 3:
+/* 0003afb8 */		this._SetAreaPos右上();
+/* 0003afc0 */		break;
+/* 0003afc6 */	case 4:
+/* 0003afc6 */		this._SetAreaPos左中();
+/* 0003afce */		break;
+/* 0003afd4 */	case 5:
+/* 0003afd4 */		this._SetAreaPos中中();
+/* 0003afdc */		break;
+/* 0003afe2 */	case 6:
+/* 0003afe2 */		this._SetAreaPos右中();
+/* 0003afea */		break;
+/* 0003aff0 */	case 7:
+/* 0003aff0 */		this._SetAreaPos左下();
+/* 0003aff8 */		break;
+/* 0003affe */	case 8:
+/* 0003affe */		this._SetAreaPos中下();
+/* 0003b006 */		break;
+/* 0003b00c */	case 9:
+/* 0003b00c */		this._SetAreaPos右下();
+/* 0003b014 */		break;
+/* 0003b01a */	}
+/* 0003b01a */}
+
+void CMenuView::_SetAreaPos左上()
+/* 0003b022 */{
+/* 0003b022 */	this._m_ox = _選択エリア[_選択枠].Ｘ;
+/* 0003b04c */	this._m_oy = _選択エリア[_選択枠].Ｙ;
+/* 0003b076 */}
+
+void CMenuView::_SetAreaPos中上()
+/* 0003b07e */{
+/* 0003b07e */	this._m_ox = _選択エリア[_選択枠].Ｘ - this._m_total_w / 2;
+/* 0003b0bc */	this._m_oy = _選択エリア[_選択枠].Ｙ;
+/* 0003b0e6 */}
+
+void CMenuView::_SetAreaPos右上()
+/* 0003b0ee */{
+/* 0003b0ee */	this._m_ox = _選択エリア[_選択枠].Ｘ - this._m_total_w;
+/* 0003b124 */	this._m_oy = _選択エリア[_選択枠].Ｙ;
+/* 0003b14e */}
+
+void CMenuView::_SetAreaPos左中()
+/* 0003b156 */{
+/* 0003b156 */	this._m_ox = _選択エリア[_選択枠].Ｘ;
+/* 0003b180 */	this._m_oy = _選択エリア[_選択枠].Ｙ - this._m_total_h / 2;
+/* 0003b1be */}
+
+void CMenuView::_SetAreaPos中中()
+/* 0003b1c6 */{
+/* 0003b1c6 */	this._m_ox = _選択エリア[_選択枠].Ｘ - this._m_total_w / 2;
+/* 0003b204 */	this._m_oy = _選択エリア[_選択枠].Ｙ - this._m_total_h / 2;
+/* 0003b242 */}
+
+void CMenuView::_SetAreaPos右中()
+/* 0003b24a */{
+/* 0003b24a */	this._m_ox = _選択エリア[_選択枠].Ｘ - this._m_total_w;
+/* 0003b280 */	this._m_oy = _選択エリア[_選択枠].Ｙ - this._m_total_h / 2;
+/* 0003b2be */}
+
+void CMenuView::_SetAreaPos左下()
+/* 0003b2c6 */{
+/* 0003b2c6 */	this._m_ox = _選択エリア[_選択枠].Ｘ;
+/* 0003b2f0 */	this._m_oy = _選択エリア[_選択枠].Ｙ - this._m_total_h;
+/* 0003b326 */}
+
+void CMenuView::_SetAreaPos中下()
+/* 0003b32e */{
+/* 0003b32e */	this._m_ox = _選択エリア[_選択枠].Ｘ - this._m_total_w / 2;
+/* 0003b36c */	this._m_oy = _選択エリア[_選択枠].Ｙ - this._m_total_h;
+/* 0003b3a2 */}
+
+void CMenuView::_SetAreaPos右下()
+/* 0003b3aa */{
+/* 0003b3aa */	this._m_ox = _選択エリア[_選択枠].Ｘ - this._m_total_w;
+/* 0003b3e0 */	this._m_oy = _選択エリア[_選択枠].Ｙ - this._m_total_h;
+/* 0003b416 */}
+
+void CMenuView::_SetAreaZ()
+/* 0003b41e */{
+/* 0003b420 */}
+
+void CMenuView::_CreateFrame()
+/* 0003b426 */{
+/* 0003b426 */	string CGName = _選択エリア[_選択枠].ＣＧ名;
+/* 0003b452 */	this.m_BackParts.Create();
+/* 0003b462 */	if (!CGName.Empty())
+/* 0003b476 */	{
+/* 0003b476 */		this.m_BackParts.SetCG(CGName, 1);
+/* 0003b496 */	}
+/* 0003b49c */	else
+/* 0003b49c */	{
+/* 0003b49c */		int nWidth = this._m_total_w;
+/* 0003b4b2 */		int nHeight = this._m_total_h;
+/* 0003b4c8 */		int nR = _選択エリア[_選択枠].塗Ｒ;
+/* 0003b4f2 */		int nG = _選択エリア[_選択枠].塗Ｇ;
+/* 0003b51c */		int nB = _選択エリア[_選択枠].塗Ｂ;
+/* 0003b546 */		int nA = _選択エリア[_選択枠].塗率;
+/* 0003b570 */		int nFrameR = _選択エリア[_選択枠].枠Ｒ;
+/* 0003b59a */		int nFrameG = _選択エリア[_選択枠].枠Ｇ;
+/* 0003b5c4 */		int nFrameB = _選択エリア[_選択枠].枠Ｂ;
+/* 0003b5ee */		Ｐ＿構築手順＿初期化(this.m_BackParts.GetPartsNumber(), 1);
+/* 0003b60a */		Ｐ＿構築手順＿作成(this.m_BackParts.GetPartsNumber(), nWidth, nHeight, 1);
+/* 0003b63a */		switch (_選択エリア[_選択枠].枠タイプ)
+/* 0003b664 */		{
+/* 0003b664 */		case 0:
+/* 0003b664 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 0, 0, nWidth, nHeight, nR, nG, nB, nA, 1);
+/* 0003b6c8 */			break;
+/* 0003b6ce */		case 1:
+/* 0003b6ce */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 0, 0, nWidth, nHeight, 0, 0, 0, 96, 1);
+/* 0003b722 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 1, 1, nWidth - 2, nHeight - 2, nFrameR, nFrameG, nFrameB, 255, 1);
+/* 0003b792 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 2, 2, nWidth - 4, nHeight - 4, nR, nG, nB, nA, 1);
+/* 0003b806 */			break;
+/* 0003b80c */		case 2:
+/* 0003b80c */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 0, 0, nWidth, nHeight, 0, 0, 0, 96, 1);
+/* 0003b860 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 1, 1, nWidth - 2, nHeight - 2, nFrameR, nFrameG, nFrameB, 255, 1);
+/* 0003b8d0 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 4, 4, nWidth - 8, nHeight - 8, nR, nG, nB, nA, 1);
+/* 0003b944 */			break;
+/* 0003b94a */		case 3:
+/* 0003b94a */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 0, 0, nWidth, nHeight, 0, 0, 0, 96, 1);
+/* 0003b99e */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 1, 1, nWidth - 2, nHeight - 2, nFrameR, nFrameG, nFrameB, 255, 1);
+/* 0003ba0e */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 2, 2, nWidth - 4, nHeight - 4, nR, nG, nB, nA, 1);
+/* 0003ba82 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 3, 3, nWidth - 6, nHeight - 6, nFrameR, nFrameG, nFrameB, 255, 1);
+/* 0003baf2 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 4, 4, nWidth - 8, nHeight - 8, nR, nG, nB, nA, 1);
+/* 0003bb66 */			break;
+/* 0003bb6c */		case 4:
+/* 0003bb6c */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 0, 0, nWidth, nHeight, 0, 0, 0, 96, 1);
+/* 0003bbc0 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 1, 1, nWidth - 2, nHeight - 2, nFrameR, nFrameG, nFrameB, 255, 1);
+/* 0003bc30 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 2, 2, nWidth - 4, nHeight - 4, nR, nG, nB, nA, 1);
+/* 0003bca4 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 3, 3, nWidth - 6, nHeight - 6, nFrameR, nFrameG, nFrameB, 255, 1);
+/* 0003bd14 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 5, 5, nWidth - 10, nHeight - 10, nR, nG, nB, nA, 1);
+/* 0003bd88 */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 6, 6, nWidth - 12, nHeight - 12, nR, nG, nB, nA, 1);
+/* 0003bdfc */			Ｐ＿構築手順＿色塗り(this.m_BackParts.GetPartsNumber(), 7, 7, nWidth - 14, nHeight - 14, nR, nG, nB, nA, 1);
+/* 0003be70 */			break;
+/* 0003be76 */		}
+/* 0003be76 */		Ｐ＿構築ビルド(this.m_BackParts.GetPartsNumber(), 1);
+/* 0003be92 */	}
+/* 0003be92 */}
+
+void CMenuView::_SetTextMetrics()
+/* 0003be9a */{
+/* 0003be9a */	int sr = _選択エリア[_選択枠].選択文字Ｒ;
+/* 0003bec4 */	int sg = _選択エリア[_選択枠].選択文字Ｇ;
+/* 0003beee */	int sb = _選択エリア[_選択枠].選択文字Ｂ;
+/* 0003bf18 */	if (sr == -1)
+/* 0003bf30 */	{
+/* 0003bf30 */		sr = _選択エリア[_選択枠]._選択可能字.文字Ｒ;
+/* 0003bf62 */	}
+/* 0003bf62 */	if (sg == -1)
+/* 0003bf7a */	{
+/* 0003bf7a */		sr = _選択エリア[_選択枠]._選択可能字.文字Ｇ;
+/* 0003bfac */	}
+/* 0003bfac */	if (sb == -1)
+/* 0003bfc4 */	{
+/* 0003bfc4 */		sr = _選択エリア[_選択枠]._選択可能字.文字Ｂ;
+/* 0003bff6 */	}
+/* 0003bff6 */	this._m_tm1.nColorR = _選択エリア[_選択枠]._選択可能字.文字Ｒ;
+/* 0003c030 */	this._m_tm1.nColorG = _選択エリア[_選択枠]._選択可能字.文字Ｇ;
+/* 0003c06a */	this._m_tm1.nColorB = _選択エリア[_選択枠]._選択可能字.文字Ｂ;
+/* 0003c0a4 */	this._m_tm1.nSize = _選択エリア[_選択枠].文字サイズ;
+/* 0003c0d6 */	this._m_tm1.nWeight = 400;
+/* 0003c0f0 */	this._m_tm1.nFace = _選択エリア[_選択枠]._選択可能字.フォント;
+/* 0003c12a */	this._m_tm1.nShadowPixelL = _選択エリア[_選択枠]._選択可能字.文字飾左;
+/* 0003c164 */	this._m_tm1.nShadowPixelU = _選択エリア[_選択枠]._選択可能字.文字飾上;
+/* 0003c19e */	this._m_tm1.nShadowPixelR = _選択エリア[_選択枠]._選択可能字.文字飾右;
+/* 0003c1d8 */	this._m_tm1.nShadowPixelD = _選択エリア[_選択枠]._選択可能字.文字飾下;
+/* 0003c212 */	this._m_tm1.nShadowColorR = _選択エリア[_選択枠]._選択可能字.文字飾Ｒ;
+/* 0003c24c */	this._m_tm1.nShadowColorG = _選択エリア[_選択枠]._選択可能字.文字飾Ｇ;
+/* 0003c286 */	this._m_tm1.nShadowColorB = _選択エリア[_選択枠]._選択可能字.文字飾Ｂ;
+/* 0003c2c0 */	this._m_tm2.nColorR = sr;
+/* 0003c2de */	this._m_tm2.nColorG = sg;
+/* 0003c2fc */	this._m_tm2.nColorB = sb;
+/* 0003c31a */	this._m_tm2.nSize = _選択エリア[_選択枠].文字サイズ;
+/* 0003c34c */	this._m_tm2.nWeight = 400;
+/* 0003c366 */	this._m_tm2.nFace = _選択エリア[_選択枠]._選択可能字.フォント;
+/* 0003c3a0 */	this._m_tm2.nShadowPixelL = _選択エリア[_選択枠].選択文字飾左;
+/* 0003c3d2 */	this._m_tm2.nShadowPixelU = _選択エリア[_選択枠].選択文字飾上;
+/* 0003c404 */	this._m_tm2.nShadowPixelR = _選択エリア[_選択枠].選択文字飾右;
+/* 0003c436 */	this._m_tm2.nShadowPixelD = _選択エリア[_選択枠].選択文字飾下;
+/* 0003c468 */	this._m_tm2.nShadowColorR = _選択エリア[_選択枠].選択文字飾Ｒ;
+/* 0003c49a */	this._m_tm2.nShadowColorG = _選択エリア[_選択枠].選択文字飾Ｇ;
+/* 0003c4cc */	this._m_tm2.nShadowColorB = _選択エリア[_選択枠].選択文字飾Ｂ;
+/* 0003c4fe */	this._m_tm3.nColorR = _選択エリア[_選択枠]._選択不可字.文字Ｒ;
+/* 0003c538 */	this._m_tm3.nColorG = _選択エリア[_選択枠]._選択不可字.文字Ｇ;
+/* 0003c572 */	this._m_tm3.nColorB = _選択エリア[_選択枠]._選択不可字.文字Ｂ;
+/* 0003c5ac */	this._m_tm3.nSize = _選択エリア[_選択枠].文字サイズ;
+/* 0003c5de */	this._m_tm3.nWeight = 400;
+/* 0003c5f8 */	this._m_tm3.nFace = _選択エリア[_選択枠]._選択不可字.フォント;
+/* 0003c632 */	this._m_tm3.nShadowPixelL = _選択エリア[_選択枠]._選択不可字.文字飾左;
+/* 0003c66c */	this._m_tm3.nShadowPixelU = _選択エリア[_選択枠]._選択不可字.文字飾上;
+/* 0003c6a6 */	this._m_tm3.nShadowPixelR = _選択エリア[_選択枠]._選択不可字.文字飾右;
+/* 0003c6e0 */	this._m_tm3.nShadowPixelD = _選択エリア[_選択枠]._選択不可字.文字飾下;
+/* 0003c71a */	this._m_tm3.nShadowColorR = _選択エリア[_選択枠]._選択不可字.文字飾Ｒ;
+/* 0003c754 */	this._m_tm3.nShadowColorG = _選択エリア[_選択枠]._選択不可字.文字飾Ｇ;
+/* 0003c78e */	this._m_tm3.nShadowColorB = _選択エリア[_選択枠]._選択不可字.文字飾Ｂ;
+/* 0003c7c8 */	this.m_fBoldWeight = _選択エリア[_選択枠].m_fBoldWeight;
+/* 0003c7f2 */	this.m_fSelectedBoldWeight = _選択エリア[_選択枠].m_fSelectedBoldWeight;
+/* 0003c81c */	this.m_fUnselectableBoldWeight = _選択エリア[_選択枠].m_fUnselectableBoldWeight;
+/* 0003c846 */	this.m_nCharSpace = _選択エリア[_選択枠].m_nCharSpace;
+/* 0003c870 */	this.m_nSelectedCharSpace = _選択エリア[_選択枠].m_nSelectedCharSpace;
+/* 0003c89a */	this.m_nUnselectableCharSpace = _選択エリア[_選択枠].m_nUnselectableCharSpace;
+/* 0003c8c4 */}
+
+void CMenuView::_ShowFrame()
+/* 0003c8cc */{
+/* 0003c8cc */	this.m_BackParts.SetPos(this._m_ox, this._m_oy);
+/* 0003c8f0 */	this.m_BackParts.SetZByBaseZ(0, 32768);
+/* 0003c90c */	this.m_BackParts.SetShow(true);
+/* 0003c922 */}
+
+int CMenuView::_ComputeCurSelByMouse()
+/* 0003c92a */{
+/* 0003c92a */	int _i;
+/* 0003c93c */	for (_i = 0; _i < this._m_item.Numof(); ++_i)
+/* 0003c98c */	{
+/* 0003c98c */		if (this._m_item[_i]._IsEnableSel() && this._m_item[_i]._IsMousePtIn())
+/* 0003c9e8 */		{
+/* 0003c9e8 */			return _i;
+/* 0003c9f4 */		}
+/* 0003c9f4 */	}
+/* 0003c9fa */	return -2147483648;
+/* 0003ca02 */}
+
+int CMenuView::_ComputeCurSelByKey()
+/* 0003ca10 */{
+/* 0003ca10 */	if (this.m_DownKeyPress.IsKeyPress(-2147483648))
+/* 0003ca2c */	{
+/* 0003ca2c */		return this._GetNextItem(this._m_sel_item);
+/* 0003ca40 */	}
+/* 0003ca40 */	if (this.m_UpKeyPress.IsKeyPress(-2147483648))
+/* 0003ca5c */	{
+/* 0003ca5c */		return this._GetPrevItem(this._m_sel_item);
+/* 0003ca70 */	}
+/* 0003ca70 */	return this._m_sel_item;
+/* 0003ca7c */}
+
+void CMenuView::_UpdateItem(int _hilite_index)
+/* 0003ca8a */{
+/* 0003ca8a */	if (!_選択エリア[_選択枠].CursorCG.Empty())
+/* 0003cab2 */	{
+/* 0003cab2 */		if (_hilite_index >= 0 && _hilite_index < this._m_item.Numof())
+/* 0003cb04 */		{
+/* 0003cb04 */			this.m_CGCursorParts.SetPos(this._m_item[_hilite_index].GetX() + _選択エリア[_選択枠].nCursorOffsetX, this._m_item[_hilite_index].GetY() + _選択エリア[_選択枠].nCursorOffsetY);
+/* 0003cb8c */			this.m_CGCursorParts.SetShow(true);
+/* 0003cba2 */		}
+/* 0003cba8 */		else
+/* 0003cba8 */		{
+/* 0003cba8 */			this.m_CGCursorParts.SetShow(false);
+/* 0003cbbe */		}
+/* 0003cbbe */		int _i;
+/* 0003cbd0 */		for (_i = 0; _i < this._m_item.Numof(); ++_i)
+/* 0003cc20 */		{
+/* 0003cc20 */			this._m_item[_i].SetSelectedState(false);
+/* 0003cc42 */		}
+/* 0003cc48 */	}
+/* 0003cc4e */	else
+/* 0003cc4e */	{
+/* 0003cc4e */		int _i;
+/* 0003cc60 */		for (_i = 0; _i < this._m_item.Numof(); ++_i)
+/* 0003ccb0 */		{
+/* 0003ccb0 */			this._m_item[_i].SetSelectedState(_i == _hilite_index);
+/* 0003cce4 */		}
+/* 0003ccea */	}
+/* 0003ccea */}
+
+int CMenuView::_GetNextItem(int _o)
+/* 0003ccf2 */{
+/* 0003ccf2 */	if (_o == -2147483648)
+/* 0003cd0a */	{
+/* 0003cd0a */		_o = -1;
+/* 0003cd1c */	}
+/* 0003cd1c */	int _r = _o;
+/* 0003cd32 */	for (; ; )
+/* 0003cd32 */	{
+/* 0003cd32 */		++_r;
+/* 0003cd42 */		if (_r >= this._m_item.Numof())
+/* 0003cd64 */		{
+/* 0003cd64 */			_r = 0;
+/* 0003cd76 */		}
+/* 0003cd76 */		if (_r == _o || this._m_item[_r]._IsEnableSel())
+/* 0003cdcc */		{
+/* 0003cdcc */			return _r;
+/* 0003cdd8 */		}
+/* 0003cdd8 */	}
+/* 0003cdde */	return _o;
+/* 0003cdea */}
+
+int CMenuView::_GetPrevItem(int _o)
+/* 0003cdf8 */{
+/* 0003cdf8 */	if (_o == -2147483648)
+/* 0003ce10 */	{
+/* 0003ce10 */		_o = this._m_item.Numof();
+/* 0003ce2c */	}
+/* 0003ce2c */	int _r = _o;
+/* 0003ce42 */	for (; ; )
+/* 0003ce42 */	{
+/* 0003ce42 */		--_r;
+/* 0003ce52 */		if (_r < 0)
+/* 0003ce6a */		{
+/* 0003ce6a */			_r = this._m_item.Numof() - 1;
+/* 0003ce8e */		}
+/* 0003ce8e */		if (_r == _o || this._m_item[_r]._IsEnableSel())
+/* 0003cee4 */		{
+/* 0003cee4 */			return _r;
+/* 0003cef0 */		}
+/* 0003cef0 */	}
+/* 0003cef6 */	return _o;
+/* 0003cf02 */}
+

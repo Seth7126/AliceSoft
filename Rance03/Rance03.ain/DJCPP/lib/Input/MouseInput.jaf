@@ -1,0 +1,134 @@
+MouseInput::MouseInput()
+/* 001e6232 */{
+/* 001e623a */	this.x_ = 0;
+/* 001e624c */	this.y_ = 0;
+/* 001e625e */}
+
+void MouseInput::update()
+/* 001e6266 */{
+/* 001e6266 */	this.updateCursorPos();
+/* 001e626e */	this.updateAccelaration();
+/* 001e6276 */	this.updateButtonState();
+/* 001e627e */	if (this.btn_[0].onDown())
+/* 001e629c */	{
+/* 001e629c */		this.objectIdOnDown_ = g_gameObjectManager.getFocusedObjectId();
+/* 001e62b8 */	}
+/* 001e62be */	else if (this.btn_[0].isPress())
+/* 001e62dc */	{
+/* 001e62dc */		this.objectIdOnUp_ = g_gameObjectManager.getFocusedObjectId();
+/* 001e62f8 */	}
+/* 001e62f8 */	this.updateWheel();
+/* 001e6300 */}
+
+void MouseInput::updateCursorPos()
+/* 001e6308 */{
+/* 001e6308 */	this.lastX_ = this.x_;
+/* 001e631e */	this.lastY_ = this.y_;
+/* 001e6334 */	int x;
+/* 001e6346 */	int y;
+/* 001e6358 */	if (AFL_Mouse_GetPos(x, y))
+/* 001e6374 */	{
+/* 001e6374 */		this.x_ = x;
+/* 001e638a */		this.y_ = y;
+/* 001e63a0 */	}
+/* 001e63a0 */	this.isCursorChanged_ = this.lastX_ != this.x_ || this.lastY_ != this.y_;
+/* 001e63f8 */}
+
+void MouseInput::updateAccelaration()
+/* 001e6400 */{
+/* 001e6400 */	int dx = this.x_ - this.lastX_;
+/* 001e6422 */	int dy = this.y_ - this.lastY_;
+/* 001e6444 */	this.accelaretionX_ = this.x_ - this.lastX_;
+/* 001e6468 */	this.accelaretionY_ = this.y_ - this.lastY_;
+/* 001e648c */}
+
+void MouseInput::updateButtonState()
+/* 001e6494 */{
+/* 001e6494 */	this.btn_[0].update(AFL_IsKeyDown(1) || AFL_IsKeyDown(13));
+/* 001e64e4 */	this.btn_[1].update(AFL_IsKeyDown(2) || AFL_IsKeyDown(32));
+/* 001e6534 */}
+
+void MouseInput::updateWheel()
+/* 001e653c */{
+/* 001e653c */	int fw;
+/* 001e654e */	int bk;
+/* 001e6560 */	AFL_MouseWheel_GetCount(fw, bk);
+/* 001e6576 */	AFL_MouseWheel_ClearCount();
+/* 001e657c */	this.wheelVal_ = fw - bk;
+/* 001e659e */}
+
+void MouseInput::setPos(int x, int y)
+/* 001e65a6 */{
+/* 001e65a8 */}
+
+void MouseInput::setNextMouseUpIgnore()
+/* 001e65ae */{
+/* 001e65ae */	this.btn_[0].setNextMouseUpIgnore();
+/* 001e65c6 */	this.objectIdOnDown_ = -2;
+/* 001e65d8 */}
+
+void MouseInput::forceClick(int n)
+/* 001e65e0 */{
+/* 001e65e0 */	this.btn_[n].forceClick();
+/* 001e65fc */}
+
+bool MouseInput::isCursorChanged()
+/* 001e6604 */{
+/* 001e6604 */	return this.isCursorChanged_;
+/* 001e6610 */}
+
+bool MouseInput::isClick(int button)
+/* 001e661e */{
+/* 001e661e */	return this.btn_[button].isPress();
+/* 001e663c */}
+
+bool MouseInput::isClickWithFocus(int objectId)
+/* 001e664a */{
+/* 001e664a */	return this.btn_[0].isPress() && this.objectIdOnDown_ == this.objectIdOnUp_ && objectId == this.objectIdOnDown_ && this.objectIdOnDown_ >= 0;
+/* 001e66fe */}
+
+bool MouseInput::isClickWithNoFocus()
+/* 001e670c */{
+/* 001e670c */	return this.btn_[0].isPress() && this.objectIdOnDown_ == -1 && this.objectIdOnUp_ == -1;
+/* 001e6788 */}
+
+bool MouseInput::isDown(int button)
+/* 001e6796 */{
+/* 001e6796 */	return this.btn_[button].isDown();
+/* 001e67b4 */}
+
+bool MouseInput::onDown(int button)
+/* 001e67c2 */{
+/* 001e67c2 */	return this.btn_[button].onDown();
+/* 001e67e0 */}
+
+int MouseInput::getX()
+/* 001e67ee */{
+/* 001e67ee */	return this.x_;
+/* 001e67fa */}
+
+int MouseInput::getY()
+/* 001e6808 */{
+/* 001e6808 */	return this.y_;
+/* 001e6814 */}
+
+int MouseInput::getWheel()
+/* 001e6822 */{
+/* 001e6822 */	return this.wheelVal_;
+/* 001e682e */}
+
+int MouseInput::getFocusedObjectId()
+/* 001e683c */{
+/* 001e683c */	return this.objectIdOnDown_;
+/* 001e6848 */}
+
+float MouseInput::getAccelarationX()
+/* 001e6856 */{
+/* 001e6856 */	return this.accelaretionX_;
+/* 001e6862 */}
+
+float MouseInput::getAccelarationY()
+/* 001e6870 */{
+/* 001e6870 */	return this.accelaretionY_;
+/* 001e687c */}
+

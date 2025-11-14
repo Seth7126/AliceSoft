@@ -1,0 +1,94 @@
+BattleSystemButton::BattleSystemButton()
+/* 001aaf52 */{
+/* 001aaf5a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001aaf80 */}
+
+void BattleSystemButton::init()
+/* 001aaf88 */{
+/* 001aaf88 */	this.state_ = 1;
+/* 001aaf9a */	this.initButton();
+/* 001aafa2 */	this.parts_[0].init("システム／オート／下地", 0);
+/* 001aafc6 */	this.parts_[1].initAsNumber("システム／数字／幅１０／白", NULL);
+/* 001aafea */	this.parts_[0].setPos(952.0, 452.0);
+/* 001ab00e */	this.parts_[1].setPos(952.0, 455.0);
+/* 001ab032 */	this.parts_[0].setOrigin(8);
+/* 001ab050 */	this.parts_[1].setOrigin(8);
+/* 001ab06e */	createPartsGroup(this.parent_, this.parts_, 2820);
+/* 001ab08e */	int i;
+/* 001ab0a0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001ab0f0 */	{
+/* 001ab0f0 */		this.parts_[i].setShow(true);
+/* 001ab112 */	}
+/* 001ab118 */	this.helper_.init();
+/* 001ab128 */	this.helper_.setPos(874, 457);
+/* 001ab144 */	this.setButtonPos();
+/* 001ab14c */}
+
+void BattleSystemButton::update()
+/* 001ab154 */{
+/* 001ab156 */}
+
+void BattleSystemButton::setOnClickCallback(DG_OnBattleSystemButtonClickCallback cb)
+/* 001ab15c */{
+/* 001ab15c */	this.callback_ = cb;
+/* 001ab176 */	this.btn_.setClickCallback(this.onClick, 0);
+/* 001ab196 */	this.btnAuto_.setClickCallback(this.onClick, 1);
+/* 001ab1b6 */}
+
+void BattleSystemButton::onClick(int i)
+/* 001ab1be */{
+/* 001ab1be */	this.callback_(i);
+/* 001ab1e8 */}
+
+void BattleSystemButton::initButton()
+/* 001ab1f0 */{
+/* 001ab1f0 */	this.btn_.init("システム／ボタン／幅３００", "戦闘開始", "効果音／戦闘開始クリック", true);
+/* 001ab218 */	this.btnAuto_.init("オート", this.getAutoItemCount);
+/* 001ab238 */}
+
+void BattleSystemButton::setButtonPos()
+/* 001ab240 */{
+/* 001ab240 */	this.btn_.setPos(362, 402);
+/* 001ab25c */	this.btnAuto_.setPos(888, 403);
+/* 001ab278 */	this.btn_.setZ(2800);
+/* 001ab28e */	this.btnAuto_.setZ(2800);
+/* 001ab2a4 */}
+
+void BattleSystemButton::setButtonEnable(bool val)
+/* 001ab2ac */{
+/* 001ab2ac */	this.btn_.setEnable(val);
+/* 001ab2c6 */}
+
+void BattleSystemButton::fadeIn(bool val)
+/* 001ab2ce */{
+/* 001ab2ce */	this.btn_.fadeIn(val);
+/* 001ab2e8 */	this.btnAuto_.updateCount();
+/* 001ab2f8 */	this.btnAuto_.fadeIn(val, NULL);
+/* 001ab314 */	this.state_ = val ? 0 : 1;
+/* 001ab342 */	if (g_playerCommonParam.getMaxHelperCount() > 0)
+/* 001ab360 */	{
+/* 001ab360 */		this.helper_.fadeIn(val, NULL);
+/* 001ab37c */	}
+/* 001ab37c */}
+
+void BattleSystemButton::fadeAutoButton(bool val)
+/* 001ab384 */{
+/* 001ab386 */}
+
+void BattleSystemButton::onFinishNoItemFadeOut()
+/* 001ab38c */{
+/* 001ab38c */	pass("%d" % g_playerCommonParam.getItemCount("オート"));
+/* 001ab3b6 */	this.parent_.setShow(false);
+/* 001ab3cc */}
+
+void BattleSystemButton::updateState()
+/* 001ab3d4 */{
+/* 001ab3d4 */	this.btnAuto_.updateCount();
+/* 001ab3e4 */	this.helper_.updateCount();
+/* 001ab3f4 */}
+
+int BattleSystemButton::getAutoItemCount()
+/* 001ab3fc */{
+/* 001ab3fc */	return g_playerCommonParam.getItemCount("オート");
+/* 001ab414 */}
+

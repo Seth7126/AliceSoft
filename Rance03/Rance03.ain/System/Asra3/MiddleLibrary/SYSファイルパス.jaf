@@ -1,0 +1,136 @@
+string SYS_GetDirectoryName(string Path)
+/* 0015796a */{
+/* 0015796a */	int FindPos = SYS_FindLast(Path, "\\");
+/* 0015798c */	if (FindPos == -1)
+/* 001579a4 */	{
+/* 001579a4 */		return "";
+/* 001579ac */	}
+/* 001579ac */	return Path.GetPart(0, FindPos);
+/* 001579ca */}
+
+string SYS_GetFirstDirectoryName(string Path)
+/* 001579de */{
+/* 001579de */	int FindPos = Path.Find("\\");
+/* 001579fc */	if (FindPos == -1)
+/* 00157a14 */	{
+/* 00157a14 */		return "";
+/* 00157a1c */	}
+/* 00157a1c */	return Path.GetPart(0, FindPos);
+/* 00157a3a */}
+
+string SYS_GetParentDirectoryName(string Path)
+/* 00157a4e */{
+/* 00157a4e */	return SYS_GetFileName(SYS_GetDirectoryName(Path));
+/* 00157a66 */}
+
+string SYS_GetRelativePath(string Path, string Root)
+/* 00157a7a */{
+/* 00157a7a */	for (; ; )
+/* 00157a7a */	{
+/* 00157a7a */		string FirstDir = SYS_GetFirstDirectoryName(Root);
+/* 00157a98 */		if (FirstDir.Empty() || FirstDir != SYS_GetFirstDirectoryName(Path))
+/* 00157ae4 */		{
+/* 00157ae4 */			break;
+/* 00157aea */		}
+/* 00157aea */		Path = Path.GetPart(FirstDir.Length() + 1, Path.Length());
+/* 00157b20 */		Root = Root.GetPart(FirstDir.Length() + 1, Root.Length());
+/* 00157b56 */	}
+/* 00157b5c */	for (; ; )
+/* 00157b5c */	{
+/* 00157b5c */		string FirstDir = SYS_GetFirstDirectoryName(Root);
+/* 00157b7a */		if (FirstDir.Empty())
+/* 00157b8c */		{
+/* 00157b8c */			break;
+/* 00157b92 */		}
+/* 00157b92 */		Path = "..\\" + Path;
+/* 00157bb2 */		Root = Root.GetPart(FirstDir.Length() + 1, Root.Length());
+/* 00157be8 */	}
+/* 00157bee */	return Path;
+/* 00157bfa */}
+
+bool SYS_IsSubDirectory(string Path, string Root)
+/* 00157c0e */{
+/* 00157c0e */	Root = SYS_GetDirectoryName(Root);
+/* 00157c2c */	return Path.GetPart(0, Root.Length()) == Root;
+/* 00157c58 */}
+
+string SYS_GetFileName(string Path)
+/* 00157c6c */{
+/* 00157c6c */	int FindPos = SYS_FindLast(Path, "\\");
+/* 00157c8e */	if (FindPos == -1)
+/* 00157ca6 */	{
+/* 00157ca6 */		return Path;
+/* 00157cb2 */	}
+/* 00157cb2 */	return Path.GetPart(FindPos + 1, Path.Length());
+/* 00157cdc */}
+
+string SYS_GetFileNameWithoutExtension(string Path)
+/* 00157cf0 */{
+/* 00157cf0 */	string FileName = SYS_GetFileName(Path);
+/* 00157d0e */	int FindPos = SYS_FindLast(FileName, ".");
+/* 00157d30 */	if (FindPos == -1)
+/* 00157d48 */	{
+/* 00157d48 */		return FileName;
+/* 00157d54 */	}
+/* 00157d54 */	return FileName.GetPart(0, FindPos);
+/* 00157d72 */}
+
+string SYS_GetExtension(string Path)
+/* 00157d86 */{
+/* 00157d86 */	string FileName = SYS_GetFileName(Path);
+/* 00157da4 */	int FindPos = SYS_FindLast(FileName, ".");
+/* 00157dc6 */	if (FindPos == -1)
+/* 00157dde */	{
+/* 00157dde */		return "";
+/* 00157de6 */	}
+/* 00157de6 */	return FileName.GetPart(FindPos + 1, FileName.Length());
+/* 00157e10 */}
+
+string SYS_ChangeExtension(string Path, string Extention)
+/* 00157e24 */{
+/* 00157e24 */	string DirectoryName = SYS_GetDirectoryName(Path);
+/* 00157e42 */	return (DirectoryName.Empty() ? "" : DirectoryName + "\\") + SYS_GetFileNameWithoutExtension(Path) + Extention;
+/* 00157e92 */}
+
+string SYS_AddPunct(string Path)
+/* 00157ea6 */{
+/* 00157ea6 */	if (Path[Path.Length() - 1] != '\\')
+/* 00157ed2 */	{
+/* 00157ed2 */		Path.PushBack('\\');
+/* 00157ee4 */	}
+/* 00157ee4 */	return Path;
+/* 00157ef0 */}
+
+string SYS_DeletePunct(string Path)
+/* 00157f04 */{
+/* 00157f04 */	if (Path[Path.Length() - 1] == '\\')
+/* 00157f30 */	{
+/* 00157f30 */		Path.PopBack();
+/* 00157f3c */	}
+/* 00157f3c */	return Path;
+/* 00157f48 */}
+
+string SYS_AddGameFolderPath(string Path)
+/* 00157f5c */{
+/* 00157f5c */	string GameFolderPath;
+/* 00157f70 */	SystemService.GetGameFolderPath(GameFolderPath);
+/* 00157f84 */	return GameFolderPath + Path;
+/* 00157f9c */}
+
+string SYS_DeleteGameFolderPath(string Path)
+/* 00157fb0 */{
+/* 00157fb0 */	string GameFolderPath;
+/* 00157fc4 */	SystemService.GetGameFolderPath(GameFolderPath);
+/* 00157fd8 */	int PathLength = Path.Length();
+/* 00157fee */	int GameFolderPathLength = GameFolderPath.Length();
+/* 00158004 */	if (PathLength < GameFolderPathLength)
+/* 00158020 */	{
+/* 00158020 */		return Path;
+/* 0015802c */	}
+/* 0015802c */	if (Path.GetPart(0, GameFolderPathLength) != GameFolderPath)
+/* 0015805a */	{
+/* 0015805a */		return Path;
+/* 00158066 */	}
+/* 00158066 */	return Path.GetPart(GameFolderPathLength, PathLength - GameFolderPathLength);
+/* 00158094 */}
+

@@ -1,0 +1,101 @@
+DungeonSideObject::DungeonSideObject()
+/* 001907fc */{
+/* 00190804 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019082a */}
+
+void DungeonSideObject::init(string flatName, int posType)
+/* 00190832 */{
+/* 00190832 */	this.flatName_ = flatName;
+/* 0019084a */	this.posType_ = posType;
+/* 00190860 */	this.inOutType_ = 0;
+/* 00190872 */	if (flatName != "")
+/* 0019088a */	{
+/* 0019088a */		this.initParts();
+/* 00190892 */	}
+/* 00190892 */}
+
+void DungeonSideObject::update()
+/* 0019089a */{
+/* 0019089c */}
+
+void DungeonSideObject::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 001908a2 */{
+/* 001908a2 */	if (this.flatName_ == "")
+/* 001908ba */	{
+/* 001908ba */		return;
+/* 001908bc */	}
+/* 001908bc */	this.setPartsShow();
+/* 001908c4 */	if (val)
+/* 001908d4 */	{
+/* 001908d4 */		this.startFlat();
+/* 001908dc */	}
+/* 001908dc */	PartsMotion m;
+/* 001908ec */	m.setTime(val ? 500 : 200);
+/* 0019091e */	if (val)
+/* 0019092e */	{
+/* 0019092e */		m.setAlpha(0, 255, 0);
+/* 00190950 */	}
+/* 00190956 */	else
+/* 00190956 */	{
+/* 00190956 */		m.setAlpha(255, 0, 0);
+/* 00190978 */	}
+/* 00190978 */	switch (this.posType_)
+/* 0019098e */	{
+/* 0019098e */	case 0:
+/* 0019098e */		if (val)
+/* 0019099e */		{
+/* 0019099e */			m.setMove(-200, 0, 0, 0, 1);
+/* 001909cc */		}
+/* 001909d2 */		else
+/* 001909d2 */		{
+/* 001909d2 */			m.setMove(0, 0, -200, 0, 1);
+/* 00190a00 */		}
+/* 00190a00 */		break;
+/* 00190a06 */	case 1:
+/* 00190a06 */		if (val)
+/* 00190a16 */		{
+/* 00190a16 */			m.setMove(200, 0, 0, 0, 1);
+/* 00190a44 */		}
+/* 00190a4a */		else
+/* 00190a4a */		{
+/* 00190a4a */			m.setMove(0, 0, 200, 0, 1);
+/* 00190a78 */		}
+/* 00190a78 */		break;
+/* 00190a7e */	case 2:
+/* 00190a7e */		if (val)
+/* 00190a8e */		{
+/* 00190a8e */			m.setMove(0, -100, 0, 0, 1);
+/* 00190abc */		}
+/* 00190ac2 */		else
+/* 00190ac2 */		{
+/* 00190ac2 */			m.setMove(0, 0, -100, 0, 1);
+/* 00190af0 */		}
+/* 00190af0 */		break;
+/* 00190af6 */	}
+/* 00190af6 */	this.parent_.runMotion(m, onFinish);
+/* 00190b20 */}
+
+void DungeonSideObject::initParts()
+/* 00190b28 */{
+/* 00190b28 */	this.parent_.initAsDummy();
+/* 00190b38 */	this.partsFlat_.initAsFlat("ダンジョン/%s" % this.flatName_);
+/* 00190b60 */	this.partsFlat_.setZ(1700.0);
+/* 00190b76 */	this.partsFlat_.setParent(this.parent_.getPartsNumber());
+/* 00190b96 */	this.setPartsPos();
+/* 00190b9e */}
+
+void DungeonSideObject::setPartsShow()
+/* 00190ba6 */{
+/* 00190ba6 */	this.parent_.setShow(true);
+/* 00190bbc */	this.partsFlat_.setShow(true);
+/* 00190bd2 */}
+
+void DungeonSideObject::setPartsPos()
+/* 00190bda */{
+/* 00190bdc */}
+
+void DungeonSideObject::startFlat()
+/* 00190be2 */{
+/* 00190be2 */	this.partsFlat_.startFlat(false, 1.0);
+/* 00190bfe */}
+

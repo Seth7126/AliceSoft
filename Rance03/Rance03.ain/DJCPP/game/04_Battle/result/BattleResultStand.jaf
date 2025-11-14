@@ -1,0 +1,32 @@
+BattleResultStand::BattleResultStand()
+/* 001a1078 */{
+/* 001a1080 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a10a6 */}
+
+void BattleResultStand::init()
+/* 001a10ae */{
+/* 001a10ae */	this.initParts();
+/* 001a10b6 */}
+
+void BattleResultStand::initParts()
+/* 001a10be */{
+/* 001a10c0 */}
+
+void BattleResultStand::setPartsShow()
+/* 001a10c6 */{
+/* 001a10c6 */	int i;
+/* 001a10d8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a1128 */	{
+/* 001a1128 */		this.parts_[i].setShow(true);
+/* 001a114a */	}
+/* 001a1150 */	this.parent_.setShow(true);
+/* 001a1166 */}
+
+void BattleResultStand::setPartsPos()
+/* 001a116e */{
+/* 001a1170 */}
+
+void BattleResultStand::update()
+/* 001a1176 */{
+/* 001a1178 */}
+

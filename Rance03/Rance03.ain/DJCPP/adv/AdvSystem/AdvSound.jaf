@@ -1,0 +1,95 @@
+string AdvSound::resolveMusicName(string name)
+/* 00174bbe */{
+/* 00174bbe */	string n = name;
+/* 00174bd6 */	if (this.isExistSoundName(n))
+/* 00174bee */	{
+/* 00174bee */		return name;
+/* 00174bfa */	}
+/* 00174bfa */	n = "音楽／ＡＤＶ／" + name;
+/* 00174c1a */	if (this.isExistSoundName(n))
+/* 00174c32 */	{
+/* 00174c32 */		return n;
+/* 00174c3e */	}
+/* 00174c3e */	n = "音楽／" + name;
+/* 00174c5e */	if (this.isExistSoundName(n))
+/* 00174c76 */	{
+/* 00174c76 */		return n;
+/* 00174c82 */	}
+/* 00174c82 */	advErr("見つからない音楽やで:%s" % name);
+/* 00174ca0 */	return "";
+/* 00174ca8 */}
+
+bool AdvSound::isExistSoundName(string name)
+/* 00174cb6 */{
+/* 00174cb6 */	return KiwiSoundEngine.IsExistFile(name);
+/* 00174ccc */}
+
+bool AdvSound::isExistFxName(string name)
+/* 00174cda */{
+/* 00174cda */	return this.isExistSoundName(name);
+/* 00174cee */}
+
+void AdvSound::playLoopSound(string loopSound, int fadeTime)
+/* 00174cfc */{
+/* 00174cfc */	string n = this.resolveFxName(loopSound);
+/* 00174d1c */	Ａ＿ループ効果音１(n, -1, fadeTime);
+/* 00174d3c */	this.isPlayingLoopSound_ = true;
+/* 00174d4e */}
+
+void AdvSound::stopLoopSound(int fadeTime)
+/* 00174d56 */{
+/* 00174d56 */	Ａ＿ループ効果音停止(fadeTime);
+/* 00174d66 */	this.isPlayingLoopSound_ = false;
+/* 00174d78 */}
+
+string AdvSound::resolveFxName(string name)
+/* 00174d80 */{
+/* 00174d80 */	string n = name;
+/* 00174d98 */	if (this.isExistFxName(n))
+/* 00174db0 */	{
+/* 00174db0 */		return n;
+/* 00174dbc */	}
+/* 00174dbc */	n = "効果音／" + name;
+/* 00174ddc */	if (this.isExistFxName(n))
+/* 00174df4 */	{
+/* 00174df4 */		return n;
+/* 00174e00 */	}
+/* 00174e00 */	advErr("見つからない効果音:%s" % name);
+/* 00174e1e */	return "";
+/* 00174e26 */}
+
+void AdvSound::playSound(string soundName, bool isStopOnClick)
+/* 00174e34 */{
+/* 00174e34 */	string n = this.resolveFxName(soundName);
+/* 00174e54 */	if (n.Find("ループ") >= 0)
+/* 00174e74 */	{
+/* 00174e74 */		string temp = "%s／ＮＬＰ" % soundName;
+/* 00174e9a */		if (this.isExistFxName(temp))
+/* 00174eb2 */		{
+/* 00174eb2 */			n = temp;
+/* 00174eca */		}
+/* 00174ed0 */		else
+/* 00174ed0 */		{
+/* 00174ed0 */			pass("代替効果音が見つからない");
+/* 00174edc */		}
+/* 00174edc */	}
+/* 00174edc */	if (isStopOnClick)
+/* 00174eec */	{
+/* 00174eec */		Ａ＿効果音非継続(n, -1, -1);
+/* 00174f08 */	}
+/* 00174f0e */	else
+/* 00174f0e */	{
+/* 00174f0e */		効果音(n, -1, -1);
+/* 00174f2a */	}
+/* 00174f2a */}
+
+bool AdvSound::isPlayingMusic()
+/* 00174f32 */{
+/* 00174f32 */	return this.isPlayingMusic_;
+/* 00174f3e */}
+
+bool AdvSound::isPlayingLoopSound()
+/* 00174f4c */{
+/* 00174f4c */	return this.isPlayingLoopSound_;
+/* 00174f58 */}
+

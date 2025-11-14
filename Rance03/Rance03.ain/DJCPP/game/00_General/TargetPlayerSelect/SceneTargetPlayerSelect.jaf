@@ -1,0 +1,214 @@
+SceneTargetPlayerSelect::SceneTargetPlayerSelect()
+/* 0017f354 */{
+/* 0017f35c */	this.clicked_ = -1;
+/* 0017f36e */	this.state_ = 0;
+/* 0017f380 */}
+
+void SceneTargetPlayerSelect::init(int targetMode)
+/* 0017f388 */{
+/* 0017f388 */	this.targetMode_ = targetMode;
+/* 0017f39e */	this.initCharcterList();
+/* 0017f3a6 */	this.initButton();
+/* 0017f3ae */	this.initParts();
+/* 0017f3b6 */	this.setButtonState();
+/* 0017f3be */}
+
+void SceneTargetPlayerSelect::setButtonState()
+/* 0017f3c6 */{
+/* 0017f3c6 */	if (this.targetMode_ == 1)
+/* 0017f3de */	{
+/* 0017f3de */		this.setButtonEnableByExp();
+/* 0017f3e6 */	}
+/* 0017f3e6 */	this.setButtonDisableDead();
+/* 0017f3ee */}
+
+void SceneTargetPlayerSelect::run()
+/* 0017f3f6 */{
+/* 0017f3f6 */	this.fadeIn(true);
+/* 0017f404 */}
+
+void SceneTargetPlayerSelect::onFinishFade()
+/* 0017f40c */{
+/* 0017f40c */	if (this.state_ == 1)
+/* 0017f424 */	{
+/* 0017f424 */		this.state_ = 2;
+/* 0017f436 */	}
+/* 0017f43c */	else
+/* 0017f43c */	{
+/* 0017f43c */		this.state_ = 4;
+/* 0017f44e */	}
+/* 0017f44e */}
+
+void SceneTargetPlayerSelect::setButtonEnableByExp()
+/* 0017f456 */{
+/* 0017f456 */	int i;
+/* 0017f468 */	for (i = 0; i < this.btnPlayer_.Numof(); ++i)
+/* 0017f4b8 */	{
+/* 0017f4b8 */		ref Player p = getPlayerFromId(this.playerId_[i]);
+/* 0017f506 */		this.btnPlayer_[i].setEnable(p.getExp() >= p.getNextExp() && p.getMaxLevel() != p.getLevel());
+/* 0017f586 */	}
+/* 0017f598 */}
+
+void SceneTargetPlayerSelect::setButtonDisableDead()
+/* 0017f5a0 */{
+/* 0017f5a0 */	int i;
+/* 0017f5b2 */	for (i = 0; i < this.btnPlayer_.Numof(); ++i)
+/* 0017f602 */	{
+/* 0017f602 */		ref Player p = getPlayerFromId(this.playerId_[i]);
+/* 0017f650 */		if (this.btnPlayer_[i].isEnable())
+/* 0017f672 */		{
+/* 0017f672 */			if (p.getHp() == 0)
+/* 0017f690 */			{
+/* 0017f690 */				this.btnPlayer_[i].setEnable(false);
+/* 0017f6b2 */			}
+/* 0017f6b2 */		}
+/* 0017f6b2 */	}
+/* 0017f6c4 */}
+
+void SceneTargetPlayerSelect::initButton()
+/* 0017f6cc */{
+/* 0017f6cc */	this.btnPlayer_.Alloc(this.playerId_.Numof());
+/* 0017f6ec */	int c = this.playerId_.Numof();
+/* 0017f708 */	int i;
+/* 0017f71a */	for (i = 0; i < this.btnPlayer_.Numof(); ++i)
+/* 0017f76a */	{
+/* 0017f76a */		this.btnPlayer_[i].init(this.playerId_[i], this.onClick);
+/* 0017f7a6 */	}
+/* 0017f7ac */	string cap;
+/* 0017f7c0 */	if (this.targetMode_ == 1)
+/* 0017f7d8 */	{
+/* 0017f7d8 */		cap = "キャンプに戻る";
+/* 0017f7ec */	}
+/* 0017f7f2 */	else
+/* 0017f7f2 */	{
+/* 0017f7f2 */		cap = "やめる";
+/* 0017f806 */	}
+/* 0017f806 */	this.btnClose_.init("システム／ボタン／幅１７０", cap, "", true);
+/* 0017f832 */	this.btnClose_.setPos(840, 494);
+/* 0017f84e */	this.btnClose_.setZ(5100);
+/* 0017f864 */	this.btnClose_.setClickCallback(this.onClickCancel, 0);
+/* 0017f884 */	this.setButtonPos();
+/* 0017f88c */}
+
+void SceneTargetPlayerSelect::setButtonPos()
+/* 0017f894 */{
+/* 0017f894 */	int c = this.playerId_.Numof();
+/* 0017f8b0 */	int vCount = (c + 4) / 5;
+/* 0017f8d6 */	int btnWidth = 142;
+/* 0017f8e8 */	int btnHeight = 136;
+/* 0017f8fa */	int totalH = vCount * btnHeight + (vCount - 1) * 10;
+/* 0017f938 */	int startY = 384 - totalH / 2;
+/* 0017f95e */	int i;
+/* 0017f970 */	for (i = 0; i < this.btnPlayer_.Numof(); ++i)
+/* 0017f9c0 */	{
+/* 0017f9c0 */		int n;
+/* 0017f9d2 */		if (i / 5 == vCount - 1)
+/* 0017f9fe */		{
+/* 0017f9fe */			n = (c + 4) % 5 + 1;
+/* 0017fa2c */		}
+/* 0017fa32 */		else
+/* 0017fa32 */		{
+/* 0017fa32 */			n = 5;
+/* 0017fa44 */		}
+/* 0017fa44 */		int totalW = btnWidth * n + 15 * (n - 1);
+/* 0017fa82 */		int startX = 405 - totalW / 2;
+/* 0017faa8 */		int x = startX + (i % 5) * (btnWidth + 15);
+/* 0017fae6 */		int y = startY + (i / 5) * (btnHeight + 10);
+/* 0017fb24 */		this.btnPlayer_[i].setPos(x, y);
+/* 0017fb54 */	}
+/* 0017fb5a */}
+
+void SceneTargetPlayerSelect::initCharcterList()
+/* 0017fb62 */{
+/* 0017fb62 */	this.playerId_.Free();
+/* 0017fb6c */	int i;
+/* 0017fb7e */	for (i = 0; i < g_player.Numof(); ++i)
+/* 0017fbce */	{
+/* 0017fbce */		if (g_player[i].isJoin())
+/* 0017fbf0 */		{
+/* 0017fbf0 */			this.playerId_.PushBack(g_player[i].getId());
+/* 0017fc16 */		}
+/* 0017fc16 */	}
+/* 0017fc1c */}
+
+void SceneTargetPlayerSelect::initParts()
+/* 0017fc24 */{
+/* 0017fc24 */	this.parts_[0].initAsFlat("システム／キャラクター選択／%s" % (this.targetMode_ == 0 ? "アイテム" : "レベルアップ"));
+/* 0017fc74 */	createPartsGroup(this.parent_, this.parts_, 5000);
+/* 0017fc94 */	this.setPartsShow();
+/* 0017fc9c */}
+
+void SceneTargetPlayerSelect::setPartsShow()
+/* 0017fca4 */{
+/* 0017fca4 */	int i;
+/* 0017fcb6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017fd06 */	{
+/* 0017fd06 */		this.parts_[i].setShow(true);
+/* 0017fd28 */	}
+/* 0017fd2e */	this.parent_.setShow(true);
+/* 0017fd44 */}
+
+bool SceneTargetPlayerSelect::update()
+/* 0017fd4c */{
+/* 0017fd4c */	if (!this.timerCb_.isRunning() && g_mouse.isClick(1))
+/* 0017fd98 */	{
+/* 0017fd98 */		playCancel();
+/* 0017fd9e */		this.fadeIn(false);
+/* 0017fdac */	}
+/* 0017fdac */	return !this.isFinish();
+/* 0017fdba */}
+
+void SceneTargetPlayerSelect::onClickCancel(int id)
+/* 0017fdc8 */{
+/* 0017fdc8 */	this.fadeIn(false);
+/* 0017fdd6 */}
+
+void SceneTargetPlayerSelect::onClick(string playerId)
+/* 0017fdde */{
+/* 0017fdde */	int i;
+/* 0017fdf0 */	for (i = 0; i < this.playerId_.Numof(); ++i)
+/* 0017fe40 */	{
+/* 0017fe40 */		if (this.playerId_[i] == playerId)
+/* 0017fe68 */		{
+/* 0017fe68 */			this.clicked_ = i;
+/* 0017fe7e */		}
+/* 0017fe7e */	}
+/* 0017fe84 */	this.fadeIn(false);
+/* 0017fe92 */}
+
+void SceneTargetPlayerSelect::fadeButton(bool val)
+/* 0017fe9a */{
+/* 0017fe9a */	int i;
+/* 0017feac */	for (i = 0; i < this.btnPlayer_.Numof(); ++i)
+/* 0017fefc */	{
+/* 0017fefc */		this.btnPlayer_[i].fadeIn(val, val ? i * 15 : 0, NULL);
+/* 0017ff52 */	}
+/* 0017ff58 */}
+
+bool SceneTargetPlayerSelect::isFinish()
+/* 0017ff60 */{
+/* 0017ff60 */	return this.state_ == 4;
+/* 0017ff76 */}
+
+void SceneTargetPlayerSelect::fadeIn(bool val)
+/* 0017ff84 */{
+/* 0017ff84 */	this.fadeButton(val);
+/* 0017ff96 */	this.btnClose_.fadeIn(val);
+/* 0017ffb0 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 0017ffea */	if (val)
+/* 0017fffa */	{
+/* 0017fffa */		this.parts_[0].startFlat(false, 1.0);
+/* 0018001e */	}
+/* 0018001e */	this.timerCb_.setTimer((val ? 200 : 125) + 50, this.onFinishFade);
+/* 00180062 */	this.state_ = val ? 1 : 3;
+/* 00180090 */}
+
+string SceneTargetPlayerSelect::getTargetPlayerId()
+/* 00180098 */{
+/* 00180098 */	if (this.clicked_ == -1)
+/* 001800b0 */	{
+/* 001800b0 */		return "";
+/* 001800b8 */	}
+/* 001800b8 */	return this.playerId_[this.clicked_];
+/* 001800d0 */}
+

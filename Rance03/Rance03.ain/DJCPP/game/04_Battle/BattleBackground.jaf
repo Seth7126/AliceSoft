@@ -1,0 +1,145 @@
+BattleBackground::BattleBackground()
+/* 001a4400 */{
+/* 001a4408 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a442e */}
+
+void BattleBackground::init(string battleBackGroundId, string flatEffectName)
+/* 001a4436 */{
+/* 001a4436 */	this.id_ = battleBackGroundId;
+/* 001a444e */	this.flatEffectName_ = flatEffectName;
+/* 001a4466 */	this.isBlackOut_ = false;
+/* 001a4478 */	this.initParts();
+/* 001a4480 */	this.initLines();
+/* 001a4488 */}
+
+void BattleBackground::initLines()
+/* 001a4490 */{
+/* 001a4490 */	int i;
+/* 001a44a2 */	for (i = 0; i < this.lines_.Numof(); ++i)
+/* 001a44f2 */	{
+/* 001a44f2 */		this.lines_[i].init(2);
+/* 001a4514 */		this.lines_[i].setCenter(768, 256);
+/* 001a453c */	}
+/* 001a4542 */}
+
+void BattleBackground::stopLines()
+/* 001a454a */{
+/* 001a454a */	int i;
+/* 001a455c */	for (i = 0; i < this.lines_.Numof(); ++i)
+/* 001a45ac */	{
+/* 001a45ac */		this.lines_[i].setLoopMode(false);
+/* 001a45ce */	}
+/* 001a45d4 */}
+
+void BattleBackground::startLines()
+/* 001a45dc */{
+/* 001a45dc */	int i;
+/* 001a45ee */	for (i = 0; i < this.lines_.Numof(); ++i)
+/* 001a463e */	{
+/* 001a463e */		this.lines_[i].setLoopMode(true);
+/* 001a4660 */		this.lines_[i].run();
+/* 001a467c */	}
+/* 001a4682 */}
+
+void BattleBackground::initParts()
+/* 001a468a */{
+/* 001a468a */	BattleBackgroundInfomation bg;
+/* 001a469a */	bg = getBattleBackGroundInfomationFromId(this.id_);
+/* 001a46da */	this.parts_[0].init(bg.getImageName(), 0);
+/* 001a4708 */	this.parts_[0].setOrigin(5);
+/* 001a4726 */	if (this.flatEffectName_ != "")
+/* 001a473e */	{
+/* 001a473e */		this.parts_[1].initAsFlat(this.flatEffectName_);
+/* 001a4760 */	}
+/* 001a4760 */	createPartsGroup(this.parent_, this.parts_, 0);
+/* 001a4780 */	this.parts_[0].setZ(2000.0);
+/* 001a479e */	this.parts_[1].setZ(2350.0);
+/* 001a47bc */	this.setPartsShow();
+/* 001a47c4 */	this.setPartsPos();
+/* 001a47cc */}
+
+void BattleBackground::setPartsShow()
+/* 001a47d4 */{
+/* 001a47d4 */	int i;
+/* 001a47e6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a4836 */	{
+/* 001a4836 */		this.parts_[i].setShow(true);
+/* 001a4858 */	}
+/* 001a485e */	this.parent_.setShow(true);
+/* 001a4874 */}
+
+void BattleBackground::setPartsPos()
+/* 001a487c */{
+/* 001a487c */	this.parts_[0].setPos(512.0, 384.0);
+/* 001a48a0 */}
+
+void BattleBackground::update()
+/* 001a48a8 */{
+/* 001a48aa */}
+
+void BattleBackground::shake(int mode)
+/* 001a48b0 */{
+/* 001a48b0 */	if (mode == 1)
+/* 001a48c8 */	{
+/* 001a48c8 */		PartsMotion m;
+/* 001a48d8 */		m.setShakeLevel(50, 0, 0);
+/* 001a48fa */		m.setTime(300);
+/* 001a4910 */		this.parent_.runMotion(m, NULL);
+/* 001a4930 */	}
+/* 001a493c */	else if (mode == 2)
+/* 001a4954 */	{
+/* 001a4954 */		PartsMotion m;
+/* 001a4964 */		m.setShakeLevel(100, 0, 0);
+/* 001a4986 */		m.setTime(400);
+/* 001a499c */		this.parent_.runMotion(m, NULL);
+/* 001a49bc */	}
+/* 001a49bc */}
+
+void BattleBackground::fadeIn(bool val)
+/* 001a49ca */{
+/* 001a49ca */	if (val)
+/* 001a49da */	{
+/* 001a49da */		PartsMotion m;
+/* 001a49ea */		m.setTime(500);
+/* 001a4a00 */		m.setAlpha(0, 255, 0);
+/* 001a4a22 */		this.parts_[0].runMotion(m, NULL);
+/* 001a4a4a */		this.parts_[1].startFlat(false, 1.0);
+/* 001a4a6e */		this.parts_[1].runMotion(m, NULL);
+/* 001a4a96 */	}
+/* 001a4aa2 */	else
+/* 001a4aa2 */	{
+/* 001a4aa2 */		PartsMotion m;
+/* 001a4ab2 */		m.setAlpha(255, 0, 0);
+/* 001a4ad4 */		this.parts_[0].runMotion(m, NULL);
+/* 001a4afc */		this.parts_[1].runMotion(m, NULL);
+/* 001a4b24 */	}
+/* 001a4b24 */}
+
+void BattleBackground::blackOut(bool val)
+/* 001a4b32 */{
+/* 001a4b32 */	if (this.isBlackOut_ == val)
+/* 001a4b4e */	{
+/* 001a4b4e */		return;
+/* 001a4b50 */	}
+/* 001a4b50 */	PartsMotion m;
+/* 001a4b60 */	if (val)
+/* 001a4b70 */	{
+/* 001a4b70 */		m.setTime(500);
+/* 001a4b86 */		m.setKey(17, 255, 128, 0);
+/* 001a4bae */		this.startLines();
+/* 001a4bb6 */		this.timer_.setTimer(1000, this.stopLines);
+/* 001a4bd6 */	}
+/* 001a4bdc */	else
+/* 001a4bdc */	{
+/* 001a4bdc */		m.setTime(300);
+/* 001a4bf2 */		m.setKey(17, 128, 255, 0);
+/* 001a4c1a */	}
+/* 001a4c1a */	this.isBlackOut_ = val;
+/* 001a4c30 */	this.parts_[0].runMotion(m, NULL);
+/* 001a4c58 */}
+
+bool BattleBackground::isUseFlat()
+/* 001a4c60 */{
+/* 001a4c60 */	return this.flatEffectName_ != "";
+/* 001a4c76 */}
+

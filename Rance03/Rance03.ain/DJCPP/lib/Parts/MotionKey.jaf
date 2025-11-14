@@ -1,0 +1,35 @@
+MotionKey::MotionKey()
+/* 001e781e */{
+/* 001e7826 */	this.isEnable_ = false;
+/* 001e7838 */	this.from_ = this.to_ = -2147483648;
+/* 001e7854 */	this.motionType_ = 0;
+/* 001e7866 */}
+
+void MotionKey::set(int from, int to, int motionType)
+/* 001e786e */{
+/* 001e786e */	this.from_ = from;
+/* 001e7884 */	this.to_ = to;
+/* 001e789a */	this.motionType_ = motionType;
+/* 001e78b0 */	this.isEnable_ = true;
+/* 001e78c2 */}
+
+bool MotionKey::isEnable()
+/* 001e78ca */{
+/* 001e78ca */	return this.isEnable_;
+/* 001e78d6 */}
+
+int MotionKey::getFrom()
+/* 001e78e4 */{
+/* 001e78e4 */	return this.from_;
+/* 001e78f0 */}
+
+int MotionKey::getTo()
+/* 001e78fe */{
+/* 001e78fe */	return this.to_;
+/* 001e790a */}
+
+int MotionKey::getMotionType()
+/* 001e7918 */{
+/* 001e7918 */	return this.motionType_;
+/* 001e7924 */}
+

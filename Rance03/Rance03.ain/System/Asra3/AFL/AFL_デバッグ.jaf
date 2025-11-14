@@ -1,0 +1,96 @@
+void AFL_DebugFPS_SetShow(bool Show)
+/* 001736a4 */{
+/* 001736a4 */	g_DebugFPS.SetShow(Show);
+/* 001736be */}
+
+bool AFL_DebugFPS_GetShow()
+/* 001736cc */{
+/* 001736cc */	return g_DebugFPS.GetShow();
+/* 001736de */}
+
+void AFL_Debug_SetShowMipmapLevel(bool DebugMipmapLevel)
+/* 001736f2 */{
+/* 001736f2 */	SystemService.Debug_SetShowMipmapLevel(DebugMipmapLevel);
+/* 00173706 */}
+
+bool AFL_Debug_IsShowMipmapLevel()
+/* 00173714 */{
+/* 00173714 */	return SystemService.Debug_IsShowMipmapLevel();
+/* 00173720 */}
+
+bool AFL_Debug_BeginProfiler()
+/* 00173734 */{
+/* 00173734 */	return Sys43VM.BeginProfiler();
+/* 00173740 */}
+
+bool AFL_Debug_EndProfiler()
+/* 00173754 */{
+/* 00173754 */	return Sys43VM.EndProfiler();
+/* 00173760 */}
+
+void AFL_Debug_GetFunctionNameList(ref array@string FunctionNameList)
+/* 00173774 */{
+/* 00173774 */	if (!system.IsDebugMode())
+/* 00173782 */	{
+/* 00173782 */		return;
+/* 00173784 */	}
+/* 00173784 */	if (FunctionNameList === NULL)
+/* 0017379c */	{
+/* 0017379c */		return;
+/* 0017379e */	}
+/* 0017379e */	Sys43VM.GetFunctionNameList(FunctionNameList);
+/* 001737b4 */}
+
+void AFL_Debug_SelectEXNode(string TreeDefineName, DG_SelectedEXNodeHandler dgObject)
+/* 001737c2 */{
+/* 001737c2 */	if (!system.IsDebugMode())
+/* 001737d0 */	{
+/* 001737d0 */		return;
+/* 001737d2 */	}
+/* 001737d2 */	SYS_SelectEXNode(TreeDefineName, "", dgObject);
+/* 001737f4 */}
+
+void AFL_Debug_ADVEngine(string Folder, DG_NotifyHandler ReleaseSceneFunc)
+/* 00173802 */{
+/* 00173802 */	if (!system.IsDebugMode())
+/* 00173810 */	{
+/* 00173810 */		return;
+/* 00173812 */	}
+/* 00173812 */	SYS_ADVEngine_Run(Folder, ReleaseSceneFunc);
+/* 0017382e */}
+
+void AFL_Debug_SetFPSFont(int Type, int Size)
+/* 0017383c */{
+/* 0017383c */	g_DebugFPS.SetFont(Type, Size);
+/* 00173860 */}
+
+void AFL_Debug_SetMemorySizeFont(int Type, int Size)
+/* 0017386e */{
+/* 0017386e */	g_DebugMemorySize.SetFont(Type, Size);
+/* 00173892 */}
+
+void AFL_Debug_SetFillRateFont(int Type, int Size)
+/* 001738a0 */{
+/* 001738a0 */	g_DebugFillRate.SetFont(Type, Size);
+/* 001738c4 */}
+
+void AFL_Debug_SetVideoMemoryFont(int Type, int Size, int Size2)
+/* 001738d2 */{
+/* 001738d2 */	g_DebugVideoMemorySize.SetFont(Type, Size, Size2);
+/* 00173900 */}
+
+void AFL_Debug_SetVoicePlayingFont(int Type, int Size)
+/* 0017390e */{
+/* 0017390e */	g_DebugVoicePlaying.SetFont(Type, Size);
+/* 00173932 */}
+
+void AFL_Debug_SetSEPlayingFont(int Type, int Size)
+/* 00173940 */{
+/* 00173940 */	g_DebugGimicSEPlaying.SetFont(Type, Size);
+/* 00173964 */}
+
+void AFL_Debug_SetBackVoicePlayingFont(int Type, int Size)
+/* 00173972 */{
+/* 00173972 */	g_DebugBackVoicePlaying.SetFont(Type, Size);
+/* 00173996 */}
+

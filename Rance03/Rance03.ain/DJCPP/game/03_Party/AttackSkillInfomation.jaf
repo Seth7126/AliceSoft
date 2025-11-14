@@ -1,0 +1,116 @@
+AttackSkillInfomation::AttackSkillInfomation()
+/* 001933ec */{
+/* 001933f4 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019341a */}
+
+void AttackSkillInfomation::init(string skillId)
+/* 00193422 */{
+/* 00193422 */	this.skillId_ = skillId;
+/* 0019343a */	if (getPlayerSkillFromId(this.skillId_) !== NULL)
+/* 0019346e */	{
+/* 0019346e */		this.initParts();
+/* 00193476 */	}
+/* 00193476 */}
+
+void AttackSkillInfomation::update()
+/* 0019347e */{
+/* 00193480 */}
+
+void AttackSkillInfomation::initParts()
+/* 00193486 */{
+/* 00193486 */	ref PlayerSkill s = getPlayerSkillFromId(this.skillId_);
+/* 001934c8 */	this.parts_[0].init("システム／編成／スキル説明", 0);
+/* 001934ec */	array@string desc;
+/* 001934f6 */	splitToken(desc, s.getDesc(), "|");
+/* 0019351c */	desc.Realloc(3);
+/* 00193532 */	int i;
+/* 00193544 */	for (i = 0; i < desc.Numof(); ++i)
+/* 00193594 */	{
+/* 00193594 */		this.parts_[1 + i].initAsText(desc[i], 20, false, 256, 31, 4, 4);
+/* 001935f2 */	}
+/* 001935f8 */	this.parts_[4].initAsText(s.getDesc2(), 20, false, 256, 31, 4, 4);
+/* 00193644 */	this.parts_[5].initAsNumber("システム／数字／幅１３／赤", NULL);
+/* 00193668 */	this.parts_[5].setNumber(s.getCoolTime());
+/* 00193692 */	createPartsGroup(this.parent_, this.parts_, 4400);
+/* 001936b2 */	if (this.parentPartsNumber_ != 0)
+/* 001936ca */	{
+/* 001936ca */		this.parent_.setParent(this.parentPartsNumber_);
+/* 001936e4 */		this.parent_.setZ(0.0);
+/* 001936fa */	}
+/* 001936fa */	this.setPartsPos();
+/* 00193702 */	this.setPartsShow();
+/* 0019370a */}
+
+void AttackSkillInfomation::setPartsShow()
+/* 00193712 */{
+/* 00193712 */	int i;
+/* 00193724 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00193774 */	{
+/* 00193774 */		this.parts_[i].setShow(true);
+/* 00193796 */	}
+/* 0019379c */	this.parent_.setShow(true);
+/* 001937b2 */}
+
+void AttackSkillInfomation::setPartsPos()
+/* 001937ba */{
+/* 001937ba */	int i;
+/* 001937cc */	for (i = 0; i < 3; ++i)
+/* 00193812 */	{
+/* 00193812 */		this.parts_[1 + i].setOrigin(1);
+/* 0019383c */		this.parts_[1 + i].setPos(35.0, 33 + i * 17);
+/* 00193882 */	}
+/* 00193888 */	this.parts_[4].setOrigin(2);
+/* 001938a6 */	this.parts_[4].setPos(118.0, 92.0);
+/* 001938ca */	this.parts_[5].setPos(258.0, 91.0);
+/* 001938ee */	this.parts_[5].setOrigin(2);
+/* 0019390c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0019395c */	{
+/* 0019395c */		this.parts_[i].changeOrigin(4);
+/* 0019397e */	}
+/* 00193984 */}
+
+void AttackSkillInfomation::setViewValue(float val)
+/* 0019398c */{
+/* 0019398c */	float v = Math.MinF(1.0, Math.MaxF(-1.0, val * 1.3));
+/* 001939ca */	v = Math.MaxF(Math.AbsF(v) - 0.25, 0.0) * 1.333;
+/* 00193a0a */	this.parts_[0].setXScaling((1 - Math.AbsF(v)) * 100.0);
+/* 00193a4c */	this.parts_[0].setAlpha((1 - Math.AbsF(v)) * 255.0);
+/* 00193a8e */	int i;
+/* 00193aa0 */	for (i = 1; i < this.parts_.Numof(); ++i)
+/* 00193af0 */	{
+/* 00193af0 */		float v2 = Math.MinF(1.0, Math.MaxF(-1.0, val * 4.0));
+/* 00193b2e */		this.parts_[i].setAlpha((1 - Math.AbsF(v2)) * 255.0);
+/* 00193b74 */	}
+/* 00193b7a */}
+
+void AttackSkillInfomation::setPos(int x, int y)
+/* 00193b82 */{
+/* 00193b82 */	this.parent_.setPos(x, y);
+/* 00193baa */}
+
+void AttackSkillInfomation::fadeIn(bool val, unknown_delegate onFinish)
+/* 00193bb2 */{
+/* 00193bb2 */	PartsMotion m;
+/* 00193bc2 */	m = getStandardMotion(val ? 0 : 1);
+/* 00193bfe */	if (!val)
+/* 00193c10 */	{
+/* 00193c10 */		m.setTime(150);
+/* 00193c26 */	}
+/* 00193c26 */	this.parent_.runMotion(m, NULL);
+/* 00193c46 */}
+
+void AttackSkillInfomation::setShow(bool val)
+/* 00193c4e */{
+/* 00193c4e */	this.parent_.setAlpha(val ? 255 : 0);
+/* 00193c82 */}
+
+void AttackSkillInfomation::setParent(int parentPartsNumber)
+/* 00193c8a */{
+/* 00193c8a */	this.parentPartsNumber_ = parentPartsNumber;
+/* 00193ca0 */	if (this.parent_.isInitialized())
+/* 00193cb6 */	{
+/* 00193cb6 */		this.parent_.setParent(this.parentPartsNumber_);
+/* 00193cd0 */		this.parent_.setZ(0.0);
+/* 00193ce6 */	}
+/* 00193ce6 */}
+

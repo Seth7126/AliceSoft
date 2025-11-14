@@ -1,0 +1,471 @@
+void initGameSystem()
+/* 001d467c */{
+/* 001d467c */	loadEx();
+/* 001d4682 */	g_globalGameFlag.setGlobalMode(true);
+/* 001d4698 */	initPlayerAttackSkill();
+/* 001d469e */	g_playerCommonParam.setBadConditionBeginEndHandler("onBeginEndBadCondition");
+/* 001d46c6 */	g_music.addHandlerFunc("onPlayMusic");
+/* 001d46ee */}
+
+void onBeginEndBadCondition(string id, bool isIn)
+/* 001d46fc */{
+/* 001d46fc */	if (id == "幻聴")
+/* 001d4714 */	{
+/* 001d4714 */		if (isIn)
+/* 001d4724 */		{
+/* 001d4724 */			g_music.forcePlay("音楽／システム／糞曲２");
+/* 001d473a */		}
+/* 001d4740 */		else
+/* 001d4740 */		{
+/* 001d4740 */			g_music.forcePlay("");
+/* 001d4756 */		}
+/* 001d4756 */	}
+/* 001d4756 */}
+
+void onPlayMusic(string id)
+/* 001d4764 */{
+/* 001d4764 */	if (g_playedMusic.Find(0, g_playedMusic.Numof(), id) == -1)
+/* 001d47a2 */	{
+/* 001d47a2 */		g_playedMusic.PushBack(id);
+/* 001d47b6 */		共有セーブ();
+/* 001d47bc */	}
+/* 001d47bc */}
+
+void loadEx()
+/* 001d47ca */{
+/* 001d47ca */	loadMapPlaceInfo();
+/* 001d47d0 */	loadCardInfo();
+/* 001d47d6 */	loadDungeon();
+/* 001d47dc */	loadPlayerBuff();
+/* 001d47e2 */	loadPlayerAttackAttribute();
+/* 001d47e8 */	loadZeroThreeSkill();
+/* 001d47ee */	loadBadCondition();
+/* 001d47f4 */	loadPlayer();
+/* 001d47fa */	loadAttackSkill();
+/* 001d4800 */	loadPlayerSkillOpenLevel();
+/* 001d4806 */	loadPlayerVoiceFinder();
+/* 001d480c */	制御／プロローグ／初期設定／レベル();
+/* 001d4812 */	loadMonsterBuff();
+/* 001d4818 */	loadMonsterAttackAttribute();
+/* 001d481e */	loadMonsterAttribute();
+/* 001d4824 */	loadMonster();
+/* 001d482a */	loadMonsterMultipleAttack();
+/* 001d4830 */	setMonsterEffectOffset();
+/* 001d4836 */	loadMapEncountProbability();
+/* 001d483c */	loadMapEncountMonsterGroup();
+/* 001d4842 */	loadStandBackgroundFillInfomation();
+/* 001d4848 */	loadItem();
+/* 001d484e */	loadShop();
+/* 001d4854 */	loadCgList();
+/* 001d485a */	loadReplayList();
+/* 001d4860 */	loadMusicInfo();
+/* 001d4866 */	loadAdvSelectionButtonInfomation();
+/* 001d486c */	loadBattleBackGround();
+/* 001d4872 */	loadEnquiteSelection();
+/* 001d4878 */	loadMirrorPiece();
+/* 001d487e */}
+
+void loadMapPlaceInfo()
+/* 001d488c */{
+/* 001d488c */	string key = "マップ場所";
+/* 001d48a0 */	g_mapPlace.Alloc(EX_Height(key));
+/* 001d48c0 */	int i;
+/* 001d48d2 */	for (i = 0; i < g_mapPlace.Numof(); ++i)
+/* 001d4922 */	{
+/* 001d4922 */		g_mapPlace[i].init(EX_A2String(key, 0, i, ""));
+/* 001d4964 */	}
+/* 001d496a */}
+
+void loadCardInfo()
+/* 001d4978 */{
+/* 001d4978 */	string key = "カード情報";
+/* 001d498c */	g_cardInfomation.Alloc(EX_Height(key));
+/* 001d49ac */	int i;
+/* 001d49be */	for (i = 0; i < g_cardInfomation.Numof(); ++i)
+/* 001d4a0e */	{
+/* 001d4a0e */		g_cardInfomation[i].init(EX_A2String(key, 0, i, ""));
+/* 001d4a50 */	}
+/* 001d4a56 */	g_cardInfomation.SortBy(&CardInfomation::id_);
+/* 001d4a66 */}
+
+void loadDungeon()
+/* 001d4a74 */{
+/* 001d4a74 */	string key = "ダンジョン情報";
+/* 001d4a88 */	g_dungeon.Alloc(EX_Height(key));
+/* 001d4aa8 */	int i;
+/* 001d4aba */	for (i = 0; i < g_dungeon.Numof(); ++i)
+/* 001d4b0a */	{
+/* 001d4b0a */		string id = EX_A2String(key, 0, i, "");
+/* 001d4b3e */		g_dungeon[i].init(id);
+/* 001d4b64 */	}
+/* 001d4b6a */}
+
+void loadPlayer()
+/* 001d4b78 */{
+/* 001d4b78 */	string key = "プレイヤー情報";
+/* 001d4b8c */	g_player.Alloc(EX_Height(key));
+/* 001d4bac */	int i;
+/* 001d4bbe */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d4c0e */	{
+/* 001d4c0e */		string id = EX_A2String(key, 0, i, "");
+/* 001d4c42 */		g_player[i].init(id);
+/* 001d4c68 */	}
+/* 001d4c6e */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d4cbe */	{
+/* 001d4cbe */		if (getZeroThreeSkillFromId(g_player[i].getZeroThreeSkillId()) === NULL)
+/* 001d4d04 */		{
+/* 001d4d04 */			system.MsgBox("loadPlayer [%s] ゼロスリースキル[%s]ありません" % g_player[i].getName() % g_player[i].getZeroThreeSkillId());
+/* 001d4d5a */		}
+/* 001d4d5a */	}
+/* 001d4d66 */}
+
+void initPlayerAttackSkill()
+/* 001d4d74 */{
+/* 001d4d74 */	int i;
+/* 001d4d86 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d4dd6 */	{
+/* 001d4dd6 */		g_player[i].initSkill();
+/* 001d4df2 */	}
+/* 001d4df8 */}
+
+void loadAttackSkill()
+/* 001d4e06 */{
+/* 001d4e06 */	string key = "プレイヤー攻撃スキル情報";
+/* 001d4e1a */	g_attackSkill.Alloc(EX_Height(key));
+/* 001d4e3a */	int i;
+/* 001d4e4c */	for (i = 0; i < g_attackSkill.Numof(); ++i)
+/* 001d4e9c */	{
+/* 001d4e9c */		string id = EX_A2String(key, 0, i, "");
+/* 001d4ed0 */		g_attackSkill[i].init(EX_A2String(key, 0, i, ""));
+/* 001d4f12 */		string s = EX_SA2String(key, id, "characterId", "");
+/* 001d4f46 */		if (getPlayerFromId(s) === NULL)
+/* 001d4f7a */		{
+/* 001d4f7a */			system.MsgBox("loadAttackSkill [%s] プレイヤーID[%s]ありません" % id % s);
+/* 001d4fac */		}
+/* 001d4fac */		s = EX_SA2String(key, id, "attributeId", "");
+/* 001d4fe0 */		if (getPlayerSkillAttributeFromId(s) === NULL)
+/* 001d5014 */		{
+/* 001d5014 */			system.MsgBox("loadAttackSkill [%s] プレイヤー攻撃属性[%s]はありません" % id % s);
+/* 001d5046 */		}
+/* 001d5046 */		s = EX_SA2String(key, id, "buffId", "");
+/* 001d507a */		if (s != "" && getPlayerBuffFromId(s) === NULL)
+/* 001d50de */		{
+/* 001d50de */			system.MsgBox("loadAttackSkill [%s] プレイヤーbuff[%s]はありません" % id % s);
+/* 001d5110 */		}
+/* 001d5110 */	}
+/* 001d5128 */	g_attackSkill.SortBy(&PlayerSkill::id_);
+/* 001d5138 */}
+
+void loadPlayerBuff()
+/* 001d5146 */{
+/* 001d5146 */	string key = "プレイヤーバフ情報";
+/* 001d515a */	g_playerBuff.Alloc(EX_Height(key));
+/* 001d517a */	int i;
+/* 001d518c */	for (i = 0; i < g_playerBuff.Numof(); ++i)
+/* 001d51dc */	{
+/* 001d51dc */		g_playerBuff[i].init(EX_A2String(key, 0, i, ""));
+/* 001d521e */	}
+/* 001d5224 */}
+
+void loadMonsterBuff()
+/* 001d5232 */{
+/* 001d5232 */	string key = "モンスターバフ情報";
+/* 001d5246 */	g_monsterBuff.Alloc(EX_Height(key));
+/* 001d5266 */	int i;
+/* 001d5278 */	for (i = 0; i < g_monsterBuff.Numof(); ++i)
+/* 001d52c8 */	{
+/* 001d52c8 */		g_monsterBuff[i].init(EX_A2String(key, 0, i, ""));
+/* 001d530a */	}
+/* 001d5310 */}
+
+void loadMonster()
+/* 001d531e */{
+/* 001d531e */	string key = "モンスター情報";
+/* 001d5332 */	g_monster.Alloc(EX_Height(key));
+/* 001d5352 */	int i;
+/* 001d5364 */	for (i = 0; i < g_monster.Numof(); ++i)
+/* 001d53b4 */	{
+/* 001d53b4 */		string id = EX_A2String(key, 0, i, "");
+/* 001d53e8 */		g_monster[i].init(id);
+/* 001d540e */		g_monster[i].setAttack();
+/* 001d542a */		int j;
+/* 001d543c */		for (j = 0; j < 3; ++j)
+/* 001d5482 */		{
+/* 001d5482 */			string attrId = "attr%d" % (j + 1);
+/* 001d54b0 */			string buffId = "buffId%d" % (j + 1);
+/* 001d54de */			string s = EX_SA2String(key, id, attrId, "");
+/* 001d5516 */			if (getMonsterAttackAttributeFromId(s) === NULL)
+/* 001d554a */			{
+/* 001d554a */				system.MsgBox("loadMonster [%s] モンスター攻撃属性[%s]はありません" % id % s);
+/* 001d557c */			}
+/* 001d557c */			s = EX_SA2String(key, id, buffId, "");
+/* 001d55b4 */			if (s != "" && getMonsterBuffFromId(s) === NULL)
+/* 001d5618 */			{
+/* 001d5618 */				system.MsgBox("loadMonster [%s] モンスターbuff[%s]はありません" % id % s);
+/* 001d564a */			}
+/* 001d564a */		}
+/* 001d565c */	}
+/* 001d5662 */}
+
+void loadMonsterMultipleAttack()
+/* 001d5670 */{
+/* 001d5670 */	string key = "モンスターマルチ攻撃情報";
+/* 001d5684 */	int count = EX_Height(key);
+/* 001d56a0 */	int i;
+/* 001d56b2 */	for (i = 0; i < count; ++i)
+/* 001d56fc */	{
+/* 001d56fc */		string id = EX_RA2String(key, i, "id", "");
+/* 001d5730 */		ref Monster m = getMonsterFromId(id);
+/* 001d5772 */		m.addMultipleAttack(i);
+/* 001d578c */	}
+/* 001d579e */}
+
+void loadMonsterAttackAttribute()
+/* 001d57ac */{
+/* 001d57ac */	string key = "モンスター攻撃属性情報";
+/* 001d57c0 */	g_monsterAttackAttribute.Alloc(EX_Height(key));
+/* 001d57e0 */	int i;
+/* 001d57f2 */	for (i = 0; i < g_monsterAttackAttribute.Numof(); ++i)
+/* 001d5842 */	{
+/* 001d5842 */		string id = EX_A2String(key, 0, i, "");
+/* 001d5876 */		g_monsterAttackAttribute[i].init(id);
+/* 001d589c */	}
+/* 001d58a2 */}
+
+void loadPlayerAttackAttribute()
+/* 001d58b0 */{
+/* 001d58b0 */	string key = "プレイヤー攻撃属性情報";
+/* 001d58c4 */	g_playerAttackAttribute.Alloc(EX_Height(key));
+/* 001d58e4 */	int i;
+/* 001d58f6 */	for (i = 0; i < g_playerAttackAttribute.Numof(); ++i)
+/* 001d5946 */	{
+/* 001d5946 */		string id = EX_A2String(key, 0, i, "");
+/* 001d597a */		g_playerAttackAttribute[i].init(EX_SA2String(key, id, "id", ""));
+/* 001d59bc */	}
+/* 001d59c2 */}
+
+void loadItem()
+/* 001d59d0 */{
+/* 001d59d0 */	string key = "アイテム情報";
+/* 001d59e4 */	g_item.Alloc(EX_Height(key));
+/* 001d5a04 */	int i;
+/* 001d5a16 */	for (i = 0; i < g_item.Numof(); ++i)
+/* 001d5a66 */	{
+/* 001d5a66 */		string id = EX_A2String(key, 0, i, "");
+/* 001d5a9a */		g_item[i].init(i);
+/* 001d5ac0 */		string s = EX_SA2String(key, id, "skillId", "");
+/* 001d5af4 */		if (s != "" && getPlayerSkillFromId(s) === NULL)
+/* 001d5b58 */		{
+/* 001d5b58 */			system.MsgBox("loadItem [%s] プレイヤースキル[%s]ありません" % id % s);
+/* 001d5b8a */		}
+/* 001d5b8a */	}
+/* 001d5b96 */}
+
+void loadShop()
+/* 001d5ba4 */{
+/* 001d5ba4 */	string key = "ショップ情報";
+/* 001d5bb8 */	g_shop.Alloc(EX_Height(key));
+/* 001d5bd8 */	int i;
+/* 001d5bea */	for (i = 0; i < g_shop.Numof(); ++i)
+/* 001d5c3a */	{
+/* 001d5c3a */		string id = EX_A2String(key, 0, i, "");
+/* 001d5c6e */		g_shop[i].init(EX_SA2String(key, id, "id", ""), EX_SA2String(key, id, "name", ""), EX_SA2String(key, id, "imageName", ""));
+/* 001d5cfc */	}
+/* 001d5d02 */}
+
+void loadBadCondition()
+/* 001d5d10 */{
+/* 001d5d10 */	string key = "状態異常情報";
+/* 001d5d24 */	g_badCondition.Alloc(EX_Height(key));
+/* 001d5d44 */	int i;
+/* 001d5d56 */	for (i = 0; i < g_badCondition.Numof(); ++i)
+/* 001d5da6 */	{
+/* 001d5da6 */		string id = EX_A2String(key, 0, i, "");
+/* 001d5dda */		g_badCondition[i].init(EX_SA2String(key, id, "id", ""), EX_SA2String(key, id, "name", ""), EX_SA2String(key, id, "imageName", ""), EX_SA2String(key, id, "desc", ""));
+/* 001d5e8e */	}
+/* 001d5e94 */}
+
+void loadMonsterAttribute()
+/* 001d5ea2 */{
+/* 001d5ea2 */	string key = "モンスター属性情報";
+/* 001d5eb6 */	g_monsterAttribute.Alloc(EX_Height(key));
+/* 001d5ed6 */	int i;
+/* 001d5ee8 */	for (i = 0; i < g_monsterAttribute.Numof(); ++i)
+/* 001d5f38 */	{
+/* 001d5f38 */		string id = EX_A2String(key, 0, i, "");
+/* 001d5f6c */		g_monsterAttribute[i].init(EX_SA2String(key, id, "id", ""), EX_SA2String(key, id, "name", ""), EX_SA2String(key, id, "imageName", ""));
+/* 001d5ffa */	}
+/* 001d6000 */}
+
+void loadCgList()
+/* 001d600e */{
+/* 001d600e */	string key = "ＣＧモード情報";
+/* 001d6022 */	int height = EX_Height(key);
+/* 001d603e */	int width = EX_Width(key);
+/* 001d605a */	g_cgList.Alloc(height);
+/* 001d6074 */	int i;
+/* 001d6086 */	for (i = 0; i < height; ++i)
+/* 001d60d0 */	{
+/* 001d60d0 */		string thumbnail = EX_A2String(key, 0, i, "");
+/* 001d6104 */		string baseName = EX_A2String(key, 1, i, "");
+/* 001d6138 */		array@string cg;
+/* 001d6142 */		int j;
+/* 001d6154 */		for (j = 2; j < width; ++j)
+/* 001d619e */		{
+/* 001d619e */			string name = EX_A2String(key, j, i, "");
+/* 001d61d6 */			if (name != "")
+/* 001d61ee */			{
+/* 001d61ee */				cg.PushBack(name);
+/* 001d6202 */			}
+/* 001d6202 */		}
+/* 001d6208 */		g_cgList[i].init(thumbnail, baseName, cg);
+/* 001d624e */	}
+/* 001d6254 */}
+
+void loadReplayList()
+/* 001d6262 */{
+/* 001d6262 */	string key = "回想モード情報";
+/* 001d6276 */	int height = EX_Height(key);
+/* 001d6292 */	g_replay.Alloc(height);
+/* 001d62ac */	int i;
+/* 001d62be */	for (i = 0; i < g_replay.Numof(); ++i)
+/* 001d630e */	{
+/* 001d630e */		g_replay[i].init(i);
+/* 001d6334 */	}
+/* 001d633a */}
+
+void loadMusicInfo()
+/* 001d6348 */{
+/* 001d6348 */	string key = "音楽情報";
+/* 001d635c */	int height = EX_Height(key);
+/* 001d6378 */	g_musicInfo.Alloc(height);
+/* 001d6392 */	int i;
+/* 001d63a4 */	for (i = 0; i < g_musicInfo.Numof(); ++i)
+/* 001d63f4 */	{
+/* 001d63f4 */		g_musicInfo[i].init(i);
+/* 001d641a */	}
+/* 001d6420 */}
+
+void loadZeroThreeSkill()
+/* 001d642e */{
+/* 001d642e */	string key = "ゼロスリースキル情報";
+/* 001d6442 */	g_zeroThreeSkill.Alloc(EX_Height(key));
+/* 001d6462 */	int i;
+/* 001d6474 */	for (i = 0; i < g_zeroThreeSkill.Numof(); ++i)
+/* 001d64c4 */	{
+/* 001d64c4 */		string id = EX_A2String(key, 0, i, "");
+/* 001d64f8 */		g_zeroThreeSkill[i].init(id, EX_SA2String(key, id, "name", ""), EX_SA2String(key, id, "desc", ""));
+/* 001d656a */	}
+/* 001d6570 */}
+
+void loadPlayerSkillOpenLevel()
+/* 001d657e */{
+/* 001d657e */	string key = "プレイヤー攻撃スキルオープンレベル情報";
+/* 001d6592 */	g_playerSkillOpenLevel.Alloc(EX_Height(key));
+/* 001d65b2 */	int i;
+/* 001d65c4 */	for (i = 0; i < g_playerSkillOpenLevel.Numof(); ++i)
+/* 001d6614 */	{
+/* 001d6614 */		string id = EX_A2String(key, 0, i, "");
+/* 001d6648 */		g_playerSkillOpenLevel[i].init(id, EX_SA2String(key, id, "playerId", ""), EX_SA2Int(key, id, "index", 0), EX_SA2Int(key, id, "openLevel", 0));
+/* 001d66e0 */		string s = EX_SA2String(key, id, "playerId", "");
+/* 001d6714 */		if (getPlayerFromId(s) === NULL)
+/* 001d6748 */		{
+/* 001d6748 */			system.MsgBox("loadPlayerSkillOpenLevel [%s] プレイヤーID[%s]ありません" % id % s);
+/* 001d677a */		}
+/* 001d677a */	}
+/* 001d6786 */}
+
+void loadMapEncountProbability()
+/* 001d6794 */{
+/* 001d6794 */	string key = "マップエンカウント率情報";
+/* 001d67a8 */	g_mapEncountProbability.Alloc(EX_Height(key));
+/* 001d67c8 */	int i;
+/* 001d67da */	for (i = 0; i < g_mapEncountProbability.Numof(); ++i)
+/* 001d682a */	{
+/* 001d682a */		int id = EX_A2Int(key, 0, i, 0);
+/* 001d685c */		g_mapEncountProbability[i].init(id, EX_IA2Int(key, id, "noHit", 0), EX_IA2Int(key, id, "hit1", 0), EX_IA2Int(key, id, "hit2", 0), EX_IA2Int(key, id, "hit3", 0));
+/* 001d691a */	}
+/* 001d6920 */}
+
+void loadMapEncountMonsterGroup()
+/* 001d692e */{
+/* 001d692e */	string key = "マップエンカウントモンスターグループ情報";
+/* 001d6942 */	g_mapEncountMonsterGroup.Alloc(EX_Height(key));
+/* 001d6962 */	int i;
+/* 001d6974 */	for (i = 0; i < g_mapEncountMonsterGroup.Numof(); ++i)
+/* 001d69c4 */	{
+/* 001d69c4 */		string id = EX_A2String(key, 0, i, "");
+/* 001d69f8 */		g_mapEncountMonsterGroup[i].init(id);
+/* 001d6a1e */	}
+/* 001d6a24 */}
+
+void loadBattleBackGround()
+/* 001d6a32 */{
+/* 001d6a32 */	string key = "戦闘背景情報";
+/* 001d6a46 */	g_battleBackgroundInfomation.Alloc(EX_Height(key));
+/* 001d6a66 */	int i;
+/* 001d6a78 */	for (i = 0; i < g_battleBackgroundInfomation.Numof(); ++i)
+/* 001d6ac8 */	{
+/* 001d6ac8 */		string id = EX_A2String(key, 0, i, "");
+/* 001d6afc */		g_battleBackgroundInfomation[i].init(id);
+/* 001d6b22 */	}
+/* 001d6b28 */}
+
+void loadStandBackgroundFillInfomation()
+/* 001d6b36 */{
+/* 001d6b36 */	string key = "立ち絵乗算フィル情報";
+/* 001d6b4a */	g_standBackgroundFillInfomation.Alloc(EX_Height(key));
+/* 001d6b6a */	int i;
+/* 001d6b7c */	for (i = 0; i < g_standBackgroundFillInfomation.Numof(); ++i)
+/* 001d6bcc */	{
+/* 001d6bcc */		g_standBackgroundFillInfomation[i].init(EX_A2String(key, 0, i, ""), EX_A2Int(key, 1, i, 0), EX_A2Int(key, 2, i, 0), EX_A2Int(key, 3, i, 0));
+/* 001d6c80 */	}
+/* 001d6c86 */}
+
+void loadAdvSelectionButtonInfomation()
+/* 001d6c94 */{
+/* 001d6c94 */	string key = "ADV選択肢ボタン情報";
+/* 001d6ca8 */	g_advSelectionButtonInfomation.Alloc(EX_Height(key));
+/* 001d6cc8 */	int i;
+/* 001d6cda */	for (i = 0; i < g_advSelectionButtonInfomation.Numof(); ++i)
+/* 001d6d2a */	{
+/* 001d6d2a */		string id = EX_A2String(key, 0, i, "");
+/* 001d6d5e */		g_advSelectionButtonInfomation[i].init(id, EX_SA2String(key, id, "caption", ""), EX_SA2String(key, id, "imageName", ""));
+/* 001d6dd0 */	}
+/* 001d6dd6 */}
+
+void loadMirrorPiece()
+/* 001d6de4 */{
+/* 001d6de4 */	string key = "鏡の破片情報";
+/* 001d6df8 */	g_mirrorPiece.Alloc(EX_Height(key));
+/* 001d6e18 */	int i;
+/* 001d6e2a */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001d6e7a */	{
+/* 001d6e7a */		string id = EX_A2String(key, 0, i, "");
+/* 001d6eae */		g_mirrorPiece[i].init(id);
+/* 001d6ed4 */	}
+/* 001d6eda */}
+
+void loadPlayerVoiceFinder()
+/* 001d6ee8 */{
+/* 001d6ee8 */	g_voiceFinder.Alloc(g_player.Numof());
+/* 001d6f08 */	int i;
+/* 001d6f1a */	for (i = 0; i < g_voiceFinder.Numof(); ++i)
+/* 001d6f6a */	{
+/* 001d6f6a */		g_voiceFinder[i].init(g_player[i].getId());
+/* 001d6fa2 */	}
+/* 001d6fa8 */}
+
+void setMonsterEffectOffset()
+/* 001d6fb6 */{
+/* 001d6fb6 */	getMonsterFromId("デカントf").setEffectOffset(235, 0);
+/* 001d6fea */	getMonsterFromId("デカントj").setEffectOffset(235, 0);
+/* 001d701e */	getMonsterFromId("デカントマムル").setEffectOffset(235, 0);
+/* 001d7052 */	getMonsterFromId("レイラ").setEffectOffset(52, 0);
+/* 001d7086 */	getMonsterFromId("ジル").setEffectOffset(84, -133);
+/* 001d70ba */	getMonsterFromId("シーザーh1").setEffectOffset(214, 0);
+/* 001d70ee */	getMonsterFromId("シーザーh2").setEffectOffset(214, 0);
+/* 001d7122 */	getMonsterFromId("シーザーh3").setEffectOffset(214, 0);
+/* 001d7156 */	getMonsterFromId("サイクロナイト").setEffectOffset(192, 0);
+/* 001d718a */}
+

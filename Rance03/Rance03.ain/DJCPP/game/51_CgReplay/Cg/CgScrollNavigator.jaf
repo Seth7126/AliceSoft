@@ -1,0 +1,52 @@
+CgScrollNavigator::CgScrollNavigator()
+/* 001bf2ca */{
+/* 001bf2d2 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001bf2f8 */}
+
+void CgScrollNavigator::init(DG_GetScrollerPos scrollPosMethod, int cgCount)
+/* 001bf300 */{
+/* 001bf300 */	this.scrollPosMethod_ = scrollPosMethod;
+/* 001bf31a */	this.cgCount_ = cgCount;
+/* 001bf330 */	this.btn_[0].init("システム／左移動", "", "", false);
+/* 001bf360 */	this.btn_[1].init("システム／右移動", "", "", false);
+/* 001bf390 */	this.btn_[0].setPos(0, 128);
+/* 001bf3b4 */	this.btn_[1].setPos(960, 128);
+/* 001bf3d8 */	int i;
+/* 001bf3ea */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001bf43a */	{
+/* 001bf43a */		this.btn_[i].setZ(15000);
+/* 001bf45c */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001bf48c */	}
+/* 001bf492 */}
+
+void CgScrollNavigator::setOnClickCallback(DG_OnClickLRNavigate cb)
+/* 001bf49a */{
+/* 001bf49a */	this.cb_ = cb;
+/* 001bf4b4 */}
+
+void CgScrollNavigator::onClick(int index)
+/* 001bf4bc */{
+/* 001bf4bc */	this.cb_(index);
+/* 001bf4e6 */}
+
+void CgScrollNavigator::update()
+/* 001bf4ee */{
+/* 001bf4ee */	this.setButtonEnable();
+/* 001bf4f6 */}
+
+void CgScrollNavigator::setButtonEnable()
+/* 001bf4fe */{
+/* 001bf4fe */	int p = roundOff(this.scrollPosMethod_());
+/* 001bf530 */	this.btn_[0].setEnable(p != 0);
+/* 001bf55c */	this.btn_[1].setEnable(p != this.cgCount_ - 1);
+/* 001bf594 */}
+
+void CgScrollNavigator::fadeIn(bool val)
+/* 001bf59c */{
+/* 001bf59c */	int i;
+/* 001bf5ae */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001bf5fe */	{
+/* 001bf5fe */		this.btn_[i].fadeIn(val);
+/* 001bf624 */	}
+/* 001bf62a */}
+

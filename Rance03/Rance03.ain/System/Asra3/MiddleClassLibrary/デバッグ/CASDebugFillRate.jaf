@@ -1,0 +1,75 @@
+CASDebugFillRate::CASDebugFillRate()
+/* 000415c8 */{
+/* 000415d0 */	this.m_Show = false;
+/* 000415e2 */	this.m_CurrentFillRate = 0;
+/* 000415f4 */	this.m_MaxFillRate = 0;
+/* 00041606 */	this.m_Text.Create();
+/* 00041616 */	PARTS_SetWantSaveBackScene(this.m_Text.GetPartsNumber(), false);
+/* 00041632 */	this.SetFont(0, 12);
+/* 00041646 */}
+
+void CASDebugFillRate::SetFont(int Type, int Size)
+/* 0004164e */{
+/* 0004164e */	this.m_TextProperty.SetType(Type);
+/* 00041668 */	this.m_TextProperty.SetSize(Size);
+/* 00041682 */	this.m_TextProperty.SetColor(CF_CASColor(255, 255, 255, 255));
+/* 000416b0 */	this.m_TextProperty.SetEdgeWeight(1.0);
+/* 000416c6 */	this.m_TextProperty.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 000416f4 */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 00041714 */}
+
+void CASDebugFillRate::SetShow(bool Show)
+/* 0004171c */{
+/* 0004171c */	if (!Show)
+/* 0004172e */	{
+/* 0004172e */		this.m_CurrentFillRate = 0;
+/* 00041740 */		this.m_MaxFillRate = 0;
+/* 00041752 */	}
+/* 00041752 */	this.m_Show = Show;
+/* 00041768 */}
+
+bool CASDebugFillRate::GetShow()
+/* 00041770 */{
+/* 00041770 */	return this.m_Show;
+/* 0004177c */}
+
+void CASDebugFillRate::Update(bool IsShowLeft, int PosY)
+/* 0004178a */{
+/* 0004178a */	Ｐ＿親設定(this.m_Text.GetPartsNumber(), PARTS_GetSystemOverlayLayer());
+/* 000417a6 */	int PrevFillRate = this.m_CurrentFillRate;
+/* 000417bc */	int MaxFillRate = this.m_MaxFillRate;
+/* 000417d2 */	this.m_CurrentFillRate = ChipmunkSpriteEngine.Debug_GetFillRate();
+/* 000417e8 */	this.m_MaxFillRate = Math.Max(this.m_MaxFillRate, this.m_CurrentFillRate);
+/* 00041812 */	if (this.IsCompulsorilyShow())
+/* 00041820 */	{
+/* 00041820 */		this.SetShow(true);
+/* 0004182e */	}
+/* 0004182e */	bool IsShow = this.GetShow() && !AFL_Config_GetDisavleDebugInfo();
+/* 0004186a */	this.m_Text.SetShow(IsShow);
+/* 00041884 */	this.m_Text.SetOriginPosMode(IsShowLeft ? 1 : 3);
+/* 000418b6 */	this.m_Text.SetPos(IsShowLeft ? 0 : AFL_View_GetWidth(), PosY);
+/* 000418f2 */	this.m_Text.SetZ(32767);
+/* 00041908 */	if (!IsShow)
+/* 0004191a */	{
+/* 0004191a */		return;
+/* 0004191c */	}
+/* 0004191c */	if (this.m_CurrentFillRate == PrevFillRate && this.m_MaxFillRate == MaxFillRate && this.m_Timer.Get() < 1000)
+/* 000419a2 */	{
+/* 000419a2 */		return;
+/* 000419a4 */	}
+/* 000419a4 */	this.m_Timer.Reset();
+/* 000419b4 */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 000419d4 */	this.m_Text.SetText("F:%4d/%4d" % (this.m_CurrentFillRate / 1024) % (MaxFillRate / 1024), 1);
+/* 00041a24 */}
+
+bool CASDebugFillRate::IsCompulsorilyShow()
+/* 00041a2c */{
+/* 00041a2c */	return this.m_CurrentFillRate >= 16000;
+/* 00041a42 */}
+
+int CASDebugFillRate::GetBottom()
+/* 00041a50 */{
+/* 00041a50 */	int Number = this.m_Text.GetPartsNumber();
+/* 00041a6c */	return AFL_Parts_GetUpperLeftPosY(Number, 1) + AFL_Parts_GetHeight(Number, 1);
+/* 00041aa0 */}
+

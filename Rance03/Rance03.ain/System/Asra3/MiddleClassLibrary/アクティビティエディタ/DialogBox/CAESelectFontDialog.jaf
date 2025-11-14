@@ -1,0 +1,191 @@
+CAESelectFontDialog::CAESelectFontDialog()
+/* 0004eebe */{
+/* 0004eec8 */}
+
+void CAESelectFontDialog::Show(int ID, int PosX, int PosY, CASCharSpriteProperty Font, DG_ChangedFont dgChangedFont)
+/* 0004eece */{
+/* 0004eece */	AFL_Parts_AddLayer(-1);
+/* 0004eedc */	this.m_dgChangedFont = dgChangedFont;
+/* 0004eef6 */	this.m_Font = Font;
+/* 0004ef18 */	this.m_ParentID = ID;
+/* 0004ef2e */	int LayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0004ef40 */	Ｐ＿レイアウトボックス＿パディング設定(LayoutBox, 6, 6, 6, 6);
+/* 0004ef68 */	Ｐ＿レイアウトボックス＿配置設定(LayoutBox, 3);
+/* 0004ef7e */	CASColor Color;
+/* 0004ef8e */	Color = Font.GetColor();
+/* 0004efb2 */	CASColor EdgeColor;
+/* 0004efc2 */	EdgeColor = Font.GetEdgeColor();
+/* 0004efe6 */	array@string FontNameList;
+/* 0004eff0 */	PARTS_GetFontNameList(FontNameList);
+/* 0004f000 */	int Find = FontNameList.Find(0, FontNameList.Numof(), PARTS_GetFontName(Font.GetType()));
+/* 0004f048 */	this.m_Panel.Init(LayoutBox);
+/* 0004f062 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0004f07c */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 0004f096 */	this.m_Panel.AddSelectedEvent(this.SelectedComboBoxEvent);
+/* 0004f0b0 */	this.m_Panel.AddComboBoxItem("種類", 100, 135, 100, FontNameList, Find);
+/* 0004f10a */	this.m_Panel.AddTextBoxItem("サイズ", 155, string(Font.GetSize()), 80, false);
+/* 0004f160 */	this.m_Panel.AddButtonItem("色", 155, "%d,%d,%d" % Color.GetR() % Color.GetG() % Color.GetB(), 80, 5);
+/* 0004f1f2 */	this.m_Panel.AddTextBoxItem("太字幅", 155, Font.GetBoldWeight().String(), 80, false);
+/* 0004f24e */	this.m_Panel.AddTextBoxItem("縁取り幅", 155, Font.GetEdgeWeight().String(), 80, false);
+/* 0004f2aa */	this.m_Panel.AddButtonItem("縁取り色", 155, "%d,%d,%d" % EdgeColor.GetR() % EdgeColor.GetG() % EdgeColor.GetB(), 80, 5);
+/* 0004f33c */	int ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 0004f34e */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(ButtonLayout, 2);
+/* 0004f364 */	Ｐ＿レイアウトボックス＿パディング設定(ButtonLayout, 3, 3, 3, 3);
+/* 0004f38c */	Ｐ＿レイアウトボックス＿追加(LayoutBox, ButtonLayout);
+/* 0004f3a6 */	int OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004f3b8 */	Ｐ＿ボタン＿テキスト設定(OKButton, "決定");
+/* 0004f3ce */	Ｐ＿ボタン＿サイズ設定(OKButton, 65, 22);
+/* 0004f3ea */	Ｐ＿マージン設定(OKButton, 0, 0, 3, 0);
+/* 0004f412 */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, OKButton);
+/* 0004f42c */	AFL_Parts_AddMouseLClickEvent(OKButton, this.ClickOKButtonEvent);
+/* 0004f446 */	int CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004f458 */	Ｐ＿ボタン＿テキスト設定(CancelButton, "キャンセル");
+/* 0004f46e */	Ｐ＿ボタン＿サイズ設定(CancelButton, 100, 22);
+/* 0004f48a */	Ｐ＿マージン設定(CancelButton, 0, 0, 3, 0);
+/* 0004f4b2 */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, CancelButton);
+/* 0004f4cc */	AFL_Parts_AddMouseLClickEvent(CancelButton, this.ClickCancelButtonEvent);
+/* 0004f4e6 */	int Width = AFL_Parts_GetWidth(LayoutBox, 1);
+/* 0004f508 */	int Height = AFL_Parts_GetHeight(LayoutBox, 1);
+/* 0004f52a */	int BG = PARTS_GetFreeSystemPartsNumber();
+/* 0004f53c */	Ｐ＿構築手順＿ピクセル作成(BG, Width, Height, 1);
+/* 0004f566 */	Ｐ＿構築手順＿色塗り(BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 0004f5b4 */	Ｐ＿構築ビルド(BG, 1);
+/* 0004f5ca */	Ｐ＿ドラッグ可能設定(BG, true);
+/* 0004f5e0 */	Ｐ＿親設定(LayoutBox, BG);
+/* 0004f5fa */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0004f63c */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 0004f67e */	Ｐ＿座標設定(BG, PosX, PosY);
+/* 0004f6a6 */	AFL_Parts_AddDragEndEvent(BG, this.DragEndEvent);
+/* 0004f6c0 */	this.m_OK = false;
+/* 0004f6d2 */	this.m_Cancel = false;
+/* 0004f6e4 */	PARTS_BeginInput();
+/* 0004f6ea */	CASCharSpriteProperty PrevFont;
+/* 0004f6fa */	PrevFont = Font;
+/* 0004f71c */	for (; ; )
+/* 0004f71c */	{
+/* 0004f71c */		if (!PrevFont.Equal(this.m_Font))
+/* 0004f73e */		{
+/* 0004f73e */			dgChangedFont(ID, this.m_Font);
+/* 0004f772 */			PrevFont = this.m_Font;
+/* 0004f794 */		}
+/* 0004f794 */		AFL_View_Update(true);
+/* 0004f7a0 */		if (this.m_OK)
+/* 0004f7b0 */		{
+/* 0004f7b0 */			break;
+/* 0004f7b6 */		}
+/* 0004f7b6 */		if (this.m_Cancel)
+/* 0004f7c6 */		{
+/* 0004f7c6 */			dgChangedFont(ID, Font);
+/* 0004f7fa */			break;
+/* 0004f800 */		}
+/* 0004f800 */	}
+/* 0004f806 */	PARTS_EndInput();
+/* 0004f80c */	this.m_Panel.Release();
+/* 0004f81c */	PARTS_ReleaseWithInit(LayoutBox);
+/* 0004f82a */	PARTS_ReleaseWithInit(CancelButton);
+/* 0004f838 */	PARTS_ReleaseWithInit(OKButton);
+/* 0004f846 */	PARTS_ReleaseWithInit(ButtonLayout);
+/* 0004f854 */	PARTS_ReleaseWithInit(BG);
+/* 0004f862 */	AFL_Parts_EraseLayer(-1);
+/* 0004f86e */}
+
+void CAESelectFontDialog::ChangeTextEvent(int ID)
+/* 0004f876 */{
+/* 0004f876 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0004f8c6 */	if (Item === NULL)
+/* 0004f8de */	{
+/* 0004f8de */		return;
+/* 0004f8e0 */	}
+/* 0004f8e0 */	if (Item.GetLabel() == "サイズ")
+/* 0004f8fe */	{
+/* 0004f8fe */		this.m_Font.SetSize(Item.GetTextBoxInt());
+/* 0004f91e */	}
+/* 0004f924 */	else if (Item.GetLabel() == "太字幅")
+/* 0004f942 */	{
+/* 0004f942 */		this.m_Font.SetBoldWeight(Item.GetTextBoxFloat());
+/* 0004f962 */	}
+/* 0004f968 */	else if (Item.GetLabel() == "縁取り幅")
+/* 0004f986 */	{
+/* 0004f986 */		this.m_Font.SetEdgeWeight(Item.GetTextBoxFloat());
+/* 0004f9a6 */	}
+/* 0004f9a6 */}
+
+void CAESelectFontDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 0004f9ae */{
+/* 0004f9ae */	this.m_OK = true;
+/* 0004f9c0 */}
+
+void CAESelectFontDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 0004f9c8 */{
+/* 0004f9c8 */	this.m_Cancel = true;
+/* 0004f9da */}
+
+void CAESelectFontDialog::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0004f9e2 */{
+/* 0004f9e2 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0004fa32 */	if (Item === NULL)
+/* 0004fa4a */	{
+/* 0004fa4a */		return;
+/* 0004fa4c */	}
+/* 0004fa4c */	CASColor Color;
+/* 0004fa5c */	Color = this.m_Font.GetColor();
+/* 0004fa80 */	CASColor EdgeColor;
+/* 0004fa90 */	EdgeColor = this.m_Font.GetEdgeColor();
+/* 0004fab4 */	if (Item.GetLabel() == "色")
+/* 0004fad2 */	{
+/* 0004fad2 */		CAESelectColorDialog Form;
+/* 0004fae2 */		Form.Show(ID, MouseX, MouseY, Color.GetR(), Color.GetG(), Color.GetB(), this.ChangedColorEvent);
+/* 0004fb4a */	}
+/* 0004fb56 */	else if (Item.GetLabel() == "縁取り色")
+/* 0004fb74 */	{
+/* 0004fb74 */		CAESelectColorDialog Form;
+/* 0004fb84 */		Form.Show(ID, MouseX, MouseY, EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), this.ChangedColorEvent);
+/* 0004fbec */	}
+/* 0004fbec */}
+
+void CAESelectFontDialog::ChangedColorEvent(int ID, int Red, int Green, int Blue)
+/* 0004fbfa */{
+/* 0004fbfa */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0004fc4a */	if (Item === NULL)
+/* 0004fc62 */	{
+/* 0004fc62 */		return;
+/* 0004fc64 */	}
+/* 0004fc64 */	if (Item.GetLabel() == "色")
+/* 0004fc82 */	{
+/* 0004fc82 */		this.m_Font.SetColor(CF_CASColor(Red, Green, Blue, 255));
+/* 0004fcbc */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 0004fd08 */	}
+/* 0004fd0e */	else if (Item.GetLabel() == "縁取り色")
+/* 0004fd2c */	{
+/* 0004fd2c */		this.m_Font.SetEdgeColor(CF_CASColor(Red, Green, Blue, 255));
+/* 0004fd66 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 0004fdb2 */	}
+/* 0004fdb2 */	this.m_dgChangedFont(this.m_ParentID, this.m_Font);
+/* 0004fde6 */}
+
+void CAESelectFontDialog::DragEndEvent(int ID)
+/* 0004fdee */{
+/* 0004fdee */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 0004fe0c */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 0004fe2a */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 0004fe4c */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 0004fe6e */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0004feb0 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 0004fef2 */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 0004ff1a */}
+
+void CAESelectFontDialog::SelectedComboBoxEvent(int ID, int Index)
+/* 0004ff22 */{
+/* 0004ff22 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0004ff72 */	if (Item === NULL)
+/* 0004ff8a */	{
+/* 0004ff8a */		return;
+/* 0004ff8c */	}
+/* 0004ff8c */	array@string List;
+/* 0004ff96 */	Item.GetComboBoxItemList(List);
+/* 0004ffb0 */	if (Item.GetLabel() == "種類")
+/* 0004ffce */	{
+/* 0004ffce */		this.m_Font.SetType(PARTS_GetFontNumber(List[Index]));
+/* 0004fffa */	}
+/* 0004fffa */}
+

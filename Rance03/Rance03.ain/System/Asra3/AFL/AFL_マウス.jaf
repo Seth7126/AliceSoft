@@ -1,0 +1,80 @@
+bool AFL_Mouse_GetPos(ref int X, ref int Y)
+/* 00169ab8 */{
+/* 00169ab8 */	return IbisInputEngine.Mouse_GetPos(X, Y);
+/* 00169ad8 */}
+
+void AFL_MouseWheel_ClearCount()
+/* 00169aec */{
+/* 00169aec */	IbisInputEngine.MouseWheel_ClearCount();
+/* 00169af6 */}
+
+void AFL_MouseWheel_GetCount(ref int Forward, ref int Back)
+/* 00169b04 */{
+/* 00169b04 */	IbisInputEngine.MouseWheel_GetCount(Forward, Back);
+/* 00169b22 */}
+
+void AFL_Mouse_SetShow(bool Show)
+/* 00169b30 */{
+/* 00169b30 */	IbisInputEngine.Mouse_HideCursorByGame(!Show);
+/* 00169b4a */}
+
+bool AFL_Mouse_IsShow()
+/* 00169b58 */{
+/* 00169b58 */	return !IbisInputEngine.Mouse_IsHideCursorByGame();
+/* 00169b68 */}
+
+void AFL_Mouse_MovePos(int DestX, int DestY, DG_MoveCursor_UpdateView Event)
+/* 00169b7c */{
+/* 00169b7c */	DestX = Math.Min(Math.Max(DestX, 0), AFL_View_GetWidth());
+/* 00169bb2 */	DestY = Math.Min(Math.Max(DestY, 0), AFL_View_GetHeight());
+/* 00169be8 */	if (g_MoveMouseCursorSpeedID == 0)
+/* 00169c00 */	{
+/* 00169c00 */		return;
+/* 00169c02 */	}
+/* 00169c02 */	int MouseX;
+/* 00169c14 */	int MouseY;
+/* 00169c26 */	if (!AFL_Mouse_GetPos(MouseX, MouseY))
+/* 00169c44 */	{
+/* 00169c44 */		return;
+/* 00169c46 */	}
+/* 00169c46 */	float Width = DestX - MouseX;
+/* 00169c6a */	float Height = DestY - MouseY;
+/* 00169c8e */	float Length = Math.Sqrt(Width * Width + Height * Height);
+/* 00169cd2 */	float Theta = Math.Atan2(Height, Width) * 57.295776;
+/* 00169d04 */	float Speed = -1.0;
+/* 00169d16 */	switch (g_MoveMouseCursorSpeedID)
+/* 00169d2c */	{
+/* 00169d2c */	case 1:
+/* 00169d2c */		Speed = 2.0;
+/* 00169d3e */		break;
+/* 00169d44 */	case 2:
+/* 00169d44 */		Speed = 5.0;
+/* 00169d56 */		break;
+/* 00169d5c */	case 3:
+/* 00169d5c */		Speed = 8.0;
+/* 00169d6e */		break;
+/* 00169d74 */	case 4:
+/* 00169d74 */		Speed = 0.0;
+/* 00169d86 */		break;
+/* 00169d8c */	}
+/* 00169d8c */	float EndTime = Length / Speed;
+/* 00169dae */	CASTimer Timer;
+/* 00169dbe */	Timer.Reset();
+/* 00169dce */	for (; ; )
+/* 00169dce */	{
+/* 00169dce */		float Time = Timer.Get();
+/* 00169dec */		if (EndTime <= Time)
+/* 00169e08 */		{
+/* 00169e08 */			break;
+/* 00169e0e */		}
+/* 00169e0e */		float MoveRate = Time / EndTime;
+/* 00169e30 */		float LengthByTime = Length * MoveRate;
+/* 00169e52 */		float PosXByTime = Math.Cos(Theta) * LengthByTime;
+/* 00169e7e */		float PosYByTime = Math.Sin(Theta) * LengthByTime;
+/* 00169eaa */		IbisInputEngine.Mouse_MovePosImmediately(MouseX + PosXByTime, MouseY + PosYByTime);
+/* 00169ef2 */		Event();
+/* 00169f12 */		AFL_View_Update(true);
+/* 00169f1e */	}
+/* 00169f24 */	IbisInputEngine.Mouse_MovePosImmediately(DestX, DestY);
+/* 00169f44 */}
+

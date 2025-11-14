@@ -1,0 +1,238 @@
+DungeonLineView::DungeonLineView()
+/* 0018d484 */{
+/* 0018d48c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018d4b2 */}
+
+void DungeonLineView::init(ref DungeonLine dungeonLine, float playerXPos, float viewLocalY, int r, int g, int b)
+/* 0018d4ba */{
+/* 0018d4ba */	this.r_ = r;
+/* 0018d4d0 */	this.g_ = g;
+/* 0018d4e6 */	this.b_ = b;
+/* 0018d4fc */	this.dungeonLine_ <- dungeonLine;
+/* 0018d51c */	this.playerPosX_ = playerXPos;
+/* 0018d532 */	this.viewlocalY_ = viewLocalY;
+/* 0018d548 */	this.initCardView();
+/* 0018d550 */}
+
+void DungeonLineView::update()
+/* 0018d558 */{
+/* 0018d558 */	if (this.state_ == 1)
+/* 0018d570 */	{
+/* 0018d570 */		float t = this.timerMoveForward_.getTime();
+/* 0018d58e */		this.viewlocalY_ = this.moveFromY_ - getMotionValue(7, 0.0, 1.0, t / 220.0);
+/* 0018d5d0 */	}
+/* 0018d5d6 */	else if (this.state_ == 2)
+/* 0018d5ee */	{
+/* 0018d5ee */		float t = this.timerMoveSideways_.getTime();
+/* 0018d60c */		this.playerPosX_ = this.moveFromX_ + getMotionValue(7, 0.0, this.moveDirection_, t / 300.0);
+/* 0018d652 */	}
+/* 0018d652 */	this.setCardCameraPos();
+/* 0018d65a */	this.setCardViewPos();
+/* 0018d662 */}
+
+void DungeonLineView::moveForward(DG_GeneralCallback onFinishCallback)
+/* 0018d66a */{
+/* 0018d66a */	if (this.state_ != 0)
+/* 0018d682 */	{
+/* 0018d682 */		return;
+/* 0018d684 */	}
+/* 0018d684 */	this.onFinishMoveForwardCallback_ = onFinishCallback;
+/* 0018d69e */	this.moveFromY_ = this.viewlocalY_;
+/* 0018d6b4 */	this.timerMoveForward_.setTimer(220, this.onFinishMoveForward);
+/* 0018d6d4 */	this.state_ = 1;
+/* 0018d6e6 */}
+
+void DungeonLineView::moveSideways(int playerXPos, DG_GeneralCallback onFinishMoveSidewaysCallback)
+/* 0018d6ee */{
+/* 0018d6ee */	if (this.state_ != 0)
+/* 0018d706 */	{
+/* 0018d706 */		return;
+/* 0018d708 */	}
+/* 0018d708 */	this.onFinishMoveSidewaysCallback_ = onFinishMoveSidewaysCallback;
+/* 0018d722 */	this.moveFromX_ = this.playerPosX_;
+/* 0018d738 */	this.moveDirection_ = playerXPos - this.playerPosX_;
+/* 0018d760 */	this.timerMoveSideways_.setTimer(300, this.onFinishMoveSideways);
+/* 0018d780 */	if (this.viewlocalY_ == 0.0)
+/* 0018d798 */	{
+/* 0018d798 */		this.purgeAnotherCard(playerXPos);
+/* 0018d7aa */	}
+/* 0018d7aa */	this.state_ = 2;
+/* 0018d7bc */}
+
+void DungeonLineView::openCard(int playerXPos, DG_GeneralCallback onFinishOpenCardCallback)
+/* 0018d7c4 */{
+/* 0018d7c4 */	int index = playerXPos + this.cardView_.Numof() / 2;
+/* 0018d7f4 */	ref DungeonCard c = this.dungeonLine_.getDungeonCard(index);
+/* 0018d844 */	if (!c.isOpen())
+/* 0018d85c */	{
+/* 0018d85c */		this.onFinishCardOpenCallback_ = onFinishOpenCardCallback;
+/* 0018d876 */		this.innerOpenCard(playerXPos);
+/* 0018d888 */	}
+/* 0018d88e */	else
+/* 0018d88e */	{
+/* 0018d88e */		CardInfomation info;
+/* 0018d89e */		info = getCardInfomationFromId(c.getCardTypeId());
+/* 0018d8e4 */		if (info.getEventCallback() != "")
+/* 0018d902 */		{
+/* 0018d902 */			this.timerOpenCard_.setTimer(100, onFinishOpenCardCallback);
+/* 0018d924 */		}
+/* 0018d92a */		else
+/* 0018d92a */		{
+/* 0018d92a */			onFinishOpenCardCallback();
+/* 0018d94a */		}
+/* 0018d94a */	}
+/* 0018d94a */}
+
+void DungeonLineView::innerOpenCard(int xPos)
+/* 0018d95e */{
+/* 0018d95e */	int index = xPos + this.cardView_.Numof() / 2;
+/* 0018d98e */	ref DungeonCard c = this.dungeonLine_.getDungeonCard(index);
+/* 0018d9de */	c.openCard();
+/* 0018d9ee */}
+
+void DungeonLineView::purgeAnotherCard(int xPos)
+/* 0018d9f6 */{
+/* 0018d9f6 */	int index = xPos + this.cardView_.Numof() / 2;
+/* 0018da26 */	int i;
+/* 0018da38 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018da88 */	{
+/* 0018da88 */		if (i != index)
+/* 0018daa4 */		{
+/* 0018daa4 */			this.cardView_[i].purge();
+/* 0018dac0 */		}
+/* 0018dac0 */	}
+/* 0018dac6 */}
+
+void DungeonLineView::setOnClickCallback(DG_OnLineCardClickCallback onClickCallback)
+/* 0018dace */{
+/* 0018dace */	this.onClickCallback_ = onClickCallback;
+/* 0018dae8 */}
+
+void DungeonLineView::initCardView()
+/* 0018daf0 */{
+/* 0018daf0 */	this.cardView_.Alloc(this.dungeonLine_.getWidth());
+/* 0018db10 */	int i;
+/* 0018db22 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018db72 */	{
+/* 0018db72 */		ref DungeonCard c = this.dungeonLine_.getDungeonCard(i);
+/* 0018dbc2 */		this.cardView_[i].init(c, this.onCardClick, i, this.r_, this.g_, this.b_);
+/* 0018dc1a */		this.cardView_[i].setFinishCardOpenCallback(this.onFinishCardOpen);
+/* 0018dc40 */	}
+/* 0018dc52 */	this.setCardCameraPos();
+/* 0018dc5a */}
+
+void DungeonLineView::setCardViewPos()
+/* 0018dc62 */{
+/* 0018dc62 */	int i;
+/* 0018dc74 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018dcc4 */	{
+/* 0018dcc4 */		this.cardView_[i].setLocalPos(i - this.cardView_.Numof() / 2, this.viewlocalY_);
+/* 0018dd10 */	}
+/* 0018dd16 */}
+
+void DungeonLineView::setCardCameraPos()
+/* 0018dd1e */{
+/* 0018dd1e */	int i;
+/* 0018dd30 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018dd80 */	{
+/* 0018dd80 */		this.cardView_[i].setCameraPos(this.playerPosX_);
+/* 0018dda6 */	}
+/* 0018ddac */}
+
+void DungeonLineView::onFinishMoveForward()
+/* 0018ddb4 */{
+/* 0018ddb4 */	this.state_ = 0;
+/* 0018ddc6 */	this.viewlocalY_ = this.moveFromY_ - 1.0;
+/* 0018dde4 */	this.setSelectable();
+/* 0018ddec */	this.onFinishMoveForwardCallback_();
+/* 0018de0c */	this.onFinishMoveForwardCallback_.Clear();
+/* 0018de18 */}
+
+void DungeonLineView::setSelectable()
+/* 0018de20 */{
+/* 0018de20 */	if (this.viewlocalY_ != 0.0)
+/* 0018de38 */	{
+/* 0018de38 */		return;
+/* 0018de3a */	}
+/* 0018de3a */	int p = this.playerPosX_ + this.cardView_.Numof() / 2;
+/* 0018de6e */	int i;
+/* 0018de80 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018ded0 */	{
+/* 0018ded0 */		this.cardView_[i].setEnable(p - 1 <= i && i <= p + 1);
+/* 0018df48 */	}
+/* 0018df4e */}
+
+void DungeonLineView::onFinishMoveSideways()
+/* 0018df56 */{
+/* 0018df56 */	this.state_ = 0;
+/* 0018df68 */	this.playerPosX_ = this.moveFromX_ + this.moveDirection_;
+/* 0018df8a */	this.onFinishMoveSidewaysCallback_();
+/* 0018dfaa */	this.onFinishMoveSidewaysCallback_.Clear();
+/* 0018dfb6 */}
+
+void DungeonLineView::onFinishCardOpen()
+/* 0018dfbe */{
+/* 0018dfbe */	this.onFinishCardOpenCallback_();
+/* 0018dfde */}
+
+void DungeonLineView::onCardClick(int index)
+/* 0018dfe6 */{
+/* 0018dfe6 */	if (g_playerCommonParam.getBadConditionTurn("内股") != 0)
+/* 0018e00a */	{
+/* 0018e00a */		if (RAND(3) != 1)
+/* 0018e024 */		{
+/* 0018e024 */			array@int n;
+/* 0018e02e */			string s;
+/* 0018e042 */			int i;
+/* 0018e054 */			for (i = 0; i < 3; ++i)
+/* 0018e09a */			{
+/* 0018e09a */				int target = (this.playerPosX_ - 1.0) + i;
+/* 0018e0c8 */				int cvIndex = target + this.cardView_.Numof() / 2;
+/* 0018e0f8 */				if (0 <= cvIndex && cvIndex < this.cardView_.Numof())
+/* 0018e14a */				{
+/* 0018e14a */					if (this.cardView_[cvIndex].isClickable())
+/* 0018e16c */					{
+/* 0018e16c */						n.PushBack(cvIndex);
+/* 0018e180 */					}
+/* 0018e180 */				}
+/* 0018e180 */			}
+/* 0018e186 */			index = n[RAND(n.Numof()) - 1];
+/* 0018e1c6 */		}
+/* 0018e1c6 */	}
+/* 0018e1c6 */	this.disableCard();
+/* 0018e1ce */	this.onClickCallback_(this.cardView_[index].getDungeonCard(), index - this.cardView_.Numof() / 2, this.dungeonLine_.getDepthPos());
+/* 0018e258 */}
+
+void DungeonLineView::disableCard()
+/* 0018e260 */{
+/* 0018e260 */	int i;
+/* 0018e272 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018e2c2 */	{
+/* 0018e2c2 */		this.cardView_[i].setEnable(false);
+/* 0018e2e4 */	}
+/* 0018e2ea */}
+
+void DungeonLineView::fadeIn(bool val, DG_GeneralCallback callback)
+/* 0018e2f2 */{
+/* 0018e2f2 */	this.onFinishFadeInCallback_ = callback;
+/* 0018e30c */	if (val)
+/* 0018e31c */	{
+/* 0018e31c */		this.setCardViewPos();
+/* 0018e324 */	}
+/* 0018e324 */	int i;
+/* 0018e336 */	for (i = 0; i < this.cardView_.Numof(); ++i)
+/* 0018e386 */	{
+/* 0018e386 */		this.cardView_[i].fadeIn(val, this.onCardViewFadeInFinish);
+/* 0018e3b6 */	}
+/* 0018e3bc */}
+
+void DungeonLineView::onCardViewFadeInFinish()
+/* 0018e3c4 */{
+/* 0018e3c4 */	++this.fadeFinishCount_;
+/* 0018e3d4 */	if (this.fadeFinishCount_ == this.cardView_.Numof())
+/* 0018e3f6 */	{
+/* 0018e3f6 */		this.onFinishFadeInCallback_();
+/* 0018e416 */		this.fadeFinishCount_ = 0;
+/* 0018e428 */	}
+/* 0018e428 */}
+

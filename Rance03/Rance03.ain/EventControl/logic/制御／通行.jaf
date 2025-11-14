@@ -1,0 +1,138 @@
+bool 制御／通行確認／リスの洞窟の鍵()
+/* 0022b4fa */{
+/* 0022b4fa */	if (g_playerCommonParam.getItemCount("リスの洞窟の鍵") > 0)
+/* 0022b51e */	{
+/* 0022b51e */		return true;
+/* 0022b526 */	}
+/* 0022b526 */	return false;
+/* 0022b52e */}
+
+bool 制御／通行確認／汎用扉()
+/* 0022b542 */{
+/* 0022b542 */	if (g_playerCommonParam.getItemCount("スカウトキー") > 0)
+/* 0022b566 */	{
+/* 0022b566 */		return true;
+/* 0022b56e */	}
+/* 0022b56e */	return false;
+/* 0022b576 */}
+
+bool 制御／通行確認／防犯扉()
+/* 0022b58a */{
+/* 0022b58a */	if (g_playerCommonParam.getItemCount("ピッキングドリル") > 0)
+/* 0022b5ae */	{
+/* 0022b5ae */		return true;
+/* 0022b5b6 */	}
+/* 0022b5b6 */	return false;
+/* 0022b5be */}
+
+bool 制御／通行確認／カッパーマトック()
+/* 0022b5d2 */{
+/* 0022b5d2 */	if (g_playerCommonParam.getItemCount("カッパーマトック") > 0)
+/* 0022b5f6 */	{
+/* 0022b5f6 */		return true;
+/* 0022b5fe */	}
+/* 0022b5fe */	return false;
+/* 0022b606 */}
+
+bool 制御／通行確認／シルバーマトック()
+/* 0022b61a */{
+/* 0022b61a */	if (g_playerCommonParam.getItemCount("シルバーマトック") > 0)
+/* 0022b63e */	{
+/* 0022b63e */		return true;
+/* 0022b646 */	}
+/* 0022b646 */	return false;
+/* 0022b64e */}
+
+bool 制御／通行確認／ミラクルミ()
+/* 0022b662 */{
+/* 0022b662 */	if (g_playerCommonParam.getItemCount("ミラクルミ") > 0)
+/* 0022b686 */	{
+/* 0022b686 */		return true;
+/* 0022b68e */	}
+/* 0022b68e */	return false;
+/* 0022b696 */}
+
+bool 制御／通行確認／丸山ワクチン()
+/* 0022b6aa */{
+/* 0022b6aa */	if (g_playerCommonParam.getItemCount("丸山ワクチン") > 0)
+/* 0022b6ce */	{
+/* 0022b6ce */		return true;
+/* 0022b6d6 */	}
+/* 0022b6d6 */	return false;
+/* 0022b6de */}
+
+bool 制御／通行確認／下水道管理者証()
+/* 0022b6f2 */{
+/* 0022b6f2 */	if (g_playerCommonParam.getItemCount("下水道管理者証") > 0)
+/* 0022b716 */	{
+/* 0022b716 */		return true;
+/* 0022b71e */	}
+/* 0022b71e */	return false;
+/* 0022b726 */}
+
+bool 制御／通行確認／食品衛生管理者証()
+/* 0022b73a */{
+/* 0022b73a */	if (g_playerCommonParam.getItemCount("食品衛生管理者証") > 0)
+/* 0022b75e */	{
+/* 0022b75e */		return true;
+/* 0022b766 */	}
+/* 0022b766 */	return false;
+/* 0022b76e */}
+
+bool 制御／通行確認／夏への鍵()
+/* 0022b782 */{
+/* 0022b782 */	if (g_playerCommonParam.getItemCount("夏への鍵") > 0)
+/* 0022b7a6 */	{
+/* 0022b7a6 */		return true;
+/* 0022b7ae */	}
+/* 0022b7ae */	return false;
+/* 0022b7b6 */}
+
+bool 制御／通行確認／最後だけの鍵()
+/* 0022b7ca */{
+/* 0022b7ca */	if (g_playerCommonParam.getItemCount("最後だけの鍵") > 0)
+/* 0022b7ee */	{
+/* 0022b7ee */		return true;
+/* 0022b7f6 */	}
+/* 0022b7f6 */	return false;
+/* 0022b7fe */}
+
+bool 制御／通行確認／コンビーフの鍵()
+/* 0022b812 */{
+/* 0022b812 */	if (g_playerCommonParam.getItemCount("コンビーフの鍵") > 0)
+/* 0022b836 */	{
+/* 0022b836 */		return true;
+/* 0022b83e */	}
+/* 0022b83e */	return false;
+/* 0022b846 */}
+
+void 制御／通行／リスの洞窟の鍵()
+/* 0022b85a */{
+/* 0022b85a */	制御／アイテム削除("リスの洞窟の鍵", 1, true);
+/* 0022b872 */}
+
+void 制御／通行／汎用扉()
+/* 0022b880 */{
+/* 0022b880 */	制御／アイテム削除("スカウトキー", 1, true);
+/* 0022b898 */}
+
+void 制御／通行／防犯扉()
+/* 0022b8a6 */{
+/* 0022b8a6 */	制御／アイテム削除("ピッキングドリル", 1, true);
+/* 0022b8be */}
+
+void 制御／通行／カッパーマトック()
+/* 0022b8cc */{
+/* 0022b8cc */	制御／アイテム削除("カッパーマトック", 1, true);
+/* 0022b8e4 */}
+
+void 制御／通行／シルバーマトック()
+/* 0022b8f2 */{
+/* 0022b8f2 */	制御／アイテム削除("シルバーマトック", 1, true);
+/* 0022b90a */}
+
+void 制御／通行／コンビーフの鍵()
+/* 0022b918 */{
+/* 0022b918 */	制御／アイテム削除("コンビーフの鍵", 1, true);
+/* 0022b930 */}
+

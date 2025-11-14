@@ -1,0 +1,95 @@
+void MapMoveInfo::init(array@string route)
+/* 00187d90 */{
+/* 00187d90 */	this.reset();
+/* 00187d98 */	if (route.Numof() <= 1)
+/* 00187db6 */	{
+/* 00187db6 */		return;
+/* 00187db8 */	}
+/* 00187db8 */	ref MapPlace start = getMapPlaceFromId(route[0]);
+/* 00187e02 */	this.x_.PushBack(start.getX());
+/* 00187e1c */	this.y_.PushBack(start.getY());
+/* 00187e36 */	this.isEncount_.PushBack(false);
+/* 00187e46 */	int i;
+/* 00187e58 */	for (i = 1; i < route.Numof(); ++i)
+/* 00187ea8 */	{
+/* 00187ea8 */		ref MapPlace place = getMapPlaceFromId(route[i]);
+/* 00187ef6 */		this.x_.PushBack(place.getX());
+/* 00187f10 */		this.y_.PushBack(place.getY());
+/* 00187f2a */		this.isEncount_.PushBack(false);
+/* 00187f3a */	}
+/* 00187f4c */}
+
+bool MapMoveInfo::getNextNode(ref int fromX, ref int fromY, ref int toX, ref int toY, ref bool encount)
+/* 00187f54 */{
+/* 00187f54 */	if (0 <= this.currentIndex_ && this.currentIndex_ < this.getNodeCount())
+/* 00187f9e */	{
+/* 00187f9e */		this.getPos(this.currentIndex_, fromX, fromY, toX, toY);
+/* 00187fd8 */		encount = this.isEncount(this.currentIndex_);
+/* 00187ff8 */		++this.currentIndex_;
+/* 00188008 */		return true;
+/* 00188010 */	}
+/* 00188010 */	return false;
+/* 00188018 */}
+
+void MapMoveInfo::reset()
+/* 00188026 */{
+/* 00188026 */	this.x_.Free();
+/* 00188030 */	this.y_.Free();
+/* 0018803a */	this.isEncount_.Free();
+/* 00188044 */	this.currentIndex_ = 0;
+/* 00188056 */}
+
+int MapMoveInfo::getNodeCount()
+/* 0018805e */{
+/* 0018805e */	return this.x_.Numof() - 1;
+/* 00188078 */}
+
+void MapMoveInfo::addEncountPoint()
+/* 00188086 */{
+/* 00188086 */	int r = RAND(this.x_.Numof() - 1) - 1;
+/* 001880b8 */	int sx = this.x_[r];
+/* 001880da */	int sy = this.y_[r];
+/* 001880fc */	int ex = this.x_[r + 1];
+/* 00188126 */	int ey = this.y_[r + 1];
+/* 00188150 */	float n = RAND(100) / 100.0;
+/* 00188172 */	int newX = sx * n + ex * (1.0 - n);
+/* 001881c2 */	int newY = sy * n + ey * (1.0 - n);
+/* 00188212 */	this.x_.Insert(r + 1, newX);
+/* 00188238 */	this.y_.Insert(r + 1, newY);
+/* 0018825e */	this.isEncount_.Insert(r + 1, true);
+/* 00188280 */}
+
+bool MapMoveInfo::isEncount(int nodeIndex)
+/* 00188288 */{
+/* 00188288 */	if (0 <= nodeIndex && nodeIndex < this.x_.Numof() - 1)
+/* 001882e2 */	{
+/* 001882e2 */		return this.isEncount_[nodeIndex + 1];
+/* 00188302 */	}
+/* 00188302 */	return false;
+/* 0018830a */}
+
+void MapMoveInfo::getPos(int nodeIndex, ref int fromX, ref int fromY, ref int toX, ref int toY)
+/* 00188318 */{
+/* 00188318 */	if (0 <= nodeIndex && nodeIndex < this.x_.Numof() - 1)
+/* 00188372 */	{
+/* 00188372 */		fromX = this.x_[nodeIndex];
+/* 00188396 */		fromY = this.y_[nodeIndex];
+/* 001883ba */		toX = this.x_[nodeIndex + 1];
+/* 001883e6 */		toY = this.y_[nodeIndex + 1];
+/* 00188412 */	}
+/* 00188412 */}
+
+int MapMoveInfo::getDistance(int nodeIndex)
+/* 0018841a */{
+/* 0018841a */	int fx;
+/* 0018842c */	int fy;
+/* 0018843e */	int tx;
+/* 00188450 */	int ty;
+/* 00188462 */	int dx;
+/* 00188474 */	int dy;
+/* 00188486 */	this.getPos(nodeIndex, fx, fy, tx, ty);
+/* 001884b8 */	dx = tx - fx;
+/* 001884da */	dy = ty - fy;
+/* 001884fc */	return Math.Sqrt(dx * dx + dy * dy);
+/* 0018853a */}
+

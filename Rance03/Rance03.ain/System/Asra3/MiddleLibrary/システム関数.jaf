@@ -1,0 +1,350 @@
+int main()
+/* 00143ac4 */{
+/* 00143ac4 */	SYS_Init();
+/* 00143aca */label0:
+/* 00143aca */	string Text;
+/* 00143ade */	SystemService.GetGameTitle(Text);
+/* 00143af2 */	if (Text.GetPart(7, 1).Int() != Text.GetPart(31, 1).Int())
+/* 00143b2e */	{
+/* 00143b2e */		goto label0;
+/* 00143b34 */	}
+/* 00143b34 */	if (Text.GetPart(4, 7) + Text.GetPart(14, 5) + Text.GetPart(32, 3) != "oi@64sd54di8zd5")
+/* 00143b8e */	{
+/* 00143b8e */		goto label0;
+/* 00143b94 */	}
+/* 00143b94 */	if (Text.GetPart(13, 1).Int() * Text.GetPart(19, 1).Int() != 21)
+/* 00143bd8 */	{
+/* 00143bd8 */		goto label0;
+/* 00143bde */	}
+/* 00143bde */	if (SYS_IsSystemSuspended())
+/* 00143bea */	{
+/* 00143bea */		SYS_SystemResume();
+/* 00143bf0 */	}
+/* 00143bf0 */	ChipmunkSpriteEngine.VIEW_SetMode(1);
+/* 00143c02 */	game_main();
+/* 00143c08 */	for (; ; )
+/* 00143c08 */	{
+/* 00143c08 */		system.Peek();
+/* 00143c0e */		system.Sleep(1);
+/* 00143c1a */	}
+/* 00143c20 */	return 0;
+/* 00143c28 */}
+
+void SYS_Init()
+/* 00143c3c */{
+/* 00143c3c */	PARTS_Init();
+/* 00143c42 */	CommonSystemData.SetFullPathSaveFileName(system.GetSaveFolderName() + "\\CommonSystemData.sav");
+/* 00143c5a */	if (!CommonSystemData.LoadAtStartup())
+/* 00143c6c */	{
+/* 00143c6c */		system.Output("CommonSystemDataセーブファイルの読み込みに失敗しました\n");
+/* 00143c7a */	}
+/* 00143c7a */	SYS_InitSound();
+/* 00143c80 */	_g_AutoModeCGList.Init();
+/* 00143c90 */	_g_MsgSkipModeCGList.Init();
+/* 00143ca0 */	g_MessageWindowModelManager.Init();
+/* 00143cb2 */	SYS_InitMenu();
+/* 00143cb8 */	SYS_InitInputText();
+/* 00143cbe */	字初期化();
+/* 00143cc4 */	_全表示効果番号 = 1;
+/* 00143cd6 */	_全表示効果時間 = 200;
+/* 00143ce8 */	SYS_InitMessageWindow();
+/* 00143cee */	g_fMessageSpeedRate = 0.5;
+/* 00143d00 */	g_fAutoModeWaitTimeRate = 0.5;
+/* 00143d12 */	AFL_Config_SetMessageWindowAlphaRate(SYS_GetMessageWindowDefaultAlphaRate());
+/* 00143d1e */	AFL_Config_SetMessageWindowMulColorRate(SYS_GetMessageWindowDefaultMulColorRate());
+/* 00143d2a */	AFL_Config_ResetReadMessageSkipWaitTimeRate();
+/* 00143d30 */	SYS_Init_JoystickButtonAssignment();
+/* 00143d36 */	g_InputJoypadCallbackList.Alloc(50);
+/* 00143d4c */	string ＣＧモードファイル名 = EX_String("Ｅ＿セーブファイル名＿接頭語", "") + "AFCGMode.asd";
+/* 00143d74 */	string 回想モードファイル名 = EX_String("Ｅ＿セーブファイル名＿接頭語", "") + "AFMemMode.asd";
+/* 00143d9c */	string 音楽モードファイル名 = EX_String("Ｅ＿セーブファイル名＿接頭語", "") + "AFBGMMode.asd";
+/* 00143dc4 */	PassRegister.SetFileName(0, ＣＧモードファイル名);
+/* 00143de0 */	PassRegister.SetFileName(1, 回想モードファイル名);
+/* 00143dfc */	PassRegister.SetFileName(2, 音楽モードファイル名);
+/* 00143e18 */	SYS_セーブファイル削除(-2);
+/* 00143e24 */	SYS_セーブファイル削除(-3);
+/* 00143e30 */	SYS_セーブファイル削除(-4);
+/* 00143e3c */	g_bCanReturnBackSelect = false;
+/* 00143e4e */	SYS_クイックセーブファイル存在フラグ更新();
+/* 00143e54 */	SYS_情報集計データロード();
+/* 00143e5c */	SYS_コンフィグロード();
+/* 00143e62 */	SYS_共有ロード();
+/* 00143e6a */	KiwiSoundEngine.SetGlobalFocus(g_ConfigSoundGlobalFocus);
+/* 00143e7e */	ChipmunkSpriteEngine.SYSTEM_SetConfigOverFrameRateSleep(g_bConfigOverFrameRateSleep);
+/* 00143e92 */	ChipmunkSpriteEngine.SYSTEM_SetConfigSleepByInactiveWindow(g_bSleepByInactiveWindow);
+/* 00143ea6 */	ChipmunkSpriteEngine.SYSTEM_SetConfigFrameSkipWhileMessageSkip(SYS_IsFrameSkipMode());
+/* 00143eb6 */	CrayfishLogViewer.SetSaveFolderName(system.GetSaveFolderName());
+/* 00143ec6 */	g_DebugVoicePlaying.SetText("音声再生中", CF_CASColor(255, 0, 0, 255));
+/* 00143efa */	g_DebugGimicSEPlaying.SetText("擬音再生中", CF_CASColor(0, 255, 0, 255));
+/* 00143f2e */	g_DebugBackVoicePlaying.SetText("背景音声再生中", CF_CASColor(0, 0, 255, 255));
+/* 00143f62 */	AFL_PlayTime_SetMinuteTime(0);
+/* 00143f6e */	SYS_PlayTime_Reset();
+/* 00143f74 */	PARTS_NotifyChangedActiveLayerEvent();
+/* 00143f7a */	AFL_Parts_AddErasingLayerEvent("SYS_ErasingLayerEvent");
+/* 00143f98 */}
+
+void SYS_ErasingLayerEvent(int ID)
+/* 00143fa6 */{
+/* 00143fa6 */	int Index = AFL_Parts_GetLayerIndex(ID);
+/* 00143fc2 */	int LayerID = AFL_Parts_GetLayerID(Index - 1);
+/* 00143fe6 */	AFL_UpdateMessageWindowLayer(LayerID);
+/* 00143ff6 */}
+
+void SYS_ERROR(string tx, int nest)
+/* 00144004 */{
+/* 00144004 */	array@string f[2];
+/* 0014401a */	int i;
+/* 0014402c */	for (i = 0; i < f.Numof(); ++i)
+/* 0014407c */	{
+/* 0014407c */		f[i] = system.GetFuncStackName(i + 1 + nest);
+/* 001440ba */		int j = f[i].Find("@");
+/* 001440e4 */		if (j != -1)
+/* 001440fc */		{
+/* 001440fc */			f[i] = f[i].GetPart(0, j) + "::" + f[i].GetPart(j + 1, f[i].Length() - 1);
+/* 00144190 */		}
+/* 00144190 */	}
+/* 00144196 */	system.Output("警告 %s ＠ %s ＠ %s\n" % tx % f[0] % f[1]);
+/* 001441ea */}
+
+void SYS_WARNING(string Text)
+/* 001441f8 */{
+/* 001441f8 */	system.Output("【警告】" + Text + "\n");
+/* 0014421a */}
+
+void SYS_RunCommandMouseWheelForward()
+/* 00144228 */{
+/* 00144228 */	switch (g_nKeyConfigMouseWheelForward)
+/* 0014423e */	{
+/* 0014423e */	case 0:
+/* 0014423e */		Ｓ＿バックログ();
+/* 00144244 */		break;
+/* 0014424a */	case 1:
+/* 0014424a */		Ｓ＿バックシーン();
+/* 00144250 */		break;
+/* 00144256 */	}
+/* 00144256 */}
+
+void SYS_RestrainScreensaverWhileAutoMode()
+/* 00144264 */{
+/* 00144264 */	if (!g_bRestrainScreensaverWhileAutoMode)
+/* 00144276 */	{
+/* 00144276 */		return;
+/* 00144278 */	}
+/* 00144278 */	SystemService.RestrainScreensaver();
+/* 00144282 */}
+
+void SYS_SaveBackSceneData(ref ADVSceneData Data)
+/* 00144290 */{
+/* 00144290 */	SYS_SaveAdvSoundData(Data.m_SoundData);
+/* 001442a8 */	Data.m_最終音声名 = _g_最終音声名;
+/* 001442c8 */	SYS_SaveAdvMessageWindowData(Data.m_MessageWindowData);
+/* 001442e0 */	if (!PARTS_SaveBackScene(Data.m_PartsEngineData))
+/* 00144300 */	{
+/* 00144300 */		system.Error("画面保管においてパーツライブラリの保存に失敗しました");
+/* 0014430e */	}
+/* 0014430e */}
+
+void SYS_SaveAdvSoundData(ref ADVSoundData Data)
+/* 0014431c */{
+/* 0014431c */	Data.m_BGM.m_Name = g_BGM.GetSoundNameStable();
+/* 0014434a */	Data.m_BGM.m_Pause = g_BGM.IsPause();
+/* 00144376 */	Data.m_BGM.m_Volume = g_BGM.GetVolumeStable();
+/* 001443a2 */	Data.m_BGM.m_LoopCount = g_BGM.GetLoopCount();
+/* 001443ce */	Data.m_LoopSE.Alloc(3);
+/* 001443ec */	int i;
+/* 001443fe */	for (i = 0; i < 3; ++i)
+/* 00144444 */	{
+/* 00144444 */		Data.m_LoopSE[i].m_Name = g_LoopSE[i].GetSoundNameStable();
+/* 0014448a */		Data.m_LoopSE[i].m_Pause = g_LoopSE[i].IsPause();
+/* 001444ce */		Data.m_LoopSE[i].m_Volume = g_LoopSE[i].GetVolumeStable();
+/* 00144512 */		Data.m_LoopSE[i].m_LoopCount = g_LoopSE[i].GetLoopCount();
+/* 00144556 */	}
+/* 0014455c */	Data.m_サウンド再生リスト.Free();
+/* 0014456e */	Data.m_サウンド再生リスト.Alloc(g_サウンド再生リスト.Numof());
+/* 00144596 */	Data.m_サウンド再生リスト.Copy(0, g_サウンド再生リスト, 0, g_サウンド再生リスト.Numof());
+/* 001445d0 */}
+
+void SYS_SaveAdvMessageWindowData(ref ADVMessageWindowData Data)
+/* 001445de */{
+/* 001445de */	Data.m_ActiveMessageWindowNumber = g_MessageWindowStatusManager.GetActiveMessageWindowNumber();
+/* 00144602 */	Data.m_MessageTextModel = g_MessageTextModel;
+/* 0014462c */	g_MessageTextView.GetTextPartsNumberList(Data.m_MessageTextPartsNumberList);
+/* 0014464e */	g_MessageTextView.GetTextFontColorList(Data.m_MessageTextFontColorList);
+/* 00144670 */	g_MessageWindowManager.GetMessageWindowPartsNumberList(Data.m_MessageWindowPartsNumberList);
+/* 00144692 */}
+
+void SYS_LoadAdvSceneData(ref ADVSceneData Data)
+/* 001446a0 */{
+/* 001446a0 */	SYS_既読メッセージフラグクリア();
+/* 001446a6 */	SYS_LoadAdvSoundData(Data.m_SoundData);
+/* 001446be */	_g_最終音声名 = Data.m_最終音声名;
+/* 001446de */}
+
+void SYS_LoadAdvSoundData(ref ADVSoundData Data)
+/* 001446ec */{
+/* 001446ec */	g_BGM.PlayBGM(Data.m_BGM.m_Name, Data.m_BGM.m_LoopCount, 1, 100, Data.m_BGM.m_Volume);
+/* 00144756 */	if (Data.m_BGM.m_Pause)
+/* 00144776 */	{
+/* 00144776 */		Ａ＿音楽一時停止();
+/* 0014477c */	}
+/* 00144782 */	else if (Ａ＿音楽一時停止中確認())
+/* 0014478e */	{
+/* 0014478e */		Ａ＿音楽再開();
+/* 00144794 */	}
+/* 00144794 */	int i;
+/* 001447a6 */	for (i = 0; i < 3; ++i)
+/* 001447ec */	{
+/* 001447ec */		g_LoopSE[i].PlayBGM(Data.m_LoopSE[i].m_Name, Data.m_LoopSE[i].m_LoopCount, g_LoopSE[i].GetTransitionType(), g_LoopSE[i].GetTransitionTotalTime(), Data.m_LoopSE[i].m_Volume);
+/* 001448b2 */	}
+/* 001448b8 */	SYS_RePlayBackSE(Data.m_サウンド再生リスト);
+/* 001448d2 */}
+
+void SYS_デフォルトセーブコメント設定(string _t)
+/* 001448e0 */{
+/* 001448e0 */	if (_t.Empty())
+/* 001448f2 */	{
+/* 001448f2 */		return;
+/* 001448f4 */	}
+/* 001448f4 */	_g_デフォルトセーブコメント = _t;
+/* 0014490c */	_g_デフォルトセーブコメント要更新 = false;
+/* 0014491e */}
+
+bool SYS_デフォルトセーブコメント要更新()
+/* 0014492c */{
+/* 0014492c */	return _g_デフォルトセーブコメント要更新;
+/* 00144938 */}
+
+void SYS_デフォルトセーブコメント更新フラグセット()
+/* 0014494c */{
+/* 0014494c */	_g_デフォルトセーブコメント要更新 = true;
+/* 0014495e */}
+
+string SYS_デフォルトセーブコメント取得()
+/* 0014496c */{
+/* 0014496c */	return _g_デフォルトセーブコメント;
+/* 00144978 */}
+
+void SYS_SetEventName(string EventName)
+/* 0014498c */{
+/* 0014498c */	g_MessageTextModel.SetEventName(EventName);
+/* 001449a6 */}
+
+void SYS_SetEventInfoByADV(string FilePath, string FuncName)
+/* 001449b4 */{
+/* 001449b4 */	g_MessageTextModel.SetEventInfoByADV(FilePath, FuncName);
+/* 001449d8 */}
+
+CASCharSpriteProperty SYS_TransCharSpriteProperty(sact_text_metrics_t tm)
+/* 001449e6 */{
+/* 001449e6 */	CASCharSpriteProperty CharSpriteProperty;
+/* 001449f6 */	CharSpriteProperty.SetType(tm.nFace);
+/* 00144a18 */	CharSpriteProperty.SetSize(tm.nSize);
+/* 00144a3a */	CharSpriteProperty.SetColor(CF_CASColor(tm.nColorR, tm.nColorG, tm.nColorB, 255));
+/* 00144a8c */	CharSpriteProperty.SetBoldWeight(0.0);
+/* 00144aa2 */	CharSpriteProperty.SetEdgeWeight(Math.Max(0, Math.Max(Math.Max(tm.nShadowPixelL, tm.nShadowPixelR), Math.Max(tm.nShadowPixelU, tm.nShadowPixelD))));
+/* 00144b2a */	CharSpriteProperty.SetEdgeColor(CF_CASColor(tm.nShadowColorR, tm.nShadowColorG, tm.nShadowColorB, 255));
+/* 00144b7c */	return CharSpriteProperty;
+/* 00144b8c */}
+
+void SYS_PostCallUpdateView()
+/* 00144ba0 */{
+/* 00144ba0 */	g_PostCallUpdateViewFuncList();
+/* 00144bc0 */}
+
+void SYS_AddPostCallUpdateViewFuncList(FTPostCallUpdateView Func)
+/* 00144bce */{
+/* 00144bce */	g_PostCallUpdateViewFuncList += Func;
+/* 00144be8 */}
+
+void SYS_DeletePostCallUpdateViewFuncList(FTPostCallUpdateView Func)
+/* 00144bf6 */{
+/* 00144bf6 */	g_PostCallUpdateViewFuncList -= Func;
+/* 00144c10 */}
+
+void SYS_WaitToKeyUpFromMessageBox()
+/* 00144c1e */{
+/* 00144c1e */	for (; ; )
+/* 00144c1e */	{
+/* 00144c1e */		if (!AFL_IsKeyDown(13) && !AFL_IsKeyDown(27))
+/* 00144c5e */		{
+/* 00144c5e */			return;
+/* 00144c60 */		}
+/* 00144c60 */		AFL_View_Update(true);
+/* 00144c6c */	}
+/* 00144c6c */}
+
+void SYS_OpenConfig()
+/* 00144c80 */{
+/* 00144c80 */	AFL_Config_ResetSampleMessageTimer();
+/* 00144c86 */	if (!g_Config3DSetting.Load())
+/* 00144c9e */	{
+/* 00144c9e */		SYS_ERROR("３Ｄの設定読み込みに失敗しました", 0);
+/* 00144cb0 */		return;
+/* 00144cb2 */	}
+/* 00144cb2 */	g_ConfigView.Execute(EX_String("Ｅ＿コンフィグファイル名", ""));
+/* 00144cd4 */	if (!g_Config3DSetting.Save())
+/* 00144cec */	{
+/* 00144cec */		SYS_ERROR("３Ｄの設定保存に失敗しました", 0);
+/* 00144cfe */		return;
+/* 00144d00 */	}
+/* 00144d00 */}
+
+void SYS_ProcessSystemMessage()
+/* 00144d0e */{
+/* 00144d0e */	for (; ; )
+/* 00144d0e */	{
+/* 00144d0e */		if (!SystemService.IsExistSystemMessage())
+/* 00144d20 */		{
+/* 00144d20 */			return;
+/* 00144d22 */		}
+/* 00144d22 */		int MessageNumber;
+/* 00144d34 */		if (!SystemService.PopSystemMessage(MessageNumber))
+/* 00144d4e */		{
+/* 00144d4e */			system.Error("システムメッセージのポップに失敗しました");
+/* 00144d5c */			return;
+/* 00144d5e */		}
+/* 00144d5e */		switch (MessageNumber)
+/* 00144d74 */		{
+/* 00144d74 */		case 1:
+/* 00144d74 */			SYS_SystemSuspend();
+/* 00144d7a */			break;
+/* 00144d80 */		case 2:
+/* 00144d80 */			SYS_DeleteSuspendSaveFile();
+/* 00144d86 */			break;
+/* 00144d8c */		case 3:
+/* 00144d8c */			Ｓ＿コンフィグ();
+/* 00144d92 */			break;
+/* 00144d98 */		default:
+/* 00144d98 */			system.Error("未定義のシステムメッセージ【 %d 】をポップしました" % MessageNumber);
+/* 00144db8 */		}
+/* 00144db8 */	}
+/* 00144db8 */}
+
+bool SYS_IsSame_sys_btn_fnc_t(sys_btn_fnc_t ObjA, sys_btn_fnc_t ObjB)
+/* 00144dcc */{
+/* 00144dcc */	if (ObjA.Numof() == 0 && ObjB.Numof() == 0)
+/* 00144e18 */	{
+/* 00144e18 */		return true;
+/* 00144e20 */	}
+/* 00144e20 */	if (ObjA.Numof() != ObjB.Numof())
+/* 00144e40 */	{
+/* 00144e40 */		return false;
+/* 00144e48 */	}
+/* 00144e48 */	sys_btn_fnc_t TempObj = ObjA;
+/* 00144e68 */	TempObj += ObjB;
+/* 00144e82 */	return TempObj.Numof() == ObjA.Numof();
+/* 00144ea0 */}
+
+bool SYS_IsFrameSkipMode()
+/* 00144eb4 */{
+/* 00144eb4 */	if (AFL_Config_GetFrameSkipWhileMessageSkip())
+/* 00144ec0 */	{
+/* 00144ec0 */		return true;
+/* 00144ec8 */	}
+/* 00144ec8 */	if (!system.IsDebugMode())
+/* 00144ed6 */	{
+/* 00144ed6 */		return false;
+/* 00144ede */	}
+/* 00144ede */	return g_SkipKeyWait || g_FrameSkipAll;
+/* 00144f14 */}
+

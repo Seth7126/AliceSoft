@@ -1,0 +1,240 @@
+CAESelectTextDialog::CAESelectTextDialog()
+/* 0005a7e4 */{
+/* 0005a7ee */}
+
+CAESelectTextDialog::~CAESelectTextDialog()
+/* 0005a7f4 */{
+/* 0005a7f4 */	this.Release();
+/* 0005a7fc */}
+
+void CAESelectTextDialog::CreateParts(string Message, int PosX, int PosY, ref array@string List, string Name)
+/* 0005a804 */{
+/* 0005a804 */	this.CreateRootLayoutBox();
+/* 0005a80c */	this.CreateMessage(Message);
+/* 0005a81e */	this.CreateTextBoxLayoutBox();
+/* 0005a826 */	this.CreateTextBox(Name);
+/* 0005a838 */	this.CreateNoneButton();
+/* 0005a840 */	this.CreateListBox(List);
+/* 0005a852 */	this.CreateButtonLayout();
+/* 0005a85a */	this.CreateOkButton();
+/* 0005a862 */	this.CreateCancelButton();
+/* 0005a86a */	this.CreateBG(PosX, PosY);
+/* 0005a886 */	Ｐ＿フォーカス設定(this.m_TextBox);
+/* 0005a896 */}
+
+void CAESelectTextDialog::CreateRootLayoutBox()
+/* 0005a89e */{
+/* 0005a89e */	this.m_RootLayout = PARTS_GetFreeSystemPartsNumber();
+/* 0005a8b0 */	Ｐ＿レイアウトボックス＿パディング設定(this.m_RootLayout, 6, 6, 6, 6);
+/* 0005a8d8 */	Ｐ＿レイアウトボックス＿配置設定(this.m_RootLayout, 3);
+/* 0005a8ee */}
+
+void CAESelectTextDialog::CreateMessage(string Message)
+/* 0005a8f6 */{
+/* 0005a8f6 */	this.m_Message = PARTS_GetFreeSystemPartsNumber();
+/* 0005a908 */	Ｐ＿フォント設定(this.m_Message, 0, 14, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1);
+/* 0005a95a */	Ｐ＿テキスト設定(this.m_Message, Message, 1);
+/* 0005a97a */	Ｐ＿マージン設定(this.m_Message, 3, 3, 3, 3);
+/* 0005a9a2 */	Ｐ＿レイアウトボックス＿追加(this.m_RootLayout, this.m_Message);
+/* 0005a9bc */	AFL_Parts_AddMouseWheelEvent(this.m_Message, this.MouseWheelEvent);
+/* 0005a9d6 */}
+
+void CAESelectTextDialog::CreateTextBoxLayoutBox()
+/* 0005a9de */{
+/* 0005a9de */	this.m_TextBoxLayout = PARTS_GetFreeSystemPartsNumber();
+/* 0005a9f0 */	Ｐ＿レイアウトボックス＿追加(this.m_RootLayout, this.m_TextBoxLayout);
+/* 0005aa0a */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_TextBoxLayout, 2);
+/* 0005aa20 */}
+
+void CAESelectTextDialog::CreateTextBox(string Name)
+/* 0005aa28 */{
+/* 0005aa28 */	this.m_TextBox = PARTS_GetFreeSystemPartsNumber();
+/* 0005aa3a */	Ｐ＿テキストボックス＿テキスト設定(this.m_TextBox, Name);
+/* 0005aa54 */	Ｐ＿テキストボックス＿サイズ設定(this.m_TextBox, 334, 22);
+/* 0005aa70 */	Ｐ＿マージン設定(this.m_TextBox, 3, 3, 3, 3);
+/* 0005aa98 */	Ｐ＿レイアウトボックス＿追加(this.m_TextBoxLayout, this.m_TextBox);
+/* 0005aab2 */	AFL_Parts_AddMouseWheelEvent(this.m_TextBox, this.MouseWheelEvent);
+/* 0005aacc */	AFL_Parts_AddChangedEvent(this.m_TextBox, this.ChangeTextEvent);
+/* 0005aae6 */}
+
+void CAESelectTextDialog::CreateNoneButton()
+/* 0005aaee */{
+/* 0005aaee */	this.m_NoneButton = PARTS_GetFreeSystemPartsNumber();
+/* 0005ab00 */	Ｐ＿ボタン＿テキスト設定(this.m_NoneButton, "×");
+/* 0005ab16 */	Ｐ＿ボタン＿サイズ設定(this.m_NoneButton, 22, 22);
+/* 0005ab32 */	Ｐ＿マージン設定(this.m_NoneButton, 3, 3, 0, 0);
+/* 0005ab5a */	Ｐ＿レイアウトボックス＿追加(this.m_TextBoxLayout, this.m_NoneButton);
+/* 0005ab74 */	AFL_Parts_AddMouseLClickEvent(this.m_NoneButton, this.ClickNoneButtonEvent);
+/* 0005ab8e */	AFL_Parts_AddMouseWheelEvent(this.m_NoneButton, this.MouseWheelEvent);
+/* 0005aba8 */}
+
+void CAESelectTextDialog::CreateListBox(ref array@string List)
+/* 0005abb0 */{
+/* 0005abb0 */	this.m_ListBox = PARTS_GetFreeSystemPartsNumber();
+/* 0005abc2 */	Ｐ＿レイアウトボックス＿追加(this.m_RootLayout, this.m_ListBox);
+/* 0005abdc */	Ｐ＿リストボックス＿サイズ設定(this.m_ListBox, 356, 256);
+/* 0005abf8 */	Ｐ＿リストボックス＿行高さ設定(this.m_ListBox, 18);
+/* 0005ac0e */	Ｐ＿Ｚ座標設定(this.m_ListBox, 100);
+/* 0005ac24 */	int Index;
+/* 0005ac36 */	for (Index = 0; Index < List.Numof(); ++Index)
+/* 0005ac86 */	{
+/* 0005ac86 */		Ｐ＿リストボックス＿アイテム追加(this.m_ListBox, List[Index]);
+/* 0005acac */	}
+/* 0005acb2 */	AFL_Parts_AddSelectedEvent(this.m_ListBox, this.SelectedEvent);
+/* 0005accc */}
+
+void CAESelectTextDialog::CreateButtonLayout()
+/* 0005acd4 */{
+/* 0005acd4 */	this.m_ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 0005ace6 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_ButtonLayout, 2);
+/* 0005acfc */	Ｐ＿レイアウトボックス＿パディング設定(this.m_ButtonLayout, 3, 3, 3, 3);
+/* 0005ad24 */	Ｐ＿レイアウトボックス＿追加(this.m_RootLayout, this.m_ButtonLayout);
+/* 0005ad3e */}
+
+void CAESelectTextDialog::CreateOkButton()
+/* 0005ad46 */{
+/* 0005ad46 */	this.m_OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 0005ad58 */	Ｐ＿ボタン＿テキスト設定(this.m_OKButton, "決定");
+/* 0005ad6e */	Ｐ＿ボタン＿サイズ設定(this.m_OKButton, 65, 22);
+/* 0005ad8a */	Ｐ＿マージン設定(this.m_OKButton, 0, 0, 3, 0);
+/* 0005adb2 */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayout, this.m_OKButton);
+/* 0005adcc */	AFL_Parts_AddMouseLClickEvent(this.m_OKButton, this.ClickOKButtonEvent);
+/* 0005ade6 */}
+
+void CAESelectTextDialog::CreateCancelButton()
+/* 0005adee */{
+/* 0005adee */	this.m_CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 0005ae00 */	Ｐ＿ボタン＿テキスト設定(this.m_CancelButton, "キャンセル");
+/* 0005ae16 */	Ｐ＿ボタン＿サイズ設定(this.m_CancelButton, 100, 22);
+/* 0005ae32 */	Ｐ＿マージン設定(this.m_CancelButton, 0, 0, 3, 0);
+/* 0005ae5a */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayout, this.m_CancelButton);
+/* 0005ae74 */	AFL_Parts_AddMouseLClickEvent(this.m_CancelButton, this.ClickCancelButtonEvent);
+/* 0005ae8e */}
+
+void CAESelectTextDialog::CreateBG(int PosX, int PosY)
+/* 0005ae96 */{
+/* 0005ae96 */	int Width = AFL_Parts_GetWidth(this.m_RootLayout, 1);
+/* 0005aeb8 */	int Height = AFL_Parts_GetHeight(this.m_RootLayout, 1);
+/* 0005aeda */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0005aeec */	Ｐ＿構築手順＿ピクセル作成(this.m_BG, Width, Height, 1);
+/* 0005af16 */	Ｐ＿構築手順＿色塗り(this.m_BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 0005af64 */	Ｐ＿構築ビルド(this.m_BG, 1);
+/* 0005af7a */	Ｐ＿親設定(this.m_RootLayout, this.m_BG);
+/* 0005af94 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0005afd6 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 0005b018 */	Ｐ＿座標設定(this.m_BG, PosX, PosY);
+/* 0005b040 */	Ｐ＿ドラッグ可能設定(this.m_BG, true);
+/* 0005b056 */	AFL_Parts_AddDragEndEvent(this.m_BG, this.DragEndEvent);
+/* 0005b070 */	AFL_Parts_AddMouseWheelEvent(this.m_BG, this.MouseWheelEvent);
+/* 0005b08a */}
+
+void CAESelectTextDialog::Release()
+/* 0005b092 */{
+/* 0005b092 */	this.m_dgChangeTextEvent.Clear();
+/* 0005b09e */	PARTS_ReleaseWithInit(this.m_BG);
+/* 0005b0ac */	PARTS_ReleaseWithInit(this.m_CancelButton);
+/* 0005b0ba */	PARTS_ReleaseWithInit(this.m_OKButton);
+/* 0005b0c8 */	PARTS_ReleaseWithInit(this.m_NoneButton);
+/* 0005b0d6 */	PARTS_ReleaseWithInit(this.m_ButtonLayout);
+/* 0005b0e4 */	PARTS_ReleaseWithInit(this.m_ListBox);
+/* 0005b0f2 */	PARTS_ReleaseWithInit(this.m_TextBox);
+/* 0005b100 */	PARTS_ReleaseWithInit(this.m_TextBoxLayout);
+/* 0005b10e */	PARTS_ReleaseWithInit(this.m_Message);
+/* 0005b11c */	PARTS_ReleaseWithInit(this.m_RootLayout);
+/* 0005b12a */}
+
+bool CAESelectTextDialog::Show(int ID, string Message, int PosX, int PosY, ref array@string List, string Name, DG_ChangeTextHandler dgObject)
+/* 0005b132 */{
+/* 0005b132 */	AFL_Parts_AddLayer(-1);
+/* 0005b140 */	this.m_dgChangeTextEvent = dgObject;
+/* 0005b15a */	this.m_ParentID = ID;
+/* 0005b170 */	this.m_List <- List;
+/* 0005b190 */	this.m_ArrowText = "";
+/* 0005b1a4 */	this.CreateParts(Message, PosX, PosY, List, Name);
+/* 0005b1de */	this.m_Cancel = false;
+/* 0005b1f0 */	this.m_Result = Name;
+/* 0005b208 */	Ｐ＿クリック実行(false);
+/* 0005b216 */	if (this.m_Cancel)
+/* 0005b226 */	{
+/* 0005b226 */		dgObject(ID, Name);
+/* 0005b25a */		this.m_Result = Name;
+/* 0005b272 */	}
+/* 0005b272 */	this.Release();
+/* 0005b27a */	AFL_Parts_EraseLayer(-1);
+/* 0005b286 */	this.m_List <- NULL;
+/* 0005b29e */	return !this.m_Cancel;
+/* 0005b2ae */}
+
+void CAESelectTextDialog::NarrowList(string Text)
+/* 0005b2bc */{
+/* 0005b2bc */	if (this.m_ArrowText == Text)
+/* 0005b2d8 */	{
+/* 0005b2d8 */		return;
+/* 0005b2da */	}
+/* 0005b2da */	this.m_ArrowText = Text;
+/* 0005b2f2 */	Ｐ＿リストボックス＿アイテム全削除(this.m_ListBox);
+/* 0005b302 */	int Index;
+/* 0005b314 */	for (Index = 0; Index < this.m_List.Numof(); ++Index)
+/* 0005b364 */	{
+/* 0005b364 */		if (this.m_List[Index].Length() < Text.Length())
+/* 0005b38c */		{
+/* 0005b38c */			continue;
+/* 0005b392 */		}
+/* 0005b392 */		if (this.m_List[Index].GetPart(0, Text.Length()) != Text)
+/* 0005b3cc */		{
+/* 0005b3cc */			continue;
+/* 0005b3d2 */		}
+/* 0005b3d2 */		Ｐ＿リストボックス＿アイテム追加(this.m_ListBox, this.m_List[Index]);
+/* 0005b3f8 */	}
+/* 0005b3fe */}
+
+string CAESelectTextDialog::GetText()
+/* 0005b406 */{
+/* 0005b406 */	return this.m_Result;
+/* 0005b412 */}
+
+void CAESelectTextDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 0005b420 */{
+/* 0005b420 */	AFL_Parts_EndWaitForClick(0);
+/* 0005b42c */}
+
+void CAESelectTextDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 0005b434 */{
+/* 0005b434 */	this.m_Cancel = true;
+/* 0005b446 */	AFL_Parts_EndWaitForClick(0);
+/* 0005b452 */}
+
+void CAESelectTextDialog::ClickNoneButtonEvent(int ID, int MouseX, int MouseY)
+/* 0005b45a */{
+/* 0005b45a */	Ｐ＿テキストボックス＿テキスト設定(this.m_TextBox, "");
+/* 0005b470 */}
+
+void CAESelectTextDialog::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0005b478 */{
+/* 0005b478 */	int Pos = Ｐ＿リストボックス＿スクロール位置取得(this.m_ListBox);
+/* 0005b494 */	Ｐ＿リストボックス＿スクロール位置設定(this.m_ListBox, Pos + 3 * (Back - Forward));
+/* 0005b4ce */}
+
+void CAESelectTextDialog::DragEndEvent(int ID)
+/* 0005b4d6 */{
+/* 0005b4d6 */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 0005b4f4 */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 0005b512 */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 0005b534 */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 0005b556 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 0005b598 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 0005b5da */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 0005b602 */}
+
+void CAESelectTextDialog::SelectedEvent(int ID, int Selected)
+/* 0005b60a */{
+/* 0005b60a */	Ｐ＿テキストボックス＿テキスト設定(this.m_TextBox, Ｐ＿リストボックス＿アイテム取得(this.m_ListBox, Selected));
+/* 0005b634 */}
+
+void CAESelectTextDialog::ChangeTextEvent(int ID)
+/* 0005b63c */{
+/* 0005b63c */	this.m_Result = Ｐ＿テキストボックス＿テキスト取得(this.m_TextBox);
+/* 0005b65a */	this.m_dgChangeTextEvent(this.m_ParentID, this.m_Result);
+/* 0005b68e */	this.NarrowList(this.m_Result);
+/* 0005b6a0 */}
+

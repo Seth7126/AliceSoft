@@ -1,0 +1,1933 @@
+bool 制御／戦闘／ふいうち(ref array@string monsterIdList)
+/* 00221180 */{
+/* 00221180 */	BattleInfomation info;
+/* 00221190 */	info = g_battleResult.getBattleInfomation();
+/* 002211b4 */	if (制御／パーティ／ゼロスリースキル確認("マリア"))
+/* 002211c6 */	{
+/* 002211c6 */		int monsterNum;
+/* 002211d8 */		int consecutive;
+/* 002211ea */		int rank;
+/* 002211fc */		consecutive = getPlayerFromId("マリア").getConsecutiveBattleCount();
+/* 00221230 */		if (monsterIdList.Numof() > 3)
+/* 0022124e */		{
+/* 0022124e */			monsterNum = 3;
+/* 00221260 */		}
+/* 00221266 */		else
+/* 00221266 */		{
+/* 00221266 */			monsterNum = monsterIdList.Numof();
+/* 00221282 */		}
+/* 00221282 */		if (consecutive >= 10)
+/* 0022129a */		{
+/* 0022129a */			rank = 10;
+/* 002212ac */		}
+/* 002212b2 */		else if (consecutive >= 5)
+/* 002212ca */		{
+/* 002212ca */			rank = 7;
+/* 002212dc */		}
+/* 002212e2 */		else
+/* 002212e2 */		{
+/* 002212e2 */			rank = 5;
+/* 002212f4 */		}
+/* 002212f4 */		int i;
+/* 00221306 */		for (i = 0; i < monsterNum; ++i)
+/* 00221350 */		{
+/* 00221350 */			string mId;
+/* 00221364 */			mId = monsterIdList[i];
+/* 00221388 */			if (RAND(10) <= rank)
+/* 002213a6 */			{
+/* 002213a6 */				g_battleLog.add("マリアが%sを体力測定！%d！" % getMonsterFromId(mId).getName() % getMonsterFromId(mId).getHp(), 4);
+/* 0022142a */			}
+/* 0022143c */			else
+/* 0022143c */			{
+/* 0022143c */				g_battleLog.add("マリアが%sの体力測定に失敗！" % getMonsterFromId(mId).getName(), 7);
+/* 00221492 */			}
+/* 00221492 */		}
+/* 00221498 */	}
+/* 0022149e */	if (制御／パーティ／ゼロスリースキル確認("リック"))
+/* 002214b0 */	{
+/* 002214b0 */		int consecutive;
+/* 002214c2 */		int rank;
+/* 002214d4 */		consecutive = getPlayerFromId("リック").getConsecutiveBattleCount();
+/* 00221508 */		if (consecutive >= 10)
+/* 00221520 */		{
+/* 00221520 */			rank = 6;
+/* 00221532 */		}
+/* 00221538 */		else if (consecutive >= 5)
+/* 00221550 */		{
+/* 00221550 */			rank = 3;
+/* 00221562 */		}
+/* 00221568 */		else
+/* 00221568 */		{
+/* 00221568 */			rank = 1;
+/* 0022157a */		}
+/* 0022157a */		if (RAND(10) <= rank)
+/* 00221598 */		{
+/* 00221598 */			g_battleLog.add("リックは不退の誓いで手傷を無きものにした！", 4);
+/* 002215b4 */			制御／ＨＰ回復／最大("リック");
+/* 002215c0 */		}
+/* 002215c0 */	}
+/* 002215c6 */	if (制御／パーティ／ゼロスリースキル確認("ジュリア"))
+/* 002215d8 */	{
+/* 002215d8 */		int consecutive;
+/* 002215ea */		int rank;
+/* 002215fc */		consecutive = getPlayerFromId("ジュリア").getConsecutiveBattleCount();
+/* 00221630 */		if (consecutive >= 10)
+/* 00221648 */		{
+/* 00221648 */			rank = 9;
+/* 0022165a */		}
+/* 00221660 */		else if (consecutive >= 5)
+/* 00221678 */		{
+/* 00221678 */			rank = 6;
+/* 0022168a */		}
+/* 00221690 */		else
+/* 00221690 */		{
+/* 00221690 */			rank = 4;
+/* 002216a2 */		}
+/* 002216a2 */		if (RAND(10) <= rank)
+/* 002216c0 */		{
+/* 002216c0 */			g_battleLog.add("ジュリアがハイパー化！", 1);
+/* 002216dc */			制御／数値フラグ設定("ハイパー化", 1);
+/* 002216ee */		}
+/* 002216ee */	}
+/* 002216f4 */	if (g_playerCommonParam.getBadConditionTurn("乱視") != 0)
+/* 00221718 */	{
+/* 00221718 */		g_battleLog.add("今は乱視で攻撃を当てにくい！", 2);
+/* 00221734 */	}
+/* 00221734 */	if (g_playerCommonParam.getBadConditionTurn("骨粗") != 0)
+/* 00221758 */	{
+/* 00221758 */		g_battleLog.add("今は骨粗鬆症でクリティカルを受けやすい！", 2);
+/* 00221774 */	}
+/* 00221774 */	if (RAND(16) == 1 || monsterIdList[0] == "スーパーハニー")
+/* 002217c6 */	{
+/* 002217c6 */		if (制御／パーティ／ゼロスリースキル確認("かなみ"))
+/* 002217d8 */		{
+/* 002217d8 */			int consecutive;
+/* 002217ea */			int rank;
+/* 002217fc */			consecutive = getPlayerFromId("かなみ").getConsecutiveBattleCount();
+/* 00221830 */			if (consecutive >= 10)
+/* 00221848 */			{
+/* 00221848 */				rank = 10;
+/* 0022185a */			}
+/* 00221860 */			else if (consecutive >= 5)
+/* 00221878 */			{
+/* 00221878 */				rank = 8;
+/* 0022188a */			}
+/* 00221890 */			else
+/* 00221890 */			{
+/* 00221890 */				rank = 5;
+/* 002218a2 */			}
+/* 002218a2 */			if (RAND(10) <= rank)
+/* 002218c0 */			{
+/* 002218c0 */				g_battleLog.add("かなみのシノビセンスで不意討ちを回避！", 1);
+/* 002218dc */				return false;
+/* 002218e4 */			}
+/* 002218e4 */		}
+/* 002218ea */		if (monsterIdList[0] == "スーパーハニー")
+/* 0022190a */		{
+/* 0022190a */			g_battleLog.add("スーパーハニーが速い！不意討ち！", 2);
+/* 00221926 */			return true;
+/* 0022192e */		}
+/* 00221934 */		else
+/* 00221934 */		{
+/* 00221934 */			int i;
+/* 00221946 */			int dexTotal;
+/* 00221958 */			int live;
+/* 0022196a */			for (i = 0; i < g_party.getCount(); ++i)
+/* 002219ba */			{
+/* 002219ba */				string pId;
+/* 002219ce */				pId = g_party.getPlayerId(i);
+/* 002219f6 */				if (getPlayerFromId(pId).getHp() != 0)
+/* 00221a30 */				{
+/* 00221a30 */					dexTotal += getPlayerFromId(pId).getDexterity();
+/* 00221a68 */					live++;
+/* 00221a7c */				}
+/* 00221a7c */			}
+/* 00221a8e */			dexTotal /= live;
+/* 00221aa4 */			if (RAND(512) <= dexTotal || info.getExtraBattleFlag() == 1)
+/* 00221af8 */			{
+/* 00221af8 */				return false;
+/* 00221b00 */			}
+/* 00221b00 */			g_battleLog.add("敵の不意討ち！", 2);
+/* 00221b1c */			return true;
+/* 00221b24 */		}
+/* 00221b24 */	}
+/* 00221b24 */	return false;
+/* 00221b2c */}
+
+int 制御／戦闘／プレイヤー攻撃(int turn, ref Player player, ref PlayerSkill skill, ref MonsterInstance monster, int index, int count, ref int type, ref string msg)
+/* 00221b40 */{
+/* 00221b40 */	string attrId = skill.getAttributeId();
+/* 00221b5e */	string groupId = skill.getGroupId();
+/* 00221b7c */	int val;
+/* 00221b8e */	int monsterMaxHp;
+/* 00221ba0 */	int monsterHp;
+/* 00221bb2 */	int critSkill;
+/* 00221bc4 */	int hackGold;
+/* 00221bd6 */	int typeA;
+/* 00221be8 */	int typeB;
+/* 00221bfa */	int typeC;
+/* 00221c0c */	int typeD;
+/* 00221c1e */	float attrAdjust;
+/* 00221c30 */	float defAdjust;
+/* 00221c42 */	float critAdjust;
+/* 00221c54 */	float fluctuation;
+/* 00221c66 */	string monsterAttrId;
+/* 00221c7a */	string monsterAtkAttrId;
+/* 00221c8e */	string attrInfo;
+/* 00221ca2 */	string defInfo;
+/* 00221cb6 */	string critInfo;
+/* 00221cca */	array@string playerBuffIdList;
+/* 00221cd4 */	array@string monsterBuffIdList;
+/* 00221cde */	bool itazura = false;
+/* 00221cf0 */	bool assassinate = false;
+/* 00221d02 */	bool glass = false;
+/* 00221d14 */	bool fastCast = false;
+/* 00221d26 */	Monster m;
+/* 00221d36 */	m = getMonsterFromId(monster.getId());
+/* 00221d7c */	monsterMaxHp = monster.getMaxHp();
+/* 00221d98 */	monsterHp = monster.getHp();
+/* 00221db4 */	monsterAttrId = m.getMonsterAttributeId();
+/* 00221dd2 */	attrAdjust = 1.0;
+/* 00221de4 */	itazura = false;
+/* 00221df6 */	assassinate = false;
+/* 00221e08 */	player.getBuffIdList(playerBuffIdList, -1);
+/* 00221e28 */	monster.getBuffIdList(monsterBuffIdList, -1);
+/* 00221e48 */	if (attrId == "物理攻撃")
+/* 00221e60 */	{
+/* 00221e60 */		if (monsterAttrId == "物理弱点")
+/* 00221e78 */		{
+/* 00221e78 */			typeB = 10;
+/* 00221e8a */			attrAdjust = 2.4;
+/* 00221e9c */			attrInfo = "弱点を突いた";
+/* 00221eb0 */		}
+/* 00221eb6 */		else if (monsterAttrId == "物理耐性")
+/* 00221ece */		{
+/* 00221ece */			typeC = 100;
+/* 00221ee0 */			if (制御／戦闘／バフ／プレイヤー／確認("ランスチャージ", playerBuffIdList))
+/* 00221efe */			{
+/* 00221efe */				attrInfo = "耐性を破った";
+/* 00221f12 */			}
+/* 00221f18 */			else
+/* 00221f18 */			{
+/* 00221f18 */				attrAdjust = 0.4;
+/* 00221f2a */				attrInfo = "抵抗されつつ";
+/* 00221f3e */			}
+/* 00221f3e */		}
+/* 00221f44 */		else if (monsterAttrId == "物理無効")
+/* 00221f5c */		{
+/* 00221f5c */			typeC = 100;
+/* 00221f6e */			if (制御／戦闘／バフ／プレイヤー／確認("ランスチャージ", playerBuffIdList))
+/* 00221f8c */			{
+/* 00221f8c */				attrInfo = "耐性を破った";
+/* 00221fa0 */			}
+/* 00221fa6 */			else
+/* 00221fa6 */			{
+/* 00221fa6 */				attrAdjust = 0.0;
+/* 00221fb8 */				attrInfo = "全く効かない";
+/* 00221fcc */			}
+/* 00221fcc */		}
+/* 00221fcc */	}
+/* 00221fd2 */	else if (attrId == "爆裂攻撃")
+/* 00221fea */	{
+/* 00221fea */		if (monsterAttrId == "爆裂弱点")
+/* 00222002 */		{
+/* 00222002 */			typeB = 10;
+/* 00222014 */			attrAdjust = 2.4;
+/* 00222026 */			attrInfo = "弱点を突いた";
+/* 0022203a */		}
+/* 00222040 */		else if (monsterAttrId == "爆裂耐性")
+/* 00222058 */		{
+/* 00222058 */			typeC = 100;
+/* 0022206a */			if (制御／戦闘／バフ／プレイヤー／確認("ランスチャージ", playerBuffIdList))
+/* 00222088 */			{
+/* 00222088 */				attrInfo = "耐性を破った";
+/* 0022209c */			}
+/* 002220a2 */			else
+/* 002220a2 */			{
+/* 002220a2 */				attrAdjust = 0.4;
+/* 002220b4 */				attrInfo = "抵抗されつつ";
+/* 002220c8 */			}
+/* 002220c8 */		}
+/* 002220ce */		else if (monsterAttrId == "爆裂無効")
+/* 002220e6 */		{
+/* 002220e6 */			typeC = 100;
+/* 002220f8 */			if (制御／戦闘／バフ／プレイヤー／確認("ランスチャージ", playerBuffIdList))
+/* 00222116 */			{
+/* 00222116 */				attrInfo = "耐性を破った";
+/* 0022212a */			}
+/* 00222130 */			else
+/* 00222130 */			{
+/* 00222130 */				attrAdjust = 0.0;
+/* 00222142 */				attrInfo = "全く効かない";
+/* 00222156 */			}
+/* 00222156 */		}
+/* 00222156 */	}
+/* 0022215c */	else if (attrId == "性的攻撃")
+/* 00222174 */	{
+/* 00222174 */		if (monsterAttrId == "性的弱点")
+/* 0022218c */		{
+/* 0022218c */			typeB = 10;
+/* 0022219e */			attrAdjust = 2.4;
+/* 002221b0 */			attrInfo = "弱点を突いた";
+/* 002221c4 */			itazura = true;
+/* 002221d6 */		}
+/* 002221dc */		else if (monsterAttrId == "性的耐性")
+/* 002221f4 */		{
+/* 002221f4 */			typeC = 100;
+/* 00222206 */			if (制御／戦闘／バフ／プレイヤー／確認("ランスチャージ", playerBuffIdList))
+/* 00222224 */			{
+/* 00222224 */				attrInfo = "耐性を破った";
+/* 00222238 */			}
+/* 0022223e */			else
+/* 0022223e */			{
+/* 0022223e */				attrAdjust = 0.4;
+/* 00222250 */				attrInfo = "抵抗されつつ";
+/* 00222264 */			}
+/* 00222264 */		}
+/* 0022226a */		else if (monsterAttrId == "性的無効")
+/* 00222282 */		{
+/* 00222282 */			typeC = 100;
+/* 00222294 */			if (制御／戦闘／バフ／プレイヤー／確認("ランスチャージ", playerBuffIdList))
+/* 002222b2 */			{
+/* 002222b2 */				attrInfo = "むりやり";
+/* 002222c6 */			}
+/* 002222cc */			else
+/* 002222cc */			{
+/* 002222cc */				attrAdjust = 0.0;
+/* 002222de */				attrInfo = "全く効かない";
+/* 002222f2 */			}
+/* 002222f2 */		}
+/* 002222f2 */	}
+/* 002222f8 */	else if (attrId == "急所攻撃")
+/* 00222310 */	{
+/* 00222310 */		if (monsterAttrId == "急所弱点")
+/* 00222328 */		{
+/* 00222328 */			typeB = 10;
+/* 0022233a */			if (制御／戦闘／バフ／プレイヤー／確認("分身の術", playerBuffIdList))
+/* 00222358 */			{
+/* 00222358 */				attrAdjust = 2.8;
+/* 0022236a */				attrInfo = "かなり弱点を突いた";
+/* 0022237e */			}
+/* 00222384 */			else
+/* 00222384 */			{
+/* 00222384 */				attrAdjust = 2.4;
+/* 00222396 */				attrInfo = "弱点を突いた";
+/* 002223aa */			}
+/* 002223aa */		}
+/* 002223b0 */		else if (monsterAttrId == "急所耐性")
+/* 002223c8 */		{
+/* 002223c8 */			typeC = 100;
+/* 002223da */			attrAdjust = 0.4;
+/* 002223ec */			attrInfo = "抵抗されつつ";
+/* 00222400 */		}
+/* 00222406 */		else if (monsterAttrId == "急所無効")
+/* 0022241e */		{
+/* 0022241e */			typeC = 100;
+/* 00222430 */			attrAdjust = 0.0;
+/* 00222442 */			attrInfo = "全く効かない";
+/* 00222456 */		}
+/* 00222456 */	}
+/* 0022245c */	else if (attrId == "魔法攻撃")
+/* 00222474 */	{
+/* 00222474 */		if (monsterAttrId == "魔法弱点")
+/* 0022248c */		{
+/* 0022248c */			typeB = 10;
+/* 0022249e */			attrAdjust = 2.4;
+/* 002224b0 */			attrInfo = "弱点を突いた";
+/* 002224c4 */		}
+/* 002224ca */		else if (monsterAttrId == "魔法耐性")
+/* 002224e2 */		{
+/* 002224e2 */			typeC = 100;
+/* 002224f4 */			if (制御／戦闘／バフ／プレイヤー／確認("魔想", playerBuffIdList))
+/* 00222512 */			{
+/* 00222512 */				attrInfo = "耐性を破った";
+/* 00222526 */			}
+/* 0022252c */			else
+/* 0022252c */			{
+/* 0022252c */				attrAdjust = 0.4;
+/* 0022253e */				attrInfo = "抵抗されつつ";
+/* 00222552 */			}
+/* 00222552 */		}
+/* 00222558 */		else if (monsterAttrId == "魔法無効")
+/* 00222570 */		{
+/* 00222570 */			typeC = 100;
+/* 00222582 */			if (制御／戦闘／バフ／プレイヤー／確認("魔想", playerBuffIdList))
+/* 002225a0 */			{
+/* 002225a0 */				attrInfo = "耐性を破った";
+/* 002225b4 */			}
+/* 002225ba */			else
+/* 002225ba */			{
+/* 002225ba */				attrAdjust = 0.0;
+/* 002225cc */				attrInfo = "全く効かない";
+/* 002225e0 */			}
+/* 002225e0 */		}
+/* 002225e0 */	}
+/* 002225e0 */	MonsterAttack mattack;
+/* 002225f0 */	mattack = monster.getAttack(turn);
+/* 0022261e */	MonsterAttackAttribute mattr;
+/* 0022262e */	mattr = getMonsterAttackAttributeFromId(mattack.getAttributeId());
+/* 00222674 */	monsterAtkAttrId = mattr.getName();
+/* 00222692 */	defAdjust = 1.0;
+/* 002226a4 */	if (monsterAtkAttrId == "物理防御")
+/* 002226bc */	{
+/* 002226bc */		typeD = 1000;
+/* 002226ce */		if (groupId == "デビルアロー" || groupId == "幻夢剣" || 制御／戦闘／バフ／プレイヤー／確認("黒金砕き", playerBuffIdList))
+/* 0022274c */		{
+/* 0022274c */			defAdjust = 1.0;
+/* 0022275e */		}
+/* 00222764 */		else
+/* 00222764 */		{
+/* 00222764 */			defAdjust = 0.2;
+/* 00222776 */		}
+/* 00222776 */	}
+/* 00222776 */	pass("defad%f" % defAdjust);
+/* 00222794 */	critAdjust = 1.0;
+/* 002227a6 */	if (制御／戦闘／バフ／プレイヤー／確認("死神無双", playerBuffIdList) || 制御／戦闘／バフ／プレイヤー／確認("無現軌道", playerBuffIdList))
+/* 002227fa */	{
+/* 002227fa */		critSkill = player.getDexterity();
+/* 00222816 */	}
+/* 0022281c */	else if (groupId == "リーザスの雷竜")
+/* 00222834 */	{
+/* 00222834 */		critSkill = player.getDexterity() * 15;
+/* 00222858 */	}
+/* 00222858 */	if (groupId != "神聖分解波")
+/* 00222870 */	{
+/* 00222870 */		if (RAND(16384) <= player.getDexterity() + critSkill)
+/* 002228a0 */		{
+/* 002228a0 */			typeA = 1;
+/* 002228b2 */			critAdjust = 3.2;
+/* 002228c4 */			critInfo = "ハイパークリティカル★★★";
+/* 002228d8 */		}
+/* 002228de */		else if (RAND(4096) <= player.getDexterity() + critSkill || groupId == "幻夢剣" && turn == 0 || player.getId() == "ランス" && 制御／パーティ／ゼロスリースキル確認("ランス") && (monster.getId() == "サファイアr" || monster.getId() == "トパーズr" || monster.getId() == "ガーネットs" || monster.getId() == "アイゼル" || monster.getId() == "ノスt1" || monster.getId() == "ノスt2" || monster.getId() == "ノスt3" || monster.getId() == "ノスt3左腕" || monster.getId() == "ノスt3右腕" || monster.getId() == "ジル"))
+/* 00222bea */		{
+/* 00222bea */			typeA = 1;
+/* 00222bfc */			critAdjust = 2.4;
+/* 00222c0e */			critInfo = "スーパークリティカル★★";
+/* 00222c22 */		}
+/* 00222c28 */		else if (RAND(1024) <= player.getDexterity() + critSkill || groupId == "健常者潰し" && monsterMaxHp == monsterHp)
+/* 00222cbc */		{
+/* 00222cbc */			typeA = 1;
+/* 00222cce */			critAdjust = 1.6;
+/* 00222ce0 */			critInfo = "クリティカル★";
+/* 00222cf4 */		}
+/* 00222cf4 */	}
+/* 00222cf4 */	player.getBuffIdList(playerBuffIdList, -1);
+/* 00222d14 */	monster.getBuffIdList(monsterBuffIdList, -1);
+/* 00222d34 */	if (attrId == "物理攻撃" || attrId == "爆裂攻撃" || attrId == "性的攻撃" || attrId == "急所攻撃")
+/* 00222ddc */	{
+/* 00222ddc */		if (groupId == "大号令")
+/* 00222df4 */		{
+/* 00222df4 */			int leazas;
+/* 00222e06 */			if (制御／パーティ／プレイヤー確認／戦闘("マリス"))
+/* 00222e18 */			{
+/* 00222e18 */				leazas += getPlayerFromId("マリス").getStrength();
+/* 00222e4c */			}
+/* 00222e52 */			if (制御／パーティ／プレイヤー確認／戦闘("かなみ"))
+/* 00222e64 */			{
+/* 00222e64 */				leazas += getPlayerFromId("かなみ").getStrength();
+/* 00222e98 */			}
+/* 00222e9e */			if (制御／パーティ／プレイヤー確認／戦闘("バレス"))
+/* 00222eb0 */			{
+/* 00222eb0 */				leazas += getPlayerFromId("バレス").getStrength();
+/* 00222ee4 */			}
+/* 00222eea */			if (制御／パーティ／プレイヤー確認／戦闘("リック"))
+/* 00222efc */			{
+/* 00222efc */				leazas += getPlayerFromId("リック").getStrength();
+/* 00222f30 */			}
+/* 00222f36 */			if (制御／パーティ／プレイヤー確認／戦闘("レイラ"))
+/* 00222f48 */			{
+/* 00222f48 */				leazas += getPlayerFromId("レイラ").getStrength();
+/* 00222f7c */			}
+/* 00222f82 */			if (制御／パーティ／プレイヤー確認／戦闘("メナド"))
+/* 00222f94 */			{
+/* 00222f94 */				leazas += getPlayerFromId("メナド").getStrength();
+/* 00222fc8 */			}
+/* 00222fce */			if (制御／パーティ／プレイヤー確認／戦闘("ジュリア"))
+/* 00222fe0 */			{
+/* 00222fe0 */				leazas += getPlayerFromId("ジュリア").getStrength();
+/* 00223014 */			}
+/* 0022301a */			if (制御／パーティ／プレイヤー確認／戦闘("イェリコ"))
+/* 0022302c */			{
+/* 0022302c */				leazas += getPlayerFromId("イェリコ").getStrength();
+/* 00223060 */			}
+/* 00223066 */			fluctuation = ((player.getStrength() + leazas) * skill.getParam() * critAdjust * attrAdjust * defAdjust * (RAND(16) - 1)) / 100.0;
+/* 002230ea */			val = (player.getStrength() + leazas) * skill.getParam() * critAdjust * attrAdjust * defAdjust + fluctuation;
+/* 0022315c */		}
+/* 00223162 */		else
+/* 00223162 */		{
+/* 00223162 */			int strength;
+/* 00223174 */			strength = player.getStrength();
+/* 00223190 */			if (groupId == "バイ・ラ・ウェイ" && 制御／戦闘／バフ／プレイヤー／確認("斬り返し", playerBuffIdList))
+/* 002231de */			{
+/* 002231de */				strength += 制御／数値フラグ確認("斬り返しダメージ");
+/* 002231f6 */				if (index == count - 1)
+/* 0022321a */				{
+/* 0022321a */					制御／数値フラグ設定("斬り返しダメージ", 0);
+/* 0022322c */				}
+/* 0022322c */			}
+/* 00223232 */			else if (groupId == "千人斬り")
+/* 0022324a */			{
+/* 0022324a */				if (player.getHp() <= (player.getMaxHp() * 10) / 100)
+/* 00223282 */				{
+/* 00223282 */					strength = (strength * 280) / 100;
+/* 002232a8 */				}
+/* 002232ae */				else if (player.getHp() <= (player.getMaxHp() * 30) / 100)
+/* 002232e6 */				{
+/* 002232e6 */					strength = (strength * 240) / 100;
+/* 0022330c */				}
+/* 00223312 */				else if (player.getHp() <= (player.getMaxHp() * 50) / 100)
+/* 0022334a */				{
+/* 0022334a */					strength = (strength * 200) / 100;
+/* 00223370 */				}
+/* 00223376 */				else if (player.getHp() <= (player.getMaxHp() * 70) / 100)
+/* 002233ae */				{
+/* 002233ae */					strength = (strength * 160) / 100;
+/* 002233d4 */				}
+/* 002233da */				else if (player.getHp() <= (player.getMaxHp() * 90) / 100)
+/* 00223412 */				{
+/* 00223412 */					strength = (strength * 120) / 100;
+/* 00223438 */				}
+/* 00223438 */			}
+/* 0022343e */			else if (制御／数値フラグ確認("ハイパー化") == 1 && (groupId == "えいえい斬り" || groupId == "必殺えいえい"))
+/* 002234b8 */			{
+/* 002234b8 */				strength = (strength * 666) / 100;
+/* 002234de */			}
+/* 002234e4 */			else if (groupId == "幻獣アタック")
+/* 002234fc */			{
+/* 002234fc */				strength = player.getMind();
+/* 00223518 */			}
+/* 00223518 */			fluctuation = (strength * skill.getParam() * critAdjust * attrAdjust * defAdjust * (RAND(16) - 1)) / 100.0;
+/* 0022358a */			val = strength * skill.getParam() * critAdjust * attrAdjust * defAdjust + fluctuation;
+/* 002235ea */			val += 制御／戦闘／バフ／プレイヤー(playerBuffIdList, monsterBuffIdList, 0);
+/* 0022361a */			if (g_playerCommonParam.getBadConditionTurn("乱視") != 0 && RAND(3) == 1)
+/* 00223670 */			{
+/* 00223670 */				val = 0;
+/* 00223682 */				glass = true;
+/* 00223694 */			}
+/* 0022369a */			else if ((groupId == "背後からスー" || groupId == "スカルピアッサ") && player.getDexterity() * attrAdjust * 10.0 > monsterHp && defAdjust >= 1.0 && critAdjust >= 1.6)
+/* 00223798 */			{
+/* 00223798 */				val = monsterHp;
+/* 002237ae */				assassinate = true;
+/* 002237c0 */			}
+/* 002237c0 */		}
+/* 002237c0 */	}
+/* 002237c6 */	else
+/* 002237c6 */	{
+/* 002237c6 */		int mind;
+/* 002237d8 */		mind = player.getMind();
+/* 002237f4 */		if (制御／数値フラグ確認("ハイパー化") && (groupId == "魔法えいえい" || groupId == "全部えいえい"))
+/* 00223866 */		{
+/* 00223866 */			mind = (mind * 666) / 100;
+/* 0022388c */		}
+/* 0022388c */		if (groupId == "神聖分解波" && mind * 30 > monsterHp)
+/* 002238e0 */		{
+/* 002238e0 */			if (g_playerCommonParam.getBadConditionTurn("乱視") != 0 && RAND(3) == 1)
+/* 00223936 */			{
+/* 00223936 */				val = 0;
+/* 00223948 */				glass = true;
+/* 0022395a */			}
+/* 00223960 */			else
+/* 00223960 */			{
+/* 00223960 */				float decompose;
+/* 00223972 */				decompose = monsterHp / 2;
+/* 00223992 */				val = decompose * critAdjust * attrAdjust * defAdjust;
+/* 002239ce */			}
+/* 002239ce */		}
+/* 002239d4 */		else
+/* 002239d4 */		{
+/* 002239d4 */			fluctuation = (mind * skill.getParam() * critAdjust * attrAdjust * defAdjust * (RAND(16) - 1)) / 100.0;
+/* 00223a46 */			val = mind * skill.getParam() * critAdjust * attrAdjust * defAdjust + fluctuation;
+/* 00223aa6 */			val += 制御／戦闘／バフ／プレイヤー(playerBuffIdList, monsterBuffIdList, 1);
+/* 00223ad6 */			if (g_playerCommonParam.getBadConditionTurn("乱視") != 0 && RAND(3) == 1)
+/* 00223b2c */			{
+/* 00223b2c */				val = 0;
+/* 00223b3e */				glass = true;
+/* 00223b50 */			}
+/* 00223b50 */		}
+/* 00223b50 */	}
+/* 00223b50 */	if ((groupId == "悔悛の錠" || groupId == "手加減攻撃") && val >= monsterHp)
+/* 00223bcc */	{
+/* 00223bcc */		val = monsterHp - 1;
+/* 00223bea */		if (val < 1)
+/* 00223c02 */		{
+/* 00223c02 */			val = 1;
+/* 00223c14 */		}
+/* 00223c14 */	}
+/* 00223c14 */	if (val < 0)
+/* 00223c2c */	{
+/* 00223c2c */		val = 0;
+/* 00223c3e */	}
+/* 00223c3e */	if (groupId == "ハックスラッシュ")
+/* 00223c56 */	{
+/* 00223c56 */		int rate;
+/* 00223c68 */		rate = 10 - turn * 3;
+/* 00223c8e */		hackGold = (m.getGold() * rate) / 10;
+/* 00223cbe */		if (hackGold < 0)
+/* 00223cd6 */		{
+/* 00223cd6 */			hackGold = 1;
+/* 00223ce8 */		}
+/* 00223ce8 */		if (!g_battleCalcMode)
+/* 00223cfa */		{
+/* 00223cfa */			g_playerCommonParam.addGold(hackGold);
+/* 00223d14 */		}
+/* 00223d14 */	}
+/* 00223d14 */	制御／戦闘／ボーナス／ジャックポット(val);
+/* 00223d24 */	if (player.getId() == "志津香" && 制御／パーティ／ゼロスリースキル確認("志津香") && index == count - 1)
+/* 00223da8 */	{
+/* 00223da8 */		int consecutive;
+/* 00223dba */		int rank;
+/* 00223dcc */		consecutive = getPlayerFromId("志津香").getConsecutiveBattleCount();
+/* 00223e00 */		if (consecutive >= 10)
+/* 00223e18 */		{
+/* 00223e18 */			rank = 25;
+/* 00223e2a */		}
+/* 00223e30 */		else if (consecutive >= 5)
+/* 00223e48 */		{
+/* 00223e48 */			rank = 15;
+/* 00223e5a */		}
+/* 00223e60 */		else
+/* 00223e60 */		{
+/* 00223e60 */			rank = 10;
+/* 00223e72 */		}
+/* 00223e72 */		if (RAND(100) <= rank)
+/* 00223e90 */		{
+/* 00223e90 */			player.setCoolTimeCancelSkillId(skill.getId());
+/* 00223eb0 */			fastCast = true;
+/* 00223ec2 */		}
+/* 00223ec2 */	}
+/* 00223ec8 */	if (glass)
+/* 00223ed8 */	{
+/* 00223ed8 */		g_battleLog.add("乱視で狙いが逸れている！", 2);
+/* 00223ef4 */	}
+/* 00223ef4 */	if (monsterAtkAttrId == "物理防御")
+/* 00223f0c */	{
+/* 00223f0c */		if (groupId == "デビルアロー" || groupId == "幻夢剣" || 制御／戦闘／バフ／プレイヤー／確認("黒金砕き", playerBuffIdList))
+/* 00223f8a */		{
+/* 00223f8a */			g_battleLog.add("%sの防御を貫通した！" % m.getName(), 4);
+/* 00223fbe */		}
+/* 00223fc4 */		else
+/* 00223fc4 */		{
+/* 00223fc4 */			g_battleLog.add("%sは防御している！" % m.getName(), 2);
+/* 00223ff8 */		}
+/* 00223ff8 */	}
+/* 00223ff8 */	if (groupId == "大号令")
+/* 00224010 */	{
+/* 00224010 */		string leazasLog1;
+/* 00224024 */		string leazasLog2;
+/* 00224038 */		string leazasLog3;
+/* 0022404c */		g_battleLog.add("%sリアの%s！" % attrInfo % skill.getName(), 0);
+/* 00224092 */		if (制御／パーティ／プレイヤー確認／戦闘("バレス"))
+/* 002240a4 */		{
+/* 002240a4 */			leazasLog1 += "バレスが布陣！";
+/* 002240b8 */		}
+/* 002240b8 */		if (制御／パーティ／プレイヤー確認／戦闘("マリス"))
+/* 002240ca */		{
+/* 002240ca */			leazasLog1 += "マリスが突撃！";
+/* 002240de */		}
+/* 002240de */		if (制御／パーティ／プレイヤー確認／戦闘("かなみ"))
+/* 002240f0 */		{
+/* 002240f0 */			leazasLog1 += "かなみが遊撃！";
+/* 00224104 */		}
+/* 00224104 */		if (leazasLog1 != "")
+/* 0022411c */		{
+/* 0022411c */			g_battleLog.add(leazasLog1, 0);
+/* 0022413c */		}
+/* 0022413c */		if (制御／パーティ／プレイヤー確認／戦闘("リック"))
+/* 0022414e */		{
+/* 0022414e */			leazasLog2 += "リックが挟撃！";
+/* 00224162 */		}
+/* 00224162 */		if (制御／パーティ／プレイヤー確認／戦闘("レイラ"))
+/* 00224174 */		{
+/* 00224174 */			leazasLog2 += "レイラが挟撃！";
+/* 00224188 */		}
+/* 00224188 */		if (制御／パーティ／プレイヤー確認／戦闘("メナド"))
+/* 0022419a */		{
+/* 0022419a */			leazasLog2 += "メナドが迎撃！";
+/* 002241ae */		}
+/* 002241ae */		if (leazasLog2 != "")
+/* 002241c6 */		{
+/* 002241c6 */			g_battleLog.add(leazasLog2, 0);
+/* 002241e6 */		}
+/* 002241e6 */		if (制御／パーティ／プレイヤー確認／戦闘("ジュリア"))
+/* 002241f8 */		{
+/* 002241f8 */			leazasLog3 += "ジュリアがえいえい！";
+/* 0022420c */		}
+/* 0022420c */		if (制御／パーティ／プレイヤー確認／戦闘("イェリコ"))
+/* 0022421e */		{
+/* 0022421e */			leazasLog3 += "イェリコが金的！";
+/* 00224232 */		}
+/* 00224232 */		if (leazasLog3 != "")
+/* 0022424a */		{
+/* 0022424a */			g_battleLog.add(leazasLog3, 0);
+/* 0022426a */		}
+/* 0022426a */		if (critAdjust != 1.0)
+/* 00224282 */		{
+/* 00224282 */			g_battleLog.add("%s%sに%dダメージ！" % critInfo % m.getName() % val, 1);
+/* 002242da */		}
+/* 002242e0 */		else
+/* 002242e0 */		{
+/* 002242e0 */			g_battleLog.add("%sに%dダメージ！" % m.getName() % val, 0);
+/* 00224326 */		}
+/* 00224326 */	}
+/* 0022432c */	else if (assassinate)
+/* 0022433c */	{
+/* 0022433c */		if (groupId == "背後からスー")
+/* 00224354 */		{
+/* 00224354 */			g_battleLog.add("スーは首を刎ねた★%sは即死！" % m.getName() % val, 1);
+/* 0022439a */		}
+/* 002243a0 */		else
+/* 002243a0 */		{
+/* 002243a0 */			g_battleLog.add("レイラは眉間を穿った★%sは即死！" % m.getName() % val, 1);
+/* 002243e6 */		}
+/* 002243e6 */	}
+/* 002243ec */	else if (critAdjust != 1.0)
+/* 00224404 */	{
+/* 00224404 */		g_battleLog.add("%s%sの%s！" % attrInfo % player.getShortName() % skill.getName(), 0);
+/* 00224462 */		g_battleLog.add("%s%sに%dダメージ！" % critInfo % m.getName() % val, 1);
+/* 002244ba */	}
+/* 002244c0 */	else
+/* 002244c0 */	{
+/* 002244c0 */		g_battleLog.add("%s%sの%s！%sに%dダメージ！" % attrInfo % player.getShortName() % skill.getName() % m.getName() % val, 0);
+/* 00224548 */	}
+/* 00224548 */	if (hackGold != 0)
+/* 00224560 */	{
+/* 00224560 */		g_battleLog.add("ついでに%dGOLD掠め取った！" % hackGold, 4);
+/* 0022458e */	}
+/* 0022458e */	if (fastCast)
+/* 0022459e */	{
+/* 0022459e */		g_battleLog.add("高速詠唱！クールタイムが発生しない！", 4);
+/* 002245ba */	}
+/* 002245ba */	if (val >= monsterHp)
+/* 002245d6 */	{
+/* 002245d6 */		if (itazura && (m.getId() == "幸福きゃんきゃん" || m.getId() == "ちゃいむ" || m.getId() == "ちょーちん" || m.getId() == "ラーメン" || m.getId() == "金魚使い" || m.getId() == "ハチ女" || m.getId() == "うしドバーン" || m.getId() == "コンテ" || m.getId() == "デュラピー" || m.getId() == "フローズン" || m.getId() == "神風" || m.getId() == "ライカンスロープd1" || m.getId() == "ライカンスロープZt1" || m.getId() == "ワー村娘" || m.getId() == "ワークィーン" || m.getId() == "ワープアー" || m.getId() == "ワードッグ" || m.getId() == "ワーシィル" || m.getId() == "ワーかなみ" || m.getId() == "ワー志津香"))
+/* 00224a1e */		{
+/* 00224a1e */			g_battleResult.addExpBonus("スーパー非道タイム★", 20);
+/* 00224a3a */			switch (m.getId())
+/* 00224a56 */			{
+/* 00224a56 */			case "幸福きゃんきゃん":
+/* 00224a56 */				if (!EV("ＥＶ／女の子モンスター／幸福きゃんきゃん／初回", -2147483648))
+/* 00224a70 */				{
+/* 00224a70 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／幸福きゃんきゃん／初回");
+/* 00224a86 */				}
+/* 00224a8c */				else
+/* 00224a8c */				{
+/* 00224a8c */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／幸福きゃんきゃん／汎用");
+/* 00224aa2 */				}
+/* 00224aa2 */				break;
+/* 00224aa8 */			case "ちゃいむ":
+/* 00224aa8 */				if (!EV("ＥＶ／女の子モンスター／ちゃいむ／初回", -2147483648))
+/* 00224ac2 */				{
+/* 00224ac2 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ちゃいむ／初回");
+/* 00224ad8 */				}
+/* 00224ade */				else
+/* 00224ade */				{
+/* 00224ade */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ちゃいむ／汎用");
+/* 00224af4 */				}
+/* 00224af4 */				break;
+/* 00224afa */			case "ちょーちん":
+/* 00224afa */				if (!EV("ＥＶ／女の子モンスター／ちょーちん／初回", -2147483648))
+/* 00224b14 */				{
+/* 00224b14 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ちょーちん／初回");
+/* 00224b2a */				}
+/* 00224b30 */				else
+/* 00224b30 */				{
+/* 00224b30 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ちょーちん／汎用");
+/* 00224b46 */				}
+/* 00224b46 */				break;
+/* 00224b4c */			case "ラーメン":
+/* 00224b4c */				if (!EV("ＥＶ／女の子モンスター／ラーメン／初回", -2147483648))
+/* 00224b66 */				{
+/* 00224b66 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ラーメン／初回");
+/* 00224b7c */				}
+/* 00224b82 */				else
+/* 00224b82 */				{
+/* 00224b82 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ラーメン／汎用");
+/* 00224b98 */				}
+/* 00224b98 */				break;
+/* 00224b9e */			case "金魚使い":
+/* 00224b9e */				if (!EV("ＥＶ／女の子モンスター／金魚使い／初回", -2147483648))
+/* 00224bb8 */				{
+/* 00224bb8 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／金魚使い／初回");
+/* 00224bce */				}
+/* 00224bd4 */				else
+/* 00224bd4 */				{
+/* 00224bd4 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／金魚使い／汎用");
+/* 00224bea */				}
+/* 00224bea */				break;
+/* 00224bf0 */			case "ハチ女":
+/* 00224bf0 */				if (!EV("ＥＶ／女の子モンスター／ハチ女／初回", -2147483648))
+/* 00224c0a */				{
+/* 00224c0a */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ハチ女／初回");
+/* 00224c20 */				}
+/* 00224c26 */				else
+/* 00224c26 */				{
+/* 00224c26 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ハチ女／汎用");
+/* 00224c3c */				}
+/* 00224c3c */				break;
+/* 00224c42 */			case "うしドバーン":
+/* 00224c42 */				if (!EV("ＥＶ／女の子モンスター／うしドバーン／初回", -2147483648))
+/* 00224c5c */				{
+/* 00224c5c */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／うしドバーン／初回");
+/* 00224c72 */				}
+/* 00224c78 */				else
+/* 00224c78 */				{
+/* 00224c78 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／うしドバーン／汎用");
+/* 00224c8e */				}
+/* 00224c8e */				break;
+/* 00224c94 */			case "コンテ":
+/* 00224c94 */				if (!EV("ＥＶ／女の子モンスター／コンテ／初回", -2147483648))
+/* 00224cae */				{
+/* 00224cae */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／コンテ／初回");
+/* 00224cc4 */				}
+/* 00224cca */				else
+/* 00224cca */				{
+/* 00224cca */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／コンテ／汎用");
+/* 00224ce0 */				}
+/* 00224ce0 */				break;
+/* 00224ce6 */			case "デュラピー":
+/* 00224ce6 */				if (!EV("ＥＶ／女の子モンスター／デュラピー／初回", -2147483648))
+/* 00224d00 */				{
+/* 00224d00 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／デュラピー／初回");
+/* 00224d16 */				}
+/* 00224d1c */				else
+/* 00224d1c */				{
+/* 00224d1c */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／デュラピー／汎用");
+/* 00224d32 */				}
+/* 00224d32 */				break;
+/* 00224d38 */			case "フローズン":
+/* 00224d38 */				if (!EV("ＥＶ／女の子モンスター／フローズン／初回", -2147483648))
+/* 00224d52 */				{
+/* 00224d52 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／フローズン／初回");
+/* 00224d68 */				}
+/* 00224d6e */				else
+/* 00224d6e */				{
+/* 00224d6e */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／フローズン／汎用");
+/* 00224d84 */				}
+/* 00224d84 */				break;
+/* 00224d8a */			case "神風":
+/* 00224d8a */				if (!EV("ＥＶ／女の子モンスター／神風／初回", -2147483648))
+/* 00224da4 */				{
+/* 00224da4 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／神風／初回");
+/* 00224dba */				}
+/* 00224dc0 */				else
+/* 00224dc0 */				{
+/* 00224dc0 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／神風／汎用");
+/* 00224dd6 */				}
+/* 00224dd6 */				break;
+/* 00224ddc */			case "ライカンスロープZt1":
+/* 00224ddc */			case "ライカンスロープd1":
+/* 00224ddc */				if (!EV("ＥＶ／女の子モンスター／ライカンスロープ／初回", -2147483648))
+/* 00224df6 */				{
+/* 00224df6 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ライカンスロープ／初回");
+/* 00224e0c */				}
+/* 00224e12 */				else
+/* 00224e12 */				{
+/* 00224e12 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ライカンスロープ／汎用");
+/* 00224e28 */				}
+/* 00224e28 */				break;
+/* 00224e2e */			case "ワー村娘":
+/* 00224e2e */				if (!EV("ＥＶ／女の子モンスター／ワー村娘／初回", -2147483648))
+/* 00224e48 */				{
+/* 00224e48 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワー村娘／初回");
+/* 00224e5e */				}
+/* 00224e64 */				else
+/* 00224e64 */				{
+/* 00224e64 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワー村娘／汎用");
+/* 00224e7a */				}
+/* 00224e7a */				break;
+/* 00224e80 */			case "ワークィーン":
+/* 00224e80 */				if (!EV("ＥＶ／女の子モンスター／ワークィーン／初回", -2147483648))
+/* 00224e9a */				{
+/* 00224e9a */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワークィーン／初回");
+/* 00224eb0 */				}
+/* 00224eb6 */				else
+/* 00224eb6 */				{
+/* 00224eb6 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワークィーン／汎用");
+/* 00224ecc */				}
+/* 00224ecc */				break;
+/* 00224ed2 */			case "ワープアー":
+/* 00224ed2 */				if (!EV("ＥＶ／女の子モンスター／ワープアー／初回", -2147483648))
+/* 00224eec */				{
+/* 00224eec */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワープアー／初回");
+/* 00224f02 */				}
+/* 00224f08 */				else
+/* 00224f08 */				{
+/* 00224f08 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワープアー／汎用");
+/* 00224f1e */				}
+/* 00224f1e */				break;
+/* 00224f24 */			case "ワードッグ":
+/* 00224f24 */				if (!EV("ＥＶ／女の子モンスター／ワードッグ／初回", -2147483648))
+/* 00224f3e */				{
+/* 00224f3e */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワードッグ／初回");
+/* 00224f54 */				}
+/* 00224f5a */				else
+/* 00224f5a */				{
+/* 00224f5a */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワードッグ／汎用");
+/* 00224f70 */				}
+/* 00224f70 */				break;
+/* 00224f76 */			case "ワーシィル":
+/* 00224f76 */				if (!EV("ＥＶ／女の子モンスター／ワーシィル／初回", -2147483648))
+/* 00224f90 */				{
+/* 00224f90 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワーシィル／初回");
+/* 00224fa6 */				}
+/* 00224fac */				else
+/* 00224fac */				{
+/* 00224fac */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワーシィル／汎用");
+/* 00224fc2 */				}
+/* 00224fc2 */				break;
+/* 00224fc8 */			case "ワーかなみ":
+/* 00224fc8 */				if (!EV("ＥＶ／女の子モンスター／ワーかなみ／初回", -2147483648))
+/* 00224fe2 */				{
+/* 00224fe2 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワーかなみ／初回");
+/* 00224ff8 */				}
+/* 00224ffe */				else
+/* 00224ffe */				{
+/* 00224ffe */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワーかなみ／汎用");
+/* 00225014 */				}
+/* 00225014 */				break;
+/* 0022501a */			case "ワー志津香":
+/* 0022501a */				if (!EV("ＥＶ／女の子モンスター／ワー志津香／初回", -2147483648))
+/* 00225034 */				{
+/* 00225034 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワー志津香／初回");
+/* 0022504a */				}
+/* 00225050 */				else
+/* 00225050 */				{
+/* 00225050 */					g_battleResult.setBattleEndEvent("ＥＶ／女の子モンスター／ワー志津香／汎用");
+/* 00225066 */				}
+/* 00225066 */				break;
+/* 0022506c */			}
+/* 0022506c */		}
+/* 0022506c */		if (val >= monsterHp * 10)
+/* 00225090 */		{
+/* 00225090 */			g_battleResult.addExpBonus("オーバーキル", 40);
+/* 002250ac */		}
+/* 002250ac */		if (monsterHp * 1.2 >= val)
+/* 002250d8 */		{
+/* 002250d8 */			g_battleResult.addExpBonus("テクニシャン", 40);
+/* 002250f4 */		}
+/* 002250f4 */		if (attrAdjust == 2.8)
+/* 0022510c */		{
+/* 0022510c */			g_battleResult.addExpBonus("弱みは遠慮なく", 30);
+/* 00225128 */		}
+/* 00225128 */		if (attrAdjust == 0.3)
+/* 00225140 */		{
+/* 00225140 */			g_battleResult.addExpBonus("無駄な抵抗はやめろ", 20);
+/* 0022515c */		}
+/* 0022515c */		if (defAdjust == 0.1)
+/* 00225174 */		{
+/* 00225174 */			g_battleResult.addExpBonus("防御なんぞ無視", 20);
+/* 00225190 */		}
+/* 00225190 */		if (critAdjust == 3.2)
+/* 002251a8 */		{
+/* 002251a8 */			g_battleResult.addGoldBonus("クリティカル超ご祝儀", 70);
+/* 002251c4 */			msg = 制御／戦闘／メッセージ(player.getId());
+/* 002251e8 */		}
+/* 002251ee */		else if (critAdjust == 2.4)
+/* 00225206 */		{
+/* 00225206 */			g_battleResult.addGoldBonus("クリティカル大ご祝儀", 40);
+/* 00225222 */			msg = 制御／戦闘／メッセージ(player.getId());
+/* 00225246 */		}
+/* 0022524c */		else if (critAdjust == 1.6)
+/* 00225264 */		{
+/* 00225264 */			g_battleResult.addGoldBonus("クリティカルご祝儀", 20);
+/* 00225280 */			msg = 制御／戦闘／メッセージ(player.getId());
+/* 002252a4 */		}
+/* 002252a4 */	}
+/* 002252aa */	else if (val * 1.1 >= monsterHp)
+/* 002252d6 */	{
+/* 002252d6 */		g_battleResult.addGoldBonus("敢闘賞", 20);
+/* 002252f2 */	}
+/* 002252f2 */	type = typeA + typeB + typeC + typeD;
+/* 0022532e */	return val;
+/* 0022533a */}
+
+int 制御／戦闘／モンスター攻撃(int turn, ref MonsterInstance monster, ref MonsterAttack atk, ref Player target, int index, int count)
+/* 0022534e */{
+/* 0022534e */	string attrId = atk.getAttributeId();
+/* 0022536c */	BattleInfomation info;
+/* 0022537c */	info = g_battleResult.getBattleInfomation();
+/* 002253a0 */	MonsterAttackAttribute attr;
+/* 002253b0 */	attr = getMonsterAttackAttributeFromId(attrId);
+/* 002253f0 */	int playerMaxHp;
+/* 00225402 */	int playerHp;
+/* 00225414 */	int attack;
+/* 00225426 */	int buffType;
+/* 00225438 */	int val;
+/* 0022544a */	int seed;
+/* 0022545c */	float fluctuation;
+/* 0022546e */	string turnOver;
+/* 00225482 */	string attackType;
+/* 00225496 */	bool critical = false;
+/* 002254a8 */	bool bone = false;
+/* 002254ba */	Monster m;
+/* 002254ca */	m = getMonsterFromId(monster.getId());
+/* 00225510 */	playerMaxHp = target.getMaxHp();
+/* 0022552c */	playerHp = target.getHp();
+/* 00225548 */	attack = atk.getParam();
+/* 00225564 */	int limit;
+/* 00225576 */	if (info.getExtraBattleFlag() != 1)
+/* 00225594 */	{
+/* 00225594 */		limit = 30;
+/* 002255a6 */	}
+/* 002255ac */	else
+/* 002255ac */	{
+/* 002255ac */		limit = 3000;
+/* 002255be */	}
+/* 002255be */	if (turn > limit)
+/* 002255da */	{
+/* 002255da */		attack = attack * (turn - limit);
+/* 00225608 */		turnOver = "怒りの";
+/* 0022561c */	}
+/* 0022561c */	if (info.getExtraBattleFlag() != 1)
+/* 0022563a */	{
+/* 0022563a */		seed = 64;
+/* 0022564c */	}
+/* 00225652 */	else
+/* 00225652 */	{
+/* 00225652 */		seed = 512;
+/* 00225664 */	}
+/* 00225664 */	if (制御／アイテム確認("守り神様ストラップ") != 0)
+/* 0022567e */	{
+/* 0022567e */		seed = seed + 制御／アイテム確認("守り神様ストラップ") * 8;
+/* 002256aa */	}
+/* 002256aa */	if (g_playerCommonParam.getBadConditionTurn("骨粗") != 0)
+/* 002256ce */	{
+/* 002256ce */		seed /= 32;
+/* 002256e0 */		bone = true;
+/* 002256f2 */	}
+/* 002256f8 */	else
+/* 002256f8 */	{
+/* 002256f8 */		bone = false;
+/* 0022570a */	}
+/* 0022570a */	if (RAND(seed) == 1)
+/* 00225728 */	{
+/* 00225728 */		attack = (attack * 140) / 100;
+/* 0022574e */		critical = true;
+/* 00225760 */	}
+/* 00225766 */	else
+/* 00225766 */	{
+/* 00225766 */		critical = false;
+/* 00225778 */	}
+/* 00225778 */	fluctuation = (attack * (RAND(16) - 1)) / 100;
+/* 002257ae */	val = attack + fluctuation;
+/* 002257d8 */	if (attrId == "物理攻撃")
+/* 002257f0 */	{
+/* 002257f0 */		buffType = 0;
+/* 00225802 */	}
+/* 00225808 */	else if (attrId == "魔法攻撃")
+/* 00225820 */	{
+/* 00225820 */		attackType = "魔法";
+/* 00225834 */		buffType = 1;
+/* 00225846 */	}
+/* 00225846 */	array@string playerBuffIdList;
+/* 00225850 */	array@string monsterBuffIdList;
+/* 0022585a */	target.getBuffIdList(playerBuffIdList, -1);
+/* 0022587a */	monster.getBuffIdList(monsterBuffIdList, -1);
+/* 0022589a */	val += 制御／戦闘／バフ／モンスター(monsterBuffIdList, playerBuffIdList, buffType);
+/* 002258ce */	if (val < 0)
+/* 002258e6 */	{
+/* 002258e6 */		val = 0;
+/* 002258f8 */	}
+/* 002258f8 */	if (制御／戦闘／バフ／プレイヤー／確認("斬り返し", playerBuffIdList))
+/* 00225916 */	{
+/* 00225916 */		int reverse;
+/* 00225928 */		reverse = 制御／数値フラグ確認("斬り返しダメージ") + val * 0.4;
+/* 00225962 */		if (reverse > getPlayerFromId("リック").getStrength())
+/* 0022599c */		{
+/* 0022599c */			reverse = getPlayerFromId("リック").getStrength();
+/* 002259d0 */		}
+/* 002259d6 */		制御／数値フラグ設定("斬り返しダメージ", reverse);
+/* 002259ec */	}
+/* 002259f2 */	if (target.getId() != "メナド" && 制御／パーティ／ゼロスリースキル確認("メナド") && val >= playerHp && playerHp != 1)
+/* 00225a9e */	{
+/* 00225a9e */		int consecutive;
+/* 00225ab0 */		int rank;
+/* 00225ac2 */		consecutive = getPlayerFromId("メナド").getConsecutiveBattleCount();
+/* 00225af6 */		if (consecutive >= 10)
+/* 00225b0e */		{
+/* 00225b0e */			rank = 6;
+/* 00225b20 */		}
+/* 00225b26 */		else if (consecutive >= 5)
+/* 00225b3e */		{
+/* 00225b3e */			rank = 3;
+/* 00225b50 */		}
+/* 00225b56 */		else
+/* 00225b56 */		{
+/* 00225b56 */			rank = 1;
+/* 00225b68 */		}
+/* 00225b68 */		if (RAND(10) <= rank)
+/* 00225b86 */		{
+/* 00225b86 */			g_battleLog.add("メナドは不撓の決意で%sを護った！" % target.getShortName(), 4);
+/* 00225bba */			val = playerHp - 1;
+/* 00225bd8 */		}
+/* 00225bde */		else
+/* 00225bde */		{
+/* 00225bde */			g_battleLog.add("メナドの不撓の決意は及ばなかった！", 7);
+/* 00225bfa */		}
+/* 00225bfa */	}
+/* 00225c00 */	if (critical)
+/* 00225c10 */	{
+/* 00225c10 */		g_battleLog.add("%sの%s%s攻撃！" % m.getName() % turnOver % attackType, 3);
+/* 00225c68 */		if (bone)
+/* 00225c78 */		{
+/* 00225c78 */			g_battleLog.add("骨が脆くてクリティカル★%sに%dダメージ！" % target.getShortName() % val, 3);
+/* 00225cbe */		}
+/* 00225cc4 */		else
+/* 00225cc4 */		{
+/* 00225cc4 */			g_battleLog.add("クリティカル★%sに%dダメージ！" % target.getShortName() % val, 3);
+/* 00225d0a */		}
+/* 00225d0a */	}
+/* 00225d10 */	else
+/* 00225d10 */	{
+/* 00225d10 */		g_battleLog.add("%sの%s%s攻撃！%sに%dダメージ！" % m.getName() % turnOver % attackType % target.getShortName() % val, 3);
+/* 00225d92 */	}
+/* 00225d92 */	if (val >= playerHp)
+/* 00225dae */	{
+/* 00225dae */		g_battleResult.addGoldBonus("ご香典", 90);
+/* 00225dca */	}
+/* 00225dd0 */	else if (val > playerMaxHp * 0.8)
+/* 00225e00 */	{
+/* 00225e00 */		g_battleResult.addGoldBonus("致命傷お見舞金", 60);
+/* 00225e1c */	}
+/* 00225e22 */	else if (val > playerMaxHp * 0.8)
+/* 00225e52 */	{
+/* 00225e52 */		g_battleResult.addGoldBonus("重傷お見舞金", 40);
+/* 00225e6e */	}
+/* 00225e6e */	return val;
+/* 00225e7a */}
+
+int 制御／戦闘／プレイヤー回復(int turn, ref Player healer, ref Player target, ref PlayerSkill skill, int index, int count, ref int type, ref string msg)
+/* 00225e8e */{
+/* 00225e8e */	string attrId = skill.getAttributeId();
+/* 00225eac */	int val;
+/* 00225ebe */	float rate;
+/* 00225ed0 */	float fluctuation;
+/* 00225ee2 */	rate = 1.0 - ((float(target.getHp()) / float(target.getMaxHp())) * 100.0) / 100.0;
+/* 00225f2c */	if (rate < 0.1)
+/* 00225f44 */	{
+/* 00225f44 */		rate = 0.1;
+/* 00225f56 */	}
+/* 00225f56 */	if (attrId == "物理治療")
+/* 00225f6e */	{
+/* 00225f6e */		fluctuation = (healer.getStrength() * skill.getParam() * rate * (RAND(16) - 1)) / 100.0;
+/* 00225fce */		val = healer.getStrength() * skill.getParam() * rate + fluctuation;
+/* 0022601c */	}
+/* 00226022 */	else
+/* 00226022 */	{
+/* 00226022 */		fluctuation = (healer.getMind() * skill.getParam() * rate * (RAND(16) - 1)) / 100.0;
+/* 00226082 */		val = healer.getMind() * skill.getParam() * rate + fluctuation;
+/* 002260d0 */	}
+/* 002260d0 */	g_battleLog.add("%sの%s！%sは%d回復！" % healer.getShortName() % skill.getName() % target.getShortName() % val, 5);
+/* 00226146 */	return val;
+/* 00226152 */}
+
+int 制御／戦闘／モンスター回復(int turn, ref Monster healer, ref Monster target, ref MonsterAttack atk, int index, int count)
+/* 00226166 */{
+/* 00226166 */	int val;
+/* 00226178 */	float param;
+/* 0022618a */	float fluctuation;
+/* 0022619c */	param = atk.getParam();
+/* 002261ba */	if (制御／パーティ／ゼロスリースキル確認("フェリス"))
+/* 002261cc */	{
+/* 002261cc */		int consecutive;
+/* 002261de */		float rank;
+/* 002261f0 */		consecutive = getPlayerFromId("フェリス").getConsecutiveBattleCount();
+/* 00226224 */		if (consecutive >= 10)
+/* 0022623c */		{
+/* 0022623c */			rank = 0.1;
+/* 0022624e */		}
+/* 00226254 */		else if (consecutive >= 5)
+/* 0022626c */		{
+/* 0022626c */			rank = 0.3;
+/* 0022627e */		}
+/* 00226284 */		else
+/* 00226284 */		{
+/* 00226284 */			rank = 0.6;
+/* 00226296 */		}
+/* 00226296 */		param = param * rank;
+/* 002262b8 */	}
+/* 002262be */	fluctuation = (param * (RAND(16) - 1)) / 100.0;
+/* 002262f4 */	val = param + fluctuation;
+/* 00226318 */	if (制御／パーティ／ゼロスリースキル確認("フェリス"))
+/* 0022632a */	{
+/* 0022632a */		g_battleLog.add("フェリスのエイドジャマーが回復を妨害！", 4);
+/* 00226346 */	}
+/* 00226346 */	g_battleLog.add("%sの治療！%sは%d回復！" % healer.getName() % target.getName() % val, 2);
+/* 002263a4 */	return val;
+/* 002263b0 */}
+
+void 制御／戦闘／モンスター待機(int turn, string monsterId, ref MonsterAttack monsterAttack)
+/* 002263c4 */{
+/* 002263c4 */	Monster m;
+/* 002263d4 */	m = getMonsterFromId(monsterId);
+/* 00226414 */	g_battleLog.add("%sは隙を窺っていた" % m.getName(), 7);
+/* 00226448 */}
+
+bool 制御／戦闘／スキップ()
+/* 00226456 */{
+/* 00226456 */	if (制御／パーティ／ゼロスリースキル確認("マリス") && 制御／数値フラグ確認("順番シャッフル") < 4)
+/* 0022649a */	{
+/* 0022649a */		int consecutive;
+/* 002264ac */		int rank;
+/* 002264be */		if (consecutive >= 10)
+/* 002264d6 */		{
+/* 002264d6 */			rank = 30;
+/* 002264e8 */		}
+/* 002264ee */		else if (consecutive >= 5)
+/* 00226506 */		{
+/* 00226506 */			rank = 20;
+/* 00226518 */		}
+/* 0022651e */		else
+/* 0022651e */		{
+/* 0022651e */			rank = 10;
+/* 00226530 */		}
+/* 00226530 */		if (RAND(100) <= rank)
+/* 0022654e */		{
+/* 0022654e */			g_battleLog.add("マリスの順番シャッフルが発動！更に行動可能！", 4);
+/* 0022656a */			int count;
+/* 0022657c */			count = 制御／数値フラグ確認("順番シャッフル");
+/* 00226594 */			count++;
+/* 002265a8 */			制御／数値フラグ設定("順番シャッフル", count);
+/* 002265be */			return true;
+/* 002265c6 */		}
+/* 002265c6 */	}
+/* 002265c6 */	return false;
+/* 002265ce */}
+
+int 制御／戦闘／アイテム確率設定(int val)
+/* 002265e2 */{
+/* 002265e2 */	if (制御／パーティ／ゼロスリースキル確認("ネカイ"))
+/* 002265f4 */	{
+/* 002265f4 */		int consecutive;
+/* 00226606 */		int rank;
+/* 00226618 */		consecutive = getPlayerFromId("ネカイ").getConsecutiveBattleCount();
+/* 0022664c */		if (consecutive >= 10)
+/* 00226664 */		{
+/* 00226664 */			val *= 4;
+/* 00226676 */		}
+/* 0022667c */		else if (consecutive >= 5)
+/* 00226694 */		{
+/* 00226694 */			val *= 3;
+/* 002266a6 */		}
+/* 002266ac */		else
+/* 002266ac */		{
+/* 002266ac */			val *= 2;
+/* 002266be */		}
+/* 002266be */	}
+/* 002266c4 */	if (RAND(64) == 1)
+/* 002266de */	{
+/* 002266de */		val *= 3;
+/* 002266f0 */	}
+/* 002266f6 */	else if (RAND(16) == 1)
+/* 00226710 */	{
+/* 00226710 */		val *= 2;
+/* 00226722 */	}
+/* 00226722 */	float fluctuation;
+/* 00226734 */	fluctuation = (val * (RAND(46) - 1)) / 100;
+/* 0022676a */	val += fluctuation;
+/* 00226782 */	if (val > 99)
+/* 0022679a */	{
+/* 0022679a */		val = 99;
+/* 002267ac */	}
+/* 002267ac */	return val;
+/* 002267b8 */}
+
+int 制御／戦闘／アイテム確率減算設定(int val)
+/* 002267cc */{
+/* 002267cc */	float fall;
+/* 002267de */	fall = val * 0.7;
+/* 00226802 */	if (fall < 1.0)
+/* 0022681a */	{
+/* 0022681a */		fall = 1.0;
+/* 0022682c */	}
+/* 0022682c */	return fall;
+/* 0022683a */}
+
+void 制御／戦闘／ボーナス／プレイヤー攻撃(int turn, int killCount)
+/* 0022684e */{
+/* 0022684e */	if (killCount == 2)
+/* 00226866 */	{
+/* 00226866 */		g_battleResult.addExpBonus("どっちも同時撃破", 20);
+/* 00226882 */	}
+/* 00226882 */	if (killCount == 3)
+/* 0022689a */	{
+/* 0022689a */		g_battleResult.addExpBonus("どっちもどっちも", 40);
+/* 002268b6 */	}
+/* 002268b6 */}
+
+void 制御／戦闘／ボーナス／ターン終了(int turn, int killCount, bool isFinalTurn)
+/* 002268c4 */{
+/* 002268c4 */	if (isFinalTurn)
+/* 002268d4 */	{
+/* 002268d4 */		switch (turn)
+/* 002268ea */		{
+/* 002268ea */		case 0:
+/* 002268ea */			g_battleResult.addExpBonus("光速でクリア", 80);
+/* 00226906 */			break;
+/* 0022690c */		case 1:
+/* 0022690c */			g_battleResult.addExpBonus("音速でクリア", 50);
+/* 00226928 */			break;
+/* 0022692e */		case 2:
+/* 0022692e */			g_battleResult.addExpBonus("ちゃっちゃとクリア", 30);
+/* 0022694a */			break;
+/* 00226950 */		default:
+/* 00226950 */			break;
+/* 00226956 */		}
+/* 00226956 */		if (制御／アイテム確認("丹下犬ストラップ") != 0)
+/* 00226970 */		{
+/* 00226970 */			g_battleResult.addExpBonus("丹下犬ボーナス", 18 + 制御／アイテム確認("丹下犬ストラップ") * 2);
+/* 002269a2 */		}
+/* 002269a2 */		if (制御／アイテム確認("毎度ありストラップ") != 0)
+/* 002269bc */		{
+/* 002269bc */			g_battleResult.addGoldBonus("毎度ありボーナス", 18 + 制御／アイテム確認("毎度ありストラップ") * 2);
+/* 002269ee */		}
+/* 002269ee */		if (制御／パーティ／ゼロスリースキル確認("バレス"))
+/* 00226a00 */		{
+/* 00226a00 */			int consecutive;
+/* 00226a12 */			int rank;
+/* 00226a24 */			consecutive = getPlayerFromId("バレス").getConsecutiveBattleCount();
+/* 00226a58 */			if (consecutive >= 10)
+/* 00226a70 */			{
+/* 00226a70 */				rank = 100;
+/* 00226a82 */			}
+/* 00226a88 */			else if (consecutive >= 5)
+/* 00226aa0 */			{
+/* 00226aa0 */				rank = 70;
+/* 00226ab2 */			}
+/* 00226ab8 */			else
+/* 00226ab8 */			{
+/* 00226ab8 */				rank = 50;
+/* 00226aca */			}
+/* 00226aca */			g_battleResult.addGoldBonus("バレスの戦費調達", rank);
+/* 00226aea */		}
+/* 00226af0 */		if (制御／パーティ／ゼロスリースキル確認("アテン"))
+/* 00226b02 */		{
+/* 00226b02 */			int consecutive;
+/* 00226b14 */			int rank;
+/* 00226b26 */			consecutive = getPlayerFromId("アテン").getConsecutiveBattleCount();
+/* 00226b5a */			if (consecutive >= 10)
+/* 00226b72 */			{
+/* 00226b72 */				rank = 100;
+/* 00226b84 */			}
+/* 00226b8a */			else if (consecutive >= 5)
+/* 00226ba2 */			{
+/* 00226ba2 */				rank = 70;
+/* 00226bb4 */			}
+/* 00226bba */			else
+/* 00226bba */			{
+/* 00226bba */				rank = 50;
+/* 00226bcc */			}
+/* 00226bcc */			g_battleResult.addExpBonus("アテンの特別講義", rank);
+/* 00226bec */		}
+/* 00226bf2 */		if (g_monsterStrengthShifter.getLocalExpRatio() == 9.0)
+/* 00226c10 */		{
+/* 00226c10 */			g_battleResult.addExpBonus("TOWERレート", 900);
+/* 00226c2c */			g_battleResult.addGoldBonus("TOWERレート", 300);
+/* 00226c48 */		}
+/* 00226c48 */		if (制御／パーティ／ゼロスリースキル確認("シィル"))
+/* 00226c5a */		{
+/* 00226c5a */			int consecutive;
+/* 00226c6c */			int mind;
+/* 00226c7e */			int val;
+/* 00226c90 */			float rank;
+/* 00226ca2 */			consecutive = getPlayerFromId("シィル").getConsecutiveBattleCount();
+/* 00226cd6 */			mind = getPlayerFromId("シィル").getMind();
+/* 00226d0a */			if (consecutive >= 10)
+/* 00226d22 */			{
+/* 00226d22 */				rank = 1.0;
+/* 00226d34 */			}
+/* 00226d3a */			else if (consecutive >= 5)
+/* 00226d52 */			{
+/* 00226d52 */				rank = 0.7;
+/* 00226d64 */			}
+/* 00226d6a */			else
+/* 00226d6a */			{
+/* 00226d6a */				rank = 0.5;
+/* 00226d7c */			}
+/* 00226d7c */			array@string n;
+/* 00226d86 */			getAlivePlayerList(n);
+/* 00226d96 */			ref Player p = getPlayerFromId(getMinHpPlayer(n));
+/* 00226dde */			float rate;
+/* 00226df0 */			float fluctuation;
+/* 00226e02 */			rate = 1.0 - ((float(p.getHp()) / float(p.getMaxHp())) * 100.0) / 100.0;
+/* 00226e4c */			if (rate < 0.1)
+/* 00226e64 */			{
+/* 00226e64 */				rate = 0.1;
+/* 00226e76 */			}
+/* 00226e76 */			fluctuation = (mind * rank * rate * (RAND(16) - 1)) / 100.0;
+/* 00226eca */			val = mind * rank * rate + fluctuation;
+/* 00226f0c */			p.setHp(p.getHp() + val);
+/* 00226f3a */			g_battleResult.addBattleEndMessage("シィルの応急ヒール！%sは%d回復！" % p.getShortName() % val);
+/* 00226f90 */		}
+/* 00226f9c */		if (制御／パーティ／ゼロスリースキル確認("セル"))
+/* 00226fae */		{
+/* 00226fae */			int consecutive;
+/* 00226fc0 */			int mind;
+/* 00226fd2 */			int val;
+/* 00226fe4 */			float rank;
+/* 00226ff6 */			consecutive = getPlayerFromId("セル").getConsecutiveBattleCount();
+/* 0022702a */			mind = getPlayerFromId("セル").getMind();
+/* 0022705e */			if (consecutive >= 10)
+/* 00227076 */			{
+/* 00227076 */				rank = 0.6;
+/* 00227088 */			}
+/* 0022708e */			else if (consecutive >= 5)
+/* 002270a6 */			{
+/* 002270a6 */				rank = 0.3;
+/* 002270b8 */			}
+/* 002270be */			else
+/* 002270be */			{
+/* 002270be */				rank = 0.1;
+/* 002270d0 */			}
+/* 002270d0 */			array@string players;
+/* 002270da */			g_party.getPlayerIdList(players);
+/* 002270f4 */			int i;
+/* 00227106 */			for (i = 0; i < players.Numof(); ++i)
+/* 00227156 */			{
+/* 00227156 */				string pId;
+/* 0022716a */				pId = players[i];
+/* 0022718e */				if (getPlayerFromId(pId).getHp() != 0)
+/* 002271c8 */				{
+/* 002271c8 */					float rate;
+/* 002271da */					float fluctuation;
+/* 002271ec */					rate = 1.0 - ((float(getPlayerFromId(pId).getHp()) / float(getPlayerFromId(pId).getMaxHp())) * 100.0) / 100.0;
+/* 0022726e */					if (rate < 0.1)
+/* 00227286 */					{
+/* 00227286 */						rate = 0.1;
+/* 00227298 */					}
+/* 00227298 */					fluctuation = (mind * rank * rate * (RAND(16) - 1)) / 100.0;
+/* 002272ec */					val = mind * rank * rate + fluctuation;
+/* 0022732e */					getPlayerFromId(pId).setHp(getPlayerFromId(pId).getHp() + val);
+/* 00227394 */					g_battleResult.addBattleEndMessage("セルの応急回復の雨！%sは%d回復！" % getPlayerFromId(pId).getShortName() % val);
+/* 002273f0 */				}
+/* 002273f0 */			}
+/* 00227424 */		}
+/* 00227430 */		if (制御／パーティ／ゼロスリースキル確認("リア"))
+/* 00227442 */		{
+/* 00227442 */			int consecutive;
+/* 00227454 */			int rank;
+/* 00227466 */			int val;
+/* 00227478 */			consecutive = getPlayerFromId("リア").getConsecutiveBattleCount();
+/* 002274ac */			if (consecutive >= 10)
+/* 002274c4 */			{
+/* 002274c4 */				rank = 6;
+/* 002274d6 */			}
+/* 002274dc */			else if (consecutive >= 5)
+/* 002274f4 */			{
+/* 002274f4 */				rank = 3;
+/* 00227506 */			}
+/* 0022750c */			else
+/* 0022750c */			{
+/* 0022750c */				rank = 1;
+/* 0022751e */			}
+/* 0022751e */			if (RAND(10) <= rank)
+/* 0022753c */			{
+/* 0022753c */				int i;
+/* 0022754e */				for (i = 0; i < g_player.Numof(); ++i)
+/* 0022759e */				{
+/* 0022759e */					if (g_player[i].isJoin())
+/* 002275c0 */					{
+/* 002275c0 */						g_player[i].clearCoolTime("");
+/* 002275e2 */					}
+/* 002275e2 */				}
+/* 002275e8 */				g_battleResult.addBattleEndMessage("リアがお茶会を開催！全員のクールタイムがリセット！");
+/* 002275fe */			}
+/* 002275fe */		}
+/* 00227604 */		制御／数値フラグ設定("斬り返しダメージ", 0);
+/* 00227616 */		制御／数値フラグ設定("順番シャッフル", 0);
+/* 00227628 */		制御／数値フラグ設定("ハイパー化", 0);
+/* 0022763a */		if (制御／パーティ／ゼロスリースキル確認("ユラン"))
+/* 0022764c */		{
+/* 0022764c */			制御／数値フラグ設定("スタア", 0);
+/* 0022765e */		}
+/* 0022765e */		if (制御／パーティ／ゼロスリースキル確認("イェリコ"))
+/* 00227670 */		{
+/* 00227670 */			制御／数値フラグ設定("みぃつけた！", 0);
+/* 00227682 */		}
+/* 00227682 */		if (制御／パーティ／ゼロスリースキル確認("バーニング"))
+/* 00227694 */		{
+/* 00227694 */			制御／数値フラグ設定("闇焔の波動", 0);
+/* 002276a6 */		}
+/* 002276a6 */	}
+/* 002276a6 */}
+
+void 制御／戦闘／ボーナス／ジャックポット(int val)
+/* 002276b4 */{
+/* 002276b4 */	if (val > 9999)
+/* 002276cc */	{
+/* 002276cc */		if (val % 11111 == 0)
+/* 002276ec */		{
+/* 002276ec */			g_battleResult.addGoldBonus("ジャックポット超", 777);
+/* 00227708 */			g_battleLog.add("5ケタゾロ目ダメージおめでとう！", 1);
+/* 00227724 */		}
+/* 00227724 */	}
+/* 0022772a */	else if (val > 999)
+/* 00227742 */	{
+/* 00227742 */		if (val % 1111 == 0)
+/* 00227762 */		{
+/* 00227762 */			g_battleResult.addGoldBonus("ジャックポット大", 555);
+/* 0022777e */			g_battleLog.add("4ケタゾロ目ダメージおめでとう！", 1);
+/* 0022779a */		}
+/* 0022779a */	}
+/* 002277a0 */	else if (val > 99)
+/* 002277b8 */	{
+/* 002277b8 */		if (val % 111 == 0)
+/* 002277d8 */		{
+/* 002277d8 */			g_battleResult.addGoldBonus("ジャックポット", 333);
+/* 002277f4 */			g_battleLog.add("3ケタゾロ目ダメージおめでとう！", 1);
+/* 00227810 */		}
+/* 00227810 */	}
+/* 00227810 */}
+
+string 制御／戦闘／メッセージ(string id)
+/* 0022781e */{
+/* 0022781e */	string msg;
+/* 00227832 */	msg = "はっ！";
+/* 00227846 */	switch (id)
+/* 0022785c */	{
+/* 0022785c */	case "３号":
+/* 0022785c */		switch (RAND(3))
+/* 00227874 */		{
+/* 00227874 */		case 1:
+/* 00227874 */			msg = "今よ、てーーっ！！";
+/* 00227888 */			break;
+/* 0022788e */		case 2:
+/* 0022788e */			msg = "圧倒するわよ！";
+/* 002278a2 */			break;
+/* 002278a8 */		case 3:
+/* 002278a8 */			msg = "ぽちっと、発射っ！";
+/* 002278bc */			break;
+/* 002278c2 */		}
+/* 002278c2 */		break;
+/* 002278c8 */	case "ランス":
+/* 002278c8 */		switch (RAND(15))
+/* 002278e0 */		{
+/* 002278e0 */		case 1:
+/* 002278e0 */			msg = "俺様憲法で死刑だ！";
+/* 002278f4 */			break;
+/* 002278fa */		case 2:
+/* 002278fa */			msg = "さっさと経験値になれ";
+/* 0022790e */			break;
+/* 00227914 */		case 3:
+/* 00227914 */			msg = "よーし、まずは死ね";
+/* 00227928 */			break;
+/* 0022792e */		case 4:
+/* 0022792e */			msg = "とーーーーーーっ！";
+/* 00227942 */			break;
+/* 00227948 */		case 5:
+/* 00227948 */			msg = "くたばれーー！";
+/* 0022795c */			break;
+/* 00227962 */		case 6:
+/* 00227962 */			msg = "こいつでとどめだ！";
+/* 00227976 */			break;
+/* 0022797c */		case 7:
+/* 0022797c */			msg = "よけたら許さんぞ";
+/* 00227990 */			break;
+/* 00227996 */		case 8:
+/* 00227996 */			msg = "全治100万年！";
+/* 002279aa */			break;
+/* 002279b0 */		case 9:
+/* 002279b0 */			msg = "ふん、あきらめろ！";
+/* 002279c4 */			break;
+/* 002279ca */		case 10:
+/* 002279ca */			msg = "金をよこせーー！";
+/* 002279de */			break;
+/* 002279e4 */		case 11:
+/* 002279e4 */			msg = "フルパワー全開！";
+/* 002279f8 */			break;
+/* 002279fe */		case 12:
+/* 002279fe */			msg = "派手に飛び散れ！";
+/* 00227a12 */			break;
+/* 00227a18 */		case 13:
+/* 00227a18 */			msg = "俺の技に泣け！";
+/* 00227a2c */			break;
+/* 00227a32 */		case 14:
+/* 00227a32 */			msg = "一撃ひっさぁーつ！";
+/* 00227a46 */			break;
+/* 00227a4c */		case 15:
+/* 00227a4c */			msg = "そろそろ終わりにするぞ";
+/* 00227a60 */			break;
+/* 00227a66 */		}
+/* 00227a66 */		break;
+/* 00227a6c */	case "シィル":
+/* 00227a6c */		switch (RAND(6))
+/* 00227a84 */		{
+/* 00227a84 */		case 1:
+/* 00227a84 */			msg = "炎の魔法なら……！";
+/* 00227a98 */			break;
+/* 00227a9e */		case 2:
+/* 00227a9e */			msg = "やーーーーーーっ！";
+/* 00227ab2 */			break;
+/* 00227ab8 */		case 3:
+/* 00227ab8 */			msg = "やっつけちゃいます！";
+/* 00227acc */			break;
+/* 00227ad2 */		case 4:
+/* 00227ad2 */			msg = "集中して集中して……";
+/* 00227ae6 */			break;
+/* 00227aec */		case 5:
+/* 00227aec */			msg = "燃やします！";
+/* 00227b00 */			break;
+/* 00227b06 */		case 6:
+/* 00227b06 */			msg = "し、シィルちゃん魔法";
+/* 00227b1a */			break;
+/* 00227b20 */		}
+/* 00227b20 */		break;
+/* 00227b26 */	case "リア":
+/* 00227b26 */		switch (RAND(3))
+/* 00227b3e */		{
+/* 00227b3e */		case 1:
+/* 00227b3e */			msg = "後悔は済んだ？";
+/* 00227b52 */			break;
+/* 00227b58 */		case 2:
+/* 00227b58 */			msg = "見ててダーリン！";
+/* 00227b6c */			break;
+/* 00227b72 */		case 3:
+/* 00227b72 */			msg = "消えて";
+/* 00227b86 */			break;
+/* 00227b8c */		}
+/* 00227b8c */		break;
+/* 00227b92 */	case "マリス":
+/* 00227b92 */		switch (RAND(3))
+/* 00227baa */		{
+/* 00227baa */		case 1:
+/* 00227baa */			msg = "これでお引取りを";
+/* 00227bbe */			break;
+/* 00227bc4 */		case 2:
+/* 00227bc4 */			msg = "さて……";
+/* 00227bd8 */			break;
+/* 00227bde */		case 3:
+/* 00227bde */			msg = "消しておきましょう";
+/* 00227bf2 */			break;
+/* 00227bf8 */		}
+/* 00227bf8 */		break;
+/* 00227bfe */	case "かなみ":
+/* 00227bfe */		switch (RAND(6))
+/* 00227c16 */		{
+/* 00227c16 */		case 1:
+/* 00227c16 */			msg = "これで死んで……！";
+/* 00227c2a */			break;
+/* 00227c30 */		case 2:
+/* 00227c30 */			msg = "仕留める……覚悟！";
+/* 00227c44 */			break;
+/* 00227c4a */		case 3:
+/* 00227c4a */			msg = "忍びの技に情はないわ";
+/* 00227c5e */			break;
+/* 00227c64 */		case 4:
+/* 00227c64 */			msg = "リーザスの為よ！";
+/* 00227c78 */			break;
+/* 00227c7e */		case 5:
+/* 00227c7e */			msg = "けぇぇぃっ！！";
+/* 00227c92 */			break;
+/* 00227c98 */		case 6:
+/* 00227c98 */			msg = "逃がさない";
+/* 00227cac */			break;
+/* 00227cb2 */		}
+/* 00227cb2 */		break;
+/* 00227cb8 */	case "フェリス":
+/* 00227cb8 */		switch (RAND(3))
+/* 00227cd0 */		{
+/* 00227cd0 */		case 1:
+/* 00227cd0 */			msg = "次から次へともう……";
+/* 00227ce4 */			break;
+/* 00227cea */		case 2:
+/* 00227cea */			msg = "悪魔の力、思い知れ";
+/* 00227cfe */			break;
+/* 00227d04 */		case 3:
+/* 00227d04 */			msg = "これが悪魔の力よ";
+/* 00227d18 */			break;
+/* 00227d1e */		}
+/* 00227d1e */		break;
+/* 00227d24 */	case "マリア":
+/* 00227d24 */		switch (RAND(3))
+/* 00227d3c */		{
+/* 00227d3c */		case 1:
+/* 00227d3c */			msg = "チャンス到来よ！";
+/* 00227d50 */			break;
+/* 00227d56 */		case 2:
+/* 00227d56 */			msg = "まるで七面鳥ね";
+/* 00227d6a */			break;
+/* 00227d70 */		case 3:
+/* 00227d70 */			msg = "シューーーート！";
+/* 00227d84 */			break;
+/* 00227d8a */		}
+/* 00227d8a */		break;
+/* 00227d90 */	case "志津香":
+/* 00227d90 */		switch (RAND(3))
+/* 00227da8 */		{
+/* 00227da8 */		case 1:
+/* 00227da8 */			msg = "本気でいくわ";
+/* 00227dbc */			break;
+/* 00227dc2 */		case 2:
+/* 00227dc2 */			msg = "容赦はしない！";
+/* 00227dd6 */			break;
+/* 00227ddc */		case 3:
+/* 00227ddc */			msg = "覚悟を決めて";
+/* 00227df0 */			break;
+/* 00227df6 */		}
+/* 00227df6 */		break;
+/* 00227dfc */	case "ミリ":
+/* 00227dfc */		switch (RAND(6))
+/* 00227e14 */		{
+/* 00227e14 */		case 1:
+/* 00227e14 */			msg = "お代は見てのお帰りだ";
+/* 00227e28 */			break;
+/* 00227e2e */		case 2:
+/* 00227e2e */			msg = "据え膳は遠慮しないぜ";
+/* 00227e42 */			break;
+/* 00227e48 */		case 3:
+/* 00227e48 */			msg = "えりゃぁぁっ！！";
+/* 00227e5c */			break;
+/* 00227e62 */		case 4:
+/* 00227e62 */			msg = "つーっかまえた、っと";
+/* 00227e76 */			break;
+/* 00227e7c */		case 5:
+/* 00227e7c */			msg = "隙だらけだと襲っちまうぞ";
+/* 00227e90 */			break;
+/* 00227e96 */		case 6:
+/* 00227e96 */			msg = "さーて、やっちまうか";
+/* 00227eaa */			break;
+/* 00227eb0 */		}
+/* 00227eb0 */		break;
+/* 00227eb6 */	case "ミル":
+/* 00227eb6 */		switch (RAND(3))
+/* 00227ece */		{
+/* 00227ece */		case 1:
+/* 00227ece */			msg = "いっちゃうよっ！";
+/* 00227ee2 */			break;
+/* 00227ee8 */		case 2:
+/* 00227ee8 */			msg = "あたたたーーっく！";
+/* 00227efc */			break;
+/* 00227f02 */		case 3:
+/* 00227f02 */			msg = "わんつーどーん！";
+/* 00227f16 */			break;
+/* 00227f1c */		}
+/* 00227f1c */		break;
+/* 00227f22 */	case "セル":
+/* 00227f22 */		switch (RAND(3))
+/* 00227f3a */		{
+/* 00227f3a */		case 1:
+/* 00227f3a */			msg = "神よ……！";
+/* 00227f4e */			break;
+/* 00227f54 */		case 2:
+/* 00227f54 */			msg = "きてはぁっ！";
+/* 00227f68 */			break;
+/* 00227f6e */		case 3:
+/* 00227f6e */			msg = "さあ、還りなさい";
+/* 00227f82 */			break;
+/* 00227f88 */		}
+/* 00227f88 */		break;
+/* 00227f8e */	case "バレス":
+/* 00227f8e */		switch (RAND(3))
+/* 00227fa6 */		{
+/* 00227fa6 */		case 1:
+/* 00227fa6 */			msg = "これは待ったなしじゃ";
+/* 00227fba */			break;
+/* 00227fc0 */		case 2:
+/* 00227fc0 */			msg = "貴殿、詰んだぞ";
+/* 00227fd4 */			break;
+/* 00227fda */		case 3:
+/* 00227fda */			msg = "投了せぬなら、討つ！";
+/* 00227fee */			break;
+/* 00227ff4 */		}
+/* 00227ff4 */		break;
+/* 00227ffa */	case "スー":
+/* 00227ffa */		switch (RAND(3))
+/* 00228012 */		{
+/* 00228012 */		case 1:
+/* 00228012 */			msg = "ミーーーー！";
+/* 00228026 */			break;
+/* 0022802c */		case 2:
+/* 0022802c */			msg = "スキアリ、バイバイ";
+/* 00228040 */			break;
+/* 00228046 */		case 3:
+/* 00228046 */			msg = "ボテクルゾ！";
+/* 0022805a */			break;
+/* 00228060 */		}
+/* 00228060 */		break;
+/* 00228066 */	case "リック":
+/* 00228066 */		switch (RAND(9))
+/* 0022807e */		{
+/* 0022807e */		case 1:
+/* 0022807e */			msg = "ゥラアァァーーッ！！";
+/* 00228092 */			break;
+/* 00228098 */		case 2:
+/* 00228098 */			msg = "アアアアアアァッ！！";
+/* 002280ac */			break;
+/* 002280b2 */		case 3:
+/* 002280b2 */			msg = "間合いだ";
+/* 002280c6 */			break;
+/* 002280cc */		case 4:
+/* 002280cc */			msg = "いざ……参る！";
+/* 002280e0 */			break;
+/* 002280e6 */		case 5:
+/* 002280e6 */			msg = "……斬り開く！";
+/* 002280fa */			break;
+/* 00228100 */		case 6:
+/* 00228100 */			msg = "面白い……！";
+/* 00228114 */			break;
+/* 0022811a */		case 7:
+/* 0022811a */			msg = "斬り、捨てる……全て";
+/* 0022812e */			break;
+/* 00228134 */		case 8:
+/* 00228134 */			msg = "ならばここは強行突破";
+/* 00228148 */			break;
+/* 0022814e */		case 9:
+/* 0022814e */			msg = "バイ・ラ・ウェイ！";
+/* 00228162 */			break;
+/* 00228168 */		}
+/* 00228168 */		break;
+/* 0022816e */	case "メナド":
+/* 0022816e */		switch (RAND(3))
+/* 00228186 */		{
+/* 00228186 */		case 1:
+/* 00228186 */			msg = "やあああぁっ！";
+/* 0022819a */			break;
+/* 002281a0 */		case 2:
+/* 002281a0 */			msg = "ボクなりの全力でっ！";
+/* 002281b4 */			break;
+/* 002281ba */		case 3:
+/* 002281ba */			msg = "退けない、絶対にっ！";
+/* 002281ce */			break;
+/* 002281d4 */		}
+/* 002281d4 */		break;
+/* 002281da */	case "ユラン":
+/* 002281da */		switch (RAND(7))
+/* 002281f2 */		{
+/* 002281f2 */		case 1:
+/* 002281f2 */			msg = "出し惜しみはしない！";
+/* 00228206 */			break;
+/* 0022820c */		case 2:
+/* 0022820c */			msg = "見切ってごらん";
+/* 00228220 */			break;
+/* 00228226 */		case 3:
+/* 00228226 */			msg = "立っていられるかな";
+/* 0022823a */			break;
+/* 00228240 */		case 4:
+/* 00228240 */			msg = "ユラン、出る！";
+/* 00228254 */			break;
+/* 0022825a */		case 5:
+/* 0022825a */			msg = "必殺必中！";
+/* 0022826e */			break;
+/* 00228274 */		case 6:
+/* 00228274 */			msg = "外しはしないさ";
+/* 00228288 */			break;
+/* 0022828e */		case 7:
+/* 0022828e */			msg = "幻夢剣……決める！";
+/* 002282a2 */			break;
+/* 002282a8 */		}
+/* 002282a8 */		break;
+/* 002282ae */	case "レイラ":
+/* 002282ae */		switch (RAND(3))
+/* 002282c6 */		{
+/* 002282c6 */		case 1:
+/* 002282c6 */			msg = "……穿つ！";
+/* 002282da */			break;
+/* 002282e0 */		case 2:
+/* 002282e0 */			msg = "見えたわ、そこっ！";
+/* 002282f4 */			break;
+/* 002282fa */		case 3:
+/* 002282fa */			msg = "強くないわね";
+/* 0022830e */			break;
+/* 00228314 */		}
+/* 00228314 */		break;
+/* 0022831a */	case "ジュリア":
+/* 0022831a */		switch (RAND(3))
+/* 00228332 */		{
+/* 00228332 */		case 1:
+/* 00228332 */			msg = "えいえいえーいっ！";
+/* 00228346 */			break;
+/* 0022834c */		case 2:
+/* 0022834c */			msg = "きゅぴーん！";
+/* 00228360 */			break;
+/* 00228366 */		case 3:
+/* 00228366 */			msg = "右みて左みて、えい！";
+/* 0022837a */			break;
+/* 00228380 */		}
+/* 00228380 */		break;
+/* 00228386 */	case "アテン":
+/* 00228386 */		switch (RAND(6))
+/* 0022839e */		{
+/* 0022839e */		case 1:
+/* 0022839e */			msg = "確率的にこうなるわね";
+/* 002283b2 */			break;
+/* 002283b8 */		case 2:
+/* 002283b8 */			msg = "やれやれだわ";
+/* 002283cc */			break;
+/* 002283d2 */		case 3:
+/* 002283d2 */			msg = "どいてくれない？";
+/* 002283e6 */			break;
+/* 002283ec */		case 4:
+/* 002283ec */			msg = "これで、おわり！";
+/* 00228400 */			break;
+/* 00228406 */		case 5:
+/* 00228406 */			msg = "私でもこれくらいっ！";
+/* 0022841a */			break;
+/* 00228420 */		case 6:
+/* 00228420 */			msg = "全て試算どおりね";
+/* 00228434 */			break;
+/* 0022843a */		}
+/* 0022843a */		break;
+/* 00228440 */	case "ネカイ":
+/* 00228440 */		switch (RAND(6))
+/* 00228458 */		{
+/* 00228458 */		case 1:
+/* 00228458 */			msg = "隙だらけよん";
+/* 0022846c */			break;
+/* 00228472 */		case 2:
+/* 00228472 */			msg = "こーいうのは好き？";
+/* 00228486 */			break;
+/* 0022848c */		case 3:
+/* 0022848c */			msg = "もらっちゃうわね";
+/* 002284a0 */			break;
+/* 002284a6 */		case 4:
+/* 002284a6 */			msg = "フィニッシュよん♪";
+/* 002284ba */			break;
+/* 002284c0 */		case 5:
+/* 002284c0 */			msg = "もうイっちゃいそうね";
+/* 002284d4 */			break;
+/* 002284da */		case 6:
+/* 002284da */			msg = "がっぽりがっぽりっ";
+/* 002284ee */			break;
+/* 002284f4 */		}
+/* 002284f4 */		break;
+/* 002284fa */	case "バーニング":
+/* 002284fa */		switch (RAND(3))
+/* 00228512 */		{
+/* 00228512 */		case 1:
+/* 00228512 */			msg = "罷り通る！";
+/* 00228526 */			break;
+/* 0022852c */		case 2:
+/* 0022852c */			msg = "バーニング！";
+/* 00228540 */			break;
+/* 00228546 */		case 3:
+/* 00228546 */			msg = "俺の前に立つとはな";
+/* 0022855a */			break;
+/* 00228560 */		}
+/* 00228560 */		break;
+/* 00228566 */	case "イェリコ":
+/* 00228566 */		switch (RAND(6))
+/* 0022857e */		{
+/* 0022857e */		case 1:
+/* 0022857e */			msg = "しねーーーー！！";
+/* 00228592 */			break;
+/* 00228598 */		case 2:
+/* 00228598 */			msg = "うわーん、来るなー！";
+/* 002285ac */			break;
+/* 002285b2 */		case 3:
+/* 002285b2 */			msg = "ほろびろーーーー！！";
+/* 002285c6 */			break;
+/* 002285cc */		case 4:
+/* 002285cc */			msg = "ぶっとばすぞーー！";
+/* 002285e0 */			break;
+/* 002285e6 */		case 5:
+/* 002285e6 */			msg = "わー、顔がこわいぞ！";
+/* 002285fa */			break;
+/* 00228600 */		case 6:
+/* 00228600 */			msg = "なさけむよう！";
+/* 00228614 */			break;
+/* 0022861a */		}
+/* 0022861a */		break;
+/* 00228620 */	}
+/* 00228620 */	return msg;
+/* 0022862c */}
+

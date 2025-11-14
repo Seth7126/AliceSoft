@@ -1,0 +1,281 @@
+SkillSelectorGroup::SkillSelectorGroup()
+/* 001b25c2 */{
+/* 001b25ca */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b25f0 */	this.lastHoverIndex_ = -1;
+/* 001b2602 */	this.isEnable_ = true;
+/* 001b2614 */}
+
+void SkillSelectorGroup::init()
+/* 001b261c */{
+/* 001b261c */	this.initPanel();
+/* 001b2624 */	this.initOrderList();
+/* 001b262c */	this.initSelector();
+/* 001b2634 */}
+
+void SkillSelectorGroup::reset()
+/* 001b263c */{
+/* 001b263c */	this.initOrderList();
+/* 001b2644 */	this.initSelector();
+/* 001b264c */}
+
+void SkillSelectorGroup::initOrderList()
+/* 001b2654 */{
+/* 001b2654 */	this.orderList_.Alloc(g_party.getCount());
+/* 001b2674 */	int i;
+/* 001b2686 */	for (i = 0; i < this.orderList_.Numof(); ++i)
+/* 001b26d6 */	{
+/* 001b26d6 */		this.orderList_[i] = -1;
+/* 001b26f4 */	}
+/* 001b26fa */}
+
+void SkillSelectorGroup::initPanel()
+/* 001b2702 */{
+/* 001b2702 */	this.partsPanelBase_.initAsFlat("システム／戦闘／フレーム／下地");
+/* 001b2718 */	this.partsPanelBase_.setShow(true);
+/* 001b272e */	this.partsPanelBase_.setZ(2600.0);
+/* 001b2744 */	this.partsPanelChaos_.initAsFlat("システム／戦闘／フレーム／カオス");
+/* 001b275a */	this.partsPanelChaos_.setShow(true);
+/* 001b2770 */	this.partsPanelChaos_.setZ(2640.0);
+/* 001b2786 */}
+
+void SkillSelectorGroup::hideSelected(string attackSkillId)
+/* 001b278e */{
+/* 001b278e */	int index = this.getIndexFromId(attackSkillId);
+/* 001b27ac */	if (0 <= index && index < this.selector_.Numof())
+/* 001b27fe */	{
+/* 001b27fe */		this.selector_[index].hideSelected();
+/* 001b281a */	}
+/* 001b281a */}
+
+void SkillSelectorGroup::initSelector()
+/* 001b2822 */{
+/* 001b2822 */	this.selector_.Alloc(g_party.getCount());
+/* 001b2842 */	int i;
+/* 001b2854 */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b28a4 */	{
+/* 001b28a4 */		ref PlayerSkill atk = getPlayerSkillFromId(g_party.getAttackSkillId(i));
+/* 001b28f6 */		this.selector_[i].init(atk.getId(), atk.getPlayerId(), i, false);
+/* 001b2942 */		this.selector_[i].setOnClickCallback(this.onClickSelect);
+/* 001b2968 */		this.selector_[i].setEnable(false);
+/* 001b298a */	}
+/* 001b299c */}
+
+int SkillSelectorGroup::getIndexFromId(string id)
+/* 001b29a4 */{
+/* 001b29a4 */	int i;
+/* 001b29b6 */	for (i = 0; i < g_party.getCount(); ++i)
+/* 001b2a06 */	{
+/* 001b2a06 */		if (g_party.getAttackSkillId(i) == id)
+/* 001b2a32 */		{
+/* 001b2a32 */			return i;
+/* 001b2a3e */		}
+/* 001b2a3e */	}
+/* 001b2a44 */	return -1;
+/* 001b2a4c */}
+
+void SkillSelectorGroup::clearOrder()
+/* 001b2a5a */{
+/* 001b2a5a */	int i;
+/* 001b2a6c */	for (i = 0; i < this.orderList_.Numof(); ++i)
+/* 001b2abc */	{
+/* 001b2abc */		this.orderList_[i] = -1;
+/* 001b2ada */		this.selector_[i].setSelected(-1);
+/* 001b2afc */	}
+/* 001b2b02 */}
+
+void SkillSelectorGroup::updateCoolTime()
+/* 001b2b0a */{
+/* 001b2b0a */	int i;
+/* 001b2b1c */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b2b6c */	{
+/* 001b2b6c */		ref PlayerSkill atk = getPlayerSkillFromId(g_party.getAttackSkillId(i));
+/* 001b2bbe */		ref Player p = getPlayerFromId(atk.getPlayerId());
+/* 001b2c06 */		this.selector_[i].setCoolTime(p.getCoolTime(atk.getId()));
+/* 001b2c42 */	}
+/* 001b2c60 */}
+
+void SkillSelectorGroup::setShowMoveOff()
+/* 001b2c68 */{
+/* 001b2c68 */	int i;
+/* 001b2c7a */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b2cca */	{
+/* 001b2cca */		this.selector_[i].setShowMoveOff();
+/* 001b2ce6 */	}
+/* 001b2cec */}
+
+void SkillSelectorGroup::getSelectedIdList(ref array@string result)
+/* 001b2cf4 */{
+/* 001b2cf4 */	result.Free();
+/* 001b2cfe */	int i;
+/* 001b2d10 */	for (i = 0; i < 8; ++i)
+/* 001b2d56 */	{
+/* 001b2d56 */		int index = this.orderList_.Find(0, this.orderList_.Numof(), i);
+/* 001b2d92 */		if (index >= 0)
+/* 001b2daa */		{
+/* 001b2daa */			result.PushBack(g_party.getAttackSkillId(index));
+/* 001b2dce */		}
+/* 001b2dce */	}
+/* 001b2dd4 */}
+
+void SkillSelectorGroup::getAvailableIdList(ref array@string result)
+/* 001b2ddc */{
+/* 001b2ddc */	result.Free();
+/* 001b2de6 */	int i;
+/* 001b2df8 */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b2e48 */	{
+/* 001b2e48 */		if (this.selector_[i].isAvailable())
+/* 001b2e6a */		{
+/* 001b2e6a */			result.PushBack(g_party.getAttackSkillId(i));
+/* 001b2e8e */		}
+/* 001b2e8e */	}
+/* 001b2e94 */}
+
+void SkillSelectorGroup::update()
+/* 001b2e9c */{
+/* 001b2e9c */	int index = -1;
+/* 001b2eae */	int i;
+/* 001b2ec0 */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b2f10 */	{
+/* 001b2f10 */		if (this.selector_[i].isHover())
+/* 001b2f32 */		{
+/* 001b2f32 */			index = i;
+/* 001b2f48 */			break;
+/* 001b2f4e */		}
+/* 001b2f4e */	}
+/* 001b2f54 */	if (this.lastHoverIndex_ != index)
+/* 001b2f70 */	{
+/* 001b2f70 */		this.hoverCb_(index);
+/* 001b2f9a */	}
+/* 001b2f9a */	this.lastHoverIndex_ = index;
+/* 001b2fb0 */}
+
+void SkillSelectorGroup::onClickSelect(int index)
+/* 001b2fb8 */{
+/* 001b2fb8 */	int n = this.getNextNumber();
+/* 001b2fcc */	if (this.orderList_[index] == -1)
+/* 001b2ff0 */	{
+/* 001b2ff0 */		this.orderList_[index] = n;
+/* 001b3012 */		this.selector_[index].setSelected(n);
+/* 001b3038 */	}
+/* 001b303e */	else
+/* 001b303e */	{
+/* 001b303e */		int current = this.orderList_[index];
+/* 001b3060 */		this.orderList_[index] = -1;
+/* 001b307e */		this.selector_[index].setSelected(-1);
+/* 001b30a0 */		int i;
+/* 001b30b2 */		for (i = 0; i < this.orderList_.Numof(); ++i)
+/* 001b3102 */		{
+/* 001b3102 */			if (current < this.orderList_[i])
+/* 001b312a */			{
+/* 001b312a */				--this.orderList_[i];
+/* 001b3146 */				this.selector_[i].setSelected(this.orderList_[i]);
+/* 001b3178 */			}
+/* 001b3178 */		}
+/* 001b317e */	}
+/* 001b317e */}
+
+void SkillSelectorGroup::select(int index)
+/* 001b3186 */{
+/* 001b3186 */	if (0 <= index && index < this.selector_.Numof())
+/* 001b31d8 */	{
+/* 001b31d8 */		if (this.selector_[index].isAvailable())
+/* 001b31fa */		{
+/* 001b31fa */			this.onClickSelect(index);
+/* 001b320c */		}
+/* 001b320c */	}
+/* 001b320c */}
+
+bool SkillSelectorGroup::isSelected(int index)
+/* 001b3214 */{
+/* 001b3214 */	if (0 <= index && index < this.selector_.Numof())
+/* 001b3266 */	{
+/* 001b3266 */		return this.selector_[index].getSelected() != -1;
+/* 001b328e */	}
+/* 001b328e */	return false;
+/* 001b3296 */}
+
+int SkillSelectorGroup::getNextNumber()
+/* 001b32a4 */{
+/* 001b32a4 */	int n = -1;
+/* 001b32b6 */	int i;
+/* 001b32c8 */	for (i = 0; i < this.orderList_.Numof(); ++i)
+/* 001b3318 */	{
+/* 001b3318 */		n = Math.Max(this.orderList_[i], n);
+/* 001b334e */	}
+/* 001b3354 */	return n + 1;
+/* 001b3368 */}
+
+void SkillSelectorGroup::setEnable(bool val)
+/* 001b3376 */{
+/* 001b3376 */	if (this.isEnable_ == val)
+/* 001b3392 */	{
+/* 001b3392 */		return;
+/* 001b3394 */	}
+/* 001b3394 */	this.isEnable_ = val;
+/* 001b33aa */	this.moveOffPanel(!val);
+/* 001b33c0 */	if (val)
+/* 001b33d0 */	{
+/* 001b33d0 */		DG_TelopFunction fn;
+/* 001b33dc */		fn = EX_String("テロップ関数", "");
+/* 001b340a */		this.telop_.init(fn(), 537, 689, 0, 729);
+/* 001b3452 */		fn.Clear();
+/* 001b345e */	}
+/* 001b345e */	this.telop_.fadeIn(val, NULL);
+/* 001b347a */	int i;
+/* 001b348c */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b34dc */	{
+/* 001b34dc */		this.selector_[i].moveOff(!val);
+/* 001b3506 */		this.selector_[i].setEnable(val);
+/* 001b352c */	}
+/* 001b3532 */}
+
+void SkillSelectorGroup::moveOffPanel(bool val)
+/* 001b353a */{
+/* 001b353a */	PartsMotion m;
+/* 001b354a */	if (val)
+/* 001b355a */	{
+/* 001b355a */		m.setMove(0, 0, 0, 40, 1);
+/* 001b3588 */	}
+/* 001b358e */	else
+/* 001b358e */	{
+/* 001b358e */		m.setMove(0, 40, 0, 0, 1);
+/* 001b35bc */	}
+/* 001b35bc */	this.partsPanelBase_.runMotion(m, NULL);
+/* 001b35dc */	this.partsPanelChaos_.runMotion(m, NULL);
+/* 001b35fc */}
+
+void SkillSelectorGroup::fadeIn(bool val)
+/* 001b3604 */{
+/* 001b3604 */	int i;
+/* 001b3616 */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b3666 */	{
+/* 001b3666 */		this.selector_[i].fadeIn(val, false);
+/* 001b3692 */	}
+/* 001b3698 */	if (val)
+/* 001b36a8 */	{
+/* 001b36a8 */		this.partsPanelBase_.startFlat(false, 1.0);
+/* 001b36c4 */		this.partsPanelChaos_.startFlat(false, 1.0);
+/* 001b36e0 */	}
+/* 001b36e6 */	else
+/* 001b36e6 */	{
+/* 001b36e6 */		PartsMotion m;
+/* 001b36f6 */		m.setAlpha(255, 0, 0);
+/* 001b3718 */		this.partsPanelBase_.runMotion(m, NULL);
+/* 001b3738 */		this.partsPanelChaos_.runMotion(m, NULL);
+/* 001b3758 */	}
+/* 001b3758 */}
+
+void SkillSelectorGroup::updateShowState()
+/* 001b3766 */{
+/* 001b3766 */	int i;
+/* 001b3778 */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001b37c8 */	{
+/* 001b37c8 */		this.selector_[i].updateShowState();
+/* 001b37e4 */	}
+/* 001b37ea */}
+
+void SkillSelectorGroup::setOnChangeHoverIndex(DG_OnChangeHoverIndex cb)
+/* 001b37f2 */{
+/* 001b37f2 */	this.hoverCb_ = cb;
+/* 001b380c */}
+

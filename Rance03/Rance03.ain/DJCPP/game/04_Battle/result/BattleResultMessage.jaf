@@ -1,0 +1,75 @@
+BattleResultMessage::BattleResultMessage()
+/* 001a0b86 */{
+/* 001a0b8e */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a0bb4 */	this.isInitialized_ = false;
+/* 001a0bc6 */}
+
+void BattleResultMessage::init()
+/* 001a0bce */{
+/* 001a0bce */	g_battleResult.getBattleEndMessage(this.msg_);
+/* 001a0be8 */	if (!this.msg_.Empty())
+/* 001a0bfa */	{
+/* 001a0bfa */		this.initParts();
+/* 001a0c02 */	}
+/* 001a0c02 */}
+
+void BattleResultMessage::update()
+/* 001a0c0a */{
+/* 001a0c0c */}
+
+void BattleResultMessage::fadeIn(bool val, unknown_delegate onFinish)
+/* 001a0c12 */{
+/* 001a0c12 */	if (!this.isInitialized_)
+/* 001a0c24 */	{
+/* 001a0c24 */		return;
+/* 001a0c26 */	}
+/* 001a0c26 */	this.setPartsShow();
+/* 001a0c2e */	PartsMotion m;
+/* 001a0c3e */	if (val)
+/* 001a0c4e */	{
+/* 001a0c4e */		m.setMove(0, 768, 0, 768 - this.parts_[0].getHeight(), 1);
+/* 001a0c96 */	}
+/* 001a0c9c */	else
+/* 001a0c9c */	{
+/* 001a0c9c */		m.setMove(0, 768 - this.parts_[0].getHeight(), 0, 768, 1);
+/* 001a0ce4 */	}
+/* 001a0ce4 */	this.parent_.runMotion(m, NULL);
+/* 001a0d04 */}
+
+void BattleResultMessage::initParts()
+/* 001a0d0c */{
+/* 001a0d0c */	this.isInitialized_ = true;
+/* 001a0d1e */	array@string msg;
+/* 001a0d28 */	g_battleResult.getBattleEndMessage(msg);
+/* 001a0d42 */	this.parts_.Alloc(msg.Numof() + 1);
+/* 001a0d6a */	this.parts_[0].initAsPlaneImage(1024, msg.Numof() * 40, 0, 0, 0, 255);
+/* 001a0db8 */	this.parts_[0].setAlpha(128.0);
+/* 001a0dd6 */	int i;
+/* 001a0de8 */	for (i = 0; i < msg.Numof(); ++i)
+/* 001a0e38 */	{
+/* 001a0e38 */		this.parts_[1 + i].initAsText(msg[i], 24, true, 256, 255, 255, 255);
+/* 001a0e96 */	}
+/* 001a0e9c */	createPartsGroup(this.parent_, this.parts_, 3760);
+/* 001a0ebc */	this.setPartsPos();
+/* 001a0ec4 */}
+
+void BattleResultMessage::setPartsShow()
+/* 001a0ecc */{
+/* 001a0ecc */	int i;
+/* 001a0ede */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a0f2e */	{
+/* 001a0f2e */		this.parts_[i].setShow(true);
+/* 001a0f50 */	}
+/* 001a0f56 */	this.parent_.setShow(true);
+/* 001a0f6c */}
+
+void BattleResultMessage::setPartsPos()
+/* 001a0f74 */{
+/* 001a0f74 */	int i;
+/* 001a0f86 */	for (i = 1; i < this.parts_.Numof(); ++i)
+/* 001a0fd6 */	{
+/* 001a0fd6 */		this.parts_[i].setPos(512.0, (i - 1) * 40 + (40 - this.parts_[i].getHeight()) / 2);
+/* 001a1042 */		this.parts_[i].setOrigin(8);
+/* 001a1064 */	}
+/* 001a106a */}
+

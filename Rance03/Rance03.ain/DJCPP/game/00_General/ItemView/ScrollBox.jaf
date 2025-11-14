@@ -1,0 +1,160 @@
+ScrollBox::ScrollBox()
+/* 0017bed4 */{
+/* 0017bedc */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0017bf0c */}
+
+void ScrollBox::init(DG_GetScrollerPosition getPosFunc, DG_SetScrollerPosition setPosFunc, DG_SetScrollerPosition scrollPosFunc, float max)
+/* 0017bf14 */{
+/* 0017bf14 */	this.getPosFunc_ = getPosFunc;
+/* 0017bf2e */	this.setPosFunc_ = setPosFunc;
+/* 0017bf48 */	this.scrollPosFunc_ = scrollPosFunc;
+/* 0017bf62 */	this.scrollerMax_ = max;
+/* 0017bf78 */	this.initParts();
+/* 0017bf80 */	this.setPartsShowState();
+/* 0017bf88 */}
+
+void ScrollBox::changeMax(float max)
+/* 0017bf90 */{
+/* 0017bf90 */	this.scrollerMax_ = max;
+/* 0017bfa6 */	this.setPartsShowState();
+/* 0017bfae */}
+
+void ScrollBox::update()
+/* 0017bfb6 */{
+/* 0017bfb6 */	if (this.scrollerMax_ == 0.0)
+/* 0017bfce */	{
+/* 0017bfce */		return;
+/* 0017bfd0 */	}
+/* 0017bfd0 */	this.isHover_ = this.parts_[0].isHit(g_mouse.getX(), g_mouse.getY());
+/* 0017c014 */	switch (this.state_)
+/* 0017c02a */	{
+/* 0017c02a */	case 0:
+/* 0017c02a */		this.setBoxPosition();
+/* 0017c032 */		if (this.isHover_ && g_mouse.onDown(0))
+/* 0017c076 */		{
+/* 0017c076 */			if (this.parts_[1].isHit(g_mouse.getX(), g_mouse.getY()))
+/* 0017c0b4 */			{
+/* 0017c0b4 */				this.state_ = 2;
+/* 0017c0c6 */				this.dragStartX_ = g_mouse.getX();
+/* 0017c0e4 */				this.dragStartY_ = g_mouse.getY();
+/* 0017c102 */				this.dragStartRange_ = this.parts_[1].getY() / this.boxPosMax_;
+/* 0017c132 */			}
+/* 0017c138 */			else
+/* 0017c138 */			{
+/* 0017c138 */				this.state_ = 1;
+/* 0017c14a */			}
+/* 0017c14a */		}
+/* 0017c14a */		break;
+/* 0017c150 */	case 1:
+/* 0017c150 */		if (!this.isHover_)
+/* 0017c162 */		{
+/* 0017c162 */			this.state_ = 0;
+/* 0017c174 */		}
+/* 0017c174 */		if (!g_mouse.isDown(0))
+/* 0017c192 */		{
+/* 0017c192 */			this.state_ = 0;
+/* 0017c1a4 */			float pos = this.getPosFunc_();
+/* 0017c1d0 */			float n = 710.0;
+/* 0017c1e2 */			if (g_mouse.getY() < this.parts_[1].getScreenY())
+/* 0017c212 */			{
+/* 0017c212 */				this.scrollPosFunc_(pos - n);
+/* 0017c248 */			}
+/* 0017c24e */			else
+/* 0017c24e */			{
+/* 0017c24e */				this.scrollPosFunc_(pos + n);
+/* 0017c284 */			}
+/* 0017c284 */		}
+/* 0017c284 */		break;
+/* 0017c28a */	case 2:
+/* 0017c28a */		if (g_mouse.isDown(0))
+/* 0017c2a6 */		{
+/* 0017c2a6 */			if (Math.Abs(g_mouse.getX() - this.dragStartX_) > 10 || Math.Abs(g_mouse.getY() - this.dragStartY_) > 10)
+/* 0017c336 */			{
+/* 0017c336 */				this.state_ = 3;
+/* 0017c348 */				g_mouse.setNextMouseUpIgnore();
+/* 0017c358 */			}
+/* 0017c358 */		}
+/* 0017c35e */		else
+/* 0017c35e */		{
+/* 0017c35e */			this.state_ = 0;
+/* 0017c370 */		}
+/* 0017c370 */		break;
+/* 0017c376 */	case 3:
+/* 0017c376 */		this.setBoxPosition();
+/* 0017c37e */		if (g_mouse.isDown(0))
+/* 0017c39a */		{
+/* 0017c39a */			float movedRange = (g_mouse.getY() - this.dragStartY_) / this.boxPosMax_;
+/* 0017c3d4 */			float r = Math.MaxF(0.0, Math.MinF(1.0, this.dragStartRange_ + movedRange));
+/* 0017c416 */			this.setPosFunc_(r * this.scrollerMax_);
+/* 0017c44c */		}
+/* 0017c452 */		else
+/* 0017c452 */		{
+/* 0017c452 */			this.state_ = 0;
+/* 0017c464 */		}
+/* 0017c464 */		break;
+/* 0017c46a */	}
+/* 0017c46a */	this.setPartsShowState();
+/* 0017c472 */}
+
+void ScrollBox::setBoxPosition()
+/* 0017c47a */{
+/* 0017c47a */	float r = Math.MaxF(0.0, Math.MinF(1.0, this.getPosFunc_() / this.scrollerMax_));
+/* 0017c4d2 */	this.parts_[1].setPos(0.0, r * this.boxPosMax_);
+/* 0017c506 */}
+
+void ScrollBox::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 0017c50e */{
+/* 0017c50e */	this.setPartsShow();
+/* 0017c516 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), onFinish);
+/* 0017c55a */}
+
+void ScrollBox::initParts()
+/* 0017c562 */{
+/* 0017c562 */	this.parts_[0].init("システム／アイテム／スクロールボックス／背景", 0);
+/* 0017c586 */	this.parts_[1].init("システム／アイテム／スクロールボックス", 0);
+/* 0017c5aa */	createPartsGroup(this.parent_, this.parts_, 4500);
+/* 0017c5ca */	this.boxWidth_ = this.parts_[1].getWidth() / 4;
+/* 0017c5f6 */	this.boxHeight_ = this.parts_[1].getHeight();
+/* 0017c61a */	this.boxPosMax_ = this.parts_[0].getHeight() - this.boxHeight_;
+/* 0017c64c */	pass("%d %d" % this.boxWidth_ % this.boxHeight_);
+/* 0017c67c */	this.setPartsPos();
+/* 0017c684 */}
+
+void ScrollBox::setPartsShowState()
+/* 0017c68c */{
+/* 0017c68c */	int n = this.scrollerMax_ == 0.0 ? 3 : 0;
+/* 0017c6c2 */	if (this.parts_[1].isHit(g_mouse.getX(), g_mouse.getY()))
+/* 0017c700 */	{
+/* 0017c700 */		n = g_mouse.isDown(0) ? 2 : 1;
+/* 0017c73a */	}
+/* 0017c73a */	this.parts_[1].setCgRange(n * this.boxWidth_, 0, this.boxWidth_, this.boxHeight_);
+/* 0017c782 */	if (n == 3)
+/* 0017c79a */	{
+/* 0017c79a */		this.parts_[1].setPos(0.0, 0.0);
+/* 0017c7be */	}
+/* 0017c7be */}
+
+void ScrollBox::setPartsShow()
+/* 0017c7c6 */{
+/* 0017c7c6 */	int i;
+/* 0017c7d8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017c828 */	{
+/* 0017c828 */		this.parts_[i].setShow(true);
+/* 0017c84a */	}
+/* 0017c850 */	this.parent_.setShow(true);
+/* 0017c866 */}
+
+void ScrollBox::setPartsPos()
+/* 0017c86e */{
+/* 0017c870 */}
+
+bool ScrollBox::isHover()
+/* 0017c876 */{
+/* 0017c876 */	return this.isHover_;
+/* 0017c882 */}
+
+void ScrollBox::setPos(int x, int y)
+/* 0017c890 */{
+/* 0017c890 */	this.parent_.setPos(x, y);
+/* 0017c8b8 */}
+

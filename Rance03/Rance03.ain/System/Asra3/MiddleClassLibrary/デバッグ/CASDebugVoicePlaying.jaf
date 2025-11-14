@@ -1,0 +1,58 @@
+CASDebugVoicePlaying::CASDebugVoicePlaying()
+/* 00041ab4 */{
+/* 00041abc */	this.m_Show = false;
+/* 00041ace */	this.m_Play = false;
+/* 00041ae0 */	this.m_Text.Create();
+/* 00041af0 */	this.SetFont(0, 24);
+/* 00041b04 */	PARTS_SetWantSaveBackScene(this.m_Text.GetPartsNumber(), false);
+/* 00041b20 */}
+
+void CASDebugVoicePlaying::SetFont(int Type, int Size)
+/* 00041b28 */{
+/* 00041b28 */	this.m_TextProperty.SetType(Type);
+/* 00041b42 */	this.m_TextProperty.SetSize(Size);
+/* 00041b5c */	this.m_TextProperty.SetEdgeWeight(1.5);
+/* 00041b72 */	this.m_TextProperty.SetEdgeColor(CF_CASColor(64, 0, 0, 255));
+/* 00041ba0 */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 00041bc0 */}
+
+void CASDebugVoicePlaying::SetText(string Text, CASColor Color)
+/* 00041bc8 */{
+/* 00041bc8 */	this.m_Text.SetText(Text, 1);
+/* 00041be8 */	this.m_Text.SetShow(false);
+/* 00041bfe */}
+
+void CASDebugVoicePlaying::SetShow(bool Show)
+/* 00041c06 */{
+/* 00041c06 */	this.m_Show = Show;
+/* 00041c1c */}
+
+bool CASDebugVoicePlaying::IsShow()
+/* 00041c24 */{
+/* 00041c24 */	return this.m_Show;
+/* 00041c30 */}
+
+void CASDebugVoicePlaying::SetPlay(bool Play)
+/* 00041c3e */{
+/* 00041c3e */	this.m_Play = Play;
+/* 00041c54 */}
+
+void CASDebugVoicePlaying::Update(int PosX, int PosY)
+/* 00041c5c */{
+/* 00041c5c */	Ｐ＿親設定(this.m_Text.GetPartsNumber(), PARTS_GetSystemOverlayLayer());
+/* 00041c78 */	this.m_Text.SetShow(false);
+/* 00041c8e */	if (!this.m_Show)
+/* 00041ca0 */	{
+/* 00041ca0 */		return;
+/* 00041ca2 */	}
+/* 00041ca2 */	this.m_Text.SetPos(PosX, PosY);
+/* 00041cc6 */	this.m_Text.SetShow(this.m_Play);
+/* 00041ce0 */	this.m_Text.SetZ(32767);
+/* 00041cf6 */}
+
+int CASDebugVoicePlaying::GetBottom()
+/* 00041cfe */{
+/* 00041cfe */	int Number = this.m_Text.GetPartsNumber();
+/* 00041d1a */	return AFL_Parts_GetUpperLeftPosY(Number, 1) + AFL_Parts_GetHeight(Number, 1);
+/* 00041d4e */}
+

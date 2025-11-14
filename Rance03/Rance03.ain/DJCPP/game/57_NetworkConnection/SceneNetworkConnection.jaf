@@ -1,0 +1,77 @@
+void SceneNetworkConnection::init()
+/* 001c83a2 */{
+/* 001c83a2 */	this.partsBg_.init("システム／接続確認", 0);
+/* 001c83be */	this.initButton();
+/* 001c83c6 */	this.setButtonPos();
+/* 001c83ce */	this.partsBg_.setZ(4000.0);
+/* 001c83e4 */}
+
+void SceneNetworkConnection::initButton()
+/* 001c83ec */{
+/* 001c83ec */	this.btn_[0].init("システム／ボタン／幅１２８", "許可する", "", true);
+/* 001c841c */	this.btn_[1].init("システム／ボタン／幅１２８", "許可しない", "", true);
+/* 001c844c */	int i;
+/* 001c845e */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c84ae */	{
+/* 001c84ae */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001c84de */		this.btn_[i].setZ(4500);
+/* 001c8500 */	}
+/* 001c8506 */}
+
+void SceneNetworkConnection::setButtonPos()
+/* 001c850e */{
+/* 001c850e */	this.btn_[0].setPos(374, 595);
+/* 001c8532 */	this.btn_[1].setPos(522, 595);
+/* 001c8556 */}
+
+void SceneNetworkConnection::fadeButton(bool val)
+/* 001c855e */{
+/* 001c855e */	int i;
+/* 001c8570 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c85c0 */	{
+/* 001c85c0 */		this.btn_[i].fadeIn(val);
+/* 001c85e6 */	}
+/* 001c85ec */}
+
+void SceneNetworkConnection::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001c85f4 */{
+/* 001c85f4 */	this.fadeButton(val);
+/* 001c8606 */	this.partsBg_.setShow(true);
+/* 001c861c */	PartsMotion m;
+/* 001c862c */	if (val)
+/* 001c863c */	{
+/* 001c863c */		m.setAlpha(0, 255, 0);
+/* 001c865e */	}
+/* 001c8664 */	else
+/* 001c8664 */	{
+/* 001c8664 */		m.setAlpha(255, 0, 0);
+/* 001c8686 */	}
+/* 001c8686 */	this.partsBg_.runMotion(m, cb);
+/* 001c86b0 */}
+
+void SceneNetworkConnection::run()
+/* 001c86b8 */{
+/* 001c86b8 */	this.fadeIn(true, NULL);
+/* 001c86c8 */}
+
+bool SceneNetworkConnection::update()
+/* 001c86d0 */{
+/* 001c86d0 */	return !this.isFinish_;
+/* 001c86e0 */}
+
+void SceneNetworkConnection::onClick(int id)
+/* 001c86ee */{
+/* 001c86ee */	this.selected_ = id;
+/* 001c8704 */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001c871c */}
+
+void SceneNetworkConnection::onFinishFadeOut()
+/* 001c8724 */{
+/* 001c8724 */	this.isFinish_ = true;
+/* 001c8736 */}
+
+int SceneNetworkConnection::getSelected()
+/* 001c873e */{
+/* 001c873e */	return this.selected_;
+/* 001c874a */}
+

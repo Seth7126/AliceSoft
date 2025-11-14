@@ -1,0 +1,2037 @@
+float AFL_Config_GetMessageSpeedRate()
+/* 0016c2e8 */{
+/* 0016c2e8 */	return g_fMessageSpeedRate;
+/* 0016c2f4 */}
+
+void AFL_Config_SetMessageSpeedRate(float Rate)
+/* 0016c308 */{
+/* 0016c308 */	if (Rate < 0.0)
+/* 0016c320 */	{
+/* 0016c320 */		Rate = 0.0;
+/* 0016c332 */	}
+/* 0016c338 */	else if (Rate > 1.0)
+/* 0016c350 */	{
+/* 0016c350 */		Rate = 1.0;
+/* 0016c362 */	}
+/* 0016c362 */	g_fMessageSpeedRate = Rate;
+/* 0016c378 */}
+
+void AFL_Config_ResetMessageSpeedRate()
+/* 0016c386 */{
+/* 0016c386 */	g_fMessageSpeedRate = 0.5;
+/* 0016c398 */}
+
+float AFL_Config_GetAutoModeWaitTimeRate()
+/* 0016c3a6 */{
+/* 0016c3a6 */	return g_fAutoModeWaitTimeRate;
+/* 0016c3b2 */}
+
+void AFL_Config_SetAutoModeWaitTimeRate(float Rate)
+/* 0016c3c6 */{
+/* 0016c3c6 */	if (Rate < 0.0)
+/* 0016c3de */	{
+/* 0016c3de */		Rate = 0.0;
+/* 0016c3f0 */	}
+/* 0016c3f6 */	else if (Rate > 1.0)
+/* 0016c40e */	{
+/* 0016c40e */		Rate = 1.0;
+/* 0016c420 */	}
+/* 0016c420 */	g_fAutoModeWaitTimeRate = Rate;
+/* 0016c436 */}
+
+void AFL_Config_ResetAutoModeWaitTimeRate()
+/* 0016c444 */{
+/* 0016c444 */	g_fAutoModeWaitTimeRate = 0.5;
+/* 0016c456 */}
+
+float AFL_Config_GetReadMessageSkipWaitTimeRate()
+/* 0016c464 */{
+/* 0016c464 */	return g_fReadMessageSkipWaitTimeRate;
+/* 0016c470 */}
+
+void AFL_Config_SetReadMessageSkipWaitTimeRate(float Rate)
+/* 0016c484 */{
+/* 0016c484 */	if (Rate < 0.0)
+/* 0016c49c */	{
+/* 0016c49c */		Rate = 0.0;
+/* 0016c4ae */	}
+/* 0016c4b4 */	else if (Rate > 1.0)
+/* 0016c4cc */	{
+/* 0016c4cc */		Rate = 1.0;
+/* 0016c4de */	}
+/* 0016c4de */	g_fReadMessageSkipWaitTimeRate = Rate;
+/* 0016c4f4 */}
+
+void AFL_Config_ResetReadMessageSkipWaitTimeRate()
+/* 0016c502 */{
+/* 0016c502 */	g_fReadMessageSkipWaitTimeRate = 1.0;
+/* 0016c514 */}
+
+bool AFL_Config_GetRestrainScreensaverWhileAutoMode()
+/* 0016c522 */{
+/* 0016c522 */	return g_bRestrainScreensaverWhileAutoMode;
+/* 0016c52e */}
+
+void AFL_Config_SetRestrainScreensaverWhileAutoMode(bool Flag)
+/* 0016c542 */{
+/* 0016c542 */	g_bRestrainScreensaverWhileAutoMode = Flag;
+/* 0016c558 */}
+
+bool AFL_Config_GetFrameSkipWhileMessageSkip()
+/* 0016c566 */{
+/* 0016c566 */	return g_bConfigIsSpeedupForFrameSkip;
+/* 0016c572 */}
+
+void AFL_Config_SetFrameSkipWhileMessageSkip(bool Flag)
+/* 0016c586 */{
+/* 0016c586 */	g_bConfigIsSpeedupForFrameSkip = Flag;
+/* 0016c59c */	ChipmunkSpriteEngine.SYSTEM_SetConfigFrameSkipWhileMessageSkip(g_bConfigIsSpeedupForFrameSkip);
+/* 0016c5b0 */}
+
+bool AFL_Config_GetReleaseSkipModeByClick()
+/* 0016c5be */{
+/* 0016c5be */	return g_bConfigReleaseSkipModeByClick;
+/* 0016c5ca */}
+
+void AFL_Config_SetReleaseSkipModeByClick(bool Flag)
+/* 0016c5de */{
+/* 0016c5de */	g_bConfigReleaseSkipModeByClick = Flag;
+/* 0016c5f4 */}
+
+bool AFL_Config_GetReleaseSkipModeByReadMessage()
+/* 0016c602 */{
+/* 0016c602 */	return g_bConfigReleaseSkipModeByReadMessage;
+/* 0016c60e */}
+
+void AFL_Config_SetReleaseSkipModeByReadMessage(bool Flag)
+/* 0016c622 */{
+/* 0016c622 */	g_bConfigReleaseSkipModeByReadMessage = Flag;
+/* 0016c638 */}
+
+bool AFL_Config_GetReleaseAutoModeByClick()
+/* 0016c646 */{
+/* 0016c646 */	return g_bConfigReleaseAutoModeByClick;
+/* 0016c652 */}
+
+void AFL_Config_SetReleaseAutoModeByClick(bool Flag)
+/* 0016c666 */{
+/* 0016c666 */	g_bConfigReleaseAutoModeByClick = Flag;
+/* 0016c67c */}
+
+void AFL_Config_SetSkipAllMessage(bool 許可)
+/* 0016c68a */{
+/* 0016c68a */	g_ConfigSkipAllMessage = 許可;
+/* 0016c6a0 */}
+
+bool AFL_Config_GetSkipAllMessage()
+/* 0016c6ae */{
+/* 0016c6ae */	return g_ConfigSkipAllMessage;
+/* 0016c6ba */}
+
+bool AFL_Config_GetReleaseMessageSkipInSelectMenu()
+/* 0016c6ce */{
+/* 0016c6ce */	return g_ReleaseMessageSkipInSelectMenu;
+/* 0016c6da */}
+
+void AFL_Config_SetReleaseMessageSkipInSelectMenu(bool Flag)
+/* 0016c6ee */{
+/* 0016c6ee */	g_ReleaseMessageSkipInSelectMenu = Flag;
+/* 0016c704 */}
+
+bool AFL_Config_GetReleaseAutoModeInSelectMenu()
+/* 0016c712 */{
+/* 0016c712 */	return g_ReleaseAutoModeInSelectMenu;
+/* 0016c71e */}
+
+void AFL_Config_SetReleaseAutoModeInSelectMenu(bool Flag)
+/* 0016c732 */{
+/* 0016c732 */	g_ReleaseAutoModeInSelectMenu = Flag;
+/* 0016c748 */}
+
+bool AFL_Config_GetShowSampleMessage()
+/* 0016c756 */{
+/* 0016c756 */	return g_ShowSampleMessage;
+/* 0016c762 */}
+
+void AFL_Config_SetShowSampleMessage(bool Flag)
+/* 0016c776 */{
+/* 0016c776 */	g_ShowSampleMessage = Flag;
+/* 0016c78c */}
+
+void AFL_Config_ResetSampleMessageTimer()
+/* 0016c79a */{
+/* 0016c79a */	g_ConfigSampleTextTimer.Reset();
+/* 0016c7aa */}
+
+string AFL_Config_GetSampleMessageText()
+/* 0016c7b8 */{
+/* 0016c7b8 */	return AFL_Config_GetSampleMessageTextByElapsedTime(g_ConfigSampleTextTimer.Get());
+/* 0016c7d0 */}
+
+string AFL_Config_GetSampleMessageTextByElapsedTime(int MilliSecond)
+/* 0016c7e4 */{
+/* 0016c7e4 */	string SampleMessageText = "これはサンプルメッセージです。";
+/* 0016c7f8 */	int TimePerOneChar = g_MessageWindowModelManager.GetMessageWindow(1).文字速度 * SYS_メッセージ速度比率();
+/* 0016c84c */	if (TimePerOneChar <= 0)
+/* 0016c864 */	{
+/* 0016c864 */		return SampleMessageText;
+/* 0016c870 */	}
+/* 0016c870 */	int TotalTime = SampleMessageText.Length() * TimePerOneChar + SYS_オートモード待機時間計算(SampleMessageText.Length());
+/* 0016c8a4 */	MilliSecond %= TotalTime;
+/* 0016c8ba */	int TextLength = Math.Min(MilliSecond / TimePerOneChar, SampleMessageText.Length());
+/* 0016c8f0 */	return SampleMessageText.GetPart(0, TextLength);
+/* 0016c90e */}
+
+bool AFL_Config_IsAnimateMessageWindow()
+/* 0016c922 */{
+/* 0016c922 */	return g_AnimateMessageWindow;
+/* 0016c92e */}
+
+void AFL_Config_SetAnimateMessageWindow(bool AnimateMessageWindow)
+/* 0016c942 */{
+/* 0016c942 */	g_AnimateMessageWindow = AnimateMessageWindow;
+/* 0016c958 */}
+
+bool AFL_Config_ChangesReadTextColor()
+/* 0016c966 */{
+/* 0016c966 */	return g_既読メッセージ色番号 != -1;
+/* 0016c97c */}
+
+void AFL_Config_SetReadTextColorIndex(int Index)
+/* 0016c990 */{
+/* 0016c990 */	Index = Math.Max(Index, -1);
+/* 0016c9b6 */	Index = Math.Min(Index, 11);
+/* 0016c9dc */	g_既読メッセージ色番号 = Index;
+/* 0016c9f2 */}
+
+int AFL_Config_GetReadTextColorIndex()
+/* 0016ca00 */{
+/* 0016ca00 */	return g_既読メッセージ色番号;
+/* 0016ca0c */}
+
+void AFL_Config_GetReadTextColor(int Index, ref int Red, ref int Green, ref int Blue)
+/* 0016ca20 */{
+/* 0016ca20 */	CASColor Color;
+/* 0016ca30 */	Color = g_MessageWindowModelManager.GetReadTextColor(Index);
+/* 0016ca5e */	Red = Color.GetR();
+/* 0016ca7c */	Green = Color.GetG();
+/* 0016ca9a */	Blue = Color.GetB();
+/* 0016cab8 */}
+
+void AFL_Config_GetReadTextColorByActiveIndex(ref int Red, ref int Green, ref int Blue)
+/* 0016cac6 */{
+/* 0016cac6 */	AFL_Config_GetReadTextColor(AFL_Config_GetReadTextColorIndex(), Red, Green, Blue);
+/* 0016caf0 */}
+
+void AFL_Config_GetReadTextColorNone(ref int Red, ref int Green, ref int Blue)
+/* 0016cafe */{
+/* 0016cafe */	AFL_Config_GetReadTextColor(-1, Red, Green, Blue);
+/* 0016cb28 */}
+
+void AFL_Config_GetReadTextColor00(ref int Red, ref int Green, ref int Blue)
+/* 0016cb36 */{
+/* 0016cb36 */	AFL_Config_GetReadTextColor(0, Red, Green, Blue);
+/* 0016cb60 */}
+
+void AFL_Config_GetReadTextColor01(ref int Red, ref int Green, ref int Blue)
+/* 0016cb6e */{
+/* 0016cb6e */	AFL_Config_GetReadTextColor(1, Red, Green, Blue);
+/* 0016cb98 */}
+
+void AFL_Config_GetReadTextColor02(ref int Red, ref int Green, ref int Blue)
+/* 0016cba6 */{
+/* 0016cba6 */	AFL_Config_GetReadTextColor(2, Red, Green, Blue);
+/* 0016cbd0 */}
+
+void AFL_Config_GetReadTextColor03(ref int Red, ref int Green, ref int Blue)
+/* 0016cbde */{
+/* 0016cbde */	AFL_Config_GetReadTextColor(3, Red, Green, Blue);
+/* 0016cc08 */}
+
+void AFL_Config_GetReadTextColor04(ref int Red, ref int Green, ref int Blue)
+/* 0016cc16 */{
+/* 0016cc16 */	AFL_Config_GetReadTextColor(4, Red, Green, Blue);
+/* 0016cc40 */}
+
+void AFL_Config_GetReadTextColor05(ref int Red, ref int Green, ref int Blue)
+/* 0016cc4e */{
+/* 0016cc4e */	AFL_Config_GetReadTextColor(5, Red, Green, Blue);
+/* 0016cc78 */}
+
+void AFL_Config_GetReadTextColor06(ref int Red, ref int Green, ref int Blue)
+/* 0016cc86 */{
+/* 0016cc86 */	AFL_Config_GetReadTextColor(6, Red, Green, Blue);
+/* 0016ccb0 */}
+
+void AFL_Config_GetReadTextColor07(ref int Red, ref int Green, ref int Blue)
+/* 0016ccbe */{
+/* 0016ccbe */	AFL_Config_GetReadTextColor(7, Red, Green, Blue);
+/* 0016cce8 */}
+
+void AFL_Config_GetReadTextColor08(ref int Red, ref int Green, ref int Blue)
+/* 0016ccf6 */{
+/* 0016ccf6 */	AFL_Config_GetReadTextColor(8, Red, Green, Blue);
+/* 0016cd20 */}
+
+void AFL_Config_GetReadTextColor09(ref int Red, ref int Green, ref int Blue)
+/* 0016cd2e */{
+/* 0016cd2e */	AFL_Config_GetReadTextColor(9, Red, Green, Blue);
+/* 0016cd58 */}
+
+void AFL_Config_GetReadTextColor10(ref int Red, ref int Green, ref int Blue)
+/* 0016cd66 */{
+/* 0016cd66 */	AFL_Config_GetReadTextColor(10, Red, Green, Blue);
+/* 0016cd90 */}
+
+void AFL_Config_GetReadTextColor11(ref int Red, ref int Green, ref int Blue)
+/* 0016cd9e */{
+/* 0016cd9e */	AFL_Config_GetReadTextColor(11, Red, Green, Blue);
+/* 0016cdc8 */}
+
+void AFL_Config_SetReadTextColorIndexNone()
+/* 0016cdd6 */{
+/* 0016cdd6 */	AFL_Config_SetReadTextColorIndex(-1);
+/* 0016cde2 */}
+
+void AFL_Config_SetReadTextColorIndex00()
+/* 0016cdf0 */{
+/* 0016cdf0 */	AFL_Config_SetReadTextColorIndex(0);
+/* 0016cdfc */}
+
+void AFL_Config_SetReadTextColorIndex01()
+/* 0016ce0a */{
+/* 0016ce0a */	AFL_Config_SetReadTextColorIndex(1);
+/* 0016ce16 */}
+
+void AFL_Config_SetReadTextColorIndex02()
+/* 0016ce24 */{
+/* 0016ce24 */	AFL_Config_SetReadTextColorIndex(2);
+/* 0016ce30 */}
+
+void AFL_Config_SetReadTextColorIndex03()
+/* 0016ce3e */{
+/* 0016ce3e */	AFL_Config_SetReadTextColorIndex(3);
+/* 0016ce4a */}
+
+void AFL_Config_SetReadTextColorIndex04()
+/* 0016ce58 */{
+/* 0016ce58 */	AFL_Config_SetReadTextColorIndex(4);
+/* 0016ce64 */}
+
+void AFL_Config_SetReadTextColorIndex05()
+/* 0016ce72 */{
+/* 0016ce72 */	AFL_Config_SetReadTextColorIndex(5);
+/* 0016ce7e */}
+
+void AFL_Config_SetReadTextColorIndex06()
+/* 0016ce8c */{
+/* 0016ce8c */	AFL_Config_SetReadTextColorIndex(6);
+/* 0016ce98 */}
+
+void AFL_Config_SetReadTextColorIndex07()
+/* 0016cea6 */{
+/* 0016cea6 */	AFL_Config_SetReadTextColorIndex(7);
+/* 0016ceb2 */}
+
+void AFL_Config_SetReadTextColorIndex08()
+/* 0016cec0 */{
+/* 0016cec0 */	AFL_Config_SetReadTextColorIndex(8);
+/* 0016cecc */}
+
+void AFL_Config_SetReadTextColorIndex09()
+/* 0016ceda */{
+/* 0016ceda */	AFL_Config_SetReadTextColorIndex(9);
+/* 0016cee6 */}
+
+void AFL_Config_SetReadTextColorIndex10()
+/* 0016cef4 */{
+/* 0016cef4 */	AFL_Config_SetReadTextColorIndex(10);
+/* 0016cf00 */}
+
+void AFL_Config_SetReadTextColorIndex11()
+/* 0016cf0e */{
+/* 0016cf0e */	AFL_Config_SetReadTextColorIndex(11);
+/* 0016cf1a */}
+
+bool AFL_Config_IsReadTextColorIndexNone()
+/* 0016cf28 */{
+/* 0016cf28 */	return AFL_Config_GetReadTextColorIndex() == -1;
+/* 0016cf3a */}
+
+bool AFL_Config_IsReadTextColorIndex00()
+/* 0016cf4e */{
+/* 0016cf4e */	return AFL_Config_GetReadTextColorIndex() == 0;
+/* 0016cf60 */}
+
+bool AFL_Config_IsReadTextColorIndex01()
+/* 0016cf74 */{
+/* 0016cf74 */	return AFL_Config_GetReadTextColorIndex() == 1;
+/* 0016cf86 */}
+
+bool AFL_Config_IsReadTextColorIndex02()
+/* 0016cf9a */{
+/* 0016cf9a */	return AFL_Config_GetReadTextColorIndex() == 2;
+/* 0016cfac */}
+
+bool AFL_Config_IsReadTextColorIndex03()
+/* 0016cfc0 */{
+/* 0016cfc0 */	return AFL_Config_GetReadTextColorIndex() == 3;
+/* 0016cfd2 */}
+
+bool AFL_Config_IsReadTextColorIndex04()
+/* 0016cfe6 */{
+/* 0016cfe6 */	return AFL_Config_GetReadTextColorIndex() == 4;
+/* 0016cff8 */}
+
+bool AFL_Config_IsReadTextColorIndex05()
+/* 0016d00c */{
+/* 0016d00c */	return AFL_Config_GetReadTextColorIndex() == 5;
+/* 0016d01e */}
+
+bool AFL_Config_IsReadTextColorIndex06()
+/* 0016d032 */{
+/* 0016d032 */	return AFL_Config_GetReadTextColorIndex() == 6;
+/* 0016d044 */}
+
+bool AFL_Config_IsReadTextColorIndex07()
+/* 0016d058 */{
+/* 0016d058 */	return AFL_Config_GetReadTextColorIndex() == 7;
+/* 0016d06a */}
+
+bool AFL_Config_IsReadTextColorIndex08()
+/* 0016d07e */{
+/* 0016d07e */	return AFL_Config_GetReadTextColorIndex() == 8;
+/* 0016d090 */}
+
+bool AFL_Config_IsReadTextColorIndex09()
+/* 0016d0a4 */{
+/* 0016d0a4 */	return AFL_Config_GetReadTextColorIndex() == 9;
+/* 0016d0b6 */}
+
+bool AFL_Config_IsReadTextColorIndex10()
+/* 0016d0ca */{
+/* 0016d0ca */	return AFL_Config_GetReadTextColorIndex() == 10;
+/* 0016d0dc */}
+
+bool AFL_Config_IsReadTextColorIndex11()
+/* 0016d0f0 */{
+/* 0016d0f0 */	return AFL_Config_GetReadTextColorIndex() == 11;
+/* 0016d102 */}
+
+bool AFL_Config_ChangesBackSceneTextColor()
+/* 0016d116 */{
+/* 0016d116 */	return g_バックシーンメッセージ色番号 != -1;
+/* 0016d12c */}
+
+void AFL_Config_SetBackSceneTextColorIndex(int Index)
+/* 0016d140 */{
+/* 0016d140 */	Index = Math.Max(Index, -1);
+/* 0016d166 */	Index = Math.Min(Index, 11);
+/* 0016d18c */	g_バックシーンメッセージ色番号 = Index;
+/* 0016d1a2 */}
+
+int AFL_Config_GetBackSceneTextColorIndex()
+/* 0016d1b0 */{
+/* 0016d1b0 */	return g_バックシーンメッセージ色番号;
+/* 0016d1bc */}
+
+void AFL_Config_GetBackSceneTextColor(int Index, ref int Red, ref int Green, ref int Blue)
+/* 0016d1d0 */{
+/* 0016d1d0 */	CASColor Color;
+/* 0016d1e0 */	Color = CF_CASColor(255, 255, 255, 255);
+/* 0016d212 */	switch (Index)
+/* 0016d228 */	{
+/* 0016d228 */	case 0:
+/* 0016d228 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 0, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 0, "緑", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 0, "青", 127), 255);
+/* 0016d2a2 */		break;
+/* 0016d2a8 */	case 1:
+/* 0016d2a8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 1, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 1, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 1, "青", 127), 255);
+/* 0016d322 */		break;
+/* 0016d328 */	case 2:
+/* 0016d328 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 2, "赤", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 2, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 2, "青", 127), 255);
+/* 0016d3a2 */		break;
+/* 0016d3a8 */	case 3:
+/* 0016d3a8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 3, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 3, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 3, "青", 127), 255);
+/* 0016d422 */		break;
+/* 0016d428 */	case 4:
+/* 0016d428 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 4, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 4, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 4, "青", 191), 255);
+/* 0016d4a2 */		break;
+/* 0016d4a8 */	case 5:
+/* 0016d4a8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 5, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 5, "緑", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 5, "青", 255), 255);
+/* 0016d522 */		break;
+/* 0016d528 */	case 6:
+/* 0016d528 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 6, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 6, "緑", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 6, "青", 255), 255);
+/* 0016d5a2 */		break;
+/* 0016d5a8 */	case 7:
+/* 0016d5a8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 7, "赤", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 7, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 7, "青", 255), 255);
+/* 0016d622 */		break;
+/* 0016d628 */	case 8:
+/* 0016d628 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 8, "赤", 191), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 8, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 8, "青", 255), 255);
+/* 0016d6a2 */		break;
+/* 0016d6a8 */	case 9:
+/* 0016d6a8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 9, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 9, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 9, "青", 255), 255);
+/* 0016d722 */		break;
+/* 0016d728 */	case 10:
+/* 0016d728 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 10, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 10, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 10, "青", 191), 255);
+/* 0016d7a2 */		break;
+/* 0016d7a8 */	case 11:
+/* 0016d7a8 */		Color = CF_CASColor(EX_RA2Int("Ｅ＿バックシーンメッセージ色", 11, "赤", 255), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 11, "緑", 127), EX_RA2Int("Ｅ＿バックシーンメッセージ色", 11, "青", 127), 255);
+/* 0016d822 */		break;
+/* 0016d828 */	}
+/* 0016d828 */	Red = Color.GetR();
+/* 0016d846 */	Green = Color.GetG();
+/* 0016d864 */	Blue = Color.GetB();
+/* 0016d882 */}
+
+void AFL_Config_GetBackSceneTextColorByActiveIndex(ref int Red, ref int Green, ref int Blue)
+/* 0016d890 */{
+/* 0016d890 */	AFL_Config_GetBackSceneTextColor(AFL_Config_GetBackSceneTextColorIndex(), Red, Green, Blue);
+/* 0016d8ba */}
+
+void AFL_Config_GetBackSceneTextColorNone(ref int Red, ref int Green, ref int Blue)
+/* 0016d8c8 */{
+/* 0016d8c8 */	AFL_Config_GetBackSceneTextColor(-1, Red, Green, Blue);
+/* 0016d8f2 */}
+
+void AFL_Config_GetBackSceneTextColor00(ref int Red, ref int Green, ref int Blue)
+/* 0016d900 */{
+/* 0016d900 */	AFL_Config_GetBackSceneTextColor(0, Red, Green, Blue);
+/* 0016d92a */}
+
+void AFL_Config_GetBackSceneTextColor01(ref int Red, ref int Green, ref int Blue)
+/* 0016d938 */{
+/* 0016d938 */	AFL_Config_GetBackSceneTextColor(1, Red, Green, Blue);
+/* 0016d962 */}
+
+void AFL_Config_GetBackSceneTextColor02(ref int Red, ref int Green, ref int Blue)
+/* 0016d970 */{
+/* 0016d970 */	AFL_Config_GetBackSceneTextColor(2, Red, Green, Blue);
+/* 0016d99a */}
+
+void AFL_Config_GetBackSceneTextColor03(ref int Red, ref int Green, ref int Blue)
+/* 0016d9a8 */{
+/* 0016d9a8 */	AFL_Config_GetBackSceneTextColor(3, Red, Green, Blue);
+/* 0016d9d2 */}
+
+void AFL_Config_GetBackSceneTextColor04(ref int Red, ref int Green, ref int Blue)
+/* 0016d9e0 */{
+/* 0016d9e0 */	AFL_Config_GetBackSceneTextColor(4, Red, Green, Blue);
+/* 0016da0a */}
+
+void AFL_Config_GetBackSceneTextColor05(ref int Red, ref int Green, ref int Blue)
+/* 0016da18 */{
+/* 0016da18 */	AFL_Config_GetBackSceneTextColor(5, Red, Green, Blue);
+/* 0016da42 */}
+
+void AFL_Config_GetBackSceneTextColor06(ref int Red, ref int Green, ref int Blue)
+/* 0016da50 */{
+/* 0016da50 */	AFL_Config_GetBackSceneTextColor(6, Red, Green, Blue);
+/* 0016da7a */}
+
+void AFL_Config_GetBackSceneTextColor07(ref int Red, ref int Green, ref int Blue)
+/* 0016da88 */{
+/* 0016da88 */	AFL_Config_GetBackSceneTextColor(7, Red, Green, Blue);
+/* 0016dab2 */}
+
+void AFL_Config_GetBackSceneTextColor08(ref int Red, ref int Green, ref int Blue)
+/* 0016dac0 */{
+/* 0016dac0 */	AFL_Config_GetBackSceneTextColor(8, Red, Green, Blue);
+/* 0016daea */}
+
+void AFL_Config_GetBackSceneTextColor09(ref int Red, ref int Green, ref int Blue)
+/* 0016daf8 */{
+/* 0016daf8 */	AFL_Config_GetBackSceneTextColor(9, Red, Green, Blue);
+/* 0016db22 */}
+
+void AFL_Config_GetBackSceneTextColor10(ref int Red, ref int Green, ref int Blue)
+/* 0016db30 */{
+/* 0016db30 */	AFL_Config_GetBackSceneTextColor(10, Red, Green, Blue);
+/* 0016db5a */}
+
+void AFL_Config_GetBackSceneTextColor11(ref int Red, ref int Green, ref int Blue)
+/* 0016db68 */{
+/* 0016db68 */	AFL_Config_GetBackSceneTextColor(11, Red, Green, Blue);
+/* 0016db92 */}
+
+void AFL_Config_SetBackSceneTextColorIndexNone()
+/* 0016dba0 */{
+/* 0016dba0 */	AFL_Config_SetBackSceneTextColorIndex(-1);
+/* 0016dbac */}
+
+void AFL_Config_SetBackSceneTextColorIndex00()
+/* 0016dbba */{
+/* 0016dbba */	AFL_Config_SetBackSceneTextColorIndex(0);
+/* 0016dbc6 */}
+
+void AFL_Config_SetBackSceneTextColorIndex01()
+/* 0016dbd4 */{
+/* 0016dbd4 */	AFL_Config_SetBackSceneTextColorIndex(1);
+/* 0016dbe0 */}
+
+void AFL_Config_SetBackSceneTextColorIndex02()
+/* 0016dbee */{
+/* 0016dbee */	AFL_Config_SetBackSceneTextColorIndex(2);
+/* 0016dbfa */}
+
+void AFL_Config_SetBackSceneTextColorIndex03()
+/* 0016dc08 */{
+/* 0016dc08 */	AFL_Config_SetBackSceneTextColorIndex(3);
+/* 0016dc14 */}
+
+void AFL_Config_SetBackSceneTextColorIndex04()
+/* 0016dc22 */{
+/* 0016dc22 */	AFL_Config_SetBackSceneTextColorIndex(4);
+/* 0016dc2e */}
+
+void AFL_Config_SetBackSceneTextColorIndex05()
+/* 0016dc3c */{
+/* 0016dc3c */	AFL_Config_SetBackSceneTextColorIndex(5);
+/* 0016dc48 */}
+
+void AFL_Config_SetBackSceneTextColorIndex06()
+/* 0016dc56 */{
+/* 0016dc56 */	AFL_Config_SetBackSceneTextColorIndex(6);
+/* 0016dc62 */}
+
+void AFL_Config_SetBackSceneTextColorIndex07()
+/* 0016dc70 */{
+/* 0016dc70 */	AFL_Config_SetBackSceneTextColorIndex(7);
+/* 0016dc7c */}
+
+void AFL_Config_SetBackSceneTextColorIndex08()
+/* 0016dc8a */{
+/* 0016dc8a */	AFL_Config_SetBackSceneTextColorIndex(8);
+/* 0016dc96 */}
+
+void AFL_Config_SetBackSceneTextColorIndex09()
+/* 0016dca4 */{
+/* 0016dca4 */	AFL_Config_SetBackSceneTextColorIndex(9);
+/* 0016dcb0 */}
+
+void AFL_Config_SetBackSceneTextColorIndex10()
+/* 0016dcbe */{
+/* 0016dcbe */	AFL_Config_SetBackSceneTextColorIndex(10);
+/* 0016dcca */}
+
+void AFL_Config_SetBackSceneTextColorIndex11()
+/* 0016dcd8 */{
+/* 0016dcd8 */	AFL_Config_SetBackSceneTextColorIndex(11);
+/* 0016dce4 */}
+
+bool AFL_Config_IsBackSceneTextColorIndexNone()
+/* 0016dcf2 */{
+/* 0016dcf2 */	return AFL_Config_GetBackSceneTextColorIndex() == -1;
+/* 0016dd04 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex00()
+/* 0016dd18 */{
+/* 0016dd18 */	return AFL_Config_GetBackSceneTextColorIndex() == 0;
+/* 0016dd2a */}
+
+bool AFL_Config_IsBackSceneTextColorIndex01()
+/* 0016dd3e */{
+/* 0016dd3e */	return AFL_Config_GetBackSceneTextColorIndex() == 1;
+/* 0016dd50 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex02()
+/* 0016dd64 */{
+/* 0016dd64 */	return AFL_Config_GetBackSceneTextColorIndex() == 2;
+/* 0016dd76 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex03()
+/* 0016dd8a */{
+/* 0016dd8a */	return AFL_Config_GetBackSceneTextColorIndex() == 3;
+/* 0016dd9c */}
+
+bool AFL_Config_IsBackSceneTextColorIndex04()
+/* 0016ddb0 */{
+/* 0016ddb0 */	return AFL_Config_GetBackSceneTextColorIndex() == 4;
+/* 0016ddc2 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex05()
+/* 0016ddd6 */{
+/* 0016ddd6 */	return AFL_Config_GetBackSceneTextColorIndex() == 5;
+/* 0016dde8 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex06()
+/* 0016ddfc */{
+/* 0016ddfc */	return AFL_Config_GetBackSceneTextColorIndex() == 6;
+/* 0016de0e */}
+
+bool AFL_Config_IsBackSceneTextColorIndex07()
+/* 0016de22 */{
+/* 0016de22 */	return AFL_Config_GetBackSceneTextColorIndex() == 7;
+/* 0016de34 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex08()
+/* 0016de48 */{
+/* 0016de48 */	return AFL_Config_GetBackSceneTextColorIndex() == 8;
+/* 0016de5a */}
+
+bool AFL_Config_IsBackSceneTextColorIndex09()
+/* 0016de6e */{
+/* 0016de6e */	return AFL_Config_GetBackSceneTextColorIndex() == 9;
+/* 0016de80 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex10()
+/* 0016de94 */{
+/* 0016de94 */	return AFL_Config_GetBackSceneTextColorIndex() == 10;
+/* 0016dea6 */}
+
+bool AFL_Config_IsBackSceneTextColorIndex11()
+/* 0016deba */{
+/* 0016deba */	return AFL_Config_GetBackSceneTextColorIndex() == 11;
+/* 0016decc */}
+
+float AFL_Config_GetMessageWindowMulColorRate()
+/* 0016dee0 */{
+/* 0016dee0 */	return g_ConfigMessageWindowMulColorRate;
+/* 0016deec */}
+
+void AFL_Config_SetMessageWindowMulColorRate(float Rate)
+/* 0016df00 */{
+/* 0016df00 */	if (Rate < 0.0)
+/* 0016df18 */	{
+/* 0016df18 */		Rate = 0.0;
+/* 0016df2a */	}
+/* 0016df30 */	else if (1.0 < Rate)
+/* 0016df48 */	{
+/* 0016df48 */		Rate = 1.0;
+/* 0016df5a */	}
+/* 0016df5a */	g_ConfigMessageWindowMulColorRate = Rate;
+/* 0016df70 */}
+
+void AFL_Config_GetMessageWindowMulColor(ref int Red, ref int Green, ref int Blue)
+/* 0016df7e */{
+/* 0016df7e */	int MulR = g_MessageWindowModelManager.GetMessageWindowMulColorR();
+/* 0016df9a */	int MulG = g_MessageWindowModelManager.GetMessageWindowMulColorG();
+/* 0016dfb6 */	int MulB = g_MessageWindowModelManager.GetMessageWindowMulColorB();
+/* 0016dfd2 */	Red = 255 + (MulR - 255) * (1.0 - AFL_Config_GetMessageWindowMulColorRate());
+/* 0016e018 */	Green = 255 + (MulG - 255) * (1.0 - AFL_Config_GetMessageWindowMulColorRate());
+/* 0016e05e */	Blue = 255 + (MulB - 255) * (1.0 - AFL_Config_GetMessageWindowMulColorRate());
+/* 0016e0a4 */}
+
+void AFL_Config_ResetMessageWindowDefaultMulColorRate()
+/* 0016e0b2 */{
+/* 0016e0b2 */	AFL_Config_SetMessageWindowMulColorRate(SYS_GetMessageWindowDefaultMulColorRate());
+/* 0016e0be */}
+
+float AFL_Config_GetMessageWindowAlphaRate()
+/* 0016e0cc */{
+/* 0016e0cc */	return g_ConfigMessageWindowAlphaRate;
+/* 0016e0d8 */}
+
+void AFL_Config_SetMessageWindowAlphaRate(float Rate)
+/* 0016e0ec */{
+/* 0016e0ec */	if (Rate < 0.0)
+/* 0016e104 */	{
+/* 0016e104 */		Rate = 0.0;
+/* 0016e116 */	}
+/* 0016e11c */	else if (1.0 < Rate)
+/* 0016e134 */	{
+/* 0016e134 */		Rate = 1.0;
+/* 0016e146 */	}
+/* 0016e146 */	g_ConfigMessageWindowAlphaRate = Rate;
+/* 0016e15c */}
+
+void AFL_Config_ResetMessageWindowDefaultAlphaRate()
+/* 0016e16a */{
+/* 0016e16a */	AFL_Config_SetMessageWindowAlphaRate(SYS_GetMessageWindowDefaultAlphaRate());
+/* 0016e176 */}
+
+int AFL_Config_GetMessageWindowAlpha()
+/* 0016e184 */{
+/* 0016e184 */	return AFL_Config_GetMessageWindowAlphaRate() * 255.0;
+/* 0016e196 */}
+
+bool AFL_Config_GetStopVoiceByStatus()
+/* 0016e1aa */{
+/* 0016e1aa */	return g_ConfigStopVoiceBySkipMessage;
+/* 0016e1b6 */}
+
+void AFL_Config_SetStopVoiceByStatus(bool Flag)
+/* 0016e1ca */{
+/* 0016e1ca */	g_ConfigStopVoiceBySkipMessage = Flag;
+/* 0016e1e0 */}
+
+int AFL_Config_GetVolume(int GroupNumber)
+/* 0016e1ee */{
+/* 0016e1ee */	int Volume;
+/* 0016e200 */	SystemService.GetMixerVolume(GroupNumber, Volume);
+/* 0016e21e */	return Volume;
+/* 0016e22a */}
+
+int AFL_Config_GetDefaultVolume(int GroupNumber)
+/* 0016e23e */{
+/* 0016e23e */	int Volume;
+/* 0016e250 */	SystemService.GetMixerDefaultVolume(GroupNumber, Volume);
+/* 0016e26e */	return Volume;
+/* 0016e27a */}
+
+void AFL_Config_SetVolume(int GroupNumber, int Volume)
+/* 0016e28e */{
+/* 0016e28e */	if (Volume < 0)
+/* 0016e2a6 */	{
+/* 0016e2a6 */		Volume = 0;
+/* 0016e2b8 */	}
+/* 0016e2be */	else if (Volume > 100)
+/* 0016e2d6 */	{
+/* 0016e2d6 */		Volume = 100;
+/* 0016e2e8 */	}
+/* 0016e2e8 */	SystemService.SetMixerVolume(GroupNumber, Volume);
+/* 0016e308 */	int BackVoiceGroupNumber = SYS_GetBackVoiceGroupNumber(GroupNumber);
+/* 0016e324 */	if (BackVoiceGroupNumber != -1)
+/* 0016e33c */	{
+/* 0016e33c */		SystemService.SetMixerVolume(BackVoiceGroupNumber, Volume);
+/* 0016e35c */	}
+/* 0016e35c */}
+
+bool AFL_Config_GetMute(int GroupNumber)
+/* 0016e36a */{
+/* 0016e36a */	bool Mute = false;
+/* 0016e37c */	SystemService.GetMixerMute(GroupNumber, Mute);
+/* 0016e39a */	return Mute;
+/* 0016e3a6 */}
+
+void AFL_Config_SetMute(int GroupNumber, bool Mute)
+/* 0016e3ba */{
+/* 0016e3ba */	SystemService.SetMixerMute(GroupNumber, Mute);
+/* 0016e3da */	int BackVoiceGroupNumber = SYS_GetBackVoiceGroupNumber(GroupNumber);
+/* 0016e3f6 */	if (BackVoiceGroupNumber != -1)
+/* 0016e40e */	{
+/* 0016e40e */		SystemService.SetMixerMute(BackVoiceGroupNumber, Mute);
+/* 0016e42e */	}
+/* 0016e42e */}
+
+bool AFL_Config_GetBGMFadeByVoice()
+/* 0016e43c */{
+/* 0016e43c */	return g_bConfigBGMFadeByVoice;
+/* 0016e448 */}
+
+void AFL_Config_SetBGMFadeByVoice(bool Flag)
+/* 0016e45c */{
+/* 0016e45c */	g_bConfigBGMFadeByVoice = Flag;
+/* 0016e472 */}
+
+bool AFL_Config_IsMuteByInactiveWindow()
+/* 0016e480 */{
+/* 0016e480 */	return !g_ConfigSoundGlobalFocus;
+/* 0016e490 */}
+
+void AFL_Config_SetMuteByInactiveWindow(bool Mute)
+/* 0016e4a4 */{
+/* 0016e4a4 */	g_ConfigSoundGlobalFocus = !Mute;
+/* 0016e4be */	KiwiSoundEngine.SetGlobalFocus(g_ConfigSoundGlobalFocus);
+/* 0016e4d2 */}
+
+float AFL_Config_GetMasterVolume()
+/* 0016e4e0 */{
+/* 0016e4e0 */	return AFL_Config_GetVolume(SYS_SOUNDGROUP_MASTER()) / 100.0;
+/* 0016e4f8 */}
+
+void AFL_Config_SetMasterVolume(float Rate)
+/* 0016e50c */{
+/* 0016e50c */	AFL_Config_SetVolume(SYS_SOUNDGROUP_MASTER(), Rate * 100.0);
+/* 0016e52c */}
+
+void AFL_Config_SetMasterDefaultVolume()
+/* 0016e53a */{
+/* 0016e53a */	AFL_Config_SetVolume(SYS_SOUNDGROUP_MASTER(), AFL_Config_GetDefaultVolume(SYS_SOUNDGROUP_MASTER()));
+/* 0016e552 */}
+
+bool AFL_Config_GetMasterMute()
+/* 0016e560 */{
+/* 0016e560 */	return AFL_Config_GetMute(SYS_SOUNDGROUP_MASTER());
+/* 0016e56e */}
+
+void AFL_Config_SetMasterMute(bool Flg)
+/* 0016e582 */{
+/* 0016e582 */	AFL_Config_SetMute(SYS_SOUNDGROUP_MASTER(), Flg);
+/* 0016e598 */}
+
+float AFL_Config_GetBGMVolume()
+/* 0016e5a6 */{
+/* 0016e5a6 */	return AFL_Config_GetVolume(SYS_SOUNDGROUP_BGM()) / 100.0;
+/* 0016e5be */}
+
+void AFL_Config_SetBGMVolume(float Rate)
+/* 0016e5d2 */{
+/* 0016e5d2 */	AFL_Config_SetVolume(SYS_SOUNDGROUP_BGM(), Rate * 100.0);
+/* 0016e5f2 */}
+
+void AFL_Config_SetBGMDefaultVolume()
+/* 0016e600 */{
+/* 0016e600 */	AFL_Config_SetVolume(SYS_SOUNDGROUP_BGM(), AFL_Config_GetDefaultVolume(SYS_SOUNDGROUP_BGM()));
+/* 0016e618 */}
+
+bool AFL_Config_GetBGMMute()
+/* 0016e626 */{
+/* 0016e626 */	return AFL_Config_GetMute(SYS_SOUNDGROUP_BGM());
+/* 0016e634 */}
+
+void AFL_Config_SeBGMtMute(bool Flg)
+/* 0016e648 */{
+/* 0016e648 */	AFL_Config_SetMute(SYS_SOUNDGROUP_BGM(), Flg);
+/* 0016e65e */}
+
+float AFL_Config_GetSEVolume()
+/* 0016e66c */{
+/* 0016e66c */	return AFL_Config_GetVolume(SYS_SOUNDGROUP_SE()) / 100.0;
+/* 0016e684 */}
+
+void AFL_Config_SetSEVolume(float Rate)
+/* 0016e698 */{
+/* 0016e698 */	AFL_Config_SetVolume(SYS_SOUNDGROUP_SE(), Rate * 100.0);
+/* 0016e6b8 */}
+
+void AFL_Config_SetSEDefaultVolume()
+/* 0016e6c6 */{
+/* 0016e6c6 */	AFL_Config_SetVolume(SYS_SOUNDGROUP_SE(), AFL_Config_GetDefaultVolume(SYS_SOUNDGROUP_SE()));
+/* 0016e6de */}
+
+bool AFL_Config_GetSEMute()
+/* 0016e6ec */{
+/* 0016e6ec */	return AFL_Config_GetMute(SYS_SOUNDGROUP_SE());
+/* 0016e6fa */}
+
+void AFL_Config_SetSEMute(bool Flg)
+/* 0016e70e */{
+/* 0016e70e */	AFL_Config_SetMute(SYS_SOUNDGROUP_SE(), Flg);
+/* 0016e724 */}
+
+float AFL_Config_GetVoiceVolume()
+/* 0016e732 */{
+/* 0016e732 */	return AFL_Config_GetVolume(SYS_SOUNDGROUP_VOICE()) / 100.0;
+/* 0016e74a */}
+
+void AFL_Config_SetVoiceVolume(float Rate)
+/* 0016e75e */{
+/* 0016e75e */	AFL_Config_SetVolume(SYS_SOUNDGROUP_VOICE(), Rate * 100.0);
+/* 0016e77e */}
+
+void AFL_Config_SetVoiceDefaultVolume()
+/* 0016e78c */{
+/* 0016e78c */	AFL_Config_SetVolume(SYS_SOUNDGROUP_VOICE(), AFL_Config_GetDefaultVolume(SYS_SOUNDGROUP_VOICE()));
+/* 0016e7a4 */}
+
+bool AFL_Config_GetVoiceMute()
+/* 0016e7b2 */{
+/* 0016e7b2 */	return AFL_Config_GetMute(SYS_SOUNDGROUP_VOICE());
+/* 0016e7c0 */}
+
+void AFL_Config_SetVoiceMute(bool Flg)
+/* 0016e7d4 */{
+/* 0016e7d4 */	AFL_Config_SetMute(SYS_SOUNDGROUP_VOICE(), Flg);
+/* 0016e7ea */}
+
+float AFL_Config_GetBackVoiceVolume()
+/* 0016e7f8 */{
+/* 0016e7f8 */	return AFL_Config_GetVolume(SYS_SOUNDGROUP_BACKVOICE()) / 100.0;
+/* 0016e810 */}
+
+void AFL_Config_SetBackVoiceVolume(float Rate)
+/* 0016e824 */{
+/* 0016e824 */	AFL_Config_SetVolume(SYS_SOUNDGROUP_BACKVOICE(), Rate * 100.0);
+/* 0016e844 */}
+
+void AFL_Config_SetBackVoiceDefaultVolume()
+/* 0016e852 */{
+/* 0016e852 */	AFL_Config_SetVolume(SYS_SOUNDGROUP_BACKVOICE(), AFL_Config_GetDefaultVolume(SYS_SOUNDGROUP_BACKVOICE()));
+/* 0016e86a */}
+
+bool AFL_Config_GetBackVoiceMute()
+/* 0016e878 */{
+/* 0016e878 */	return AFL_Config_GetMute(SYS_SOUNDGROUP_BACKVOICE());
+/* 0016e886 */}
+
+void AFL_Config_SetBackVoiceMute(bool Flg)
+/* 0016e89a */{
+/* 0016e89a */	AFL_Config_SetMute(SYS_SOUNDGROUP_BACKVOICE(), Flg);
+/* 0016e8b0 */}
+
+bool AFL_Config_GetHideUnmoveMouseCursor()
+/* 0016e8be */{
+/* 0016e8be */	int HideUnmoveMouseCursor;
+/* 0016e8d0 */	SystemService.GetMouseCursorConfig(0, HideUnmoveMouseCursor);
+/* 0016e8ea */	return HideUnmoveMouseCursor != 0;
+/* 0016e900 */}
+
+void AFL_Config_SetHideUnmoveMouseCursor(bool Flag)
+/* 0016e914 */{
+/* 0016e914 */	SystemService.SetMouseCursorConfig(0, Flag ? 1 : 0);
+/* 0016e948 */}
+
+bool AFL_Config_GetHideKeyOrJoypadInputMouseCursor()
+/* 0016e956 */{
+/* 0016e956 */	int HideUnmoveMouseCursor;
+/* 0016e968 */	SystemService.GetMouseCursorConfig(1, HideUnmoveMouseCursor);
+/* 0016e982 */	return HideUnmoveMouseCursor != 0;
+/* 0016e998 */}
+
+void AFL_Config_SetHideKeyOrJoypadInputMouseCursor(bool Flag)
+/* 0016e9ac */{
+/* 0016e9ac */	SystemService.SetMouseCursorConfig(1, Flag ? 1 : 0);
+/* 0016e9e0 */}
+
+bool AFL_Config_GetHideStepMessageMouseCursor()
+/* 0016e9ee */{
+/* 0016e9ee */	int HideUnmoveMouseCursor;
+/* 0016ea00 */	SystemService.GetMouseCursorConfig(2, HideUnmoveMouseCursor);
+/* 0016ea1a */	return HideUnmoveMouseCursor != 0;
+/* 0016ea30 */}
+
+void AFL_Config_SetHideStepMessageMouseCursor(bool Flag)
+/* 0016ea44 */{
+/* 0016ea44 */	SystemService.SetMouseCursorConfig(2, Flag ? 1 : 0);
+/* 0016ea78 */}
+
+int AFL_Config_GetWheelForward()
+/* 0016ea86 */{
+/* 0016ea86 */	return g_nKeyConfigMouseWheelForward;
+/* 0016ea92 */}
+
+void AFL_Config_SetWheelForward(int Type)
+/* 0016eaa6 */{
+/* 0016eaa6 */	if (Type != 0 && Type != 1)
+/* 0016eaee */	{
+/* 0016eaee */		return;
+/* 0016eaf0 */	}
+/* 0016eaf0 */	g_nKeyConfigMouseWheelForward = Type;
+/* 0016eb06 */}
+
+void AFL_Config_SetWheelForwardForBackLog()
+/* 0016eb14 */{
+/* 0016eb14 */	AFL_Config_SetWheelForward(0);
+/* 0016eb20 */}
+
+bool AFL_Config_IsWheelForwardForBackLog()
+/* 0016eb2e */{
+/* 0016eb2e */	return AFL_Config_GetWheelForward() == 0;
+/* 0016eb40 */}
+
+void AFL_Config_SetWheelForwardForBackScene()
+/* 0016eb54 */{
+/* 0016eb54 */	AFL_Config_SetWheelForward(1);
+/* 0016eb60 */}
+
+bool AFL_Config_IsWheelForwardForBackScene()
+/* 0016eb6e */{
+/* 0016eb6e */	return AFL_Config_GetWheelForward() == 1;
+/* 0016eb80 */}
+
+bool AFL_Config_GetQuickSaveConfirm()
+/* 0016eb94 */{
+/* 0016eb94 */	return AFL_GetConfigQuickSaveConfirm();
+/* 0016eb9c */}
+
+void AFL_Config_SetQuickSaveConfirm(bool Flag)
+/* 0016ebb0 */{
+/* 0016ebb0 */	g_ConfigQuickSaveConfirm = Flag;
+/* 0016ebc6 */}
+
+bool AFL_Config_GetQuickLoadConfirm()
+/* 0016ebd4 */{
+/* 0016ebd4 */	return AFL_GetConfigQuickLoadConfirm();
+/* 0016ebdc */}
+
+void AFL_Config_SetQuickLoadConfirm(bool Flag)
+/* 0016ebf0 */{
+/* 0016ebf0 */	g_ConfigQuickLoadConfirm = Flag;
+/* 0016ec06 */}
+
+bool AFL_Config_GetSaveConfirm()
+/* 0016ec14 */{
+/* 0016ec14 */	return AFL_GetConfigSaveConfirm();
+/* 0016ec1c */}
+
+void AFL_Config_SetSaveConfirm(bool Flag)
+/* 0016ec30 */{
+/* 0016ec30 */	g_ConfigSaveConfirm = Flag;
+/* 0016ec46 */}
+
+bool AFL_Config_GetLoadConfirm()
+/* 0016ec54 */{
+/* 0016ec54 */	return AFL_GetConfigLoadConfirm();
+/* 0016ec5c */}
+
+void AFL_Config_SetLoadConfirm(bool Flag)
+/* 0016ec70 */{
+/* 0016ec70 */	g_ConfigLoadConfirm = Flag;
+/* 0016ec86 */}
+
+void AFL_Config_SetBackToTitleConfirm(bool Flag)
+/* 0016ec94 */{
+/* 0016ec94 */	SystemService.SetWindowSetting(5, Flag ? 1 : 0);
+/* 0016ecc8 */}
+
+bool AFL_Config_GetBackToTitleConfirm()
+/* 0016ecd6 */{
+/* 0016ecd6 */	int Setting = 1;
+/* 0016ece8 */	SystemService.GetWindowSetting(5, Setting);
+/* 0016ed02 */	return Setting != 0;
+/* 0016ed18 */}
+
+void AFL_Config_SetCloseGameConfirm(bool Flag)
+/* 0016ed2c */{
+/* 0016ed2c */	SystemService.SetWindowSetting(6, Flag ? 1 : 0);
+/* 0016ed60 */}
+
+bool AFL_Config_GetCloseGameConfirm()
+/* 0016ed6e */{
+/* 0016ed6e */	int Setting = 1;
+/* 0016ed80 */	SystemService.GetWindowSetting(6, Setting);
+/* 0016ed9a */	return Setting != 0;
+/* 0016edb0 */}
+
+void AFL_Config_SetMoveMouseCursorSpeed(int Speed)
+/* 0016edc4 */{
+/* 0016edc4 */	g_MoveMouseCursorSpeedID = Math.Max(0, Math.Min(4, Speed));
+/* 0016edfa */}
+
+int AFL_Config_GetMoveMouseCursorSpeed()
+/* 0016ee08 */{
+/* 0016ee08 */	return g_MoveMouseCursorSpeedID;
+/* 0016ee14 */}
+
+void AFL_Config_SetMoveMouseCursorSpeedForNone()
+/* 0016ee28 */{
+/* 0016ee28 */	AFL_Config_SetMoveMouseCursorSpeed(0);
+/* 0016ee34 */}
+
+void AFL_Config_SetMoveMouseCursorSpeedForLow()
+/* 0016ee42 */{
+/* 0016ee42 */	AFL_Config_SetMoveMouseCursorSpeed(1);
+/* 0016ee4e */}
+
+void AFL_Config_SetMoveMouseCursorSpeedForMiddle()
+/* 0016ee5c */{
+/* 0016ee5c */	AFL_Config_SetMoveMouseCursorSpeed(2);
+/* 0016ee68 */}
+
+void AFL_Config_SetMoveMouseCursorSpeedForHigh()
+/* 0016ee76 */{
+/* 0016ee76 */	AFL_Config_SetMoveMouseCursorSpeed(3);
+/* 0016ee82 */}
+
+void AFL_Config_SetMoveMouseCursorSpeedForFast()
+/* 0016ee90 */{
+/* 0016ee90 */	AFL_Config_SetMoveMouseCursorSpeed(4);
+/* 0016ee9c */}
+
+bool AFL_Config_IsMoveMouseCursorSpeedForNone()
+/* 0016eeaa */{
+/* 0016eeaa */	return AFL_Config_GetMoveMouseCursorSpeed() == 0;
+/* 0016eebc */}
+
+bool AFL_Config_IsMoveMouseCursorSpeedForLow()
+/* 0016eed0 */{
+/* 0016eed0 */	return AFL_Config_GetMoveMouseCursorSpeed() == 1;
+/* 0016eee2 */}
+
+bool AFL_Config_IsMoveMouseCursorSpeedForMiddle()
+/* 0016eef6 */{
+/* 0016eef6 */	return AFL_Config_GetMoveMouseCursorSpeed() == 2;
+/* 0016ef08 */}
+
+bool AFL_Config_IsMoveMouseCursorSpeedForHigh()
+/* 0016ef1c */{
+/* 0016ef1c */	return AFL_Config_GetMoveMouseCursorSpeed() == 3;
+/* 0016ef2e */}
+
+bool AFL_Config_IsMoveMouseCursorSpeedForFast()
+/* 0016ef42 */{
+/* 0016ef42 */	return AFL_Config_GetMoveMouseCursorSpeed() == 4;
+/* 0016ef54 */}
+
+bool AFL_Config_GetWindowMode()
+/* 0016ef68 */{
+/* 0016ef68 */	return !SystemService.IsFullScreen();
+/* 0016ef78 */}
+
+bool AFL_Config_GetFullScreenMode()
+/* 0016ef8c */{
+/* 0016ef8c */	return SystemService.IsFullScreen();
+/* 0016ef98 */}
+
+void AFL_Config_SetWindowMode(bool WindowMode)
+/* 0016efac */{
+/* 0016efac */	if (WindowMode)
+/* 0016efbc */	{
+/* 0016efbc */		if (!SystemService.IsFullScreen())
+/* 0016efce */		{
+/* 0016efce */			return;
+/* 0016efd0 */		}
+/* 0016efd0 */		SystemService.ChangeNormalScreen();
+/* 0016efdc */	}
+/* 0016efe2 */	else
+/* 0016efe2 */	{
+/* 0016efe2 */		if (SystemService.IsFullScreen())
+/* 0016eff2 */		{
+/* 0016eff2 */			return;
+/* 0016eff4 */		}
+/* 0016eff4 */		SystemService.ChangeFullScreen();
+/* 0016f000 */	}
+/* 0016f000 */}
+
+int AFL_Config_GetAspectRatio()
+/* 0016f00e */{
+/* 0016f00e */	int AspectRatio;
+/* 0016f020 */	SystemService.GetWindowSetting(0, AspectRatio);
+/* 0016f03a */	return AspectRatio;
+/* 0016f046 */}
+
+void AFL_Config_SetAspectRatio(int Type)
+/* 0016f05a */{
+/* 0016f05a */	if (Type != 0 && Type != 1)
+/* 0016f0a2 */	{
+/* 0016f0a2 */		return;
+/* 0016f0a4 */	}
+/* 0016f0a4 */	SystemService.SetWindowSetting(0, Type);
+/* 0016f0c0 */}
+
+void AFL_Config_SetAspectRatioDefault()
+/* 0016f0ce */{
+/* 0016f0ce */	AFL_Config_SetAspectRatio(0);
+/* 0016f0da */}
+
+bool AFL_Config_IsAspectRatioDefault()
+/* 0016f0e8 */{
+/* 0016f0e8 */	return AFL_Config_GetAspectRatio() == 0;
+/* 0016f0fa */}
+
+void AFL_Config_SetAspectRatioFix()
+/* 0016f10e */{
+/* 0016f10e */	AFL_Config_SetAspectRatio(1);
+/* 0016f11a */}
+
+bool AFL_Config_IsAspectRatioFix()
+/* 0016f128 */{
+/* 0016f128 */	return AFL_Config_GetAspectRatio() == 1;
+/* 0016f13a */}
+
+int AFL_Config_GetScalingType()
+/* 0016f14e */{
+/* 0016f14e */	int ScalingMode;
+/* 0016f160 */	SystemService.GetWindowSetting(1, ScalingMode);
+/* 0016f17a */	return ScalingMode;
+/* 0016f186 */}
+
+void AFL_Config_SetScalingType(int Type)
+/* 0016f19a */{
+/* 0016f19a */	if (Type != 0 && Type != 1)
+/* 0016f1e2 */	{
+/* 0016f1e2 */		return;
+/* 0016f1e4 */	}
+/* 0016f1e4 */	SystemService.SetWindowSetting(1, Type);
+/* 0016f200 */}
+
+void AFL_Config_SetScalingDefault()
+/* 0016f20e */{
+/* 0016f20e */	AFL_Config_SetScalingType(0);
+/* 0016f21a */}
+
+bool AFL_Config_IsScalingDefault()
+/* 0016f228 */{
+/* 0016f228 */	return AFL_Config_GetScalingType() == 0;
+/* 0016f23a */}
+
+void AFL_Config_SetScalingBicubic()
+/* 0016f24e */{
+/* 0016f24e */	AFL_Config_SetScalingType(1);
+/* 0016f25a */}
+
+bool AFL_Config_IsScalingBicubic()
+/* 0016f268 */{
+/* 0016f268 */	return AFL_Config_GetScalingType() == 1;
+/* 0016f27a */}
+
+bool AFL_Config_GetWaitVSync()
+/* 0016f28e */{
+/* 0016f28e */	int WaitVSync;
+/* 0016f2a0 */	SystemService.GetWindowSetting(2, WaitVSync);
+/* 0016f2ba */	return WaitVSync != 0;
+/* 0016f2d0 */}
+
+void AFL_Config_SetWaitVSync(bool Flag)
+/* 0016f2e4 */{
+/* 0016f2e4 */	SystemService.SetWindowSetting(2, Flag ? 1 : 0);
+/* 0016f318 */}
+
+bool AFL_Config_GetRecordPosSize()
+/* 0016f326 */{
+/* 0016f326 */	int RecordPosSize;
+/* 0016f338 */	SystemService.GetWindowSetting(3, RecordPosSize);
+/* 0016f352 */	return RecordPosSize != 0;
+/* 0016f368 */}
+
+void AFL_Config_SetRecordPosSize(bool Flag)
+/* 0016f37c */{
+/* 0016f37c */	SystemService.SetWindowSetting(3, Flag ? 1 : 0);
+/* 0016f3b0 */}
+
+bool AFL_Config_GetMinimizeByFullScreenInactive()
+/* 0016f3be */{
+/* 0016f3be */	int MinimizeByFullScreenInactive;
+/* 0016f3d0 */	SystemService.GetWindowSetting(4, MinimizeByFullScreenInactive);
+/* 0016f3ea */	return MinimizeByFullScreenInactive != 0;
+/* 0016f400 */}
+
+void AFL_Config_SetMinimizeByFullScreenInactive(bool Flag)
+/* 0016f414 */{
+/* 0016f414 */	SystemService.SetWindowSetting(4, Flag ? 1 : 0);
+/* 0016f448 */}
+
+bool AFL_Config_GetSleepByInactive()
+/* 0016f456 */{
+/* 0016f456 */	return ChipmunkSpriteEngine.SYSTEM_GetConfigSleepByInactiveWindow();
+/* 0016f462 */}
+
+void AFL_Config_SetSleepByInactive(bool Flag)
+/* 0016f476 */{
+/* 0016f476 */	ChipmunkSpriteEngine.SYSTEM_SetConfigSleepByInactiveWindow(Flag);
+/* 0016f48a */	g_bSleepByInactiveWindow = Flag;
+/* 0016f4a0 */}
+
+bool AFL_Config_GetOverFrameRateSleep()
+/* 0016f4ae */{
+/* 0016f4ae */	return ChipmunkSpriteEngine.SYSTEM_GetConfigOverFrameRateSleep();
+/* 0016f4ba */}
+
+void AFL_Config_SetOverFrameRateSleep(bool Flag)
+/* 0016f4ce */{
+/* 0016f4ce */	ChipmunkSpriteEngine.SYSTEM_SetConfigOverFrameRateSleep(Flag);
+/* 0016f4e2 */	g_bConfigOverFrameRateSleep = Flag;
+/* 0016f4f8 */}
+
+void AFL_Config_InitMainWindowPosAndSize()
+/* 0016f506 */{
+/* 0016f506 */	SystemService.InitMainWindowPosAndSize();
+/* 0016f512 */}
+
+void AFL_Config_Network_SetEnableConnection(bool EnableConnection)
+/* 0016f520 */{
+/* 0016f520 */	if (g_Network_EnableConnection == EnableConnection)
+/* 0016f53c */	{
+/* 0016f53c */		return;
+/* 0016f53e */	}
+/* 0016f53e */	g_Network_EnableConnection = EnableConnection;
+/* 0016f554 */	SYS_コンフィグセーブ();
+/* 0016f55a */}
+
+bool AFL_Config_Network_GetEnableConnection()
+/* 0016f568 */{
+/* 0016f568 */	return g_Network_EnableConnection;
+/* 0016f574 */}
+
+void AFL_Config_SetSoftwareRenderMode()
+/* 0016f588 */{
+/* 0016f588 */	g_Config3DSetting.SetRenderMode(0);
+/* 0016f59e */}
+
+void AFL_Config_SetFixShadeRenderMode()
+/* 0016f5ac */{
+/* 0016f5ac */	g_Config3DSetting.SetRenderMode(1);
+/* 0016f5c2 */}
+
+void AFL_Config_SetProgrammableShadeRenderMode()
+/* 0016f5d0 */{
+/* 0016f5d0 */	g_Config3DSetting.SetRenderMode(2);
+/* 0016f5e6 */}
+
+bool AFL_Config_IsSoftwareRenderMode()
+/* 0016f5f4 */{
+/* 0016f5f4 */	return g_Config3DSetting.GetRenderMode() == 0;
+/* 0016f610 */}
+
+bool AFL_Config_IsFixShadeRenderMode()
+/* 0016f624 */{
+/* 0016f624 */	return g_Config3DSetting.GetRenderMode() == 1;
+/* 0016f640 */}
+
+bool AFL_Config_IsProgrammableShadeRenderMode()
+/* 0016f654 */{
+/* 0016f654 */	return g_Config3DSetting.GetRenderMode() == 2;
+/* 0016f670 */}
+
+void AFL_Config_SetLightingModeOff()
+/* 0016f684 */{
+/* 0016f684 */	g_Config3DSetting.SetLightingMode(0);
+/* 0016f69a */}
+
+void AFL_Config_SetLightingModeOn()
+/* 0016f6a8 */{
+/* 0016f6a8 */	g_Config3DSetting.SetLightingMode(1);
+/* 0016f6be */}
+
+bool AFL_Config_IsLightingModeOff()
+/* 0016f6cc */{
+/* 0016f6cc */	return g_Config3DSetting.GetLightingMode() == 0;
+/* 0016f6e8 */}
+
+bool AFL_Config_IsLightingModeOn()
+/* 0016f6fc */{
+/* 0016f6fc */	return g_Config3DSetting.GetLightingMode() == 1;
+/* 0016f718 */}
+
+void AFL_Config_SetAntiAliasingModeNone()
+/* 0016f72c */{
+/* 0016f72c */	g_Config3DSetting.SetAntiAliasingMode(0);
+/* 0016f742 */}
+
+void AFL_Config_SetAntiAliasingMode2()
+/* 0016f750 */{
+/* 0016f750 */	g_Config3DSetting.SetAntiAliasingMode(1);
+/* 0016f766 */}
+
+void AFL_Config_SetAntiAliasingMode4()
+/* 0016f774 */{
+/* 0016f774 */	g_Config3DSetting.SetAntiAliasingMode(2);
+/* 0016f78a */}
+
+void AFL_Config_SetAntiAliasingMode8()
+/* 0016f798 */{
+/* 0016f798 */	g_Config3DSetting.SetAntiAliasingMode(3);
+/* 0016f7ae */}
+
+bool AFL_Config_IsAntiAliasingModeNone()
+/* 0016f7bc */{
+/* 0016f7bc */	return g_Config3DSetting.GetAntiAliasingMode() == 0;
+/* 0016f7d8 */}
+
+bool AFL_Config_IsAntiAliasingMode2()
+/* 0016f7ec */{
+/* 0016f7ec */	return g_Config3DSetting.GetAntiAliasingMode() == 1;
+/* 0016f808 */}
+
+bool AFL_Config_IsAntiAliasingMode4()
+/* 0016f81c */{
+/* 0016f81c */	return g_Config3DSetting.GetAntiAliasingMode() == 2;
+/* 0016f838 */}
+
+bool AFL_Config_IsAntiAliasingMode8()
+/* 0016f84c */{
+/* 0016f84c */	return g_Config3DSetting.GetAntiAliasingMode() == 3;
+/* 0016f868 */}
+
+void AFL_Config_SetShadowModeNone()
+/* 0016f87c */{
+/* 0016f87c */	g_Config3DSetting.SetShadowMode(0);
+/* 0016f892 */}
+
+void AFL_Config_SetShadowModeLow()
+/* 0016f8a0 */{
+/* 0016f8a0 */	g_Config3DSetting.SetShadowMode(1);
+/* 0016f8b6 */}
+
+void AFL_Config_SetShadowModeMiddle()
+/* 0016f8c4 */{
+/* 0016f8c4 */	g_Config3DSetting.SetShadowMode(2);
+/* 0016f8da */}
+
+void AFL_Config_SetShadowModeHigh()
+/* 0016f8e8 */{
+/* 0016f8e8 */	g_Config3DSetting.SetShadowMode(3);
+/* 0016f8fe */}
+
+bool AFL_Config_IsShadowModeNone()
+/* 0016f90c */{
+/* 0016f90c */	return g_Config3DSetting.GetShadowMode() == 0;
+/* 0016f928 */}
+
+bool AFL_Config_IsShadowModeLow()
+/* 0016f93c */{
+/* 0016f93c */	return g_Config3DSetting.GetShadowMode() == 1;
+/* 0016f958 */}
+
+bool AFL_Config_IsShadowModeMiddle()
+/* 0016f96c */{
+/* 0016f96c */	return g_Config3DSetting.GetShadowMode() == 2;
+/* 0016f988 */}
+
+bool AFL_Config_IsShadowModeHigh()
+/* 0016f99c */{
+/* 0016f99c */	return g_Config3DSetting.GetShadowMode() == 3;
+/* 0016f9b8 */}
+
+void AFL_Config_SetShadowMapResolutionLevelMax()
+/* 0016f9cc */{
+/* 0016f9cc */	g_Config3DSetting.SetShadowMapResolutionLevel(0);
+/* 0016f9e2 */}
+
+void AFL_Config_SetShadowMapResolutionLevelHigh()
+/* 0016f9f0 */{
+/* 0016f9f0 */	g_Config3DSetting.SetShadowMapResolutionLevel(1);
+/* 0016fa06 */}
+
+void AFL_Config_SetShadowMapResolutionLevelMiddle()
+/* 0016fa14 */{
+/* 0016fa14 */	g_Config3DSetting.SetShadowMapResolutionLevel(2);
+/* 0016fa2a */}
+
+void AFL_Config_SetShadowMapResolutionLevelLow()
+/* 0016fa38 */{
+/* 0016fa38 */	g_Config3DSetting.SetShadowMapResolutionLevel(3);
+/* 0016fa4e */}
+
+void AFL_Config_SetShadowMapResolutionLevelMin()
+/* 0016fa5c */{
+/* 0016fa5c */	g_Config3DSetting.SetShadowMapResolutionLevel(4);
+/* 0016fa72 */}
+
+bool AFL_Config_IsShadowMapResolutionLevelMax()
+/* 0016fa80 */{
+/* 0016fa80 */	return g_Config3DSetting.GetShadowMapResolutionLevel() == 0;
+/* 0016fa9c */}
+
+bool AFL_Config_IsShadowMapResolutionLevelHigh()
+/* 0016fab0 */{
+/* 0016fab0 */	return g_Config3DSetting.GetShadowMapResolutionLevel() == 1;
+/* 0016facc */}
+
+bool AFL_Config_IsShadowMapResolutionLevelMiddle()
+/* 0016fae0 */{
+/* 0016fae0 */	return g_Config3DSetting.GetShadowMapResolutionLevel() == 2;
+/* 0016fafc */}
+
+bool AFL_Config_IsShadowMapResolutionLevelLow()
+/* 0016fb10 */{
+/* 0016fb10 */	return g_Config3DSetting.GetShadowMapResolutionLevel() == 3;
+/* 0016fb2c */}
+
+bool AFL_Config_IsShadowMapResolutionLevelMin()
+/* 0016fb40 */{
+/* 0016fb40 */	return g_Config3DSetting.GetShadowMapResolutionLevel() == 4;
+/* 0016fb5c */}
+
+void AFL_Config_SetTextureResolutionLevelMax()
+/* 0016fb70 */{
+/* 0016fb70 */	g_Config3DSetting.SetTextureResolutionLevel(0);
+/* 0016fb86 */}
+
+void AFL_Config_SetTextureResolutionLevelHigh()
+/* 0016fb94 */{
+/* 0016fb94 */	g_Config3DSetting.SetTextureResolutionLevel(1);
+/* 0016fbaa */}
+
+void AFL_Config_SetTextureResolutionLevelMiddle()
+/* 0016fbb8 */{
+/* 0016fbb8 */	g_Config3DSetting.SetTextureResolutionLevel(2);
+/* 0016fbce */}
+
+void AFL_Config_SetTextureResolutionLevelLow()
+/* 0016fbdc */{
+/* 0016fbdc */	g_Config3DSetting.SetTextureResolutionLevel(3);
+/* 0016fbf2 */}
+
+void AFL_Config_SetTextureResolutionLevelMin()
+/* 0016fc00 */{
+/* 0016fc00 */	g_Config3DSetting.SetTextureResolutionLevel(4);
+/* 0016fc16 */}
+
+bool AFL_Config_IsTextureResolutionLevelMax()
+/* 0016fc24 */{
+/* 0016fc24 */	return g_Config3DSetting.GetTextureResolutionLevel() == 0;
+/* 0016fc40 */}
+
+bool AFL_Config_IsTextureResolutionLevelHigh()
+/* 0016fc54 */{
+/* 0016fc54 */	return g_Config3DSetting.GetTextureResolutionLevel() == 1;
+/* 0016fc70 */}
+
+bool AFL_Config_IsTextureResolutionLevelMiddle()
+/* 0016fc84 */{
+/* 0016fc84 */	return g_Config3DSetting.GetTextureResolutionLevel() == 2;
+/* 0016fca0 */}
+
+bool AFL_Config_IsTextureResolutionLevelLow()
+/* 0016fcb4 */{
+/* 0016fcb4 */	return g_Config3DSetting.GetTextureResolutionLevel() == 3;
+/* 0016fcd0 */}
+
+bool AFL_Config_IsTextureResolutionLevelMin()
+/* 0016fce4 */{
+/* 0016fce4 */	return g_Config3DSetting.GetTextureResolutionLevel() == 4;
+/* 0016fd00 */}
+
+void AFL_Config_SetTextureFilterModePoint()
+/* 0016fd14 */{
+/* 0016fd14 */	g_Config3DSetting.SetTextureFilterMode(0);
+/* 0016fd2a */}
+
+void AFL_Config_SetTextureFilterModeLinear()
+/* 0016fd38 */{
+/* 0016fd38 */	g_Config3DSetting.SetTextureFilterMode(1);
+/* 0016fd4e */}
+
+void AFL_Config_SetTextureFilterModeAnisotropic04()
+/* 0016fd5c */{
+/* 0016fd5c */	g_Config3DSetting.SetTextureFilterMode(2);
+/* 0016fd72 */}
+
+void AFL_Config_SetTextureFilterModeAnisotropic08()
+/* 0016fd80 */{
+/* 0016fd80 */	g_Config3DSetting.SetTextureFilterMode(3);
+/* 0016fd96 */}
+
+void AFL_Config_SetTextureFilterModeAnisotropic16()
+/* 0016fda4 */{
+/* 0016fda4 */	g_Config3DSetting.SetTextureFilterMode(4);
+/* 0016fdba */}
+
+bool AFL_Config_IsTextureFilterModePoint()
+/* 0016fdc8 */{
+/* 0016fdc8 */	return g_Config3DSetting.GetTextureFilterMode() == 0;
+/* 0016fde4 */}
+
+bool AFL_Config_IsTextureFilterModeLinear()
+/* 0016fdf8 */{
+/* 0016fdf8 */	return g_Config3DSetting.GetTextureFilterMode() == 1;
+/* 0016fe14 */}
+
+bool AFL_Config_IsTextureFilterModeAnisotropic04()
+/* 0016fe28 */{
+/* 0016fe28 */	return g_Config3DSetting.GetTextureFilterMode() == 2;
+/* 0016fe44 */}
+
+bool AFL_Config_IsTextureFilterModeAnisotropic08()
+/* 0016fe58 */{
+/* 0016fe58 */	return g_Config3DSetting.GetTextureFilterMode() == 3;
+/* 0016fe74 */}
+
+bool AFL_Config_IsTextureFilterModeAnisotropic16()
+/* 0016fe88 */{
+/* 0016fe88 */	return g_Config3DSetting.GetTextureFilterMode() == 4;
+/* 0016fea4 */}
+
+void AFL_Config_SetBumpModeOff()
+/* 0016feb8 */{
+/* 0016feb8 */	g_Config3DSetting.SetBumpMode(0);
+/* 0016fece */}
+
+void AFL_Config_SetBumpModeBumpMapping()
+/* 0016fedc */{
+/* 0016fedc */	g_Config3DSetting.SetBumpMode(1);
+/* 0016fef2 */}
+
+void AFL_Config_SetBumpModeParallaxMapping()
+/* 0016ff00 */{
+/* 0016ff00 */	g_Config3DSetting.SetBumpMode(2);
+/* 0016ff16 */}
+
+void AFL_Config_SetBumpModeReliefMapping()
+/* 0016ff24 */{
+/* 0016ff24 */	g_Config3DSetting.SetBumpMode(3);
+/* 0016ff3a */}
+
+bool AFL_Config_IsBumpModeOff()
+/* 0016ff48 */{
+/* 0016ff48 */	return g_Config3DSetting.GetBumpMode() == 0;
+/* 0016ff64 */}
+
+bool AFL_Config_IsBumpModeBumpMapping()
+/* 0016ff78 */{
+/* 0016ff78 */	return g_Config3DSetting.GetBumpMode() == 1;
+/* 0016ff94 */}
+
+bool AFL_Config_IsBumpModeParallaxMapping()
+/* 0016ffa8 */{
+/* 0016ffa8 */	return g_Config3DSetting.GetBumpMode() == 2;
+/* 0016ffc4 */}
+
+bool AFL_Config_IsBumpModeReliefMapping()
+/* 0016ffd8 */{
+/* 0016ffd8 */	return g_Config3DSetting.GetBumpMode() == 3;
+/* 0016fff4 */}
+
+void AFL_Config_SetBloomModeOff()
+/* 00170008 */{
+/* 00170008 */	g_Config3DSetting.SetBloomMode(0);
+/* 0017001e */}
+
+void AFL_Config_SetBloomModeOn()
+/* 0017002c */{
+/* 0017002c */	g_Config3DSetting.SetBloomMode(1);
+/* 00170042 */}
+
+bool AFL_Config_IsBloomModeOff()
+/* 00170050 */{
+/* 00170050 */	return g_Config3DSetting.GetBloomMode() == 0;
+/* 0017006c */}
+
+bool AFL_Config_IsBloomModeOn()
+/* 00170080 */{
+/* 00170080 */	return g_Config3DSetting.GetBloomMode() == 1;
+/* 0017009c */}
+
+void AFL_Config_SetGlareModeOff()
+/* 001700b0 */{
+/* 001700b0 */	g_Config3DSetting.SetGlareMode(0);
+/* 001700c6 */}
+
+void AFL_Config_SetGlareModeOn()
+/* 001700d4 */{
+/* 001700d4 */	g_Config3DSetting.SetGlareMode(1);
+/* 001700ea */}
+
+bool AFL_Config_IsGlareModeOff()
+/* 001700f8 */{
+/* 001700f8 */	return g_Config3DSetting.GetGlareMode() == 0;
+/* 00170114 */}
+
+bool AFL_Config_IsGlareModeOn()
+/* 00170128 */{
+/* 00170128 */	return g_Config3DSetting.GetGlareMode() == 1;
+/* 00170144 */}
+
+void AFL_Config_SetFogModeOff()
+/* 00170158 */{
+/* 00170158 */	g_Config3DSetting.SetFogMode(0);
+/* 0017016e */}
+
+void AFL_Config_SetFogModeOn()
+/* 0017017c */{
+/* 0017017c */	g_Config3DSetting.SetFogMode(1);
+/* 00170192 */}
+
+bool AFL_Config_IsFogModeOff()
+/* 001701a0 */{
+/* 001701a0 */	return g_Config3DSetting.GetFogMode() == 0;
+/* 001701bc */}
+
+bool AFL_Config_IsFogModeOn()
+/* 001701d0 */{
+/* 001701d0 */	return g_Config3DSetting.GetFogMode() == 1;
+/* 001701ec */}
+
+void AFL_Config_SetSpecularModeOff()
+/* 00170200 */{
+/* 00170200 */	g_Config3DSetting.SetSpecularMode(0);
+/* 00170216 */}
+
+void AFL_Config_SetSpecularModeOn()
+/* 00170224 */{
+/* 00170224 */	g_Config3DSetting.SetSpecularMode(1);
+/* 0017023a */}
+
+bool AFL_Config_IsSpecularModeOff()
+/* 00170248 */{
+/* 00170248 */	return g_Config3DSetting.GetSpecularMode() == 0;
+/* 00170264 */}
+
+bool AFL_Config_IsSpecularModeOn()
+/* 00170278 */{
+/* 00170278 */	return g_Config3DSetting.GetSpecularMode() == 1;
+/* 00170294 */}
+
+void AFL_Config_SetSoftFogEdgeModeOff()
+/* 001702a8 */{
+/* 001702a8 */	g_Config3DSetting.SetSoftFogEdgeMode(0);
+/* 001702be */}
+
+void AFL_Config_SetSoftFogEdgeModeOn()
+/* 001702cc */{
+/* 001702cc */	g_Config3DSetting.SetSoftFogEdgeMode(1);
+/* 001702e2 */}
+
+bool AFL_Config_IsSoftFogEdgeModeOff()
+/* 001702f0 */{
+/* 001702f0 */	return g_Config3DSetting.GetSoftFogEdgeMode() == 0;
+/* 0017030c */}
+
+bool AFL_Config_IsSoftFogEdgeModeOn()
+/* 00170320 */{
+/* 00170320 */	return g_Config3DSetting.GetSoftFogEdgeMode() == 1;
+/* 0017033c */}
+
+void AFL_Config_SetSSAOModeOff()
+/* 00170350 */{
+/* 00170350 */	g_Config3DSetting.SetSSAOMode(0);
+/* 00170366 */}
+
+void AFL_Config_SetSSAOModeOn()
+/* 00170374 */{
+/* 00170374 */	g_Config3DSetting.SetSSAOMode(1);
+/* 0017038a */}
+
+bool AFL_Config_IsSSAOModeOff()
+/* 00170398 */{
+/* 00170398 */	return g_Config3DSetting.GetSSAOMode() == 0;
+/* 001703b4 */}
+
+bool AFL_Config_IsSSAOModeOn()
+/* 001703c8 */{
+/* 001703c8 */	return g_Config3DSetting.GetSSAOMode() == 1;
+/* 001703e4 */}
+
+void AFL_Config_SetLightMapModeOff()
+/* 001703f8 */{
+/* 001703f8 */	g_Config3DSetting.SetLightMapMode(0);
+/* 0017040e */}
+
+void AFL_Config_SetLightMapModeOn()
+/* 0017041c */{
+/* 0017041c */	g_Config3DSetting.SetLightMapMode(1);
+/* 00170432 */}
+
+bool AFL_Config_IsLightMapModeOff()
+/* 00170440 */{
+/* 00170440 */	return g_Config3DSetting.GetLightMapMode() == 0;
+/* 0017045c */}
+
+bool AFL_Config_IsLightMapModeOn()
+/* 00170470 */{
+/* 00170470 */	return g_Config3DSetting.GetLightMapMode() == 1;
+/* 0017048c */}
+
+void AFL_Config_SetEdgeOff()
+/* 001704a0 */{
+/* 001704a0 */	g_Config3DSetting.SetEdge(0);
+/* 001704b6 */}
+
+void AFL_Config_SetEdgeOn()
+/* 001704c4 */{
+/* 001704c4 */	g_Config3DSetting.SetEdge(1);
+/* 001704da */}
+
+bool AFL_Config_IsEdgeOff()
+/* 001704e8 */{
+/* 001704e8 */	return g_Config3DSetting.GetEdge() == 0;
+/* 00170504 */}
+
+bool AFL_Config_IsEdgeOn()
+/* 00170518 */{
+/* 00170518 */	return g_Config3DSetting.GetEdge() == 1;
+/* 00170534 */}
+
+void AFL_Config_SetDOFModeOff()
+/* 00170548 */{
+/* 00170548 */	g_Config3DSetting.SetDOFMode(0);
+/* 0017055e */}
+
+void AFL_Config_SetDOFModeOn()
+/* 0017056c */{
+/* 0017056c */	g_Config3DSetting.SetDOFMode(1);
+/* 00170582 */}
+
+bool AFL_Config_IsDOFModeOff()
+/* 00170590 */{
+/* 00170590 */	return g_Config3DSetting.GetDOFMode() == 0;
+/* 001705ac */}
+
+bool AFL_Config_IsDOFModeOn()
+/* 001705c0 */{
+/* 001705c0 */	return g_Config3DSetting.GetDOFMode() == 1;
+/* 001705dc */}
+
+bool AFL_Config_GetShowFPS()
+/* 001705f0 */{
+/* 001705f0 */	return AFL_DebugFPS_GetShow();
+/* 001705f8 */}
+
+void AFL_Config_SetShowFPS(bool Flag)
+/* 0017060c */{
+/* 0017060c */	AFL_DebugFPS_SetShow(Flag);
+/* 0017061c */}
+
+bool AFL_Config_GetShowMemorySize()
+/* 0017062a */{
+/* 0017062a */	return g_DebugMemorySize.GetShow();
+/* 0017063c */}
+
+void AFL_Config_SetShowMemorySize(bool Flag)
+/* 00170650 */{
+/* 00170650 */	g_DebugMemorySize.SetShow(Flag);
+/* 0017066a */}
+
+bool AFL_Config_GetShowFillRate()
+/* 00170678 */{
+/* 00170678 */	return g_DebugFillRate.GetShow();
+/* 0017068a */}
+
+void AFL_Config_SetShowFillRate(bool Flag)
+/* 0017069e */{
+/* 0017069e */	g_DebugFillRate.SetShow(Flag);
+/* 001706b8 */}
+
+bool AFL_Config_GetShowVideoMemorySize()
+/* 001706c6 */{
+/* 001706c6 */	return g_DebugVideoMemorySize.GetShow();
+/* 001706d8 */}
+
+void AFL_Config_SetShowVideoMemorySize(bool Flag)
+/* 001706ec */{
+/* 001706ec */	g_DebugVideoMemorySize.SetShow(Flag);
+/* 00170706 */}
+
+bool AFL_Config_GetDisavleDebugInfo()
+/* 00170714 */{
+/* 00170714 */	return !g_CompulsorilyShowDebugInfo;
+/* 00170724 */}
+
+void AFL_Config_SetDisavleDebugInfo(bool Flag)
+/* 00170738 */{
+/* 00170738 */	g_CompulsorilyShowDebugInfo = !Flag;
+/* 00170752 */}
+
+void AFL_Config_SetShowVoicePlaying(bool Flg)
+/* 00170760 */{
+/* 00170760 */	g_DebugVoicePlaying.SetShow(Flg);
+/* 0017077a */}
+
+bool AFL_Config_GetShowVoicePlaying()
+/* 00170788 */{
+/* 00170788 */	return g_DebugVoicePlaying.IsShow();
+/* 0017079a */}
+
+void AFL_Config_SetShowSEPlaying(bool Flg)
+/* 001707ae */{
+/* 001707ae */	g_DebugGimicSEPlaying.SetShow(Flg);
+/* 001707c8 */}
+
+bool AFL_Config_GetShowSEPlaying()
+/* 001707d6 */{
+/* 001707d6 */	return g_DebugGimicSEPlaying.IsShow();
+/* 001707e8 */}
+
+void AFL_Config_SetShowBackVoicePlaying(bool Flg)
+/* 001707fc */{
+/* 001707fc */	g_DebugBackVoicePlaying.SetShow(Flg);
+/* 00170816 */}
+
+bool AFL_Config_GetShowBackVoicePlaying()
+/* 00170824 */{
+/* 00170824 */	return g_DebugBackVoicePlaying.IsShow();
+/* 00170836 */}
+
+string AFL_Config_GetHelpText(int Type, bool AddNewLine)
+/* 0017084a */{
+/* 0017084a */	string NewLineText = AddNewLine ? "\n" : "";
+/* 0017087a */	string NewLineText2 = AddNewLine ? "\n\n" : "";
+/* 001708aa */	switch (Type)
+/* 001708c0 */	{
+/* 001708c0 */	case 0:
+/* 001708c0 */		return "ゲーム画面の比率と同じでないディスプレイ" + NewLineText + "でも、フルスクリーン時に画面比率を維持" + NewLineText + "します。" + NewLineText2 + "この機能を使うにはDirect3Dが正常に" + NewLineText + "動作するビデオカードが必要です。";
+/* 00170918 */	case 1:
+/* 00170918 */		return "【フルスクリーン時の画面比率が標準の場合】" + NewLineText + "フルスクリーン時はディスプレイの拡大機能が" + NewLineText + "使用されます。ウィンドウモードの時は、" + NewLineText + "バイリニアフィルタリングが適用されます。" + NewLineText2 + "【フルスクリーン時の画面比率が固定の場合】" + NewLineText + "バイリニアフィルタリングが適用されます。";
+/* 00170984 */	case 2:
+/* 00170984 */		return "「標準」よりもよりシャープで綺麗な画質に" + NewLineText + "なります。" + NewLineText2 + "フルスクリーン時の画面比率が固定の場合と、" + NewLineText + "ウィンドウモード時のみ、この機能が適用" + NewLineText + "されます。" + NewLineText2 + "使用するにはシェーダモデル３．０に" + NewLineText + "対応したビデオカードが必要です。";
+/* 00170a04 */	case 3:
+/* 00170a04 */		return "画面更新時に垂直同期を待つことで、画面の" + NewLineText + "ちらつきを抑えることができます。";
+/* 00170a20 */	case 4:
+/* 00170a20 */		return "オフにすることで、マルチディスプレイ環境" + NewLineText + "において、フルスクリーン時に他の" + NewLineText + "ディスプレイ上のウィンドウをアクティブに" + NewLineText + "した時に、ゲーム側のウィンドウが最小化" + NewLineText + "されないようにします。";
+/* 00170a78 */	case 5:
+/* 00170a78 */		return "画面更新頻度を適度に抑え、ＣＰＵ使用率を" + NewLineText + "下げます。" + NewLineText2 + "なお、自動的に動作クロックを下げる機能を" + NewLineText + "持つＣＰＵを使用している場合、タスク" + NewLineText + "マネージャ上でのＣＰＵ使用率の値が" + NewLineText + "下がらない場合があります。";
+/* 00170ae4 */	}
+/* 00170ae4 */	return "";
+/* 00170aec */}
+
+string AFL_Config_GetWindowHelpTextForAspect()
+/* 00170b00 */{
+/* 00170b00 */	return AFL_Config_GetHelpText(0, true);
+/* 00170b14 */}
+
+string AFL_Config_GetWindowHelpTextForScalingDefault()
+/* 00170b28 */{
+/* 00170b28 */	return AFL_Config_GetHelpText(1, true);
+/* 00170b3c */}
+
+string AFL_Config_GetWindowHelpTextForScalingBicubic()
+/* 00170b50 */{
+/* 00170b50 */	return AFL_Config_GetHelpText(2, true);
+/* 00170b64 */}
+
+string AFL_Config_GetWindowHelpTextForWaitVSync()
+/* 00170b78 */{
+/* 00170b78 */	return AFL_Config_GetHelpText(3, true);
+/* 00170b8c */}
+
+string AFL_Config_GetWindowHelpTextForMinimizeByFullscreen()
+/* 00170ba0 */{
+/* 00170ba0 */	return AFL_Config_GetHelpText(4, true);
+/* 00170bb4 */}
+
+string AFL_Config_GetWindowHelpTextForOverFramerateSleep()
+/* 00170bc8 */{
+/* 00170bc8 */	return AFL_Config_GetHelpText(5, true);
+/* 00170bdc */}
+
+string AFL_Config_Get3DHelpTextForRenderMode()
+/* 00170bf0 */{
+/* 00170bf0 */	return "";
+/* 00170bf8 */}
+
+string AFL_Config_Get3DHelpTextForAntiAliasing()
+/* 00170c0c */{
+/* 00170c0c */	return "ポリゴンのエッジをなめらかにします。\n\n" + "ビデオカードが対応している必要があります。";
+/* 00170c1c */}
+
+string AFL_Config_Get3DHelpTextForShadowMode()
+/* 00170c30 */{
+/* 00170c30 */	return "描画するには、浮動小数点テクスチャに対応した\n" + "ビデオカードが必要です。";
+/* 00170c40 */}
+
+string AFL_Config_Get3DHelpTextForShadowmapResolutionLevel()
+/* 00170c54 */{
+/* 00170c54 */	return "より上品質の設定をおこなうと影描画の画質が\n" + "向上しますが、ビデオメモリの消費量が多くなります。\n\n" + "ビデオカードによっては、上品質の設定ほど\n" + "対応していない場合があります。";
+/* 00170c74 */}
+
+string AFL_Config_Get3DHelpTextForTextureResolutionLevel()
+/* 00170c88 */{
+/* 00170c88 */	return "より上品質の設定をおこなうと画質が\n" + "向上しますが、ビデオメモリの消費量が多くなります。\n\n" + "ビデオカードによっては、上品質の設定ほど\n" + "対応していない場合があります。";
+/* 00170ca8 */}
+
+string AFL_Config_Get3DHelpTextForTextureFilterMode()
+/* 00170cbc */{
+/* 00170cbc */	return "次数が高いほど画質が向上します。\n" + "ビデオカードによっては、上位の設定ほど\n" + "対応していない場合があります。";
+/* 00170cd4 */}
+
+string AFL_Config_Get3DHelpTextForBumpMode()
+/* 00170ce8 */{
+/* 00170ce8 */	return "凸凹を強調します。";
+/* 00170cf0 */}
+
+string AFL_Config_Get3DHelpTextForBloomMode()
+/* 00170d04 */{
+/* 00170d04 */	return "自己発光の輝きを描画します。";
+/* 00170d0c */}
+
+string AFL_Config_Get3DHelpTextForGlareMode()
+/* 00170d20 */{
+/* 00170d20 */	return "明るい部分の輝きを描画します。";
+/* 00170d28 */}
+
+string AFL_Config_Get3DHelpTextForFogMode()
+/* 00170d3c */{
+/* 00170d3c */	return "霧や空気感を描画します。";
+/* 00170d44 */}
+
+string AFL_Config_Get3DHelpTextForSpecularMode()
+/* 00170d58 */{
+/* 00170d58 */	return "光の反射を描画します。";
+/* 00170d60 */}
+
+string AFL_Config_Get3DHelpTextForSoftFogMode()
+/* 00170d74 */{
+/* 00170d74 */	return "アルファブレンディングされるビルボード等の\n" + "ポリゴン交差部分をぼかします。\n" + "浮動小数点テクスチャに対応したビデオカードが\n" + "必要です。";
+/* 00170d94 */}
+
+string AFL_Config_Get3DHelpTextForSSAOMode()
+/* 00170da8 */{
+/* 00170da8 */	return "光が届きにくい部分を暗くします。\n" + "浮動小数点テクスチャに対応したビデオカードが\n" + "必要です。";
+/* 00170dc0 */}
+
+string AFL_Config_Get3DHelpTextForLightMapMode()
+/* 00170dd4 */{
+/* 00170dd4 */	return "影を焼き込みます。";
+/* 00170ddc */}
+
+string AFL_Config_Get3DHelpTextForEdge()
+/* 00170df0 */{
+/* 00170df0 */	return "エッジを描画します。";
+/* 00170df8 */}
+
+string AFL_Config_Get3DHelpTextForDOF()
+/* 00170e0c */{
+/* 00170e0c */	return "被写界深度フィルタを使用します。\n" + "浮動小数点テクスチャに対応したビデオカードが\n" + "必要です。";
+/* 00170e24 */}
+

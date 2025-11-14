@@ -1,0 +1,266 @@
+CASParts::CASParts()
+/* 00006dde */{
+/* 00006de6 */	this.m_PartsNumber = -1;
+/* 00006df8 */}
+
+CASParts::~CASParts()
+/* 00006e00 */{
+/* 00006e00 */	this.Release();
+/* 00006e08 */}
+
+void CASParts::Create()
+/* 00006e10 */{
+/* 00006e10 */	this.Release();
+/* 00006e18 */	this.m_PartsNumber = PARTS_GetFreeSystemPartsNumber();
+/* 00006e2a */	this.SetPos(0, 0);
+/* 00006e3e */}
+
+void CASParts::Release()
+/* 00006e46 */{
+/* 00006e46 */	if (this.m_PartsNumber == -1)
+/* 00006e5e */	{
+/* 00006e5e */		return;
+/* 00006e60 */	}
+/* 00006e60 */	PARTS_Release(this.m_PartsNumber);
+/* 00006e70 */	this.m_PartsNumber = -1;
+/* 00006e82 */}
+
+bool CASParts::IsExist()
+/* 00006e8a */{
+/* 00006e8a */	return this.m_PartsNumber != -1;
+/* 00006ea0 */}
+
+int CASParts::GetPartsNumber()
+/* 00006eae */{
+/* 00006eae */	return this.m_PartsNumber;
+/* 00006eba */}
+
+void CASParts::SetState(int State)
+/* 00006ec8 */{
+/* 00006ec8 */	AFL_Parts_SetStatus(this.GetPartsNumber(), State);
+/* 00006ee0 */}
+
+int CASParts::GetState()
+/* 00006ee8 */{
+/* 00006ee8 */	return AFL_Parts_GetStatus(this.GetPartsNumber());
+/* 00006ef8 */}
+
+void CASParts::SetCG(string CGName, int State)
+/* 00006f06 */{
+/* 00006f06 */	Ｐ＿ＣＧ設定(this.GetPartsNumber(), CGName, State);
+/* 00006f28 */}
+
+void CASParts::SetCGSurfaceArea(int X, int Y, int Width, int Height, int State)
+/* 00006f30 */{
+/* 00006f30 */	Ｐ＿ＣＧ表示範囲設定(this.GetPartsNumber(), X, Y, Width, Height, State);
+/* 00006f70 */}
+
+void CASParts::SetLoopCG(string CGName, int BeginNumber, int Numof, int Time, int State)
+/* 00006f78 */{
+/* 00006f78 */	Ｐ＿ループＣＧ設定(this.GetPartsNumber(), CGName, BeginNumber, Numof, Time, State);
+/* 00006fb8 */}
+
+void CASParts::SetText(string Text, int State)
+/* 00006fc0 */{
+/* 00006fc0 */	Ｐ＿テキスト設定(this.GetPartsNumber(), Text, State);
+/* 00006fe2 */}
+
+void CASParts::SetFontProperty(ref CASCharSpriteProperty Property, int State)
+/* 00006fea */{
+/* 00006fea */	CASColor Color;
+/* 00006ffa */	Color = Property.GetColor();
+/* 0000701e */	CASColor EdgeColor;
+/* 0000702e */	EdgeColor = Property.GetEdgeColor();
+/* 00007052 */	this.SetFont(Property.GetType(), State);
+/* 00007074 */	this.SetFontSize(Property.GetSize(), State);
+/* 00007096 */	this.SetFontBoldWeight(Property.GetBoldWeight(), State);
+/* 000070b8 */	this.SetFontEdgeWeight(Property.GetEdgeWeight(), State);
+/* 000070da */	this.SetFontColor(Color.GetR(), Color.GetG(), Color.GetB(), State);
+/* 0000711c */	this.SetFontEdgeColor(EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), State);
+/* 0000715e */}
+
+void CASParts::SetFont(int Type, int State)
+/* 00007166 */{
+/* 00007166 */	Ｐ＿フォント種類設定(this.GetPartsNumber(), Type, State);
+/* 00007188 */}
+
+void CASParts::SetFontSize(int Size, int State)
+/* 00007190 */{
+/* 00007190 */	Ｐ＿フォントサイズ設定(this.GetPartsNumber(), Size, State);
+/* 000071b2 */}
+
+void CASParts::SetFontBoldWeight(float Weight, int State)
+/* 000071ba */{
+/* 000071ba */	Ｐ＿フォント太字幅設定(this.GetPartsNumber(), Weight, State);
+/* 000071dc */}
+
+void CASParts::SetFontEdgeWeight(float Weight, int State)
+/* 000071e4 */{
+/* 000071e4 */	Ｐ＿フォント縁取り幅設定(this.GetPartsNumber(), Weight, State);
+/* 00007206 */}
+
+void CASParts::SetFontColor(int ColorR, int ColorG, int ColorB, int State)
+/* 0000720e */{
+/* 0000720e */	Ｐ＿フォント色設定(this.GetPartsNumber(), ColorR, ColorG, ColorB, State);
+/* 00007244 */}
+
+void CASParts::SetFontEdgeColor(int ColorR, int ColorG, int ColorB, int State)
+/* 0000724c */{
+/* 0000724c */	Ｐ＿フォント縁取り色設定(this.GetPartsNumber(), ColorR, ColorG, ColorB, State);
+/* 00007282 */}
+
+void CASParts::SetFontCharSpace(int Space, int State)
+/* 0000728a */{
+/* 0000728a */	Ｐ＿テキスト字間隔設定(this.GetPartsNumber(), Space, State);
+/* 000072ac */}
+
+void CASParts::SetTextSurfaceArea(int X, int Y, int Width, int Height, int State)
+/* 000072b4 */{
+/* 000072b4 */	Ｐ＿テキスト表示範囲設定(this.GetPartsNumber(), X, Y, Width, Height, State);
+/* 000072f4 */}
+
+void CASParts::SetNumeralCG(string CGName, int State)
+/* 000072fc */{
+/* 000072fc */	Ｐ＿数字ＣＧ設定(this.GetPartsNumber(), CGName, State);
+/* 0000731e */}
+
+void CASParts::SetNumeralNumber(int Number, int State)
+/* 00007326 */{
+/* 00007326 */	Ｐ＿数字設定(this.GetPartsNumber(), Number, State);
+/* 00007348 */}
+
+void CASParts::SetRectangleDetection(int Width, int Height)
+/* 00007350 */{
+/* 00007350 */	Ｐ＿矩形判定設定(this.GetPartsNumber(), Ｐ＿Ｘ座標取得(this.GetPartsNumber()), Ｐ＿Ｙ座標取得(this.GetPartsNumber()), Width, Height);
+/* 00007392 */}
+
+void CASParts::SetFlat(string FlatFileName)
+/* 0000739a */{
+/* 0000739a */	Ｐ＿フラット設定(this.GetPartsNumber(), FlatFileName, 1);
+/* 000073b8 */}
+
+int CASParts::GetFlatCurrentFrameNumber()
+/* 000073c0 */{
+/* 000073c0 */	return AFL_Parts_GetPartsFlatCurrentFrameNumber(this.GetPartsNumber(), 1);
+/* 000073d6 */}
+
+void CASParts::BackFlatBeginFrame()
+/* 000073e4 */{
+/* 000073e4 */	Ｐ＿フラット開始フレーム移動(this.GetPartsNumber(), 1);
+/* 000073f8 */}
+
+void CASParts::StepFlatFinalFrame()
+/* 00007400 */{
+/* 00007400 */	Ｐ＿フラット最終フレームステップ(this.GetPartsNumber(), 1);
+/* 00007414 */}
+
+bool CASParts::Create3DLayerPluginID(int State)
+/* 0000741c */{
+/* 0000741c */	return PartsEngine.Parts_CreateParts3DLayerPluginID(this.GetPartsNumber(), State);
+/* 0000743a */}
+
+int CASParts::Get3DLayerPluginID(int State)
+/* 00007448 */{
+/* 00007448 */	return PartsEngine.Parts_GetParts3DLayerPluginID(this.GetPartsNumber(), State);
+/* 00007466 */}
+
+bool CASParts::Release3DLayerPluginID(int State)
+/* 00007474 */{
+/* 00007474 */	return PartsEngine.Parts_ReleaseParts3DLayerPluginID(this.GetPartsNumber(), State);
+/* 00007492 */}
+
+void CASParts::SetPos(int X, int Y)
+/* 000074a0 */{
+/* 000074a0 */	Ｐ＿座標設定(this.GetPartsNumber(), X, Y);
+/* 000074c6 */}
+
+void CASParts::SetZ(int Z)
+/* 000074ce */{
+/* 000074ce */	Ｐ＿Ｚ座標設定(this.GetPartsNumber(), Z);
+/* 000074e6 */}
+
+void CASParts::SetZByBaseZ(int Z, int BaseZ)
+/* 000074ee */{
+/* 000074ee */	AFL_Parts_SetZByBaseZ(this.GetPartsNumber(), Z, BaseZ);
+/* 00007510 */}
+
+void CASParts::SetShow(bool Show)
+/* 00007518 */{
+/* 00007518 */	Ｐ＿表示設定(this.GetPartsNumber(), Show);
+/* 00007530 */}
+
+void CASParts::SetAlpha(int Alpha)
+/* 00007538 */{
+/* 00007538 */	Ｐ＿アルファ値設定(this.GetPartsNumber(), Alpha);
+/* 00007550 */}
+
+void CASParts::SetAddColor(int Red, int Green, int Blue)
+/* 00007558 */{
+/* 00007558 */	Ｐ＿加算色設定(this.GetPartsNumber(), Red, Green, Blue);
+/* 00007584 */}
+
+void CASParts::SetMultipleColor(int Red, int Green, int Blue)
+/* 0000758c */{
+/* 0000758c */	Ｐ＿乗算色設定(this.GetPartsNumber(), Red, Green, Blue);
+/* 000075b8 */}
+
+void CASParts::SetOriginPosMode(int OriginPosMode)
+/* 000075c0 */{
+/* 000075c0 */	Ｐ＿原点座標設定(this.GetPartsNumber(), OriginPosMode);
+/* 000075d8 */}
+
+void CASParts::SetParentParts(ref CASParts ParentParts)
+/* 000075e0 */{
+/* 000075e0 */	Ｐ＿オンカーソル表示連動設定(this.GetPartsNumber(), ParentParts.GetPartsNumber());
+/* 000075fe */}
+
+void CASParts::SetMessageWindowShowLink(bool ShowLink)
+/* 00007606 */{
+/* 00007606 */	Ｐ＿メッセージウィンドウ表示連動設定(this.GetPartsNumber(), ShowLink);
+/* 0000761e */}
+
+void CASParts::SetClickable(bool Clickable)
+/* 00007626 */{
+/* 00007626 */	Ｐ＿クリック可能設定(this.GetPartsNumber(), Clickable);
+/* 0000763e */}
+
+bool CASParts::IsShow()
+/* 00007646 */{
+/* 00007646 */	return Ｐ＿表示設定取得(this.GetPartsNumber());
+/* 00007656 */}
+
+int CASParts::GetX()
+/* 00007664 */{
+/* 00007664 */	return Ｐ＿Ｘ座標取得(this.GetPartsNumber());
+/* 00007676 */}
+
+int CASParts::GetY()
+/* 00007684 */{
+/* 00007684 */	return Ｐ＿Ｙ座標取得(this.GetPartsNumber());
+/* 00007696 */}
+
+int CASParts::GetAlpha()
+/* 000076a4 */{
+/* 000076a4 */	return Ｐ＿アルファ値取得(this.GetPartsNumber());
+/* 000076b4 */}
+
+int CASParts::GetWidth(int State)
+/* 000076c2 */{
+/* 000076c2 */	return AFL_Parts_GetWidth(this.GetPartsNumber(), State);
+/* 000076dc */}
+
+int CASParts::GetHeight(int State)
+/* 000076ea */{
+/* 000076ea */	return AFL_Parts_GetHeight(this.GetPartsNumber(), State);
+/* 00007704 */}
+
+void CASParts::SetOnCursorSoundName(string Name)
+/* 00007712 */{
+/* 00007712 */	Ｐ＿オンカーソル効果音設定(this.GetPartsNumber(), Name);
+/* 0000772a */}
+
+void CASParts::SetClickSoundName(string Name)
+/* 00007732 */{
+/* 00007732 */	Ｐ＿クリック効果音設定(this.GetPartsNumber(), Name);
+/* 0000774a */}
+

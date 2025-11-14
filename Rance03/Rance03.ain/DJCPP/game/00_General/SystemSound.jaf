@@ -1,0 +1,39 @@
+void SystemSound::playLoop(string name)
+/* 001858f8 */{
+/* 001858f8 */	Ａ＿ループ効果音１(name, -1, -1);
+/* 00185914 */}
+
+void SystemSound::stopLoop(int time)
+/* 0018591c */{
+/* 0018591c */	Ａ＿ループ効果音停止(time);
+/* 0018592c */}
+
+void SystemSound::play(int type, string name)
+/* 00185934 */{
+/* 00185934 */	if (name == "")
+/* 0018594c */	{
+/* 0018594c */		return;
+/* 0018594e */	}
+/* 0018594e */	AFL_SystemSE_Play(name, type);
+/* 00185968 */}
+
+void SystemSound::playVoice(int number)
+/* 00185970 */{
+/* 00185970 */	AFL_SystemSE_Play("%05d" % number, 7);
+/* 00185994 */}
+
+void playCursor()
+/* 0018599c */{
+/* 0018599c */	g_sysSound.play(4, "効果音／カーソル");
+/* 001859b8 */}
+
+void playClick()
+/* 001859c6 */{
+/* 001859c6 */	g_sysSound.play(5, "効果音／クリック");
+/* 001859e2 */}
+
+void playCancel()
+/* 001859f0 */{
+/* 001859f0 */	g_sysSound.play(5, "効果音／キャンセル");
+/* 00185a0c */}
+

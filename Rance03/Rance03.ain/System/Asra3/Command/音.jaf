@@ -1,0 +1,281 @@
+void 音楽(string 音楽名, int 効果タイプ, int 効果時間)
+/* 0015c924 */{
+/* 0015c924 */	g_BGM.PlayBGM(音楽名, 0, 効果タイプ, 効果時間, 1.0);
+/* 0015c95e */}
+
+void 音楽１回再生(string 音楽名, int 効果タイプ, int 効果時間)
+/* 0015c96c */{
+/* 0015c96c */	g_BGM.PlayBGM(音楽名, 1, 効果タイプ, 効果時間, 1.0);
+/* 0015c9a6 */}
+
+bool 音楽再生中確認()
+/* 0015c9b4 */{
+/* 0015c9b4 */	return g_BGM.IsPlay();
+/* 0015c9c6 */}
+
+string 再生中音楽名取得()
+/* 0015c9da */{
+/* 0015c9da */	if (!g_BGM.IsPlay())
+/* 0015c9f2 */	{
+/* 0015c9f2 */		return "";
+/* 0015c9fa */	}
+/* 0015c9fa */	return g_BGM.GetSoundName();
+/* 0015ca0c */}
+
+void Ａ＿音楽一時停止()
+/* 0015ca20 */{
+/* 0015ca20 */	g_BGM.Pause();
+/* 0015ca30 */}
+
+void Ａ＿音楽再開()
+/* 0015ca3e */{
+/* 0015ca3e */	g_BGM.Restart();
+/* 0015ca4e */}
+
+bool Ａ＿音楽一時停止中確認()
+/* 0015ca5c */{
+/* 0015ca5c */	return g_BGM.IsPausing();
+/* 0015ca6e */}
+
+bool Ａ＿音楽確認(string 音楽名)
+/* 0015ca82 */{
+/* 0015ca82 */	return PassRegister.ExistText(2, 音楽名);
+/* 0015ca9e */}
+
+void 効果音(string _効果音名, int 効果タイプ, int 効果時間)
+/* 0015cab2 */{
+/* 0015cab2 */	SYS_PlaySE(_効果音名, false, true, true, 効果タイプ, 効果時間);
+/* 0015cae8 */}
+
+void Ａ＿効果音停止()
+/* 0015caf6 */{
+/* 0015caf6 */	SYS_StopSE();
+/* 0015cafc */}
+
+bool Ａ＿効果音再生中確認()
+/* 0015cb0a */{
+/* 0015cb0a */	return SYS_IsPlaySE();
+/* 0015cb12 */}
+
+void Ａ＿効果音非継続(string _効果音名, int 効果タイプ, int 効果時間)
+/* 0015cb26 */{
+/* 0015cb26 */	SYS_PlaySE(_効果音名, false, true, false, 効果タイプ, 効果時間);
+/* 0015cb5c */}
+
+void 効果音終了待ちあり(string _効果音名, int 効果タイプ, int 効果時間)
+/* 0015cb6a */{
+/* 0015cb6a */	SYS_PlaySE(_効果音名, true, true, false, 効果タイプ, 効果時間);
+/* 0015cba0 */}
+
+void 効果音強制終了待ちあり(string _効果音名, int 効果タイプ, int 効果時間)
+/* 0015cbae */{
+/* 0015cbae */	SYS_PlaySE(_効果音名, true, false, false, 効果タイプ, 効果時間);
+/* 0015cbe4 */}
+
+void 効果音ボリューム(float 音量)
+/* 0015cbf2 */{
+/* 0015cbf2 */	SYS_ASSERTE_VOLUME(音量);
+/* 0015cc00 */	g_SE.SetVolume(音量);
+/* 0015cc1a */	g_SE.Fade(0, 音量, false, -1);
+/* 0015cc46 */}
+
+void システム効果音(string _snd)
+/* 0015cc54 */{
+/* 0015cc54 */	_g_SystemSound._Play(_snd);
+/* 0015cc6e */}
+
+void Ａ＿システム効果音停止()
+/* 0015cc7c */{
+/* 0015cc7c */	_g_SystemSound._ClearCache();
+/* 0015cc8c */}
+
+bool Ａ＿システム効果音再生中確認()
+/* 0015cc9a */{
+/* 0015cc9a */	return _g_SystemSound.IsPlay();
+/* 0015ccac */}
+
+void Ａ＿ループ効果音１(string ループ効果音名, int 効果タイプ, int 効果時間)
+/* 0015ccc0 */{
+/* 0015ccc0 */	g_LoopSE[0].PlayBGM(ループ効果音名, 0, 効果タイプ, 効果時間, 1.0);
+/* 0015cd02 */}
+
+void Ａ＿ループ効果音２(string ループ効果音名, int 効果タイプ, int 効果時間)
+/* 0015cd10 */{
+/* 0015cd10 */	g_LoopSE[1].PlayBGM(ループ効果音名, 0, 効果タイプ, 効果時間, 1.0);
+/* 0015cd52 */}
+
+void Ａ＿ループ効果音３(string ループ効果音名, int 効果タイプ, int 効果時間)
+/* 0015cd60 */{
+/* 0015cd60 */	g_LoopSE[2].PlayBGM(ループ効果音名, 0, 効果タイプ, 効果時間, 1.0);
+/* 0015cda2 */}
+
+void Ａ＿ループ効果音停止(int 効果時間)
+/* 0015cdb0 */{
+/* 0015cdb0 */	Ａ＿ループ効果音１("", 3, 効果時間);
+/* 0015cdcc */	Ａ＿ループ効果音２("", 3, 効果時間);
+/* 0015cde8 */	Ａ＿ループ効果音３("", 3, 効果時間);
+/* 0015ce04 */}
+
+void VOICE(string VOICE名)
+/* 0015ce12 */{
+/* 0015ce12 */	SYS_VOICE(VOICE名);
+/* 0015ce22 */}
+
+void Ａ＿ボイス停止()
+/* 0015ce30 */{
+/* 0015ce30 */	SYS_StopVoice();
+/* 0015ce36 */}
+
+bool Ａ＿ボイスリプレイ可能確認()
+/* 0015ce44 */{
+/* 0015ce44 */	if (_g_最終音声名.Empty())
+/* 0015ce56 */	{
+/* 0015ce56 */		return false;
+/* 0015ce5e */	}
+/* 0015ce5e */	if (!KiwiSoundEngine.IsExistFile(_g_最終音声名))
+/* 0015ce7a */	{
+/* 0015ce7a */		return false;
+/* 0015ce82 */	}
+/* 0015ce82 */	return true;
+/* 0015ce8a */}
+
+void Ｓ＿ボイスリプレイ()
+/* 0015ce9e */{
+/* 0015ce9e */	if (Ａ＿ボイスリプレイ可能確認())
+/* 0015ceaa */	{
+/* 0015ceaa */		SYS_PlayVoice(_g_最終音声名);
+/* 0015ceba */	}
+/* 0015ceba */}
+
+void Ａ＿音声加工(string 加工名)
+/* 0015cec8 */{
+/* 0015ceca */}
+
+void Ａ＿音声加工開始(string 加工名)
+/* 0015ced6 */{
+/* 0015ced8 */}
+
+void Ａ＿音声加工終了()
+/* 0015cee4 */{
+/* 0015cee6 */}
+
+void Ａ＿擬音開始(string 効果音名1, string 効果音名2, string 効果音名3, string 効果音名4, string 効果音名5, string 効果音名6, string 効果音名7, string 効果音名8, string 効果音名9, string 効果音名10)
+/* 0015cef2 */{
+/* 0015cef2 */	array@string SoundList;
+/* 0015cefc */	SoundList.PushBack(効果音名1);
+/* 0015cf10 */	if (!効果音名2.Empty())
+/* 0015cf24 */	{
+/* 0015cf24 */		SoundList.PushBack(効果音名2);
+/* 0015cf38 */	}
+/* 0015cf38 */	if (!効果音名3.Empty())
+/* 0015cf4c */	{
+/* 0015cf4c */		SoundList.PushBack(効果音名3);
+/* 0015cf60 */	}
+/* 0015cf60 */	if (!効果音名4.Empty())
+/* 0015cf74 */	{
+/* 0015cf74 */		SoundList.PushBack(効果音名4);
+/* 0015cf88 */	}
+/* 0015cf88 */	if (!効果音名5.Empty())
+/* 0015cf9c */	{
+/* 0015cf9c */		SoundList.PushBack(効果音名5);
+/* 0015cfb0 */	}
+/* 0015cfb0 */	if (!効果音名6.Empty())
+/* 0015cfc4 */	{
+/* 0015cfc4 */		SoundList.PushBack(効果音名6);
+/* 0015cfd8 */	}
+/* 0015cfd8 */	if (!効果音名7.Empty())
+/* 0015cfec */	{
+/* 0015cfec */		SoundList.PushBack(効果音名7);
+/* 0015d000 */	}
+/* 0015d000 */	if (!効果音名8.Empty())
+/* 0015d014 */	{
+/* 0015d014 */		SoundList.PushBack(効果音名8);
+/* 0015d028 */	}
+/* 0015d028 */	if (!効果音名9.Empty())
+/* 0015d03c */	{
+/* 0015d03c */		SoundList.PushBack(効果音名9);
+/* 0015d050 */	}
+/* 0015d050 */	if (!効果音名10.Empty())
+/* 0015d064 */	{
+/* 0015d064 */		SoundList.PushBack(効果音名10);
+/* 0015d078 */	}
+/* 0015d078 */	SYS_PlayBackSE(SYS_SOUNDGROUP_SE(), SoundList);
+/* 0015d090 */}
+
+void Ａ＿擬音終了()
+/* 0015d09e */{
+/* 0015d09e */	array@string SoundList;
+/* 0015d0a8 */	SoundList.PushBack("");
+/* 0015d0b8 */	SYS_PlayBackSE(SYS_SOUNDGROUP_SE(), SoundList);
+/* 0015d0d0 */}
+
+void Ａ＿背景音声開始(int サウンドグループ番号, string 音声名1, string 音声名2, string 音声名3, string 音声名4, string 音声名5, string 音声名6, string 音声名7, string 音声名8, string 音声名9, string 音声名10)
+/* 0015d0de */{
+/* 0015d0de */	if (サウンドグループ番号 <= SYS_SOUNDGROUP_BACKVOICE())
+/* 0015d0f6 */	{
+/* 0015d0f6 */		SYS_ERROR("サウンドグループ[%d]無効" % サウンドグループ番号, 0);
+/* 0015d11a */		return;
+/* 0015d11c */	}
+/* 0015d11c */	array@string SoundList;
+/* 0015d126 */	SoundList.PushBack(音声名1);
+/* 0015d13a */	if (!音声名2.Empty())
+/* 0015d14e */	{
+/* 0015d14e */		SoundList.PushBack(音声名2);
+/* 0015d162 */	}
+/* 0015d162 */	if (!音声名3.Empty())
+/* 0015d176 */	{
+/* 0015d176 */		SoundList.PushBack(音声名3);
+/* 0015d18a */	}
+/* 0015d18a */	if (!音声名4.Empty())
+/* 0015d19e */	{
+/* 0015d19e */		SoundList.PushBack(音声名4);
+/* 0015d1b2 */	}
+/* 0015d1b2 */	if (!音声名5.Empty())
+/* 0015d1c6 */	{
+/* 0015d1c6 */		SoundList.PushBack(音声名5);
+/* 0015d1da */	}
+/* 0015d1da */	if (!音声名6.Empty())
+/* 0015d1ee */	{
+/* 0015d1ee */		SoundList.PushBack(音声名6);
+/* 0015d202 */	}
+/* 0015d202 */	if (!音声名7.Empty())
+/* 0015d216 */	{
+/* 0015d216 */		SoundList.PushBack(音声名7);
+/* 0015d22a */	}
+/* 0015d22a */	if (!音声名8.Empty())
+/* 0015d23e */	{
+/* 0015d23e */		SoundList.PushBack(音声名8);
+/* 0015d252 */	}
+/* 0015d252 */	if (!音声名9.Empty())
+/* 0015d266 */	{
+/* 0015d266 */		SoundList.PushBack(音声名9);
+/* 0015d27a */	}
+/* 0015d27a */	if (!音声名10.Empty())
+/* 0015d28e */	{
+/* 0015d28e */		SoundList.PushBack(音声名10);
+/* 0015d2a2 */	}
+/* 0015d2a2 */	SYS_PlayBackSE(サウンドグループ番号, SoundList);
+/* 0015d2be */}
+
+void Ａ＿背景音声終了(int サウンドグループ番号)
+/* 0015d2cc */{
+/* 0015d2cc */	if (サウンドグループ番号 <= SYS_SOUNDGROUP_BACKVOICE())
+/* 0015d2e4 */	{
+/* 0015d2e4 */		SYS_ERROR("サウンドグループ[%d]無効" % サウンドグループ番号, 0);
+/* 0015d308 */		return;
+/* 0015d30a */	}
+/* 0015d30a */	array@string SoundList;
+/* 0015d314 */	SoundList.PushBack("");
+/* 0015d324 */	SYS_PlayBackSE(サウンドグループ番号, SoundList);
+/* 0015d340 */}
+
+void Ａ＿サウンド状態保存(bool 音楽停止)
+/* 0015d34e */{
+/* 0015d34e */	SYS_Sound_Suspend(音楽停止);
+/* 0015d35e */}
+
+void Ａ＿サウンド状態復帰()
+/* 0015d36c */{
+/* 0015d36c */	SYS_Sound_Resume();
+/* 0015d372 */}
+

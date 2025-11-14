@@ -1,0 +1,41 @@
+void SceneGameOver::init()
+/* 001b9c20 */{
+/* 001b9c20 */	this.partsBg_.init("イベント／その他／ゲームオーバー０１", 0);
+/* 001b9c3c */}
+
+void SceneGameOver::onFinishFadeIn()
+/* 001b9c44 */{
+/* 001b9c44 */	this.state_ = 1;
+/* 001b9c56 */}
+
+void SceneGameOver::onFinishFadeOut()
+/* 001b9c5e */{
+/* 001b9c5e */	this.state_ = 3;
+/* 001b9c70 */}
+
+void SceneGameOver::run()
+/* 001b9c78 */{
+/* 001b9c78 */	this.partsBg_.setShow(true);
+/* 001b9c8e */	PartsMotion m;
+/* 001b9c9e */	m = getStandardMotion(0);
+/* 001b9cbe */	m.setTime(700);
+/* 001b9cd4 */	this.partsBg_.runMotion(m, this.onFinishFadeIn);
+/* 001b9cfc */	this.state_ = 0;
+/* 001b9d0e */}
+
+bool SceneGameOver::update()
+/* 001b9d16 */{
+/* 001b9d16 */	if (g_mouse.isClick(0) || g_mouse.isClick(1))
+/* 001b9d66 */	{
+/* 001b9d66 */		PartsMotion m;
+/* 001b9d76 */		m = getStandardMotion(1);
+/* 001b9d96 */		m.setTime(700);
+/* 001b9dac */		this.partsBg_.runMotion(m, this.onFinishFadeOut);
+/* 001b9dd4 */	}
+/* 001b9dda */	if (this.state_ == 3)
+/* 001b9df2 */	{
+/* 001b9df2 */		system.Reset();
+/* 001b9df8 */	}
+/* 001b9df8 */	return true;
+/* 001b9e00 */}
+

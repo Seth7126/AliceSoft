@@ -1,0 +1,67 @@
+void CgList::init(string thumbnailCg, string baseName, array@string cg)
+/* 001cde9c */{
+/* 001cde9c */	this.cgName_.Free();
+/* 001cdea6 */	this.thumbnailCg_ = thumbnailCg;
+/* 001cdebe */	if (cg.Empty())
+/* 001cdece */	{
+/* 001cdece */		this.cgName_.PushBack(baseName);
+/* 001cdee2 */	}
+/* 001cdee8 */	else
+/* 001cdee8 */	{
+/* 001cdee8 */		this.cgName_.Alloc(cg.Numof());
+/* 001cdf08 */		int i;
+/* 001cdf1a */		for (i = 0; i < this.cgName_.Numof(); ++i)
+/* 001cdf6a */		{
+/* 001cdf6a */			if (Ａ＿ＣＧ存在確認(cg[i]))
+/* 001cdf8c */			{
+/* 001cdf8c */				this.cgName_[i] = cg[i];
+/* 001cdfbc */			}
+/* 001cdfc2 */			else if (Ａ＿ＣＧ存在確認(baseName + cg[i]))
+/* 001cdff0 */			{
+/* 001cdff0 */				this.cgName_[i] = baseName + cg[i];
+/* 001ce02c */			}
+/* 001ce032 */			else
+/* 001ce032 */			{
+/* 001ce032 */				pass("base:%s inside:%s は存在しません" % baseName % cg[i]);
+/* 001ce06e */			}
+/* 001ce06e */		}
+/* 001ce074 */	}
+/* 001ce074 */}
+
+void CgList::getShownCgList(ref array@string cgList)
+/* 001ce07c */{
+/* 001ce07c */	cgList.Free();
+/* 001ce086 */	int i;
+/* 001ce098 */	for (i = 0; i < this.cgName_.Numof(); ++i)
+/* 001ce0e8 */	{
+/* 001ce0e8 */		if (ＣＧモード確認(this.cgName_[i]))
+/* 001ce10a */		{
+/* 001ce10a */			cgList.PushBack(this.cgName_[i]);
+/* 001ce12a */		}
+/* 001ce12a */	}
+/* 001ce130 */}
+
+string CgList::getThumbnailCg()
+/* 001ce138 */{
+/* 001ce138 */	return this.thumbnailCg_;
+/* 001ce144 */}
+
+bool CgList::isAvailable()
+/* 001ce152 */{
+/* 001ce152 */	int i;
+/* 001ce164 */	for (i = 0; i < this.cgName_.Numof(); ++i)
+/* 001ce1b4 */	{
+/* 001ce1b4 */		if (ＣＧモード確認(this.cgName_[i]))
+/* 001ce1d6 */		{
+/* 001ce1d6 */			return true;
+/* 001ce1de */		}
+/* 001ce1de */	}
+/* 001ce1e4 */	return false;
+/* 001ce1ec */}
+
+void CgList::getAllCgList(ref array@string cgList)
+/* 001ce1fa */{
+/* 001ce1fa */	cgList.Alloc(this.cgName_.Numof());
+/* 001ce21a */	cgList.Copy(0, this.cgName_, 0, this.cgName_.Numof());
+/* 001ce24c */}
+

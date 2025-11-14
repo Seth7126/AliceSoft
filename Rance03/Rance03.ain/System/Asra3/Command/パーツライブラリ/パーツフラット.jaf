@@ -1,0 +1,100 @@
+void Ｐ＿フラット設定(int パーツ番号, string ファイル名, int 状態)
+/* 0016305e */{
+/* 0016305e */	if (!PartsEngine.Parts_SetPartsFlat(パーツ番号, ファイル名, 状態))
+/* 0016308e */	{
+/* 0016308e */		PARTS_Warning("Ｐ＿フラット設定(パーツ番号 = %d, ファイル名 = \"%s\", 状態 = %d)\n" % パーツ番号 % ファイル名 % 状態);
+/* 001630d0 */	}
+/* 001630d0 */}
+
+string Ｐ＿フラット名取得(int パーツ番号, int 状態)
+/* 001630de */{
+/* 001630de */	string Out;
+/* 001630f2 */	PartsEngine.Parts_GetPartsFlatName(Out, パーツ番号, 状態);
+/* 0016311a */	return Out;
+/* 00163126 */}
+
+bool Ｐ＿フラット終了確認(int パーツ番号, int 状態)
+/* 0016313a */{
+/* 0016313a */	return PartsEngine.Parts_IsPartsFlatEnd(パーツ番号, 状態);
+/* 0016315a */}
+
+void Ｐ＿フラット開始フレーム移動(int パーツ番号, int 状態)
+/* 0016316e */{
+/* 0016316e */	PartsEngine.Parts_BackPartsFlatBeginFrame(パーツ番号, 状態);
+/* 0016318e */}
+
+void Ｐ＿フラット最終フレームステップ(int パーツ番号, int 状態)
+/* 0016319c */{
+/* 0016319c */	PartsEngine.Parts_StepPartsFlatFinalFrame(パーツ番号, 状態);
+/* 001631bc */}
+
+void Ｐ＿フラットＣＧ名リスト取得(int パーツ番号, ref array@string リスト, int 状態)
+/* 001631ca */{
+/* 001631ca */	int NumofCG = PartsEngine.NumofFlatCG(パーツ番号, 状態);
+/* 001631f4 */	リスト.Free();
+/* 001631fe */	int Index;
+/* 001631fe */	for (Index = 0; Index < NumofCG; ++Index)
+/* 00163248 */	{
+/* 00163248 */		string Out;
+/* 0016325c */		PartsEngine.GetFlatCGName(Out, パーツ番号, Index, 状態);
+/* 0016328e */		リスト.PushBack(Out);
+/* 001632a2 */	}
+/* 001632a8 */}
+
+void Ｐ＿フラットＣＧ変更(int パーツ番号, string フラット内ＣＧ名, string 代替ＣＧ名, int 状態)
+/* 001632b6 */{
+/* 001632b6 */	PartsEngine.Parts_ChangeFlatCG(パーツ番号, フラット内ＣＧ名, 代替ＣＧ名, 状態);
+/* 001632e8 */}
+
+string Ｐ＿フラット代替ＣＧ名取得(int パーツ番号, string フラット内ＣＧ名, int 状態)
+/* 001632f6 */{
+/* 001632f6 */	string Out;
+/* 0016330a */	PartsEngine.GetProxyFlatCGName(Out, パーツ番号, フラット内ＣＧ名, 状態);
+/* 0016333c */	return Out;
+/* 00163348 */}
+
+void Ｐ＿フラットＣＧ変更一部キャンセル(int パーツ番号, string フラット内ＣＧ名, int 状態)
+/* 0016335c */{
+/* 0016335c */	PartsEngine.ReturnChangeFlatCG(パーツ番号, フラット内ＣＧ名, 状態);
+/* 00163384 */}
+
+void Ｐ＿フラットＣＧ変更キャンセル(int パーツ番号, int 状態)
+/* 00163392 */{
+/* 00163392 */	PartsEngine.ClearChangeFlatCG(パーツ番号, 状態);
+/* 001633b0 */}
+
+void Ｐ＿フラットサウンド名リスト取得(int パーツ番号, ref array@string リスト, int 状態)
+/* 001633be */{
+/* 001633be */	int NumofCG = PartsEngine.NumofFlatSound(パーツ番号, 状態);
+/* 001633e8 */	リスト.Free();
+/* 001633f2 */	int Index;
+/* 001633f2 */	for (Index = 0; Index < NumofCG; ++Index)
+/* 0016343c */	{
+/* 0016343c */		string Out;
+/* 00163450 */		PartsEngine.GetFlatSoundName(Out, パーツ番号, Index, 状態);
+/* 00163482 */		リスト.PushBack(Out);
+/* 00163496 */	}
+/* 0016349c */}
+
+void Ｐ＿フラットサウンド変更(int パーツ番号, string フラット内サウンド名, string 代替サウンド名, int 状態)
+/* 001634aa */{
+/* 001634aa */	PartsEngine.Parts_ChangeFlatSound(パーツ番号, フラット内サウンド名, 代替サウンド名, 状態);
+/* 001634dc */}
+
+int Ｐ＿フラット代替サウンド取得(int パーツ番号, string フラット内サウンド名, int 状態)
+/* 001634ea */{
+/* 001634ea */	string Out;
+/* 001634fe */	PartsEngine.GetProxyFlatSound(Out, パーツ番号, フラット内サウンド名, 状態);
+/* 00163530 */	return Out.Int();
+/* 0016353e */}
+
+void Ｐ＿フラットサウンド変更一部キャンセル(int パーツ番号, string フラット内サウンド名, int 状態)
+/* 00163552 */{
+/* 00163552 */	PartsEngine.ReturnChangeFlatSound(パーツ番号, フラット内サウンド名, 状態);
+/* 0016357a */}
+
+void Ｐ＿フラットサウンド変更キャンセル(int パーツ番号, int 状態)
+/* 00163588 */{
+/* 00163588 */	PartsEngine.ClearChangeFlatSound(パーツ番号, 状態);
+/* 001635a6 */}
+

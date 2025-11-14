@@ -1,0 +1,61 @@
+void SceneDungeonViewer::init(string dungeonId)
+/* 001c91ba */{
+/* 001c91ba */	this.isCardClicked_ = false;
+/* 001c91cc */	ref Dungeon d = getDungeonFromId(dungeonId);
+/* 001c920e */	d.reset();
+/* 001c921e */	this.depth_ = d.getDepth();
+/* 001c923a */	this.width_ = d.getWidth();
+/* 001c9256 */	this.scroller_.init(0, 0, 1024, 768, this.depth_ * 154 - 768, 154, true);
+/* 001c92a4 */	this.view_.Alloc(this.depth_ * this.width_);
+/* 001c92ca */	int i;
+/* 001c92dc */	for (i = 0; i < this.depth_; ++i)
+/* 001c9326 */	{
+/* 001c9326 */		DungeonLine line;
+/* 001c9336 */		line = d.getDungeonLine(i);
+/* 001c9384 */		int j;
+/* 001c9396 */		for (j = 0; j < this.width_; ++j)
+/* 001c93e0 */		{
+/* 001c93e0 */			int index = i * this.width_ + j;
+/* 001c940e */			this.view_[index].init(line.getDungeonCard(j), j - this.width_ / 2, i, this.depth_);
+/* 001c9490 */			this.view_[index].setParent(this.scroller_.getPartsNumber());
+/* 001c94bc */			this.view_[index].setOnClickCallback(this.onClick);
+/* 001c94e2 */		}
+/* 001c94ee */	}
+/* 001c9500 */}
+
+void SceneDungeonViewer::run()
+/* 001c9508 */{
+/* 001c9508 */	this.scroller_.setPos(this.depth_ * 154 - 768);
+/* 001c9534 */}
+
+bool SceneDungeonViewer::update()
+/* 001c953c */{
+/* 001c953c */	if (g_mouse.isClick(1) || this.isCardClicked_)
+/* 001c9580 */	{
+/* 001c9580 */		return false;
+/* 001c9588 */	}
+/* 001c9588 */	return true;
+/* 001c9590 */}
+
+void SceneDungeonViewer::onClick(int x, int y)
+/* 001c959e */{
+/* 001c959e */	this.clickedX_ = x;
+/* 001c95b4 */	this.clickedY_ = y;
+/* 001c95ca */	this.isCardClicked_ = true;
+/* 001c95dc */}
+
+int SceneDungeonViewer::getClickedX()
+/* 001c95e4 */{
+/* 001c95e4 */	return this.clickedX_;
+/* 001c95f0 */}
+
+int SceneDungeonViewer::getClickedY()
+/* 001c95fe */{
+/* 001c95fe */	return this.clickedY_;
+/* 001c960a */}
+
+bool SceneDungeonViewer::isCardClicked()
+/* 001c9618 */{
+/* 001c9618 */	return this.isCardClicked_;
+/* 001c9624 */}
+

@@ -1,0 +1,96 @@
+BadConditionView::BadConditionView()
+/* 001802a2 */{
+/* 001802aa */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001802d0 */}
+
+void BadConditionView::init(string id, int index)
+/* 001802d8 */{
+/* 001802d8 */	this.id_ = id;
+/* 001802f0 */	this.index_ = index;
+/* 00180306 */	this.initParts();
+/* 0018030e */	this.setPartsPos();
+/* 00180316 */}
+
+void BadConditionView::initParts()
+/* 0018031e */{
+/* 0018031e */	BadCondition b;
+/* 0018032e */	b = getBadConditionFromId(this.id_);
+/* 0018036e */	if (Ａ＿ＣＧ存在確認(b.getImageName()))
+/* 0018038a */	{
+/* 0018038a */		this.parts_[0].init(b.getImageName(), 0);
+/* 001803b8 */	}
+/* 001803be */	else
+/* 001803be */	{
+/* 001803be */		this.parts_[0].init("システム／ダンジョン／状態異常／マイナス", 0);
+/* 001803e2 */	}
+/* 001803e2 */	this.parts_[1].initAsText(b.getName(), 16, true, 256, 255, 255, 255);
+/* 0018042e */	this.parts_[2].initAsNumber("システム／数字／幅１０／白", NULL);
+/* 00180452 */	createPartsGroup(this.parent_, this.parts_, 8200);
+/* 00180472 */}
+
+void BadConditionView::changeIndex(int index)
+/* 0018047a */{
+/* 0018047a */	int from = this.getPartsX(this.index_);
+/* 00180498 */	int to = this.getPartsX(index);
+/* 001804b6 */	this.index_ = index;
+/* 001804cc */	PartsMotion m;
+/* 001804dc */	m.setMove(from, 50, to, 50, 2);
+/* 00180512 */	m.setTime(1000);
+/* 00180528 */	this.parent_.runMotion(m, NULL);
+/* 00180548 */}
+
+void BadConditionView::updateCount()
+/* 00180550 */{
+/* 00180550 */	this.parts_[2].setNumber(g_playerCommonParam.getBadConditionTurn(this.id_));
+/* 00180584 */}
+
+void BadConditionView::setPartsShow()
+/* 0018058c */{
+/* 0018058c */	int i;
+/* 0018059e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001805ee */	{
+/* 001805ee */		this.parts_[i].setShow(true);
+/* 00180610 */	}
+/* 00180616 */	this.parent_.setShow(true);
+/* 0018062c */}
+
+void BadConditionView::setPartsPos()
+/* 00180634 */{
+/* 00180634 */	this.parts_[2].setPos(57.0, 18.0);
+/* 00180658 */	this.parts_[2].setOrigin(5);
+/* 00180676 */	this.parts_[1].setPos(27.0, 10.0);
+/* 0018069a */	this.parts_[1].setOrigin(5);
+/* 001806b8 */	this.parent_.setPos(this.getPartsX(this.index_), 30.0);
+/* 001806e2 */}
+
+int BadConditionView::getPartsX(int index)
+/* 001806ea */{
+/* 001806ea */	return 926 - index * 77;
+/* 00180706 */}
+
+void BadConditionView::update()
+/* 00180714 */{
+/* 00180716 */}
+
+void BadConditionView::fadeIn(bool val)
+/* 0018071c */{
+/* 0018071c */	this.setPartsShow();
+/* 00180724 */	if (val)
+/* 00180734 */	{
+/* 00180734 */		PartsMotion m;
+/* 00180744 */		m.setMove(-100, 50, this.getPartsX(this.index_), 50, 2);
+/* 0018077e */		m.setTime(1000);
+/* 00180794 */		m.setAlpha(255, 255, 0);
+/* 001807b6 */		this.parent_.runMotion(m, NULL);
+/* 001807d6 */	}
+/* 001807e2 */	else
+/* 001807e2 */	{
+/* 001807e2 */		this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 0018081c */	}
+/* 0018081c */}
+
+string BadConditionView::getId()
+/* 00180824 */{
+/* 00180824 */	return this.id_;
+/* 00180830 */}
+

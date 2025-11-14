@@ -1,0 +1,61 @@
+MapBranch::MapBranch()
+/* 00186248 */{
+/* 00186250 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00186276 */}
+
+void MapBranch::init(ref MapChainInfo info, int parentPartsNumber)
+/* 0018627e */{
+/* 0018627e */	this.parentPartsNumber_ = parentPartsNumber;
+/* 00186294 */	this.info_ = info;
+/* 001862b6 */	this.isShown_ = !this.info_.isNew;
+/* 001862d8 */	this.initParts();
+/* 001862e0 */}
+
+void MapBranch::initParts()
+/* 001862e8 */{
+/* 001862e8 */	this.branch_.init(this.parentPartsNumber_);
+/* 00186302 */	int x1;
+/* 00186314 */	int y1;
+/* 00186326 */	int x2;
+/* 00186338 */	int y2;
+/* 0018634a */	x1 = getMapPlaceFromId(this.info_.pId1).getX();
+/* 0018638a */	y1 = getMapPlaceFromId(this.info_.pId1).getY();
+/* 001863ca */	x2 = getMapPlaceFromId(this.info_.pId2).getX();
+/* 0018640a */	y2 = getMapPlaceFromId(this.info_.pId2).getY();
+/* 0018644a */	this.branch_.setPos(x1, y1, x2, y2);
+/* 00186482 */	this.branch_.setShow(!this.info_.isNew);
+/* 001864a8 */}
+
+void MapBranch::setPartsShow()
+/* 001864b0 */{
+/* 001864b0 */	int i;
+/* 001864c2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00186512 */	{
+/* 00186512 */		this.parts_[i].setShow(true);
+/* 00186534 */	}
+/* 0018653a */	this.parent_.setShow(true);
+/* 00186550 */}
+
+void MapBranch::fadeIn(bool val)
+/* 00186558 */{
+/* 00186558 */	this.branch_.fadeIn(val, NULL);
+/* 00186574 */}
+
+void MapBranch::update()
+/* 0018657c */{
+/* 0018657e */}
+
+void MapBranch::showNewBranch(DG_GeneralCallback onFinishCallback)
+/* 00186584 */{
+/* 00186584 */	g_sysSound.play(6, "効果音／新しいブランチ");
+/* 001865a0 */	this.branch_.fadeIn(true, onFinishCallback);
+/* 001865c2 */}
+
+void MapBranch::getCenter(ref int x, ref int y)
+/* 001865ca */{
+/* 001865ca */	ref MapPlace mp1 = getMapPlaceFromId(this.info_.pId1);
+/* 00186614 */	ref MapPlace mp2 = getMapPlaceFromId(this.info_.pId2);
+/* 0018665e */	x = (mp1.getX() + mp2.getX()) / 2;
+/* 00186696 */	y = (mp1.getY() + mp2.getY()) / 2;
+/* 001866ce */}
+

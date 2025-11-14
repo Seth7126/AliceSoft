@@ -1,0 +1,210 @@
+CAEPropertyListBox::CAEPropertyListBox()
+/* 000657dc */{
+/* 000657e4 */	this.Init(0, NULL);
+/* 000657f8 */}
+
+CAEPropertyListBox::~CAEPropertyListBox()
+/* 00065800 */{
+/* 00065800 */	this.Release();
+/* 00065808 */}
+
+void CAEPropertyListBox::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 00065810 */{
+/* 00065810 */	this.Release();
+/* 00065818 */	if (Item === NULL)
+/* 00065830 */	{
+/* 00065830 */		return;
+/* 00065832 */	}
+/* 00065832 */	this.m_Item <- Item;
+/* 00065852 */	this.m_Panel.Init(LayoutID);
+/* 0006586c */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00065886 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 000658a0 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 000658ba */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 000658d4 */	int ID = this.m_Item.GetID();
+/* 000658f0 */	float 太字幅;
+/* 00065902 */	float 縁取り幅;
+/* 00065914 */	int 種類;
+/* 00065926 */	int サイズ;
+/* 00065938 */	int 赤;
+/* 0006594a */	int 緑;
+/* 0006595c */	int 青;
+/* 0006596e */	int 縁取り赤;
+/* 00065980 */	int 縁取り緑;
+/* 00065992 */	int 縁取り青;
+/* 000659a4 */	Ｐ＿リストボックス＿フォント取得(ID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00065a04 */	this.m_Panel.AddTextBoxItem("幅", string(AFL_Parts_GetWidth(ID, 1)), false);
+/* 00065a54 */	this.m_Panel.AddTextBoxItem("高さ", string(AFL_Parts_GetHeight(ID, 1)), false);
+/* 00065aa4 */	this.m_Panel.AddTextBoxItem("行高さ", string(Ｐ＿リストボックス＿行高さ取得(ID)), false);
+/* 00065aee */	this.m_Panel.AddTextBoxItem("行マージン幅", string(Ｐ＿リストボックス＿行マージン幅取得(ID)), false);
+/* 00065b38 */	this.m_Panel.AddTextBoxItem("行マージン高さ", string(Ｐ＿リストボックス＿行マージン高さ取得(ID)), false);
+/* 00065b82 */	this.m_Panel.AddButtonItem("項目", "編集");
+/* 00065bba */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿リストボックス＿ＣＧ名取得(ID), true);
+/* 00065c02 */	this.m_Panel.AddTextBoxItem("スクロール位置", string(Ｐ＿リストボックス＿スクロール位置取得(ID)), false);
+/* 00065c4c */	this.m_Panel.AddButtonItem("フォント", "%s, サイズ[%d]" % PARTS_GetFontName(種類) % サイズ);
+/* 00065cae */	this.m_Panel.AddTextBoxItem("選択位置", string(Ｐ＿リストボックス＿選択位置取得(ID)), false);
+/* 00065cf8 */}
+
+void CAEPropertyListBox::Release()
+/* 00065d00 */{
+/* 00065d00 */	this.m_dgMouseWheelEvent.Clear();
+/* 00065d0c */	this.m_dgKeyDownEvent.Clear();
+/* 00065d18 */	this.m_Item <- NULL;
+/* 00065d30 */	this.m_Panel.Release();
+/* 00065d40 */}
+
+void CAEPropertyListBox::KeyDownEvent(int ID, int KeyID)
+/* 00065d48 */{
+/* 00065d48 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00065d7c */}
+
+void CAEPropertyListBox::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00065d84 */{
+/* 00065d84 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00065dc2 */}
+
+void CAEPropertyListBox::ChangeTextEvent(int ID)
+/* 00065dca */{
+/* 00065dca */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00065e1a */	if (Item === NULL)
+/* 00065e32 */	{
+/* 00065e32 */		return;
+/* 00065e34 */	}
+/* 00065e34 */	int PartsID = this.m_Item.GetID();
+/* 00065e50 */	if (Item.GetLabel() == "幅")
+/* 00065e6e */	{
+/* 00065e6e */		Ｐ＿リストボックス＿サイズ設定(PartsID, Item.GetTextBoxInt(), AFL_Parts_GetHeight(PartsID, 1));
+/* 00065ea4 */	}
+/* 00065eaa */	else if (Item.GetLabel() == "高さ")
+/* 00065ec8 */	{
+/* 00065ec8 */		Ｐ＿リストボックス＿サイズ設定(PartsID, AFL_Parts_GetWidth(PartsID, 1), Item.GetTextBoxInt());
+/* 00065efe */	}
+/* 00065f04 */	else if (Item.GetLabel() == "行高さ")
+/* 00065f22 */	{
+/* 00065f22 */		Ｐ＿リストボックス＿行高さ設定(PartsID, Item.GetTextBoxInt());
+/* 00065f42 */	}
+/* 00065f48 */	else if (Item.GetLabel() == "行マージン幅")
+/* 00065f66 */	{
+/* 00065f66 */		Ｐ＿リストボックス＿行マージン設定(PartsID, Item.GetTextBoxInt(), Ｐ＿リストボックス＿行マージン高さ取得(PartsID));
+/* 00065f96 */	}
+/* 00065f9c */	else if (Item.GetLabel() == "行マージン高さ")
+/* 00065fba */	{
+/* 00065fba */		Ｐ＿リストボックス＿行マージン設定(PartsID, Ｐ＿リストボックス＿行マージン幅取得(PartsID), Item.GetTextBoxInt());
+/* 00065fea */	}
+/* 00065ff0 */	else if (Item.GetLabel() == "ＣＧ名")
+/* 0006600e */	{
+/* 0006600e */		Ｐ＿リストボックス＿ＣＧ名設定(PartsID, Item.GetTextBoxText());
+/* 0006602e */	}
+/* 00066034 */	else if (Item.GetLabel() == "スクロール位置")
+/* 00066052 */	{
+/* 00066052 */		Ｐ＿リストボックス＿スクロール位置設定(PartsID, Item.GetTextBoxInt());
+/* 00066072 */	}
+/* 00066078 */	else if (Item.GetLabel() == "選択位置")
+/* 00066096 */	{
+/* 00066096 */		Ｐ＿リストボックス＿選択位置設定(PartsID, Item.GetTextBoxInt());
+/* 000660b6 */	}
+/* 000660b6 */}
+
+void CAEPropertyListBox::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 000660be */{
+/* 000660be */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006610e */	if (Item === NULL)
+/* 00066126 */	{
+/* 00066126 */		return;
+/* 00066128 */	}
+/* 00066128 */	int PartsID = this.m_Item.GetID();
+/* 00066144 */	if (Item.GetLabel() == "項目")
+/* 00066162 */	{
+/* 00066162 */		CAEEditTextListListDialog Form;
+/* 00066172 */		array@string ItemList;
+/* 0006617c */		int Index;
+/* 0006618e */		int Numof = Ｐ＿リストボックス＿アイテム数取得(PartsID);
+/* 000661aa */		for (Index = 0; Index < Numof; ++Index)
+/* 000661f4 */		{
+/* 000661f4 */			ItemList.PushBack(Ｐ＿リストボックス＿アイテム取得(PartsID, Index));
+/* 00066218 */		}
+/* 0006621e */		Form.Show(ID, MouseX, MouseY, ItemList, this.ChangedItemListEvent);
+/* 0006626c */	}
+/* 00066278 */	else if (Item.GetLabel() == "フォント")
+/* 00066296 */	{
+/* 00066296 */		float 太字幅;
+/* 000662a8 */		float 縁取り幅;
+/* 000662ba */		int 種類;
+/* 000662cc */		int サイズ;
+/* 000662de */		int 赤;
+/* 000662f0 */		int 緑;
+/* 00066302 */		int 青;
+/* 00066314 */		int 縁取り赤;
+/* 00066326 */		int 縁取り緑;
+/* 00066338 */		int 縁取り青;
+/* 0006634a */		Ｐ＿リストボックス＿フォント取得(PartsID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000663aa */		CASCharSpriteProperty Font;
+/* 000663ba */		Font.SetType(種類);
+/* 000663d4 */		Font.SetSize(サイズ);
+/* 000663ee */		Font.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 00066428 */		Font.SetBoldWeight(太字幅);
+/* 00066442 */		Font.SetEdgeWeight(縁取り幅);
+/* 0006645c */		Font.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 00066496 */		CAESelectFontDialog Form;
+/* 000664a6 */		Form.Show(ID, MouseX, MouseY, Font, this.ChangedFontEvent);
+/* 000664ec */	}
+/* 000664ec */}
+
+void CAEPropertyListBox::ChangedFontEvent(int ID, ref CASCharSpriteProperty Font)
+/* 00066500 */{
+/* 00066500 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00066550 */	if (Item === NULL)
+/* 00066568 */	{
+/* 00066568 */		return;
+/* 0006656a */	}
+/* 0006656a */	int PartsID = this.m_Item.GetID();
+/* 00066586 */	CASColor Color;
+/* 00066596 */	Color = Font.GetColor();
+/* 000665ba */	CASColor EdgeColor;
+/* 000665ca */	EdgeColor = Font.GetEdgeColor();
+/* 000665ee */	if (Item.GetLabel() == "フォント")
+/* 0006660c */	{
+/* 0006660c */		Ｐ＿リストボックス＿フォント設定(PartsID, Font.GetType(), Font.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), Font.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Font.GetEdgeWeight());
+/* 000666bc */		Item.SetButtonText("%s, サイズ[%d]" % PARTS_GetFontName(Font.GetType()) % Font.GetSize());
+/* 00066708 */	}
+/* 00066708 */}
+
+void CAEPropertyListBox::ChangedItemListEvent(int ID, ref array@string List)
+/* 00066710 */{
+/* 00066710 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00066760 */	if (Item === NULL)
+/* 00066778 */	{
+/* 00066778 */		return;
+/* 0006677a */	}
+/* 0006677a */	int PartsID = this.m_Item.GetID();
+/* 00066796 */	if (Item.GetLabel() == "項目")
+/* 000667b4 */	{
+/* 000667b4 */		Ｐ＿リストボックス＿アイテム全削除(PartsID);
+/* 000667c4 */		int Index;
+/* 000667d6 */		for (Index = 0; Index < List.Numof(); ++Index)
+/* 00066826 */		{
+/* 00066826 */			Ｐ＿リストボックス＿アイテム追加(PartsID, List[Index]);
+/* 0006684c */		}
+/* 00066852 */	}
+/* 00066852 */}
+
+void CAEPropertyListBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006685a */{
+/* 0006685a */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00066874 */}
+
+void CAEPropertyListBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006687c */{
+/* 0006687c */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00066896 */}
+
+void CAEPropertyListBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006689e */{
+/* 0006689e */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 000668b8 */}
+
+void CAEPropertyListBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000668c0 */{
+/* 000668c0 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 000668da */}
+

@@ -1,0 +1,62 @@
+void SaveObject::init(int saveIndex)
+/* 001e1ea2 */{
+/* 001e1ea2 */	this.saveIndex_ = saveIndex;
+/* 001e1eb8 */}
+
+void SaveObject::setOnSaveCallback(DG_OnSaveCallback onSaveCallback)
+/* 001e1ec0 */{
+/* 001e1ec0 */	this.onSave_ += onSaveCallback;
+/* 001e1eda */}
+
+bool SaveObject::save(string comment)
+/* 001e1ee2 */{
+/* 001e1ee2 */	AFL_GameSave_CopyThumbnail(this.saveIndex_, 255);
+/* 001e1efa */	bool r = AFL_GameSave_Save(this.saveIndex_, comment);
+/* 001e1f20 */	if (r)
+/* 001e1f30 */	{
+/* 001e1f30 */		this.updateInfomation();
+/* 001e1f38 */		if (this.onSave_.Numof() != 0)
+/* 001e1f54 */		{
+/* 001e1f54 */			this.onSave_();
+/* 001e1f74 */		}
+/* 001e1f74 */	}
+/* 001e1f74 */	return r;
+/* 001e1f80 */}
+
+void SaveObject::updateInfomation()
+/* 001e1f8e */{
+/* 001e1f8e */	AFL_GameSave_GetFileInfo(this.saveIndex_, this.year_, this.month_, this.day_, this.week_, this.hour_, this.min_, this.sec_, this.timeInGame_, this.userComment_, this.playTimeMinute_);
+/* 001e1ff4 */}
+
+void SaveObject::load()
+/* 001e1ffc */{
+/* 001e1ffc */	if (!this.isSaved())
+/* 001e200c */	{
+/* 001e200c */		return;
+/* 001e200e */	}
+/* 001e200e */	AFL_GameSave_Load(this.saveIndex_);
+/* 001e201e */}
+
+bool SaveObject::isSaved()
+/* 001e2026 */{
+/* 001e2026 */	return AFL_GameSave_IsExistFile(this.saveIndex_);
+/* 001e2038 */}
+
+string SaveObject::getComment()
+/* 001e2046 */{
+/* 001e2046 */	this.updateInfomation();
+/* 001e204e */	return this.userComment_;
+/* 001e205a */}
+
+string SaveObject::getSaveTime()
+/* 001e2068 */{
+/* 001e2068 */	this.updateInfomation();
+/* 001e2070 */	return "%04d/%02d/%02d %02d:%02d:%02d" % this.year_ % this.month_ % this.day_ % this.hour_ % this.min_ % this.sec_;
+/* 001e20e4 */}
+
+int SaveObject::getPlayTimeMinute()
+/* 001e20f2 */{
+/* 001e20f2 */	this.updateInfomation();
+/* 001e20fa */	return this.playTimeMinute_;
+/* 001e2106 */}
+

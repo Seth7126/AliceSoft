@@ -1,0 +1,78 @@
+CASDebugVideoMemorySize::CASDebugVideoMemorySize()
+/* 00041d62 */{
+/* 00041d6a */	this.m_Show = false;
+/* 00041d7c */	this.m_Text.Create();
+/* 00041d8c */	PARTS_SetWantSaveBackScene(this.m_Text.GetPartsNumber(), false);
+/* 00041da8 */	this.SetFont(0, 12, 24);
+/* 00041dc2 */}
+
+void CASDebugVideoMemorySize::SetFont(int Type, int Size, int Size2)
+/* 00041dca */{
+/* 00041dca */	this.m_FontSize = Size;
+/* 00041de0 */	this.m_FontSize2 = Size2;
+/* 00041df6 */	this.m_TextProperty.SetType(Type);
+/* 00041e10 */	this.m_TextProperty.SetSize(Size);
+/* 00041e2a */	this.m_TextProperty.SetColor(CF_CASColor(255, 255, 255, 255));
+/* 00041e58 */	this.m_TextProperty.SetEdgeWeight(1.0);
+/* 00041e6e */	this.m_TextProperty.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 00041e9c */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 00041ebc */}
+
+void CASDebugVideoMemorySize::Reset()
+/* 00041ec4 */{
+/* 00041ec4 */	this.m_UseSize = 0;
+/* 00041ed6 */	this.m_UseMaxSize = 0;
+/* 00041ee8 */}
+
+void CASDebugVideoMemorySize::SetShow(bool Show)
+/* 00041ef0 */{
+/* 00041ef0 */	this.m_Show = Show;
+/* 00041f06 */}
+
+bool CASDebugVideoMemorySize::GetShow()
+/* 00041f0e */{
+/* 00041f0e */	return this.m_Show;
+/* 00041f1a */}
+
+void CASDebugVideoMemorySize::Update(bool IsShowLeft, int PosY)
+/* 00041f28 */{
+/* 00041f28 */	Ｐ＿親設定(this.m_Text.GetPartsNumber(), PARTS_GetSystemOverlayLayer());
+/* 00041f44 */	int PrevUseSize = this.m_UseSize;
+/* 00041f5a */	int PrevUseMaxSize = this.m_UseMaxSize;
+/* 00041f70 */	this.m_UseSize = SystemService.Debug_GetUseVideoMemorySize();
+/* 00041f86 */	this.m_UseMaxSize = Math.Max(this.m_UseMaxSize, this.m_UseSize);
+/* 00041fb0 */	if (this.IsCompulsorilyShow())
+/* 00041fbe */	{
+/* 00041fbe */		this.SetShow(true);
+/* 00041fcc */		this.m_TextProperty.SetSize(this.m_FontSize2);
+/* 00041fe6 */		this.m_TextProperty.SetColor(CF_CASColor(255, 0, 0, 255));
+/* 00042014 */	}
+/* 00042014 */	bool IsShow = this.GetShow() && !AFL_Config_GetDisavleDebugInfo();
+/* 00042050 */	this.m_Text.SetShow(IsShow);
+/* 0004206a */	this.m_Text.SetOriginPosMode(IsShowLeft ? 1 : 3);
+/* 0004209c */	this.m_Text.SetPos(IsShowLeft ? 0 : AFL_View_GetWidth(), PosY);
+/* 000420d8 */	this.m_Text.SetZ(32767);
+/* 000420ee */	if (!IsShow)
+/* 00042100 */	{
+/* 00042100 */		return;
+/* 00042102 */	}
+/* 00042102 */	if (PrevUseSize == this.m_UseSize && PrevUseMaxSize == this.m_UseMaxSize && this.m_Timer.Get() < 1000)
+/* 00042188 */	{
+/* 00042188 */		return;
+/* 0004218a */	}
+/* 0004218a */	this.m_Timer.Reset();
+/* 0004219a */	this.m_Text.SetFontProperty(this.m_TextProperty, 1);
+/* 000421ba */	this.m_Text.SetText("V:%4d/%4d" % (this.m_UseSize / 1024 / 1024) % (this.m_UseMaxSize / 1024 / 1024), 1);
+/* 0004221a */}
+
+bool CASDebugVideoMemorySize::IsCompulsorilyShow()
+/* 00042222 */{
+/* 00042222 */	return this.m_UseSize >= 167772160;
+/* 00042238 */}
+
+int CASDebugVideoMemorySize::GetBottom()
+/* 00042246 */{
+/* 00042246 */	int Number = this.m_Text.GetPartsNumber();
+/* 00042262 */	return AFL_Parts_GetUpperLeftPosY(Number, 1) + AFL_Parts_GetHeight(Number, 1);
+/* 00042296 */}
+

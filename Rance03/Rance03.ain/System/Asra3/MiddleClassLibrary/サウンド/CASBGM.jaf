@@ -1,0 +1,304 @@
+CASBGM::CASBGM()
+/* 0003d62a */{
+/* 0003d632 */	this.m_Volume = 1.0;
+/* 0003d644 */	this.m_TransitionType = 3;
+/* 0003d656 */	this.m_TransitionTotalTime = 500;
+/* 0003d668 */	this.m_Pause = false;
+/* 0003d67a */	this.ClearReserveInfo();
+/* 0003d682 */}
+
+void CASBGM::InitChannel(int Channel1, int Channel2)
+/* 0003d68a */{
+/* 0003d68a */	this.m_ChannelList.Alloc(2);
+/* 0003d6a0 */	this.m_ChannelList[0] = Channel1;
+/* 0003d6be */	this.m_ChannelList[1] = Channel2;
+/* 0003d6dc */}
+
+void CASBGM::SwapChannel()
+/* 0003d6e4 */{
+/* 0003d6e4 */	this.m_CurrentChannel = 1 - this.m_CurrentChannel;
+/* 0003d702 */}
+
+void CASBGM::SetSoundName(string SoundName)
+/* 0003d70a */{
+/* 0003d70a */	this.m_SoundName = SoundName;
+/* 0003d722 */}
+
+string CASBGM::GetSoundName()
+/* 0003d72a */{
+/* 0003d72a */	return this.m_SoundName;
+/* 0003d736 */}
+
+string CASBGM::GetSoundNameStable()
+/* 0003d744 */{
+/* 0003d744 */	if (this.m_Reserve)
+/* 0003d754 */	{
+/* 0003d754 */		return this.m_Reserve_BGMName;
+/* 0003d760 */	}
+/* 0003d760 */	return this.GetSoundName();
+/* 0003d76a */}
+
+void CASBGM::SetVolume(float Volume)
+/* 0003d778 */{
+/* 0003d778 */	this.m_Volume = Volume;
+/* 0003d78e */}
+
+float CASBGM::GetVolume()
+/* 0003d796 */{
+/* 0003d796 */	return this.m_Volume;
+/* 0003d7a2 */}
+
+float CASBGM::GetVolumeStable()
+/* 0003d7b0 */{
+/* 0003d7b0 */	if (this.m_Reserve)
+/* 0003d7c0 */	{
+/* 0003d7c0 */		return this.m_Reserve_Volume;
+/* 0003d7cc */	}
+/* 0003d7cc */	return this.GetVolume();
+/* 0003d7d6 */}
+
+int CASBGM::GetTransitionType()
+/* 0003d7e4 */{
+/* 0003d7e4 */	return this.m_TransitionType;
+/* 0003d7f0 */}
+
+int CASBGM::GetTransitionTotalTime()
+/* 0003d7fe */{
+/* 0003d7fe */	return this.m_TransitionTotalTime;
+/* 0003d80a */}
+
+void CASBGM::SetLoopCount(int LoopCount)
+/* 0003d818 */{
+/* 0003d818 */	this.m_LoopCount = LoopCount;
+/* 0003d82e */}
+
+int CASBGM::GetLoopCount()
+/* 0003d836 */{
+/* 0003d836 */	return this.m_LoopCount;
+/* 0003d842 */}
+
+void CASBGM::ReserveNext(string 音楽名, int LoopCount, int 効果時間, float Volume, int FadeType)
+/* 0003d850 */{
+/* 0003d850 */	this.m_Reserve = true;
+/* 0003d862 */	this.m_Reserve_BGMName = 音楽名;
+/* 0003d87a */	this.m_Reserve_LoopCount = LoopCount;
+/* 0003d890 */	this.m_Reserve_Time = 効果時間;
+/* 0003d8a6 */	this.m_Reserve_Volume = Volume;
+/* 0003d8bc */	this.m_Reserve_FadeType = FadeType;
+/* 0003d8d2 */}
+
+void CASBGM::UpdateReserve()
+/* 0003d8da */{
+/* 0003d8da */	if (!this.m_Reserve)
+/* 0003d8ec */	{
+/* 0003d8ec */		return;
+/* 0003d8ee */	}
+/* 0003d8ee */	if (this.IsPlay())
+/* 0003d8fc */	{
+/* 0003d8fc */		return;
+/* 0003d8fe */	}
+/* 0003d8fe */	this.UpdateReserveForce();
+/* 0003d906 */}
+
+void CASBGM::UpdateReserveForce()
+/* 0003d90e */{
+/* 0003d90e */	if (!this.m_Reserve)
+/* 0003d920 */	{
+/* 0003d920 */		return;
+/* 0003d922 */	}
+/* 0003d922 */	this.PlayNext(this.m_Reserve_BGMName, this.m_Reserve_LoopCount, this.m_Reserve_Time, this.m_Reserve_Volume, this.m_Reserve_FadeType);
+/* 0003d95c */	this.ClearReserveInfo();
+/* 0003d964 */}
+
+void CASBGM::ClearReserveInfo()
+/* 0003d96c */{
+/* 0003d96c */	this.m_Reserve = false;
+/* 0003d97e */	this.m_Reserve_BGMName = "";
+/* 0003d992 */	this.m_Reserve_LoopCount = 0;
+/* 0003d9a4 */	this.m_Reserve_Time = 0;
+/* 0003d9b6 */	this.m_Reserve_Volume = 0.0;
+/* 0003d9c8 */	this.m_Reserve_FadeType = -1;
+/* 0003d9da */}
+
+void CASBGM::PlayNext(string 音楽名, int LoopCount, int 効果時間, float Volume, int FadeType)
+/* 0003d9e2 */{
+/* 0003d9e2 */	this.SwapChannel();
+/* 0003d9ea */	this.SetVolume(Volume);
+/* 0003d9fc */	if (!音楽名.Empty())
+/* 0003da10 */	{
+/* 0003da10 */		this.Prepare(音楽名);
+/* 0003da22 */		this.Fade(0, 0.0, false, -1);
+/* 0003da42 */		this.FadeWithVolumeCap(効果時間, g_BGMVolumeCapManager.GetCurrentBGMVolumeCapRate(), FadeType);
+/* 0003da6e */		this.SetLoopCount(LoopCount);
+/* 0003da80 */		this.Play();
+/* 0003da88 */	}
+/* 0003da8e */	else
+/* 0003da8e */	{
+/* 0003da8e */		this.Stop();
+/* 0003da96 */	}
+/* 0003da96 */	PassRegister.RegistText(2, 音楽名);
+/* 0003dab2 */	this.SetSoundName(音楽名);
+/* 0003dac4 */}
+
+void CASBGM::PlayBGM(string 音楽名, int LoopCount, int 効果タイプ, int 効果時間, float Volume)
+/* 0003dacc */{
+/* 0003dacc */	if (!音楽名.Empty() && !KiwiSoundEngine.IsExistFile(音楽名))
+/* 0003db14 */	{
+/* 0003db14 */		SYS_ERROR("音楽[%s]ロード失敗\n" % 音楽名, 0);
+/* 0003db38 */		音楽名 = "";
+/* 0003db4c */	}
+/* 0003db4c */	if (効果タイプ == -1)
+/* 0003db64 */	{
+/* 0003db64 */		効果タイプ = this.GetTransitionType();
+/* 0003db78 */	}
+/* 0003db78 */	if (効果時間 == -1)
+/* 0003db90 */	{
+/* 0003db90 */		効果時間 = this.GetTransitionTotalTime();
+/* 0003dba4 */	}
+/* 0003dba4 */	if (効果タイプ == 0)
+/* 0003dbbc */	{
+/* 0003dbbc */		効果時間 = 0;
+/* 0003dbce */	}
+/* 0003dbce */	this.UpdateReserveForce();
+/* 0003dbd6 */	if (this.GetSoundNameStable() == 音楽名 && !音楽名.Empty())
+/* 0003dc1c */	{
+/* 0003dc1c */		if (this.GetVolume() != Volume)
+/* 0003dc36 */		{
+/* 0003dc36 */			this.SetVolume(Volume);
+/* 0003dc48 */			this.FadeWithVolumeCap(効果時間, g_BGMVolumeCapManager.GetCurrentBGMVolumeCapRate(), 0);
+/* 0003dc70 */		}
+/* 0003dc70 */		return;
+/* 0003dc72 */	}
+/* 0003dc72 */	g_BGMVolumeCapManager.ResetBGM();
+/* 0003dc82 */	switch (効果タイプ)
+/* 0003dc98 */	{
+/* 0003dc98 */	case 0:
+/* 0003dc98 */		this.Stop();
+/* 0003dca0 */		break;
+/* 0003dca6 */	case 1:
+/* 0003dca6 */		if (音楽名.Empty())
+/* 0003dcb8 */		{
+/* 0003dcb8 */			this.Fade(効果時間, 0.0, true, 3);
+/* 0003dcdc */		}
+/* 0003dce2 */		else
+/* 0003dce2 */		{
+/* 0003dce2 */			this.Fade(効果時間 * 1.7, 0.0, true, 3);
+/* 0003dd16 */		}
+/* 0003dd16 */		break;
+/* 0003dd1c */	case 2:
+/* 0003dd1c */	case 3:
+/* 0003dd1c */		this.Fade(効果時間, 0.0, true, 3);
+/* 0003dd40 */		break;
+/* 0003dd46 */	}
+/* 0003dd46 */	switch (効果タイプ)
+/* 0003dd5c */	{
+/* 0003dd5c */	case 0:
+/* 0003dd5c */		this.PlayNext(音楽名, LoopCount, 0, Volume, -1);
+/* 0003dd8e */		break;
+/* 0003dd94 */	case 1:
+/* 0003dd94 */		if (this.m_SoundName == "")
+/* 0003ddac */		{
+/* 0003ddac */			this.PlayNext(音楽名, LoopCount, 効果時間, Volume, 5);
+/* 0003dde2 */		}
+/* 0003dde8 */		else
+/* 0003dde8 */		{
+/* 0003dde8 */			this.PlayNext(音楽名, LoopCount, 効果時間, Volume, 4);
+/* 0003de1e */		}
+/* 0003de1e */		break;
+/* 0003de24 */	case 2:
+/* 0003de24 */		this.ReserveNext(音楽名, LoopCount, 効果時間, Volume, 4);
+/* 0003de5a */		break;
+/* 0003de60 */	case 3:
+/* 0003de60 */		this.ReserveNext(音楽名, LoopCount, 0, Volume, -1);
+/* 0003de92 */		break;
+/* 0003de98 */	}
+/* 0003de98 */}
+
+bool CASBGM::IsPause()
+/* 0003dea0 */{
+/* 0003dea0 */	return this.m_Pause;
+/* 0003deac */}
+
+void CASBGM::Prepare(string SoundName)
+/* 0003deba */{
+/* 0003deba */	if (!KiwiSoundEngine.Prepare(this.m_ChannelList[this.m_CurrentChannel], SoundName, true))
+/* 0003def2 */	{
+/* 0003def2 */		system.Output("音楽【 %s 】の準備に失敗しました\n" % SoundName);
+/* 0003df12 */	}
+/* 0003df12 */}
+
+void CASBGM::Play()
+/* 0003df1a */{
+/* 0003df1a */	KiwiSoundEngine.SetLoopCount(this.m_ChannelList[this.m_CurrentChannel], this.m_LoopCount);
+/* 0003df46 */	KiwiSoundEngine.Play(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003df68 */	this.m_Pause = false;
+/* 0003df7a */}
+
+void CASBGM::Stop()
+/* 0003df82 */{
+/* 0003df82 */	KiwiSoundEngine.Stop(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003dfa4 */	this.m_Pause = false;
+/* 0003dfb6 */}
+
+void CASBGM::Fade(int Time, float Volume, bool StopAfterEnd, int FadeType)
+/* 0003dfbe */{
+/* 0003dfbe */	KiwiSoundEngine.Fade(this.m_ChannelList[this.m_CurrentChannel], Time, Volume, StopAfterEnd, FadeType);
+/* 0003e008 */}
+
+void CASBGM::FadeWithVolumeCap(int Time, float VolumeCapRate, int FadeType)
+/* 0003e010 */{
+/* 0003e010 */	float Volume = g_BGM.GetVolume() * VolumeCapRate;
+/* 0003e038 */	this.Fade(Time, Volume, false, FadeType);
+/* 0003e064 */}
+
+bool CASBGM::IsPlay()
+/* 0003e06c */{
+/* 0003e06c */	return KiwiSoundEngine.IsPlay(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003e08e */}
+
+void CASBGM::Pause()
+/* 0003e09c */{
+/* 0003e09c */	KiwiSoundEngine.Pause(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003e0be */	this.m_Pause = true;
+/* 0003e0d0 */}
+
+void CASBGM::Restart()
+/* 0003e0d8 */{
+/* 0003e0d8 */	KiwiSoundEngine.Restart(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003e0fa */	this.m_Pause = false;
+/* 0003e10c */}
+
+bool CASBGM::IsPausing()
+/* 0003e114 */{
+/* 0003e114 */	return KiwiSoundEngine.IsPause(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003e136 */}
+
+int CASBGM::GetLength()
+/* 0003e144 */{
+/* 0003e144 */	return KiwiSoundEngine.GetLength(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003e166 */}
+
+int CASBGM::GetPos()
+/* 0003e174 */{
+/* 0003e174 */	return KiwiSoundEngine.GetPos(this.m_ChannelList[this.m_CurrentChannel]);
+/* 0003e196 */}
+
+int CASBGM::Seek(int MilliSecond)
+/* 0003e1a4 */{
+/* 0003e1a4 */	return KiwiSoundEngine.Seek(this.m_ChannelList[this.m_CurrentChannel], MilliSecond);
+/* 0003e1d0 */}
+
+void CASBGM::SetLoop(bool Loop)
+/* 0003e1de */{
+/* 0003e1de */	this.m_LoopCount = Loop ? 0 : 1;
+/* 0003e20c */	if (this.m_Reserve)
+/* 0003e21c */	{
+/* 0003e21c */		this.m_Reserve_LoopCount = Loop ? 0 : 1;
+/* 0003e24a */	}
+/* 0003e24a */	int n;
+/* 0003e25c */	for (n = 0; n < this.m_ChannelList.Numof(); n++)
+/* 0003e2b0 */	{
+/* 0003e2b0 */		KiwiSoundEngine.SetLoopCount(this.m_ChannelList[n], Loop ? 0 : 1);
+/* 0003e2f4 */	}
+/* 0003e2fa */}
+

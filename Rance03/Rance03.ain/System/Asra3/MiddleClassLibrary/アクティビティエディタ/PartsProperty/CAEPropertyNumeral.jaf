@@ -1,0 +1,296 @@
+CAEPropertyNumeral::CAEPropertyNumeral()
+/* 0006e5f4 */{
+/* 0006e5fc */	this.Release();
+/* 0006e604 */}
+
+CAEPropertyNumeral::~CAEPropertyNumeral()
+/* 0006e60c */{
+/* 0006e60c */	this.Release();
+/* 0006e614 */}
+
+void CAEPropertyNumeral::Init(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006e61c */{
+/* 0006e61c */	this.Release();
+/* 0006e624 */	if (Item === NULL)
+/* 0006e63c */	{
+/* 0006e63c */		return;
+/* 0006e63e */	}
+/* 0006e63e */	this.m_Item <- Item;
+/* 0006e65e */	this.m_PartsState = State;
+/* 0006e674 */	this.m_TypeList.Free();
+/* 0006e67e */	this.m_TypeList.PushBack("通常");
+/* 0006e68e */	this.m_TypeList.PushBack("連結");
+/* 0006e69e */	this.m_TypeList.PushBack("フォント");
+/* 0006e6ae */	this.m_Panel.Init(LayoutID);
+/* 0006e6c8 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006e6e2 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006e6fc */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0006e716 */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 0006e730 */	this.m_Panel.AddSelectedEvent(this.SelectedComboBoxEvent);
+/* 0006e74a */	this.m_Panel.AddChangedCheckBoxEvent(this.ChangedCheckBoxEvent);
+/* 0006e764 */	int ID = this.m_Item.GetID();
+/* 0006e780 */	this.m_ShowType = Ｐ＿数字表示タイプ取得(ID, State);
+/* 0006e7a6 */	int X;
+/* 0006e7b8 */	int Y;
+/* 0006e7ca */	int Width;
+/* 0006e7dc */	int Height;
+/* 0006e7ee */	Ｐ＿数字表示範囲取得(ID, X, Y, Width, Height, State);
+/* 0006e828 */	float 太字幅;
+/* 0006e83a */	float 縁取り幅;
+/* 0006e84c */	int 種類;
+/* 0006e85e */	int サイズ;
+/* 0006e870 */	int 赤;
+/* 0006e882 */	int 緑;
+/* 0006e894 */	int 青;
+/* 0006e8a6 */	int 縁取り赤;
+/* 0006e8b8 */	int 縁取り緑;
+/* 0006e8ca */	int 縁取り青;
+/* 0006e8dc */	Ｐ＿数字フォント取得(ID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅, State);
+/* 0006e946 */	this.m_Panel.AddComboBoxItem("表示タイプ", this.m_TypeList, this.m_ShowType);
+/* 0006e98e */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿数字ＣＧ名取得(ID, State), true);
+/* 0006e9e0 */	this.m_Panel.AddButtonItem("連結幅", "編集");
+/* 0006ea18 */	this.m_Panel.AddButtonItem("フォント", "%s, サイズ[%d]" % PARTS_GetFontName(種類) % サイズ);
+/* 0006ea7a */	this.m_Panel.AddCheckBoxItem("全角フォント", Ｐ＿数字フォント全角設定取得(ID, State));
+/* 0006eac6 */	this.m_Panel.AddTextBoxItem("数字", string(Ｐ＿数字取得(ID, State)), false);
+/* 0006eb1a */	this.m_Panel.AddCheckBoxItem("コンマ表示", Ｐ＿数字コンマ表示設定取得(ID, State));
+/* 0006eb66 */	this.m_Panel.AddTextBoxItem("字間隔", string(Ｐ＿数字字間隔取得(ID, State)), false);
+/* 0006ebba */	this.m_Panel.AddTextBoxItem("表示桁数", string(Ｐ＿数字桁取得(ID, State)), false);
+/* 0006ec0e */	this.m_Panel.AddCheckBoxItem("パディング表示", Ｐ＿数字パディング表示設定取得(ID, State));
+/* 0006ec5a */	this.m_Panel.AddTextBoxItem("表示範囲／Ｘ", string(X), false);
+/* 0006ec9e */	this.m_Panel.AddTextBoxItem("表示範囲／Ｙ", string(Y), false);
+/* 0006ece2 */	this.m_Panel.AddTextBoxItem("表示範囲／幅", string(Width), false);
+/* 0006ed26 */	this.m_Panel.AddTextBoxItem("表示範囲／高さ", string(Height), false);
+/* 0006ed6a */}
+
+void CAEPropertyNumeral::Release()
+/* 0006ed72 */{
+/* 0006ed72 */	this.m_dgMouseWheelEvent.Clear();
+/* 0006ed7e */	this.m_dgKeyDownEvent.Clear();
+/* 0006ed8a */	this.m_Item <- NULL;
+/* 0006eda2 */	this.m_Panel.Release();
+/* 0006edb2 */}
+
+void CAEPropertyNumeral::KeyDownEvent(int ID, int KeyID)
+/* 0006edba */{
+/* 0006edba */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 0006edee */}
+
+void CAEPropertyNumeral::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0006edf6 */{
+/* 0006edf6 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0006ee34 */}
+
+void CAEPropertyNumeral::ChangeTextEvent(int ID)
+/* 0006ee3c */{
+/* 0006ee3c */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006ee8c */	if (Item === NULL)
+/* 0006eea4 */	{
+/* 0006eea4 */		return;
+/* 0006eea6 */	}
+/* 0006eea6 */	int PartsID = this.m_Item.GetID();
+/* 0006eec2 */	int X;
+/* 0006eed4 */	int Y;
+/* 0006eee6 */	int Width;
+/* 0006eef8 */	int Height;
+/* 0006ef0a */	Ｐ＿数字表示範囲取得(PartsID, X, Y, Width, Height, this.m_PartsState);
+/* 0006ef44 */	if (Item.GetLabel() == "ＣＧ名")
+/* 0006ef62 */	{
+/* 0006ef62 */		Ｐ＿数字ＣＧ設定(PartsID, Item.GetTextBoxText(), this.m_PartsState);
+/* 0006ef8c */	}
+/* 0006ef92 */	else if (Item.GetLabel() == "数字")
+/* 0006efb0 */	{
+/* 0006efb0 */		Ｐ＿数字設定(PartsID, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006efda */	}
+/* 0006efe0 */	else if (Item.GetLabel() == "字間隔")
+/* 0006effe */	{
+/* 0006effe */		Ｐ＿数字字間隔設定(PartsID, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006f028 */	}
+/* 0006f02e */	else if (Item.GetLabel() == "表示桁数")
+/* 0006f04c */	{
+/* 0006f04c */		Ｐ＿数字桁設定(PartsID, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006f076 */	}
+/* 0006f07c */	else if (Item.GetLabel() == "表示範囲／Ｘ")
+/* 0006f09a */	{
+/* 0006f09a */		Ｐ＿数字表示範囲設定(PartsID, Item.GetTextBoxInt(), Y, Width, Height, this.m_PartsState);
+/* 0006f0e2 */	}
+/* 0006f0e8 */	else if (Item.GetLabel() == "表示範囲／Ｙ")
+/* 0006f106 */	{
+/* 0006f106 */		Ｐ＿数字表示範囲設定(PartsID, X, Item.GetTextBoxInt(), Width, Height, this.m_PartsState);
+/* 0006f14e */	}
+/* 0006f154 */	else if (Item.GetLabel() == "表示範囲／幅")
+/* 0006f172 */	{
+/* 0006f172 */		Ｐ＿数字表示範囲設定(PartsID, X, Y, Item.GetTextBoxInt(), Height, this.m_PartsState);
+/* 0006f1ba */	}
+/* 0006f1c0 */	else if (Item.GetLabel() == "表示範囲／高さ")
+/* 0006f1de */	{
+/* 0006f1de */		Ｐ＿数字表示範囲設定(PartsID, X, Y, Width, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006f226 */	}
+/* 0006f226 */	Ｐ＿数字表示タイプ設定(PartsID, this.m_ShowType, this.m_PartsState);
+/* 0006f24a */}
+
+void CAEPropertyNumeral::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0006f252 */{
+/* 0006f252 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006f2a2 */	if (Item === NULL)
+/* 0006f2ba */	{
+/* 0006f2ba */		return;
+/* 0006f2bc */	}
+/* 0006f2bc */	int PartsID = this.m_Item.GetID();
+/* 0006f2d8 */	if (Item.GetLabel() == "連結幅")
+/* 0006f2f6 */	{
+/* 0006f2f6 */		int 幅０;
+/* 0006f308 */		int 幅１;
+/* 0006f31a */		int 幅２;
+/* 0006f32c */		int 幅３;
+/* 0006f33e */		int 幅４;
+/* 0006f350 */		int 幅５;
+/* 0006f362 */		int 幅６;
+/* 0006f374 */		int 幅７;
+/* 0006f386 */		int 幅８;
+/* 0006f398 */		int 幅９;
+/* 0006f3aa */		int 幅マイナス;
+/* 0006f3bc */		int 幅コンマ;
+/* 0006f3ce */		Ｐ＿数字連結幅取得(PartsID, 幅０, 幅１, 幅２, 幅３, 幅４, 幅５, 幅６, 幅７, 幅８, 幅９, 幅マイナス, 幅コンマ, this.m_PartsState);
+/* 0006f448 */		array@SGUIStringPair List[13];
+/* 0006f45e */		List[0].Set("統一", "");
+/* 0006f482 */		List[1].Set("０", string(幅０));
+/* 0006f4ac */		List[2].Set("１", string(幅１));
+/* 0006f4d6 */		List[3].Set("２", string(幅２));
+/* 0006f500 */		List[4].Set("３", string(幅３));
+/* 0006f52a */		List[5].Set("４", string(幅４));
+/* 0006f554 */		List[6].Set("５", string(幅５));
+/* 0006f57e */		List[7].Set("６", string(幅６));
+/* 0006f5a8 */		List[8].Set("７", string(幅７));
+/* 0006f5d2 */		List[9].Set("８", string(幅８));
+/* 0006f5fc */		List[10].Set("９", string(幅９));
+/* 0006f626 */		List[11].Set("マイナス", string(幅マイナス));
+/* 0006f650 */		List[12].Set("コンマ", string(幅コンマ));
+/* 0006f67a */		CAEEditStringPairDialog Form;
+/* 0006f68a */		Form.Show(ID, MouseX, MouseY, List, this.ChangedListEvent);
+/* 0006f6de */	}
+/* 0006f6e4 */	else if (Item.GetLabel() == "フォント")
+/* 0006f702 */	{
+/* 0006f702 */		float 太字幅;
+/* 0006f714 */		float 縁取り幅;
+/* 0006f726 */		int 種類;
+/* 0006f738 */		int サイズ;
+/* 0006f74a */		int 赤;
+/* 0006f75c */		int 緑;
+/* 0006f76e */		int 青;
+/* 0006f780 */		int 縁取り赤;
+/* 0006f792 */		int 縁取り緑;
+/* 0006f7a4 */		int 縁取り青;
+/* 0006f7b6 */		Ｐ＿数字フォント取得(PartsID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅, this.m_PartsState);
+/* 0006f820 */		CASCharSpriteProperty Font;
+/* 0006f830 */		Font.SetType(種類);
+/* 0006f84a */		Font.SetSize(サイズ);
+/* 0006f864 */		Font.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 0006f89e */		Font.SetBoldWeight(太字幅);
+/* 0006f8b8 */		Font.SetEdgeWeight(縁取り幅);
+/* 0006f8d2 */		Font.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 0006f90c */		CAESelectFontDialog Form;
+/* 0006f91c */		Form.Show(ID, MouseX, MouseY, Font, this.ChangedFontEvent);
+/* 0006f962 */	}
+/* 0006f96e */	Ｐ＿数字表示タイプ設定(PartsID, this.m_ShowType, this.m_PartsState);
+/* 0006f992 */}
+
+void CAEPropertyNumeral::ChangedListEvent(int ID, ref array@SGUIStringPair List)
+/* 0006f99a */{
+/* 0006f99a */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006f9ea */	if (Item === NULL)
+/* 0006fa02 */	{
+/* 0006fa02 */		return;
+/* 0006fa04 */	}
+/* 0006fa04 */	int PartsID = this.m_Item.GetID();
+/* 0006fa20 */	if (Item.GetLabel() == "連結幅")
+/* 0006fa3e */	{
+/* 0006fa3e */		if (!List[0].m_Second.Empty())
+/* 0006fa62 */		{
+/* 0006fa62 */			int Index;
+/* 0006fa74 */			for (Index = 1; Index < List.Numof(); ++Index)
+/* 0006fac4 */			{
+/* 0006fac4 */				List[Index].m_Second = List[0].m_Second;
+/* 0006fb00 */			}
+/* 0006fb06 */			List[0].m_Second = "";
+/* 0006fb2a */		}
+/* 0006fb2a */		Ｐ＿数字連結ＣＧ設定(PartsID, Ｐ＿数字ＣＧ名取得(PartsID, this.m_PartsState), List[1].m_Second.Int(), List[2].m_Second.Int(), List[3].m_Second.Int(), List[4].m_Second.Int(), List[5].m_Second.Int(), List[6].m_Second.Int(), List[7].m_Second.Int(), List[8].m_Second.Int(), List[9].m_Second.Int(), List[10].m_Second.Int(), List[11].m_Second.Int(), List[12].m_Second.Int(), this.m_PartsState);
+/* 0006fcae */	}
+/* 0006fcae */}
+
+void CAEPropertyNumeral::ChangedFontEvent(int ID, ref CASCharSpriteProperty Font)
+/* 0006fcb6 */{
+/* 0006fcb6 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006fd06 */	if (Item === NULL)
+/* 0006fd1e */	{
+/* 0006fd1e */		return;
+/* 0006fd20 */	}
+/* 0006fd20 */	int PartsID = this.m_Item.GetID();
+/* 0006fd3c */	CASColor Color;
+/* 0006fd4c */	Color = Font.GetColor();
+/* 0006fd70 */	CASColor EdgeColor;
+/* 0006fd80 */	EdgeColor = Font.GetEdgeColor();
+/* 0006fda4 */	if (Item.GetLabel() == "フォント")
+/* 0006fdc2 */	{
+/* 0006fdc2 */		Ｐ＿数字フォント設定(PartsID, Font.GetType(), Font.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), Font.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Font.GetEdgeWeight(), this.m_PartsState);
+/* 0006fe7c */		Item.SetButtonText("%s, サイズ[%d]" % PARTS_GetFontName(Font.GetType()) % Font.GetSize());
+/* 0006fec8 */	}
+/* 0006fec8 */}
+
+void CAEPropertyNumeral::SelectedComboBoxEvent(int ID, int Index)
+/* 0006fed0 */{
+/* 0006fed0 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006ff20 */	if (Item === NULL)
+/* 0006ff38 */	{
+/* 0006ff38 */		return;
+/* 0006ff3a */	}
+/* 0006ff3a */	int PartsID = this.m_Item.GetID();
+/* 0006ff56 */	if (Item.GetLabel() == "表示タイプ")
+/* 0006ff74 */	{
+/* 0006ff74 */		Ｐ＿数字表示タイプ設定(PartsID, Index, this.m_PartsState);
+/* 0006ff98 */		this.m_ShowType = Index;
+/* 0006ffae */	}
+/* 0006ffae */}
+
+void CAEPropertyNumeral::ChangedCheckBoxEvent(int ID, bool Check)
+/* 0006ffb6 */{
+/* 0006ffb6 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00070006 */	if (Item === NULL)
+/* 0007001e */	{
+/* 0007001e */		return;
+/* 00070020 */	}
+/* 00070020 */	int PartsID = this.m_Item.GetID();
+/* 0007003c */	if (Item.GetLabel() == "全角フォント")
+/* 0007005a */	{
+/* 0007005a */		Ｐ＿数字フォント全角設定(PartsID, Item.GetFlg(), this.m_PartsState);
+/* 00070084 */	}
+/* 0007008a */	else if (Item.GetLabel() == "コンマ表示")
+/* 000700a8 */	{
+/* 000700a8 */		Ｐ＿数字コンマ表示設定(PartsID, Item.GetFlg(), this.m_PartsState);
+/* 000700d2 */	}
+/* 000700d8 */	else if (Item.GetLabel() == "パディング表示")
+/* 000700f6 */	{
+/* 000700f6 */		Ｐ＿数字パディング表示設定(PartsID, Item.GetFlg(), this.m_PartsState);
+/* 00070120 */	}
+/* 00070120 */	Ｐ＿数字表示タイプ設定(PartsID, this.m_ShowType, this.m_PartsState);
+/* 00070144 */}
+
+void CAEPropertyNumeral::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0007014c */{
+/* 0007014c */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00070166 */}
+
+void CAEPropertyNumeral::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0007016e */{
+/* 0007016e */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00070188 */}
+
+void CAEPropertyNumeral::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00070190 */{
+/* 00070190 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 000701aa */}
+
+void CAEPropertyNumeral::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000701b2 */{
+/* 000701b2 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 000701cc */}
+

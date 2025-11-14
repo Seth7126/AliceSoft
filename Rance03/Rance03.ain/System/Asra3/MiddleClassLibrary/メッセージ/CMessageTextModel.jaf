@@ -1,0 +1,295 @@
+CMessageTextModel::CMessageTextModel()
+/* 000144cc */{
+/* 000144d6 */}
+
+void CMessageTextModel::Clear()
+/* 000144dc */{
+/* 000144dc */	int Index;
+/* 000144ee */	for (Index = 0; Index < this.m_MessageTextList.Numof(); ++Index)
+/* 0001453e */	{
+/* 0001453e */		this.m_ReadMessageTextManager.EraseMessageNumber(this.m_MessageTextList[Index].nMsgNum);
+/* 0001456c */	}
+/* 00014572 */	this.m_MessageTextList.Free();
+/* 0001457c */}
+
+void CMessageTextModel::ClearMessageText(int MessageWindowNumber)
+/* 00014584 */{
+/* 00014584 */	int Index;
+/* 00014596 */	for (Index = 0; Index < this.m_MessageTextList.Numof(); )
+/* 000145d6 */	{
+/* 000145d6 */		if (this.m_MessageTextList[Index].MessageWindowNumber == MessageWindowNumber)
+/* 00014606 */		{
+/* 00014606 */			this.m_ReadMessageTextManager.EraseMessageNumber(this.m_MessageTextList[Index].nMsgNum);
+/* 00014634 */			this.m_MessageTextList.Erase(Index);
+/* 0001464a */		}
+/* 00014650 */		else
+/* 00014650 */		{
+/* 00014650 */			Index++;
+/* 00014664 */		}
+/* 00014664 */	}
+/* 0001466a */}
+
+void CMessageTextModel::SetEventName(string Name)
+/* 00014672 */{
+/* 00014672 */	this.m_EventName = Name;
+/* 0001468a */}
+
+void CMessageTextModel::SetEventInfoByADV(string FilePath, string FuncName)
+/* 00014692 */{
+/* 00014692 */	if (FilePath.Empty() && FuncName.Empty())
+/* 000146ce */	{
+/* 000146ce */		this.m_EventInfoByADVEngine = "";
+/* 000146e2 */		return;
+/* 000146e4 */	}
+/* 000146e4 */	this.m_EventInfoByADVEngine = "ファイル[%s] 関数名[%s]" % FilePath % FuncName;
+/* 0001471c */}
+
+void CMessageTextModel::AddMessageText(int Index, string Text, int MessageWindowNumber)
+/* 00014724 */{
+/* 00014724 */	CMessageText MessageText;
+/* 00014734 */	MessageText.nType = 0;
+/* 0001474e */	MessageText.MessageWindowNumber = MessageWindowNumber;
+/* 0001476c */	MessageText.nMsgNum = Index;
+/* 0001478a */	MessageText.MessageText = Text;
+/* 000147aa */	MessageText.Ｍフォント = _Ｍフォント;
+/* 000147c8 */	MessageText.Ｍサイズ = _Ｍサイズ;
+/* 000147e6 */	MessageText.Ｍ太さ = _g_Ｍ太さ;
+/* 00014804 */	MessageText.ＭＲ = _ＭＲ;
+/* 00014822 */	MessageText.ＭＧ = _ＭＧ;
+/* 00014840 */	MessageText.ＭＢ = _ＭＢ;
+/* 0001485e */	MessageText.Ｍ速度 = _Ｍ速度;
+/* 0001487c */	MessageText.Ｍ配置 = _Ｍ配置;
+/* 0001489a */	MessageText.Ｍ縁取り幅 = g_MessageTextEdgeWeight;
+/* 000148b8 */	MessageText.Ｍ縁取りＲ = _Ｍ飾Ｒ;
+/* 000148d6 */	MessageText.Ｍ縁取りＧ = _Ｍ飾Ｇ;
+/* 000148f4 */	MessageText.Ｍ縁取りＢ = _Ｍ飾Ｂ;
+/* 00014912 */	this.m_MessageTextList.PushBack(MessageText);
+/* 0001492a */}
+
+void CMessageTextModel::AddNewLine(int MessageWindowNumber)
+/* 00014932 */{
+/* 00014932 */	CMessageText MessageText;
+/* 00014942 */	MessageText.nType = 1;
+/* 0001495c */	MessageText.MessageWindowNumber = MessageWindowNumber;
+/* 0001497a */	MessageText.Ｍフォント = _Ｍフォント;
+/* 00014998 */	MessageText.Ｍサイズ = _Ｍサイズ;
+/* 000149b6 */	MessageText.Ｍ太さ = _g_Ｍ太さ;
+/* 000149d4 */	MessageText.ＭＲ = _ＭＲ;
+/* 000149f2 */	MessageText.ＭＧ = _ＭＧ;
+/* 00014a10 */	MessageText.ＭＢ = _ＭＢ;
+/* 00014a2e */	MessageText.Ｍ速度 = _Ｍ速度;
+/* 00014a4c */	MessageText.Ｍ配置 = _Ｍ配置;
+/* 00014a6a */	MessageText.Ｍ縁取り幅 = g_MessageTextEdgeWeight;
+/* 00014a88 */	MessageText.Ｍ縁取りＲ = _Ｍ飾Ｒ;
+/* 00014aa6 */	MessageText.Ｍ縁取りＧ = _Ｍ飾Ｇ;
+/* 00014ac4 */	MessageText.Ｍ縁取りＢ = _Ｍ飾Ｂ;
+/* 00014ae2 */	this.m_MessageTextList.PushBack(MessageText);
+/* 00014afa */}
+
+void CMessageTextModel::AddVoice(string VoiceName, int MessageWindowNumber)
+/* 00014b02 */{
+/* 00014b02 */	CMessageText MessageText;
+/* 00014b12 */	MessageText.nType = 2;
+/* 00014b2c */	MessageText.MessageWindowNumber = MessageWindowNumber;
+/* 00014b4a */	MessageText.Voice = VoiceName;
+/* 00014b6a */	this.m_MessageTextList.PushBack(MessageText);
+/* 00014b82 */}
+
+void CMessageTextModel::AddC(int MessageWindowNumber)
+/* 00014b8a */{
+/* 00014b8a */	CMessageText MessageText;
+/* 00014b9a */	MessageText.nType = 3;
+/* 00014bb4 */	MessageText.MessageWindowNumber = MessageWindowNumber;
+/* 00014bd2 */	this.m_MessageTextList.PushBack(MessageText);
+/* 00014bea */}
+
+int CMessageTextModel::GetNumofMessage()
+/* 00014bf2 */{
+/* 00014bf2 */	return this.m_MessageTextList.Numof();
+/* 00014c04 */}
+
+ref CMessageText CMessageTextModel::GetMessage(int Index)
+/* 00014c12 */{
+/* 00014c12 */	return this.m_MessageTextList[Index];
+/* 00014c2e */}
+
+int CMessageTextModel::GetMessageTextLength()
+/* 00014c3c */{
+/* 00014c3c */	int Length;
+/* 00014c4e */	int nIndex;
+/* 00014c60 */	for (nIndex = 0; nIndex < this.m_MessageTextList.Numof(); nIndex++)
+/* 00014cb4 */	{
+/* 00014cb4 */		ref CMessageText Message = this.m_MessageTextList[nIndex];
+/* 00014ce6 */		if (Message.nType == 0)
+/* 00014d06 */		{
+/* 00014d06 */			int nChar;
+/* 00014d18 */			for (nChar = 0; nChar < Message.MessageText.Length(); nChar++)
+/* 00014d6e */			{
+/* 00014d6e */				int nSJISCode = Message.MessageText[nChar];
+/* 00014d98 */				int nSJISCode1Byte = nSJISCode & 255;
+/* 00014db6 */				if (nSJISCode > 255 && nSJISCode1Byte >= 136)
+/* 00014dfe */				{
+/* 00014dfe */					Length += 2;
+/* 00014e10 */				}
+/* 00014e16 */				else
+/* 00014e16 */				{
+/* 00014e16 */					Length++;
+/* 00014e2a */				}
+/* 00014e2a */			}
+/* 00014e30 */		}
+/* 00014e36 */		else if (Message.nType == 3)
+/* 00014e56 */		{
+/* 00014e56 */			Length = 0;
+/* 00014e68 */		}
+/* 00014e68 */	}
+/* 00014e74 */	return Length;
+/* 00014e80 */}
+
+string CMessageTextModel::GetLastVoiceName()
+/* 00014e8e */{
+/* 00014e8e */	string VoiceName;
+/* 00014ea2 */	int nIndex;
+/* 00014eb4 */	for (nIndex = 0; nIndex < this.m_MessageTextList.Numof(); nIndex++)
+/* 00014f08 */	{
+/* 00014f08 */		ref CMessageText Message = this.m_MessageTextList[nIndex];
+/* 00014f3a */		if (Message.nType != 2)
+/* 00014f5a */		{
+/* 00014f5a */			continue;
+/* 00014f66 */		}
+/* 00014f66 */		VoiceName = Message.Voice;
+/* 00014f86 */	}
+/* 00014f92 */	return VoiceName;
+/* 00014f9e */}
+
+bool CMessageTextModel::IsExistVoice()
+/* 00014fac */{
+/* 00014fac */	int nIndex;
+/* 00014fbe */	for (nIndex = 0; nIndex < this.m_MessageTextList.Numof(); nIndex++)
+/* 00015012 */	{
+/* 00015012 */		ref CMessageText Message = this.m_MessageTextList[nIndex];
+/* 00015044 */		if (Message.nType == 2)
+/* 00015064 */		{
+/* 00015064 */			bool bExistC = false;
+/* 00015076 */			int nNext;
+/* 00015088 */			for (nNext = nIndex + 1; nNext < this.m_MessageTextList.Numof() - 1; nNext++)
+/* 000150f0 */			{
+/* 000150f0 */				if (this.m_MessageTextList[nNext].nType == 3)
+/* 0001511c */				{
+/* 0001511c */					bExistC = true;
+/* 0001512e */					break;
+/* 00015134 */				}
+/* 00015134 */			}
+/* 0001513a */			if (bExistC)
+/* 0001514a */			{
+/* 0001514a */				continue;
+/* 00015156 */			}
+/* 00015156 */			if (SYS_IsMuteVoice(Message.Voice))
+/* 00015174 */			{
+/* 00015174 */				continue;
+/* 00015180 */			}
+/* 00015180 */			return true;
+/* 00015188 */		}
+/* 00015188 */	}
+/* 00015194 */	return false;
+/* 0001519c */}
+
+bool CMessageTextModel::IsReadMessage(ref CMessageText MessageText)
+/* 000151aa */{
+/* 000151aa */	if (MessageText.nMsgNum > 0)
+/* 000151ca */	{
+/* 000151ca */		return MsgSkip.GetFlag(MessageText.nMsgNum);
+/* 000151ea */	}
+/* 000151ea */	int n;
+/* 000151fc */	for (n = 0; n < this.m_MessageTextList.Numof(); n++)
+/* 00015250 */	{
+/* 00015250 */		ref CMessageText Data = this.m_MessageTextList[n];
+/* 00015282 */		if (Data.nType != 0)
+/* 000152a2 */		{
+/* 000152a2 */			continue;
+/* 000152ae */		}
+/* 000152ae */		if (Data.nMsgNum <= 0)
+/* 000152ce */		{
+/* 000152ce */			continue;
+/* 000152da */		}
+/* 000152da */		if (Data.MessageWindowNumber != MessageText.MessageWindowNumber)
+/* 00015306 */		{
+/* 00015306 */			continue;
+/* 00015312 */		}
+/* 00015312 */		if (MsgSkip.GetFlag(Data.nMsgNum))
+/* 00015334 */		{
+/* 00015334 */			return true;
+/* 0001533c */		}
+/* 0001533c */	}
+/* 00015348 */	return false;
+/* 00015350 */}
+
+void CMessageTextModel::SetMessageReadFlag()
+/* 0001535e */{
+/* 0001535e */	int n;
+/* 00015370 */	for (n = 0; n < this.m_MessageTextList.Numof(); n++)
+/* 000153c4 */	{
+/* 000153c4 */		ref CMessageText Data = this.m_MessageTextList[n];
+/* 000153f6 */		if (Data.nType != 0)
+/* 00015416 */		{
+/* 00015416 */			continue;
+/* 00015422 */		}
+/* 00015422 */		if (Data.nMsgNum <= 0)
+/* 00015442 */		{
+/* 00015442 */			continue;
+/* 0001544e */		}
+/* 0001544e */		this.m_ReadMessageTextManager.SetReadMessage(Data.nMsgNum);
+/* 00015470 */	}
+/* 0001547c */}
+
+void CMessageTextModel::DebugOutputMessageText()
+/* 00015484 */{
+/* 00015484 */	if (!system.IsDebugMode())
+/* 00015492 */	{
+/* 00015492 */		return;
+/* 00015494 */	}
+/* 00015494 */	system.Output("--------MessageBegin--------\n");
+/* 000154a2 */	system.Output("【 %s 】\n" % (this.m_EventInfoByADVEngine.Empty() ? this.m_EventName : this.m_EventInfoByADVEngine));
+/* 000154e4 */	int Index;
+/* 000154f6 */	for (Index = 0; Index < this.m_MessageTextList.Numof(); Index++)
+/* 0001554a */	{
+/* 0001554a */		ref CMessageText DrawMessage = this.m_MessageTextList[Index];
+/* 0001557c */		switch (DrawMessage.nType)
+/* 0001559a */		{
+/* 0001559a */		case 0:
+/* 0001559a */			system.Output(DrawMessage.MessageText);
+/* 000155b4 */			break;
+/* 000155ba */		case 1:
+/* 000155ba */			system.Output("\n");
+/* 000155c8 */			break;
+/* 000155ce */		}
+/* 000155ce */	}
+/* 000155da */	system.Output("\n--------MessageEnd----------\n");
+/* 000155e8 */}
+
+void CMessageTextModel::DebugMessageTextToClipboard()
+/* 000155f0 */{
+/* 000155f0 */	if (!system.IsDebugMode())
+/* 000155fe */	{
+/* 000155fe */		return;
+/* 00015600 */	}
+/* 00015600 */	string Text;
+/* 00015614 */	Text += "--------MessageBegin--------\n";
+/* 00015628 */	Text += "【 %s 】\r\n" % (this.m_EventInfoByADVEngine.Empty() ? this.m_EventName : this.m_EventInfoByADVEngine);
+/* 00015670 */	int Index;
+/* 00015682 */	for (Index = 0; Index < this.m_MessageTextList.Numof(); Index++)
+/* 000156d6 */	{
+/* 000156d6 */		ref CMessageText DrawMessage = this.m_MessageTextList[Index];
+/* 00015708 */		switch (DrawMessage.nType)
+/* 00015726 */		{
+/* 00015726 */		case 0:
+/* 00015726 */			Text += DrawMessage.MessageText;
+/* 00015746 */			break;
+/* 0001574c */		case 1:
+/* 0001574c */			Text += "\n";
+/* 00015760 */			break;
+/* 00015766 */		}
+/* 00015766 */	}
+/* 00015772 */	Text += "\n--------MessageEnd----------\n";
+/* 00015786 */	Clipboard.SetText(Text);
+/* 0001579a */}
+

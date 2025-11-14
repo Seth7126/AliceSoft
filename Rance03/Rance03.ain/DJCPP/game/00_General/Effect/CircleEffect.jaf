@@ -1,0 +1,61 @@
+CircleEffect::CircleEffect()
+/* 001781ec */{
+/* 001781f4 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0017821a */}
+
+void CircleEffect::init(string imageName)
+/* 00178222 */{
+/* 00178222 */	this.parts_.init(imageName, 0);
+/* 00178242 */	this.parts_.setZ(30000.0);
+/* 00178258 */	this.parts_.setOrigin(5);
+/* 0017826e */}
+
+void CircleEffect::setPos(int x, int y)
+/* 00178276 */{
+/* 00178276 */	this.parts_.setPos(x, y);
+/* 0017829e */}
+
+void CircleEffect::setXYRot(int rot)
+/* 001782a6 */{
+/* 001782a6 */	this.parts_.setXYRot(rot);
+/* 001782c2 */}
+
+void CircleEffect::setXZRot(int rot)
+/* 001782ca */{
+/* 001782ca */	this.parts_.setXZRot(rot);
+/* 001782e6 */}
+
+void CircleEffect::setYZRot(int rot)
+/* 001782ee */{
+/* 001782ee */	this.parts_.setYZRot(rot);
+/* 0017830a */}
+
+void CircleEffect::run(int type)
+/* 00178312 */{
+/* 00178312 */	this.parts_.setShow(true);
+/* 00178328 */	array@PartsMotion m[3];
+/* 0017833e */	m[0].setTime(RAND(80));
+/* 00178362 */	m[0].setScaling(0, 0, 1);
+/* 0017838c */	m[1].setTime(125 + RAND(50));
+/* 001783b8 */	m[1].setScaling(0, this.maxScaling_ * 0.8, 0);
+/* 001783f0 */	m[1].setAlpha(255, 128, 0);
+/* 0017841a */	m[2].setTime(300 + RAND(100));
+/* 00178446 */	m[2].setScaling(this.maxScaling_ * 0.8, this.maxScaling_, 0);
+/* 00178484 */	m[2].setAlpha(128, 0, 0);
+/* 001784ae */	this.parts_.runMotionArray(m, NULL);
+/* 001784cc */}
+
+void CircleEffect::setMaxScaling(float maxScaling)
+/* 001784d4 */{
+/* 001784d4 */	this.maxScaling_ = maxScaling;
+/* 001784ea */}
+
+void CircleEffect::update()
+/* 001784f2 */{
+/* 001784f4 */}
+
+void CircleEffect::setZ(int z)
+/* 001784fa */{
+/* 001784fa */	this.parts_.setZ(z);
+/* 00178516 */}
+

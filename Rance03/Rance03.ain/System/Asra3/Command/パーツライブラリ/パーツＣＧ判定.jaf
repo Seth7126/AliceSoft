@@ -1,0 +1,26 @@
+void Ｐ＿ＣＧ判定設定(int パーツ番号, int Ｘ, int Ｙ, string ＣＧ名)
+/* 001635ba */{
+/* 001635ba */	PartsEngine.SetComponentPos(パーツ番号, Ｘ, Ｙ);
+/* 001635e6 */	if (!PartsEngine.Parts_SetPartsCGDetectionSize(パーツ番号, ＣＧ名, 1))
+/* 00163612 */	{
+/* 00163612 */		PARTS_Warning("Ｐ＿ＣＧ判定設定(パーツ番号 = %d, Ｘ = %d, Ｙ = %d, ＣＧ名 = %s)\n" % パーツ番号 % Ｘ % Ｙ % ＣＧ名);
+/* 00163666 */	}
+/* 00163666 */}
+
+string Ｐ＿ＣＧ判定ＣＧ名取得(int パーツ番号)
+/* 00163674 */{
+/* 00163674 */	string Out;
+/* 00163688 */	PartsEngine.Parts_GetPartsCGDetectionCGName(Out, パーツ番号, 1);
+/* 001636ac */	return Out;
+/* 001636b8 */}
+
+void Ｐ＿ＣＧ判定範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ)
+/* 001636cc */{
+/* 001636cc */	PartsEngine.Parts_SetPartsCGDetectionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 1);
+/* 00163710 */}
+
+void Ｐ＿ＣＧ判定範囲取得(int パーツ番号, ref int Ｘ, ref int Ｙ, ref int 幅, ref int 高さ)
+/* 0016371e */{
+/* 0016371e */	PartsEngine.GetCGDetectionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 1);
+/* 00163760 */}
+

@@ -1,0 +1,35 @@
+void AdvEventCg::show(string cgName, int asraTransitionCommand, int time)
+/* 001740c0 */{
+/* 001740c0 */	this.partsCg_.init(cgName, 0);
+/* 001740e0 */	this.partsCg_.setShow(true);
+/* 001740f6 */	this.partsCg_.setPos(0.0, 0.0);
+/* 00174112 */	this.partsCg_.setZ(3300.0);
+/* 00174128 */	if (asraTransitionCommand != -1 && time > 0)
+/* 00174170 */	{
+/* 00174170 */		全表示(asraTransitionCommand, time * g_globalTimer.getEffectiveScalingValue());
+/* 001741a4 */	}
+/* 001741a4 */}
+
+void AdvEventCg::hide(int asraTransitionCommand, int time)
+/* 001741ac */{
+/* 001741ac */	if (!this.partsCg_.isShow())
+/* 001741c4 */	{
+/* 001741c4 */		return;
+/* 001741c6 */	}
+/* 001741c6 */	this.release();
+/* 001741ce */	if (asraTransitionCommand != -1 && time > 0)
+/* 00174216 */	{
+/* 00174216 */		全表示(asraTransitionCommand, time * g_globalTimer.getEffectiveScalingValue());
+/* 0017424a */	}
+/* 0017424a */}
+
+void AdvEventCg::release()
+/* 00174252 */{
+/* 00174252 */	this.partsCg_.release();
+/* 00174262 */}
+
+bool AdvEventCg::isShow()
+/* 0017426a */{
+/* 0017426a */	return this.partsCg_.isInitialized();
+/* 0017427c */}
+

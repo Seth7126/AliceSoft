@@ -1,0 +1,266 @@
+ItemView::ItemView()
+/* 0017acf8 */{
+/* 0017ad00 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0017ad30 */}
+
+void ItemView::init(string itemId, bool isShopMode)
+/* 0017ad38 */{
+/* 0017ad38 */	this.id_ = itemId;
+/* 0017ad50 */	this.isShopMode_ = isShopMode;
+/* 0017ad66 */	this.item_ <- getItemFromId(this.id_);
+/* 0017ada2 */	this.state_ = 0;
+/* 0017adb4 */	this.isInitialized_ = false;
+/* 0017adc6 */	this.parent_.initAsDummy();
+/* 0017add6 */	this.parent_.setZ(4500.0);
+/* 0017adec */}
+
+void ItemView::updateState()
+/* 0017adf4 */{
+/* 0017adf4 */	if (!this.isInitialized_)
+/* 0017ae06 */	{
+/* 0017ae06 */		return;
+/* 0017ae08 */	}
+/* 0017ae08 */	this.updateEnable();
+/* 0017ae10 */	this.updateCount();
+/* 0017ae18 */	this.setPartsShowState();
+/* 0017ae20 */}
+
+void ItemView::updateEnable()
+/* 0017ae28 */{
+/* 0017ae28 */	if (this.isShopMode_)
+/* 0017ae38 */	{
+/* 0017ae38 */		this.isClickable_ = !this.isMaxItemCount() && this.isItemBuyable();
+/* 0017ae76 */	}
+/* 0017ae7c */	else
+/* 0017ae7c */	{
+/* 0017ae7c */		this.isClickable_ = this.item_.getType() != 2;
+/* 0017aea2 */	}
+/* 0017aea2 */}
+
+bool ItemView::isMaxItemCount()
+/* 0017aeaa */{
+/* 0017aeaa */	int count = g_playerCommonParam.getItemCount(this.item_.getId());
+/* 0017aed6 */	return count >= this.item_.getMaxCount();
+/* 0017aef6 */}
+
+bool ItemView::isItemBuyable()
+/* 0017af04 */{
+/* 0017af04 */	return this.item_.getShopPrice() <= g_playerCommonParam.getGold();
+/* 0017af2a */}
+
+void ItemView::updateCount()
+/* 0017af38 */{
+/* 0017af38 */	this.count_ = g_playerCommonParam.getItemCount(this.id_);
+/* 0017af5e */	this.parts_[10].setNumber(this.count_);
+/* 0017af82 */	this.parts_[11].setNumber(this.count_);
+/* 0017afa6 */	Item item;
+/* 0017afb6 */	item = getItemFromId(this.id_);
+/* 0017aff6 */	bool isMax = item.getMaxCount() == this.count_;
+/* 0017b020 */	this.parts_[10].setShow(!isMax);
+/* 0017b046 */	this.parts_[11].setShow(isMax);
+/* 0017b068 */	this.updateShopPrice();
+/* 0017b070 */}
+
+void ItemView::initParts()
+/* 0017b078 */{
+/* 0017b078 */	this.parts_[0].init("システム／アイテム／ボタン", 0);
+/* 0017b09c */	this.parts_[1].init(this.item_.getIconImageName(), 0);
+/* 0017b0ca */	this.parts_[2].init(this.item_.getLabelImageName(), 0);
+/* 0017b0f8 */	this.parts_[3].initAsText(this.item_.getName(), 26, false, 256, 255, 255, 255);
+/* 0017b144 */	array@string desc;
+/* 0017b14e */	splitToken(desc, this.item_.getDesc(), "|");
+/* 0017b174 */	int i;
+/* 0017b186 */	for (i = 0; i < desc.Numof(); ++i)
+/* 0017b1d6 */	{
+/* 0017b1d6 */		this.parts_[4 + i].initAsText(desc[i], 18, false, 256, 32, 5, 5);
+/* 0017b234 */	}
+/* 0017b23a */	this.parts_[10].initAsNumber("システム／数字／幅１７／黄", NULL);
+/* 0017b25e */	this.parts_[11].initAsNumber("システム／数字／幅１７／赤", NULL);
+/* 0017b282 */	if (this.isShopMode_)
+/* 0017b292 */	{
+/* 0017b292 */		this.parts_[8].initAsNumber("システム／数字／幅１７／黄", NULL);
+/* 0017b2b6 */		this.parts_[9].initAsNumber("システム／数字／幅１７／赤", NULL);
+/* 0017b2da */		this.parts_[7].init("システム／価格", 0);
+/* 0017b2fe */	}
+/* 0017b2fe */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017b34e */	{
+/* 0017b34e */		this.parts_[i].setParent(this.parent_.getPartsNumber());
+/* 0017b37a */	}
+/* 0017b380 */	this.setPartsPos();
+/* 0017b388 */	this.setPartsShow();
+/* 0017b390 */	this.updateShopPrice();
+/* 0017b398 */}
+
+void ItemView::updateShopPrice()
+/* 0017b3a0 */{
+/* 0017b3a0 */	this.parts_[8].setNumber(this.item_.getShopPrice());
+/* 0017b3ca */	this.parts_[9].setNumber(this.item_.getShopPrice());
+/* 0017b3f4 */}
+
+void ItemView::setPartsShow()
+/* 0017b3fc */{
+/* 0017b3fc */	int i;
+/* 0017b40e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017b45e */	{
+/* 0017b45e */		this.parts_[i].setShow(true);
+/* 0017b480 */	}
+/* 0017b486 */}
+
+void ItemView::setPartsPos()
+/* 0017b48e */{
+/* 0017b48e */	this.parts_[0].setPos(0.0, 0.0);
+/* 0017b4b2 */	this.parts_[3].setPos(150.0, 12.0);
+/* 0017b4d6 */	this.parts_[1].setPos(25.0, 12.0);
+/* 0017b4fa */	this.parts_[2].setPos(60.0, 75.0);
+/* 0017b51e */	this.parts_[2].setOrigin(9);
+/* 0017b53c */	this.parts_[4].setPos(150.0, 40.0);
+/* 0017b560 */	this.parts_[5].setPos(150.0, 56.0);
+/* 0017b584 */	this.parts_[6].setPos(150.0, 72.0);
+/* 0017b5a8 */	this.parts_[10].setOrigin(9);
+/* 0017b5c6 */	this.parts_[10].setPos(222.0, 93.0);
+/* 0017b5ea */	this.parts_[11].setOrigin(9);
+/* 0017b608 */	this.parts_[11].setPos(222.0, 93.0);
+/* 0017b62c */	this.parts_[7].setPos(247.0, 93.0);
+/* 0017b650 */	this.parts_[8].setOrigin(9);
+/* 0017b66e */	this.parts_[8].setPos(393.0, 93.0);
+/* 0017b692 */	this.parts_[9].setOrigin(9);
+/* 0017b6b0 */	this.parts_[9].setPos(393.0, 93.0);
+/* 0017b6d4 */}
+
+void ItemView::update()
+/* 0017b6dc */{
+/* 0017b6dc */	if (!this.isInitialized_)
+/* 0017b6ee */	{
+/* 0017b6ee */		if (-200 < this.parent_.getScreenY() && this.parent_.getScreenY() < 768)
+/* 0017b742 */		{
+/* 0017b742 */			this.isInitialized_ = true;
+/* 0017b754 */			this.initParts();
+/* 0017b75c */			this.updateState();
+/* 0017b764 */		}
+/* 0017b764 */	}
+/* 0017b764 */	this.updateHover();
+/* 0017b76c */	if (g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 0017b78c */	{
+/* 0017b78c */		this.onClickCallback_(this.clickId_);
+/* 0017b7b6 */	}
+/* 0017b7b6 */	if (!this.lastHover_ && this.isHover_)
+/* 0017b7f0 */	{
+/* 0017b7f0 */		playCursor();
+/* 0017b7f6 */	}
+/* 0017b7f6 */	if (this.isHover_ && g_mouse.onDown(0))
+/* 0017b83a */	{
+/* 0017b83a */		playClick();
+/* 0017b840 */	}
+/* 0017b840 */	this.setPartsShowState();
+/* 0017b848 */	this.lastHover_ = this.isHover_;
+/* 0017b85e */}
+
+void ItemView::setPartsShowState()
+/* 0017b866 */{
+/* 0017b866 */	int n = this.isClickable_ ? 0 : 3;
+/* 0017b894 */	if (this.isHover_)
+/* 0017b8a4 */	{
+/* 0017b8a4 */		n = g_mouse.isDown(0) ? 2 : 1;
+/* 0017b8de */	}
+/* 0017b8de */	this.parts_[0].setCgRange(0, n * 132, 508, 132);
+/* 0017b91a */	bool b = this.isItemBuyable();
+/* 0017b92e */	this.parts_[8].setShow(b);
+/* 0017b950 */	this.parts_[9].setShow(!b);
+/* 0017b976 */}
+
+bool ItemView::isHover()
+/* 0017b97e */{
+/* 0017b97e */	this.updateHover();
+/* 0017b986 */	return this.isHover_;
+/* 0017b992 */}
+
+void ItemView::updateHover()
+/* 0017b9a0 */{
+/* 0017b9a0 */	this.isHover_ = this.isClickable_ && AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 0017ba1a */}
+
+void ItemView::setPos(int x, int y, bool immidiate)
+/* 0017ba22 */{
+/* 0017ba22 */	if (immidiate)
+/* 0017ba32 */	{
+/* 0017ba32 */		this.x_ = x;
+/* 0017ba48 */		this.y_ = y;
+/* 0017ba5e */		this.parent_.setPos(this.x_, this.y_);
+/* 0017ba86 */	}
+/* 0017ba8c */	else
+/* 0017ba8c */	{
+/* 0017ba8c */		PartsMotion m;
+/* 0017ba9c */		m.setMove(this.x_, this.y_, x, y, 1);
+/* 0017bada */		this.parent_.runMotion(m, NULL);
+/* 0017bafa */		this.x_ = x;
+/* 0017bb10 */		this.y_ = y;
+/* 0017bb26 */	}
+/* 0017bb26 */}
+
+void ItemView::setOnClickCallback(DG_ItemViewClickCallback cb, int clickId)
+/* 0017bb34 */{
+/* 0017bb34 */	this.onClickCallback_ = cb;
+/* 0017bb4e */	this.clickId_ = clickId;
+/* 0017bb64 */}
+
+void ItemView::setParent(int partsNumber)
+/* 0017bb6c */{
+/* 0017bb6c */	this.parent_.setParent(partsNumber);
+/* 0017bb86 */}
+
+void ItemView::setClipper(int partsNumber)
+/* 0017bb8e */{
+/* 0017bb8e */	this.parent_.setAlphaClipperParts(partsNumber);
+/* 0017bba8 */}
+
+void ItemView::fadeIn(bool val, int delay)
+/* 0017bbb0 */{
+/* 0017bbb0 */	this.parent_.setShow(true);
+/* 0017bbc6 */	if (val)
+/* 0017bbd6 */	{
+/* 0017bbd6 */		if (this.state_ == 2 || this.state_ == 1)
+/* 0017bc1e */		{
+/* 0017bc1e */			return;
+/* 0017bc20 */		}
+/* 0017bc20 */	}
+/* 0017bc26 */	else if (this.state_ == 0 || this.state_ == 3)
+/* 0017bc6e */	{
+/* 0017bc6e */		return;
+/* 0017bc70 */	}
+/* 0017bc70 */	if (val)
+/* 0017bc80 */	{
+/* 0017bc80 */		this.state_ = 1;
+/* 0017bc92 */		array@PartsMotion m[2];
+/* 0017bca8 */		int w = 450;
+/* 0017bcba */		m[0].setTime(delay);
+/* 0017bcdc */		m[0].setMove(-w, this.y_, -w, this.y_, 1);
+/* 0017bd26 */		m[1].setTime(250);
+/* 0017bd44 */		m[1].setMove(-w, this.y_, this.x_, this.y_, 1);
+/* 0017bd8c */		this.parent_.runMotionArray(m, this.onFinishFadeIn);
+/* 0017bdbc */	}
+/* 0017bdc2 */	else
+/* 0017bdc2 */	{
+/* 0017bdc2 */		this.state_ = 1;
+/* 0017bdd4 */		PartsMotion m;
+/* 0017bde4 */		m.setTime(150);
+/* 0017bdfa */		m.setMove(this.x_, this.y_, -450, this.y_, 1);
+/* 0017be34 */		this.parent_.runMotion(m, this.onFinishFadeOut);
+/* 0017be5c */	}
+/* 0017be62 */	this.isShow_ = val;
+/* 0017be78 */}
+
+void ItemView::onFinishFadeIn()
+/* 0017be80 */{
+/* 0017be80 */	this.state_ = 2;
+/* 0017be92 */}
+
+void ItemView::onFinishFadeOut()
+/* 0017be9a */{
+/* 0017be9a */	this.state_ = 0;
+/* 0017beac */}
+
+string ItemView::getId()
+/* 0017beb4 */{
+/* 0017beb4 */	return this.id_;
+/* 0017bec0 */}
+

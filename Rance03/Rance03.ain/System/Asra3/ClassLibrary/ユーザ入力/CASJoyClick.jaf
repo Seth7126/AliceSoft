@@ -1,0 +1,178 @@
+CASJoyClick::CASJoyClick()
+/* 000007f2 */{
+/* 000007fa */	this.m_nKey = -1;
+/* 0000080c */	this.m_bKeyDown = false;
+/* 0000081e */	this.m_bFirstClickOff = false;
+/* 00000830 */	this.m_nKeyDownOnObject = -2147483648;
+/* 00000842 */	this.m_Trigger = false;
+/* 00000854 */	this.m_bKeyDownLoop = false;
+/* 00000866 */	this.m_bKeyPress = false;
+/* 00000878 */	this.m_DeviceNumber = 0;
+/* 0000088a */	this.m_nPressFirstTime = 350;
+/* 0000089c */	this.m_nPressTime = 50;
+/* 000008ae */}
+
+void CASJoyClick::Init(int nKey, bool FirstKeyDownCancel)
+/* 000008b6 */{
+/* 000008b6 */	this.m_nKey = nKey;
+/* 000008cc */	this.Reset(FirstKeyDownCancel);
+/* 000008de */}
+
+void CASJoyClick::ChangeKey(int nKey)
+/* 000008e6 */{
+/* 000008e6 */	this.m_nKey = nKey;
+/* 000008fc */}
+
+void CASJoyClick::Reset(bool FirstKeyDownCancel)
+/* 00000904 */{
+/* 00000904 */	this.m_bKeyDown = false;
+/* 00000916 */	this.m_nKeyDownOnObject = -2147483648;
+/* 00000928 */	this.m_bKeyDownLoop = false;
+/* 0000093a */	this.m_bKeyPress = false;
+/* 0000094c */	this.m_bFirstClickOff = FirstKeyDownCancel && AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey);
+/* 0000099c */}
+
+bool CASJoyClick::IsFirstClick()
+/* 000009a4 */{
+/* 000009a4 */	if (this.m_nKey == -1)
+/* 000009bc */	{
+/* 000009bc */		return false;
+/* 000009c4 */	}
+/* 000009c4 */	if (!this.m_bFirstClickOff)
+/* 000009d6 */	{
+/* 000009d6 */		return false;
+/* 000009de */	}
+/* 000009de */	if (AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey))
+/* 000009fe */	{
+/* 000009fe */		if (!this.m_bKeyDown)
+/* 00000a10 */		{
+/* 00000a10 */			this.m_bKeyDown = true;
+/* 00000a22 */		}
+/* 00000a22 */	}
+/* 00000a28 */	else if (this.m_bKeyDown)
+/* 00000a38 */	{
+/* 00000a38 */		this.m_bKeyDown = false;
+/* 00000a4a */		this.m_bFirstClickOff = false;
+/* 00000a5c */	}
+/* 00000a5c */	return true;
+/* 00000a64 */}
+
+bool CASJoyClick::IsClick(int nOnObject)
+/* 00000a72 */{
+/* 00000a72 */	if (this.m_nKey == -1)
+/* 00000a8a */	{
+/* 00000a8a */		return false;
+/* 00000a92 */	}
+/* 00000a92 */	if (this.IsFirstClick())
+/* 00000aa0 */	{
+/* 00000aa0 */		return false;
+/* 00000aa8 */	}
+/* 00000aa8 */	if (AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey))
+/* 00000ac8 */	{
+/* 00000ac8 */		if (!this.m_bKeyDown)
+/* 00000ada */		{
+/* 00000ada */			this.m_bKeyDown = true;
+/* 00000aec */			this.m_nKeyDownOnObject = nOnObject;
+/* 00000b02 */		}
+/* 00000b02 */	}
+/* 00000b08 */	else if (this.m_bKeyDown)
+/* 00000b18 */	{
+/* 00000b18 */		this.m_bKeyDown = false;
+/* 00000b2a */		if (nOnObject != -2147483648)
+/* 00000b42 */		{
+/* 00000b42 */			if (nOnObject == this.m_nKeyDownOnObject)
+/* 00000b5e */			{
+/* 00000b5e */				return true;
+/* 00000b66 */			}
+/* 00000b66 */		}
+/* 00000b6c */		else
+/* 00000b6c */		{
+/* 00000b6c */			return true;
+/* 00000b74 */		}
+/* 00000b74 */		this.m_nKeyDownOnObject = -2147483648;
+/* 00000b86 */	}
+/* 00000b86 */	return false;
+/* 00000b8e */}
+
+bool CASJoyClick::IsKeyDown()
+/* 00000b9c */{
+/* 00000b9c */	if (this.m_nKey == -1)
+/* 00000bb4 */	{
+/* 00000bb4 */		return false;
+/* 00000bbc */	}
+/* 00000bbc */	if (this.IsFirstClick())
+/* 00000bca */	{
+/* 00000bca */		return false;
+/* 00000bd2 */	}
+/* 00000bd2 */	return AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey);
+/* 00000bee */}
+
+bool CASJoyClick::IsKeyTrigger()
+/* 00000bfc */{
+/* 00000bfc */	if (this.m_nKey == -1)
+/* 00000c14 */	{
+/* 00000c14 */		return false;
+/* 00000c1c */	}
+/* 00000c1c */	if (this.IsFirstClick())
+/* 00000c2a */	{
+/* 00000c2a */		return false;
+/* 00000c32 */	}
+/* 00000c32 */	if (AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey) && !this.m_Trigger)
+/* 00000c7c */	{
+/* 00000c7c */		this.m_Trigger = true;
+/* 00000c8e */		return true;
+/* 00000c96 */	}
+/* 00000c9c */	else if (AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey))
+/* 00000cbc */	{
+/* 00000cbc */		return false;
+/* 00000cc4 */	}
+/* 00000cca */	else
+/* 00000cca */	{
+/* 00000cca */		this.m_Trigger = false;
+/* 00000cdc */	}
+/* 00000cdc */	return false;
+/* 00000ce4 */}
+
+bool CASJoyClick::IsKeyPress()
+/* 00000cf2 */{
+/* 00000cf2 */	if (this.m_nKey == -1)
+/* 00000d0a */	{
+/* 00000d0a */		return false;
+/* 00000d12 */	}
+/* 00000d12 */	if (this.IsFirstClick())
+/* 00000d20 */	{
+/* 00000d20 */		return false;
+/* 00000d28 */	}
+/* 00000d28 */	if (AFL_Joystick_IsKeyDown(this.m_DeviceNumber, this.m_nKey))
+/* 00000d48 */	{
+/* 00000d48 */		if (!this.m_bKeyPress)
+/* 00000d5a */		{
+/* 00000d5a */			this.m_bKeyPress = true;
+/* 00000d6c */			this.m_bKeyDownLoop = false;
+/* 00000d7e */			this.m_Timer.Reset();
+/* 00000d8e */			return true;
+/* 00000d96 */		}
+/* 00000d96 */		if (!this.m_bKeyDownLoop)
+/* 00000da8 */		{
+/* 00000da8 */			if (this.m_Timer.Get() < this.m_nPressFirstTime)
+/* 00000dca */			{
+/* 00000dca */				return false;
+/* 00000dd2 */			}
+/* 00000dd2 */		}
+/* 00000dd8 */		else if (this.m_Timer.Get() < this.m_nPressTime)
+/* 00000dfa */		{
+/* 00000dfa */			return false;
+/* 00000e02 */		}
+/* 00000e02 */		this.m_bKeyDownLoop = true;
+/* 00000e14 */		this.m_Timer.Reset();
+/* 00000e24 */		return true;
+/* 00000e2c */	}
+/* 00000e32 */	else if (this.m_bKeyPress)
+/* 00000e42 */	{
+/* 00000e42 */		this.m_bKeyPress = false;
+/* 00000e54 */		this.m_bKeyDownLoop = false;
+/* 00000e66 */		this.m_bFirstClickOff = false;
+/* 00000e78 */	}
+/* 00000e78 */	return false;
+/* 00000e80 */}
+

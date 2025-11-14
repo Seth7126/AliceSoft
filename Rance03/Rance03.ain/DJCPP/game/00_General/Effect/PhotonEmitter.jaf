@@ -1,0 +1,49 @@
+PhotonEmittor::PhotonEmittor()
+/* 00179042 */{
+/* 0017904a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00179070 */}
+
+void PhotonEmittor::init(int count)
+/* 00179078 */{
+/* 00179078 */	this.parts_.Alloc(count);
+/* 00179092 */	int i;
+/* 001790a4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001790f4 */	{
+/* 001790f4 */		this.parts_[i].init("システム／エフェクト／フォトン", 0);
+/* 0017911c */		this.parts_[i].setOrigin(5);
+/* 0017913e */		this.parts_[i].setScaling(RAND(50) + 50);
+/* 00179170 */		this.parts_[i].setZ(30000.0);
+/* 00179192 */	}
+/* 00179198 */}
+
+void PhotonEmittor::setPos(int x, int y)
+/* 001791a0 */{
+/* 001791a0 */	this.x_ = x;
+/* 001791b6 */	this.y_ = y;
+/* 001791cc */}
+
+void PhotonEmittor::run()
+/* 001791d4 */{
+/* 001791d4 */	int i;
+/* 001791e6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00179236 */	{
+/* 00179236 */		int rot = RAND(360);
+/* 0017924e */		int len = RAND(400) + 100;
+/* 0017926e */		int tx = Math.Cos(rot) * len;
+/* 001792a0 */		int ty = Math.Sin(rot) * len;
+/* 001792d2 */		array@PartsMotion m[2];
+/* 001792e8 */		m[0].setMove(this.x_, this.y_, this.x_ + tx * 0.8, this.y_ + ty * 0.8, 0);
+/* 00179372 */		m[0].setTime(100 + RAND(100));
+/* 0017939e */		m[0].setAlpha(128, 255, 0);
+/* 001793c8 */		m[1].setMove(this.x_ + tx * 0.8, this.y_ + ty * 0.8, this.x_ + tx, this.y_ + ty, 0);
+/* 0017946a */		m[1].setTime(RAND(400) + 200);
+/* 00179496 */		m[1].setAlpha(255, 0, 0);
+/* 001794c0 */		this.parts_[i].setShow(true);
+/* 001794e2 */		this.parts_[i].runMotionArray(m, NULL);
+/* 00179516 */	}
+/* 0017951c */}
+
+void PhotonEmittor::update()
+/* 00179524 */{
+/* 00179526 */}
+

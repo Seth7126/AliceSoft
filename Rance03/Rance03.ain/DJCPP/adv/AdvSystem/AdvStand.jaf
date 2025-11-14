@@ -1,0 +1,313 @@
+AdvStand::AdvStand()
+/* 0017508a */{
+/* 00175094 */}
+
+void AdvStand::init(int x, int y, int offsetZ, string prefixString)
+/* 0017509a */{
+/* 0017509a */	this.defaultX_ = x;
+/* 001750b0 */	this.defaultY_ = y;
+/* 001750c6 */	this.offsetZ_ = offsetZ;
+/* 001750dc */	this.prefixString_ = prefixString;
+/* 001750f4 */}
+
+void AdvStand::show(string standName, int inType, bool immidiate)
+/* 001750fc */{
+/* 001750fc */	string current = this.standName_;
+/* 00175114 */	if (standName == "")
+/* 0017512c */	{
+/* 0017512c */		return;
+/* 0017512e */	}
+/* 0017512e */	if (standName == current)
+/* 0017514a */	{
+/* 0017514a */		return;
+/* 0017514c */	}
+/* 0017514c */	if (current == "")
+/* 00175164 */	{
+/* 00175164 */		this.innerShow(standName, inType, immidiate);
+/* 0017518a */		this.standName_ = standName;
+/* 001751a2 */	}
+/* 001751a8 */	else
+/* 001751a8 */	{
+/* 001751a8 */		int n = current.Find("／");
+/* 001751c6 */		if (n != -1 && standName.GetPart(0, n) == current.GetPart(0, n))
+/* 00175236 */		{
+/* 00175236 */			this.showBlackStand(standName);
+/* 00175248 */			this.resetParts(standName);
+/* 0017525a */			this.standName_ = standName;
+/* 00175272 */		}
+/* 00175278 */		else
+/* 00175278 */		{
+/* 00175278 */			this.hide(0, true);
+/* 0017528c */			this.innerShow(standName, 0, true);
+/* 001752aa */			this.standName_ = standName;
+/* 001752c2 */		}
+/* 001752c2 */	}
+/* 001752c2 */}
+
+void AdvStand::innerShow(string standName, int inType, bool immidiate)
+/* 001752ca */{
+/* 001752ca */	this.resetParts(standName);
+/* 001752dc */	this.parent_.runMotion(this.getPartsMotionShow(inType), NULL);
+/* 00175300 */	if (immidiate)
+/* 00175310 */	{
+/* 00175310 */		RunPartsMotion();
+/* 00175316 */	}
+/* 00175316 */}
+
+void AdvStand::resetParts(string standName)
+/* 0017531e */{
+/* 0017531e */	this.cgName_ = this.prefixString_ + standName;
+/* 00175342 */	this.parent_.initAsDummy();
+/* 00175352 */	this.offsetParent_.initAsDummy();
+/* 00175362 */	this.parts_[0].init("trim_" + this.cgName_, 0);
+/* 00175392 */	this.parts_[2].initAsCgPlaneImage("trim_" + this.cgName_, 0, 0, 0);
+/* 001753ce */	this.setMultiColorValue();
+/* 001753d6 */	this.setPartsParent();
+/* 001753de */	this.setPartsPos();
+/* 001753e6 */	this.setPartsShow();
+/* 001753ee */}
+
+void AdvStand::setPartsParent()
+/* 001753f6 */{
+/* 001753f6 */	this.offsetParent_.setParent(this.parent_.getPartsNumber());
+/* 00175416 */	int i;
+/* 00175428 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00175478 */	{
+/* 00175478 */		this.parts_[i].setParent(this.offsetParent_.getPartsNumber());
+/* 001754a4 */	}
+/* 001754aa */}
+
+void AdvStand::setMultiColorValue()
+/* 001754b2 */{
+/* 001754b2 */	string name = g_advBackGround.getCgName();
+/* 001754d0 */	int r = 255;
+/* 001754e2 */	int g = 255;
+/* 001754f4 */	int b = 255;
+/* 00175506 */	int i;
+/* 00175518 */	for (i = 0; i < g_standBackgroundFillInfomation.Numof(); ++i)
+/* 00175568 */	{
+/* 00175568 */		if ("背景／" + g_standBackgroundFillInfomation[i].getId() == name)
+/* 0017559e */		{
+/* 0017559e */			r = g_standBackgroundFillInfomation[i].getR();
+/* 001755c6 */			g = g_standBackgroundFillInfomation[i].getG();
+/* 001755ee */			b = g_standBackgroundFillInfomation[i].getB();
+/* 00175616 */			break;
+/* 0017561c */		}
+/* 0017561c */	}
+/* 00175622 */	this.parts_[0].setMultiColorValue(r, g, b);
+/* 00175658 */}
+
+void AdvStand::setPartsPos()
+/* 00175660 */{
+/* 00175660 */	int x;
+/* 00175672 */	int y;
+/* 00175684 */	this.getStandOffset(this.cgName_, x, y);
+/* 001756a6 */	int i;
+/* 001756b8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00175708 */	{
+/* 00175708 */		this.parts_[i].setPos(x, y);
+/* 0017573c */		this.parts_[i].setZ(i);
+/* 00175764 */	}
+/* 0017576a */	this.parent_.setZ(3100 + this.offsetZ_);
+/* 0017578e */	this.offsetParent_.setPos(this.defaultX_, this.defaultY_);
+/* 001757b6 */}
+
+void AdvStand::setPartsShow()
+/* 001757be */{
+/* 001757be */	this.parts_[0].setShow(true);
+/* 001757dc */	this.parts_[1].setShow(true);
+/* 001757fa */	this.offsetParent_.setShow(true);
+/* 00175810 */	this.parent_.setShow(true);
+/* 00175826 */}
+
+void AdvStand::showBlackStand(string standName)
+/* 0017582e */{
+/* 0017582e */	this.parts_[2].setShow(true);
+/* 0017584c */	PartsMotion m;
+/* 0017585c */	m.setAlpha(0, 255, 0);
+/* 0017587e */	m.setTime(150);
+/* 00175894 */	this.parts_[2].runMotion(m, NULL);
+/* 001758bc */	RunPartsMotion();
+/* 001758c2 */}
+
+PartsMotion AdvStand::getPartsMotionShow(int inType)
+/* 001758ca */{
+/* 001758ca */	int fromX;
+/* 001758dc */	int fromY;
+/* 001758ee */	switch (inType)
+/* 00175904 */	{
+/* 00175904 */	case 2:
+/* 00175904 */		fromX = -150;
+/* 00175916 */		break;
+/* 0017591c */	case 1:
+/* 0017591c */		fromX = 150;
+/* 0017592e */		break;
+/* 00175934 */	case 4:
+/* 00175934 */		fromY = -150;
+/* 00175946 */		break;
+/* 0017594c */	case 3:
+/* 0017594c */		fromY = 150;
+/* 0017595e */		break;
+/* 00175964 */	}
+/* 00175964 */	PartsMotion m;
+/* 00175974 */	m.setTime(250);
+/* 0017598a */	m.setAlpha(0, 255, 0);
+/* 001759ac */	m.setMove(fromX, fromY, 0, 0, 3);
+/* 001759e2 */	return m;
+/* 001759f2 */}
+
+PartsMotion AdvStand::getPartsMotionHide(int outType)
+/* 00175a00 */{
+/* 00175a00 */	int toX;
+/* 00175a12 */	int toY;
+/* 00175a24 */	switch (outType)
+/* 00175a3a */	{
+/* 00175a3a */	case 2:
+/* 00175a3a */		toX = -100;
+/* 00175a4c */		break;
+/* 00175a52 */	case 1:
+/* 00175a52 */		toX = 100;
+/* 00175a64 */		break;
+/* 00175a6a */	case 4:
+/* 00175a6a */		toY = -100;
+/* 00175a7c */		break;
+/* 00175a82 */	case 3:
+/* 00175a82 */		toY = 100;
+/* 00175a94 */		break;
+/* 00175a9a */	}
+/* 00175a9a */	PartsMotion m;
+/* 00175aaa */	m.setTime(150);
+/* 00175ac0 */	m.setMove(0, 0, toX, toY, 7);
+/* 00175af6 */	m.setAlpha(255, 0, 0);
+/* 00175b18 */	return m;
+/* 00175b28 */}
+
+void AdvStand::hide(int outType, bool immidiate)
+/* 00175b36 */{
+/* 00175b36 */	if (!this.parts_[0].isInitialized())
+/* 00175b56 */	{
+/* 00175b56 */		return;
+/* 00175b58 */	}
+/* 00175b58 */	this.parent_.runMotion(this.getPartsMotionHide(outType), this.release);
+/* 00175b84 */	if (immidiate)
+/* 00175b94 */	{
+/* 00175b94 */		RunPartsMotion();
+/* 00175b9a */	}
+/* 00175b9a */}
+
+void AdvStand::motion(int motionType)
+/* 00175ba2 */{
+/* 00175ba2 */	switch (motionType)
+/* 00175bb8 */	{
+/* 00175bb8 */	case 0:
+/* 00175bb8 */		array@PartsMotion m;
+/* 00175bc2 */		this.getPartsMotionBow(m);
+/* 00175bd4 */		this.parent_.runMotionArray(m, NULL);
+/* 00175bfc */		break;
+/* 00175c02 */	case 1:
+/* 00175c02 */		array@PartsMotion m;
+/* 00175c0c */		this.getPartsMotionJump(m);
+/* 00175c1e */		this.parent_.runMotionArray(m, NULL);
+/* 00175c46 */		break;
+/* 00175c4c */	case 2:
+/* 00175c4c */		this.parent_.runMotion(this.getPartsMotionShake(true, true), NULL);
+/* 00175c72 */		break;
+/* 00175c78 */	case 3:
+/* 00175c78 */		this.parent_.runMotion(this.getPartsMotionShake(false, true), NULL);
+/* 00175c9e */		break;
+/* 00175ca4 */	case 4:
+/* 00175ca4 */		this.parent_.runMotion(this.getPartsMotionShake(true, false), NULL);
+/* 00175cca */		break;
+/* 00175cd0 */	}
+/* 00175cd0 */	RunPartsMotion();
+/* 00175cd6 */}
+
+void AdvStand::getPartsMotionBow(ref array@PartsMotion m)
+/* 00175cde */{
+/* 00175cde */	m.Alloc(3);
+/* 00175cf4 */	m[0].setTime(200);
+/* 00175d12 */	m[0].setMove(0, 0, 0, 50, 1);
+/* 00175d48 */	m[1].setTime(150);
+/* 00175d66 */	m[1].setMove(0, 50, 0, 0, 3);
+/* 00175d9c */}
+
+void AdvStand::getPartsMotionJump(ref array@PartsMotion m)
+/* 00175da4 */{
+/* 00175da4 */	m.Alloc(3);
+/* 00175dba */	m[0].setTime(150);
+/* 00175dd8 */	m[0].setMove(0, 5, 0, -50, 1);
+/* 00175e0e */	m[1].setTime(200);
+/* 00175e2c */	m[1].setMove(0, -50, 0, 15, 5);
+/* 00175e62 */	m[2].setTime(45);
+/* 00175e80 */	m[2].setMove(0, 15, 0, 0, 0);
+/* 00175eb6 */}
+
+PartsMotion AdvStand::getPartsMotionShake(bool isHorizontal, bool isVertical)
+/* 00175ebe */{
+/* 00175ebe */	PartsMotion m;
+/* 00175ece */	m.setTime(350);
+/* 00175ee4 */	if (isHorizontal && isVertical)
+/* 00175f1c */	{
+/* 00175f1c */		m.setKey(7, 50, 0, 0);
+/* 00175f44 */		m.setKey(8, 50, 0, 0);
+/* 00175f6c */	}
+/* 00175f72 */	else if (isHorizontal)
+/* 00175f82 */	{
+/* 00175f82 */		m.setKey(7, 100, 30, 0);
+/* 00175faa */	}
+/* 00175fb0 */	else if (isVertical)
+/* 00175fc0 */	{
+/* 00175fc0 */		m.setKey(8, 100, 30, 0);
+/* 00175fe8 */	}
+/* 00175fe8 */	return m;
+/* 00175ff8 */}
+
+string AdvStand::truncateStandPrefix(string n)
+/* 00176006 */{
+/* 00176006 */	int pos = n.Find(this.prefixString_) + this.prefixString_.Length();
+/* 00176034 */	return n.GetPart(pos, n.Length() - pos);
+/* 00176062 */}
+
+void AdvStand::getStandOffset(string cgName, ref int x, ref int y)
+/* 00176070 */{
+/* 00176070 */	x = EX_SA2Int("立ち絵オフセット", cgName, "x", 0);
+/* 001760a0 */	y = EX_SA2Int("立ち絵オフセット", cgName, "y", 0);
+/* 001760d0 */}
+
+void AdvStand::release()
+/* 001760d8 */{
+/* 001760d8 */	this.parent_.release();
+/* 001760e8 */	this.offsetParent_.release();
+/* 001760f8 */	this.parts_[0].release();
+/* 00176110 */	this.parts_[2].release();
+/* 00176128 */	this.standName_ = "";
+/* 0017613c */}
+
+bool AdvStand::isShow()
+/* 00176144 */{
+/* 00176144 */	return this.parts_[0].isInitialized();
+/* 0017615e */}
+
+void AdvStand::setShopMode(bool val)
+/* 0017616c */{
+/* 0017616c */	if (val)
+/* 0017617c */	{
+/* 0017617c */		PartsMotion m;
+/* 0017618c */		m.setMove(this.defaultX_, this.defaultY_, this.defaultX_ + 80, this.defaultY_, 1);
+/* 001761d2 */		this.offsetParent_.runMotion(m, NULL);
+/* 001761f2 */		this.parent_.setZ(4200.0);
+/* 00176208 */	}
+/* 00176214 */	else
+/* 00176214 */	{
+/* 00176214 */		PartsMotion m;
+/* 00176224 */		m.setMove(this.defaultX_ + 80, this.defaultY_, this.defaultX_, this.defaultY_, 1);
+/* 0017626a */		this.offsetParent_.runMotion(m, NULL);
+/* 0017628a */		this.parent_.setZ(3100 + this.offsetZ_);
+/* 001762ae */	}
+/* 001762ae */}
+
+string AdvStand::getStandName()
+/* 001762bc */{
+/* 001762bc */	return this.standName_;
+/* 001762c8 */}
+

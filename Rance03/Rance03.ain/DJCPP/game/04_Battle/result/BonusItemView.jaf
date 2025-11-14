@@ -1,0 +1,88 @@
+BonusItemView::BonusItemView()
+/* 001a2a66 */{
+/* 001a2a6e */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a2a94 */}
+
+void BonusItemView::init(string itemId)
+/* 001a2a9c */{
+/* 001a2a9c */	this.itemId_ = itemId;
+/* 001a2ab4 */	this.initParts();
+/* 001a2abc */}
+
+void BonusItemView::initParts()
+/* 001a2ac4 */{
+/* 001a2ac4 */	this.parts_[0].init("システム／リザルト／ＩＴＥＭ下地", 0);
+/* 001a2ae8 */	this.parts_[1].initAsCgPlaneImage("システム／リザルト／ＩＴＥＭ下地", 255, 255, 255);
+/* 001a2b18 */	this.parts_[5].init("システム／リザルト／ＩＴＥＭ斜め線", 0);
+/* 001a2b3c */	if (this.itemId_ != "")
+/* 001a2b54 */	{
+/* 001a2b54 */		this.parts_[2].initAsFlat("システム／後光");
+/* 001a2b72 */		this.parts_[3].init(getItemFromId(this.itemId_).getIconImageName(), 0);
+/* 001a2bbc */		this.parts_[4].initAsFlat("システム／キラキラ");
+/* 001a2bda */	}
+/* 001a2be0 */	createPartsGroup(this.parent_, this.parts_, 3530);
+/* 001a2c00 */	this.setPartsPos();
+/* 001a2c08 */}
+
+void BonusItemView::setPartsShow()
+/* 001a2c10 */{
+/* 001a2c10 */	int i;
+/* 001a2c22 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a2c72 */	{
+/* 001a2c72 */		this.parts_[i].setShow(true);
+/* 001a2c94 */	}
+/* 001a2c9a */	this.parent_.setShow(true);
+/* 001a2cb0 */}
+
+void BonusItemView::startFlat()
+/* 001a2cb8 */{
+/* 001a2cb8 */	this.parts_[2].startFlat(false, 1.0);
+/* 001a2cdc */	this.parts_[4].startFlat(false, 1.0);
+/* 001a2d00 */}
+
+void BonusItemView::setPartsPos()
+/* 001a2d08 */{
+/* 001a2d08 */	this.parts_[0].setPos(629.0, 713.0);
+/* 001a2d2c */	this.parts_[1].setPos(629.0, 713.0);
+/* 001a2d50 */	this.parts_[5].setPos(-13.0, 581.0);
+/* 001a2d74 */	this.parts_[2].setPos(461.0, 571.0);
+/* 001a2d98 */	this.parts_[3].setPos(461.0, 571.0);
+/* 001a2dbc */	this.parts_[4].setPos(461.0, 571.0);
+/* 001a2de0 */	this.parts_[0].setOrigin(3);
+/* 001a2dfe */	this.parts_[1].setOrigin(3);
+/* 001a2e1c */	this.parts_[5].setOrigin(7);
+/* 001a2e3a */	this.parts_[2].setOrigin(5);
+/* 001a2e58 */	this.parts_[3].setOrigin(5);
+/* 001a2e76 */	this.parts_[4].setOrigin(5);
+/* 001a2e94 */}
+
+void BonusItemView::update()
+/* 001a2e9c */{
+/* 001a2e9e */}
+
+void BonusItemView::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001a2ea4 */{
+/* 001a2ea4 */	this.setPartsShow();
+/* 001a2eac */	if (val)
+/* 001a2ebc */	{
+/* 001a2ebc */		this.startFlat();
+/* 001a2ec4 */		PartsMotion m;
+/* 001a2ed4 */		m.setTime(1000);
+/* 001a2eea */		m.setAlpha(255, 0, 0);
+/* 001a2f0c */		this.parts_[1].runMotion(m, NULL);
+/* 001a2f34 */		PartsMotion m2;
+/* 001a2f44 */		int w = this.parts_[5].getWidth();
+/* 001a2f68 */		int h = this.parts_[5].getHeight();
+/* 001a2f8c */		m2.setCgRangeMove(0, 0, 0, h, 0, 0, w, h, 2);
+/* 001a2fde */		m2.setTime(1000);
+/* 001a2ff4 */		this.parts_[5].runMotion(m2, cb);
+/* 001a3026 */	}
+/* 001a3038 */	else
+/* 001a3038 */	{
+/* 001a3038 */		PartsMotion m;
+/* 001a3048 */		m.setTime(100);
+/* 001a305e */		m.setMove(0, 0, -700, 0, 1);
+/* 001a308c */		this.parent_.runMotion(m, cb);
+/* 001a30b6 */	}
+/* 001a30b6 */}
+

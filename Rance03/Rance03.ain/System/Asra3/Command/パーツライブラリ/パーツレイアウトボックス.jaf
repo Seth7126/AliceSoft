@@ -1,0 +1,112 @@
+void Ｐ＿レイアウトボックス＿レイアウトタイプ設定(int パーツ番号, int 種類)
+/* 00167ce0 */{
+/* 00167ce0 */	PartsEngine.SetLayoutBoxLayoutType(パーツ番号, 種類);
+/* 00167cfe */}
+
+int Ｐ＿レイアウトボックス＿レイアウトタイプ取得(int パーツ番号)
+/* 00167d0c */{
+/* 00167d0c */	return PartsEngine.GetLayoutBoxLayoutType(パーツ番号);
+/* 00167d22 */}
+
+void Ｐ＿レイアウトボックス＿折り返し設定(int パーツ番号, bool 許可, float サイズ)
+/* 00167d36 */{
+/* 00167d36 */	PartsEngine.SetLayoutBoxReturn(パーツ番号, 許可, サイズ);
+/* 00167d5e */}
+
+bool Ｐ＿レイアウトボックス＿折り返し設定取得(int パーツ番号)
+/* 00167d6c */{
+/* 00167d6c */	return PartsEngine.IsLayoutBoxReturn(パーツ番号);
+/* 00167d82 */}
+
+float Ｐ＿レイアウトボックス＿折り返しサイズ取得(int パーツ番号)
+/* 00167d96 */{
+/* 00167d96 */	return PartsEngine.GetLayoutBoxReturnSize(パーツ番号);
+/* 00167dac */}
+
+void Ｐ＿レイアウトボックス＿折り返しサイズレート設定(int パーツ番号, bool 許可)
+/* 00167dc0 */{
+/* 00167dc0 */	PartsEngine.SetLayoutBoxReturnSizeForRate(パーツ番号, 許可);
+/* 00167dde */}
+
+bool Ｐ＿レイアウトボックス＿折り返しサイズレート設定取得(int パーツ番号)
+/* 00167dec */{
+/* 00167dec */	return PartsEngine.IsLayoutBoxReturnSizeForRate(パーツ番号);
+/* 00167e02 */}
+
+void Ｐ＿レイアウトボックス＿配置設定(int パーツ番号, int 配置種類)
+/* 00167e16 */{
+/* 00167e16 */	PartsEngine.SetLayoutBoxAlign(パーツ番号, 配置種類);
+/* 00167e34 */}
+
+int Ｐ＿レイアウトボックス＿配置設定取得(int パーツ番号)
+/* 00167e42 */{
+/* 00167e42 */	return PartsEngine.GetLayoutBoxAlign(パーツ番号);
+/* 00167e58 */}
+
+bool Ｐ＿レイアウトボックス＿存在確認(int パーツ番号, int 番号)
+/* 00167e6c */{
+/* 00167e6c */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00167e88 */	return Ｐ＿子存在確認(パーツ番号, 番号);
+/* 00167ea4 */}
+
+void Ｐ＿レイアウトボックス＿全解放(int パーツ番号)
+/* 00167eb8 */{
+/* 00167eb8 */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00167ed4 */	Ｐ＿子全解放(パーツ番号);
+/* 00167ee4 */}
+
+void Ｐ＿レイアウトボックス＿追加(int パーツ番号, int 番号)
+/* 00167ef2 */{
+/* 00167ef2 */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00167f0e */	Ｐ＿子追加(パーツ番号, 番号);
+/* 00167f28 */}
+
+void Ｐ＿レイアウトボックス＿挿入(int パーツ番号, int インデックス, int 番号)
+/* 00167f36 */{
+/* 00167f36 */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00167f52 */	Ｐ＿子挿入(パーツ番号, インデックス, 番号);
+/* 00167f76 */}
+
+void Ｐ＿レイアウトボックス＿解放(int パーツ番号, int 番号)
+/* 00167f84 */{
+/* 00167f84 */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00167fa0 */	Ｐ＿子解放(パーツ番号, 番号);
+/* 00167fba */}
+
+int Ｐ＿レイアウトボックス＿個数取得(int パーツ番号)
+/* 00167fc8 */{
+/* 00167fc8 */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00167fe4 */	return Ｐ＿子数取得(パーツ番号);
+/* 00167ff6 */}
+
+int Ｐ＿レイアウトボックス＿番号取得(int パーツ番号, int インデックス)
+/* 0016800a */{
+/* 0016800a */	PARTS_SetComponentType(パーツ番号, 8, 1);
+/* 00168026 */	return Ｐ＿子取得(パーツ番号, インデックス);
+/* 00168042 */}
+
+void Ｐ＿レイアウトボックス＿パディング設定(int パーツ番号, int 上パディング, int 下パディング, int 左パディング, int 右パディング)
+/* 00168056 */{
+/* 00168056 */	PartsEngine.SetLayoutBoxPadding(パーツ番号, 上パディング, 下パディング, 左パディング, 右パディング);
+/* 00168092 */}
+
+int Ｐ＿レイアウトボックス＿上パディング取得(int パーツ番号)
+/* 001680a0 */{
+/* 001680a0 */	return PartsEngine.GetLayoutBoxPaddingTop(パーツ番号);
+/* 001680b6 */}
+
+int Ｐ＿レイアウトボックス＿下パディング取得(int パーツ番号)
+/* 001680ca */{
+/* 001680ca */	return PartsEngine.GetLayoutBoxPaddingBottom(パーツ番号);
+/* 001680e0 */}
+
+int Ｐ＿レイアウトボックス＿左パディング取得(int パーツ番号)
+/* 001680f4 */{
+/* 001680f4 */	return PartsEngine.GetLayoutBoxPaddingLeft(パーツ番号);
+/* 0016810a */}
+
+int Ｐ＿レイアウトボックス＿右パディング取得(int パーツ番号)
+/* 0016811e */{
+/* 0016811e */	return PartsEngine.GetLayoutBoxPaddingRight(パーツ番号);
+/* 00168134 */}
+

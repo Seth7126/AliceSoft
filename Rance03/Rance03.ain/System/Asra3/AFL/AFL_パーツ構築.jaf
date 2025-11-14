@@ -1,0 +1,115 @@
+int AFL_Parts_NumofConstructProcess(int PartsNumber, int State)
+/* 0016b15c */{
+/* 0016b15c */	return PartsEngine.Parts_GetPartsConstructionProcessCount(PartsNumber, State);
+/* 0016b17c */}
+
+void AFL_Parts_GetConstructProcess(int PartsNumber, int Index, ref CASConstructionProcess Process, int State)
+/* 0016b190 */{
+/* 0016b190 */	array@int ArrayInt;
+/* 0016b19a */	array@float ArrayFloat;
+/* 0016b1a4 */	array@string ArrayString;
+/* 0016b1ae */	ArrayInt.PushBack(PartsNumber);
+/* 0016b1c2 */	ArrayInt.PushBack(Index);
+/* 0016b1d6 */	ArrayInt.PushBack(State);
+/* 0016b1ea */	ArrayInt.Realloc(33);
+/* 0016b200 */	ArrayFloat.Realloc(2);
+/* 0016b216 */	ArrayString.Realloc(2);
+/* 0016b22c */	PartsEngine.GetPartsConstructionProcess(ArrayInt, ArrayFloat, ArrayString);
+/* 0016b254 */	int IntCount = 3;
+/* 0016b266 */	int FloatCount;
+/* 0016b278 */	int StringCount;
+/* 0016b28a */	Process.SetCommand(ArrayInt[IntCount++]);
+/* 0016b2b8 */	Process.SetInterpolationType(ArrayInt[IntCount++]);
+/* 0016b2e6 */	Process.SetSrcX(ArrayInt[IntCount++]);
+/* 0016b314 */	Process.SetSrcY(ArrayInt[IntCount++]);
+/* 0016b342 */	Process.SetSrcWidth(ArrayInt[IntCount++]);
+/* 0016b370 */	Process.SetSrcHeight(ArrayInt[IntCount++]);
+/* 0016b39e */	Process.SetDestX(ArrayInt[IntCount++]);
+/* 0016b3cc */	Process.SetDestY(ArrayInt[IntCount++]);
+/* 0016b3fa */	Process.SetDestX2(ArrayInt[IntCount++]);
+/* 0016b428 */	Process.SetDestY2(ArrayInt[IntCount++]);
+/* 0016b456 */	Process.SetDestWidth(ArrayInt[IntCount++]);
+/* 0016b484 */	Process.SetDestHeight(ArrayInt[IntCount++]);
+/* 0016b4b2 */	Process.SetR(ArrayInt[IntCount++]);
+/* 0016b4e0 */	Process.SetG(ArrayInt[IntCount++]);
+/* 0016b50e */	Process.SetB(ArrayInt[IntCount++]);
+/* 0016b53c */	Process.SetA(ArrayInt[IntCount++]);
+/* 0016b56a */	Process.SetR2(ArrayInt[IntCount++]);
+/* 0016b598 */	Process.SetG2(ArrayInt[IntCount++]);
+/* 0016b5c6 */	Process.SetB2(ArrayInt[IntCount++]);
+/* 0016b5f4 */	Process.SetCharSpace(ArrayInt[IntCount++]);
+/* 0016b622 */	Process.SetLineSpace(ArrayInt[IntCount++]);
+/* 0016b650 */	CASCharSpriteProperty Font;
+/* 0016b660 */	Font.SetType(ArrayInt[IntCount++]);
+/* 0016b68e */	Font.SetSize(ArrayInt[IntCount++]);
+/* 0016b6bc */	int FontColorR = ArrayInt[IntCount++];
+/* 0016b6e6 */	int FontColorG = ArrayInt[IntCount++];
+/* 0016b710 */	int FontColorB = ArrayInt[IntCount++];
+/* 0016b73a */	Font.SetColor(CF_CASColor(FontColorR, FontColorG, FontColorB, 255));
+/* 0016b774 */	int EdgeColorR = ArrayInt[IntCount++];
+/* 0016b79e */	int EdgeColorG = ArrayInt[IntCount++];
+/* 0016b7c8 */	int EdgeColorB = ArrayInt[IntCount++];
+/* 0016b7f2 */	Font.SetEdgeColor(CF_CASColor(EdgeColorR, EdgeColorG, EdgeColorB, 255));
+/* 0016b82c */	Font.SetBoldWeight(ArrayFloat[FloatCount++]);
+/* 0016b85a */	Font.SetEdgeWeight(ArrayFloat[FloatCount++]);
+/* 0016b888 */	Process.SetFontProperty(Font);
+/* 0016b8a2 */	Process.SetText(ArrayString[StringCount++]);
+/* 0016b8d0 */	Process.SetCGName(ArrayString[StringCount++]);
+/* 0016b8fe */	Process.SetFullSize(ArrayInt[IntCount++] != 0);
+/* 0016b936 */}
+
+void AFL_Parts_AddConstructProcess(int PartsNumber, ref CASConstructionProcess Process, int State)
+/* 0016b944 */{
+/* 0016b944 */	array@int ArrayInt;
+/* 0016b94e */	array@float ArrayFloat;
+/* 0016b958 */	array@string ArrayString;
+/* 0016b962 */	ArrayInt.PushBack(PartsNumber);
+/* 0016b976 */	ArrayInt.PushBack(State);
+/* 0016b98a */	ArrayInt.Realloc(32);
+/* 0016b9a0 */	ArrayFloat.Realloc(2);
+/* 0016b9b6 */	ArrayString.Realloc(2);
+/* 0016b9cc */	int IntCount = 2;
+/* 0016b9de */	int FloatCount;
+/* 0016b9f0 */	int StringCount;
+/* 0016ba02 */	ArrayInt[IntCount++] = Process.GetCommand();
+/* 0016ba32 */	ArrayInt[IntCount++] = Process.GetInterpolationType();
+/* 0016ba62 */	ArrayInt[IntCount++] = Process.GetSrcX();
+/* 0016ba92 */	ArrayInt[IntCount++] = Process.GetSrcY();
+/* 0016bac2 */	ArrayInt[IntCount++] = Process.GetSrcWidth();
+/* 0016baf2 */	ArrayInt[IntCount++] = Process.GetSrcHeight();
+/* 0016bb22 */	ArrayInt[IntCount++] = Process.GetDestX();
+/* 0016bb52 */	ArrayInt[IntCount++] = Process.GetDestY();
+/* 0016bb82 */	ArrayInt[IntCount++] = Process.GetDestX2();
+/* 0016bbb2 */	ArrayInt[IntCount++] = Process.GetDestY2();
+/* 0016bbe2 */	ArrayInt[IntCount++] = Process.GetDestWidth();
+/* 0016bc12 */	ArrayInt[IntCount++] = Process.GetDestHeight();
+/* 0016bc42 */	ArrayInt[IntCount++] = Process.GetR();
+/* 0016bc72 */	ArrayInt[IntCount++] = Process.GetG();
+/* 0016bca2 */	ArrayInt[IntCount++] = Process.GetB();
+/* 0016bcd2 */	ArrayInt[IntCount++] = Process.GetA();
+/* 0016bd02 */	ArrayInt[IntCount++] = Process.GetR2();
+/* 0016bd32 */	ArrayInt[IntCount++] = Process.GetG2();
+/* 0016bd62 */	ArrayInt[IntCount++] = Process.GetB2();
+/* 0016bd92 */	ArrayInt[IntCount++] = Process.GetCharSpace();
+/* 0016bdc2 */	ArrayInt[IntCount++] = Process.GetLineSpace();
+/* 0016bdf2 */	ref CASCharSpriteProperty Font = Process.GetFontProperty();
+/* 0016be38 */	CASColor Color;
+/* 0016be48 */	Color = Font.GetColor();
+/* 0016be6c */	CASColor EdgeColor;
+/* 0016be7c */	EdgeColor = Font.GetEdgeColor();
+/* 0016bea0 */	ArrayInt[IntCount++] = Font.GetType();
+/* 0016bed0 */	ArrayInt[IntCount++] = Font.GetSize();
+/* 0016bf00 */	ArrayInt[IntCount++] = Color.GetR();
+/* 0016bf30 */	ArrayInt[IntCount++] = Color.GetG();
+/* 0016bf60 */	ArrayInt[IntCount++] = Color.GetB();
+/* 0016bf90 */	ArrayFloat[FloatCount++] = Font.GetBoldWeight();
+/* 0016bfc0 */	ArrayInt[IntCount++] = EdgeColor.GetR();
+/* 0016bff0 */	ArrayInt[IntCount++] = EdgeColor.GetG();
+/* 0016c020 */	ArrayInt[IntCount++] = EdgeColor.GetB();
+/* 0016c050 */	ArrayFloat[FloatCount++] = Font.GetEdgeWeight();
+/* 0016c080 */	ArrayString[StringCount++] = Process.GetText();
+/* 0016c0b2 */	ArrayString[StringCount++] = Process.GetCGName();
+/* 0016c0e4 */	ArrayInt[IntCount++] = Process.IsFullSize() ? 1 : 0;
+/* 0016c12c */	PartsEngine.AddPartsConstructionProcess(ArrayInt, ArrayFloat, ArrayString);
+/* 0016c154 */}
+

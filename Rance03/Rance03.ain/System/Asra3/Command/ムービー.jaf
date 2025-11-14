@@ -1,0 +1,10 @@
+void ムービー(string ファイル名, bool キーキャンセル, int nBackColorR, int nBackColorG, int nBackColorB)
+/* 00169976 */{
+/* 00169976 */	SYS_Movie_Play(ファイル名, キーキャンセル, nBackColorR, nBackColorG, nBackColorB, SYS_SOUNDGROUP_BGM());
+/* 001699b4 */}
+
+void Ａ＿ムービー＿効果音(string ファイル名, bool キーキャンセル, int nBackColorR, int nBackColorG, int nBackColorB)
+/* 001699c2 */{
+/* 001699c2 */	SYS_Movie_Play(ファイル名, キーキャンセル, nBackColorR, nBackColorG, nBackColorB, SYS_SOUNDGROUP_SE());
+/* 00169a00 */}
+

@@ -1,0 +1,236 @@
+SceneWorldMap::SceneWorldMap()
+/* 00189754 */{
+/* 0018975c */	this.isExit_ = false;
+/* 0018976e */}
+
+void SceneWorldMap::setPlaceButtonClickable(bool val)
+/* 00189776 */{
+/* 00189776 */	this.worldMap_.setPlaceButtonClickable(val);
+/* 00189790 */}
+
+void SceneWorldMap::init(string placeId, bool isLoadAutoSave)
+/* 00189798 */{
+/* 00189798 */	this.currentPlaceId_ = placeId;
+/* 001897b0 */	this.worldMap_.init(this.currentPlaceId_);
+/* 001897ca */	this.worldMap_.setOnClickPlaceCallback(this.onClickPlace);
+/* 001897e4 */	if (!isLoadAutoSave)
+/* 001897f6 */	{
+/* 001897f6 */		this.partsDoneAutoSave_.initAsText("オートセーブしました", 24, true, 256, 255, 255, 255);
+/* 00189830 */		this.partsDoneAutoSave_.setZ(6200.0);
+/* 00189846 */		this.partsDoneAutoSave_.setShow(true);
+/* 0018985c */	}
+/* 0018985c */	this.runAutoSavePopup();
+/* 00189864 */	this.btnCamp_.init("システム／ボタン／幅１７０", "キャンプを開く", "", true);
+/* 0018988c */	this.btnCamp_.setPos(834, 688);
+/* 001898a8 */	this.btnCamp_.setClickCallback(this.onClickCampButton, 0);
+/* 001898c8 */	this.btnCamp_.setEnable(false);
+/* 001898de */}
+
+void SceneWorldMap::runAutoSavePopup()
+/* 001898e6 */{
+/* 001898e6 */	array@PartsMotion p[3];
+/* 001898fc */	p[0].setTime(250);
+/* 0018991a */	p[0].setAlpha(0, 255, 0);
+/* 00189944 */	p[0].setMove(-this.partsDoneAutoSave_.getWidth(), 0, 0, 0, 1);
+/* 00189986 */	p[1].setTime(3000);
+/* 001899a4 */	p[2].setTime(250);
+/* 001899c2 */	p[2].setAlpha(255, 0, 0);
+/* 001899ec */	p[2].setMove(0, 0, -this.partsDoneAutoSave_.getWidth(), 0, 1);
+/* 00189a2e */	this.partsDoneAutoSave_.runMotionArray(p, NULL);
+/* 00189a4c */}
+
+void SceneWorldMap::run()
+/* 00189a54 */{
+/* 00189a54 */	g_music.play("音楽／システム／マップ", -2147483648, false);
+/* 00189a76 */	this.fadeIn(true, 500, this.onFinishFadeIn);
+/* 00189a94 */}
+
+void SceneWorldMap::onFinishFadeIn()
+/* 00189a9c */{
+/* 00189a9c */	this.worldMap_.showNewBranch(this.onFinishShowNewBranch);
+/* 00189ab6 */}
+
+void SceneWorldMap::fadeIn(bool val, int time, DG_GeneralCallback onFinishCallback)
+/* 00189abe */{
+/* 00189abe */	this.worldMap_.fadeIn(val, time, onFinishCallback);
+/* 00189aee */	this.btnCamp_.fadeIn(val);
+/* 00189b08 */}
+
+void SceneWorldMap::onFinishMoveFadeOut()
+/* 00189b10 */{
+/* 00189b10 */	g_partsMotionManager.finalize(-1);
+/* 00189b26 */	this.isExit_ = true;
+/* 00189b38 */}
+
+string SceneWorldMap::getPlaceIdMoveTo()
+/* 00189b40 */{
+/* 00189b40 */	return this.placeIdMoveTo_;
+/* 00189b4c */}
+
+void SceneWorldMap::onFinishShowNewBranch()
+/* 00189b5a */{
+/* 00189b5a */	ref MapPlace mp = getMapPlaceFromId(this.currentPlaceId_);
+/* 00189b9c */	this.worldMap_.moveFocus(mp.getX(), mp.getY(), this.onFinishFocusToPlayer);
+/* 00189bd6 */	this.btnCamp_.setEnable(true);
+/* 00189bec */}
+
+void SceneWorldMap::onFinishFocusToPlayer()
+/* 00189bf4 */{
+/* 00189bf4 */	this.worldMap_.setPlaceButtonClickable(true);
+/* 00189c0a */}
+
+void SceneWorldMap::onClickPlace(string placeId)
+/* 00189c12 */{
+/* 00189c12 */	array@string route;
+/* 00189c1c */	if (g_mapChain.getRoute(route, this.currentPlaceId_, placeId))
+/* 00189c50 */	{
+/* 00189c50 */		this.worldMap_.setPlaceButtonClickable(false);
+/* 00189c66 */		this.btnCamp_.setEnable(false);
+/* 00189c7c */		this.placeIdMoveTo_ = placeId;
+/* 00189c94 */		if (route.Numof() > 0)
+/* 00189cb2 */		{
+/* 00189cb2 */			this.worldMap_.setFollowPlayerIcon(true);
+/* 00189cc8 */			this.moveInfo_.init(route);
+/* 00189ce4 */			int c = getEncountCount(route.Numof() - 1);
+/* 00189d0e */			int i;
+/* 00189d20 */			for (i = 0; i < c; ++i)
+/* 00189d6a */			{
+/* 00189d6a */				this.moveInfo_.addEncountPoint();
+/* 00189d7a */			}
+/* 00189d80 */			int fx;
+/* 00189d92 */			int fy;
+/* 00189da4 */			int tx;
+/* 00189db6 */			int ty;
+/* 00189dc8 */			if (this.moveInfo_.getNextNode(fx, fy, tx, ty, this.isEncount_))
+/* 00189e06 */			{
+/* 00189e06 */				this.worldMap_.movePlayerIcon(fx, fy, tx, ty, this.onFinishMovePlayerIcon);
+/* 00189e48 */			}
+/* 00189e48 */		}
+/* 00189e4e */		else
+/* 00189e4e */		{
+/* 00189e4e */			g_music.fadeOut(2000);
+/* 00189e64 */			g_sysSound.play(6, "効果音／ダンジョンイベント");
+/* 00189e80 */			this.fadeIn(false, 500, this.onFinishMoveFadeOut);
+/* 00189e9e */		}
+/* 00189e9e */	}
+/* 00189ea4 */}
+
+void SceneWorldMap::onFinishMovePlayerIcon()
+/* 00189eac */{
+/* 00189eac */	if (this.isEncount_)
+/* 00189ebc */	{
+/* 00189ebc */		g_music.fadeOut(0);
+/* 00189ed2 */		this.flat_.init("システム／エンカウント", "効果音／エンカウント", false);
+/* 00189ef4 */		this.flat_.setOnFinishCallback(NULL);
+/* 00189f06 */		this.flat_.run(1.0);
+/* 00189f1c */		this.fadeIn(false, 350, this.onFinishEncountFadeOut);
+/* 00189f3a */	}
+/* 00189f40 */	else
+/* 00189f40 */	{
+/* 00189f40 */		this.moveNextNode();
+/* 00189f48 */	}
+/* 00189f48 */}
+
+void SceneWorldMap::onFinishEncountFadeOut()
+/* 00189f50 */{
+/* 00189f50 */	this.flat_.join(-2147483648);
+/* 00189f66 */	this.flat_.release();
+/* 00189f76 */	this.openMapEncount();
+/* 00189f7e */	g_music.play("音楽／システム／マップ", 1000, true);
+/* 00189fa0 */	this.fadeIn(true, 500, this.onFinishEncountFadeIn);
+/* 00189fbe */}
+
+void SceneWorldMap::openMapEncount()
+/* 00189fc6 */{
+/* 00189fc6 */	DG_GetMapEncountMonsterGroup fn;
+/* 00189fd2 */	fn = EX_String("マップエンカウントモンスターグループ取得関数", "");
+/* 0018a000 */	string groupId = fn();
+/* 0018a02e */	ref MapEncountMonsterGroup g = getMapEncountMonsterGroupFromId(groupId);
+/* 0018a070 */	array@string m;
+/* 0018a07a */	g.getMonsterList(m);
+/* 0018a094 */	BattleInfomation info;
+/* 0018a0a4 */	info.setMonsterArray(m);
+/* 0018a0c0 */	info.setGold(g.getGold());
+/* 0018a0e0 */	info.setExp(g.getExp());
+/* 0018a100 */	info.setItem(g.getItemId(), g.getItemProbability());
+/* 0018a130 */	info.setBattleBackGroundId("平野");
+/* 0018a146 */	if (g.getMusicId() != "")
+/* 0018a164 */	{
+/* 0018a164 */		info.setMusicId(g.getMusicId());
+/* 0018a184 */	}
+/* 0018a184 */	openBattle2(info);
+/* 0018a196 */}
+
+void SceneWorldMap::onFinishEncountFadeIn()
+/* 0018a19e */{
+/* 0018a19e */	this.moveNextNode();
+/* 0018a1a6 */}
+
+void SceneWorldMap::moveNextNode()
+/* 0018a1ae */{
+/* 0018a1ae */	int fx;
+/* 0018a1c0 */	int fy;
+/* 0018a1d2 */	int tx;
+/* 0018a1e4 */	int ty;
+/* 0018a1f6 */	if (this.moveInfo_.getNextNode(fx, fy, tx, ty, this.isEncount_))
+/* 0018a234 */	{
+/* 0018a234 */		this.worldMap_.movePlayerIcon(fx, fy, tx, ty, this.onFinishMovePlayerIcon);
+/* 0018a276 */	}
+/* 0018a27c */	else
+/* 0018a27c */	{
+/* 0018a27c */		this.worldMap_.setFollowPlayerIcon(false);
+/* 0018a292 */		g_music.fadeOut(2000);
+/* 0018a2a8 */		g_sysSound.play(6, "効果音／ダンジョンイベント");
+/* 0018a2c4 */		this.fadeIn(false, 1000, this.onFinishMoveFadeOut);
+/* 0018a2e2 */	}
+/* 0018a2e2 */}
+
+bool SceneWorldMap::update()
+/* 0018a2ea */{
+/* 0018a2ea */	if (this.isExit_)
+/* 0018a2fa */	{
+/* 0018a2fa */		return false;
+/* 0018a302 */	}
+/* 0018a302 */	return true;
+/* 0018a30a */}
+
+void SceneWorldMap::onClickCampButton(int id)
+/* 0018a318 */{
+/* 0018a318 */	this.btnCamp_.setEnable(false);
+/* 0018a32e */	this.fadeIn(false, 250, this.onClickCampButtonFadeOut);
+/* 0018a34c */}
+
+void SceneWorldMap::onClickCampButtonFadeOut()
+/* 0018a354 */{
+/* 0018a354 */	g_partsMotionManager.finalize(-1);
+/* 0018a36a */	bool last = g_playerCommonParam.isEnableExitDungeon();
+/* 0018a386 */	g_playerCommonParam.setEnableExitDungeon(false);
+/* 0018a39c */	g_gameObjectManager.pushScene();
+/* 0018a3ac */	openCamp(0);
+/* 0018a3ba */	g_gameObjectManager.popScene();
+/* 0018a3ca */	g_playerCommonParam.setEnableExitDungeon(last);
+/* 0018a3e4 */	this.fadeIn(true, 250, this.onClickCampButtonFadeIn);
+/* 0018a402 */}
+
+void SceneWorldMap::onClickCampButtonFadeIn()
+/* 0018a40a */{
+/* 0018a40a */	this.btnCamp_.setEnable(true);
+/* 0018a420 */}
+
+int getEncountCount(int node)
+/* 0018a428 */{
+/* 0018a428 */	if (node == 0)
+/* 0018a440 */	{
+/* 0018a440 */		return 0;
+/* 0018a448 */	}
+/* 0018a448 */	int i;
+/* 0018a45a */	for (i = 0; i < g_mapEncountProbability.Numof(); ++i)
+/* 0018a4aa */	{
+/* 0018a4aa */		if (g_mapEncountProbability[i].getNodeCount() == node)
+/* 0018a4d8 */		{
+/* 0018a4d8 */			return g_mapEncountProbability[i].getHitCount();
+/* 0018a4f6 */		}
+/* 0018a4f6 */	}
+/* 0018a4fc */	return g_mapEncountProbability[g_mapEncountProbability.Numof() - 1].getHitCount();
+/* 0018a528 */}
+

@@ -1,0 +1,256 @@
+void SceneShop::init(string shopId, string shopName)
+/* 001b41b4 */{
+/* 001b41b4 */	this.id_ = shopId;
+/* 001b41cc */	this.shopName_ = shopName;
+/* 001b41e4 */	ref Shop s = getShopFromId(this.id_);
+/* 001b4226 */	array@string list;
+/* 001b4230 */	s.getItemIdList(list);
+/* 001b424a */	list.Sort(&sortFunctionItemIdByIndex);
+/* 001b425a */	this.eraseNotUpgradableSkillItem(list);
+/* 001b426c */	this.listView_.init(list, true);
+/* 001b428c */	this.listView_.setOnClickCallback(this.onClickItem);
+/* 001b42a6 */	this.oldPlaceName_ = g_playerCommonParam.getPlaceName();
+/* 001b42c4 */	g_playerCommonParam.setPlaceName(this.shopName_);
+/* 001b42de */	this.commonParamView_.init();
+/* 001b42ee */	this.initButton();
+/* 001b42f6 */	this.initParts();
+/* 001b42fe */}
+
+void SceneShop::initButton()
+/* 001b4306 */{
+/* 001b4306 */	this.btnExit_.init("システム／ボタン／幅１７０", "やめる", "", true);
+/* 001b432e */	this.btnExit_.setPos(840, 494);
+/* 001b434a */	this.btnExit_.setZ(4500);
+/* 001b4360 */	this.btnExit_.setClickCallback(this.onClickExit, 0);
+/* 001b4380 */	this.btnCamp_.init("システム／ボタン／幅６０", "PT", "", false);
+/* 001b43a8 */	this.btnCamp_.setPos(771, 494);
+/* 001b43c4 */	this.btnCamp_.setZ(4500);
+/* 001b43da */	this.btnCamp_.setClickCallback(this.onClickParty, 0);
+/* 001b43fa */}
+
+void SceneShop::initParts()
+/* 001b4402 */{
+/* 001b4402 */	this.parts_[0].initAsFlat("システム／武器屋／背景");
+/* 001b4420 */	this.parts_[1].initAsFlat("システム／武器屋／タイトル");
+/* 001b443e */	this.parts_[0].setZ(4100.0);
+/* 001b445c */	this.parts_[1].setZ(4400.0);
+/* 001b447a */	createPartsGroup(this.parent_, this.parts_, 0);
+/* 001b449a */	this.setPartsShow();
+/* 001b44a2 */}
+
+void SceneShop::setPartsShow()
+/* 001b44aa */{
+/* 001b44aa */	int i;
+/* 001b44bc */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b450c */	{
+/* 001b450c */		this.parts_[i].setShow(true);
+/* 001b452e */	}
+/* 001b4534 */	this.parent_.setShow(true);
+/* 001b454a */}
+
+void SceneShop::onClickExit(int id)
+/* 001b4552 */{
+/* 001b4552 */	this.state_ = 1;
+/* 001b4564 */	this.fadeObject(false, this.onFinishFadeOut);
+/* 001b457c */	g_music.play(this.lastBgmId_, 2000, false);
+/* 001b45a2 */}
+
+void SceneShop::onClickParty(int id)
+/* 001b45aa */{
+/* 001b45aa */	this.state_ = 1;
+/* 001b45bc */	this.fadeObject(false, this.onFinishFadeOutToParty);
+/* 001b45d4 */}
+
+void SceneShop::onFinishFadeOutToParty()
+/* 001b45dc */{
+/* 001b45dc */	openParty(true);
+/* 001b45e8 */	this.fadeObject(true, this.onFinishFadeInFromParty);
+/* 001b4600 */}
+
+void SceneShop::onFinishFadeInFromParty()
+/* 001b4608 */{
+/* 001b4608 */	this.state_ = 0;
+/* 001b461a */}
+
+void SceneShop::onFinishFadeOut()
+/* 001b4622 */{
+/* 001b4622 */	this.state_ = 2;
+/* 001b4634 */}
+
+void SceneShop::run()
+/* 001b463c */{
+/* 001b463c */	this.lastBgmId_ = g_music.getPlayingMusicId();
+/* 001b465a */	g_music.play("音楽／システム／店", 2000, false);
+/* 001b467c */	this.fadeObject(true, NULL);
+/* 001b468c */}
+
+void SceneShop::fadeObject(bool val, DG_GeneralCallback cb)
+/* 001b4694 */{
+/* 001b4694 */	g_advStand[0].setShopMode(val);
+/* 001b46b6 */	if (val)
+/* 001b46c6 */	{
+/* 001b46c6 */		this.listView_.fadeIn(val, cb);
+/* 001b46ec */	}
+/* 001b46f2 */	else
+/* 001b46f2 */	{
+/* 001b46f2 */		this.listView_.fadeIn(val, cb);
+/* 001b4718 */	}
+/* 001b4718 */	this.fadeInFlat(val);
+/* 001b472a */	this.commonParamView_.fadeIn(val);
+/* 001b4744 */	this.btnExit_.fadeIn(val);
+/* 001b475e */	this.btnCamp_.fadeIn(val);
+/* 001b4778 */}
+
+void SceneShop::fadeInFlat(bool val)
+/* 001b4780 */{
+/* 001b4780 */	if (val)
+/* 001b4790 */	{
+/* 001b4790 */		int i;
+/* 001b47a2 */		for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b47f2 */		{
+/* 001b47f2 */			this.parts_[i].setPos(0.0, 0.0);
+/* 001b481a */			this.parts_[i].setAlpha(255.0);
+/* 001b483c */			this.parts_[i].startFlat(false, 1.0);
+/* 001b4864 */		}
+/* 001b486a */	}
+/* 001b4870 */	else
+/* 001b4870 */	{
+/* 001b4870 */		int i;
+/* 001b4882 */		for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b48d2 */		{
+/* 001b48d2 */			PartsMotion m;
+/* 001b48e2 */			m.setMove(0, 0, 500, 0, 1);
+/* 001b4910 */			m.setAlpha(255, 0, 0);
+/* 001b4932 */			m.setTime(150);
+/* 001b4948 */			this.parts_[i].runMotion(m, NULL);
+/* 001b4974 */		}
+/* 001b4980 */	}
+/* 001b4980 */}
+
+bool SceneShop::update()
+/* 001b4988 */{
+/* 001b4988 */	if (g_mouse.isClick(1) && this.state_ == 0)
+/* 001b49d4 */	{
+/* 001b49d4 */		playCancel();
+/* 001b49da */		g_music.play(this.lastBgmId_, 2000, false);
+/* 001b4a00 */		this.state_ = 1;
+/* 001b4a12 */		this.fadeObject(false, this.onFinishFadeOut);
+/* 001b4a2a */	}
+/* 001b4a2a */	if (this.state_ == 2)
+/* 001b4a42 */	{
+/* 001b4a42 */		this.release();
+/* 001b4a4a */		return false;
+/* 001b4a52 */	}
+/* 001b4a52 */	return true;
+/* 001b4a5a */}
+
+void SceneShop::release()
+/* 001b4a68 */{
+/* 001b4a68 */	g_playerCommonParam.setPlaceName(this.oldPlaceName_);
+/* 001b4a82 */}
+
+void SceneShop::onClickItem(string itemId)
+/* 001b4a8a */{
+/* 001b4a8a */	ref Item item = getItemFromId(itemId);
+/* 001b4acc */	int price = item.getShopPrice();
+/* 001b4ae8 */	if (item.getType() == 0)
+/* 001b4b06 */	{
+/* 001b4b06 */		string old = this.upgradeSkill(item.getSkillId());
+/* 001b4b2c */		ref PlayerSkill s = getPlayerSkillFromId(item.getSkillId());
+/* 001b4b74 */		string sn = getPlayerFromId(s.getPlayerId()).getShortName();
+/* 001b4bb4 */		DialogInfomation info;
+/* 001b4bc4 */		info.setCaption("新しい装備を買った！");
+/* 001b4bda */		string msg = "%sのバトルスキル、|%sは、|%sにパワーアップ！" % sn % getPlayerSkillFromId(old).getName() % s.getName();
+/* 001b4c4c */		info.setPictureImageName("システム／ダイアログ／写真／%s" % sn);
+/* 001b4c74 */		info.setMessage(msg);
+/* 001b4c8e */		openDialog(info);
+/* 001b4ca4 */		this.listView_.eraseFromList(itemId);
+/* 001b4cbe */		this.eraseLowLevelSkillItem();
+/* 001b4cc6 */	}
+/* 001b4cea */	else
+/* 001b4cea */	{
+/* 001b4cea */		g_playerCommonParam.addItem(itemId);
+/* 001b4d04 */	}
+/* 001b4d04 */	g_sysSound.play(6, "効果音／購入");
+/* 001b4d20 */	g_playerCommonParam.setGold(g_playerCommonParam.getGold() - price);
+/* 001b4d4c */	this.listView_.updateState();
+/* 001b4d5c */}
+
+void SceneShop::eraseLowLevelSkillItem()
+/* 001b4d64 */{
+/* 001b4d64 */	int count = this.listView_.getCount();
+/* 001b4d80 */	int i;
+/* 001b4d92 */	while (i < this.listView_.getCount())
+/* 001b4db4 */	{
+/* 001b4db4 */		string itemId = this.listView_.getId(i);
+/* 001b4ddc */		Item item;
+/* 001b4dec */		item = getItemFromId(itemId);
+/* 001b4e2c */		if (item.getType() == 0 && !this.isSkillUpgradable(item.getSkillId()))
+/* 001b4e82 */		{
+/* 001b4e82 */			this.listView_.eraseIndex(i);
+/* 001b4e9c */		}
+/* 001b4ea2 */		else
+/* 001b4ea2 */		{
+/* 001b4ea2 */			++i;
+/* 001b4eb2 */		}
+/* 001b4eb2 */	}
+/* 001b4ec4 */}
+
+void SceneShop::eraseNotUpgradableSkillItem(ref array@string itemIdList)
+/* 001b4ecc */{
+/* 001b4ecc */	int i;
+/* 001b4ede */	while (i < itemIdList.Numof())
+/* 001b4f00 */	{
+/* 001b4f00 */		ref Item item = getItemFromId(itemIdList[i]);
+/* 001b4f4e */		if (item.getType() == 0 && !this.isSkillUpgradable(item.getSkillId()))
+/* 001b4fa4 */		{
+/* 001b4fa4 */			itemIdList.Erase(i);
+/* 001b4fba */		}
+/* 001b4fc0 */		else
+/* 001b4fc0 */		{
+/* 001b4fc0 */			++i;
+/* 001b4fd0 */		}
+/* 001b4fd0 */	}
+/* 001b4fe2 */}
+
+bool SceneShop::isSkillUpgradable(string skillId)
+/* 001b4fea */{
+/* 001b4fea */	int i;
+/* 001b4ffc */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001b504c */	{
+/* 001b504c */		if (g_player[i].isJoin() && g_player[i].isAttackSkillUpgradable(skillId))
+/* 001b50b2 */		{
+/* 001b50b2 */			return true;
+/* 001b50ba */		}
+/* 001b50ba */	}
+/* 001b50c0 */	return false;
+/* 001b50c8 */}
+
+string SceneShop::upgradeSkill(string skillId)
+/* 001b50d6 */{
+/* 001b50d6 */	int i;
+/* 001b50e8 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001b5138 */	{
+/* 001b5138 */		if (g_player[i].isAttackSkillUpgradable(skillId))
+/* 001b5164 */		{
+/* 001b5164 */			return g_player[i].upgradeSkill(skillId);
+/* 001b518c */		}
+/* 001b518c */	}
+/* 001b5192 */	return "";
+/* 001b519a */}
+
+int sortFunctionItemIdByIndex(string lhs, string rhs)
+/* 001b51a8 */{
+/* 001b51a8 */	ref Item iLhs = getItemFromId(lhs);
+/* 001b51ea */	ref Item iRhs = getItemFromId(rhs);
+/* 001b522c */	if (iLhs.getIndex() > iRhs.getIndex())
+/* 001b5254 */	{
+/* 001b5254 */		return 1;
+/* 001b525c */	}
+/* 001b525c */	if (iLhs.getIndex() < iRhs.getIndex())
+/* 001b5284 */	{
+/* 001b5284 */		return -1;
+/* 001b528c */	}
+/* 001b528c */	return 0;
+/* 001b5294 */}
+

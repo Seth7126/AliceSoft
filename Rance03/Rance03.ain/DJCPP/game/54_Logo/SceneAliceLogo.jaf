@@ -1,0 +1,33 @@
+void SceneAliceLogo::init()
+/* 001c569a */{
+/* 001c569a */	this.fsImage_[0].init("システム／アリスロゴ");
+/* 001c56b8 */	this.fsImage_[1].init("システム／注意");
+/* 001c56d6 */}
+
+void SceneAliceLogo::run()
+/* 001c56de */{
+/* 001c56de */	this.fsImage_[0].run(this.onFinishFadeOut);
+/* 001c5700 */}
+
+bool SceneAliceLogo::update()
+/* 001c5708 */{
+/* 001c5708 */	if (g_mouse.isClick(0))
+/* 001c5724 */	{
+/* 001c5724 */		g_globalTimer.setScaling(5.0);
+/* 001c573a */	}
+/* 001c573a */	return this.current_ != 4;
+/* 001c5750 */}
+
+void SceneAliceLogo::onFinishFadeOut()
+/* 001c575e */{
+/* 001c575e */	this.current_ = 2;
+/* 001c5770 */	g_globalTimer.setScaling(1.0);
+/* 001c5786 */	this.fsImage_[1].run(this.onFinishFadeOutAll);
+/* 001c57a8 */}
+
+void SceneAliceLogo::onFinishFadeOutAll()
+/* 001c57b0 */{
+/* 001c57b0 */	g_globalTimer.setScaling(1.0);
+/* 001c57c6 */	this.current_ = 4;
+/* 001c57d8 */}
+

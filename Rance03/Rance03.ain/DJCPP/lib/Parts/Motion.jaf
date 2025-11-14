@@ -1,0 +1,53 @@
+float getMotionValue(int motionType, float from, float to, float t)
+/* 001e733a */{
+/* 001e733a */	if (from == to)
+/* 001e7356 */	{
+/* 001e7356 */		return from;
+/* 001e7362 */	}
+/* 001e7362 */	t = Math.MinF(1.0, t);
+/* 001e7388 */	t = Math.MaxF(0.0, t);
+/* 001e73ae */	switch (motionType)
+/* 001e73c4 */	{
+/* 001e73c4 */	case 0:
+/* 001e73c4 */		return (1 - t) * from + t * to;
+/* 001e7402 */		break;
+/* 001e7408 */	case 1:
+/* 001e7408 */		float tt = -Math.AbsF(Math.Pow(t - 1.0, 3.0)) + 1.0;
+/* 001e744a */		return (1 - tt) * from + tt * to;
+/* 001e7488 */		break;
+/* 001e748e */	case 2:
+/* 001e748e */		float tt = -Math.AbsF(Math.Pow(t - 1.0, 7.0)) + 1.0;
+/* 001e74d0 */		return (1 - tt) * from + tt * to;
+/* 001e750e */		break;
+/* 001e7514 */	case 3:
+/* 001e7514 */		float tt = bezierVal(0.0, 1.0, t, 1.2);
+/* 001e7542 */		return (1 - tt) * from + tt * to;
+/* 001e7580 */		break;
+/* 001e7586 */	case 4:
+/* 001e7586 */		if (t < 0.7)
+/* 001e759e */		{
+/* 001e759e */			float tt = t / 0.7;
+/* 001e75bc */			return from + (to - from) * (tt * tt);
+/* 001e75f8 */		}
+/* 001e75fe */		else
+/* 001e75fe */		{
+/* 001e75fe */			float tt = ((t - 0.7) / 0.3) * 2.0 - 1.0;
+/* 001e7634 */			return from + (to - from) * ((tt * tt) / 8.0 + 0.875);
+/* 001e7680 */		}
+/* 001e7680 */		break;
+/* 001e7686 */	case 5:
+/* 001e7686 */		float tt = Math.AbsF(Math.Pow(t, 3.0));
+/* 001e76b6 */		return (1 - tt) * from + tt * to;
+/* 001e76f4 */		break;
+/* 001e76fa */	case 6:
+/* 001e76fa */		float tt = Math.AbsF(Math.Pow(t, 5.0));
+/* 001e772a */		return (1 - tt) * from + tt * to;
+/* 001e7768 */		break;
+/* 001e776e */	case 7:
+/* 001e776e */		float r = (Math.Sin(90 + t * 180.0) + 1.0) / 2.0;
+/* 001e77b4 */		return r * from + (1 - r) * to;
+/* 001e77f2 */		break;
+/* 001e77f8 */	}
+/* 001e77f8 */	return from;
+/* 001e7804 */}
+

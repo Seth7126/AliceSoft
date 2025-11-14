@@ -1,0 +1,94 @@
+MusicButtonList::MusicButtonList()
+/* 001c209c */{
+/* 001c20a4 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001c20ca */}
+
+void MusicButtonList::init()
+/* 001c20d2 */{
+/* 001c20d2 */	int pageCount = (g_musicInfo.Numof() + 23) / 24;
+/* 001c20fe */	this.base_.init(pageCount, "システム／音楽鑑賞／下地", false);
+/* 001c2124 */	this.partsPlaying_.init("システム／音楽鑑賞／再生中", 0);
+/* 001c2140 */	this.partsPlaying_.setZ(5000.0);
+/* 001c2156 */	this.partsPlaying_.setParent(this.base_.getPartsNumber());
+/* 001c2176 */	this.btn_.Alloc(g_musicInfo.Numof());
+/* 001c2196 */	int i;
+/* 001c21a8 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c21f8 */	{
+/* 001c21f8 */		if (g_musicInfo[i].isPlayed())
+/* 001c221a */		{
+/* 001c221a */			this.btn_[i].init("システム／ボタン／幅２８２", g_musicInfo[i].getSongName(), "", true);
+/* 001c2264 */		}
+/* 001c226a */		else
+/* 001c226a */		{
+/* 001c226a */			this.btn_[i].init("システム／ボタン／幅２８２", "？？？？？", "", true);
+/* 001c229e */			this.btn_[i].setEnable(false);
+/* 001c22c0 */		}
+/* 001c22c0 */		this.btn_[i].setParent(this.base_.getPartsNumber());
+/* 001c22ec */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001c231c */		this.btn_[i].setZ(4500);
+/* 001c233e */	}
+/* 001c2344 */	this.setButtonPos();
+/* 001c234c */}
+
+void MusicButtonList::setButtonPos()
+/* 001c2354 */{
+/* 001c2354 */	int i;
+/* 001c2366 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c23b6 */	{
+/* 001c23b6 */		int x;
+/* 001c23c8 */		int y;
+/* 001c23da */		this.getButtonPos(x, y, i);
+/* 001c23fc */		this.btn_[i].setPos(x, y);
+/* 001c242c */	}
+/* 001c2432 */}
+
+void MusicButtonList::getButtonPos(ref int x, ref int y, int index)
+/* 001c243a */{
+/* 001c243a */	int page = index / 24;
+/* 001c2458 */	int px = index % 24 % 3;
+/* 001c247e */	int py = (index % 24) / 3;
+/* 001c24a4 */	x = 81 + px * 292 + page * 1024;
+/* 001c24e0 */	y = 128 + py * 56;
+/* 001c2508 */}
+
+void MusicButtonList::update()
+/* 001c2510 */{
+/* 001c2512 */}
+
+void MusicButtonList::setOnClickCallback(DG_OnClickMusicButtonCallback cb)
+/* 001c2518 */{
+/* 001c2518 */	this.cb_ = cb;
+/* 001c2532 */}
+
+void MusicButtonList::onClick(int index)
+/* 001c253a */{
+/* 001c253a */	this.cb_(index);
+/* 001c2564 */}
+
+void MusicButtonList::fadeIn(bool val, unknown_delegate onFinish)
+/* 001c256c */{
+/* 001c256c */	int i;
+/* 001c257e */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c25ce */	{
+/* 001c25ce */		this.btn_[i].fadeIn(val);
+/* 001c25f4 */	}
+/* 001c25fa */	this.base_.fadeIn(val, NULL);
+/* 001c2616 */	this.partsPlaying_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c2650 */}
+
+void MusicButtonList::setPlaying(int index)
+/* 001c2658 */{
+/* 001c2658 */	if (index == -1)
+/* 001c2670 */	{
+/* 001c2670 */		this.partsPlaying_.setShow(false);
+/* 001c2686 */	}
+/* 001c268c */	else
+/* 001c268c */	{
+/* 001c268c */		int x;
+/* 001c269e */		int y;
+/* 001c26b0 */		this.getButtonPos(x, y, index);
+/* 001c26d2 */		this.partsPlaying_.setShow(true);
+/* 001c26e8 */		this.partsPlaying_.setPos(x - 10, y + 7);
+/* 001c2720 */	}
+/* 001c2720 */}
+

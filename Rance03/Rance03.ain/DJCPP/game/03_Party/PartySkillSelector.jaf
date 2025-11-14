@@ -1,0 +1,99 @@
+PartySkillSelector::PartySkillSelector()
+/* 001941ec */{
+/* 001941f4 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019421a */}
+
+void PartySkillSelector::init(DG_OnSkillSelectorClickCallback cb)
+/* 00194222 */{
+/* 00194222 */	this.cb_ = cb;
+/* 0019423c */	int i;
+/* 0019424e */	for (i = 0; i < this.partsEmpty_.Numof(); ++i)
+/* 0019429e */	{
+/* 0019429e */		this.partsEmpty_[i].init("システム／スキル／下地／空", 0);
+/* 001942c6 */		int x = 113 * i + 15;
+/* 001942ec */		int y = 14 * i + 508;
+/* 00194312 */		this.partsEmpty_[i].setPos(x, y);
+/* 00194346 */	}
+/* 0019434c */	createPartsGroup(this.parent_, this.partsEmpty_, 4350);
+/* 0019436c */	this.parent_.setShow(true);
+/* 00194382 */	this.selector_.Free();
+/* 0019438c */	this.selector_.Alloc(g_party.getCount());
+/* 001943ac */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 001943fc */	{
+/* 001943fc */		this.innerInit(this.selector_[i], i, g_party.getAttackSkillId(i));
+/* 0019443e */	}
+/* 00194444 */	this.setShowEmptyParts();
+/* 0019444c */}
+
+void PartySkillSelector::setShowEmptyParts()
+/* 00194454 */{
+/* 00194454 */	int i;
+/* 00194466 */	for (i = 0; i < this.partsEmpty_.Numof(); ++i)
+/* 001944b6 */	{
+/* 001944b6 */		this.partsEmpty_[i].setShow(i < g_party.getMaxCount());
+/* 001944f0 */	}
+/* 001944f6 */}
+
+void PartySkillSelector::update()
+/* 001944fe */{
+/* 00194500 */}
+
+void PartySkillSelector::onClick(int index)
+/* 00194506 */{
+/* 00194506 */	this.cb_(index);
+/* 00194530 */}
+
+void PartySkillSelector::fadeIn(bool val)
+/* 00194538 */{
+/* 00194538 */	int i;
+/* 0019454a */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 0019459a */	{
+/* 0019459a */		this.selector_[i].obj.fadeIn(val, false);
+/* 001945ce */	}
+/* 001945d4 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 0019460e */}
+
+void PartySkillSelector::innerInit(ref SelectorContainer sc, int index, string skillId)
+/* 00194616 */{
+/* 00194616 */	ref PlayerSkill ps = getPlayerSkillFromId(skillId);
+/* 00194658 */	sc.obj <- new SkillSelector;
+/* 00194694 */	sc.obj.init(ps.getId(), ps.getPlayerId(), index, true);
+/* 001946dc */	sc.obj.setZ(4500);
+/* 001946fa */	sc.obj.setOnClickCallback(this.onClick);
+/* 0019471c */	sc.obj.setCoolTime(getCoolTimeFromSkillId(skillId));
+/* 00194744 */	sc.obj.setEnable(true);
+/* 00194762 */}
+
+void PartySkillSelector::add(int index, string skillId)
+/* 0019476a */{
+/* 0019476a */	ref PlayerSkill ps = getPlayerSkillFromId(skillId);
+/* 001947ac */	SelectorContainer sc;
+/* 001947bc */	this.innerInit(sc, index, skillId);
+/* 001947e2 */	sc.obj.fadeIn(true, true);
+/* 00194806 */	if (this.selector_.Numof() == index)
+/* 00194828 */	{
+/* 00194828 */		this.selector_.PushBack(sc);
+/* 00194840 */	}
+/* 00194846 */	else
+/* 00194846 */	{
+/* 00194846 */		this.selector_.Insert(index, sc);
+/* 00194868 */	}
+/* 00194868 */	this.reposition();
+/* 00194870 */}
+
+void PartySkillSelector::erase(int index)
+/* 00194878 */{
+/* 00194878 */	this.selector_.Erase(index);
+/* 0019488e */	this.reposition();
+/* 00194896 */}
+
+void PartySkillSelector::reposition()
+/* 0019489e */{
+/* 0019489e */	int i;
+/* 001948b0 */	for (i = 0; i < this.selector_.Numof(); ++i)
+/* 00194900 */	{
+/* 00194900 */		this.selector_[i].obj.changeIndex(i);
+/* 0019492e */	}
+/* 00194934 */	this.setShowEmptyParts();
+/* 0019493c */}
+

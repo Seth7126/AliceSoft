@@ -1,0 +1,99 @@
+void Ｐ＿縦スクロールバー＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00165dd4 */{
+/* 00165dd4 */	PartsEngine.SetVScrollbarSize(パーツ番号, 幅, 高さ);
+/* 00165dfc */}
+
+void Ｐ＿縦スクロールバー＿上ボタン高さ設定(int パーツ番号, int 高さ)
+/* 00165e0a */{
+/* 00165e0a */	PartsEngine.SetVScrollbarUpHeight(パーツ番号, 高さ);
+/* 00165e28 */}
+
+void Ｐ＿縦スクロールバー＿下ボタン高さ設定(int パーツ番号, int 高さ)
+/* 00165e36 */{
+/* 00165e36 */	PartsEngine.SetVScrollbarDownHeight(パーツ番号, 高さ);
+/* 00165e54 */}
+
+int Ｐ＿縦スクロールバー＿上ボタン高さ取得(int パーツ番号)
+/* 00165e62 */{
+/* 00165e62 */	return PartsEngine.GetVScrollbarUpHeight(パーツ番号);
+/* 00165e78 */}
+
+int Ｐ＿縦スクロールバー＿下ボタン高さ取得(int パーツ番号)
+/* 00165e8c */{
+/* 00165e8c */	return PartsEngine.GetVScrollbarDownHeight(パーツ番号);
+/* 00165ea2 */}
+
+void Ｐ＿縦スクロールバー＿全体量設定(int パーツ番号, int 全体量)
+/* 00165eb6 */{
+/* 00165eb6 */	PartsEngine.SetVScrollbarTotalSize(パーツ番号, 全体量);
+/* 00165ed4 */}
+
+void Ｐ＿縦スクロールバー＿表示量設定(int パーツ番号, int 表示量)
+/* 00165ee2 */{
+/* 00165ee2 */	PartsEngine.SetVScrollbarViewSize(パーツ番号, 表示量);
+/* 00165f00 */}
+
+void Ｐ＿縦スクロールバー＿スクロール位置設定(int パーツ番号, int 表示位置)
+/* 00165f0e */{
+/* 00165f0e */	PartsEngine.SetVScrollbarScrollPos(パーツ番号, 表示位置);
+/* 00165f2c */}
+
+void Ｐ＿縦スクロールバー＿スクロールレート設定(int パーツ番号, float レート)
+/* 00165f3a */{
+/* 00165f3a */	PartsEngine.SetVScrollbarScrollRate(パーツ番号, レート);
+/* 00165f58 */}
+
+void Ｐ＿縦スクロールバー＿ボタンクリック移動量設定(int パーツ番号, int 移動量)
+/* 00165f66 */{
+/* 00165f66 */	PartsEngine.SetVScrollbarMoveSizeByButton(パーツ番号, 移動量);
+/* 00165f84 */}
+
+int Ｐ＿縦スクロールバー＿全体量取得(int パーツ番号)
+/* 00165f92 */{
+/* 00165f92 */	return PartsEngine.GetVScrollbarTotalSize(パーツ番号);
+/* 00165fa8 */}
+
+int Ｐ＿縦スクロールバー＿表示量取得(int パーツ番号)
+/* 00165fbc */{
+/* 00165fbc */	return PartsEngine.GetVScrollbarViewSize(パーツ番号);
+/* 00165fd2 */}
+
+int Ｐ＿縦スクロールバー＿スクロール位置取得(int パーツ番号)
+/* 00165fe6 */{
+/* 00165fe6 */	return PartsEngine.GetVScrollbarScrollPos(パーツ番号);
+/* 00165ffc */}
+
+float Ｐ＿縦スクロールバー＿スクロールレート取得(int パーツ番号)
+/* 00166010 */{
+/* 00166010 */	return PartsEngine.GetVScrollbarScrollRate(パーツ番号);
+/* 00166026 */}
+
+int Ｐ＿縦スクロールバー＿ボタンクリック移動量取得(int パーツ番号)
+/* 0016603a */{
+/* 0016603a */	return PartsEngine.GetVScrollbarMoveSizeByButton(パーツ番号);
+/* 00166050 */}
+
+void Ｐ＿縦スクロールバー＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00166064 */{
+/* 00166064 */	PartsEngine.SetVScrollbarCGName(パーツ番号, ＣＧ名);
+/* 00166082 */}
+
+string Ｐ＿縦スクロールバー＿ＣＧ名取得(int パーツ番号)
+/* 00166090 */{
+/* 00166090 */	string Name;
+/* 001660a4 */	PartsEngine.GetVScrollbarCGName(パーツ番号, Name);
+/* 001660c2 */	return Name;
+/* 001660ce */}
+
+void Ｐ＿縦スクロールバー＿フラット名設定(int パーツ番号, string ＣＧ名)
+/* 001660e2 */{
+/* 001660e2 */	PartsEngine.SetVScrollbarFlatName(パーツ番号, ＣＧ名);
+/* 00166100 */}
+
+string Ｐ＿縦スクロールバー＿フラット名取得(int パーツ番号)
+/* 0016610e */{
+/* 0016610e */	string Name;
+/* 00166122 */	PartsEngine.GetVScrollbarFlatName(パーツ番号, Name);
+/* 00166140 */	return Name;
+/* 0016614c */}
+

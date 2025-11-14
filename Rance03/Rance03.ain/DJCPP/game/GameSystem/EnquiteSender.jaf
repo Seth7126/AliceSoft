@@ -1,0 +1,542 @@
+EnquiteSender::EnquiteSender()
+/* 001cf5c8 */{
+/* 001cf5d0 */	this.net_.SetServerURL("http://games.alicesoft.com/rance03/");
+/* 001cf5e6 */}
+
+void EnquiteSender::checkValue()
+/* 001cf5ee */{
+/* 001cf5ee */	this.updateValue();
+/* 001cf5f6 */	this.outputEnquiteValueToDebugWindow();
+/* 001cf5fe */}
+
+void EnquiteSender::setInt(int enquiteId, int answer)
+/* 001cf606 */{
+/* 001cf606 */	if (0 <= enquiteId && enquiteId < 426)
+/* 001cf64e */	{
+/* 001cf64e */		this.enquite_[enquiteId] = "%d" % answer;
+/* 001cf680 */	}
+/* 001cf680 */}
+
+void EnquiteSender::setString(int enquiteId, string answer)
+/* 001cf688 */{
+/* 001cf688 */	if (0 <= enquiteId && enquiteId < 426)
+/* 001cf6d0 */	{
+/* 001cf6d0 */		this.enquite_[enquiteId] = answer;
+/* 001cf6f4 */	}
+/* 001cf6f4 */}
+
+bool EnquiteSender::createId()
+/* 001cf6fc */{
+/* 001cf6fc */	if (!this.isEnableNetwork())
+/* 001cf70c */	{
+/* 001cf70c */		return false;
+/* 001cf714 */	}
+/* 001cf714 */	if (this.isExistId())
+/* 001cf722 */	{
+/* 001cf722 */		return true;
+/* 001cf72a */	}
+/* 001cf72a */	CASTimer t;
+/* 001cf73a */	t.Reset();
+/* 001cf74a */	if (this.net_.BeginCreateUserID())
+/* 001cf760 */	{
+/* 001cf760 */		while (true)
+/* 001cf76c */		{
+/* 001cf76c */			if (this.net_.IsEndCreateUserID())
+/* 001cf782 */			{
+/* 001cf782 */				break;
+/* 001cf788 */			}
+/* 001cf788 */			if (t.Get() > 10000)
+/* 001cf7a6 */			{
+/* 001cf7a6 */				pass("タイムアウトしました");
+/* 001cf7b2 */				this.net_.StopCreateUserID();
+/* 001cf7c2 */				return false;
+/* 001cf7ca */			}
+/* 001cf7ca */			AFL_View_Update(true);
+/* 001cf7d6 */		}
+/* 001cf7dc */		bool r = this.net_.EndCreateUserID();
+/* 001cf7f8 */		pass("EndCreateUserID:%d" % r);
+/* 001cf816 */		return r;
+/* 001cf822 */	}
+/* 001cf822 */	return false;
+/* 001cf82a */}
+
+bool EnquiteSender::isExistId()
+/* 001cf838 */{
+/* 001cf838 */	return this.net_.IsExistUserID();
+/* 001cf84a */}
+
+bool EnquiteSender::send()
+/* 001cf858 */{
+/* 001cf858 */	if (!this.isEnableNetwork())
+/* 001cf868 */	{
+/* 001cf868 */		return false;
+/* 001cf870 */	}
+/* 001cf870 */	if (this.sendAsync())
+/* 001cf87e */	{
+/* 001cf87e */		this.joinSendCommand();
+/* 001cf886 */		string result;
+/* 001cf89a */		return this.net_.EndSendCommand(result);
+/* 001cf8b6 */	}
+/* 001cf8b6 */	return false;
+/* 001cf8be */}
+
+bool EnquiteSender::sendAsync()
+/* 001cf8cc */{
+/* 001cf8cc */	if (!this.isEnableNetwork())
+/* 001cf8dc */	{
+/* 001cf8dc */		return false;
+/* 001cf8e4 */	}
+/* 001cf8e4 */	this.updateValue();
+/* 001cf8ec */	return this.net_.BeginSendCommand("sendsurvey", this.enquite_);
+/* 001cf910 */}
+
+void EnquiteSender::joinSendCommand()
+/* 001cf91e */{
+/* 001cf91e */	CASTimer t;
+/* 001cf92e */	t.Reset();
+/* 001cf93e */	while (true)
+/* 001cf94a */	{
+/* 001cf94a */		if (this.net_.IsEndSendCommand())
+/* 001cf960 */		{
+/* 001cf960 */			break;
+/* 001cf966 */		}
+/* 001cf966 */		if (t.Get() > 5000)
+/* 001cf984 */		{
+/* 001cf984 */			this.net_.StopSendCommand();
+/* 001cf994 */		}
+/* 001cf994 */		AFL_View_Update(true);
+/* 001cf9a0 */	}
+/* 001cf9a6 */}
+
+void EnquiteSender::updateValue()
+/* 001cf9ae */{
+/* 001cf9ae */	this.setInt(0, 100);
+/* 001cf9c2 */	this.setInt(1, 100);
+/* 001cf9d6 */	this.setGamePlayValue();
+/* 001cf9de */	this.setConfigValue();
+/* 001cf9e6 */}
+
+void EnquiteSender::setGamePlayValue()
+/* 001cf9ee */{
+/* 001cf9ee */	this.setInt(2, getEnquiteAnswerIndex(1));
+/* 001cfa08 */	this.setInt(3, getEnquiteAnswerIndex(2));
+/* 001cfa22 */	this.setInt(4, getEnquiteAnswerIndex(3));
+/* 001cfa3c */	this.setInt(5, getEnquiteAnswerIndex(4));
+/* 001cfa56 */	this.setInt(6, getEnquiteAnswerIndex(5));
+/* 001cfa70 */	this.setInt(7, g_enquiteSelection[26].isChecked());
+/* 001cfa96 */	this.setInt(8, g_enquiteSelection[27].isChecked());
+/* 001cfabc */	this.setInt(9, g_enquiteSelection[28].isChecked());
+/* 001cfae2 */	this.setInt(10, g_enquiteSelection[29].isChecked());
+/* 001cfb08 */	this.setInt(11, g_enquiteSelection[30].isChecked());
+/* 001cfb2e */	this.setInt(12, g_enquiteSelection[31].isChecked());
+/* 001cfb54 */	this.setInt(13, g_enquiteSelection[32].isChecked());
+/* 001cfb7a */	this.setInt(14, g_enquiteSelection[33].isChecked());
+/* 001cfba0 */	this.setInt(15, getEnquiteAnswerIndex(7));
+/* 001cfbba */	this.setInt(16, getEnquiteAnswerIndex(8));
+/* 001cfbd4 */	this.setInt(17, getEnquiteAnswerIndex(9));
+/* 001cfbee */	this.setInt(18, getEnquiteAnswerIndex(10));
+/* 001cfc08 */	this.setInt(19, getEnquiteAnswerIndex(11));
+/* 001cfc22 */	this.setInt(20, getEnquiteAnswerIndex(12));
+/* 001cfc3c */	this.setInt(21, getEnquiteAnswerIndex(13));
+/* 001cfc56 */	this.setInt(22, getEnquiteAnswerIndex(14));
+/* 001cfc70 */	this.setInt(23, getEnquiteAnswerIndex(15));
+/* 001cfc8a */	this.setInt(24, g_enquiteSelection[67].isChecked());
+/* 001cfcb0 */	this.setInt(25, g_enquiteSelection[68].isChecked());
+/* 001cfcd6 */	this.setInt(26, g_enquiteSelection[69].isChecked());
+/* 001cfcfc */	this.setInt(27, g_enquiteSelection[70].isChecked());
+/* 001cfd22 */	this.setInt(28, g_enquiteSelection[71].isChecked());
+/* 001cfd48 */	this.setInt(29, g_enquiteSelection[72].isChecked());
+/* 001cfd6e */	this.setInt(30, g_enquiteSelection[73].isChecked());
+/* 001cfd94 */	this.setInt(31, g_enquiteSelection[74].isChecked());
+/* 001cfdba */	this.setInt(32, g_enquiteSelection[75].isChecked());
+/* 001cfde0 */	this.setInt(33, g_enquiteSelection[76].isChecked());
+/* 001cfe06 */	this.setInt(34, g_enquiteSelection[77].isChecked());
+/* 001cfe2c */	this.setInt(35, g_enquiteSelection[78].isChecked());
+/* 001cfe52 */	this.setInt(36, g_enquiteSelection[79].isChecked());
+/* 001cfe78 */	this.setInt(37, g_enquiteSelection[80].isChecked());
+/* 001cfe9e */	this.setInt(38, g_enquiteSelection[81].isChecked());
+/* 001cfec4 */	this.setInt(39, g_enquiteSelection[82].isChecked());
+/* 001cfeea */	this.setInt(40, g_enquiteSelection[83].isChecked());
+/* 001cff10 */	this.setInt(41, g_enquiteSelection[84].isChecked());
+/* 001cff36 */	this.setInt(42, g_enquiteSelection[85].isChecked());
+/* 001cff5c */	this.setInt(43, g_enquiteSelection[86].isChecked());
+/* 001cff82 */	this.setInt(44, g_enquiteSelection[87].isChecked());
+/* 001cffa8 */	this.setInt(45, g_enquiteSelection[88].isChecked());
+/* 001cffce */	this.setInt(46, g_enquiteSelection[89].isChecked());
+/* 001cfff4 */	this.setInt(47, g_enquiteSelection[90].isChecked());
+/* 001d001a */	this.setInt(48, g_enquiteSelection[91].isChecked());
+/* 001d0040 */	this.setInt(49, g_enquiteSelection[92].isChecked());
+/* 001d0066 */	this.setInt(50, g_enquiteSelection[93].isChecked());
+/* 001d008c */	this.setInt(51, g_enquiteSelection[94].isChecked());
+/* 001d00b2 */	this.setInt(52, g_enquiteSelection[95].isChecked());
+/* 001d00d8 */	this.setInt(53, g_enquiteSelection[96].isChecked());
+/* 001d00fe */	this.setInt(54, g_enquiteSelection[97].isChecked());
+/* 001d0124 */	this.setInt(55, g_enquiteSelection[98].isChecked());
+/* 001d014a */	this.setInt(56, g_enquiteSelection[99].isChecked());
+/* 001d0170 */	this.setInt(57, g_enquiteSelection[100].isChecked());
+/* 001d0196 */	this.setInt(58, g_enquiteSelection[101].isChecked());
+/* 001d01bc */	this.setInt(59, g_enquiteSelection[102].isChecked());
+/* 001d01e2 */	this.setInt(60, g_enquiteSelection[103].isChecked());
+/* 001d0208 */	this.setInt(61, g_enquiteSelection[104].isChecked());
+/* 001d022e */	this.setInt(62, g_enquiteSelection[105].isChecked());
+/* 001d0254 */	this.setInt(63, g_enquiteSelection[106].isChecked());
+/* 001d027a */	this.setInt(64, g_enquiteSelection[107].isChecked());
+/* 001d02a0 */	this.setInt(65, g_enquiteSelection[108].isChecked());
+/* 001d02c6 */	this.setInt(66, g_enquiteSelection[109].isChecked());
+/* 001d02ec */	this.setInt(67, g_enquiteSelection[110].isChecked());
+/* 001d0312 */	this.setInt(68, g_enquiteSelection[111].isChecked());
+/* 001d0338 */	this.setInt(69, g_enquiteSelection[112].isChecked());
+/* 001d035e */	this.setInt(70, g_enquiteSelection[113].isChecked());
+/* 001d0384 */	this.setInt(71, g_enquiteSelection[114].isChecked());
+/* 001d03aa */	this.setInt(72, g_enquiteSelection[115].isChecked());
+/* 001d03d0 */	this.setInt(73, g_enquiteSelection[116].isChecked());
+/* 001d03f6 */	this.setInt(74, g_enquiteSelection[117].isChecked());
+/* 001d041c */	this.setInt(75, g_enquiteSelection[118].isChecked());
+/* 001d0442 */	this.setInt(76, g_enquiteSelection[119].isChecked());
+/* 001d0468 */	this.setInt(77, g_enquiteSelection[120].isChecked());
+/* 001d048e */	this.setInt(78, g_enquiteSelection[121].isChecked());
+/* 001d04b4 */	this.setInt(79, g_enquiteSelection[122].isChecked());
+/* 001d04da */	this.setInt(80, g_enquiteSelection[123].isChecked());
+/* 001d0500 */	this.setInt(81, g_enquiteSelection[124].isChecked());
+/* 001d0526 */	this.setInt(82, g_enquiteSelection[125].isChecked());
+/* 001d054c */	this.setInt(83, g_enquiteSelection[126].isChecked());
+/* 001d0572 */	this.setInt(84, g_enquiteSelection[127].isChecked());
+/* 001d0598 */	this.setInt(85, g_enquiteSelection[128].isChecked());
+/* 001d05be */	this.setInt(86, g_enquiteSelection[129].isChecked());
+/* 001d05e4 */	this.setInt(87, g_enquiteSelection[130].isChecked());
+/* 001d060a */	this.setInt(88, g_enquiteSelection[131].isChecked());
+/* 001d0630 */	this.setInt(89, g_enquiteSelection[132].isChecked());
+/* 001d0656 */	this.setInt(90, g_enquiteSelection[133].isChecked());
+/* 001d067c */	this.setInt(91, g_enquiteSelection[134].isChecked());
+/* 001d06a2 */	this.setInt(92, g_enquiteSelection[135].isChecked());
+/* 001d06c8 */	this.setInt(93, g_enquiteSelection[136].isChecked());
+/* 001d06ee */	this.setInt(94, g_enquiteSelection[137].isChecked());
+/* 001d0714 */	this.setInt(95, g_enquiteSelection[138].isChecked());
+/* 001d073a */	this.setInt(96, g_enquiteSelection[139].isChecked());
+/* 001d0760 */	this.setInt(97, g_enquiteSelection[140].isChecked());
+/* 001d0786 */	this.setInt(98, g_enquiteSelection[141].isChecked());
+/* 001d07ac */	this.setInt(99, g_enquiteSelection[142].isChecked());
+/* 001d07d2 */	this.setInt(100, g_enquiteSelection[143].isChecked());
+/* 001d07f8 */	this.setInt(101, g_enquiteSelection[144].isChecked());
+/* 001d081e */	this.setInt(102, g_enquiteSelection[145].isChecked());
+/* 001d0844 */	this.setInt(103, g_enquiteSelection[146].isChecked());
+/* 001d086a */	this.setInt(104, g_enquiteSelection[147].isChecked());
+/* 001d0890 */	this.setInt(105, g_enquiteSelection[148].isChecked());
+/* 001d08b6 */	this.setInt(106, g_enquiteSelection[149].isChecked());
+/* 001d08dc */	this.setInt(107, g_enquiteSelection[150].isChecked());
+/* 001d0902 */	this.setInt(108, g_enquiteSelection[151].isChecked());
+/* 001d0928 */	this.setInt(109, g_enquiteSelection[152].isChecked());
+/* 001d094e */	this.setInt(110, g_enquiteSelection[153].isChecked());
+/* 001d0974 */	this.setInt(111, g_enquiteSelection[154].isChecked());
+/* 001d099a */	this.setInt(112, g_enquiteSelection[155].isChecked());
+/* 001d09c0 */	this.setInt(113, g_enquiteSelection[156].isChecked());
+/* 001d09e6 */	this.setInt(114, g_enquiteSelection[157].isChecked());
+/* 001d0a0c */	this.setInt(115, g_enquiteSelection[158].isChecked());
+/* 001d0a32 */	this.setInt(116, g_enquiteSelection[159].isChecked());
+/* 001d0a58 */	this.setInt(117, g_enquiteSelection[160].isChecked());
+/* 001d0a7e */	this.setInt(118, g_enquiteSelection[161].isChecked());
+/* 001d0aa4 */	this.setInt(119, g_enquiteSelection[162].isChecked());
+/* 001d0aca */	this.setInt(120, g_enquiteSelection[163].isChecked());
+/* 001d0af0 */	this.setInt(121, g_enquiteSelection[164].isChecked());
+/* 001d0b16 */	this.setInt(122, g_enquiteSelection[165].isChecked());
+/* 001d0b3c */	this.setInt(123, g_enquiteSelection[166].isChecked());
+/* 001d0b62 */	this.setInt(124, g_enquiteSelection[167].isChecked());
+/* 001d0b88 */	this.setInt(125, g_enquiteSelection[168].isChecked());
+/* 001d0bae */	this.setInt(126, g_globalGameFlag.getInt("アンケート送信"));
+/* 001d0bd2 */	this.setInt(127, AFL_TotalPlayTime_GetMinuteTime());
+/* 001d0be6 */	this.setInt(128, g_globalGameFlag.getInt("ゲームクリア"));
+/* 001d0c0a */	this.setInt(129, g_globalGameFlag.getInt("最大進行状況"));
+/* 001d0c2e */	this.setInt(130, g_globalGameFlag.getInt("ボイス設定確認"));
+/* 001d0c52 */	int i;
+/* 001d0c64 */	for (i = 0; i < 96; ++i)
+/* 001d0caa */	{
+/* 001d0caa */		this.setInt(131 + i, g_globalGameFlag.getInt("ＣＧ%02d" % (i + 1)));
+/* 001d0cf4 */	}
+/* 001d0cfa */	for (i = 0; i < 92; ++i)
+/* 001d0d40 */	{
+/* 001d0d40 */		this.setInt(227 + i, g_globalGameFlag.getInt("回想%02d" % (i + 1)));
+/* 001d0d8a */	}
+/* 001d0d90 */	for (i = 0; i < 49; ++i)
+/* 001d0dd6 */	{
+/* 001d0dd6 */		this.setInt(319 + i, g_globalGameFlag.getInt("音楽%02d" % (i + 1)));
+/* 001d0e20 */	}
+/* 001d0e26 */	this.setInt(416, Ａ＿プレイングマニュアル表示回数取得());
+/* 001d0e3a */	this.setInt(417, Ａ＿コンフィグ表示回数取得());
+/* 001d0e4e */	this.setInt(418, Ａ＿バックシーン表示回数取得());
+/* 001d0e62 */	this.setInt(419, Ａ＿バックログ表示回数取得());
+/* 001d0e76 */	this.setInt(420, Ａ＿ゲームメディア確認());
+/* 001d0e8a */	this.setInt(421, AFL_PCInfo_GetMemoryInfo());
+/* 001d0e9e */	this.setString(422, AFL_PCInfo_GetCPUInfo());
+/* 001d0eb2 */	this.setString(423, AFL_PCInfo_GetOSInfo());
+/* 001d0ec6 */	this.setString(424, AFL_PCInfo_GetScreenInfo());
+/* 001d0eda */	this.setString(425, g_enquiteFreeText);
+/* 001d0ef2 */}
+
+void EnquiteSender::setConfigValue()
+/* 001d0efa */{
+/* 001d0efa */	this.setInt(368, AFL_Config_GetMessageSpeedRate() * 100.0);
+/* 001d0f18 */	this.setInt(369, AFL_Config_GetAutoModeWaitTimeRate() * 100.0);
+/* 001d0f36 */	this.setInt(370, AFL_Config_GetReadMessageSkipWaitTimeRate() * 100.0);
+/* 001d0f54 */	this.setInt(371, AFL_Config_GetFrameSkipWhileMessageSkip());
+/* 001d0f68 */	this.setInt(372, AFL_Config_GetShowSampleMessage());
+/* 001d0f7c */	this.setInt(373, AFL_Config_GetReleaseSkipModeByClick());
+/* 001d0f90 */	this.setInt(374, AFL_Config_GetReleaseMessageSkipInSelectMenu());
+/* 001d0fa4 */	this.setInt(375, AFL_Config_GetReleaseSkipModeByReadMessage());
+/* 001d0fb8 */	this.setInt(376, AFL_Config_GetSkipAllMessage());
+/* 001d0fcc */	this.setInt(377, AFL_Config_GetReleaseAutoModeByClick());
+/* 001d0fe0 */	this.setInt(378, AFL_Config_GetReleaseAutoModeInSelectMenu());
+/* 001d0ff4 */	this.setInt(379, AFL_Config_GetRestrainScreensaverWhileAutoMode());
+/* 001d1008 */	this.setInt(380, AFL_Config_GetReadTextColorIndex());
+/* 001d101c */	this.setInt(381, AFL_Config_GetBackSceneTextColorIndex());
+/* 001d1030 */	this.setInt(382, AFL_Config_GetMessageWindowMulColorRate() * 100.0);
+/* 001d104e */	this.setInt(383, AFL_Config_GetMessageWindowAlphaRate() * 100.0);
+/* 001d106c */	this.setInt(384, AFL_Config_GetVolume(0));
+/* 001d1086 */	this.setInt(385, AFL_Config_GetVolume(1));
+/* 001d10a0 */	this.setInt(386, AFL_Config_GetVolume(2));
+/* 001d10ba */	this.setInt(387, AFL_Config_GetVolume(3));
+/* 001d10d4 */	this.setInt(388, AFL_Config_GetVolume(6));
+/* 001d10ee */	this.setInt(389, AFL_Config_GetVolume(7));
+/* 001d1108 */	this.setInt(390, AFL_Config_GetMute(0));
+/* 001d1122 */	this.setInt(391, AFL_Config_GetMute(1));
+/* 001d113c */	this.setInt(392, AFL_Config_GetMute(2));
+/* 001d1156 */	this.setInt(393, AFL_Config_GetMute(3));
+/* 001d1170 */	this.setInt(394, AFL_Config_GetMute(6));
+/* 001d118a */	this.setInt(395, AFL_Config_GetMute(7));
+/* 001d11a4 */	this.setInt(396, AFL_Config_GetStopVoiceByStatus());
+/* 001d11b8 */	this.setInt(397, AFL_Config_GetBGMFadeByVoice());
+/* 001d11cc */	this.setInt(398, AFL_Config_IsMuteByInactiveWindow());
+/* 001d11e0 */	this.setInt(399, AFL_Config_GetHideUnmoveMouseCursor());
+/* 001d11f4 */	this.setInt(400, AFL_Config_GetHideKeyOrJoypadInputMouseCursor());
+/* 001d1208 */	this.setInt(401, AFL_Config_GetHideStepMessageMouseCursor());
+/* 001d121c */	this.setInt(402, AFL_Config_GetWheelForward());
+/* 001d1230 */	this.setInt(403, AFL_Config_GetSaveConfirm());
+/* 001d1244 */	this.setInt(404, AFL_Config_GetLoadConfirm());
+/* 001d1258 */	this.setInt(405, AFL_Config_GetBackToTitleConfirm());
+/* 001d126c */	this.setInt(406, AFL_Config_GetCloseGameConfirm());
+/* 001d1280 */	this.setInt(407, AFL_Config_GetWindowMode());
+/* 001d1294 */	this.setInt(408, AFL_Config_GetAspectRatio());
+/* 001d12a8 */	this.setInt(409, AFL_Config_GetScalingType());
+/* 001d12bc */	this.setInt(410, AFL_Config_GetWaitVSync());
+/* 001d12d0 */	this.setInt(411, AFL_Config_GetRecordPosSize());
+/* 001d12e4 */	this.setInt(412, AFL_Config_GetMinimizeByFullScreenInactive());
+/* 001d12f8 */	this.setInt(413, AFL_Config_GetSleepByInactive());
+/* 001d130c */	this.setInt(414, AFL_Config_GetOverFrameRateSleep());
+/* 001d1320 */	this.setInt(415, ((g_common_configTimerScaling - 1.0) / 1.5) * 100.0);
+/* 001d1352 */}
+
+void EnquiteSender::outputEnquiteValueToDebugWindow()
+/* 001d135a */{
+/* 001d135a */	AFL_LogViewer_OpenViewer();
+/* 001d1360 */	this.outputLog(127, "総プレイ時間");
+/* 001d1374 */	this.outputLog(368, "コンフィグ／メッセージスピード");
+/* 001d1388 */	this.outputLog(369, "コンフィグ／オートモードスピード");
+/* 001d139c */	this.outputLog(370, "コンフィグ／全文スキップ速度");
+/* 001d13b0 */	this.outputLog(371, "コンフィグ／フレームスキップして高速化");
+/* 001d13c4 */	this.outputLog(372, "コンフィグ／サンプルメッセージ");
+/* 001d13d8 */	this.outputLog(373, "コンフィグ／スキップモード／クリックで解除");
+/* 001d13ec */	this.outputLog(374, "コンフィグ／スキップモード／選択肢で解除");
+/* 001d1400 */	this.outputLog(375, "コンフィグ／スキップモード／未読メッセージで解除");
+/* 001d1414 */	this.outputLog(376, "コンフィグ／すべてのメッセージをスキップする");
+/* 001d1428 */	this.outputLog(377, "コンフィグ／オートモード／クリックで解除");
+/* 001d143c */	this.outputLog(378, "コンフィグ／オートモード／選択肢で解除");
+/* 001d1450 */	this.outputLog(379, "コンフィグ／オートモード／スクリーンセーバー抑止");
+/* 001d1464 */	this.outputLog(380, "コンフィグ／既読メッセージ色");
+/* 001d1478 */	this.outputLog(381, "コンフィグ／バックシーンメッセージ色");
+/* 001d148c */	this.outputLog(382, "コンフィグ／メッセージウィンドウの明るさ");
+/* 001d14a0 */	this.outputLog(383, "コンフィグ／メッセージウィンドウの透過率");
+/* 001d14b4 */	this.outputLog(384, "コンフィグ／ボリューム／マスター");
+/* 001d14c8 */	this.outputLog(385, "コンフィグ／ボリューム／BGM");
+/* 001d14dc */	this.outputLog(386, "コンフィグ／ボリューム／SE");
+/* 001d14f0 */	this.outputLog(387, "コンフィグ／ボリューム／音声");
+/* 001d1504 */	this.outputLog(388, "コンフィグ／ボリューム／男性音声");
+/* 001d1518 */	this.outputLog(389, "コンフィグ／ボリューム／女性音声");
+/* 001d152c */	this.outputLog(390, "コンフィグ／ミュート／マスター");
+/* 001d1540 */	this.outputLog(391, "コンフィグ／ミュート／BGM");
+/* 001d1554 */	this.outputLog(392, "コンフィグ／ミュート／SE");
+/* 001d1568 */	this.outputLog(396, "コンフィグ／クリックで音声停止");
+/* 001d157c */	this.outputLog(397, "コンフィグ／BGMをフェード");
+/* 001d1590 */	this.outputLog(398, "コンフィグ／非アクティブでミュート");
+/* 001d15a4 */	this.outputLog(399, "コンフィグ／マウスカーソル非表示／一定時間");
+/* 001d15b8 */	this.outputLog(400, "コンフィグ／マウスカーソル非表示／キーボード入力");
+/* 001d15cc */	this.outputLog(401, "コンフィグ／マウスカーソル非表示／メッセージを進めたとき");
+/* 001d15e0 */	this.outputLog(402, "コンフィグ／ホイール上回転");
+/* 001d15f4 */	this.outputLog(403, "コンフィグ／確認／セーブ時");
+/* 001d1608 */	this.outputLog(404, "コンフィグ／確認／ロード時");
+/* 001d161c */	this.outputLog(405, "コンフィグ／確認／タイトルに戻る");
+/* 001d1630 */	this.outputLog(406, "コンフィグ／確認／ゲーム終了時");
+/* 001d1644 */	this.outputLog(407, "コンフィグ／ウィンドウモード");
+/* 001d1658 */	this.outputLog(408, "コンフィグ／アスペクト比");
+/* 001d166c */	this.outputLog(409, "コンフィグ／スケーリング方法");
+/* 001d1680 */	this.outputLog(410, "コンフィグ／垂直同期");
+/* 001d1694 */	this.outputLog(411, "コンフィグ／位置とサイズを復元");
+/* 001d16a8 */	this.outputLog(412, "コンフィグ／非アクティブで最小化");
+/* 001d16bc */	this.outputLog(413, "コンフィグ／非アクティブでCPU使用率を下げる");
+/* 001d16d0 */	this.outputLog(414, "コンフィグ／過剰な描画処理を抑える");
+/* 001d16e4 */	this.outputLog(415, "コンフィグ／ゲーム速度");
+/* 001d16f8 */	this.outputLog(126, "アンケート送信");
+/* 001d170c */	this.outputLog(2, " アンケート／Q01.あなたの年齢を教えてください");
+/* 001d1720 */	this.outputLog(3, " アンケート／Q02.あなたの性別を教えてください");
+/* 001d1734 */	this.outputLog(4, " アンケート／Q03.あなたのエロゲー歴はどれぐらいですか？");
+/* 001d1748 */	this.outputLog(5, " アンケート／Q04.過去にアリスソフトのゲームを何本プレイしたことがありますか？");
+/* 001d175c */	this.outputLog(6, " アンケート／Q05.ランス01をプレイしたかどうか");
+/* 001d1770 */	this.outputLog(7, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／同シリーズをプレイしていたから");
+/* 001d1784 */	this.outputLog(8, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／アリスソフトブランドだから");
+/* 001d1798 */	this.outputLog(9, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／絵柄が好みだったから");
+/* 001d17ac */	this.outputLog(10, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／設定が好みだったから");
+/* 001d17c0 */	this.outputLog(11, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／エロが良さそうだったから");
+/* 001d17d4 */	this.outputLog(12, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／ゲームが面白そうだったから");
+/* 001d17e8 */	this.outputLog(13, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／体験版をプレイして気にいったから");
+/* 001d17fc */	this.outputLog(14, " アンケート／Q06.このゲームを購入するに至った主な理由を教えてください(※複数回答可)／その他");
+/* 001d1810 */	this.outputLog(15, " アンケート／Q07.この商品の総合評価");
+/* 001d1824 */	this.outputLog(16, " アンケート／Q08.原画について、絵柄やデザインの品質はどうでしたか？");
+/* 001d1838 */	this.outputLog(17, " アンケート／Q09.ＣＧについて、塗りの品質はどうでしたか？");
+/* 001d184c */	this.outputLog(18, " アンケート／Q10.ゲームシステムについて、どう感じましたか？");
+/* 001d1860 */	this.outputLog(19, " アンケート／Q11.操作性について、どう感じましたか？");
+/* 001d1874 */	this.outputLog(20, " アンケート／Q12.ストーリーやキャラクターの会話について、どう感じましたか？");
+/* 001d1888 */	this.outputLog(21, " アンケート／Q13.エロシーンのシナリオについて、どう感じましたか？");
+/* 001d189c */	this.outputLog(22, " アンケート／Q14.音楽について、どう感じましたか？");
+/* 001d18b0 */	this.outputLog(23, " アンケート／Q15.気に入った点があれば教えてください");
+/* 001d18c4 */	this.outputLog(24, " アンケート：キャラクター：アイ");
+/* 001d18d8 */	this.outputLog(25, " アンケート：キャラクター：アテン");
+/* 001d18ec */	this.outputLog(26, " アンケート：キャラクター：ありす");
+/* 001d1900 */	this.outputLog(27, " アンケート：キャラクター：イェリコ");
+/* 001d1914 */	this.outputLog(28, " アンケート：キャラクター：エレノア");
+/* 001d1928 */	this.outputLog(29, " アンケート：キャラクター：カーナ");
+/* 001d193c */	this.outputLog(30, " アンケート：キャラクター：ガーネット");
+/* 001d1950 */	this.outputLog(31, " アンケート：キャラクター：カスミ");
+/* 001d1964 */	this.outputLog(32, " アンケート：キャラクター：かなみ");
+/* 001d1978 */	this.outputLog(33, " アンケート：キャラクター：クリン");
+/* 001d198c */	this.outputLog(34, " アンケート：キャラクター：コリン");
+/* 001d19a0 */	this.outputLog(35, " アンケート：キャラクター：サテラ");
+/* 001d19b4 */	this.outputLog(36, " アンケート：キャラクター：サファイア");
+/* 001d19c8 */	this.outputLog(37, " アンケート：キャラクター：サヤ");
+/* 001d19dc */	this.outputLog(38, " アンケート：キャラクター：さより");
+/* 001d19f0 */	this.outputLog(39, " アンケート：キャラクター：シィル");
+/* 001d1a04 */	this.outputLog(40, " アンケート：キャラクター：志津香");
+/* 001d1a18 */	this.outputLog(41, " アンケート：キャラクター：ジュリア");
+/* 001d1a2c */	this.outputLog(42, " アンケート：キャラクター：ジル");
+/* 001d1a40 */	this.outputLog(43, " アンケート：キャラクター：スー");
+/* 001d1a54 */	this.outputLog(44, " アンケート：キャラクター：セティナ");
+/* 001d1a68 */	this.outputLog(45, " アンケート：キャラクター：セピア");
+/* 001d1a7c */	this.outputLog(46, " アンケート：キャラクター：セル");
+/* 001d1a90 */	this.outputLog(47, " アンケート：キャラクター：トパーズ");
+/* 001d1aa4 */	this.outputLog(48, " アンケート：キャラクター：奈美");
+/* 001d1ab8 */	this.outputLog(49, " アンケート：キャラクター：ネカイ");
+/* 001d1acc */	this.outputLog(50, " アンケート：キャラクター：ノア");
+/* 001d1ae0 */	this.outputLog(51, " アンケート：キャラクター：ハイジ");
+/* 001d1af4 */	this.outputLog(52, " アンケート：キャラクター：ハイニ");
+/* 001d1b08 */	this.outputLog(53, " アンケート：キャラクター：葉月");
+/* 001d1b1c */	this.outputLog(54, " アンケート：キャラクター：パティ");
+/* 001d1b30 */	this.outputLog(55, " アンケート：キャラクター：パルプテンクス");
+/* 001d1b44 */	this.outputLog(56, " アンケート：キャラクター：ハンティ");
+/* 001d1b58 */	this.outputLog(57, " アンケート：キャラクター：フェリス");
+/* 001d1b6c */	this.outputLog(58, " アンケート：キャラクター：マリア");
+/* 001d1b80 */	this.outputLog(59, " アンケート：キャラクター：マリス");
+/* 001d1b94 */	this.outputLog(60, " アンケート：キャラクター：ミーキル");
+/* 001d1ba8 */	this.outputLog(61, " アンケート：キャラクター：ミリ");
+/* 001d1bbc */	this.outputLog(62, " アンケート：キャラクター：ミリー");
+/* 001d1bd0 */	this.outputLog(63, " アンケート：キャラクター：ミル");
+/* 001d1be4 */	this.outputLog(64, " アンケート：キャラクター：メナド");
+/* 001d1bf8 */	this.outputLog(65, " アンケート：キャラクター：ユラン");
+/* 001d1c0c */	this.outputLog(66, " アンケート：キャラクター：リア");
+/* 001d1c20 */	this.outputLog(67, " アンケート：キャラクター：レイラ");
+/* 001d1c34 */	this.outputLog(68, " アンケート：キャラクター：レンチ");
+/* 001d1c48 */	this.outputLog(69, " アンケート：キャラクター：ローラ");
+/* 001d1c5c */	this.outputLog(70, " アンケート：キャラクター：ロゼ");
+/* 001d1c70 */	this.outputLog(71, " アンケート：キャラクター：ワヨソ");
+/* 001d1c84 */	this.outputLog(72, " アンケート：キャラクター：アイゼル");
+/* 001d1c98 */	this.outputLog(73, " アンケート：キャラクター：アリスマン");
+/* 001d1cac */	this.outputLog(74, " アンケート：キャラクター：アリスマンレディー");
+/* 001d1cc0 */	this.outputLog(75, " アンケート：キャラクター：イシス");
+/* 001d1cd4 */	this.outputLog(76, " アンケート：キャラクター：伊集院");
+/* 001d1ce8 */	this.outputLog(77, " アンケート：キャラクター：リスのウーくん");
+/* 001d1cfc */	this.outputLog(78, " アンケート：キャラクター：エクス");
+/* 001d1d10 */	this.outputLog(79, " アンケート：キャラクター：エロヤック");
+/* 001d1d24 */	this.outputLog(80, " アンケート：キャラクター：カオス");
+/* 001d1d38 */	this.outputLog(81, " アンケート：キャラクター：加藤");
+/* 001d1d4c */	this.outputLog(82, " アンケート：キャラクター：キース");
+/* 001d1d60 */	this.outputLog(83, " アンケート：キャラクター：シーザー");
+/* 001d1d74 */	this.outputLog(84, " アンケート：キャラクター：しゃも仁一郎");
+/* 001d1d88 */	this.outputLog(85, " アンケート：キャラクター：その辺のくそがき");
+/* 001d1d9c */	this.outputLog(86, " アンケート：キャラクター：トーマ");
+/* 001d1db0 */	this.outputLog(87, " アンケート：キャラクター：ねこたま");
+/* 001d1dc4 */	this.outputLog(88, " アンケート：キャラクター：ノス");
+/* 001d1dd8 */	this.outputLog(89, " アンケート：キャラクター：バーニング");
+/* 001d1dec */	this.outputLog(90, " アンケート：キャラクター：パットン");
+/* 001d1e00 */	this.outputLog(91, " アンケート：キャラクター：バレス");
+/* 001d1e14 */	this.outputLog(92, " アンケート：キャラクター：ブリティシュ");
+/* 001d1e28 */	this.outputLog(93, " アンケート：キャラクター：フレッチャー");
+/* 001d1e3c */	this.outputLog(94, " アンケート：キャラクター：ヘンダーソン");
+/* 001d1e50 */	this.outputLog(95, " アンケート：キャラクター：ミ");
+/* 001d1e64 */	this.outputLog(96, " アンケート：キャラクター：ミネバ");
+/* 001d1e78 */	this.outputLog(97, " アンケート：キャラクター：ラーク");
+/* 001d1e8c */	this.outputLog(98, " アンケート：キャラクター：ラチェット");
+/* 001d1ea0 */	this.outputLog(99, " アンケート：キャラクター：ラプ");
+/* 001d1eb4 */	this.outputLog(100, " アンケート：キャラクター：ラプの長老");
+/* 001d1ec8 */	this.outputLog(101, " アンケート：キャラクター：ランス");
+/* 001d1edc */	this.outputLog(102, " アンケート：キャラクター：リターンデーモン");
+/* 001d1ef0 */	this.outputLog(103, " アンケート：キャラクター：リック");
+/* 001d1f04 */	this.outputLog(104, " アンケート：キャラクター：ルイス");
+/* 001d1f18 */	this.outputLog(105, " アンケート：キャラクター：ロバート");
+/* 001d1f2c */	this.outputLog(106, " アンケート：キャラクター：うしドバーン");
+/* 001d1f40 */	this.outputLog(107, " アンケート：キャラクター：神風");
+/* 001d1f54 */	this.outputLog(108, " アンケート：キャラクター：金魚使い");
+/* 001d1f68 */	this.outputLog(109, " アンケート：キャラクター：幸福きゃんきゃん");
+/* 001d1f7c */	this.outputLog(110, " アンケート：キャラクター：コンテ");
+/* 001d1f90 */	this.outputLog(111, " アンケート：キャラクター：ちゃいむ");
+/* 001d1fa4 */	this.outputLog(112, " アンケート：キャラクター：ちょーちん");
+/* 001d1fb8 */	this.outputLog(113, " アンケート：キャラクター：デュラピー");
+/* 001d1fcc */	this.outputLog(114, " アンケート：キャラクター：ハチ女");
+/* 001d1fe0 */	this.outputLog(115, " アンケート：キャラクター：フローズン");
+/* 001d1ff4 */	this.outputLog(116, " アンケート：キャラクター：ユニコーン");
+/* 001d2008 */	this.outputLog(117, " アンケート：キャラクター：ライカンスロープ");
+/* 001d201c */	this.outputLog(118, " アンケート：キャラクター：ラーメン");
+/* 001d2030 */	this.outputLog(119, " アンケート：キャラクター：ワーかなみ");
+/* 001d2044 */	this.outputLog(120, " アンケート：キャラクター：ワークィーン");
+/* 001d2058 */	this.outputLog(121, " アンケート：キャラクター：ワーシィル");
+/* 001d206c */	this.outputLog(122, " アンケート：キャラクター：ワー志津香");
+/* 001d2080 */	this.outputLog(123, " アンケート：キャラクター：ワードッグ");
+/* 001d2094 */	this.outputLog(124, " アンケート：キャラクター：ワープアー");
+/* 001d20a8 */	this.outputLog(125, " アンケート：キャラクター：ワー村娘");
+/* 001d20bc */	this.outputLog(127, " トータルプレイタイム(AFL_TotalPlayTime_GetMinuteTime)");
+/* 001d20d0 */	this.outputLog(128, " ゲームクリア");
+/* 001d20e4 */	this.outputLog(129, " 最大進行状況");
+/* 001d20f8 */	this.outputLog(130, " 音声確認状況");
+/* 001d210c */	int i;
+/* 001d211e */	for (i = 0; i < 96; ++i)
+/* 001d2164 */	{
+/* 001d2164 */		this.outputLog(131 + i, "ＣＧ%02d" % (i + 1));
+/* 001d219e */	}
+/* 001d21a4 */	for (i = 0; i < 92; ++i)
+/* 001d21ea */	{
+/* 001d21ea */		this.outputLog(227 + i, "回想%02d" % (i + 1));
+/* 001d2224 */	}
+/* 001d222a */	for (i = 0; i < 50; ++i)
+/* 001d2270 */	{
+/* 001d2270 */		this.outputLog(319 + i, "音楽%02d" % (i + 1));
+/* 001d22aa */	}
+/* 001d22b0 */	this.outputLog(416, "Ａ＿プレイングマニュアル表示回数取得");
+/* 001d22c4 */	this.outputLog(417, "Ａ＿コンフィグ表示回数取得()");
+/* 001d22d8 */	this.outputLog(418, "Ａ＿バックシーン表示回数取得()");
+/* 001d22ec */	this.outputLog(419, "Ａ＿バックログ表示回数取得()");
+/* 001d2300 */	this.outputLog(420, "Ａ＿ゲームメディア確認()");
+/* 001d2314 */	this.outputLog(421, "AFL_PCInfo_GetMemoryInfo()");
+/* 001d2328 */	this.outputLog(422, "AFL_PCInfo_GetCPUInfo()");
+/* 001d233c */	this.outputLog(423, "AFL_PCInfo_GetOSInfo()");
+/* 001d2350 */	this.outputLog(424, "AFL_PCInfo_GetScreenInfo()");
+/* 001d2364 */}
+
+void EnquiteSender::outputLog(int key, string desc)
+/* 001d236c */{
+/* 001d236e */}
+
+void EnquiteSender::innerGameSend()
+/* 001d2374 */{
+/* 001d2374 */	this.sendAsync();
+/* 001d237e */}
+
+bool EnquiteSender::isEnableNetwork()
+/* 001d2386 */{
+/* 001d2386 */	return AFL_Config_Network_GetEnableConnection();
+/* 001d238e */}
+

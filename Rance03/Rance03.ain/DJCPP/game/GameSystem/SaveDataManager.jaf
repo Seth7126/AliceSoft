@@ -1,0 +1,157 @@
+SaveDataManager::SaveDataManager()
+/* 001e1612 */{
+/* 001e161a */	this.saveDataIndex_ = 0;
+/* 001e162c */	this.initSaveObject();
+/* 001e1634 */}
+
+void SaveDataManager::initSaveObject()
+/* 001e163c */{
+/* 001e163c */	int i;
+/* 001e164e */	for (i = 0; i < this.saveObject_.Numof(); ++i)
+/* 001e169e */	{
+/* 001e169e */		this.saveObject_[i].init(i);
+/* 001e16c4 */	}
+/* 001e16ca */}
+
+void SaveDataManager::setOnAutoSaveCallback(DG_OnSaveCallback callback)
+/* 001e16d2 */{
+/* 001e16d2 */	int i;
+/* 001e16e4 */	for (i = 80; i < this.saveObject_.Numof() - 1; ++i)
+/* 001e173c */	{
+/* 001e173c */		this.saveObject_[i].setOnSaveCallback(callback);
+/* 001e1764 */	}
+/* 001e176a */}
+
+bool SaveDataManager::save(int index)
+/* 001e1772 */{
+/* 001e1772 */	string comment = createSaveComment();
+/* 001e1786 */	if (0 <= index && index < 80)
+/* 001e17ce */	{
+/* 001e17ce */		this.copyAutoSaveData(this.saveDataIndex_, index);
+/* 001e17ea */		this.saveDataIndex_ = index;
+/* 001e1800 */		this.updateLatestSaveIndex(this.saveDataIndex_);
+/* 001e1812 */		return this.saveObject_[this.saveDataIndex_].save(comment);
+/* 001e183a */	}
+/* 001e183a */	return false;
+/* 001e1842 */}
+
+void SaveDataManager::updateLatestSaveIndex(int index)
+/* 001e1850 */{
+/* 001e1850 */	g_common_latestSaveIndex = index;
+/* 001e1866 */	共有セーブ();
+/* 001e186c */}
+
+void SaveDataManager::load(int index)
+/* 001e1874 */{
+/* 001e1874 */	if (0 <= index && index < 80)
+/* 001e18bc */	{
+/* 001e18bc */		if (!this.saveObject_[index].isSaved())
+/* 001e18e0 */		{
+/* 001e18e0 */			pass("セーブデータがありません。%d" % index);
+/* 001e18fe */		}
+/* 001e1904 */		else
+/* 001e1904 */		{
+/* 001e1904 */			this.saveObject_[index].load();
+/* 001e1920 */		}
+/* 001e1920 */	}
+/* 001e1920 */}
+
+bool SaveDataManager::saveAutoSave()
+/* 001e1928 */{
+/* 001e1928 */	this.updateLatestAutoSaveIndex(80 + this.saveDataIndex_);
+/* 001e1942 */	return this.saveObject_[80 + this.saveDataIndex_].save("");
+/* 001e196e */}
+
+void SaveDataManager::updateLatestAutoSaveIndex(int index)
+/* 001e197c */{
+/* 001e197c */	g_common_latestAutoSaveIndex = index;
+/* 001e1992 */	共有セーブ();
+/* 001e1998 */}
+
+void SaveDataManager::copyAutoSaveData(int oldIndex, int newIndex)
+/* 001e19a0 */{
+/* 001e19a0 */	if (oldIndex != newIndex && AFL_GameSave_IsExistFile(80 + oldIndex))
+/* 001e19f2 */	{
+/* 001e19f2 */		this.updateLatestAutoSaveIndex(80 + newIndex);
+/* 001e1a0c */		AFL_GameSave_Copy(80 + newIndex, 80 + oldIndex);
+/* 001e1a38 */	}
+/* 001e1a38 */}
+
+void SaveDataManager::loadAutoSave()
+/* 001e1a40 */{
+/* 001e1a40 */	if (g_common_latestAutoSaveIndex != -1)
+/* 001e1a58 */	{
+/* 001e1a58 */		this.saveObject_[g_common_latestAutoSaveIndex].load();
+/* 001e1a74 */	}
+/* 001e1a74 */}
+
+bool SaveDataManager::replaySave()
+/* 001e1a7c */{
+/* 001e1a7c */	return this.saveObject_[this.saveObject_.Numof() - 1].save("");
+/* 001e1aae */}
+
+void SaveDataManager::replayLoad()
+/* 001e1abc */{
+/* 001e1abc */	this.saveObject_[this.saveObject_.Numof() - 1].load();
+/* 001e1ae6 */}
+
+string SaveDataManager::getSaveComment(int index)
+/* 001e1aee */{
+/* 001e1aee */	if (0 <= index && index < 80)
+/* 001e1b36 */	{
+/* 001e1b36 */		if (this.saveObject_[index].isSaved())
+/* 001e1b58 */		{
+/* 001e1b58 */			string s = "%s　%s" % this.saveObject_[index].getSaveTime() % this.saveObject_[index].getComment();
+/* 001e1bb4 */			return s;
+/* 001e1bc0 */		}
+/* 001e1bc0 */	}
+/* 001e1bc0 */	return "データがありません";
+/* 001e1bc8 */}
+
+bool SaveDataManager::isSaved(int index)
+/* 001e1bd6 */{
+/* 001e1bd6 */	return 0 <= index && index < 80 && this.saveObject_[index].isSaved();
+/* 001e1c56 */}
+
+void SaveDataManager::loadLatestAutoSave()
+/* 001e1c64 */{
+/* 001e1c64 */	if (g_common_latestAutoSaveIndex != -1)
+/* 001e1c7c */	{
+/* 001e1c7c */		AFL_GameSave_Load(g_common_latestAutoSaveIndex);
+/* 001e1c8c */	}
+/* 001e1c8c */}
+
+int SaveDataManager::getSavedObjectCount()
+/* 001e1c94 */{
+/* 001e1c94 */	int c;
+/* 001e1ca6 */	int i;
+/* 001e1cb8 */	for (i = 0; i < 80; ++i)
+/* 001e1cfe */	{
+/* 001e1cfe */		if (this.saveObject_[i].isSaved())
+/* 001e1d20 */		{
+/* 001e1d20 */			++c;
+/* 001e1d30 */		}
+/* 001e1d30 */	}
+/* 001e1d36 */	return c;
+/* 001e1d42 */}
+
+string createSaveComment()
+/* 001e1d50 */{
+/* 001e1d50 */	string n = g_gameFlagMap.getString("俺のメモ");
+/* 001e1d74 */	string m;
+/* 001e1d88 */	int i;
+/* 001e1d9a */	while (m.Length() < 24 && i < n.Length())
+/* 001e1de6 */	{
+/* 001e1de6 */		if (n.GetPart(i, 1) != "|")
+/* 001e1e10 */		{
+/* 001e1e10 */			m += n.GetPart(i, 1);
+/* 001e1e3a */		}
+/* 001e1e3a */		++i;
+/* 001e1e4a */	}
+/* 001e1e50 */	if (n.Length() > 26)
+/* 001e1e68 */	{
+/* 001e1e68 */		m += "…";
+/* 001e1e7c */	}
+/* 001e1e7c */	return m;
+/* 001e1e88 */}
+

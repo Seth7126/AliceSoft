@@ -1,0 +1,107 @@
+void EnquiteSelection::setCheckBoxName(string n)
+/* 001c4bbe */{
+/* 001c4bbe */	this.checkBoxName_ = n;
+/* 001c4bd6 */}
+
+string EnquiteSelection::getCheckBoxName()
+/* 001c4bde */{
+/* 001c4bde */	return this.checkBoxName_;
+/* 001c4bea */}
+
+void EnquiteSelection::setChecked(bool val)
+/* 001c4bf8 */{
+/* 001c4bf8 */	this.isChecked_ = val;
+/* 001c4c0e */}
+
+bool EnquiteSelection::isChecked()
+/* 001c4c16 */{
+/* 001c4c16 */	return this.isChecked_;
+/* 001c4c22 */}
+
+void EnquiteSelection::setEnableCheckCgName(string n)
+/* 001c4c30 */{
+/* 001c4c30 */	this.enableCheckCgName_ = n;
+/* 001c4c48 */}
+
+string EnquiteSelection::getEnableCheckCgName()
+/* 001c4c50 */{
+/* 001c4c50 */	return this.enableCheckCgName_;
+/* 001c4c5c */}
+
+void EnquiteSelection::setAnswerId(int id)
+/* 001c4c6a */{
+/* 001c4c6a */	this.id_ = id;
+/* 001c4c80 */}
+
+int EnquiteSelection::getAnswerId()
+/* 001c4c88 */{
+/* 001c4c88 */	return this.id_;
+/* 001c4c94 */}
+
+void loadEnquiteSelection()
+/* 001c4ca2 */{
+/* 001c4ca2 */	if (!g_enquiteSelection.Empty())
+/* 001c4cb4 */	{
+/* 001c4cb4 */		return;
+/* 001c4cb6 */	}
+/* 001c4cb6 */	string key = "アンケートアクティビティ情報";
+/* 001c4cca */	int count = EX_Height(key);
+/* 001c4ce6 */	int i;
+/* 001c4cf8 */	for (i = 0; i < count; ++i)
+/* 001c4d42 */	{
+/* 001c4d42 */		EnquiteSelection s;
+/* 001c4d52 */		s.setCheckBoxName(EX_RA2String(key, i, "checkboxName", ""));
+/* 001c4d88 */		s.setEnableCheckCgName(EX_RA2String(key, i, "enableCheckCgName", ""));
+/* 001c4dbe */		s.setChecked(false);
+/* 001c4dd4 */		s.setAnswerId(EX_RA2Int(key, i, "qId", 0));
+/* 001c4e0a */		g_enquiteSelection.PushBack(s);
+/* 001c4e22 */	}
+/* 001c4e2e */}
+
+bool isEnquiteAnswered(int answerId)
+/* 001c4e3c */{
+/* 001c4e3c */	if (answerId == 6)
+/* 001c4e54 */	{
+/* 001c4e54 */		return true;
+/* 001c4e5c */	}
+/* 001c4e5c */	if (answerId == 16)
+/* 001c4e74 */	{
+/* 001c4e74 */		return true;
+/* 001c4e7c */	}
+/* 001c4e7c */	if (answerId == 17)
+/* 001c4e94 */	{
+/* 001c4e94 */		return true;
+/* 001c4e9c */	}
+/* 001c4e9c */	if (answerId == 18)
+/* 001c4eb4 */	{
+/* 001c4eb4 */		return true;
+/* 001c4ebc */	}
+/* 001c4ebc */	int i;
+/* 001c4ece */	for (i = 0; i < g_enquiteSelection.Numof(); ++i)
+/* 001c4f1e */	{
+/* 001c4f1e */		if (g_enquiteSelection[i].getAnswerId() == answerId && g_enquiteSelection[i].isChecked())
+/* 001c4f86 */		{
+/* 001c4f86 */			return true;
+/* 001c4f8e */		}
+/* 001c4f8e */	}
+/* 001c4f94 */	return false;
+/* 001c4f9c */}
+
+int getEnquiteAnswerIndex(int answerId)
+/* 001c4fb0 */{
+/* 001c4fb0 */	int index;
+/* 001c4fc2 */	int i;
+/* 001c4fd4 */	for (i = 0; i < g_enquiteSelection.Numof(); ++i)
+/* 001c5024 */	{
+/* 001c5024 */		if (g_enquiteSelection[i].getAnswerId() == answerId)
+/* 001c5052 */		{
+/* 001c5052 */			if (g_enquiteSelection[i].isChecked())
+/* 001c5074 */			{
+/* 001c5074 */				return index;
+/* 001c5080 */			}
+/* 001c5080 */			++index;
+/* 001c5090 */		}
+/* 001c5090 */	}
+/* 001c5096 */	return -1;
+/* 001c509e */}
+

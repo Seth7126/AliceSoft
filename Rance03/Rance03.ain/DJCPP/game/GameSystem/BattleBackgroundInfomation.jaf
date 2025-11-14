@@ -1,0 +1,59 @@
+void BattleBackgroundInfomation::init(string id)
+/* 001cc99c */{
+/* 001cc99c */	string key = "戦闘背景情報";
+/* 001cc9b0 */	this.id_ = id;
+/* 001cc9c8 */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001cc9fc */	this.ambientR_ = EX_SA2Int(key, this.id_, "ambientR", 0);
+/* 001cca2e */	this.ambientG_ = EX_SA2Int(key, this.id_, "ambientG", 0);
+/* 001cca60 */	this.ambientB_ = EX_SA2Int(key, this.id_, "ambientB", 0);
+/* 001cca92 */	this.ambientMaxAlpha_ = EX_SA2Int(key, this.id_, "ambientMaxAlpha", 0);
+/* 001ccac4 */	this.unfocusShadowR_ = EX_SA2Int(key, this.id_, "unfocusShadowR", 0);
+/* 001ccaf6 */	this.unfocusShadowG_ = EX_SA2Int(key, this.id_, "unfocusShadowG", 0);
+/* 001ccb28 */	this.unfocusShadowB_ = EX_SA2Int(key, this.id_, "unfocusShadowB", 0);
+/* 001ccb5a */}
+
+string BattleBackgroundInfomation::getId()
+/* 001ccb62 */{
+/* 001ccb62 */	return this.id_;
+/* 001ccb6e */}
+
+string BattleBackgroundInfomation::getImageName()
+/* 001ccb7c */{
+/* 001ccb7c */	return this.imageName_;
+/* 001ccb88 */}
+
+int BattleBackgroundInfomation::getAmbientR()
+/* 001ccb96 */{
+/* 001ccb96 */	return this.ambientR_;
+/* 001ccba2 */}
+
+int BattleBackgroundInfomation::getAmbientG()
+/* 001ccbb0 */{
+/* 001ccbb0 */	return this.ambientG_;
+/* 001ccbbc */}
+
+int BattleBackgroundInfomation::getAmbientB()
+/* 001ccbca */{
+/* 001ccbca */	return this.ambientB_;
+/* 001ccbd6 */}
+
+int BattleBackgroundInfomation::getAmbientMaxAlpha()
+/* 001ccbe4 */{
+/* 001ccbe4 */	return this.ambientMaxAlpha_;
+/* 001ccbf0 */}
+
+int BattleBackgroundInfomation::getUnfocusShadowR()
+/* 001ccbfe */{
+/* 001ccbfe */	return this.unfocusShadowR_;
+/* 001ccc0a */}
+
+int BattleBackgroundInfomation::getUnfocusShadowG()
+/* 001ccc18 */{
+/* 001ccc18 */	return this.unfocusShadowG_;
+/* 001ccc24 */}
+
+int BattleBackgroundInfomation::getUnfocusShadowB()
+/* 001ccc32 */{
+/* 001ccc32 */	return this.unfocusShadowB_;
+/* 001ccc3e */}
+

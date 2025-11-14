@@ -1,0 +1,44 @@
+void Ｓ＿バックログ()
+/* 0015e566 */{
+/* 0015e566 */	bool PrevMessageSkipPermission = SYS_IsMessageSkipPermission();
+/* 0015e578 */	SYS_SetMessageSkipPermission(false);
+/* 0015e584 */	g_MessageWindowManager.HideAll();
+/* 0015e594 */	SYS_StopVoiceBySkipMessage();
+/* 0015e59a */	Ａ＿効果音停止();
+/* 0015e5a0 */	bool bPrev既読スキップモードマーク表示許可 = SYS_スキップモードマーク表示許可フラグ取得();
+/* 0015e5b2 */	bool bPrevオートモードマーク表示許可 = SYS_オートモードマーク表示許可フラグ取得();
+/* 0015e5c4 */	既読スキップモードマーク表示許可設定(false);
+/* 0015e5d0 */	オートモードマーク表示許可設定(false);
+/* 0015e5dc */	CBackLogView View;
+/* 0015e5ec */	View.SetActivityName(EX_String("Ｅ＿バックログファイル名", ""));
+/* 0015e60e */	View.Execute();
+/* 0015e61e */	既読スキップモードマーク表示許可設定(bPrev既読スキップモードマーク表示許可);
+/* 0015e634 */	オートモードマーク表示許可設定(bPrevオートモードマーク表示許可);
+/* 0015e644 */	SYS_StopVoiceBySkipMessage();
+/* 0015e64a */	Ａ＿効果音停止();
+/* 0015e650 */	g_MessageWindowManager.ShowAll();
+/* 0015e660 */	SYS_SetMessageSkipPermission(PrevMessageSkipPermission);
+/* 0015e670 */	AFL_View_Update(true);
+/* 0015e67c */	SYS_バックログオープン通知クリア();
+/* 0015e682 */	++g_NumofOpenBacklog;
+/* 0015e692 */	SYS_情報集計データセーブ();
+/* 0015e69a */}
+
+int Ａ＿バックログ表示回数取得()
+/* 0015e6a8 */{
+/* 0015e6a8 */	return g_NumofOpenBacklog;
+/* 0015e6b4 */}
+
+void バックログ登録(string Text)
+/* 0015e6c8 */{
+/* 0015e6c8 */	AnteaterADVEngine.ADVLogList_AddText(Text, g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 0015e6ec */	AnteaterADVEngine.ADVLogList_AddNewLine();
+/* 0015e6f6 */}
+
+bool バックログ登録制御(bool _on)
+/* 0015e704 */{
+/* 0015e704 */	bool r = AnteaterADVEngine.ADVLogList_IsEnable();
+/* 0015e71a */	AnteaterADVEngine.ADVLogList_SetEnable(_on);
+/* 0015e72e */	return r;
+/* 0015e73a */}
+

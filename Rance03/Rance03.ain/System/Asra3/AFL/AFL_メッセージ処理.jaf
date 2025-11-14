@@ -1,0 +1,35 @@
+void AFL_OverrideMessageFunction(FTMessage Function)
+/* 0016a140 */{
+/* 0016a140 */	g_MessageFunction = Function;
+/* 0016a15a */}
+
+void AFL_OverrideMessageRFunction(FTMessageR Function)
+/* 0016a168 */{
+/* 0016a168 */	g_MessageRFunction = Function;
+/* 0016a182 */}
+
+void AFL_OverrideMessageAFunction(FTMessageA Function)
+/* 0016a190 */{
+/* 0016a190 */	g_MessageAFunction = Function;
+/* 0016a1aa */}
+
+void AFL_OverrideMessageAAFunction(FTMessageAA Function)
+/* 0016a1b8 */{
+/* 0016a1b8 */	g_MessageAAFunction = Function;
+/* 0016a1d2 */}
+
+void AFL_OverrideMessageBFunction(FTMessageB Function)
+/* 0016a1e0 */{
+/* 0016a1e0 */	g_MessageBFunction = Function;
+/* 0016a1fa */}
+
+void AFL_OverrideMessageCFunction(FTMessageC Function)
+/* 0016a208 */{
+/* 0016a208 */	g_MessageCFunction = Function;
+/* 0016a222 */}
+
+void AFL_OverrideMessageDFunction(FTMessageD Function)
+/* 0016a230 */{
+/* 0016a230 */	g_MessageDFunction = Function;
+/* 0016a24a */}
+

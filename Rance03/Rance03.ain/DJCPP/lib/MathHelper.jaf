@@ -1,0 +1,140 @@
+float getDeflectionRandomValue(int level)
+/* 001ed87e */{
+/* 001ed87e */	level = Math.Max(1, level);
+/* 001ed8a4 */	float total;
+/* 001ed8b6 */	int i;
+/* 001ed8c8 */	for (i = 0; i < level; ++i)
+/* 001ed912 */	{
+/* 001ed912 */		total += Math.RandF();
+/* 001ed928 */	}
+/* 001ed92e */	return total / level;
+/* 001ed948 */}
+
+int range(int min, int max, int val)
+/* 001ed95c */{
+/* 001ed95c */	val = Math.Min(max, val);
+/* 001ed986 */	val = Math.Max(min, val);
+/* 001ed9b0 */	return val;
+/* 001ed9bc */}
+
+float rangeF(float min, float max, float val)
+/* 001ed9d0 */{
+/* 001ed9d0 */	val = Math.MinF(max, val);
+/* 001ed9fa */	val = Math.MaxF(min, val);
+/* 001eda24 */	return val;
+/* 001eda30 */}
+
+int roundOff(float val)
+/* 001eda44 */{
+/* 001eda44 */	if (val < 0.0)
+/* 001eda5c */	{
+/* 001eda5c */		return val - 0.5;
+/* 001eda72 */	}
+/* 001eda72 */	return val + 0.5;
+/* 001eda88 */}
+
+float getDest(int x1, int y1, int x2, int y2)
+/* 001eda9c */{
+/* 001eda9c */	int dx = x1 - x2;
+/* 001edabe */	int dy = y1 - y2;
+/* 001edae0 */	return Math.Sqrt(dx * dx + dy * dy);
+/* 001edb1c */}
+
+bool isCollideAABB(int x, int y, int left, int top, int right, int bottom)
+/* 001edb30 */{
+/* 001edb30 */	if (left < x && x < right && top < y && y < bottom)
+/* 001edbe8 */	{
+/* 001edbe8 */		return true;
+/* 001edbf0 */	}
+/* 001edbf0 */	return false;
+/* 001edbf8 */}
+
+bool isCollideAABBWH(int mx, int my, int x, int y, int w, int h)
+/* 001edc0c */{
+/* 001edc0c */	return isCollideAABB(mx, my, x, y, x + w, y + h);
+/* 001edc68 */}
+
+bool isCollideWithMouseWH(int x, int y, int w, int h)
+/* 001edc7c */{
+/* 001edc7c */	return isCollideAABBWH(g_mouse.getX(), g_mouse.getY(), x, y, w, h);
+/* 001edccc */}
+
+bool isCollideEllipse(int mx, int my, int cx, int cy, int a, int b)
+/* 001edce0 */{
+/* 001edce0 */	if (a < b)
+/* 001edcfc */	{
+/* 001edcfc */		return false;
+/* 001edd04 */	}
+/* 001edd04 */	int px = mx - cx;
+/* 001edd26 */	int py = my - cy;
+/* 001edd48 */	int f = Math.Sqrt(a * a - b * b);
+/* 001edd90 */	int dst1 = getDest(-f, 0, px, py);
+/* 001eddca */	int dst2 = getDest(f, 0, px, py);
+/* 001ede02 */	return dst1 + dst2 < 2 * a;
+/* 001ede30 */}
+
+float calcAngle(float x, float y)
+/* 001ede44 */{
+/* 001ede44 */	float radian = Math.Atan2(y, x);
+/* 001ede6e */	if (radian < 0.0)
+/* 001ede86 */	{
+/* 001ede86 */		radian += 6.283;
+/* 001ede98 */	}
+/* 001ede98 */	return (radian * 180.0) / 3.1415;
+/* 001edeb4 */}
+
+void rotate(float x, float y, float rot, float cx, float cy, ref float rx, ref float ry)
+/* 001edec8 */{
+/* 001edec8 */	float px = x - cx;
+/* 001edeea */	float py = y - cy;
+/* 001edf0c */	rx = (px * Math.Cos(rot) - py * Math.Sin(rot)) + cx;
+/* 001edf68 */	ry = (px * Math.Sin(rot) - py * Math.Cos(rot)) + cy;
+/* 001edfc4 */}
+
+float bezierVal(float s, float e, float t, float c)
+/* 001edfd2 */{
+/* 001edfd2 */	if (s == e)
+/* 001edfee */	{
+/* 001edfee */		return s;
+/* 001edffa */	}
+/* 001edffa */	t = rangeF(0.0, 1.0, t);
+/* 001ee022 */	c = rangeF(0.0, 2.0, c);
+/* 001ee04a */	float v = 2 * t * (1 - t) * c + t * t;
+/* 001ee0ac */	return s + (e - s) * v;
+/* 001ee0dc */}
+
+void projection(Pos3D pos, Pos3D offset, ref Pos3D res, float horizon, float vertical, float nearClip, float farClip)
+/* 001ee0f0 */{
+/* 001ee0f0 */	pos.x += offset.x;
+/* 001ee116 */	pos.y += offset.y;
+/* 001ee13c */	pos.z += offset.z;
+/* 001ee162 */	float w = (2 * nearClip) / 1.0;
+/* 001ee18e */	float h = (2 * nearClip) / 0.75;
+/* 001ee1ba */	float Q = farClip / (farClip - nearClip);
+/* 001ee1e8 */	res.x = pos.x * w;
+/* 001ee21a */	res.y = pos.y * h;
+/* 001ee24c */	res.z = Q * pos.z + 1.0;
+/* 001ee286 */	res.w = -Q * nearClip * pos.z;
+/* 001ee2c6 */	res.x /= res.w;
+/* 001ee2ec */	res.y /= res.w;
+/* 001ee312 */	res.z /= res.w;
+/* 001ee338 */	res.x = 400 - (res.x / 2.0) * 400.0;
+/* 001ee37c */	res.y = 300 - (res.y / 2.0) * 300.0;
+/* 001ee3c0 */}
+
+void splitToken(ref array@string result, string target, string token)
+/* 001ee3ce */{
+/* 001ee3ce */	result.Free();
+/* 001ee3d8 */	while (true)
+/* 001ee3e4 */	{
+/* 001ee3e4 */		int n = target.Find(token);
+/* 001ee406 */		if (n == -1)
+/* 001ee41e */		{
+/* 001ee41e */			result.PushBack(target);
+/* 001ee432 */			break;
+/* 001ee438 */		}
+/* 001ee438 */		result.PushBack(target.GetPart(0, n));
+/* 001ee45e */		target = target.GetPart(n + 1, target.Length());
+/* 001ee494 */	}
+/* 001ee49a */}
+

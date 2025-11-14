@@ -1,0 +1,26 @@
+void initLibrary()
+/* 001ed5b2 */{
+/* 001ed5b2 */	createGlobalObject();
+/* 001ed5b8 */}
+
+void createGlobalObject()
+/* 001ed5c6 */{
+/* 001ed5c6 */	g_globalTimer <- new GlobalGameTimer;
+/* 001ed5fa */	g_frameManager <- new FrameManager;
+/* 001ed62e */	g_partsNumberProvider <- new PartsNumberProvider;
+/* 001ed662 */	g_keyboard <- new KeyInput;
+/* 001ed696 */	g_mouse <- new MouseInput;
+/* 001ed6ca */	g_sysSound <- new SystemSound;
+/* 001ed6fe */	g_loopSound <- new LoopSound;
+/* 001ed732 */	g_music <- new Music;
+/* 001ed766 */	g_gameObjectManager <- new GameObjectManager;
+/* 001ed79a */	g_partsInitializeOption <- new PartsInitializeOption;
+/* 001ed7ce */	g_partsMotionManager <- new PartsMotionManager;
+/* 001ed802 */	g_globalTimer.setSkipFunction("skipFunction");
+/* 001ed818 */}
+
+bool skipFunction()
+/* 001ed826 */{
+/* 001ed826 */	return 全文スキップ中確認() || g_keyboard.isDown(17);
+/* 001ed864 */}
+

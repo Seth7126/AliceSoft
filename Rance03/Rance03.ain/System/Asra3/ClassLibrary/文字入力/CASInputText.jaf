@@ -1,0 +1,253 @@
+CASInputText::CASInputText()
+/* 00013046 */{
+/* 0001304e */	this.m_End = false;
+/* 00013060 */}
+
+void CASInputText::Begin(int AreaNumber, string BeginText, bool OpenIME)
+/* 00013068 */{
+/* 00013068 */	SYS_ASSERTE_AREA_ID(AreaNumber);
+/* 00013076 */	ref 文字入力エリア_t a = _文字入力エリア[AreaNumber];
+/* 000130a8 */	string cg = a.ＣＧ名;
+/* 000130c8 */	this.m_BaseParts.Create();
+/* 000130d8 */	if (!cg.Empty())
+/* 000130ec */	{
+/* 000130ec */		this.m_BaseParts.SetCG(cg, 1);
+/* 0001310c */	}
+/* 00013112 */	else
+/* 00013112 */	{
+/* 00013112 */		Ｐ＿構築手順＿初期化(this.m_BaseParts.GetPartsNumber(), 1);
+/* 0001312e */		Ｐ＿構築手順＿作成(this.m_BaseParts.GetPartsNumber(), a.幅, a.高, 1);
+/* 0001316e */		Ｐ＿構築手順＿色塗り(this.m_BaseParts.GetPartsNumber(), 0, 0, a.幅, a.高, a.塗Ｒ, a.塗Ｇ, a.塗Ｂ, a.塗率, 1);
+/* 00013202 */		Ｐ＿構築ビルド(this.m_BaseParts.GetPartsNumber(), 1);
+/* 0001321e */	}
+/* 0001321e */	this.m_BaseParts.SetPos(a.Ｘ, a.Ｙ);
+/* 00013252 */	this.m_BaseParts.SetZ(a.Ｚ);
+/* 00013274 */	this.m_BaseParts.SetShow(true);
+/* 0001328a */	string font_name;
+/* 0001329e */	switch (a.フォント)
+/* 000132bc */	{
+/* 000132bc */	case 0:
+/* 000132bc */		font_name = "ＭＳ ゴシック";
+/* 000132d0 */		break;
+/* 000132d6 */	case 1:
+/* 000132d6 */		font_name = "ＭＳ 明朝";
+/* 000132ea */		break;
+/* 000132f0 */	default:
+/* 000132f0 */		font_name = "ＭＳ ゴシック";
+/* 00013304 */		break;
+/* 0001330a */	}
+/* 0001330a */	InputString.SetFont(a.文字サイズ, font_name, 0);
+/* 00013336 */	InputString.SetPos(a.Ｘ + a.文字Ｘ, a.Ｙ + a.文字Ｙ);
+/* 0001338c */	this.m_CharProperty.SetType(a.フォント);
+/* 000133ae */	this.m_CharProperty.SetSize(a.文字サイズ);
+/* 000133d0 */	this.m_CharProperty.SetColor(CF_CASColor(a.文字Ｒ, a.文字Ｇ, a.文字Ｂ, 255));
+/* 00013422 */	this.m_CharProperty.SetBoldWeight(0.0);
+/* 00013438 */	this.m_CharProperty.SetEdgeWeight(Math.Max(0, Math.Max(Math.Max(a.文字飾左, a.文字飾右), Math.Max(a.文字飾上, a.文字飾下))));
+/* 000134c0 */	this.m_CharProperty.SetEdgeColor(CF_CASColor(a.文字飾Ｒ, a.文字飾Ｇ, a.文字飾Ｂ, 255));
+/* 00013512 */	this.m_PrevTextParts.Create();
+/* 00013522 */	this.m_PrevTextParts.SetPos(a.Ｘ + a.文字Ｘ, a.Ｙ + a.文字Ｙ);
+/* 0001357e */	this.m_PrevTextParts.SetZ(a.Ｚ + 1);
+/* 000135a8 */	this.m_NextTextParts.Create();
+/* 000135b8 */	this.m_NextTextParts.SetPos(this.m_PrevTextParts.GetX() + this.m_PrevTextParts.GetWidth(1), this.m_PrevTextParts.GetY());
+/* 00013600 */	this.m_NextTextParts.SetZ(a.Ｚ + 1);
+/* 0001362a */	this.m_CursorParts.Create();
+/* 0001363a */	Ｐ＿構築手順＿初期化(this.m_CursorParts.GetPartsNumber(), 1);
+/* 00013656 */	Ｐ＿構築手順＿ピクセル作成(this.m_CursorParts.GetPartsNumber(), 3, a.文字サイズ, 1);
+/* 0001368a */	if (a.文字飾上 > 0 || a.文字飾右 > 0 || a.文字飾下 > 0 || a.文字飾左 > 0)
+/* 00013752 */	{
+/* 00013752 */		Ｐ＿構築手順＿色塗り(this.m_CursorParts.GetPartsNumber(), 0, 0, 3, a.文字サイズ, a.文字飾Ｒ, a.文字飾Ｇ, a.文字飾Ｂ, -1, 1);
+/* 000137ce */		Ｐ＿構築手順＿色塗り(this.m_CursorParts.GetPartsNumber(), 1, 1, 1, a.文字サイズ - 2, a.文字Ｒ, a.文字Ｇ, a.文字Ｂ, -1, 1);
+/* 00013852 */	}
+/* 00013858 */	else
+/* 00013858 */	{
+/* 00013858 */		Ｐ＿構築手順＿色塗り(this.m_CursorParts.GetPartsNumber(), 0, 0, 3, a.文字サイズ, a.文字Ｒ, a.文字Ｇ, a.文字Ｂ, -1, 1);
+/* 000138d4 */	}
+/* 000138d4 */	Ｐ＿構築ビルド(this.m_CursorParts.GetPartsNumber(), 1);
+/* 000138f0 */	this.m_CursorParts.SetZ(a.Ｚ + 2);
+/* 0001391a */	this.UpdateCursorPos(a, a.文字Ｘ, a.文字Ｙ);
+/* 00013950 */	InputString.Begin();
+/* 0001395a */	if (OpenIME)
+/* 0001396a */	{
+/* 0001396a */		InputString.OpenIME();
+/* 00013974 */	}
+/* 00013974 */	string Dummy;
+/* 00013988 */	this.ClipText(a, BeginText, Dummy);
+/* 000139ae */	this.m_InputText = BeginText;
+/* 000139c6 */	this.m_PrevText = BeginText;
+/* 000139de */	this.m_NextText = "";
+/* 000139f2 */	this.m_OldPrevText = "";
+/* 00013a06 */	this.m_OldNextText = "";
+/* 00013a1a */	this.m_LeftKeyClick.Init(37, true);
+/* 00013a36 */	this.m_RightKeyClick.Init(39, true);
+/* 00013a52 */	this.m_EnterKeyClick.Init(13, true);
+/* 00013a6e */	this.m_EscapeKeyClick.Init(27, true);
+/* 00013a8a */	this.m_RButtonClick.Init(2, true);
+/* 00013aa6 */	this.m_HomeKeyClick.Init(36, true);
+/* 00013ac2 */	this.m_EndKeyClick.Init(35, true);
+/* 00013ade */	this.m_BackSpaceKeyClick.Init(8, true);
+/* 00013afa */	this.m_DeleteKeyClick.Init(46, true);
+/* 00013b16 */	this.m_Converts = false;
+/* 00013b28 */	this.m_Inputs = false;
+/* 00013b3a */	this.m_OpenIME = OpenIME;
+/* 00013b50 */	this.m_AreaNumber = AreaNumber;
+/* 00013b66 */	this.m_End = false;
+/* 00013b78 */}
+
+void CASInputText::Update()
+/* 00013b80 */{
+/* 00013b80 */	if (this.m_End)
+/* 00013b90 */	{
+/* 00013b90 */		return;
+/* 00013b92 */	}
+/* 00013b92 */	this.m_InputText = this.m_PrevText + this.m_NextText;
+/* 00013bb6 */	if (this.m_EnterKeyClick.IsClick(-2147483648))
+/* 00013bd2 */	{
+/* 00013bd2 */		this.m_End = true;
+/* 00013be4 */		return;
+/* 00013be6 */	}
+/* 00013be6 */	if (this.m_EscapeKeyClick.IsClick(-2147483648) || this.m_RButtonClick.IsClick(-2147483648))
+/* 00013c36 */	{
+/* 00013c36 */		this.m_End = true;
+/* 00013c48 */		return;
+/* 00013c4a */	}
+/* 00013c4a */	bool MoveCursor = false;
+/* 00013c5c */	if (!this.m_Inputs && !this.m_Converts)
+/* 00013c98 */	{
+/* 00013c98 */		if (this.m_LeftKeyClick.IsKeyPress(-2147483648))
+/* 00013cb4 */		{
+/* 00013cb4 */			MoveCursor = this.ShiftRight(this.m_PrevText, this.m_NextText);
+/* 00013cdc */		}
+/* 00013ce2 */		else if (this.m_RightKeyClick.IsKeyPress(-2147483648))
+/* 00013cfe */		{
+/* 00013cfe */			MoveCursor = this.ShiftLeft(this.m_PrevText, this.m_NextText);
+/* 00013d26 */		}
+/* 00013d2c */		else if (this.m_HomeKeyClick.IsKeyDown())
+/* 00013d42 */		{
+/* 00013d42 */			this.m_NextText = this.m_PrevText + this.m_NextText;
+/* 00013d66 */			this.m_PrevText = "";
+/* 00013d7a */		}
+/* 00013d80 */		else if (this.m_EndKeyClick.IsKeyDown())
+/* 00013d96 */		{
+/* 00013d96 */			this.m_PrevText = this.m_PrevText + this.m_NextText;
+/* 00013dba */			this.m_NextText = "";
+/* 00013dce */		}
+/* 00013dce */		if (this.m_LeftKeyClick.IsClick(-2147483648) || this.m_RightKeyClick.IsClick(-2147483648))
+/* 00013e1e */		{
+/* 00013e1e */			MoveCursor = false;
+/* 00013e30 */		}
+/* 00013e30 */		if (this.m_BackSpaceKeyClick.IsKeyPress(-2147483648))
+/* 00013e4c */		{
+/* 00013e4c */			this.m_PrevText.PopBack();
+/* 00013e58 */		}
+/* 00013e5e */		else if (this.m_DeleteKeyClick.IsKeyPress(-2147483648))
+/* 00013e7a */		{
+/* 00013e7a */			this.m_NextText.Erase(0);
+/* 00013e92 */		}
+/* 00013e92 */	}
+/* 00013e98 */	else
+/* 00013e98 */	{
+/* 00013e98 */		this.m_BackSpaceKeyClick.Reset(true);
+/* 00013eae */		this.m_DeleteKeyClick.Reset(true);
+/* 00013ec4 */		this.m_EnterKeyClick.Reset(true);
+/* 00013eda */	}
+/* 00013eda */	this.m_PrevText += InputString.GetResultString();
+/* 00013ef2 */	InputString.ClearResultString();
+/* 00013efc */	if (this.m_OldPrevText != this.m_PrevText || this.m_OldNextText != this.m_NextText)
+/* 00013f4c */	{
+/* 00013f4c */		SYS_ASSERTE_AREA_ID(this.m_AreaNumber);
+/* 00013f5a */		ref 文字入力エリア_t a = _文字入力エリア[this.m_AreaNumber];
+/* 00013f8c */		this.ClipText(a, this.m_PrevText, this.m_NextText);
+/* 00013fb2 */		this.m_PrevTextParts.SetFontProperty(this.m_CharProperty, 1);
+/* 00013fd2 */		this.m_PrevTextParts.SetText(this.m_PrevText, 1);
+/* 00013ff2 */		this.m_NextTextParts.SetFontProperty(this.m_CharProperty, 1);
+/* 00014012 */		this.m_NextTextParts.SetText(this.m_NextText, 1);
+/* 00014032 */		this.m_NextTextParts.SetPos(this.m_PrevTextParts.GetX() + this.m_PrevTextParts.GetWidth(1), this.m_PrevTextParts.GetY());
+/* 0001407a */		this.UpdateCursorPos(a, a.文字Ｘ + this.m_PrevTextParts.GetWidth(1), a.文字Ｙ);
+/* 000140c8 */		this.m_OldPrevText = this.m_PrevText;
+/* 000140e0 */		this.m_OldNextText = this.m_NextText;
+/* 000140f8 */	}
+/* 000140fe */	this.m_Converts = InputString.Converts();
+/* 00014114 */	this.m_Inputs = InputString.Inputs();
+/* 0001412a */	this.m_CursorParts.SetShow(MoveCursor | (system.GetTime() / 500) % 2);
+/* 0001415e */}
+
+void CASInputText::End()
+/* 00014166 */{
+/* 00014166 */	this.m_End = true;
+/* 00014178 */	this.m_CursorParts.Release();
+/* 00014188 */	this.m_NextTextParts.Release();
+/* 00014198 */	this.m_PrevTextParts.Release();
+/* 000141a8 */	if (this.m_OpenIME)
+/* 000141b8 */	{
+/* 000141b8 */		InputString.CloseIME();
+/* 000141c2 */	}
+/* 000141c2 */	InputString.End();
+/* 000141cc */	this.m_BaseParts.Release();
+/* 000141dc */	AFL_MouseWheel_ClearCount();
+/* 000141e2 */}
+
+bool CASInputText::IsEnd()
+/* 000141ea */{
+/* 000141ea */	return this.m_End;
+/* 000141f6 */}
+
+string CASInputText::GetInputText()
+/* 00014204 */{
+/* 00014204 */	return this.m_InputText;
+/* 00014210 */}
+
+void CASInputText::UpdateCursorPos(ref 文字入力エリア_t a, int OffsetX, int OffsetY)
+/* 0001421e */{
+/* 0001421e */	int x = a.Ｘ + OffsetX;
+/* 00014248 */	int y = a.Ｙ + OffsetY;
+/* 00014272 */	InputString.SetPos(x, y);
+/* 00014290 */	this.m_CursorParts.SetPos(x + 1, y);
+/* 000142bc */}
+
+void CASInputText::ClipText(ref 文字入力エリア_t InputStringArea, ref string PrevText, ref string NextText)
+/* 000142c4 */{
+/* 000142c4 */	if (InputStringArea.m_nMaxTextLengthSJIS == -1)
+/* 000142e4 */	{
+/* 000142e4 */		return;
+/* 000142e6 */	}
+/* 000142e6 */	while (PrevText.LengthByte() + NextText.LengthByte() > InputStringArea.m_nMaxTextLengthSJIS * 2)
+/* 0001431e */	{
+/* 0001431e */		NextText.PopBack();
+/* 0001432a */		if (NextText.LengthByte() == 0)
+/* 00014342 */		{
+/* 00014342 */			break;
+/* 00014348 */		}
+/* 00014348 */	}
+/* 0001434e */	while (PrevText.LengthByte() > InputStringArea.m_nMaxTextLengthSJIS * 2)
+/* 0001437a */	{
+/* 0001437a */		PrevText.PopBack();
+/* 00014386 */	}
+/* 0001438c */}
+
+bool CASInputText::ShiftRight(ref string SrcText, ref string DestText)
+/* 00014394 */{
+/* 00014394 */	if (SrcText.Empty())
+/* 000143a6 */	{
+/* 000143a6 */		return false;
+/* 000143ae */	}
+/* 000143ae */	DestText = SrcText.GetPart(SrcText.Length() - 1, 1) + DestText;
+/* 000143ec */	SrcText.PopBack();
+/* 000143f8 */	return true;
+/* 00014400 */}
+
+bool CASInputText::ShiftLeft(ref string SrcText, ref string DestText)
+/* 0001440e */{
+/* 0001440e */	if (DestText.Empty())
+/* 00014420 */	{
+/* 00014420 */		return false;
+/* 00014428 */	}
+/* 00014428 */	SrcText += DestText.GetPart(0, 1);
+/* 0001444e */	DestText.Erase(0);
+/* 00014466 */	return true;
+/* 0001446e */}
+
+bool CASInputText::IsConverting()
+/* 0001447c */{
+/* 0001447c */	return InputString.Converts() || InputString.Inputs();
+/* 000144b2 */}
+

@@ -1,0 +1,28 @@
+void PlayerSkillOpenLevel::init(string skillId, string playerId, int index, int openLevel)
+/* 001e0a86 */{
+/* 001e0a86 */	this.skillId_ = skillId;
+/* 001e0a9e */	this.playerId_ = playerId;
+/* 001e0ab6 */	this.index_ = index;
+/* 001e0acc */	this.openLevel_ = openLevel;
+/* 001e0ae2 */}
+
+string PlayerSkillOpenLevel::getSkillId()
+/* 001e0aea */{
+/* 001e0aea */	return this.skillId_;
+/* 001e0af6 */}
+
+string PlayerSkillOpenLevel::getPlayerId()
+/* 001e0b04 */{
+/* 001e0b04 */	return this.playerId_;
+/* 001e0b10 */}
+
+int PlayerSkillOpenLevel::getIndex()
+/* 001e0b1e */{
+/* 001e0b1e */	return this.index_;
+/* 001e0b2a */}
+
+int PlayerSkillOpenLevel::getOpenLevel()
+/* 001e0b38 */{
+/* 001e0b38 */	return this.openLevel_;
+/* 001e0b44 */}
+

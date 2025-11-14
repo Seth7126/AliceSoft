@@ -1,0 +1,178 @@
+CASClick::CASClick()
+/* 0000017a */{
+/* 00000182 */	this.m_nKey = -1;
+/* 00000194 */	this.m_bKeyDown = false;
+/* 000001a6 */	this.m_bFirstClickOff = false;
+/* 000001b8 */	this.m_nKeyDownOnObject = -2147483648;
+/* 000001ca */	this.m_Trigger = false;
+/* 000001dc */	this.m_bKeyDownLoop = false;
+/* 000001ee */	this.m_bKeyPress = false;
+/* 00000200 */	this.m_nPressFirstTime = 350;
+/* 00000212 */	this.m_nPressTime = 50;
+/* 00000224 */}
+
+void CASClick::Init(int nKey, bool FirstKeyDownCancel)
+/* 0000022c */{
+/* 0000022c */	this.m_nKey = nKey;
+/* 00000242 */	this.Reset(FirstKeyDownCancel);
+/* 00000254 */}
+
+void CASClick::Reset(bool FirstKeyDownCancel)
+/* 0000025c */{
+/* 0000025c */	this.m_bKeyDown = false;
+/* 0000026e */	this.m_nKeyDownOnObject = -2147483648;
+/* 00000280 */	this.m_bKeyDownLoop = false;
+/* 00000292 */	this.m_bKeyPress = false;
+/* 000002a4 */	this.m_bFirstClickOff = FirstKeyDownCancel && AFL_IsKeyDown(this.m_nKey);
+/* 000002ea */}
+
+bool CASClick::IsFirstClick()
+/* 000002f2 */{
+/* 000002f2 */	if (this.m_nKey == -1)
+/* 0000030a */	{
+/* 0000030a */		return false;
+/* 00000312 */	}
+/* 00000312 */	if (!this.m_bFirstClickOff)
+/* 00000324 */	{
+/* 00000324 */		return false;
+/* 0000032c */	}
+/* 0000032c */	if (AFL_IsKeyDown(this.m_nKey))
+/* 00000342 */	{
+/* 00000342 */		if (!this.m_bKeyDown)
+/* 00000354 */		{
+/* 00000354 */			this.m_bKeyDown = true;
+/* 00000366 */		}
+/* 00000366 */	}
+/* 0000036c */	else if (this.m_bKeyDown)
+/* 0000037c */	{
+/* 0000037c */		this.m_bKeyDown = false;
+/* 0000038e */		this.m_bFirstClickOff = false;
+/* 000003a0 */	}
+/* 000003a0 */	return true;
+/* 000003a8 */}
+
+bool CASClick::IsClick(int nOnObject)
+/* 000003b6 */{
+/* 000003b6 */	if (this.m_nKey == -1)
+/* 000003ce */	{
+/* 000003ce */		return false;
+/* 000003d6 */	}
+/* 000003d6 */	if (this.IsFirstClick())
+/* 000003e4 */	{
+/* 000003e4 */		return false;
+/* 000003ec */	}
+/* 000003ec */	if (AFL_IsKeyDown(this.m_nKey))
+/* 00000402 */	{
+/* 00000402 */		if (!this.m_bKeyDown)
+/* 00000414 */		{
+/* 00000414 */			this.m_bKeyDown = true;
+/* 00000426 */			this.m_nKeyDownOnObject = nOnObject;
+/* 0000043c */		}
+/* 0000043c */	}
+/* 00000442 */	else if (this.m_bKeyDown)
+/* 00000452 */	{
+/* 00000452 */		this.m_bKeyDown = false;
+/* 00000464 */		if (nOnObject != -2147483648)
+/* 0000047c */		{
+/* 0000047c */			if (nOnObject == this.m_nKeyDownOnObject)
+/* 00000498 */			{
+/* 00000498 */				return true;
+/* 000004a0 */			}
+/* 000004a0 */		}
+/* 000004a6 */		else
+/* 000004a6 */		{
+/* 000004a6 */			return true;
+/* 000004ae */		}
+/* 000004ae */		this.m_nKeyDownOnObject = -2147483648;
+/* 000004c0 */	}
+/* 000004c0 */	return false;
+/* 000004c8 */}
+
+bool CASClick::IsKeyDown()
+/* 000004d6 */{
+/* 000004d6 */	if (this.m_nKey == -1)
+/* 000004ee */	{
+/* 000004ee */		return false;
+/* 000004f6 */	}
+/* 000004f6 */	if (this.IsFirstClick())
+/* 00000504 */	{
+/* 00000504 */		return false;
+/* 0000050c */	}
+/* 0000050c */	return AFL_IsKeyDown(this.m_nKey);
+/* 0000051e */}
+
+bool CASClick::IsKeyTrigger()
+/* 0000052c */{
+/* 0000052c */	if (this.m_nKey == -1)
+/* 00000544 */	{
+/* 00000544 */		return false;
+/* 0000054c */	}
+/* 0000054c */	if (this.IsFirstClick())
+/* 0000055a */	{
+/* 0000055a */		return false;
+/* 00000562 */	}
+/* 00000562 */	if (AFL_IsKeyDown(this.m_nKey) && !this.m_Trigger)
+/* 000005a2 */	{
+/* 000005a2 */		this.m_Trigger = true;
+/* 000005b4 */		return true;
+/* 000005bc */	}
+/* 000005c2 */	else if (AFL_IsKeyDown(this.m_nKey))
+/* 000005d8 */	{
+/* 000005d8 */		return false;
+/* 000005e0 */	}
+/* 000005e6 */	else
+/* 000005e6 */	{
+/* 000005e6 */		this.m_Trigger = false;
+/* 000005f8 */	}
+/* 000005f8 */	return false;
+/* 00000600 */}
+
+bool CASClick::IsKeyPress(int nOnObject)
+/* 0000060e */{
+/* 0000060e */	if (this.m_nKey == -1)
+/* 00000626 */	{
+/* 00000626 */		return false;
+/* 0000062e */	}
+/* 0000062e */	if (this.IsFirstClick())
+/* 0000063c */	{
+/* 0000063c */		return false;
+/* 00000644 */	}
+/* 00000644 */	if (AFL_IsKeyDown(this.m_nKey))
+/* 0000065a */	{
+/* 0000065a */		if (!this.m_bKeyPress)
+/* 0000066c */		{
+/* 0000066c */			this.m_bKeyPress = true;
+/* 0000067e */			this.m_bKeyDownLoop = false;
+/* 00000690 */			this.m_Timer.Reset();
+/* 000006a0 */			this.m_nKeyDownOnObject = nOnObject;
+/* 000006b6 */			return true;
+/* 000006be */		}
+/* 000006be */		if (nOnObject != this.m_nKeyDownOnObject)
+/* 000006da */		{
+/* 000006da */			return false;
+/* 000006e2 */		}
+/* 000006e2 */		if (!this.m_bKeyDownLoop)
+/* 000006f4 */		{
+/* 000006f4 */			if (this.m_Timer.Get() < this.m_nPressFirstTime)
+/* 00000716 */			{
+/* 00000716 */				return false;
+/* 0000071e */			}
+/* 0000071e */		}
+/* 00000724 */		else if (this.m_Timer.Get() < this.m_nPressTime)
+/* 00000746 */		{
+/* 00000746 */			return false;
+/* 0000074e */		}
+/* 0000074e */		this.m_bKeyDownLoop = true;
+/* 00000760 */		this.m_Timer.Reset();
+/* 00000770 */		return true;
+/* 00000778 */	}
+/* 0000077e */	else if (this.m_bKeyPress)
+/* 0000078e */	{
+/* 0000078e */		this.m_bKeyPress = false;
+/* 000007a0 */		this.m_bKeyDownLoop = false;
+/* 000007b2 */		this.m_bFirstClickOff = false;
+/* 000007c4 */		this.m_nKeyDownOnObject = -2147483648;
+/* 000007d6 */	}
+/* 000007d6 */	return false;
+/* 000007de */}
+

@@ -1,0 +1,45 @@
+CMessageWindowStatusManager::CMessageWindowStatusManager()
+/* 00020a92 */{
+/* 00020a9c */}
+
+void CMessageWindowStatusManager::Clear()
+/* 00020aa2 */{
+/* 00020aa2 */	this.m_ShowingMessageWindowList.Free();
+/* 00020aac */}
+
+void CMessageWindowStatusManager::ShowMessageWindow(int MessageWindowNumber)
+/* 00020ab4 */{
+/* 00020ab4 */	this.HideMessageWindow(MessageWindowNumber);
+/* 00020ac6 */	this.m_ShowingMessageWindowList.PushBack(MessageWindowNumber);
+/* 00020ada */}
+
+void CMessageWindowStatusManager::HideMessageWindow(int MessageWindowNumber)
+/* 00020ae2 */{
+/* 00020ae2 */	int Index = this.m_ShowingMessageWindowList.Find(0, this.m_ShowingMessageWindowList.Numof(), MessageWindowNumber);
+/* 00020b1e */	if (Index == -1)
+/* 00020b36 */	{
+/* 00020b36 */		return;
+/* 00020b38 */	}
+/* 00020b38 */	this.m_ShowingMessageWindowList.Erase(Index);
+/* 00020b4e */}
+
+void CMessageWindowStatusManager::GetShowingMessageWindowList(ref array@int ShowingMessageWindowList)
+/* 00020b56 */{
+/* 00020b56 */	ShowingMessageWindowList.Alloc(this.m_ShowingMessageWindowList.Numof());
+/* 00020b76 */	ShowingMessageWindowList.Copy(0, this.m_ShowingMessageWindowList, 0, ShowingMessageWindowList.Numof());
+/* 00020ba8 */}
+
+int CMessageWindowStatusManager::GetActiveMessageWindowNumber()
+/* 00020bb0 */{
+/* 00020bb0 */	if (this.m_ShowingMessageWindowList.Empty())
+/* 00020bc0 */	{
+/* 00020bc0 */		return 0;
+/* 00020bc8 */	}
+/* 00020bc8 */	return this.m_ShowingMessageWindowList[this.m_ShowingMessageWindowList.Numof() - 1];
+/* 00020bee */}
+
+bool CMessageWindowStatusManager::IsExistActiveMessageWindow()
+/* 00020bfc */{
+/* 00020bfc */	return !this.m_ShowingMessageWindowList.Empty();
+/* 00020c0c */}
+

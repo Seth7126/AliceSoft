@@ -1,0 +1,171 @@
+void SceneCamp::init(ref CampBackGround bg, int imageType)
+/* 001b7fb2 */{
+/* 001b7fb2 */	this.bg_ <- bg;
+/* 001b7fd2 */	this.state_ = 0;
+/* 001b7fe4 */	this.clicked_ = -1;
+/* 001b7ff6 */	this.imageType_ = imageType;
+/* 001b800c */	this.initButton();
+/* 001b8014 */	this.cpView_.init();
+/* 001b8024 */	this.icon_.init(this.onClickMirrorPiece);
+/* 001b803e */	this.hpView_.init(5200);
+/* 001b8054 */	this.memoView_.init(g_gameFlagMap.getString("俺のメモ"));
+/* 001b807a */	this.btnExit_.init("システム／ボタン／幅１７０", "キャンプをたたむ", "", true);
+/* 001b80a2 */	this.btnExit_.setPos(840, 494);
+/* 001b80be */	this.btnSystem_.init("システム／ボタン／メニュー", "", "", false);
+/* 001b80e6 */	this.btnSystem_.setPos(950, 692);
+/* 001b8102 */	this.btnSystem_.setClickCallback(this.onClickSystemMenuButton, 0);
+/* 001b8122 */	this.btnSaveLion_.init("セーブライオン", this.getSaveLionCount);
+/* 001b8142 */	this.btnSaveLion_.setPos(694, 494);
+/* 001b815e */	this.btnSaveLion_.setClickCallback(this.onClickSaveLion, 1);
+/* 001b817e */}
+
+void SceneCamp::onClickMirrorPiece()
+/* 001b8186 */{
+/* 001b8186 */	this.onClick(5);
+/* 001b8194 */}
+
+void SceneCamp::onClickSaveLion(int index)
+/* 001b819c */{
+/* 001b819c */	DialogInfomation info;
+/* 001b81ac */	info.setCaption("吠えろセーブライオン！");
+/* 001b81c2 */	info.setMessage("セーブライオンをひとつ消費して、|ここでセーブ画面を開きます|がおー");
+/* 001b81d8 */	info.setPictureImageName("システム／ダイアログ／写真／セーブライオン");
+/* 001b81ee */	info.setAnswerTypeYesNo(true);
+/* 001b8204 */	if (openDialog(info) == 0)
+/* 001b8226 */	{
+/* 001b8226 */		if (g_playerCommonParam.getItemCount("セーブライオン") > 0)
+/* 001b824a */		{
+/* 001b824a */			g_playerCommonParam.decItem("セーブライオン");
+/* 001b8260 */		}
+/* 001b8266 */		else
+/* 001b8266 */		{
+/* 001b8266 */			g_playerCommonParam.decItem("養殖セーブライオン");
+/* 001b827c */		}
+/* 001b827c */		this.onClick(4);
+/* 001b828a */	}
+/* 001b828a */}
+
+int SceneCamp::getSaveLionCount()
+/* 001b8292 */{
+/* 001b8292 */	return g_playerCommonParam.getItemCount("セーブライオン") + g_playerCommonParam.getItemCount("養殖セーブライオン");
+/* 001b82c2 */}
+
+void SceneCamp::onClickSystemMenuButton(int index)
+/* 001b82d0 */{
+/* 001b82d0 */	openSystemMenu(false);
+/* 001b82dc */}
+
+void SceneCamp::run()
+/* 001b82e4 */{
+/* 001b82e4 */	this.fadeObject(true);
+/* 001b82f2 */}
+
+void SceneCamp::fadeObject(bool val)
+/* 001b82fa */{
+/* 001b82fa */	if (val)
+/* 001b830a */	{
+/* 001b830a */		this.bg_.fadeIn(true, NULL);
+/* 001b8322 */	}
+/* 001b8328 */	else if (this.clicked_ == -1 || this.clicked_ == 3)
+/* 001b8370 */	{
+/* 001b8370 */		this.bg_.fadeIn(false, NULL);
+/* 001b8388 */	}
+/* 001b8388 */	this.fadeButton(val);
+/* 001b839a */	this.icon_.fadeIn(val);
+/* 001b83b4 */	this.hpView_.fadeIn(val);
+/* 001b83ce */	this.cpView_.fadeIn(val);
+/* 001b83e8 */	this.memoView_.fadeIn(val);
+/* 001b8402 */	this.btnExit_.fadeIn(val);
+/* 001b841c */	this.btnSystem_.fadeIn(val);
+/* 001b8436 */	this.btnSaveLion_.fadeIn(val, NULL);
+/* 001b8452 */	this.state_ = val ? 1 : 3;
+/* 001b8480 */	this.timer_.setTimer(250, this.onFinishFading);
+/* 001b84a0 */}
+
+void SceneCamp::fadeButton(bool val)
+/* 001b84a8 */{
+/* 001b84a8 */	int i;
+/* 001b84ba */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b850a */	{
+/* 001b850a */		this.btn_[i].fadeIn(val, i * 100);
+/* 001b8542 */	}
+/* 001b8548 */}
+
+bool SceneCamp::update()
+/* 001b8550 */{
+/* 001b8550 */	if (this.state_ == 2)
+/* 001b8568 */	{
+/* 001b8568 */		if (g_mouse.isClick(1) || this.clicked_ != -1 || this.btnExit_.isClick())
+/* 001b85e2 */		{
+/* 001b85e2 */			if (g_mouse.isClick(1))
+/* 001b85fe */			{
+/* 001b85fe */				playCancel();
+/* 001b8604 */			}
+/* 001b8604 */			this.fadeObject(false);
+/* 001b8612 */		}
+/* 001b8612 */	}
+/* 001b8612 */	if (g_mouse.getWheel() > 0)
+/* 001b8630 */	{
+/* 001b8630 */		openBackLog();
+/* 001b8636 */	}
+/* 001b8636 */	return this.state_ != 4;
+/* 001b864c */}
+
+void SceneCamp::onFinishFading()
+/* 001b865a */{
+/* 001b865a */	if (this.state_ == 1)
+/* 001b8672 */	{
+/* 001b8672 */		this.state_ = 2;
+/* 001b8684 */	}
+/* 001b868a */	else
+/* 001b868a */	{
+/* 001b868a */		this.state_ = 4;
+/* 001b869c */	}
+/* 001b869c */}
+
+void SceneCamp::initButton()
+/* 001b86a4 */{
+/* 001b86a4 */	this.btn_[0].init("システム／キャンプ／パーティ編成", "パーティ編成", this.onClick, 0);
+/* 001b86d8 */	this.btn_[1].init("システム／キャンプ／アイテムを使う", "アイテムを使う", this.onClick, 1);
+/* 001b870c */	this.btn_[2].init("システム／キャンプ／ウィリスを呼ぶ", "ウィリスを呼ぶ", this.onClick, 2);
+/* 001b8740 */	this.btn_[3].init("システム／キャンプ／帰り木を使う", "帰り木を使う", this.onClick, 3);
+/* 001b8774 */	this.btn_[0].setPos(718, 155);
+/* 001b8798 */	this.btn_[1].setPos(718, 300);
+/* 001b87bc */	this.btn_[2].setPos(868, 205);
+/* 001b87e0 */	this.btn_[3].setPos(868, 351);
+/* 001b8804 */	this.setButtonEnable();
+/* 001b880c */}
+
+void SceneCamp::setButtonEnable()
+/* 001b8814 */{
+/* 001b8814 */	this.btn_[2].setEnable(g_playerCommonParam.isEnableLevelGod());
+/* 001b883c */	this.btn_[3].setEnable(g_playerCommonParam.isEnableExitDungeon());
+/* 001b8864 */	this.btn_[1].setEnable(g_playerCommonParam.isEnableItem());
+/* 001b888c */}
+
+void SceneCamp::onClick(int id)
+/* 001b8894 */{
+/* 001b8894 */	if (id == 3)
+/* 001b88ac */	{
+/* 001b88ac */		DialogInfomation info;
+/* 001b88bc */		info.setCaption("帰り木を天に掲げた！");
+/* 001b88d2 */		info.setMessage("ダンジョンから脱出するぞ");
+/* 001b88e8 */		info.setPictureImageName("システム／ダイアログ／写真／帰り木");
+/* 001b88fe */		info.setAnswerTypeYesNo(true);
+/* 001b8914 */		if (openDialog(info) == 1)
+/* 001b8936 */		{
+/* 001b8936 */			return;
+/* 001b8938 */		}
+/* 001b893e */		else
+/* 001b893e */		{
+/* 001b893e */			g_sysSound.play(6, "効果音／帰り木");
+/* 001b895a */		}
+/* 001b895a */	}
+/* 001b8960 */	this.clicked_ = id;
+/* 001b8976 */}
+
+int SceneCamp::getNextScene()
+/* 001b897e */{
+/* 001b897e */	return this.clicked_;
+/* 001b898a */}
+

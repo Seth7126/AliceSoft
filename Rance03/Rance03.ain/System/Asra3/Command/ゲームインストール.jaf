@@ -1,0 +1,10 @@
+bool Ａ＿ゲームインストール確認(string ゲーム名)
+/* 0015f1b4 */{
+/* 0015f1b4 */	return InstallInfo.IsInstalledGame(ゲーム名);
+/* 0015f1ca */}
+
+int Ａ＿ゲームメディア確認()
+/* 0015f1de */{
+/* 0015f1de */	return InstallInfo.GetInstallMediaType();
+/* 0015f1ea */}
+

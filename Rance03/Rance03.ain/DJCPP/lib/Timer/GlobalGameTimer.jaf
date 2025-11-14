@@ -1,0 +1,60 @@
+GlobalGameTimer::GlobalGameTimer()
+/* 001ed300 */{
+/* 001ed308 */	this.timer_.Reset();
+/* 001ed318 */	this.scaling_ = 1.0;
+/* 001ed32a */}
+
+void GlobalGameTimer::update()
+/* 001ed332 */{
+/* 001ed332 */	int elapsed = this.timer_.Get();
+/* 001ed34e */	if (elapsed == 0)
+/* 001ed366 */	{
+/* 001ed366 */		return;
+/* 001ed368 */	}
+/* 001ed368 */	this.timer_.Reset();
+/* 001ed378 */	if (elapsed > 48)
+/* 001ed390 */	{
+/* 001ed390 */		elapsed = 16;
+/* 001ed3a2 */	}
+/* 001ed3a2 */	this.gameLocalTime_ += Math.Min(48, elapsed) * this.getTotalScaling();
+/* 001ed3da */}
+
+int GlobalGameTimer::getTime()
+/* 001ed3e2 */{
+/* 001ed3e2 */	return this.gameLocalTime_;
+/* 001ed3ee */}
+
+float GlobalGameTimer::getTotalScaling()
+/* 001ed3fc */{
+/* 001ed3fc */	float v = g_common_configTimerScaling * this.scaling_;
+/* 001ed41e */	if (this.skipFunc_.Numof() != 0)
+/* 001ed43a */	{
+/* 001ed43a */		if (this.skipFunc_())
+/* 001ed460 */		{
+/* 001ed460 */			v = g_common_configTimerScaling * this.scaling_ * 3.0;
+/* 001ed48a */		}
+/* 001ed48a */	}
+/* 001ed48a */	return Math.MinF(v, 4.0);
+/* 001ed4a6 */}
+
+void GlobalGameTimer::setScaling(float val)
+/* 001ed4b4 */{
+/* 001ed4b4 */	this.scaling_ = val;
+/* 001ed4ca */}
+
+float GlobalGameTimer::getScaling()
+/* 001ed4d2 */{
+/* 001ed4d2 */	return this.scaling_;
+/* 001ed4de */}
+
+void GlobalGameTimer::setSkipFunction(string skipFunc)
+/* 001ed4ec */{
+/* 001ed4ec */	this.skipFunc_.Clear();
+/* 001ed4f8 */	this.skipFunc_ += skipFunc;
+/* 001ed51e */}
+
+float GlobalGameTimer::getEffectiveScalingValue()
+/* 001ed526 */{
+/* 001ed526 */	return 1.0 / this.getTotalScaling();
+/* 001ed538 */}
+

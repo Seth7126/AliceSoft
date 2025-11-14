@@ -1,0 +1,15 @@
+void AdvChangeCharacter::run(string current, string next)
+/* 00173e66 */{
+/* 00173e66 */	this.parts_.setZ(3999.0);
+/* 00173e7c */	pass("%s" % next);
+/* 00173e9a */	this.parts_.initAsFlat("システム／キャラクター切り替え");
+/* 00173eb0 */	this.parts_.changeFlatCg("立ち絵背／アイゼル／基本.png", "立ち絵背／%s／基本" % next);
+/* 00173ede */	this.parts_.setShow(true);
+/* 00173ef4 */	this.parts_.startFlat(false, 1.0);
+/* 00173f10 */	while (this.parts_.isMotionFlat())
+/* 00173f26 */	{
+/* 00173f26 */		g_frameManager.updateFrame();
+/* 00173f36 */	}
+/* 00173f3c */	this.parts_.release();
+/* 00173f4c */}
+

@@ -1,0 +1,310 @@
+void ■背景(string 背景名前, int 背景／表示方法, int 表示速度)
+/* 001762dc */{
+/* 001762dc */	checkAdvCommandHistory();
+/* 001762e2 */	g_advBackGround.show(背景名前, 背景／表示方法, 表示速度, true);
+/* 00176316 */}
+
+void ■背景消去(int 背景／表示方法, int 表示速度, bool 即時実行)
+/* 00176324 */{
+/* 00176324 */	checkAdvCommandHistory();
+/* 0017632a */	■枠消去();
+/* 00176330 */	g_advBackGround.hide(背景／表示方法, 表示速度, 即時実行);
+/* 0017635e */}
+
+void ■背景視点移動(int 方向, bool 即時実行)
+/* 0017636c */{
+/* 0017636c */	checkAdvCommandHistory();
+/* 00176372 */	g_advBackGround.move(方向 == 1, 300, 即時実行);
+/* 001763a6 */}
+
+void ■立ち絵(string 立ち絵名前, int 表示方向, bool 即時実行)
+/* 001763b4 */{
+/* 001763b4 */	checkAdvCommandHistory();
+/* 001763ba */	g_advStand[0].show(立ち絵名前, 表示方向, 即時実行);
+/* 001763f0 */}
+
+void ■立ち絵消去(int 表示方向, bool 即時実行)
+/* 001763fe */{
+/* 001763fe */	checkAdvCommandHistory();
+/* 00176404 */	g_advStand[0].hide(表示方向, 即時実行);
+/* 00176430 */}
+
+void ■立ち絵モ(int 立ち絵モ種類)
+/* 0017643e */{
+/* 0017643e */	g_advStand[0].motion(立ち絵モ種類);
+/* 00176460 */}
+
+void ■立ち絵背(string 立ち絵名前, int 表示方向, bool 即時実行)
+/* 0017646e */{
+/* 0017646e */	checkAdvCommandHistory();
+/* 00176474 */	int n;
+/* 00176486 */	switch (表示方向)
+/* 0017649c */	{
+/* 0017649c */	case 1:
+/* 0017649c */		表示方向 = 2;
+/* 001764ae */		break;
+/* 001764b4 */	case 2:
+/* 001764b4 */		表示方向 = 1;
+/* 001764c6 */		break;
+/* 001764cc */	}
+/* 001764cc */	g_advStand[1].show(立ち絵名前, 表示方向, 即時実行);
+/* 00176502 */}
+
+void ■立ち絵背消去(int 表示方向, bool 即時実行)
+/* 00176510 */{
+/* 00176510 */	checkAdvCommandHistory();
+/* 00176516 */	int n;
+/* 00176528 */	switch (表示方向)
+/* 0017653e */	{
+/* 0017653e */	case 1:
+/* 0017653e */		表示方向 = 2;
+/* 00176550 */		break;
+/* 00176556 */	case 2:
+/* 00176556 */		表示方向 = 1;
+/* 00176568 */		break;
+/* 0017656e */	}
+/* 0017656e */	g_advStand[1].hide(表示方向, 即時実行);
+/* 0017659a */}
+
+void ■立ち絵背モ(int 立ち絵モ種類)
+/* 001765a8 */{
+/* 001765a8 */	checkAdvCommandHistory();
+/* 001765ae */	g_advStand[1].motion(立ち絵モ種類);
+/* 001765d0 */}
+
+void ●名札(string キャラ名前, string 名札定義)
+/* 001765de */{
+/* 001765de */	checkAdvCommandHistory();
+/* 001765e4 */	○名札(キャラ名前, 名札定義);
+/* 001765fe */}
+
+void ○名札(string キャラ名前, string 名札定義)
+/* 0017660c */{
+/* 0017660c */	checkAdvCommandHistory();
+/* 00176612 */	g_advMessageWindow.show();
+/* 00176622 */	if (名札定義 != "")
+/* 0017663a */	{
+/* 0017663a */		innerShowNamePlate(名札定義);
+/* 0017664a */	}
+/* 00176650 */	else
+/* 00176650 */	{
+/* 00176650 */		innerShowNamePlate(キャラ名前);
+/* 00176660 */	}
+/* 00176660 */}
+
+void innerShowNamePlate(string 名札名前)
+/* 0017666e */{
+/* 0017666e */	array@string n;
+/* 00176678 */	splitToken(n, 名札名前, "／");
+/* 00176698 */	バックログ登録("【%s】" % n[0]);
+/* 001766be */	g_advMessageWindow.show();
+/* 001766ce */	g_advNamePlate.show(名札名前);
+/* 001766e8 */}
+
+void ●ト書き()
+/* 001766f6 */{
+/* 001766f6 */	checkAdvCommandHistory();
+/* 001766fc */	g_advMessageWindow.show();
+/* 0017670c */	g_advNamePlate.hide();
+/* 0017671c */}
+
+void ■枠消去()
+/* 0017672a */{
+/* 0017672a */	if (g_advNamePlate.isShow())
+/* 00176740 */	{
+/* 00176740 */		checkAdvCommandHistory();
+/* 00176746 */		g_advNamePlate.hide();
+/* 00176756 */	}
+/* 00176756 */	g_advMessageWindow.hide();
+/* 00176766 */}
+
+void ■シーン終了(int 表示速度)
+/* 00176774 */{
+/* 00176774 */	checkAdvCommandHistory();
+/* 0017677a */	■枠消去();
+/* 00176780 */	g_advBackGround.release();
+/* 00176790 */	g_advStand[0].release();
+/* 001767a8 */	g_advStand[1].release();
+/* 001767c0 */	全表示(1, 表示速度 * g_globalTimer.getEffectiveScalingValue());
+/* 001767f0 */}
+
+void ■立ち絵全消去()
+/* 001767fe */{
+/* 001767fe */	checkAdvCommandHistory();
+/* 00176804 */	■枠消去();
+/* 0017680a */	■立ち絵消去(1, false);
+/* 0017681c */	■立ち絵背消去(1, false);
+/* 0017682e */	RunPartsMotion();
+/* 00176834 */}
+
+void ■イベント(string 画像名, int 効果種類, int 表示速度)
+/* 00176842 */{
+/* 00176842 */	checkAdvCommandHistory();
+/* 00176848 */	■枠消去();
+/* 0017684e */	string name = 画像名 == "" ? "背景／黒" : "イベント／" + 画像名;
+/* 00176892 */	g_advEventCg.show(name, 効果種類, 表示速度);
+/* 001768c0 */	g_advStand[0].release();
+/* 001768d8 */	g_advStand[1].release();
+/* 001768f0 */	g_advBackGround.release();
+/* 00176900 */}
+
+void ■イベント終了(int 効果種類, int 表示速度)
+/* 0017690e */{
+/* 0017690e */	checkAdvCommandHistory();
+/* 00176914 */	■枠消去();
+/* 0017691a */	g_advEventCg.hide(効果種類, 表示速度);
+/* 0017693e */	■回想登録(system.GetFuncStackName(1));
+/* 00176950 */}
+
+void ■射精(string 変更ＣＧ名)
+/* 0017695e */{
+/* 0017695e */	checkAdvCommandHistory();
+/* 00176964 */	■枠消去();
+/* 0017696a */	g_advFullScreenEffect.init(7);
+/* 00176980 */	g_advFullScreenEffect.show(1, 1500);
+/* 0017699c */	g_advFullScreenEffect.hide(1, 300);
+/* 001769b8 */	g_advFullScreenEffect.show(1, 500);
+/* 001769d4 */	g_advEventCg.show("イベント／" + 変更ＣＧ名, -1, 0);
+/* 00176a02 */	g_advFullScreenEffect.hide(1, 1500);
+/* 00176a1e */	g_advFullScreenEffect.release();
+/* 00176a2e */}
+
+void ■フラッシュ(int フラッシュイン時間, int フラッシュアウト時間, int 色)
+/* 00176a3c */{
+/* 00176a3c */	フラッシュイン時間 = Math.Max(5, フラッシュイン時間);
+/* 00176a62 */	フラッシュアウト時間 = Math.Max(5, フラッシュアウト時間);
+/* 00176a88 */	checkAdvCommandHistory();
+/* 00176a8e */	g_advFullScreenEffect.init(色);
+/* 00176aa8 */	g_advFullScreenEffect.show(1, フラッシュイン時間);
+/* 00176ac8 */	g_advFullScreenEffect.hide(1, フラッシュアウト時間);
+/* 00176ae8 */	g_advFullScreenEffect.release();
+/* 00176af8 */}
+
+void ■フラッシュイン(int time)
+/* 00176b06 */{
+/* 00176b06 */	checkAdvCommandHistory();
+/* 00176b0c */	g_advFullScreenEffect.init(7);
+/* 00176b22 */	g_advFullScreenEffect.show(1, time);
+/* 00176b42 */}
+
+void ■フラッシュアウト(int time)
+/* 00176b50 */{
+/* 00176b50 */	checkAdvCommandHistory();
+/* 00176b56 */	g_advFullScreenEffect.hide(1, time);
+/* 00176b76 */	g_advFullScreenEffect.release();
+/* 00176b86 */}
+
+void ■画面揺らし(int 揺れ幅, int 揺れ時間)
+/* 00176b94 */{
+/* 00176b94 */	checkAdvCommandHistory();
+/* 00176b9a */	画面揺らし(揺れ幅, 揺れ幅, 揺れ時間);
+/* 00176bbe */}
+
+void ■全体イン(string 立ち絵背, string 立ち絵)
+/* 00176bcc */{
+/* 00176bcc */	checkAdvCommandHistory();
+/* 00176bd2 */	■立ち絵(立ち絵, 1, false);
+/* 00176bee */	■立ち絵背(立ち絵背, 1, false);
+/* 00176c0a */	■背景視点移動(-1, true);
+/* 00176c1c */}
+
+void ■全体アウト()
+/* 00176c2a */{
+/* 00176c2a */	checkAdvCommandHistory();
+/* 00176c30 */	■立ち絵消去(1, false);
+/* 00176c42 */	■立ち絵背消去(1, false);
+/* 00176c54 */	■背景視点移動(1, true);
+/* 00176c66 */}
+
+void ■立ち絵背景アウト()
+/* 00176c74 */{
+/* 00176c74 */	checkAdvCommandHistory();
+/* 00176c7a */	■立ち絵消去(1, false);
+/* 00176c8c */	■立ち絵背消去(1, false);
+/* 00176c9e */	■背景消去(0, 1000, true);
+/* 00176cb6 */}
+
+void ■切り替え(string 現在キャラ, string 変更キャラ)
+/* 00176cc4 */{
+/* 00176cc4 */	checkAdvCommandHistory();
+/* 00176cca */	g_advChangeCharacter.run(現在キャラ, 変更キャラ);
+/* 00176cee */}
+
+void ■効果音(string 効果音名)
+/* 00176cfc */{
+/* 00176cfc */	checkAdvCommandHistory();
+/* 00176d02 */	g_advSound.playSound(効果音名, false);
+/* 00176d22 */}
+
+void ■効果音非継続(string 効果音名)
+/* 00176d30 */{
+/* 00176d30 */	checkAdvCommandHistory();
+/* 00176d36 */	g_advSound.playSound(効果音名, true);
+/* 00176d56 */}
+
+void ■ループ効果音(string 効果音名, int time)
+/* 00176d64 */{
+/* 00176d64 */	checkAdvCommandHistory();
+/* 00176d6a */	g_advSound.playLoopSound(効果音名, time);
+/* 00176d8e */}
+
+void ■ループ効果音停止(int フェード時間)
+/* 00176d9c */{
+/* 00176d9c */	checkAdvCommandHistory();
+/* 00176da2 */	g_advSound.stopLoopSound(フェード時間);
+/* 00176dbc */}
+
+void ■音楽(string 音楽名, int フェード時間)
+/* 00176dca */{
+/* 00176dca */	checkAdvCommandHistory();
+/* 00176dd0 */	音楽名 = g_advSound.resolveMusicName(音楽名);
+/* 00176df8 */	if (g_music.getPlayingMusicId() != "" && フェード時間 == 0)
+/* 00176e46 */	{
+/* 00176e46 */		advErr("フェードアウトせずに音楽連続再生");
+/* 00176e52 */	}
+/* 00176e52 */	g_music.play(音楽名, フェード時間, false);
+/* 00176e7c */}
+
+void ■音楽停止(int フェード時間)
+/* 00176e8a */{
+/* 00176e8a */	checkAdvCommandHistory();
+/* 00176e90 */	g_music.fadeOut(フェード時間);
+/* 00176eaa */}
+
+void ■効果音停止()
+/* 00176eb8 */{
+/* 00176eba */}
+
+void ■スタッフロール開始(string flatName)
+/* 00176ec6 */{
+/* 00176ec6 */	g_advStaffroll.show(flatName);
+/* 00176ee0 */}
+
+void ■スタッフロール終了()
+/* 00176eee */{
+/* 00176eee */	g_advStaffroll.hide();
+/* 00176efe */}
+
+void ■回想登録(string func)
+/* 00176f0c */{
+/* 00176f0c */	pass(func);
+/* 00176f1c */	if (g_replayEvent.Find(0, g_replayEvent.Numof(), func) != -1)
+/* 00176f5a */	{
+/* 00176f5a */		return;
+/* 00176f5c */	}
+/* 00176f5c */	int i;
+/* 00176f6e */	for (i = 0; i < g_replay.Numof(); ++i)
+/* 00176fbe */	{
+/* 00176fbe */		if (g_replay[i].isEventExist(func))
+/* 00176fea */		{
+/* 00176fea */			g_replayEvent.PushBack(func);
+/* 00176ffe */			共有セーブ();
+/* 00177004 */			break;
+/* 0017700a */		}
+/* 0017700a */	}
+/* 00177010 */}
+
+void checkAdvCommandHistory()
+/* 0017701e */{
+/* 00177020 */}
+

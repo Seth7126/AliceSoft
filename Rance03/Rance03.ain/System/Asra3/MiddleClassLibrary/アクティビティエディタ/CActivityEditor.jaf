@@ -1,0 +1,427 @@
+CActivityEditor::CActivityEditor()
+/* 0004236c */{
+/* 00042376 */}
+
+CActivityEditor::~CActivityEditor()
+/* 0004237c */{
+/* 0004237e */}
+
+bool CActivityEditor::CreateBGRect()
+/* 00042384 */{
+/* 00042384 */	PARTS_ReleaseWithInit(this.m_BGRect);
+/* 00042392 */	this.m_BGRect = PARTS_GetFreeSystemPartsNumber();
+/* 000423a4 */	Ｐ＿Ｚ座標設定(this.m_BGRect, 0);
+/* 000423ba */	Ｐ＿クリック可能設定(this.m_BGRect, true);
+/* 000423d0 */	AFL_Parts_AddMouseLClickEvent(this.m_BGRect, this.MouseClickEvent);
+/* 000423ea */	return true;
+/* 000423f2 */}
+
+bool CActivityEditor::CreateToolForm()
+/* 00042400 */{
+/* 00042400 */	this.m_PanelList.Create();
+/* 00042410 */	this.m_PanelList.SetLayoutType(1);
+/* 00042426 */	if (!this.CreateProjectForm())
+/* 00042436 */	{
+/* 00042436 */		return false;
+/* 0004243e */	}
+/* 0004243e */	if (!this.CreateComponentListForm())
+/* 0004244e */	{
+/* 0004244e */		return false;
+/* 00042456 */	}
+/* 00042456 */	if (!this.CreateInstanceItemList())
+/* 00042466 */	{
+/* 00042466 */		return false;
+/* 0004246e */	}
+/* 0004246e */	if (!this.CreateInstanceTreeForm())
+/* 0004247e */	{
+/* 0004247e */		return false;
+/* 00042486 */	}
+/* 00042486 */	if (!this.CreatePropertyForm())
+/* 00042496 */	{
+/* 00042496 */		return false;
+/* 0004249e */	}
+/* 0004249e */	this.LoadPanelSetting();
+/* 000424a6 */	this.m_PanelList.AddUpdateLayoutEvent(this.OnUpdatePanelLayout);
+/* 000424c0 */	return true;
+/* 000424c8 */}
+
+bool CActivityEditor::CreateProjectForm()
+/* 000424d6 */{
+/* 000424d6 */	int Number = this.m_ProjectForm.Create();
+/* 000424f2 */	if (Number == 0)
+/* 0004250a */	{
+/* 0004250a */		return false;
+/* 00042512 */	}
+/* 00042512 */	this.m_PanelList.ResetPanel("プロジェクト", Number);
+/* 00042538 */	this.m_PanelList.SetPanelSize(Number, 420, 120);
+/* 00042566 */	this.m_ProjectForm.SetCreateClick(this.MouseProjectCreateClickEvent);
+/* 00042580 */	this.m_ProjectForm.SetLoadClick(this.MouseProjectLoadClickEvent);
+/* 0004259a */	this.m_ProjectForm.SetSaveClick(this.MouseProjectSaveClickEvent);
+/* 000425b4 */	this.m_ProjectForm.SetSaveAsClick(this.MouseProjectSaveAsClickEvent);
+/* 000425ce */	this.m_ProjectForm.SetRunClick(this.MouseProjectRunClickEvent);
+/* 000425e8 */	this.m_ProjectForm.SetResetPosClick(this.MouseProjectResetPosClickEvent);
+/* 00042602 */	this.m_ProjectForm.CreateProject("");
+/* 00042618 */	return true;
+/* 00042620 */}
+
+bool CActivityEditor::CreateComponentListForm()
+/* 0004262e */{
+/* 0004262e */	int Number = this.m_ComponentListForm.Create();
+/* 0004264a */	if (Number == 0)
+/* 00042662 */	{
+/* 00042662 */		return false;
+/* 0004266a */	}
+/* 0004266a */	this.m_PanelList.ResetPanel("コンポーネントリスト", Number);
+/* 00042690 */	this.m_PanelList.SetPanelSize(Number, 420, 150);
+/* 000426be */	this.m_ComponentListForm.AddAddComponentEvent(this.m_InstanceTreeForm.Add);
+/* 000426e0 */	return true;
+/* 000426e8 */}
+
+bool CActivityEditor::CreateInstanceItemList()
+/* 000426f6 */{
+/* 000426f6 */	this.m_InstanceItemList.Create(this.m_InstanceLayerID);
+/* 00042710 */	this.m_InstanceItemList.AddSelectEvent(this.m_PropertyForm.SetComponent);
+/* 00042732 */	return true;
+/* 0004273a */}
+
+bool CActivityEditor::CreateInstanceTreeForm()
+/* 00042748 */{
+/* 00042748 */	int Number = this.m_InstanceTreeForm.Create(this.m_InstanceItemList);
+/* 0004276e */	if (Number == 0)
+/* 00042786 */	{
+/* 00042786 */		SYS_ERROR("インスタンスツリーの初期化に失敗しました", 0);
+/* 00042798 */		return false;
+/* 000427a0 */	}
+/* 000427a0 */	this.m_PanelList.ResetPanel("インスタンスツリー", Number);
+/* 000427c6 */	this.m_PanelList.SetPanelSize(Number, 420, 320);
+/* 000427f4 */	return true;
+/* 000427fc */}
+
+bool CActivityEditor::CreatePropertyForm()
+/* 0004280a */{
+/* 0004280a */	int Number = this.m_PropertyForm.Create();
+/* 00042826 */	if (Number == 0)
+/* 0004283e */	{
+/* 0004283e */		return false;
+/* 00042846 */	}
+/* 00042846 */	this.m_PanelList.ResetPanel("プロパティ", Number);
+/* 0004286c */	this.m_PanelList.SetPanelSize(Number, 420, 350);
+/* 0004289a */	this.m_PropertyForm.SetInstanceTree(this.m_InstanceItemList);
+/* 000428b4 */	return true;
+/* 000428bc */}
+
+void CActivityEditor::MouseClickEvent(int ID, int MouseX, int MouseY)
+/* 000428ca */{
+/* 000428ca */	this.m_InstanceItemList.Passive();
+/* 000428da */}
+
+void CActivityEditor::MouseProjectCreateClickEvent(int ID, int MouseX, int MouseY)
+/* 000428e2 */{
+/* 000428e2 */	if (!DIALOG_OKCANCEL("現在作成中のデータを破棄しますか？"))
+/* 000428f6 */	{
+/* 000428f6 */		return;
+/* 000428f8 */	}
+/* 000428f8 */	this.m_InstanceTreeForm.ReleaseAllInstance();
+/* 00042908 */	this.m_ProjectForm.CreateProject("");
+/* 0004291e */}
+
+void CActivityEditor::MouseProjectLoadClickEvent(int ID, int MouseX, int MouseY)
+/* 00042926 */{
+/* 00042926 */	if (!DIALOG_OKCANCEL("現在作成中のデータを破棄して\n新しいデータを読み込みますか？"))
+/* 0004293a */	{
+/* 0004293a */		return;
+/* 0004293c */	}
+/* 0004293c */	string SelectActivityPath;
+/* 00042950 */	if (!SYS_Activity_SelectFile(SelectActivityPath))
+/* 00042968 */	{
+/* 00042968 */		return;
+/* 0004296a */	}
+/* 0004296a */	this.Load(SelectActivityPath);
+/* 0004297c */}
+
+void CActivityEditor::Load(string ActivityName)
+/* 00042984 */{
+/* 00042984 */	CActivityData ActivityData;
+/* 00042994 */	if (!ActivityData.Load(ActivityName, this.m_InstanceLayerID))
+/* 000429c0 */	{
+/* 000429c0 */		return;
+/* 000429c2 */	}
+/* 000429c2 */	if (!this.m_InstanceTreeForm.LoadActivity(ActivityData))
+/* 000429e4 */	{
+/* 000429e4 */		return;
+/* 000429e6 */	}
+/* 000429e6 */	if (!this.m_ProjectForm.LoadActivity(ActivityData))
+/* 00042a08 */	{
+/* 00042a08 */		return;
+/* 00042a0a */	}
+/* 00042a0a */	this.m_ProjectForm.SetProjectName(ActivityName);
+/* 00042a24 */}
+
+void CActivityEditor::MouseProjectSaveClickEvent(int ID, int MouseX, int MouseY)
+/* 00042a2c */{
+/* 00042a2c */	if (this.m_ProjectForm.GetProjectName().Empty())
+/* 00042a44 */	{
+/* 00042a44 */		this.MouseProjectSaveAsClickEvent(ID, MouseX, MouseY);
+/* 00042a6a */		return;
+/* 00042a6c */	}
+/* 00042a6c */	if (!this.OutputActivity(this.m_ProjectForm.GetProjectName()))
+/* 00042a8c */	{
+/* 00042a8c */		DIALOG_OK("データの書き出しに失敗しました");
+/* 00042a98 */		return;
+/* 00042a9a */	}
+/* 00042a9a */}
+
+void CActivityEditor::MouseProjectSaveAsClickEvent(int ID, int MouseX, int MouseY)
+/* 00042aa2 */{
+/* 00042aa2 */	string FileName = this.m_ProjectForm.GetProjectName();
+/* 00042ac0 */	if (!SYS_Activity_SaveFile(FileName))
+/* 00042ad8 */	{
+/* 00042ad8 */		return;
+/* 00042ada */	}
+/* 00042ada */	if (!this.OutputActivity(FileName))
+/* 00042af4 */	{
+/* 00042af4 */		DIALOG_OK("データの書き出しに失敗しました");
+/* 00042b00 */		return;
+/* 00042b02 */	}
+/* 00042b02 */	this.m_ProjectForm.SetProjectName(FileName);
+/* 00042b1c */}
+
+void CActivityEditor::MouseProjectRunClickEvent(int ID, int MouseX, int MouseY)
+/* 00042b24 */{
+/* 00042b24 */	this.RunActivity();
+/* 00042b2c */}
+
+void CActivityEditor::MouseProjectResetPosClickEvent(int ID, int MouseX, int MouseY)
+/* 00042b34 */{
+/* 00042b34 */	this.m_InstanceItemList.SetPosForRoot(0, 0);
+/* 00042b50 */}
+
+void CActivityEditor::MouseMoveEvent(int Number, int MouseX, int MouseY)
+/* 00042b58 */{
+/* 00042b58 */	if (this.m_DownMButton && this.m_EditMode)
+/* 00042b90 */	{
+/* 00042b90 */		int DiffX = MouseX - this.m_StartMousePosX;
+/* 00042bb2 */		int DiffY = MouseY - this.m_StartMousePosY;
+/* 00042bd4 */		this.m_InstanceItemList.SetPosForRoot(this.m_StartRootPosX + DiffX, this.m_StartRootPosY + DiffY);
+/* 00042c10 */	}
+/* 00042c10 */}
+
+void CActivityEditor::KeyTriggerEvent(int Number, int KeyCode)
+/* 00042c18 */{
+/* 00042c18 */	if (KeyCode == 4 && this.m_EditMode)
+/* 00042c58 */	{
+/* 00042c58 */		this.m_DownMButton = true;
+/* 00042c6a */		this.m_StartRootPosX = this.m_InstanceItemList.GetPosXByRoot();
+/* 00042c86 */		this.m_StartRootPosY = this.m_InstanceItemList.GetPosYByRoot();
+/* 00042ca2 */		this.m_StartMousePosX = 0;
+/* 00042cb4 */		this.m_StartMousePosY = 0;
+/* 00042cc6 */		AFL_Mouse_GetPos(this.m_StartMousePosX, this.m_StartMousePosY);
+/* 00042cde */	}
+/* 00042cde */}
+
+void CActivityEditor::KeyUpEvent(int Number, int KeyCode)
+/* 00042ce6 */{
+/* 00042ce6 */	if (KeyCode == 4 && this.m_EditMode)
+/* 00042d26 */	{
+/* 00042d26 */		this.m_DownMButton = false;
+/* 00042d38 */		this.m_StartRootPosX = 0;
+/* 00042d4a */		this.m_StartRootPosY = 0;
+/* 00042d5c */		this.m_StartMousePosX = 0;
+/* 00042d6e */		this.m_StartMousePosY = 0;
+/* 00042d80 */	}
+/* 00042d80 */}
+
+bool CActivityEditor::OutputActivity(string ActivityName)
+/* 00042d88 */{
+/* 00042d88 */	int PrevPosX = this.m_InstanceItemList.GetPosXByRoot();
+/* 00042da4 */	int PrevPosY = this.m_InstanceItemList.GetPosYByRoot();
+/* 00042dc0 */	this.m_InstanceItemList.SetPosForRoot(0, 0);
+/* 00042ddc */	CActivityData ActivityData;
+/* 00042dec */	if (!ActivityData.Create(ActivityName))
+/* 00042e0e */	{
+/* 00042e0e */		this.m_InstanceItemList.SetPosForRoot(PrevPosX, PrevPosY);
+/* 00042e32 */		return false;
+/* 00042e3a */	}
+/* 00042e3a */	if (!this.m_InstanceTreeForm.SaveActivity(ActivityData))
+/* 00042e5c */	{
+/* 00042e5c */		this.m_InstanceItemList.SetPosForRoot(PrevPosX, PrevPosY);
+/* 00042e80 */		return false;
+/* 00042e88 */	}
+/* 00042e88 */	if (!this.m_ProjectForm.SaveActivity(ActivityData))
+/* 00042eaa */	{
+/* 00042eaa */		this.m_InstanceItemList.SetPosForRoot(PrevPosX, PrevPosY);
+/* 00042ece */		return false;
+/* 00042ed6 */	}
+/* 00042ed6 */	if (!ActivityData.CloseWithWrite())
+/* 00042eee */	{
+/* 00042eee */		this.m_InstanceItemList.SetPosForRoot(PrevPosX, PrevPosY);
+/* 00042f12 */		return false;
+/* 00042f1a */	}
+/* 00042f1a */	this.m_InstanceItemList.SetPosForRoot(PrevPosX, PrevPosY);
+/* 00042f3e */	return true;
+/* 00042f46 */}
+
+bool CActivityEditor::SaveEXText(ref string Data)
+/* 00042f54 */{
+/* 00042f54 */	CActivityData ActivityData;
+/* 00042f64 */	if (!ActivityData.Create("仮実行"))
+/* 00042f82 */	{
+/* 00042f82 */		return false;
+/* 00042f8a */	}
+/* 00042f8a */	if (!this.m_InstanceTreeForm.SaveActivity(ActivityData))
+/* 00042fac */	{
+/* 00042fac */		return false;
+/* 00042fb4 */	}
+/* 00042fb4 */	if (!this.m_ProjectForm.SaveActivity(ActivityData))
+/* 00042fd6 */	{
+/* 00042fd6 */		return false;
+/* 00042fde */	}
+/* 00042fde */	Data = "";
+/* 00042ff2 */	if (!ActivityData.SaveEXText(Data))
+/* 00043014 */	{
+/* 00043014 */		return false;
+/* 0004301c */	}
+/* 0004301c */	return true;
+/* 00043024 */}
+
+void CActivityEditor::SetEditMode(bool EditMode)
+/* 00043032 */{
+/* 00043032 */	if (this.m_EditMode == EditMode)
+/* 0004304e */	{
+/* 0004304e */		return;
+/* 00043050 */	}
+/* 00043050 */	this.m_EditMode = EditMode;
+/* 00043066 */	AFL_Parts_SetActiveLayer(this.m_UILayerID);
+/* 00043078 */	this.m_InstanceItemList.EditMode(this.m_EditMode);
+/* 00043092 */	this.m_PanelList.SetShow(this.m_EditMode);
+/* 000430ac */	Ｐ＿フォーカス設定(this.m_BGRect);
+/* 000430bc */	Ｐ＿表示設定(this.m_UILayerID, EditMode);
+/* 000430d6 */	if (!this.m_EditMode)
+/* 000430e8 */	{
+/* 000430e8 */		AFL_Parts_SetActiveLayer(this.m_InstanceLayerID);
+/* 000430fa */	}
+/* 000430fa */}
+
+void CActivityEditor::SwitchEditMode()
+/* 00043102 */{
+/* 00043102 */	this.SetEditMode(!this.m_EditMode);
+/* 00043118 */}
+
+void CActivityEditor::OnBeginUpdate(int PassedTime)
+/* 00043120 */{
+/* 00043120 */	int Width = AFL_View_GetWidth();
+/* 00043132 */	int Height = AFL_View_GetHeight();
+/* 00043144 */	Ｐ＿矩形判定設定(this.m_BGRect, 0, 0, Width, Height);
+/* 00043174 */	if (this.m_PanelList.GetHeight() != Height)
+/* 00043196 */	{
+/* 00043196 */		this.m_PanelList.SetSize(0, Height);
+/* 000431b6 */	}
+/* 000431b6 */	this.m_PanelList.SetPos(Width - this.m_PanelList.GetWidth(), 0.0);
+/* 000431ea */}
+
+void CActivityEditor::OnUpdatePanelLayout()
+/* 000431f2 */{
+/* 000431f2 */	this.SavePanelSetting();
+/* 000431fa */}
+
+void CActivityEditor::SavePanelSetting()
+/* 00043202 */{
+/* 00043202 */	FileOperation.CreateFolder(SYS_GetDirectoryName(this.EX_PANELLAYOUT_FILEPATH));
+/* 0004321e */	if (!AFL_TextFileWriter_Create(this.EX_PANELLAYOUT_FILEPATH))
+/* 00043236 */	{
+/* 00043236 */		return;
+/* 00043238 */	}
+/* 00043238 */	AFL_TextFileWriter_Write(this.m_PanelList.GetEXString("パネルレイアウト"));
+/* 00043256 */	AFL_TextFileWriter_Close();
+/* 0004325e */}
+
+void CActivityEditor::LoadPanelSetting()
+/* 00043266 */{
+/* 00043266 */	this.m_PanelList.Restore("パネルレイアウト");
+/* 0004327e */}
+
+void CActivityEditor::Run(string ActivityName)
+/* 00043286 */{
+/* 00043286 */	this.EX_PANELLAYOUT_FILEPATH = SYS_AddPunct(system.GetSaveFolderName()) + "..\\ActivityEditor\\設定.txtex";
+/* 000432a8 */	EX_AddEXFile(this.EX_PANELLAYOUT_FILEPATH);
+/* 000432ba */	this.m_InstanceLayerID = AFL_Parts_AddLayer(-1);
+/* 000432d2 */	this.m_UILayerID = AFL_Parts_AddLayer(-1);
+/* 000432ea */	AFL_Parts_AddWholeMouseMoveEvent(this.MouseMoveEvent);
+/* 000432fa */	AFL_Parts_AddWholeKeyTriggerEvent(this.KeyTriggerEvent);
+/* 0004330a */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 0004331a */	CASClick F4KeyClick;
+/* 0004332a */	F4KeyClick.Init(115, true);
+/* 00043346 */	CASClick F5KeyClick;
+/* 00043356 */	F5KeyClick.Init(116, true);
+/* 00043372 */	CASClick F1KeyClick;
+/* 00043382 */	F1KeyClick.Init(112, true);
+/* 0004339e */	CASClick ConfigKey;
+/* 000433ae */	ConfigKey.Init(27, true);
+/* 000433ca */	if (!this.CreateBGRect())
+/* 000433da */	{
+/* 000433da */		return;
+/* 000433dc */	}
+/* 000433dc */	if (!this.CreateToolForm())
+/* 000433ec */	{
+/* 000433ec */		return;
+/* 000433ee */	}
+/* 000433ee */	this.SetEditMode(true);
+/* 000433fc */	if (!ActivityName.Empty())
+/* 00043410 */	{
+/* 00043410 */		this.Load(ActivityName);
+/* 00043422 */	}
+/* 00043422 */	this.m_DownMButton = false;
+/* 00043434 */	PARTS_BeginInput();
+/* 0004343a */	for (; ; )
+/* 0004343a */	{
+/* 0004343a */		this.OnBeginUpdate(0);
+/* 00043448 */		AFL_View_Update(true);
+/* 00043454 */		if (ConfigKey.IsClick(-2147483648))
+/* 00043470 */		{
+/* 00043470 */			Ｓ＿コンフィグ();
+/* 00043476 */		}
+/* 00043476 */		if (F1KeyClick.IsClick(-2147483648))
+/* 00043492 */		{
+/* 00043492 */			this.SwitchEditMode();
+/* 0004349a */		}
+/* 0004349a */		if (this.m_EditMode && F5KeyClick.IsClick(-2147483648))
+/* 000434de */		{
+/* 000434de */			this.RunActivity();
+/* 000434e6 */		}
+/* 000434e6 */		if (F4KeyClick.IsClick(-2147483648) || this.m_ProjectForm.IsEnd())
+/* 00043530 */		{
+/* 00043530 */			if (DIALOG_OKCANCEL("終了しますか？"))
+/* 00043542 */			{
+/* 00043542 */				break;
+/* 00043548 */			}
+/* 00043548 */			this.m_ProjectForm.End(false);
+/* 0004355e */		}
+/* 0004355e */	}
+/* 00043564 */	PARTS_EndInput();
+/* 0004356a */	PARTS_ReleaseWithInit(this.m_BGRect);
+/* 00043578 */	AFL_Parts_EraseWholeMouseMoveEvent(this.MouseMoveEvent);
+/* 00043588 */	AFL_Parts_EraseWholeKeyTriggerEvent(this.KeyTriggerEvent);
+/* 00043598 */	AFL_Parts_EraseWholeKeyUpEvent(this.KeyUpEvent);
+/* 000435a8 */	AFL_Parts_EraseLayer(-1);
+/* 000435b4 */	AFL_Parts_EraseLayer(-1);
+/* 000435c0 */}
+
+void CActivityEditor::RunActivity()
+/* 000435c8 */{
+/* 000435c8 */	bool PrevEndTypeClickEscape = this.m_ProjectForm.IsEndTypeClickEscape();
+/* 000435e4 */	this.m_ProjectForm.SetEndTypeClickEscape(true);
+/* 000435fa */	this.SetEditMode(false);
+/* 00043608 */	string ActivityData;
+/* 0004361c */	if (!this.SaveEXText(ActivityData))
+/* 00043636 */	{
+/* 00043636 */		DIALOG_OK("アクティビティデータの作成に失敗しました。\n実行を中止します。");
+/* 00043642 */		this.SetEditMode(true);
+/* 00043650 */		return;
+/* 00043652 */	}
+/* 00043652 */	this.m_InstanceItemList.SetShow(false);
+/* 00043668 */	SYS_Activity_RunEXText(ActivityData, NULL, NULL, NULL);
+/* 0004367e */	this.SetEditMode(true);
+/* 0004368c */	this.m_InstanceItemList.SetShow(true);
+/* 000436a2 */	this.m_ProjectForm.SetEndTypeClickEscape(PrevEndTypeClickEscape);
+/* 000436bc */}
+

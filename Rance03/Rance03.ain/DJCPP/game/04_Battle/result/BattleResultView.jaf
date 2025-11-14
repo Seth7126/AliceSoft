@@ -1,0 +1,137 @@
+BattleResultView::BattleResultView()
+/* 001a1184 */{
+/* 001a118c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a11b2 */}
+
+void BattleResultView::init(ref array@BattleBonus expBonus, ref array@BattleBonus goldBonus, int exp, int gold, string itemId)
+/* 001a11ba */{
+/* 001a11ba */	this.parts_[0].initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 001a11f6 */	this.parts_[0].setAlpha(200.0);
+/* 001a1214 */	this.parts_[0].setPos(0.0, 0.0);
+/* 001a1238 */	this.initBonusParts(this.partsExp_, expBonus, exp, 100, 100, "EXP");
+/* 001a1270 */	this.initBonusParts(this.partsGold_, goldBonus, gold, 200, 300, "GOLD");
+/* 001a12a8 */	this.initStandParts();
+/* 001a12b0 */	this.initItemParts(itemId);
+/* 001a12c2 */	this.setPartsParent();
+/* 001a12ca */	this.setPartsShow();
+/* 001a12d2 */}
+
+void BattleResultView::initStandParts()
+/* 001a12da */{
+/* 001a12da */	this.parts_[1].init("立ち絵／切り替え／かなみ", 0);
+/* 001a12fe */	this.parts_[1].setShow(true);
+/* 001a131c */	this.parts_[1].setPos(768.0, 768.0);
+/* 001a1340 */	this.parts_[1].setScaling(60.0);
+/* 001a135e */	this.parts_[1].setOrigin(2);
+/* 001a137c */}
+
+int BattleResultView::calcBonus(array@BattleBonus b, int value)
+/* 001a1384 */{
+/* 001a1384 */	int per;
+/* 001a1396 */	int i;
+/* 001a13a8 */	for (i = 0; i < b.Numof(); ++i)
+/* 001a13f8 */	{
+/* 001a13f8 */		per += b[i].getValue();
+/* 001a1420 */	}
+/* 001a1426 */	return (float(value) * float(per + 100)) / 100.0;
+/* 001a1458 */}
+
+void BattleResultView::initBonusParts(ref array@Parts p, ref array@BattleBonus bonus, int value, int x, int y, string caption)
+/* 001a1466 */{
+/* 001a1466 */	PartsFloatingLayout fl;
+/* 001a1476 */	fl.reset(x, y, true);
+/* 001a14a0 */	p.Alloc(bonus.Numof() * 2 + 4);
+/* 001a14d0 */	p[0].initAsText("%s：" % caption, 50, true, 256, 255, 255, 255);
+/* 001a1524 */	p[1].initAsText("%d" % this.calcBonus(bonus, value), 50, true, 256, 255, 255, 255);
+/* 001a158c */	p[2].initAsText("%s：" % caption, 30, false, 256, 255, 255, 255);
+/* 001a15e0 */	p[3].initAsText("%d" % value, 30, false, 256, 255, 255, 255);
+/* 001a1634 */	fl.add(p[2]);
+/* 001a1656 */	fl.add(p[3]);
+/* 001a1678 */	fl.br();
+/* 001a1688 */	int i;
+/* 001a169a */	for (i = 0; i < bonus.Numof(); ++i)
+/* 001a16ea */	{
+/* 001a16ea */		p[4 + i * 2 + 0].initAsText("%s:" % bonus[i].getName(), 20, false, 256, 255, 255, 255);
+/* 001a176c */		p[4 + i * 2 + 1].initAsText("%d％" % bonus[i].getValue(), 20, false, 256, 255, 255, 255);
+/* 001a17ee */		fl.add(p[4 + i * 2 + 0]);
+/* 001a182c */		fl.add(p[4 + i * 2 + 1]);
+/* 001a186a */		fl.br();
+/* 001a187a */	}
+/* 001a1880 */	fl.add(p[0]);
+/* 001a18a2 */	fl.add(p[1]);
+/* 001a18c4 */}
+
+void BattleResultView::initItemParts(string itemId)
+/* 001a18cc */{
+/* 001a18cc */	if (itemId == "")
+/* 001a18e4 */	{
+/* 001a18e4 */		return;
+/* 001a18e6 */	}
+/* 001a18e6 */	this.partsItem_.Alloc(3);
+/* 001a18fc */	this.partsItem_[0].init("システム／スキル／アイコン／チューリップ", 0);
+/* 001a1920 */	this.partsItem_[1].initAsText("%sを取得しました" % getItemFromId(itemId).getName(), 50, true, 256, 255, 255, 255);
+/* 001a1996 */	this.partsItem_[2].initAsText("%s" % getItemFromId(itemId).getDesc(), 20, true, 256, 255, 255, 255);
+/* 001a1a0c */	this.partsItem_[0].setCgRange(0, 0, this.partsItem_[0].getWidth() / 4, this.partsItem_[0].getHeight());
+/* 001a1a68 */	PartsFloatingLayout fl;
+/* 001a1a78 */	fl.reset(300, 500, true);
+/* 001a1a9a */	fl.add(this.partsItem_[0]);
+/* 001a1abc */	fl.br();
+/* 001a1acc */	fl.add(this.partsItem_[1]);
+/* 001a1aee */	fl.br();
+/* 001a1afe */	fl.add(this.partsItem_[2]);
+/* 001a1b20 */}
+
+void BattleResultView::setPartsShow()
+/* 001a1b28 */{
+/* 001a1b28 */	int i;
+/* 001a1b3a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a1b8a */	{
+/* 001a1b8a */		this.parts_[i].setShow(true);
+/* 001a1bac */	}
+/* 001a1bb2 */	for (i = 0; i < this.partsExp_.Numof(); ++i)
+/* 001a1c02 */	{
+/* 001a1c02 */		this.partsExp_[i].setShow(true);
+/* 001a1c24 */	}
+/* 001a1c2a */	for (i = 0; i < this.partsGold_.Numof(); ++i)
+/* 001a1c7a */	{
+/* 001a1c7a */		this.partsGold_[i].setShow(true);
+/* 001a1c9c */	}
+/* 001a1ca2 */	for (i = 0; i < this.partsItem_.Numof(); ++i)
+/* 001a1cf2 */	{
+/* 001a1cf2 */		this.partsItem_[i].setShow(true);
+/* 001a1d14 */	}
+/* 001a1d1a */	this.parent_.setShow(true);
+/* 001a1d30 */}
+
+void BattleResultView::setPartsParent()
+/* 001a1d38 */{
+/* 001a1d38 */	this.parent_.initAsDummy();
+/* 001a1d48 */	this.parent_.setPos(0.0, 0.0);
+/* 001a1d64 */	this.parent_.setZ(3500.0);
+/* 001a1d7a */	int i;
+/* 001a1d8c */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a1ddc */	{
+/* 001a1ddc */		this.parts_[i].setParent(this.parent_.getPartsNumber());
+/* 001a1e08 */	}
+/* 001a1e0e */	for (i = 0; i < this.partsExp_.Numof(); ++i)
+/* 001a1e5e */	{
+/* 001a1e5e */		this.partsExp_[i].setParent(this.parent_.getPartsNumber());
+/* 001a1e8a */	}
+/* 001a1e90 */	for (i = 0; i < this.partsGold_.Numof(); ++i)
+/* 001a1ee0 */	{
+/* 001a1ee0 */		this.partsGold_[i].setParent(this.parent_.getPartsNumber());
+/* 001a1f0c */	}
+/* 001a1f12 */	for (i = 0; i < this.partsItem_.Numof(); ++i)
+/* 001a1f62 */	{
+/* 001a1f62 */		this.partsItem_[i].setParent(this.parent_.getPartsNumber());
+/* 001a1f8e */	}
+/* 001a1f94 */}
+
+void BattleResultView::setPartsPos()
+/* 001a1f9c */{
+/* 001a1f9e */}
+
+void BattleResultView::update()
+/* 001a1fa4 */{
+/* 001a1fa6 */}
+

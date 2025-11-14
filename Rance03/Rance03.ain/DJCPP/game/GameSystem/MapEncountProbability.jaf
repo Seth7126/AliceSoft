@@ -1,0 +1,38 @@
+void MapEncountProbability::init(int nodeCount, int noHit, int hit1, int hit2, int hit3)
+/* 001d8e48 */{
+/* 001d8e48 */	this.hitTable_.Free();
+/* 001d8e52 */	this.nodeCount_ = nodeCount;
+/* 001d8e68 */	this.addToTable(0, noHit);
+/* 001d8e80 */	this.addToTable(1, hit1);
+/* 001d8e98 */	this.addToTable(2, hit2);
+/* 001d8eb0 */	this.addToTable(3, hit3);
+/* 001d8ec8 */}
+
+void MapEncountProbability::addToTable(int value, int count)
+/* 001d8ed0 */{
+/* 001d8ed0 */	int i;
+/* 001d8ee2 */	for (i = 0; i < count; ++i)
+/* 001d8f2c */	{
+/* 001d8f2c */		this.hitTable_.PushBack(value);
+/* 001d8f40 */	}
+/* 001d8f46 */}
+
+int MapEncountProbability::getNodeCount()
+/* 001d8f4e */{
+/* 001d8f4e */	return this.nodeCount_;
+/* 001d8f5a */}
+
+int MapEncountProbability::getHitCount()
+/* 001d8f68 */{
+/* 001d8f68 */	return this.hitTable_[RAND(this.hitTable_.Numof()) - 1];
+/* 001d8f94 */}
+
+void MapEncountProbability::change(int noHit, int hit1, int hit2, int hit3)
+/* 001d8fa2 */{
+/* 001d8fa2 */	this.hitTable_.Free();
+/* 001d8fac */	this.addToTable(0, noHit);
+/* 001d8fc4 */	this.addToTable(1, hit1);
+/* 001d8fdc */	this.addToTable(2, hit2);
+/* 001d8ff4 */	this.addToTable(3, hit3);
+/* 001d900c */}
+

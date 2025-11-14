@@ -1,0 +1,22 @@
+void MonsterAttribute::init(string id, string name, string imageName)
+/* 001da548 */{
+/* 001da548 */	this.id_ = id;
+/* 001da560 */	this.name_ = name;
+/* 001da578 */	this.imageName_ = imageName;
+/* 001da590 */}
+
+string MonsterAttribute::getId()
+/* 001da598 */{
+/* 001da598 */	return this.id_;
+/* 001da5a4 */}
+
+string MonsterAttribute::getName()
+/* 001da5b2 */{
+/* 001da5b2 */	return this.name_;
+/* 001da5be */}
+
+string MonsterAttribute::getImageName()
+/* 001da5cc */{
+/* 001da5cc */	return this.imageName_;
+/* 001da5d8 */}
+

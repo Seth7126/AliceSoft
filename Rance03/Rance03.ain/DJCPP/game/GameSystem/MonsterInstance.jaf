@@ -1,0 +1,212 @@
+void MonsterInstance::init(string monsterId, int position, int instanceIndex, int arrivalTurn)
+/* 001da738 */{
+/* 001da738 */	this.reset();
+/* 001da740 */	this.position_ = position;
+/* 001da756 */	this.id_ = monsterId;
+/* 001da76e */	this.maxHp_ = getMonsterFromId(monsterId).getHp();
+/* 001da7a6 */	this.hp_ = this.maxHp_;
+/* 001da7bc */	this.attackHp_ = this.maxHp_;
+/* 001da7d2 */	this.instanceIndex_ = instanceIndex;
+/* 001da7e8 */	this.arrivalTurn_ = arrivalTurn;
+/* 001da7fe */}
+
+void MonsterInstance::reset()
+/* 001da806 */{
+/* 001da806 */	this.isChanged_ = false;
+/* 001da818 */	this.id_ = "";
+/* 001da82c */	this.hp_ = 0;
+/* 001da83e */	this.maxHp_ = 0;
+/* 001da850 */	this.instanceIndex_ = -1;
+/* 001da862 */	this.position_ = -1;
+/* 001da874 */	this.arrivalTurn_ = -1;
+/* 001da886 */	this.positionCallback_.Clear();
+/* 001da892 */	this.hpCallback_.Clear();
+/* 001da89e */	this.buffIdList_.Free();
+/* 001da8a8 */	this.addBuffCallback_.Clear();
+/* 001da8b4 */	this.eraseBuffCallback_.Clear();
+/* 001da8c0 */}
+
+int MonsterInstance::setHp(int val)
+/* 001da8c8 */{
+/* 001da8c8 */	int lost;
+/* 001da8da */	if (this.maxHp_ < val)
+/* 001da8f6 */	{
+/* 001da8f6 */		lost = val - this.maxHp_;
+/* 001da918 */	}
+/* 001da91e */	else if (val < 0)
+/* 001da936 */	{
+/* 001da936 */		lost = -val;
+/* 001da94e */	}
+/* 001da94e */	this.hp_ = Math.Max(0, Math.Min(val, this.maxHp_));
+/* 001da988 */	this.hpCallback_(this.hp_);
+/* 001da9b2 */	return lost;
+/* 001da9be */}
+
+int MonsterInstance::getHp()
+/* 001da9cc */{
+/* 001da9cc */	return this.hp_;
+/* 001da9d8 */}
+
+int MonsterInstance::getMaxHp()
+/* 001da9e6 */{
+/* 001da9e6 */	return getMonsterFromId(this.id_).getHp();
+/* 001daa14 */}
+
+int MonsterInstance::getPosition()
+/* 001daa22 */{
+/* 001daa22 */	return this.position_;
+/* 001daa2e */}
+
+void MonsterInstance::setPosition(int val)
+/* 001daa3c */{
+/* 001daa3c */	int old = this.position_;
+/* 001daa52 */	this.position_ = Math.Max(0, Math.Min(3, val));
+/* 001daa88 */	if (old != this.position_)
+/* 001daaa4 */	{
+/* 001daaa4 */		this.positionCallback_();
+/* 001daac4 */	}
+/* 001daac4 */}
+
+string MonsterInstance::getId()
+/* 001daacc */{
+/* 001daacc */	return this.id_;
+/* 001daad8 */}
+
+void MonsterInstance::setOnChangePositionCallback(DG_GeneralCallback cb)
+/* 001daae6 */{
+/* 001daae6 */	this.positionCallback_ = cb;
+/* 001dab00 */}
+
+DG_GeneralCallback MonsterInstance::getOnChangePositionCallback()
+/* 001dab08 */{
+/* 001dab08 */	return this.positionCallback_;
+/* 001dab16 */}
+
+void MonsterInstance::setOnChangeHpCallback(DG_OnChangeHp hpCallback)
+/* 001dab24 */{
+/* 001dab24 */	this.hpCallback_ = hpCallback;
+/* 001dab3e */}
+
+void MonsterInstance::addBuff(string buffId)
+/* 001dab46 */{
+/* 001dab46 */	if (!this.isExistBuff(buffId) && this.isAvailableBuffId(buffId))
+/* 001dab90 */	{
+/* 001dab90 */		this.buffIdList_.PushBack(buffId);
+/* 001daba4 */		this.addBuffCallback_(buffId);
+/* 001dabce */	}
+/* 001dabce */}
+
+bool MonsterInstance::isExistBuff(string buffId)
+/* 001dabd6 */{
+/* 001dabd6 */	return this.buffIdList_.Find(0, this.buffIdList_.Numof(), buffId) >= 0;
+/* 001dac12 */}
+
+void MonsterInstance::eraseBuff(string id)
+/* 001dac20 */{
+/* 001dac20 */	if (id == "")
+/* 001dac38 */	{
+/* 001dac38 */		this.buffIdList_.Free();
+/* 001dac42 */	}
+/* 001dac48 */	else if (this.isExistBuff(id))
+/* 001dac60 */	{
+/* 001dac60 */		int index = this.buffIdList_.Find(0, this.buffIdList_.Numof(), id);
+/* 001dac9c */		this.buffIdList_.Erase(index);
+/* 001dacb2 */		this.eraseBuffCallback_(id);
+/* 001dacdc */	}
+/* 001dacdc */}
+
+void MonsterInstance::eraseBuffByType(int type)
+/* 001dace4 */{
+/* 001dace4 */	int i;
+/* 001dacf6 */	while (i < this.buffIdList_.Numof())
+/* 001dad18 */	{
+/* 001dad18 */		string id = this.buffIdList_[i];
+/* 001dad3c */		if (getMonsterBuffFromId(id).getType() == type)
+/* 001dad7a */		{
+/* 001dad7a */			this.buffIdList_.Erase(i);
+/* 001dad90 */			this.eraseBuffCallback_(id);
+/* 001dadba */		}
+/* 001dadc0 */		else
+/* 001dadc0 */		{
+/* 001dadc0 */			++i;
+/* 001dadd0 */		}
+/* 001dadd0 */	}
+/* 001daddc */}
+
+bool MonsterInstance::isAvailableBuffId(string id)
+/* 001dade4 */{
+/* 001dade4 */	ref MonsterBuff b = getMonsterBuffFromId(id);
+/* 001dae26 */	return b !== NULL;
+/* 001dae3c */}
+
+void MonsterInstance::setBuffCallback(DG_OnChangeBuff onAdd, DG_OnChangeBuff onErase)
+/* 001dae4a */{
+/* 001dae4a */	this.addBuffCallback_ = onAdd;
+/* 001dae64 */	this.eraseBuffCallback_ = onErase;
+/* 001dae7e */}
+
+void MonsterInstance::getBuffIdList(ref array@string result, int type)
+/* 001dae86 */{
+/* 001dae86 */	result.Free();
+/* 001dae90 */	if (this.buffIdList_.Empty())
+/* 001daea0 */	{
+/* 001daea0 */		return;
+/* 001daea2 */	}
+/* 001daea2 */	if (type == -1)
+/* 001daeba */	{
+/* 001daeba */		result.Alloc(this.buffIdList_.Numof());
+/* 001daeda */		result.Copy(0, this.buffIdList_, 0, this.buffIdList_.Numof());
+/* 001daf0c */	}
+/* 001daf12 */	else
+/* 001daf12 */	{
+/* 001daf12 */		int i;
+/* 001daf24 */		for (i = 0; i < this.buffIdList_.Numof(); ++i)
+/* 001daf74 */		{
+/* 001daf74 */			if (getMonsterBuffFromId(this.buffIdList_[i]).getType() == type)
+/* 001dafbe */			{
+/* 001dafbe */				result.PushBack(this.buffIdList_[i]);
+/* 001dafde */			}
+/* 001dafde */		}
+/* 001dafea */	}
+/* 001dafea */}
+
+int MonsterInstance::getInstanceIndex()
+/* 001daff2 */{
+/* 001daff2 */	return this.instanceIndex_;
+/* 001daffe */}
+
+int MonsterInstance::getArrivalTurn()
+/* 001db00c */{
+/* 001db00c */	return this.arrivalTurn_;
+/* 001db018 */}
+
+MonsterAttack MonsterInstance::getAttack(int turn)
+/* 001db026 */{
+/* 001db026 */	int n = turn - this.arrivalTurn_;
+/* 001db048 */	ref Monster m = getMonsterFromId(this.id_);
+/* 001db08a */	return m.getAttack(n, (float(this.attackHp_) / float(this.maxHp_)) * 100.0);
+/* 001db0ca */}
+
+void MonsterInstance::updateAttackHp()
+/* 001db0d8 */{
+/* 001db0d8 */	this.attackHp_ = this.hp_;
+/* 001db0ee */}
+
+void MonsterInstance::clearCallback()
+/* 001db0f6 */{
+/* 001db0f6 */	this.positionCallback_.Clear();
+/* 001db102 */	this.hpCallback_.Clear();
+/* 001db10e */	this.addBuffCallback_.Clear();
+/* 001db11a */	this.eraseBuffCallback_.Clear();
+/* 001db126 */}
+
+bool MonsterInstance::isChanged()
+/* 001db12e */{
+/* 001db12e */	return this.isChanged_;
+/* 001db13a */}
+
+void MonsterInstance::setChanged(bool val)
+/* 001db148 */{
+/* 001db148 */	this.isChanged_ = val;
+/* 001db15e */}
+

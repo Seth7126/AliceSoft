@@ -1,0 +1,147 @@
+void SYS_ADVEngine_Run(string Folder, DG_NotifyHandler ReleaseSceneFunc)
+/* 00156bae */{
+/* 00156bae */	if (!system.IsDebugMode())
+/* 00156bbc */	{
+/* 00156bbc */		return;
+/* 00156bbe */	}
+/* 00156bbe */	string GameFolderPath;
+/* 00156bd2 */	SystemService.GetGameFolderPath(GameFolderPath);
+/* 00156be6 */	GameFolderPath += "\\..";
+/* 00156bfa */	string BaseFolder = Folder.Length() == 0 ? GameFolderPath : Folder;
+/* 00156c3a */	SYS_ADVEngine_RunNest(BaseFolder, ReleaseSceneFunc);
+/* 00156c56 */}
+
+void SYS_ADVEngine_RunNest(string FolderPath, DG_NotifyHandler ReleaseSceneFunc)
+/* 00156c64 */{
+/* 00156c64 */	if (!system.IsDebugMode())
+/* 00156c72 */	{
+/* 00156c72 */		return;
+/* 00156c74 */	}
+/* 00156c74 */	for (; ; )
+/* 00156c74 */	{
+/* 00156c74 */		array@string FolderList;
+/* 00156c7e */		if (!FileOperation.GetFolderList(FolderPath, FolderList))
+/* 00156ca4 */		{
+/* 00156ca4 */			system.Output("フォルダリストの作成に失敗しました\n");
+/* 00156cb2 */			return;
+/* 00156cb4 */		}
+/* 00156cb4 */		array@string List;
+/* 00156cbe */		if (!FileOperation.GetFileList(FolderPath, List))
+/* 00156ce4 */		{
+/* 00156ce4 */			system.Output("ファイルリストの作成に失敗しました\n");
+/* 00156cf2 */			return;
+/* 00156cf4 */		}
+/* 00156cf4 */		array@string FileList;
+/* 00156cfe */		int i;
+/* 00156d10 */		for (i = 0; i < List.Numof(); ++i)
+/* 00156d60 */		{
+/* 00156d60 */			if (List[i].Length() <= 3)
+/* 00156d84 */			{
+/* 00156d84 */				continue;
+/* 00156d8a */			}
+/* 00156d8a */			if (List[i].GetPart(List[i].Length() - 3, 3) != "jaf")
+/* 00156dd4 */			{
+/* 00156dd4 */				continue;
+/* 00156dda */			}
+/* 00156dda */			FileList.PushBack(List[i]);
+/* 00156dfa */		}
+/* 00156e00 */		int Index;
+/* 00156e12 */		選択肢(2147483647, "■■■■■ フォルダリスト ■■■■■", 0);
+/* 00156e2a */		int FolderListBase = Index;
+/* 00156e40 */		int FolderListIndex;
+/* 00156e52 */		for (FolderListIndex = 0; FolderListIndex < FolderList.Numof(); ++Index, ++FolderListIndex)
+/* 00156eb2 */		{
+/* 00156eb2 */			選択肢(Index, FolderList[FolderListIndex], 0);
+/* 00156ede */		}
+/* 00156ee4 */		選択肢(2147483647, "", 0);
+/* 00156efc */		選択肢(2147483647, "■■■■■  ファイルリスト ■■■■■", 0);
+/* 00156f14 */		int FileListBase = Index;
+/* 00156f2a */		int FileListIndex;
+/* 00156f3c */		for (FileListIndex = 0; FileListIndex < FileList.Numof(); ++Index, ++FileListIndex)
+/* 00156f9c */		{
+/* 00156f9c */			選択肢(Index, FileList[FileListIndex], 0);
+/* 00156fc8 */		}
+/* 00156fce */		選択肢(2147483647, "-----------------", 0);
+/* 00156fe6 */		選択肢(Index, "戻る", 0);
+/* 00157002 */		int 結果 = テスト選択();
+/* 00157014 */		if (Index < 結果)
+/* 00157030 */		{
+/* 00157030 */			FileList.Free();
+/* 0015703a */			List.Free();
+/* 00157044 */			FolderList.Free();
+/* 0015704e */			continue;
+/* 00157054 */		}
+/* 00157054 */		if (結果 < 0 || Index == 結果)
+/* 001570a0 */		{
+/* 001570a0 */			FileList.Free();
+/* 001570aa */			List.Free();
+/* 001570b4 */			FolderList.Free();
+/* 001570be */			break;
+/* 001570c4 */		}
+/* 001570c4 */		FolderListIndex = 結果 - FolderListBase;
+/* 001570e6 */		if (0 <= FolderListIndex && FolderListIndex < FolderList.Numof())
+/* 00157138 */		{
+/* 00157138 */			SYS_ADVEngine_RunNest(FolderPath + "\\" + FolderList[FolderListIndex], ReleaseSceneFunc);
+/* 00157174 */			FileList.Free();
+/* 0015717e */			List.Free();
+/* 00157188 */			FolderList.Free();
+/* 00157192 */			continue;
+/* 00157198 */		}
+/* 00157198 */		FileListIndex = 結果 - FileListBase;
+/* 001571ba */		if (0 <= FileListIndex && FileListIndex < FileList.Numof())
+/* 0015720c */		{
+/* 0015720c */			CADVEngine ADV;
+/* 0015721c */			ADV.SetReleaseSceneFunc(ReleaseSceneFunc);
+/* 00157238 */			ADV.Execute(FolderPath + "\\" + FileList[FileListIndex]);
+/* 00157272 */			FileList.Free();
+/* 00157282 */			List.Free();
+/* 0015728c */			FolderList.Free();
+/* 00157296 */			continue;
+/* 0015729c */		}
+/* 001572c0 */	}
+/* 001572c0 */}
+
+int SYS_Script_GetArgumentValue_int(string FunctionName, int Step, int Index)
+/* 001572d4 */{
+/* 001572d4 */	int Value;
+/* 001572e6 */	if (!ADVEngine.GetArgumentValue_int(Value, FunctionName, Step, Index))
+/* 0015731e */	{
+/* 0015731e */		system.Output("int値として取得できませんでした。0を使用します。\n");
+/* 0015732c */		return 0;
+/* 00157334 */	}
+/* 00157334 */	return Value;
+/* 00157340 */}
+
+float SYS_Script_GetArgumentValue_float(string FunctionName, int Step, int Index)
+/* 00157354 */{
+/* 00157354 */	float Value;
+/* 00157366 */	if (!ADVEngine.GetArgumentValue_float(Value, FunctionName, Step, Index))
+/* 0015739e */	{
+/* 0015739e */		system.Output("float値として取得できませんでした。0.0fを使用します。\n");
+/* 001573ac */		return 0.0;
+/* 001573b4 */	}
+/* 001573b4 */	return Value;
+/* 001573c0 */}
+
+bool SYS_Script_GetArgumentValue_bool(string FunctionName, int Step, int Index)
+/* 001573d4 */{
+/* 001573d4 */	int Value;
+/* 001573e6 */	if (!ADVEngine.GetArgumentValue_bool(Value, FunctionName, Step, Index))
+/* 0015741e */	{
+/* 0015741e */		system.Output("bool値として取得できませんでした。falseを使用します。\n");
+/* 0015742c */		return false;
+/* 00157434 */	}
+/* 00157434 */	return Value != 0;
+/* 0015744a */}
+
+string SYS_Script_GetArgumentValue_string(string FunctionName, int Step, int Index)
+/* 0015745e */{
+/* 0015745e */	string Value;
+/* 00157472 */	if (!ADVEngine.GetArgumentValue_string(Value, FunctionName, Step, Index))
+/* 001574ac */	{
+/* 001574ac */		system.Output("string値として取得できませんでした。空文字を使用します。\n");
+/* 001574ba */		return "";
+/* 001574c2 */	}
+/* 001574c2 */	return Value;
+/* 001574ce */}
+

@@ -1,0 +1,141 @@
+CAEPropertyItemComboBox::CAEPropertyItemComboBox()
+/* 0007573a */{
+/* 00075744 */}
+
+CAEPropertyItemComboBox::~CAEPropertyItemComboBox()
+/* 0007574a */{
+/* 0007574a */	this.Release();
+/* 00075752 */}
+
+int CAEPropertyItemComboBox::Init(string Name, int LabelWidth, int ComboBoxWidth, int ComboBoxHeight, ref CAEPropertyToolTip ToolTip)
+/* 0007575a */{
+/* 0007575a */	this.Release();
+/* 00075762 */	this.m_LayoutID = PARTS_GetFreeSystemPartsNumber();
+/* 00075774 */	this.m_Label = PARTS_GetFreeSystemPartsNumber();
+/* 00075786 */	this.m_ComboBox.Create();
+/* 00075796 */	this.m_ComboBox.SetSize(ComboBoxWidth, 14);
+/* 000757b6 */	this.m_ComboBox.SetLineHeight(12);
+/* 000757cc */	this.m_ComboBox.SetBoxHeight(ComboBoxHeight);
+/* 000757e6 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_LayoutID, 2);
+/* 000757fc */	Ｐ＿レイアウトボックス＿配置設定(this.m_LayoutID, 4);
+/* 00075812 */	Ｐ＿マージン設定(this.m_LayoutID, 1, 1, 3, 3);
+/* 0007583a */	Ｐ＿フォント設定(this.m_Label, 0, 14, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1);
+/* 0007588c */	Ｐ＿テキスト設定(this.m_Label, Name, 1);
+/* 000758ac */	Ｐ＿オンカーソル透過設定(this.m_Label, true);
+/* 000758c2 */	Ｐ＿マージン設定(this.m_Label, 0, 0, 0, LabelWidth - AFL_Parts_GetWidth(this.m_Label, 1));
+/* 00075906 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, this.m_Label);
+/* 00075920 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, this.m_ComboBox.GetPartsNumber());
+/* 00075940 */	AFL_Parts_AddKeyDownEvent(this.m_LayoutID, this.KeyDownEvent);
+/* 0007595a */	AFL_Parts_AddKeyDownEvent(this.m_Label, this.KeyDownEvent);
+/* 00075974 */	AFL_Parts_AddMouseWheelEvent(this.m_LayoutID, this.MouseWheelEvent);
+/* 0007598e */	AFL_Parts_AddMouseWheelEvent(this.m_Label, this.MouseWheelEvent);
+/* 000759a8 */	this.m_ComboBox.AddKeyDownEvent(this.KeyDownEvent);
+/* 000759c2 */	this.m_ComboBox.AddSelectedEvent(this.SelectedEvent);
+/* 000759dc */	return this.m_LayoutID;
+/* 000759e8 */}
+
+void CAEPropertyItemComboBox::Release()
+/* 000759f6 */{
+/* 000759f6 */	this.m_dgSelectedEvent.Clear();
+/* 00075a02 */	this.m_dgMouseWheelEvent.Clear();
+/* 00075a0e */	this.m_dgKeyDownEvent.Clear();
+/* 00075a1a */	PARTS_ReleaseWithInit(this.m_Label);
+/* 00075a28 */	PARTS_ReleaseWithInit(this.m_LayoutID);
+/* 00075a36 */	this.m_ComboBox.Release();
+/* 00075a46 */}
+
+int CAEPropertyItemComboBox::GetID()
+/* 00075a4e */{
+/* 00075a4e */	return this.m_LayoutID;
+/* 00075a5a */}
+
+string CAEPropertyItemComboBox::GetLabel()
+/* 00075a68 */{
+/* 00075a68 */	return Ｐ＿テキスト取得(this.m_Label, 1);
+/* 00075a80 */}
+
+void CAEPropertyItemComboBox::SetItemList(array@string ItemList)
+/* 00075a8e */{
+/* 00075a8e */	this.m_ComboBox.ClearItem();
+/* 00075a9e */	int Index;
+/* 00075ab0 */	for (Index = 0; Index < ItemList.Numof(); ++Index)
+/* 00075b00 */	{
+/* 00075b00 */		this.m_ComboBox.AddItem(ItemList[Index]);
+/* 00075b26 */	}
+/* 00075b2c */}
+
+void CAEPropertyItemComboBox::GetItemList(ref array@string ItemList)
+/* 00075b34 */{
+/* 00075b34 */	ItemList.Free();
+/* 00075b3e */	int Index;
+/* 00075b50 */	for (Index = 0; Index < this.m_ComboBox.Numof(); ++Index)
+/* 00075ba0 */	{
+/* 00075ba0 */		ItemList.PushBack(this.m_ComboBox.GetItem(Index));
+/* 00075bc4 */	}
+/* 00075bca */}
+
+void CAEPropertyItemComboBox::SetIndex(int Index)
+/* 00075bd2 */{
+/* 00075bd2 */	this.m_ComboBox.Select(Index);
+/* 00075bec */}
+
+int CAEPropertyItemComboBox::GetIndex()
+/* 00075bf4 */{
+/* 00075bf4 */	return this.m_ComboBox.SelectedIndex();
+/* 00075c06 */}
+
+string CAEPropertyItemComboBox::GetToolTipText()
+/* 00075c14 */{
+/* 00075c14 */	return "";
+/* 00075c1c */}
+
+void CAEPropertyItemComboBox::AddParts(int Number)
+/* 00075c2a */{
+/* 00075c2a */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, Number);
+/* 00075c44 */}
+
+void CAEPropertyItemComboBox::SelectedEvent(int ID, int Index)
+/* 00075c4c */{
+/* 00075c4c */	this.m_dgSelectedEvent(ID, Index);
+/* 00075c80 */}
+
+void CAEPropertyItemComboBox::KeyDownEvent(int ID, int KeyID)
+/* 00075c88 */{
+/* 00075c88 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00075cbc */}
+
+void CAEPropertyItemComboBox::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00075cc4 */{
+/* 00075cc4 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00075d02 */}
+
+void CAEPropertyItemComboBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00075d0a */{
+/* 00075d0a */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00075d24 */}
+
+void CAEPropertyItemComboBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00075d2c */{
+/* 00075d2c */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00075d46 */}
+
+void CAEPropertyItemComboBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00075d4e */{
+/* 00075d4e */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00075d68 */}
+
+void CAEPropertyItemComboBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00075d70 */{
+/* 00075d70 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 00075d8a */}
+
+void CAEPropertyItemComboBox::AddSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 00075d92 */{
+/* 00075d92 */	this.m_dgSelectedEvent += DelegateObject;
+/* 00075dac */}
+
+void CAEPropertyItemComboBox::EraseSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 00075db4 */{
+/* 00075db4 */	this.m_dgSelectedEvent -= DelegateObject;
+/* 00075dce */}
+

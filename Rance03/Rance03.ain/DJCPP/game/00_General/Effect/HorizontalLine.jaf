@@ -1,0 +1,45 @@
+HorizontalLine::HorizontalLine()
+/* 00178d04 */{
+/* 00178d0c */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00178d32 */}
+
+void HorizontalLine::init()
+/* 00178d3a */{
+/* 00178d3a */	this.rot_ = 0;
+/* 00178d4c */	this.parts_.init("システム／効果線／仮", 0);
+/* 00178d68 */	float w = RAND(500) + 300;
+/* 00178d8a */	float h = RAND(6) + 2;
+/* 00178dac */	this.parts_.setXScaling((w / 1024.0) * 100.0);
+/* 00178dd6 */	this.parts_.setYScaling((h / 8.0) * 100.0);
+/* 00178e00 */	this.parts_.setAlpha(RAND(128) + 128);
+/* 00178e26 */	this.parts_.setOrigin(5);
+/* 00178e3c */	this.parts_.setShow(true);
+/* 00178e52 */	this.parts_.setZ(30000.0);
+/* 00178e68 */	this.resetMotion();
+/* 00178e70 */}
+
+void HorizontalLine::resetMotion()
+/* 00178e78 */{
+/* 00178e78 */	int x = RAND(1024);
+/* 00178e90 */	int y = RAND(768);
+/* 00178ea8 */	PartsMotion m;
+/* 00178eb8 */	m.setMove(x - Math.Cos(this.rot_) * 1400.0, y - Math.Sin(this.rot_) * 1200.0, x + Math.Cos(this.rot_) * 1400.0, y + Math.Sin(this.rot_) * 1200.0, 0);
+/* 00178f96 */	m.setTime(300 + RAND(200));
+/* 00178fba */	this.parts_.runMotion(m, this.onFinish);
+/* 00178fe2 */}
+
+void HorizontalLine::onFinish()
+/* 00178fea */{
+/* 00178fea */	this.resetMotion();
+/* 00178ff2 */}
+
+void HorizontalLine::update()
+/* 00178ffa */{
+/* 00178ffc */}
+
+void HorizontalLine::setRot(int rot)
+/* 00179002 */{
+/* 00179002 */	this.rot_ = rot;
+/* 00179018 */	this.parts_.setXYRot(this.rot_);
+/* 00179034 */}
+

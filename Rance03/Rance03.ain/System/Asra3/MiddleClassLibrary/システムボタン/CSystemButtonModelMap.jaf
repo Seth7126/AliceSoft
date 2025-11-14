@@ -1,0 +1,333 @@
+void CSystemButtonModelMap::SetCGButtonModel(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, int X, int Y, int Z, string PlainName, string OnCursorName, string KeyDownName, bool PixelDecide)
+/* 0001c3e8 */{
+/* 0001c3e8 */	this.SetButtonModel(MessageWindowNumber, CommandFunc, X, Y, Z, PlainName, OnCursorName, KeyDownName, PixelDecide, false);
+/* 0001c452 */}
+
+void CSystemButtonModelMap::SetFlatButtonModel(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, int X, int Y, int Z, string PlainName, string OnCursorName, string KeyDownName, bool PixelDecide)
+/* 0001c45a */{
+/* 0001c45a */	this.SetButtonModel(MessageWindowNumber, CommandFunc, X, Y, Z, PlainName, OnCursorName, KeyDownName, PixelDecide, true);
+/* 0001c4c4 */}
+
+void CSystemButtonModelMap::Clear(int MessageWindowNumber)
+/* 0001c4cc */{
+/* 0001c4cc */	if (MessageWindowNumber == 0)
+/* 0001c4e4 */	{
+/* 0001c4e4 */		for (MessageWindowNumber = 0; MessageWindowNumber < this.m_SystemButtonModelMap.Numof(); ++MessageWindowNumber)
+/* 0001c534 */		{
+/* 0001c534 */			this.ClearButtonModelByMessageWindowNumber(MessageWindowNumber);
+/* 0001c546 */		}
+/* 0001c54c */	}
+/* 0001c552 */	else
+/* 0001c552 */	{
+/* 0001c552 */		this.ClearButtonModelByMessageWindowNumber(MessageWindowNumber);
+/* 0001c564 */	}
+/* 0001c564 */}
+
+void CSystemButtonModelMap::ClearButtonModelByMessageWindowNumber(int MessageWindowNumber)
+/* 0001c56c */{
+/* 0001c56c */	this.EnlargeModelList(MessageWindowNumber);
+/* 0001c57e */	this.m_SystemButtonModelMap[MessageWindowNumber].Clear();
+/* 0001c59a */}
+
+void CSystemButtonModelMap::SetButtonModel(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, int X, int Y, int Z, string PlainName, string OnCursorName, string KeyDownName, bool PixelDecide, bool IsFlat)
+/* 0001c5a2 */{
+/* 0001c5a2 */	if (MessageWindowNumber == 0)
+/* 0001c5ba */	{
+/* 0001c5ba */		if (this.m_SystemButtonModelMap.Empty())
+/* 0001c5ca */		{
+/* 0001c5ca */			this.m_SystemButtonModelMap.Alloc(40);
+/* 0001c5e0 */		}
+/* 0001c5e0 */		int i;
+/* 0001c5f2 */		for (i = 1; i < this.m_SystemButtonModelMap.Numof(); ++i)
+/* 0001c642 */		{
+/* 0001c642 */			this.SetButtonModelByMessageWindowNumber(i, CommandFunc, X, Y, Z, PlainName, OnCursorName, KeyDownName, PixelDecide, IsFlat);
+/* 0001c6b0 */		}
+/* 0001c6b6 */	}
+/* 0001c6bc */	else
+/* 0001c6bc */	{
+/* 0001c6bc */		this.SetButtonModelByMessageWindowNumber(MessageWindowNumber, CommandFunc, X, Y, Z, PlainName, OnCursorName, KeyDownName, PixelDecide, IsFlat);
+/* 0001c72a */	}
+/* 0001c72a */}
+
+void CSystemButtonModelMap::SetButtonModelByMessageWindowNumber(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, int X, int Y, int Z, string PlainName, string OnCursorName, string KeyDownName, bool PixelDecide, bool IsFlat)
+/* 0001c732 */{
+/* 0001c732 */	this.EnlargeModelList(MessageWindowNumber);
+/* 0001c744 */	if (!IsFlat)
+/* 0001c756 */	{
+/* 0001c756 */		this.m_SystemButtonModelMap[MessageWindowNumber].SetCGButtonModel(CommandFunc, X, Y, Z, PlainName, OnCursorName, KeyDownName, PixelDecide);
+/* 0001c7c4 */	}
+/* 0001c7ca */	else
+/* 0001c7ca */	{
+/* 0001c7ca */		this.m_SystemButtonModelMap[MessageWindowNumber].SetFlatButtonModel(CommandFunc, X, Y, Z, PlainName, OnCursorName, KeyDownName, PixelDecide);
+/* 0001c838 */	}
+/* 0001c838 */}
+
+void CSystemButtonModelMap::SetCGButtonModelForReminisceMode(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string CoverName)
+/* 0001c840 */{
+/* 0001c840 */	this.SetButtonModelForReminisceMode(MessageWindowNumber, CommandFunc, CoverName, false);
+/* 0001c86e */}
+
+void CSystemButtonModelMap::SetFlatButtonModelForReminisceMode(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string CoverName)
+/* 0001c876 */{
+/* 0001c876 */	this.SetButtonModelForReminisceMode(MessageWindowNumber, CommandFunc, CoverName, true);
+/* 0001c8a4 */}
+
+void CSystemButtonModelMap::SetButtonModelForReminisceMode(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string CoverName, bool IsFlat)
+/* 0001c8ac */{
+/* 0001c8ac */	if (MessageWindowNumber == 0)
+/* 0001c8c4 */	{
+/* 0001c8c4 */		if (this.m_SystemButtonModelMap.Empty())
+/* 0001c8d4 */		{
+/* 0001c8d4 */			this.m_SystemButtonModelMap.Alloc(40);
+/* 0001c8ea */		}
+/* 0001c8ea */		int i;
+/* 0001c8fc */		for (i = 1; i < this.m_SystemButtonModelMap.Numof(); ++i)
+/* 0001c94c */		{
+/* 0001c94c */			this.SetButtonModelByMessageWindowNumberForReminisceMode(i, CommandFunc, CoverName, IsFlat);
+/* 0001c97e */		}
+/* 0001c984 */	}
+/* 0001c98a */	else
+/* 0001c98a */	{
+/* 0001c98a */		this.SetButtonModelByMessageWindowNumberForReminisceMode(MessageWindowNumber, CommandFunc, CoverName, IsFlat);
+/* 0001c9bc */	}
+/* 0001c9bc */}
+
+void CSystemButtonModelMap::SetButtonModelByMessageWindowNumberForReminisceMode(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string CoverName, bool IsFlat)
+/* 0001c9c4 */{
+/* 0001c9c4 */	this.EnlargeModelList(MessageWindowNumber);
+/* 0001c9d6 */	if (!IsFlat)
+/* 0001c9e8 */	{
+/* 0001c9e8 */		this.m_SystemButtonModelMap[MessageWindowNumber].SetCGButtonModelForReminisceMode(CommandFunc, CoverName);
+/* 0001ca1a */	}
+/* 0001ca20 */	else
+/* 0001ca20 */	{
+/* 0001ca20 */		this.m_SystemButtonModelMap[MessageWindowNumber].SetFlatButtonModelForReminisceMode(CommandFunc, CoverName);
+/* 0001ca52 */	}
+/* 0001ca52 */}
+
+void CSystemButtonModelMap::SetDisableCG(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string DisableName)
+/* 0001ca5a */{
+/* 0001ca5a */	this.SetDisable(MessageWindowNumber, CommandFunc, DisableName, false);
+/* 0001ca88 */}
+
+void CSystemButtonModelMap::SetDisableFlat(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string DisableName)
+/* 0001ca90 */{
+/* 0001ca90 */	this.SetDisable(MessageWindowNumber, CommandFunc, DisableName, true);
+/* 0001cabe */}
+
+void CSystemButtonModelMap::SetDisable(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string DisableName, bool IsFlat)
+/* 0001cac6 */{
+/* 0001cac6 */	if (MessageWindowNumber == 0)
+/* 0001cade */	{
+/* 0001cade */		if (this.m_SystemButtonModelMap.Empty())
+/* 0001caee */		{
+/* 0001caee */			this.m_SystemButtonModelMap.Alloc(40);
+/* 0001cb04 */		}
+/* 0001cb04 */		int i;
+/* 0001cb16 */		for (i = 1; i < this.m_SystemButtonModelMap.Numof(); ++i)
+/* 0001cb66 */		{
+/* 0001cb66 */			this.SetDisableByMessageWindowNumber(i, CommandFunc, DisableName, IsFlat);
+/* 0001cb98 */		}
+/* 0001cb9e */	}
+/* 0001cba4 */	else
+/* 0001cba4 */	{
+/* 0001cba4 */		this.SetDisableByMessageWindowNumber(MessageWindowNumber, CommandFunc, DisableName, IsFlat);
+/* 0001cbd6 */	}
+/* 0001cbd6 */}
+
+void CSystemButtonModelMap::SetDisableByMessageWindowNumber(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, string DisableName, bool IsFlat)
+/* 0001cbde */{
+/* 0001cbde */	this.EnlargeModelList(MessageWindowNumber);
+/* 0001cbf0 */	if (!IsFlat)
+/* 0001cc02 */	{
+/* 0001cc02 */		this.m_SystemButtonModelMap[MessageWindowNumber].SetDisableCG(CommandFunc, DisableName);
+/* 0001cc34 */	}
+/* 0001cc3a */	else
+/* 0001cc3a */	{
+/* 0001cc3a */		this.m_SystemButtonModelMap[MessageWindowNumber].SetDisableFlat(CommandFunc, DisableName);
+/* 0001cc6c */	}
+/* 0001cc6c */}
+
+void CSystemButtonModelMap::SetIsEnableSystemButtonFunc(int MessageWindowNumber, sys_btn_fnc_t CommandFunc, FTIsEnableSystemButton Func)
+/* 0001cc74 */{
+/* 0001cc74 */	if (MessageWindowNumber == 0)
+/* 0001cc8c */	{
+/* 0001cc8c */		if (this.m_SystemButtonModelMap.Empty())
+/* 0001cc9c */		{
+/* 0001cc9c */			this.m_SystemButtonModelMap.Alloc(40);
+/* 0001ccb2 */		}
+/* 0001ccb2 */		for (MessageWindowNumber = 1; MessageWindowNumber < this.m_SystemButtonModelMap.Numof(); ++MessageWindowNumber)
+/* 0001cd02 */		{
+/* 0001cd02 */			this.m_SystemButtonModelMap[MessageWindowNumber].SetIsEnableSystemButtonFunc(CommandFunc, Func);
+/* 0001cd36 */		}
+/* 0001cd3c */	}
+/* 0001cd42 */	else
+/* 0001cd42 */	{
+/* 0001cd42 */		this.EnlargeModelList(MessageWindowNumber);
+/* 0001cd54 */		this.m_SystemButtonModelMap[MessageWindowNumber].SetIsEnableSystemButtonFunc(CommandFunc, Func);
+/* 0001cd88 */	}
+/* 0001cd88 */}
+
+void CSystemButtonModelMap::EnlargeModelList(int MessageWindowNumber)
+/* 0001cd90 */{
+/* 0001cd90 */	if (MessageWindowNumber < this.m_SystemButtonModelMap.Numof())
+/* 0001cdb2 */	{
+/* 0001cdb2 */		return;
+/* 0001cdb4 */	}
+/* 0001cdb4 */	this.m_SystemButtonModelMap.Realloc(MessageWindowNumber + 1);
+/* 0001cdd6 */}
+
+int CSystemButtonModelMap::GetButtonCount(int MessageWindowNumber)
+/* 0001cdde */{
+/* 0001cdde */	if (MessageWindowNumber >= 0 && MessageWindowNumber < this.m_SystemButtonModelMap.Numof())
+/* 0001ce30 */	{
+/* 0001ce30 */		return this.m_SystemButtonModelMap[MessageWindowNumber].GetButtonCount();
+/* 0001ce4e */	}
+/* 0001ce4e */	return 0;
+/* 0001ce56 */}
+
+sys_btn_fnc_t CSystemButtonModelMap::GetFunction(int MessageWindowNumber, int ButtonIndex)
+/* 0001ce64 */{
+/* 0001ce64 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001ce7e */	{
+/* 0001ce7e */		return NULL;
+/* 0001ce82 */	}
+/* 0001ce82 */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetFunction(ButtonIndex);
+/* 0001ceaa */}
+
+int CSystemButtonModelMap::GetX(int MessageWindowNumber, int ButtonIndex)
+/* 0001ceb8 */{
+/* 0001ceb8 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001ced2 */	{
+/* 0001ced2 */		return -2147483648;
+/* 0001ceda */	}
+/* 0001ceda */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetX(ButtonIndex);
+/* 0001cf02 */}
+
+int CSystemButtonModelMap::GetY(int MessageWindowNumber, int ButtonIndex)
+/* 0001cf10 */{
+/* 0001cf10 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001cf2a */	{
+/* 0001cf2a */		return -2147483648;
+/* 0001cf32 */	}
+/* 0001cf32 */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetY(ButtonIndex);
+/* 0001cf5a */}
+
+int CSystemButtonModelMap::GetZ(int MessageWindowNumber, int ButtonIndex)
+/* 0001cf68 */{
+/* 0001cf68 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001cf82 */	{
+/* 0001cf82 */		return 1;
+/* 0001cf8a */	}
+/* 0001cf8a */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetZ(ButtonIndex);
+/* 0001cfb2 */}
+
+string CSystemButtonModelMap::GetPlainName(int MessageWindowNumber, int ButtonIndex)
+/* 0001cfc0 */{
+/* 0001cfc0 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001cfda */	{
+/* 0001cfda */		return "";
+/* 0001cfe2 */	}
+/* 0001cfe2 */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetPlainName(ButtonIndex);
+/* 0001d00a */}
+
+string CSystemButtonModelMap::GetOnCursorName(int MessageWindowNumber, int ButtonIndex)
+/* 0001d018 */{
+/* 0001d018 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d032 */	{
+/* 0001d032 */		return "";
+/* 0001d03a */	}
+/* 0001d03a */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetOnCursorName(ButtonIndex);
+/* 0001d062 */}
+
+string CSystemButtonModelMap::GetKeyDownName(int MessageWindowNumber, int ButtonIndex)
+/* 0001d070 */{
+/* 0001d070 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d08a */	{
+/* 0001d08a */		return "";
+/* 0001d092 */	}
+/* 0001d092 */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetKeyDownName(ButtonIndex);
+/* 0001d0ba */}
+
+string CSystemButtonModelMap::GetDisableName(int MessageWindowNumber, int ButtonIndex)
+/* 0001d0c8 */{
+/* 0001d0c8 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d0e2 */	{
+/* 0001d0e2 */		return "";
+/* 0001d0ea */	}
+/* 0001d0ea */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetDisableName(ButtonIndex);
+/* 0001d112 */}
+
+string CSystemButtonModelMap::GetCoverName(int MessageWindowNumber, int ButtonIndex)
+/* 0001d120 */{
+/* 0001d120 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d13a */	{
+/* 0001d13a */		return "";
+/* 0001d142 */	}
+/* 0001d142 */	return this.m_SystemButtonModelMap[MessageWindowNumber].GetCoverName(ButtonIndex);
+/* 0001d16a */}
+
+bool CSystemButtonModelMap::IsInvalidByReminisceMode(int MessageWindowNumber, int ButtonIndex)
+/* 0001d178 */{
+/* 0001d178 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d192 */	{
+/* 0001d192 */		return false;
+/* 0001d19a */	}
+/* 0001d19a */	return this.m_SystemButtonModelMap[MessageWindowNumber].IsInvalidByReminisceMode(ButtonIndex);
+/* 0001d1c2 */}
+
+bool CSystemButtonModelMap::IsEnable(int MessageWindowNumber, int ButtonIndex)
+/* 0001d1d0 */{
+/* 0001d1d0 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d1ea */	{
+/* 0001d1ea */		return false;
+/* 0001d1f2 */	}
+/* 0001d1f2 */	return this.m_SystemButtonModelMap[MessageWindowNumber].IsEnable(ButtonIndex);
+/* 0001d21a */}
+
+bool CSystemButtonModelMap::IsPixelDecide(int MessageWindowNumber, int ButtonIndex)
+/* 0001d228 */{
+/* 0001d228 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d242 */	{
+/* 0001d242 */		return false;
+/* 0001d24a */	}
+/* 0001d24a */	return this.m_SystemButtonModelMap[MessageWindowNumber].IsPixelDecide(ButtonIndex);
+/* 0001d272 */}
+
+bool CSystemButtonModelMap::IsFlatButton(int MessageWindowNumber, int ButtonIndex)
+/* 0001d280 */{
+/* 0001d280 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d29a */	{
+/* 0001d29a */		return false;
+/* 0001d2a2 */	}
+/* 0001d2a2 */	return this.m_SystemButtonModelMap[MessageWindowNumber].IsFlatButton(ButtonIndex);
+/* 0001d2ca */}
+
+bool CSystemButtonModelMap::IsFlatDisable(int MessageWindowNumber, int ButtonIndex)
+/* 0001d2d8 */{
+/* 0001d2d8 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d2f2 */	{
+/* 0001d2f2 */		return false;
+/* 0001d2fa */	}
+/* 0001d2fa */	return this.m_SystemButtonModelMap[MessageWindowNumber].IsFlatDisable(ButtonIndex);
+/* 0001d322 */}
+
+bool CSystemButtonModelMap::IsFlatCover(int MessageWindowNumber, int ButtonIndex)
+/* 0001d330 */{
+/* 0001d330 */	if (!this.AsserteButtonIndex(MessageWindowNumber))
+/* 0001d34a */	{
+/* 0001d34a */		return false;
+/* 0001d352 */	}
+/* 0001d352 */	return this.m_SystemButtonModelMap[MessageWindowNumber].IsFlatCover(ButtonIndex);
+/* 0001d37a */}
+
+bool CSystemButtonModelMap::AsserteButtonIndex(int MessageWindowNumber)
+/* 0001d388 */{
+/* 0001d388 */	if (MessageWindowNumber >= 0 && MessageWindowNumber < this.m_SystemButtonModelMap.Numof())
+/* 0001d3da */	{
+/* 0001d3da */		return true;
+/* 0001d3e2 */	}
+/* 0001d3e2 */	system.Error("MessageWindowNumber = %d\nm_SystemButtonModelList.Numof() = %d\n" % MessageWindowNumber % this.m_SystemButtonModelMap.Numof());
+/* 0001d41a */	return false;
+/* 0001d422 */}
+

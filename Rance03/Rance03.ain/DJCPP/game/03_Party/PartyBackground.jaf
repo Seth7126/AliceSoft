@@ -1,0 +1,82 @@
+PartyBackground::PartyBackground()
+/* 00193cf4 */{
+/* 00193cfc */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00193d22 */}
+
+void PartyBackground::init(bool isShowBg)
+/* 00193d2a */{
+/* 00193d2a */	this.isShowBg_ = isShowBg;
+/* 00193d40 */	this.initParts();
+/* 00193d48 */}
+
+void PartyBackground::initParts()
+/* 00193d50 */{
+/* 00193d50 */	this.parts_[0].init("システム／キャンプ／背景", 0);
+/* 00193d74 */	this.parts_[1].init("システム／編成／スキル背景", 0);
+/* 00193d98 */	this.parts_[2].initAsFlat("システム／戦闘／フレーム／開始");
+/* 00193db6 */	this.parts_[0].setZ(4000.0);
+/* 00193dd4 */	this.parts_[1].setZ(4200.0);
+/* 00193df2 */	this.parts_[2].setZ(4300.0);
+/* 00193e10 */}
+
+void PartyBackground::setPartsShow()
+/* 00193e18 */{
+/* 00193e18 */	int i;
+/* 00193e2a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00193e7a */	{
+/* 00193e7a */		this.parts_[i].setShow(true);
+/* 00193e9c */	}
+/* 00193ea2 */	this.parent_.setShow(true);
+/* 00193eb8 */	this.parts_[0].setShow(this.isShowBg_);
+/* 00193eda */}
+
+void PartyBackground::update()
+/* 00193ee2 */{
+/* 00193ee4 */}
+
+void PartyBackground::fadeIn(bool val)
+/* 00193eea */{
+/* 00193eea */	if (val)
+/* 00193efa */	{
+/* 00193efa */		this.parts_[2].startFlat(false, 1.0);
+/* 00193f1e */	}
+/* 00193f24 */	else
+/* 00193f24 */	{
+/* 00193f24 */		PartsMotion m;
+/* 00193f34 */		m.setMove(0, 0, 0, 300, 1);
+/* 00193f62 */		m.setAlpha(255, 0, 0);
+/* 00193f84 */		this.parts_[2].runMotion(m, NULL);
+/* 00193fac */	}
+/* 00193fb2 */	PartsMotion mb;
+/* 00193fc2 */	mb = getStandardMotion(val ? 0 : 1);
+/* 00193ffe */	mb.setTime(500);
+/* 00194014 */	this.setPartsShow();
+/* 0019401c */	PartsMotion m;
+/* 0019402c */	if (val)
+/* 0019403c */	{
+/* 0019403c */		m.setTime(400);
+/* 00194052 */		m.setCgRangeMove(0, 0, 1, 1, 0, 0, 665, 768, 1);
+/* 00194098 */	}
+/* 0019409e */	else
+/* 0019409e */	{
+/* 0019409e */		m.setTime(150);
+/* 001940b4 */		m.setMove(0, 0, -300, 0, 1);
+/* 001940e2 */		m.setAlpha(255, 0, 0);
+/* 00194104 */	}
+/* 00194104 */	this.parts_[1].runMotion(m, NULL);
+/* 0019412c */}
+
+void PartyBackground::changeCenter(bool isWithOutInfomation)
+/* 00194134 */{
+/* 00194134 */	PartsMotion m;
+/* 00194144 */	if (isWithOutInfomation)
+/* 00194154 */	{
+/* 00194154 */		m.setMove(-145, 0, 0, 0, 1);
+/* 00194182 */	}
+/* 00194188 */	else
+/* 00194188 */	{
+/* 00194188 */		m.setMove(0, 0, -145, 0, 1);
+/* 001941b6 */	}
+/* 001941b6 */	this.parts_[1].runMotion(m, NULL);
+/* 001941de */}
+

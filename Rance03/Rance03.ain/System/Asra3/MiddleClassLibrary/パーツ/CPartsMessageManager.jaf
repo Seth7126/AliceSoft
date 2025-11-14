@@ -1,0 +1,1025 @@
+CPartsMessageManager::CPartsMessageManager()
+/* 000297ae */{
+/* 000297b6 */	this.m_ErrorFunctionSet.Init(0);
+/* 000297cc */	this.m_FunctionSetList.Free();
+/* 000297d6 */}
+
+CPartsMessageManager::~CPartsMessageManager()
+/* 000297de */{
+/* 000297de */	this.m_FunctionSetList.Free();
+/* 000297e8 */	this.m_ErrorFunctionSet.Release();
+/* 000297f8 */}
+
+void CPartsMessageManager::Update()
+/* 00029800 */{
+/* 00029800 */	for (; ; )
+/* 00029800 */	{
+/* 00029800 */		int MessageType = PARTS_GetMessageType();
+/* 00029812 */		if (MessageType == 0)
+/* 0002982a */		{
+/* 0002982a */			break;
+/* 00029830 */		}
+/* 00029830 */		if (!this.CallDelegate(MessageType))
+/* 0002984a */		{
+/* 0002984a */			this.PopMessage();
+/* 00029852 */		}
+/* 00029852 */	}
+/* 00029858 */	PARTS_ReleaseMessage();
+/* 0002985e */}
+
+void CPartsMessageManager::PopMessage()
+/* 00029866 */{
+/* 00029866 */	PARTS_PopMessage();
+/* 0002986c */}
+
+bool CPartsMessageManager::CallDelegate(int MessageType)
+/* 00029874 */{
+/* 00029874 */	int PartsNumber = PARTS_GetMessagePartsNumber();
+/* 00029886 */	ref CPartsFunctionSet FunctionSet;
+/* 000298a0 */	if (PartsNumber == 0)
+/* 000298bc */	{
+/* 000298bc */		FunctionSet <- this.m_WholeFunctionSet;
+/* 000298dc */	}
+/* 000298e2 */	else
+/* 000298e2 */	{
+/* 000298e2 */		int DelegateIndex = PARTS_GetMessageDelegateIndex();
+/* 000298f4 */		if (DelegateIndex < 0)
+/* 0002990c */		{
+/* 0002990c */			return false;
+/* 00029914 */		}
+/* 00029914 */		if (this.m_FunctionSetList.Numof() <= DelegateIndex)
+/* 00029936 */		{
+/* 00029936 */			return false;
+/* 0002993e */		}
+/* 0002993e */		FunctionSet <- this.m_FunctionSetList[DelegateIndex];
+/* 0002996a */	}
+/* 0002996a */	switch (MessageType)
+/* 00029980 */	{
+/* 00029980 */	case 1:
+/* 00029980 */		return this.CallDelegateMouseEnter(FunctionSet);
+/* 00029994 */	case 2:
+/* 00029994 */		return this.CallDelegateMouseMove(FunctionSet);
+/* 000299a8 */	case 3:
+/* 000299a8 */		return this.CallDelegateMouseLeave(FunctionSet);
+/* 000299bc */	case 4:
+/* 000299bc */		return this.CallDelegateMouseWheel(FunctionSet);
+/* 000299d0 */	case 5:
+/* 000299d0 */		return this.CallDelegateMouseClick(FunctionSet);
+/* 000299e4 */	case 6:
+/* 000299e4 */		return this.CallDelegateMouseOnCursor(FunctionSet);
+/* 000299f8 */	case 14:
+/* 000299f8 */		return this.CallDelegateKetTrigger(FunctionSet);
+/* 00029a0c */	case 15:
+/* 00029a0c */		return this.CallDelegateKeyDown(FunctionSet);
+/* 00029a20 */	case 16:
+/* 00029a20 */		return this.CallDelegateKeyPress(FunctionSet);
+/* 00029a34 */	case 17:
+/* 00029a34 */		return this.CallDelegateKeyUp(FunctionSet);
+/* 00029a48 */	case 7:
+/* 00029a48 */		return this.CallDelegateDragBegin(FunctionSet);
+/* 00029a5c */	case 8:
+/* 00029a5c */		return this.CallDelegateDraging(FunctionSet);
+/* 00029a70 */	case 9:
+/* 00029a70 */		return this.CallDelegateDragEnd(FunctionSet);
+/* 00029a84 */	case 10:
+/* 00029a84 */		return this.CallDelegateDropEnter(FunctionSet);
+/* 00029a98 */	case 11:
+/* 00029a98 */		return this.CallDelegateDropOn(FunctionSet);
+/* 00029aac */	case 12:
+/* 00029aac */		return this.CallDelegateDropped(FunctionSet);
+/* 00029ac0 */	case 13:
+/* 00029ac0 */		return this.CallDelegateDropLeave(FunctionSet);
+/* 00029ad4 */	case 18:
+/* 00029ad4 */		return this.CallDelegateFocus(FunctionSet);
+/* 00029ae8 */	case 19:
+/* 00029ae8 */		return this.CallDelegateLostFocus(FunctionSet);
+/* 00029afc */	case 20:
+/* 00029afc */		return this.CallDelegateScroll(FunctionSet);
+/* 00029b10 */	case 23:
+/* 00029b10 */		return this.CallDelegateCreated(FunctionSet);
+/* 00029b24 */	case 24:
+/* 00029b24 */		return this.CallDelegateSelected(FunctionSet);
+/* 00029b38 */	case 21:
+/* 00029b38 */		return this.CallDelegateChanged(FunctionSet);
+/* 00029b4c */	case 22:
+/* 00029b4c */		return this.CallDelegateChangedFlg(FunctionSet);
+/* 00029b60 */	case 25:
+/* 00029b60 */		return this.CallDelegateFixed(FunctionSet);
+/* 00029b74 */	}
+/* 00029b74 */	return false;
+/* 00029b7c */}
+
+bool CPartsMessageManager::CallDelegateMouseEnter(ref CPartsFunctionSet FunctionSet)
+/* 00029b8a */{
+/* 00029b8a */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 00029b9c */	if (MessageVariableCount != 2)
+/* 00029bb4 */	{
+/* 00029bb4 */		return false;
+/* 00029bbc */	}
+/* 00029bbc */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 00029bd6 */	{
+/* 00029bd6 */		return false;
+/* 00029bde */	}
+/* 00029bde */	int MouseX = PARTS_GetMessageVariableInt(0);
+/* 00029bf6 */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 00029c10 */	{
+/* 00029c10 */		return false;
+/* 00029c18 */	}
+/* 00029c18 */	int MouseY = PARTS_GetMessageVariableInt(1);
+/* 00029c30 */	this.PopMessage();
+/* 00029c38 */	FunctionSet.CallFunctionMouseEnter(MouseX, MouseY);
+/* 00029c5c */	return true;
+/* 00029c64 */}
+
+bool CPartsMessageManager::CallDelegateMouseMove(ref CPartsFunctionSet FunctionSet)
+/* 00029c72 */{
+/* 00029c72 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 00029c84 */	if (MessageVariableCount != 2)
+/* 00029c9c */	{
+/* 00029c9c */		return false;
+/* 00029ca4 */	}
+/* 00029ca4 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 00029cbe */	{
+/* 00029cbe */		return false;
+/* 00029cc6 */	}
+/* 00029cc6 */	int MouseX = PARTS_GetMessageVariableInt(0);
+/* 00029cde */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 00029cf8 */	{
+/* 00029cf8 */		return false;
+/* 00029d00 */	}
+/* 00029d00 */	int MouseY = PARTS_GetMessageVariableInt(1);
+/* 00029d18 */	this.PopMessage();
+/* 00029d20 */	FunctionSet.CallFunctionMouseMove(MouseX, MouseY);
+/* 00029d44 */	return true;
+/* 00029d4c */}
+
+bool CPartsMessageManager::CallDelegateMouseLeave(ref CPartsFunctionSet FunctionSet)
+/* 00029d5a */{
+/* 00029d5a */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 00029d6c */	if (MessageVariableCount != 2)
+/* 00029d84 */	{
+/* 00029d84 */		return false;
+/* 00029d8c */	}
+/* 00029d8c */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 00029da6 */	{
+/* 00029da6 */		return false;
+/* 00029dae */	}
+/* 00029dae */	int MouseX = PARTS_GetMessageVariableInt(0);
+/* 00029dc6 */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 00029de0 */	{
+/* 00029de0 */		return false;
+/* 00029de8 */	}
+/* 00029de8 */	int MouseY = PARTS_GetMessageVariableInt(1);
+/* 00029e00 */	this.PopMessage();
+/* 00029e08 */	FunctionSet.CallFunctionMouseLeave(MouseX, MouseY);
+/* 00029e2c */	return true;
+/* 00029e34 */}
+
+bool CPartsMessageManager::CallDelegateMouseWheel(ref CPartsFunctionSet FunctionSet)
+/* 00029e42 */{
+/* 00029e42 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 00029e54 */	if (MessageVariableCount != 2)
+/* 00029e6c */	{
+/* 00029e6c */		return false;
+/* 00029e74 */	}
+/* 00029e74 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 00029e8e */	{
+/* 00029e8e */		return false;
+/* 00029e96 */	}
+/* 00029e96 */	int Forward = PARTS_GetMessageVariableInt(0);
+/* 00029eae */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 00029ec8 */	{
+/* 00029ec8 */		return false;
+/* 00029ed0 */	}
+/* 00029ed0 */	int Back = PARTS_GetMessageVariableInt(1);
+/* 00029ee8 */	this.PopMessage();
+/* 00029ef0 */	FunctionSet.CallFunctionMouseWheel(Forward, Back);
+/* 00029f14 */	return true;
+/* 00029f1c */}
+
+bool CPartsMessageManager::CallDelegateMouseClick(ref CPartsFunctionSet FunctionSet)
+/* 00029f2a */{
+/* 00029f2a */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 00029f3c */	if (MessageVariableCount != 3)
+/* 00029f54 */	{
+/* 00029f54 */		return false;
+/* 00029f5c */	}
+/* 00029f5c */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 00029f76 */	{
+/* 00029f76 */		return false;
+/* 00029f7e */	}
+/* 00029f7e */	int MouseX = PARTS_GetMessageVariableInt(0);
+/* 00029f96 */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 00029fb0 */	{
+/* 00029fb0 */		return false;
+/* 00029fb8 */	}
+/* 00029fb8 */	int MouseY = PARTS_GetMessageVariableInt(1);
+/* 00029fd0 */	if (PARTS_GetMessageVariableType(2) != 1)
+/* 00029fea */	{
+/* 00029fea */		return false;
+/* 00029ff2 */	}
+/* 00029ff2 */	int KeyCode = PARTS_GetMessageVariableInt(2);
+/* 0002a00a */	this.PopMessage();
+/* 0002a012 */	FunctionSet.CallFunctionMouseClick(MouseX, MouseY, KeyCode);
+/* 0002a040 */	return true;
+/* 0002a048 */}
+
+bool CPartsMessageManager::CallDelegateMouseOnCursor(ref CPartsFunctionSet FunctionSet)
+/* 0002a056 */{
+/* 0002a056 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a068 */	if (MessageVariableCount != 3)
+/* 0002a080 */	{
+/* 0002a080 */		return false;
+/* 0002a088 */	}
+/* 0002a088 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a0a2 */	{
+/* 0002a0a2 */		return false;
+/* 0002a0aa */	}
+/* 0002a0aa */	int MouseX = PARTS_GetMessageVariableInt(0);
+/* 0002a0c2 */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 0002a0dc */	{
+/* 0002a0dc */		return false;
+/* 0002a0e4 */	}
+/* 0002a0e4 */	int MouseY = PARTS_GetMessageVariableInt(1);
+/* 0002a0fc */	if (PARTS_GetMessageVariableType(2) != 1)
+/* 0002a116 */	{
+/* 0002a116 */		return false;
+/* 0002a11e */	}
+/* 0002a11e */	int Time = PARTS_GetMessageVariableInt(2);
+/* 0002a136 */	this.PopMessage();
+/* 0002a13e */	FunctionSet.CallFunctionMouseOnCursor(MouseX, MouseY, Time);
+/* 0002a16c */	return true;
+/* 0002a174 */}
+
+bool CPartsMessageManager::CallDelegateKetTrigger(ref CPartsFunctionSet FunctionSet)
+/* 0002a182 */{
+/* 0002a182 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a194 */	if (MessageVariableCount != 1)
+/* 0002a1ac */	{
+/* 0002a1ac */		return false;
+/* 0002a1b4 */	}
+/* 0002a1b4 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a1ce */	{
+/* 0002a1ce */		return false;
+/* 0002a1d6 */	}
+/* 0002a1d6 */	int KeyCode = PARTS_GetMessageVariableInt(0);
+/* 0002a1ee */	this.PopMessage();
+/* 0002a1f6 */	FunctionSet.CallFunctionKeyTrigger(KeyCode);
+/* 0002a210 */	return true;
+/* 0002a218 */}
+
+bool CPartsMessageManager::CallDelegateKeyDown(ref CPartsFunctionSet FunctionSet)
+/* 0002a226 */{
+/* 0002a226 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a238 */	if (MessageVariableCount != 1)
+/* 0002a250 */	{
+/* 0002a250 */		return false;
+/* 0002a258 */	}
+/* 0002a258 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a272 */	{
+/* 0002a272 */		return false;
+/* 0002a27a */	}
+/* 0002a27a */	int KeyCode = PARTS_GetMessageVariableInt(0);
+/* 0002a292 */	this.PopMessage();
+/* 0002a29a */	FunctionSet.CallFunctionKeyDown(KeyCode);
+/* 0002a2b4 */	return true;
+/* 0002a2bc */}
+
+bool CPartsMessageManager::CallDelegateKeyPress(ref CPartsFunctionSet FunctionSet)
+/* 0002a2ca */{
+/* 0002a2ca */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a2dc */	if (MessageVariableCount != 1)
+/* 0002a2f4 */	{
+/* 0002a2f4 */		return false;
+/* 0002a2fc */	}
+/* 0002a2fc */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a316 */	{
+/* 0002a316 */		return false;
+/* 0002a31e */	}
+/* 0002a31e */	int KeyCode = PARTS_GetMessageVariableInt(0);
+/* 0002a336 */	this.PopMessage();
+/* 0002a33e */	FunctionSet.CallFunctionKeyPress(KeyCode);
+/* 0002a358 */	return true;
+/* 0002a360 */}
+
+bool CPartsMessageManager::CallDelegateKeyUp(ref CPartsFunctionSet FunctionSet)
+/* 0002a36e */{
+/* 0002a36e */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a380 */	if (MessageVariableCount != 1)
+/* 0002a398 */	{
+/* 0002a398 */		return false;
+/* 0002a3a0 */	}
+/* 0002a3a0 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a3ba */	{
+/* 0002a3ba */		return false;
+/* 0002a3c2 */	}
+/* 0002a3c2 */	int KeyCode = PARTS_GetMessageVariableInt(0);
+/* 0002a3da */	this.PopMessage();
+/* 0002a3e2 */	FunctionSet.CallFunctionKeyUp(KeyCode);
+/* 0002a3fc */	return true;
+/* 0002a404 */}
+
+bool CPartsMessageManager::CallDelegateDragBegin(ref CPartsFunctionSet FunctionSet)
+/* 0002a412 */{
+/* 0002a412 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a424 */	if (MessageVariableCount != 0)
+/* 0002a43c */	{
+/* 0002a43c */		return false;
+/* 0002a444 */	}
+/* 0002a444 */	this.PopMessage();
+/* 0002a44c */	FunctionSet.CallFunctionDragBegin();
+/* 0002a45c */	return true;
+/* 0002a464 */}
+
+bool CPartsMessageManager::CallDelegateDraging(ref CPartsFunctionSet FunctionSet)
+/* 0002a472 */{
+/* 0002a472 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a484 */	if (MessageVariableCount != 4)
+/* 0002a49c */	{
+/* 0002a49c */		return false;
+/* 0002a4a4 */	}
+/* 0002a4a4 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a4be */	{
+/* 0002a4be */		return false;
+/* 0002a4c6 */	}
+/* 0002a4c6 */	int BeginMouseX = PARTS_GetMessageVariableInt(0);
+/* 0002a4de */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 0002a4f8 */	{
+/* 0002a4f8 */		return false;
+/* 0002a500 */	}
+/* 0002a500 */	int BeginMouseY = PARTS_GetMessageVariableInt(1);
+/* 0002a518 */	if (PARTS_GetMessageVariableType(2) != 1)
+/* 0002a532 */	{
+/* 0002a532 */		return false;
+/* 0002a53a */	}
+/* 0002a53a */	int MouseX = PARTS_GetMessageVariableInt(2);
+/* 0002a552 */	if (PARTS_GetMessageVariableType(3) != 1)
+/* 0002a56c */	{
+/* 0002a56c */		return false;
+/* 0002a574 */	}
+/* 0002a574 */	int MouseY = PARTS_GetMessageVariableInt(3);
+/* 0002a58c */	this.PopMessage();
+/* 0002a594 */	FunctionSet.CallFunctionDraging(BeginMouseX, BeginMouseY, MouseX, MouseY);
+/* 0002a5cc */	return true;
+/* 0002a5d4 */}
+
+bool CPartsMessageManager::CallDelegateDragEnd(ref CPartsFunctionSet FunctionSet)
+/* 0002a5e2 */{
+/* 0002a5e2 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a5f4 */	if (MessageVariableCount != 0)
+/* 0002a60c */	{
+/* 0002a60c */		return false;
+/* 0002a614 */	}
+/* 0002a614 */	this.PopMessage();
+/* 0002a61c */	FunctionSet.CallFunctionDragEnd();
+/* 0002a62c */	return true;
+/* 0002a634 */}
+
+bool CPartsMessageManager::CallDelegateDropEnter(ref CPartsFunctionSet FunctionSet)
+/* 0002a642 */{
+/* 0002a642 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a654 */	if (MessageVariableCount != 1)
+/* 0002a66c */	{
+/* 0002a66c */		return false;
+/* 0002a674 */	}
+/* 0002a674 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a68e */	{
+/* 0002a68e */		return false;
+/* 0002a696 */	}
+/* 0002a696 */	int DragPartsNumber = PARTS_GetMessageVariableInt(0);
+/* 0002a6ae */	this.PopMessage();
+/* 0002a6b6 */	FunctionSet.CallFunctionDropEnter(DragPartsNumber);
+/* 0002a6d0 */	return true;
+/* 0002a6d8 */}
+
+bool CPartsMessageManager::CallDelegateDropOn(ref CPartsFunctionSet FunctionSet)
+/* 0002a6e6 */{
+/* 0002a6e6 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a6f8 */	if (MessageVariableCount != 3)
+/* 0002a710 */	{
+/* 0002a710 */		return false;
+/* 0002a718 */	}
+/* 0002a718 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a732 */	{
+/* 0002a732 */		return false;
+/* 0002a73a */	}
+/* 0002a73a */	int DragPartsNumber = PARTS_GetMessageVariableInt(0);
+/* 0002a752 */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 0002a76c */	{
+/* 0002a76c */		return false;
+/* 0002a774 */	}
+/* 0002a774 */	int MouseX = PARTS_GetMessageVariableInt(1);
+/* 0002a78c */	if (PARTS_GetMessageVariableType(2) != 1)
+/* 0002a7a6 */	{
+/* 0002a7a6 */		return false;
+/* 0002a7ae */	}
+/* 0002a7ae */	int MouseY = PARTS_GetMessageVariableInt(2);
+/* 0002a7c6 */	this.PopMessage();
+/* 0002a7ce */	FunctionSet.CallFunctionDropOn(DragPartsNumber, MouseX, MouseY);
+/* 0002a7fc */	return true;
+/* 0002a804 */}
+
+bool CPartsMessageManager::CallDelegateDropped(ref CPartsFunctionSet FunctionSet)
+/* 0002a812 */{
+/* 0002a812 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a824 */	if (MessageVariableCount != 3)
+/* 0002a83c */	{
+/* 0002a83c */		return false;
+/* 0002a844 */	}
+/* 0002a844 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a85e */	{
+/* 0002a85e */		return false;
+/* 0002a866 */	}
+/* 0002a866 */	int DragPartsNumber = PARTS_GetMessageVariableInt(0);
+/* 0002a87e */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 0002a898 */	{
+/* 0002a898 */		return false;
+/* 0002a8a0 */	}
+/* 0002a8a0 */	int MouseX = PARTS_GetMessageVariableInt(1);
+/* 0002a8b8 */	if (PARTS_GetMessageVariableType(2) != 1)
+/* 0002a8d2 */	{
+/* 0002a8d2 */		return false;
+/* 0002a8da */	}
+/* 0002a8da */	int MouseY = PARTS_GetMessageVariableInt(2);
+/* 0002a8f2 */	this.PopMessage();
+/* 0002a8fa */	FunctionSet.CallFunctionDropped(DragPartsNumber, MouseX, MouseY);
+/* 0002a928 */	return true;
+/* 0002a930 */}
+
+bool CPartsMessageManager::CallDelegateDropLeave(ref CPartsFunctionSet FunctionSet)
+/* 0002a93e */{
+/* 0002a93e */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a950 */	if (MessageVariableCount != 1)
+/* 0002a968 */	{
+/* 0002a968 */		return false;
+/* 0002a970 */	}
+/* 0002a970 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002a98a */	{
+/* 0002a98a */		return false;
+/* 0002a992 */	}
+/* 0002a992 */	int DragPartsNumber = PARTS_GetMessageVariableInt(0);
+/* 0002a9aa */	this.PopMessage();
+/* 0002a9b2 */	FunctionSet.CallFunctionDropLeave(DragPartsNumber);
+/* 0002a9cc */	return true;
+/* 0002a9d4 */}
+
+bool CPartsMessageManager::CallDelegateFocus(ref CPartsFunctionSet FunctionSet)
+/* 0002a9e2 */{
+/* 0002a9e2 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002a9f4 */	if (MessageVariableCount != 0)
+/* 0002aa0c */	{
+/* 0002aa0c */		return false;
+/* 0002aa14 */	}
+/* 0002aa14 */	this.PopMessage();
+/* 0002aa1c */	FunctionSet.CallFunctionFocus();
+/* 0002aa2c */	return true;
+/* 0002aa34 */}
+
+bool CPartsMessageManager::CallDelegateLostFocus(ref CPartsFunctionSet FunctionSet)
+/* 0002aa42 */{
+/* 0002aa42 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002aa54 */	if (MessageVariableCount != 0)
+/* 0002aa6c */	{
+/* 0002aa6c */		return false;
+/* 0002aa74 */	}
+/* 0002aa74 */	this.PopMessage();
+/* 0002aa7c */	FunctionSet.CallFunctionLostFocus();
+/* 0002aa8c */	return true;
+/* 0002aa94 */}
+
+bool CPartsMessageManager::CallDelegateScroll(ref CPartsFunctionSet FunctionSet)
+/* 0002aaa2 */{
+/* 0002aaa2 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002aab4 */	if (MessageVariableCount != 2)
+/* 0002aacc */	{
+/* 0002aacc */		return false;
+/* 0002aad4 */	}
+/* 0002aad4 */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002aaee */	{
+/* 0002aaee */		return false;
+/* 0002aaf6 */	}
+/* 0002aaf6 */	int ScrollPos = PARTS_GetMessageVariableInt(0);
+/* 0002ab0e */	if (PARTS_GetMessageVariableType(1) != 1)
+/* 0002ab28 */	{
+/* 0002ab28 */		return false;
+/* 0002ab30 */	}
+/* 0002ab30 */	int Total = PARTS_GetMessageVariableInt(1);
+/* 0002ab48 */	this.PopMessage();
+/* 0002ab50 */	FunctionSet.CallFunctionScroll(ScrollPos, Total);
+/* 0002ab74 */	return true;
+/* 0002ab7c */}
+
+bool CPartsMessageManager::CallDelegateCreated(ref CPartsFunctionSet FunctionSet)
+/* 0002ab8a */{
+/* 0002ab8a */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002ab9c */	if (MessageVariableCount != 0)
+/* 0002abb4 */	{
+/* 0002abb4 */		return false;
+/* 0002abbc */	}
+/* 0002abbc */	this.PopMessage();
+/* 0002abc4 */	FunctionSet.CallFunctionCreated();
+/* 0002abd4 */	return true;
+/* 0002abdc */}
+
+bool CPartsMessageManager::CallDelegateSelected(ref CPartsFunctionSet FunctionSet)
+/* 0002abea */{
+/* 0002abea */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002abfc */	if (MessageVariableCount != 1)
+/* 0002ac14 */	{
+/* 0002ac14 */		return false;
+/* 0002ac1c */	}
+/* 0002ac1c */	if (PARTS_GetMessageVariableType(0) != 1)
+/* 0002ac36 */	{
+/* 0002ac36 */		return false;
+/* 0002ac3e */	}
+/* 0002ac3e */	int Selected = PARTS_GetMessageVariableInt(0);
+/* 0002ac56 */	this.PopMessage();
+/* 0002ac5e */	FunctionSet.CallFunctionSelected(Selected);
+/* 0002ac78 */	return true;
+/* 0002ac80 */}
+
+bool CPartsMessageManager::CallDelegateChanged(ref CPartsFunctionSet FunctionSet)
+/* 0002ac8e */{
+/* 0002ac8e */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002aca0 */	if (MessageVariableCount != 0)
+/* 0002acb8 */	{
+/* 0002acb8 */		return false;
+/* 0002acc0 */	}
+/* 0002acc0 */	this.PopMessage();
+/* 0002acc8 */	FunctionSet.CallFunctionChanged();
+/* 0002acd8 */	return true;
+/* 0002ace0 */}
+
+bool CPartsMessageManager::CallDelegateChangedFlg(ref CPartsFunctionSet FunctionSet)
+/* 0002acee */{
+/* 0002acee */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002ad00 */	if (MessageVariableCount != 1)
+/* 0002ad18 */	{
+/* 0002ad18 */		return false;
+/* 0002ad20 */	}
+/* 0002ad20 */	if (PARTS_GetMessageVariableType(0) != 3)
+/* 0002ad3a */	{
+/* 0002ad3a */		return false;
+/* 0002ad42 */	}
+/* 0002ad42 */	bool Check = PARTS_GetMessageVariableBool(0);
+/* 0002ad5a */	this.PopMessage();
+/* 0002ad62 */	FunctionSet.CallFunctionChangedFlg(Check);
+/* 0002ad7c */	return true;
+/* 0002ad84 */}
+
+bool CPartsMessageManager::CallDelegateFixed(ref CPartsFunctionSet FunctionSet)
+/* 0002ad92 */{
+/* 0002ad92 */	int MessageVariableCount = PARTS_GetMessageVariableCount();
+/* 0002ada4 */	if (MessageVariableCount != 0)
+/* 0002adbc */	{
+/* 0002adbc */		return false;
+/* 0002adc4 */	}
+/* 0002adc4 */	this.PopMessage();
+/* 0002adcc */	FunctionSet.CallFunctionFixed();
+/* 0002addc */	return true;
+/* 0002ade4 */}
+
+void CPartsMessageManager::GC()
+/* 0002adf2 */{
+/* 0002adf2 */	if (this.m_FunctionSetList.Empty())
+/* 0002ae02 */	{
+/* 0002ae02 */		return;
+/* 0002ae04 */	}
+/* 0002ae04 */	for (; !this.m_FunctionSetList.Empty(); )
+/* 0002ae22 */	{
+/* 0002ae22 */		if (this.m_FunctionSetList[this.m_FunctionSetList.Numof() - 1].IsUse())
+/* 0002ae52 */		{
+/* 0002ae52 */			break;
+/* 0002ae58 */		}
+/* 0002ae58 */		this.m_FunctionSetList.PopBack();
+/* 0002ae62 */	}
+/* 0002ae68 */}
+
+void CPartsMessageManager::ReleaseFunctionSetWithoutGC(int DelegateIndex)
+/* 0002ae70 */{
+/* 0002ae70 */	if (DelegateIndex == -1)
+/* 0002ae88 */	{
+/* 0002ae88 */		return;
+/* 0002ae8a */	}
+/* 0002ae8a */	if (DelegateIndex < 0)
+/* 0002aea2 */	{
+/* 0002aea2 */		return;
+/* 0002aea4 */	}
+/* 0002aea4 */	if (this.m_FunctionSetList.Numof() <= DelegateIndex)
+/* 0002aec6 */	{
+/* 0002aec6 */		return;
+/* 0002aec8 */	}
+/* 0002aec8 */	this.m_FunctionSetList[DelegateIndex].CallFunctionDeleted();
+/* 0002aee4 */	this.m_FunctionSetList[DelegateIndex].Release();
+/* 0002af00 */}
+
+void CPartsMessageManager::ReleaseFunctionSet(int DelegateIndex)
+/* 0002af08 */{
+/* 0002af08 */	this.ReleaseFunctionSetWithoutGC(DelegateIndex);
+/* 0002af1a */	this.GC();
+/* 0002af22 */}
+
+void CPartsMessageManager::ReleaseFunctionSetList(ref array@int DelegateIndexList)
+/* 0002af2a */{
+/* 0002af2a */	int Index;
+/* 0002af2a */	for (Index = 0; Index < DelegateIndexList.Numof(); ++Index)
+/* 0002af7a */	{
+/* 0002af7a */		this.ReleaseFunctionSetWithoutGC(DelegateIndexList[Index]);
+/* 0002af98 */	}
+/* 0002af9e */	this.GC();
+/* 0002afa6 */}
+
+ref CPartsFunctionSet CPartsMessageManager::GetFunctionSet(int PartsNumber)
+/* 0002afae */{
+/* 0002afae */	if (PartsNumber == 0)
+/* 0002afc6 */	{
+/* 0002afc6 */		return this.m_WholeFunctionSet;
+/* 0002afd6 */	}
+/* 0002afd6 */	int DelegateIndex = PARTS_GetDelegateIndex(PartsNumber);
+/* 0002aff2 */	if (DelegateIndex == -1)
+/* 0002b00a */	{
+/* 0002b00a */		int Index;
+/* 0002b00a */		for (Index = 0; Index < this.m_FunctionSetList.Numof(); ++Index)
+/* 0002b05a */		{
+/* 0002b05a */			if (!this.m_FunctionSetList[Index].IsUse())
+/* 0002b07e */			{
+/* 0002b07e */				break;
+/* 0002b084 */			}
+/* 0002b084 */		}
+/* 0002b08a */		if (Index == this.m_FunctionSetList.Numof())
+/* 0002b0ac */		{
+/* 0002b0ac */			this.m_FunctionSetList.Realloc(Index + 1);
+/* 0002b0ce */		}
+/* 0002b0ce */		PARTS_SetDelegateIndex(PartsNumber, Index);
+/* 0002b0e8 */		this.m_FunctionSetList[Index].Init(PartsNumber);
+/* 0002b10e */		DelegateIndex = Index;
+/* 0002b124 */	}
+/* 0002b124 */	if (DelegateIndex < 0)
+/* 0002b13c */	{
+/* 0002b13c */		return this.m_ErrorFunctionSet;
+/* 0002b14c */	}
+/* 0002b14c */	if (this.m_FunctionSetList.Numof() <= DelegateIndex)
+/* 0002b16e */	{
+/* 0002b16e */		return this.m_ErrorFunctionSet;
+/* 0002b17e */	}
+/* 0002b17e */	return this.m_FunctionSetList[DelegateIndex];
+/* 0002b19a */}
+
+ref CPartsFunctionSet CPartsMessageManager::GetFunctionSetWithoutCreate(int PartsNumber)
+/* 0002b1a8 */{
+/* 0002b1a8 */	if (PartsNumber == 0)
+/* 0002b1c0 */	{
+/* 0002b1c0 */		return this.m_WholeFunctionSet;
+/* 0002b1d0 */	}
+/* 0002b1d0 */	int DelegateIndex = PARTS_GetDelegateIndex(PartsNumber);
+/* 0002b1ec */	if (DelegateIndex == -1)
+/* 0002b204 */	{
+/* 0002b204 */		return this.m_ErrorFunctionSet;
+/* 0002b214 */	}
+/* 0002b214 */	if (DelegateIndex < 0)
+/* 0002b22c */	{
+/* 0002b22c */		return this.m_ErrorFunctionSet;
+/* 0002b23c */	}
+/* 0002b23c */	if (this.m_FunctionSetList.Numof() <= DelegateIndex)
+/* 0002b25e */	{
+/* 0002b25e */		return this.m_ErrorFunctionSet;
+/* 0002b26e */	}
+/* 0002b26e */	return this.m_FunctionSetList[DelegateIndex];
+/* 0002b28a */}
+
+void CPartsMessageManager::AddMouseEnterEvent(int PartsNumber, DG_MouseEnterHandler DelegateObject)
+/* 0002b298 */{
+/* 0002b298 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b2dc */	FunctionSet.AddMouseEnterEvent(DelegateObject);
+/* 0002b2f8 */}
+
+void CPartsMessageManager::EraseMouseEnterEvent(int PartsNumber, DG_MouseEnterHandler DelegateObject)
+/* 0002b300 */{
+/* 0002b300 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b344 */	FunctionSet.EraseMouseEnterEvent(DelegateObject);
+/* 0002b360 */}
+
+void CPartsMessageManager::AddMouseMoveEvent(int PartsNumber, DG_MouseMoveHandler DelegateObject)
+/* 0002b368 */{
+/* 0002b368 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b3ac */	FunctionSet.AddMouseMoveEvent(DelegateObject);
+/* 0002b3c8 */}
+
+void CPartsMessageManager::EraseMouseMoveEvent(int PartsNumber, DG_MouseMoveHandler DelegateObject)
+/* 0002b3d0 */{
+/* 0002b3d0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b414 */	FunctionSet.EraseMouseMoveEvent(DelegateObject);
+/* 0002b430 */}
+
+void CPartsMessageManager::AddMouseLeaveEvent(int PartsNumber, DG_MouseLeaveHandler DelegateObject)
+/* 0002b438 */{
+/* 0002b438 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b47c */	FunctionSet.AddMouseLeaveEvent(DelegateObject);
+/* 0002b498 */}
+
+void CPartsMessageManager::EraseMouseLeaveEvent(int PartsNumber, DG_MouseLeaveHandler DelegateObject)
+/* 0002b4a0 */{
+/* 0002b4a0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b4e4 */	FunctionSet.EraseMouseLeaveEvent(DelegateObject);
+/* 0002b500 */}
+
+void CPartsMessageManager::AddMouseWheelEvent(int PartsNumber, DG_MouseWheelHandler DelegateObject)
+/* 0002b508 */{
+/* 0002b508 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b54c */	FunctionSet.AddMouseWheelEvent(DelegateObject);
+/* 0002b568 */}
+
+void CPartsMessageManager::EraseMouseWheelEvent(int PartsNumber, DG_MouseWheelHandler DelegateObject)
+/* 0002b570 */{
+/* 0002b570 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b5b4 */	FunctionSet.EraseMouseWheelEvent(DelegateObject);
+/* 0002b5d0 */}
+
+void CPartsMessageManager::AddMouseLClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0002b5d8 */{
+/* 0002b5d8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b61c */	FunctionSet.AddMouseLClickEvent(DelegateObject);
+/* 0002b638 */}
+
+void CPartsMessageManager::EraseMouseLClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0002b640 */{
+/* 0002b640 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b684 */	FunctionSet.EraseMouseLClickEvent(DelegateObject);
+/* 0002b6a0 */}
+
+void CPartsMessageManager::AddMouseRClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0002b6a8 */{
+/* 0002b6a8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b6ec */	FunctionSet.AddMouseRClickEvent(DelegateObject);
+/* 0002b708 */}
+
+void CPartsMessageManager::EraseMouseRClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0002b710 */{
+/* 0002b710 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b754 */	FunctionSet.EraseMouseRClickEvent(DelegateObject);
+/* 0002b770 */}
+
+void CPartsMessageManager::AddMouseMClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0002b778 */{
+/* 0002b778 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b7bc */	FunctionSet.AddMouseMClickEvent(DelegateObject);
+/* 0002b7d8 */}
+
+void CPartsMessageManager::EraseMouseMClickEvent(int PartsNumber, DG_MouseClickHandler DelegateObject)
+/* 0002b7e0 */{
+/* 0002b7e0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b824 */	FunctionSet.EraseMouseMClickEvent(DelegateObject);
+/* 0002b840 */}
+
+void CPartsMessageManager::AddMouseOnEvent(int PartsNumber, DG_MouseOnHandler DelegateObject)
+/* 0002b848 */{
+/* 0002b848 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b88c */	FunctionSet.AddMouseOnEvent(DelegateObject);
+/* 0002b8a8 */}
+
+void CPartsMessageManager::EraseMouseOnEvent(int PartsNumber, DG_MouseOnHandler DelegateObject)
+/* 0002b8b0 */{
+/* 0002b8b0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b8f4 */	FunctionSet.EraseMouseOnEvent(DelegateObject);
+/* 0002b910 */}
+
+void CPartsMessageManager::AddKeyTriggerEvent(int PartsNumber, DG_KeyTriggerHandler DelegateObject)
+/* 0002b918 */{
+/* 0002b918 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002b95c */	FunctionSet.AddKeyTriggerEvent(DelegateObject);
+/* 0002b978 */}
+
+void CPartsMessageManager::EraseKeyTriggerEvent(int PartsNumber, DG_KeyTriggerHandler DelegateObject)
+/* 0002b980 */{
+/* 0002b980 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002b9c4 */	FunctionSet.EraseKeyTriggerEvent(DelegateObject);
+/* 0002b9e0 */}
+
+void CPartsMessageManager::AddKeyDownEvent(int PartsNumber, DG_KeyDownHandler DelegateObject)
+/* 0002b9e8 */{
+/* 0002b9e8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002ba2c */	FunctionSet.AddKeyDownEvent(DelegateObject);
+/* 0002ba48 */}
+
+void CPartsMessageManager::EraseKeyDownEvent(int PartsNumber, DG_KeyDownHandler DelegateObject)
+/* 0002ba50 */{
+/* 0002ba50 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002ba94 */	FunctionSet.EraseKeyDownEvent(DelegateObject);
+/* 0002bab0 */}
+
+void CPartsMessageManager::AddKeyPressEvent(int PartsNumber, DG_KeyPressHandler DelegateObject)
+/* 0002bab8 */{
+/* 0002bab8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002bafc */	FunctionSet.AddKeyPressEvent(DelegateObject);
+/* 0002bb18 */}
+
+void CPartsMessageManager::EraseKeyPressEvent(int PartsNumber, DG_KeyPressHandler DelegateObject)
+/* 0002bb20 */{
+/* 0002bb20 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002bb64 */	FunctionSet.EraseKeyPressEvent(DelegateObject);
+/* 0002bb80 */}
+
+void CPartsMessageManager::AddKeyUpEvent(int PartsNumber, DG_KeyUpHandler DelegateObject)
+/* 0002bb88 */{
+/* 0002bb88 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002bbcc */	FunctionSet.AddKeyUpEvent(DelegateObject);
+/* 0002bbe8 */}
+
+void CPartsMessageManager::EraseKeyUpEvent(int PartsNumber, DG_KeyUpHandler DelegateObject)
+/* 0002bbf0 */{
+/* 0002bbf0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002bc34 */	FunctionSet.EraseKeyUpEvent(DelegateObject);
+/* 0002bc50 */}
+
+void CPartsMessageManager::AddDragBeginEvent(int PartsNumber, DG_DragBeginHandler DelegateObject)
+/* 0002bc58 */{
+/* 0002bc58 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002bc9c */	FunctionSet.AddDragBeginEvent(DelegateObject);
+/* 0002bcb8 */}
+
+void CPartsMessageManager::EraseDragBeginEvent(int PartsNumber, DG_DragBeginHandler DelegateObject)
+/* 0002bcc0 */{
+/* 0002bcc0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002bd04 */	FunctionSet.EraseDragBeginEvent(DelegateObject);
+/* 0002bd20 */}
+
+void CPartsMessageManager::AddDragingEvent(int PartsNumber, DG_DragingHandler DelegateObject)
+/* 0002bd28 */{
+/* 0002bd28 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002bd6c */	FunctionSet.AddDragingEvent(DelegateObject);
+/* 0002bd88 */}
+
+void CPartsMessageManager::EraseDragingEvent(int PartsNumber, DG_DragingHandler DelegateObject)
+/* 0002bd90 */{
+/* 0002bd90 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002bdd4 */	FunctionSet.EraseDragingEvent(DelegateObject);
+/* 0002bdf0 */}
+
+void CPartsMessageManager::AddDragEndEvent(int PartsNumber, DG_DragEndHandler DelegateObject)
+/* 0002bdf8 */{
+/* 0002bdf8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002be3c */	FunctionSet.AddDragEndEvent(DelegateObject);
+/* 0002be58 */}
+
+void CPartsMessageManager::EraseDragEndEvent(int PartsNumber, DG_DragEndHandler DelegateObject)
+/* 0002be60 */{
+/* 0002be60 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002bea4 */	FunctionSet.EraseDragEndEvent(DelegateObject);
+/* 0002bec0 */}
+
+void CPartsMessageManager::AddDropEnterEvent(int PartsNumber, DG_DropEnterHandler DelegateObject)
+/* 0002bec8 */{
+/* 0002bec8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002bf0c */	FunctionSet.AddDropEnterEvent(DelegateObject);
+/* 0002bf28 */}
+
+void CPartsMessageManager::EraseDropEnterEvent(int PartsNumber, DG_DropEnterHandler DelegateObject)
+/* 0002bf30 */{
+/* 0002bf30 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002bf74 */	FunctionSet.EraseDropEnterEvent(DelegateObject);
+/* 0002bf90 */}
+
+void CPartsMessageManager::AddDropOnEvent(int PartsNumber, DG_DropOnHandler DelegateObject)
+/* 0002bf98 */{
+/* 0002bf98 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002bfdc */	FunctionSet.AddDropOnEvent(DelegateObject);
+/* 0002bff8 */}
+
+void CPartsMessageManager::EraseDropOnEvent(int PartsNumber, DG_DropOnHandler DelegateObject)
+/* 0002c000 */{
+/* 0002c000 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c044 */	FunctionSet.EraseDropOnEvent(DelegateObject);
+/* 0002c060 */}
+
+void CPartsMessageManager::AddDroppedEvent(int PartsNumber, DG_DroppedHandler DelegateObject)
+/* 0002c068 */{
+/* 0002c068 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c0ac */	FunctionSet.AddDroppedEvent(DelegateObject);
+/* 0002c0c8 */}
+
+void CPartsMessageManager::EraseDroppedEvent(int PartsNumber, DG_DroppedHandler DelegateObject)
+/* 0002c0d0 */{
+/* 0002c0d0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c114 */	FunctionSet.EraseDroppedEvent(DelegateObject);
+/* 0002c130 */}
+
+void CPartsMessageManager::AddDropLeaveEvent(int PartsNumber, DG_DropLeaveHandler DelegateObject)
+/* 0002c138 */{
+/* 0002c138 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c17c */	FunctionSet.AddDropLeaveEvent(DelegateObject);
+/* 0002c198 */}
+
+void CPartsMessageManager::EraseDropLeaveEvent(int PartsNumber, DG_DropLeaveHandler DelegateObject)
+/* 0002c1a0 */{
+/* 0002c1a0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c1e4 */	FunctionSet.EraseDropLeaveEvent(DelegateObject);
+/* 0002c200 */}
+
+void CPartsMessageManager::AddFocusEvent(int PartsNumber, DG_FocusHandler DelegateObject)
+/* 0002c208 */{
+/* 0002c208 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c24c */	FunctionSet.AddFocusEvent(DelegateObject);
+/* 0002c268 */}
+
+void CPartsMessageManager::EraseFocusEvent(int PartsNumber, DG_FocusHandler DelegateObject)
+/* 0002c270 */{
+/* 0002c270 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c2b4 */	FunctionSet.EraseFocusEvent(DelegateObject);
+/* 0002c2d0 */}
+
+void CPartsMessageManager::AddLostFocusEvent(int PartsNumber, DG_LostFocusHandler DelegateObject)
+/* 0002c2d8 */{
+/* 0002c2d8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c31c */	FunctionSet.AddLostFocusEvent(DelegateObject);
+/* 0002c338 */}
+
+void CPartsMessageManager::EraseLostFocusEvent(int PartsNumber, DG_LostFocusHandler DelegateObject)
+/* 0002c340 */{
+/* 0002c340 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c384 */	FunctionSet.EraseLostFocusEvent(DelegateObject);
+/* 0002c3a0 */}
+
+void CPartsMessageManager::AddScrollEvent(int PartsNumber, DG_ScrollHandler DelegateObject)
+/* 0002c3a8 */{
+/* 0002c3a8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c3ec */	FunctionSet.AddScrollEvent(DelegateObject);
+/* 0002c408 */}
+
+void CPartsMessageManager::EraseScrollEvent(int PartsNumber, DG_ScrollHandler DelegateObject)
+/* 0002c410 */{
+/* 0002c410 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c454 */	FunctionSet.EraseScrollEvent(DelegateObject);
+/* 0002c470 */}
+
+void CPartsMessageManager::AddCreatedEvent(int PartsNumber, DG_CreatedHandler DelegateObject)
+/* 0002c478 */{
+/* 0002c478 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c4bc */	FunctionSet.AddCreatedEvent(DelegateObject);
+/* 0002c4d8 */}
+
+void CPartsMessageManager::EraseCreatedEvent(int PartsNumber, DG_CreatedHandler DelegateObject)
+/* 0002c4e0 */{
+/* 0002c4e0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c524 */	FunctionSet.EraseCreatedEvent(DelegateObject);
+/* 0002c540 */}
+
+void CPartsMessageManager::AddDeletedEvent(int PartsNumber, DG_DeletedHandler DelegateObject)
+/* 0002c548 */{
+/* 0002c548 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c58c */	FunctionSet.AddDeletedEvent(DelegateObject);
+/* 0002c5a8 */}
+
+void CPartsMessageManager::EraseDeletedEvent(int PartsNumber, DG_DeletedHandler DelegateObject)
+/* 0002c5b0 */{
+/* 0002c5b0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c5f4 */	FunctionSet.EraseDeletedEvent(DelegateObject);
+/* 0002c610 */}
+
+void CPartsMessageManager::AddSelectedEvent(int PartsNumber, DG_SelectedHandler DelegateObject)
+/* 0002c618 */{
+/* 0002c618 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c65c */	FunctionSet.AddSelectedEvent(DelegateObject);
+/* 0002c678 */}
+
+void CPartsMessageManager::EraseSelectedEvent(int PartsNumber, DG_SelectedHandler DelegateObject)
+/* 0002c680 */{
+/* 0002c680 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c6c4 */	FunctionSet.EraseSelectedEvent(DelegateObject);
+/* 0002c6e0 */}
+
+void CPartsMessageManager::AddChangedEvent(int PartsNumber, DG_ChangedHandler DelegateObject)
+/* 0002c6e8 */{
+/* 0002c6e8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c72c */	FunctionSet.AddChangedEvent(DelegateObject);
+/* 0002c748 */}
+
+void CPartsMessageManager::EraseChangedEvent(int PartsNumber, DG_ChangedHandler DelegateObject)
+/* 0002c750 */{
+/* 0002c750 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c794 */	FunctionSet.EraseChangedEvent(DelegateObject);
+/* 0002c7b0 */}
+
+void CPartsMessageManager::AddChangedFlgEvent(int PartsNumber, DG_ChangedFlgHandler DelegateObject)
+/* 0002c7b8 */{
+/* 0002c7b8 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c7fc */	FunctionSet.AddChangedFlgEvent(DelegateObject);
+/* 0002c818 */}
+
+void CPartsMessageManager::EraseChangedFlgEvent(int PartsNumber, DG_ChangedFlgHandler DelegateObject)
+/* 0002c820 */{
+/* 0002c820 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c864 */	FunctionSet.EraseChangedFlgEvent(DelegateObject);
+/* 0002c880 */}
+
+void CPartsMessageManager::AddFixedEvent(int PartsNumber, DG_FixedHandler DelegateObject)
+/* 0002c888 */{
+/* 0002c888 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSet(PartsNumber);
+/* 0002c8cc */	FunctionSet.AddFixedEvent(DelegateObject);
+/* 0002c8e8 */}
+
+void CPartsMessageManager::EraseFixedEvent(int PartsNumber, DG_FixedHandler DelegateObject)
+/* 0002c8f0 */{
+/* 0002c8f0 */	ref CPartsFunctionSet FunctionSet = this.GetFunctionSetWithoutCreate(PartsNumber);
+/* 0002c934 */	FunctionSet.EraseFixedEvent(DelegateObject);
+/* 0002c950 */}
+

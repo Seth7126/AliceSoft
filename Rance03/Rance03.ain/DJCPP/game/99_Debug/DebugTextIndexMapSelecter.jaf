@@ -1,0 +1,216 @@
+DebugTextIndexMapSelecter::DebugTextIndexMapSelecter()
+/* 001cac10 */{
+/* 001cac18 */	this.groupingCount_ = 135;
+/* 001cac2a */}
+
+void DebugTextIndexMapSelecter::setGroupingCount(int count)
+/* 001cac32 */{
+/* 001cac32 */	this.groupingCount_ = count;
+/* 001cac48 */}
+
+void DebugTextIndexMapSelecter::setBaseCategory(string categoryName)
+/* 001cac50 */{
+/* 001cac50 */	this.baseCategory_ = categoryName;
+/* 001cac68 */}
+
+void DebugTextIndexMapSelecter::run(array@DebugFunctionTextIndexMap textIndexMap, string selecterFunction, string executeFunction)
+/* 001cac70 */{
+/* 001cac70 */	this.map_.Free();
+/* 001cac7a */	this.map_.Alloc(textIndexMap.Numof());
+/* 001cac9a */	this.map_.Copy(0, textIndexMap, 0, textIndexMap.Numof());
+/* 001caccc */	this.selectedCategory_.Free();
+/* 001cacd6 */	this.splitter_ = this.map_[0].getSplitter();
+/* 001cacfc */	if (!this.baseCategory_.Empty())
+/* 001cad10 */	{
+/* 001cad10 */		this.selectedCategory_.PushBack(this.baseCategory_);
+/* 001cad24 */	}
+/* 001cad24 */	if (selecterFunction == "")
+/* 001cad3c */	{
+/* 001cad3c */		this.selFn_ = this.defaultSelecter;
+/* 001cad50 */	}
+/* 001cad56 */	else
+/* 001cad56 */	{
+/* 001cad56 */		this.selFn_ = selecterFunction;
+/* 001cad7c */	}
+/* 001cad7c */	if (executeFunction == "")
+/* 001cad94 */	{
+/* 001cad94 */		this.exeFn_ = this.defaultExecuter;
+/* 001cada8 */	}
+/* 001cadae */	else
+/* 001cadae */	{
+/* 001cadae */		this.exeFn_ = executeFunction;
+/* 001cadd4 */	}
+/* 001cadd4 */	while (true)
+/* 001cade0 */	{
+/* 001cade0 */		array@string indexList;
+/* 001cadea */		this.getTextIndexList(indexList);
+/* 001cadfc */		if (indexList.Numof() <= this.groupingCount_)
+/* 001cae1e */		{
+/* 001cae1e */			string r = this.selFn_(indexList, "");
+/* 001cae5c */			if (!r.Empty())
+/* 001cae70 */			{
+/* 001cae70 */				this.execute(r);
+/* 001cae82 */			}
+/* 001cae88 */			else
+/* 001cae88 */			{
+/* 001cae88 */				if (this.isRootCategory())
+/* 001cae96 */				{
+/* 001cae96 */					return;
+/* 001cae98 */				}
+/* 001cae98 */				this.selectedCategory_.PopBack();
+/* 001caea2 */			}
+/* 001caea2 */		}
+/* 001caea8 */		else
+/* 001caea8 */		{
+/* 001caea8 */			array@string subCategory;
+/* 001caeb2 */			this.getSubCategoryList(subCategory);
+/* 001caec4 */			string header = this.getCurrentHeader();
+/* 001caeda */			string r = this.selFn_(subCategory, header);
+/* 001caf1c */			if (!r.Empty())
+/* 001caf30 */			{
+/* 001caf30 */				if (this.isExistIndexName(header + r))
+/* 001caf54 */				{
+/* 001caf54 */					this.execute(header + r);
+/* 001caf72 */				}
+/* 001caf78 */				else
+/* 001caf78 */				{
+/* 001caf78 */					this.selectedCategory_.PushBack(r);
+/* 001caf8c */				}
+/* 001caf8c */			}
+/* 001caf92 */			else
+/* 001caf92 */			{
+/* 001caf92 */				if (this.isRootCategory())
+/* 001cafa0 */				{
+/* 001cafa0 */					return;
+/* 001cafa2 */				}
+/* 001cafa2 */				this.selectedCategory_.PopBack();
+/* 001cafac */			}
+/* 001cafb6 */		}
+/* 001cafc0 */	}
+/* 001cafc6 */}
+
+bool DebugTextIndexMapSelecter::isExistIndexName(string name)
+/* 001cafce */{
+/* 001cafce */	int i;
+/* 001cafe0 */	for (i = 0; i < this.map_.Numof(); ++i)
+/* 001cb030 */	{
+/* 001cb030 */		if (this.map_[i].getIndexName() == name)
+/* 001cb05e */		{
+/* 001cb05e */			return true;
+/* 001cb066 */		}
+/* 001cb066 */	}
+/* 001cb06c */	return false;
+/* 001cb074 */}
+
+bool DebugTextIndexMapSelecter::isRootCategory()
+/* 001cb082 */{
+/* 001cb082 */	if (!this.baseCategory_.Empty())
+/* 001cb096 */	{
+/* 001cb096 */		return this.selectedCategory_.Numof() == 1;
+/* 001cb0b2 */	}
+/* 001cb0b2 */	return this.selectedCategory_.Empty();
+/* 001cb0c0 */}
+
+void DebugTextIndexMapSelecter::execute(string indexText)
+/* 001cb0ce */{
+/* 001cb0ce */	int index = this.getIndexFromIndexName(indexText);
+/* 001cb0ec */	this.exeFn_(this.map_[index]);
+/* 001cb122 */}
+
+string DebugTextIndexMapSelecter::defaultSelecter(ref array@string list, string head)
+/* 001cb12a */{
+/* 001cb12a */	int i;
+/* 001cb13c */	for (i = 0; i < list.Numof(); ++i)
+/* 001cb18c */	{
+/* 001cb18c */		選択肢(i, head + list[i], 0);
+/* 001cb1c4 */	}
+/* 001cb1ca */	int r = テスト選択();
+/* 001cb1dc */	if (r != -1)
+/* 001cb1f4 */	{
+/* 001cb1f4 */		return list[r];
+/* 001cb20c */	}
+/* 001cb20c */	return "";
+/* 001cb214 */}
+
+void DebugTextIndexMapSelecter::defaultExecuter(ref DebugFunctionTextIndexMap map)
+/* 001cb222 */{
+/* 001cb222 */	DG_GeneralCallback fn;
+/* 001cb22e */	fn = map.getFunctionName();
+/* 001cb25a */	if (fn.Numof() != 0)
+/* 001cb276 */	{
+/* 001cb276 */		fn();
+/* 001cb296 */		return;
+/* 001cb298 */	}
+/* 001cb298 */	DG_StringParamCallback fn2;
+/* 001cb2a4 */	fn2 = map.getFunctionName();
+/* 001cb2d0 */	if (fn2.Numof() != 0)
+/* 001cb2ec */	{
+/* 001cb2ec */		fn2(map.getFunctionParam());
+/* 001cb31c */	}
+/* 001cb31c */}
+
+int DebugTextIndexMapSelecter::getIndexFromIndexName(string functionName)
+/* 001cb324 */{
+/* 001cb324 */	int i;
+/* 001cb336 */	for (i = 0; i < this.map_.Numof(); ++i)
+/* 001cb386 */	{
+/* 001cb386 */		if (this.map_[i].getIndexName() == functionName)
+/* 001cb3b4 */		{
+/* 001cb3b4 */			return i;
+/* 001cb3c0 */		}
+/* 001cb3c0 */	}
+/* 001cb3c6 */	return -1;
+/* 001cb3ce */}
+
+string DebugTextIndexMapSelecter::getCurrentHeader()
+/* 001cb3dc */{
+/* 001cb3dc */	string result;
+/* 001cb3f0 */	int i;
+/* 001cb402 */	for (i = 0; i < this.selectedCategory_.Numof(); ++i)
+/* 001cb452 */	{
+/* 001cb452 */		result = result + this.selectedCategory_[i] + this.splitter_;
+/* 001cb48e */	}
+/* 001cb494 */	return result;
+/* 001cb4a0 */}
+
+void DebugTextIndexMapSelecter::getTextIndexList(ref array@string resultFunc)
+/* 001cb4ae */{
+/* 001cb4ae */	resultFunc.Free();
+/* 001cb4b8 */	int depth = this.selectedCategory_.Numof();
+/* 001cb4d4 */	int i;
+/* 001cb4e6 */	for (i = 0; i < this.map_.Numof(); ++i)
+/* 001cb536 */	{
+/* 001cb536 */		if (this.map_[i].isMatchCategory(this.selectedCategory_))
+/* 001cb562 */		{
+/* 001cb562 */			resultFunc.PushBack(this.map_[i].getIndexName());
+/* 001cb588 */		}
+/* 001cb588 */	}
+/* 001cb58e */}
+
+void DebugTextIndexMapSelecter::getSubCategoryList(ref array@string resultCategory)
+/* 001cb596 */{
+/* 001cb596 */	resultCategory.Free();
+/* 001cb5a0 */	int depth = this.selectedCategory_.Numof();
+/* 001cb5bc */	int i;
+/* 001cb5ce */	for (i = 0; i < this.map_.Numof(); ++i)
+/* 001cb61e */	{
+/* 001cb61e */		if (this.map_[i].isMatchCategory(this.selectedCategory_))
+/* 001cb64a */		{
+/* 001cb64a */			string ct = this.map_[i].getCategory(depth);
+/* 001cb67e */			if (resultCategory.Find(0, resultCategory.Numof(), ct) == -1)
+/* 001cb6bc */			{
+/* 001cb6bc */				resultCategory.PushBack(ct);
+/* 001cb6d0 */			}
+/* 001cb6d0 */		}
+/* 001cb6d0 */	}
+/* 001cb6d6 */}
+
+bool isExistFunction(string r)
+/* 001cb6de */{
+/* 001cb6de */	if (g_allFunctions.Empty())
+/* 001cb6ee */	{
+/* 001cb6ee */		AFL_Debug_GetFunctionNameList(g_allFunctions);
+/* 001cb6fe */	}
+/* 001cb6fe */	return g_allFunctions.Find(0, g_allFunctions.Numof(), r) >= 0;
+/* 001cb73a */}
+

@@ -1,0 +1,186 @@
+Party::Party()
+/* 001dc830 */{
+/* 001dc838 */	this.max_ = 4;
+/* 001dc84a */}
+
+void Party::clear()
+/* 001dc852 */{
+/* 001dc852 */	this.skillId_.Free();
+/* 001dc85c */}
+
+void Party::getPlayerSkillIndexMinMax(ref int min, ref int max, string targetPlayerId)
+/* 001dc864 */{
+/* 001dc864 */	min = 10;
+/* 001dc878 */	max = 0;
+/* 001dc88c */	int i;
+/* 001dc89e */	for (i = 0; i < g_party.getCount(); ++i)
+/* 001dc8ee */	{
+/* 001dc8ee */		string atkId = g_party.getAttackSkillId(i);
+/* 001dc916 */		string chrId = getPlayerSkillFromId(atkId).getPlayerId();
+/* 001dc950 */		if (chrId == targetPlayerId)
+/* 001dc96c */		{
+/* 001dc96c */			min = Math.Min(min, i);
+/* 001dc99a */			max = Math.Max(max, i);
+/* 001dc9c8 */		}
+/* 001dc9c8 */	}
+/* 001dc9d4 */}
+
+bool Party::isAddable()
+/* 001dc9dc */{
+/* 001dc9dc */	return this.skillId_.Numof() < this.max_;
+/* 001dc9fc */}
+
+bool Party::add(string attackSkillId)
+/* 001dca0a */{
+/* 001dca0a */	if (!this.isAddable())
+/* 001dca1a */	{
+/* 001dca1a */		return false;
+/* 001dca22 */	}
+/* 001dca22 */	if (this.isExist(attackSkillId))
+/* 001dca3a */	{
+/* 001dca3a */		return false;
+/* 001dca42 */	}
+/* 001dca42 */	this.skillId_.PushBack(attackSkillId);
+/* 001dca56 */	this.sort();
+/* 001dca5e */	this.cbOnPartyChanged_();
+/* 001dca7e */	return true;
+/* 001dca86 */}
+
+bool Party::isExist(string attackSkillId)
+/* 001dca94 */{
+/* 001dca94 */	return this.skillId_.Find(0, this.skillId_.Numof(), attackSkillId) >= 0;
+/* 001dcad0 */}
+
+void Party::erase(int index)
+/* 001dcade */{
+/* 001dcade */	if (0 <= index && index < this.skillId_.Numof())
+/* 001dcb30 */	{
+/* 001dcb30 */		this.skillId_.Erase(index);
+/* 001dcb46 */		this.cbOnPartyChanged_();
+/* 001dcb66 */	}
+/* 001dcb66 */}
+
+string Party::getAttackSkillId(int index)
+/* 001dcb6e */{
+/* 001dcb6e */	if (0 <= index && index < this.skillId_.Numof())
+/* 001dcbc0 */	{
+/* 001dcbc0 */		return this.skillId_[index];
+/* 001dcbd8 */	}
+/* 001dcbd8 */	return "";
+/* 001dcbe0 */}
+
+string Party::getPlayerId(int index)
+/* 001dcbee */{
+/* 001dcbee */	if (0 <= index && index < this.skillId_.Numof())
+/* 001dcc40 */	{
+/* 001dcc40 */		ref PlayerSkill skill = getPlayerSkillFromId(this.skillId_[index]);
+/* 001dcc8e */		return skill.getPlayerId();
+/* 001dcca0 */	}
+/* 001dccac */	return "";
+/* 001dccb4 */}
+
+void Party::sort()
+/* 001dccc2 */{
+/* 001dccc2 */	this.skillId_.Sort(&sortFuncAttackSkillId);
+/* 001dccd2 */}
+
+int sortFuncAttackSkillId(string lhs, string rhs)
+/* 001dccda */{
+/* 001dccda */	ref PlayerSkill l = getPlayerSkillFromId(lhs);
+/* 001dcd1c */	ref PlayerSkill r = getPlayerSkillFromId(rhs);
+/* 001dcd5e */	int lhsIndex = getPlayerIndexFromId(l.getPlayerId());
+/* 001dcd80 */	int rhsIndex = getPlayerIndexFromId(r.getPlayerId());
+/* 001dcda2 */	if (lhsIndex < rhsIndex)
+/* 001dcdbe */	{
+/* 001dcdbe */		return -1;
+/* 001dcdc6 */	}
+/* 001dcdc6 */	if (lhsIndex > rhsIndex)
+/* 001dcde2 */	{
+/* 001dcde2 */		return 1;
+/* 001dcdea */	}
+/* 001dcdea */	int lIndex = getPlayerFromId(l.getPlayerId()).getSkillIndexFromId(l.getId());
+/* 001dce38 */	int rIndex = getPlayerFromId(r.getPlayerId()).getSkillIndexFromId(r.getId());
+/* 001dce86 */	if (lIndex < rIndex)
+/* 001dcea2 */	{
+/* 001dcea2 */		return -1;
+/* 001dceaa */	}
+/* 001dceaa */	if (lIndex > rIndex)
+/* 001dcec6 */	{
+/* 001dcec6 */		return 1;
+/* 001dcece */	}
+/* 001dcece */	return 0;
+/* 001dced6 */}
+
+int Party::getCount()
+/* 001dceea */{
+/* 001dceea */	return this.skillId_.Numof();
+/* 001dcefc */}
+
+void Party::addOnUpdateCallback(DG_GeneralCallback cb)
+/* 001dcf0a */{
+/* 001dcf0a */	this.cbOnPartyChanged_ += cb;
+/* 001dcf24 */}
+
+void Party::replace(string oldId, string newId)
+/* 001dcf2c */{
+/* 001dcf2c */	int i;
+/* 001dcf3e */	for (i = 0; i < this.skillId_.Numof(); ++i)
+/* 001dcf8e */	{
+/* 001dcf8e */		if (this.skillId_[i] == oldId)
+/* 001dcfb6 */		{
+/* 001dcfb6 */			this.skillId_[i] = newId;
+/* 001dcfda */			this.cbOnPartyChanged_();
+/* 001dcffa */		}
+/* 001dcffa */	}
+/* 001dd000 */}
+
+void Party::getPlayerIdList(ref array@string pIdList)
+/* 001dd008 */{
+/* 001dd008 */	pIdList.Free();
+/* 001dd012 */	int i;
+/* 001dd024 */	for (i = 0; i < g_party.getCount(); ++i)
+/* 001dd074 */	{
+/* 001dd074 */		string sId = g_party.getAttackSkillId(i);
+/* 001dd09c */		string pId = getPlayerSkillFromId(sId).getPlayerId();
+/* 001dd0d6 */		if (pIdList.Empty() || pIdList[pIdList.Numof() - 1] != pId)
+/* 001dd134 */		{
+/* 001dd134 */			pIdList.PushBack(pId);
+/* 001dd148 */		}
+/* 001dd148 */	}
+/* 001dd154 */}
+
+void Party::setMaxCount(int value)
+/* 001dd15c */{
+/* 001dd15c */	this.max_ = Math.Max(1, value);
+/* 001dd182 */}
+
+int Party::getMaxCount()
+/* 001dd18a */{
+/* 001dd18a */	return this.max_;
+/* 001dd196 */}
+
+int Party::getIndexFromId(string skillId)
+/* 001dd1a4 */{
+/* 001dd1a4 */	int i;
+/* 001dd1b6 */	for (i = 0; i < this.skillId_.Numof(); ++i)
+/* 001dd206 */	{
+/* 001dd206 */		if (this.skillId_[i] == skillId)
+/* 001dd22e */		{
+/* 001dd22e */			return i;
+/* 001dd23a */		}
+/* 001dd23a */	}
+/* 001dd240 */	return -1;
+/* 001dd248 */}
+
+bool Party::empty()
+/* 001dd256 */{
+/* 001dd256 */	return this.skillId_.Empty();
+/* 001dd264 */}
+
+void Party::getSkillIdList(ref array@string list)
+/* 001dd272 */{
+/* 001dd272 */	list.Free();
+/* 001dd27c */	list.Alloc(this.skillId_.Numof());
+/* 001dd29c */	list.Copy(0, this.skillId_, 0, this.skillId_.Numof());
+/* 001dd2ce */}
+

@@ -1,0 +1,128 @@
+CAEPropertyLoopCG::CAEPropertyLoopCG()
+/* 0006b53c */{
+/* 0006b544 */	this.Release();
+/* 0006b54c */}
+
+CAEPropertyLoopCG::~CAEPropertyLoopCG()
+/* 0006b554 */{
+/* 0006b554 */	this.Release();
+/* 0006b55c */}
+
+void CAEPropertyLoopCG::Init(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006b564 */{
+/* 0006b564 */	this.Release();
+/* 0006b56c */	if (Item === NULL)
+/* 0006b584 */	{
+/* 0006b584 */		return;
+/* 0006b586 */	}
+/* 0006b586 */	this.m_Item <- Item;
+/* 0006b5a6 */	this.m_PartsState = State;
+/* 0006b5bc */	this.m_Panel.Init(LayoutID);
+/* 0006b5d6 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006b5f0 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006b60a */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0006b624 */	int ID = this.m_Item.GetID();
+/* 0006b640 */	int X;
+/* 0006b652 */	int Y;
+/* 0006b664 */	int Width;
+/* 0006b676 */	int Height;
+/* 0006b688 */	Ｐ＿ループＣＧ表示範囲取得(ID, X, Y, Width, Height, State);
+/* 0006b6c2 */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿ループＣＧ名取得(ID, State), true);
+/* 0006b714 */	this.m_Panel.AddTextBoxItem("開始番号", string(Ｐ＿ループＣＧ開始番号取得(ID, State)), false);
+/* 0006b768 */	this.m_Panel.AddTextBoxItem("ＣＧ枚数", string(Ｐ＿ループＣＧ枚数取得(ID, State)), false);
+/* 0006b7bc */	this.m_Panel.AddTextBoxItem("切り替え時間", string(Ｐ＿ループＣＧ切り替え時間取得(ID, State)), false);
+/* 0006b810 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｘ", string(X), false);
+/* 0006b854 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｙ", string(Y), false);
+/* 0006b898 */	this.m_Panel.AddTextBoxItem("表示範囲／幅", string(Width), false);
+/* 0006b8dc */	this.m_Panel.AddTextBoxItem("表示範囲／高さ", string(Height), false);
+/* 0006b920 */}
+
+void CAEPropertyLoopCG::Release()
+/* 0006b928 */{
+/* 0006b928 */	this.m_dgMouseWheelEvent.Clear();
+/* 0006b934 */	this.m_dgKeyDownEvent.Clear();
+/* 0006b940 */	this.m_Item <- NULL;
+/* 0006b958 */	this.m_Panel.Release();
+/* 0006b968 */}
+
+void CAEPropertyLoopCG::KeyDownEvent(int ID, int KeyID)
+/* 0006b970 */{
+/* 0006b970 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 0006b9a4 */}
+
+void CAEPropertyLoopCG::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0006b9ac */{
+/* 0006b9ac */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0006b9ea */}
+
+void CAEPropertyLoopCG::ChangeTextEvent(int ID)
+/* 0006b9f2 */{
+/* 0006b9f2 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006ba42 */	if (Item === NULL)
+/* 0006ba5a */	{
+/* 0006ba5a */		return;
+/* 0006ba5c */	}
+/* 0006ba5c */	int PartsID = this.m_Item.GetID();
+/* 0006ba78 */	int X;
+/* 0006ba8a */	int Y;
+/* 0006ba9c */	int Width;
+/* 0006baae */	int Height;
+/* 0006bac0 */	Ｐ＿ループＣＧ表示範囲取得(PartsID, X, Y, Width, Height, this.m_PartsState);
+/* 0006bafa */	string CGName = Ｐ＿ループＣＧ名取得(PartsID, this.m_PartsState);
+/* 0006bb22 */	int StartNo = Ｐ＿ループＣＧ開始番号取得(PartsID, this.m_PartsState);
+/* 0006bb48 */	int Numof = Ｐ＿ループＣＧ枚数取得(PartsID, this.m_PartsState);
+/* 0006bb6e */	int Interval = Ｐ＿ループＣＧ切り替え時間取得(PartsID, this.m_PartsState);
+/* 0006bb94 */	if (Item.GetLabel() == "ＣＧ名")
+/* 0006bbb2 */	{
+/* 0006bbb2 */		Ｐ＿ループＣＧ設定(PartsID, Item.GetTextBoxText(), StartNo, Numof, Interval, this.m_PartsState);
+/* 0006bbfa */	}
+/* 0006bc00 */	else if (Item.GetLabel() == "開始番号")
+/* 0006bc1e */	{
+/* 0006bc1e */		Ｐ＿ループＣＧ設定(PartsID, CGName, Item.GetTextBoxInt(), Numof, Interval, this.m_PartsState);
+/* 0006bc66 */	}
+/* 0006bc6c */	else if (Item.GetLabel() == "ＣＧ枚数")
+/* 0006bc8a */	{
+/* 0006bc8a */		Ｐ＿ループＣＧ設定(PartsID, CGName, StartNo, Item.GetTextBoxInt(), Interval, this.m_PartsState);
+/* 0006bcd2 */	}
+/* 0006bcd8 */	else if (Item.GetLabel() == "切り替え時間")
+/* 0006bcf6 */	{
+/* 0006bcf6 */		Ｐ＿ループＣＧ設定(PartsID, CGName, StartNo, Numof, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006bd3e */	}
+/* 0006bd44 */	else if (Item.GetLabel() == "表示範囲／Ｘ")
+/* 0006bd62 */	{
+/* 0006bd62 */		Ｐ＿ループＣＧ表示範囲設定(PartsID, Item.GetTextBoxInt(), Y, Width, Height, this.m_PartsState);
+/* 0006bdaa */	}
+/* 0006bdb0 */	else if (Item.GetLabel() == "表示範囲／Ｙ")
+/* 0006bdce */	{
+/* 0006bdce */		Ｐ＿ループＣＧ表示範囲設定(PartsID, X, Item.GetTextBoxInt(), Width, Height, this.m_PartsState);
+/* 0006be16 */	}
+/* 0006be1c */	else if (Item.GetLabel() == "表示範囲／幅")
+/* 0006be3a */	{
+/* 0006be3a */		Ｐ＿ループＣＧ表示範囲設定(PartsID, X, Y, Item.GetTextBoxInt(), Height, this.m_PartsState);
+/* 0006be82 */	}
+/* 0006be88 */	else if (Item.GetLabel() == "表示範囲／高さ")
+/* 0006bea6 */	{
+/* 0006bea6 */		Ｐ＿ループＣＧ表示範囲設定(PartsID, X, Y, Width, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006beee */	}
+/* 0006beee */}
+
+void CAEPropertyLoopCG::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006bef6 */{
+/* 0006bef6 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0006bf10 */}
+
+void CAEPropertyLoopCG::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006bf18 */{
+/* 0006bf18 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0006bf32 */}
+
+void CAEPropertyLoopCG::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006bf3a */{
+/* 0006bf3a */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0006bf54 */}
+
+void CAEPropertyLoopCG::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006bf5c */{
+/* 0006bf5c */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0006bf76 */}
+

@@ -1,0 +1,41 @@
+CASCharSpriteProperty getCharSpriteProperty(int size, bool isEdge, int type, int r, int g, int b)
+/* 001ec782 */{
+/* 001ec782 */	CASColor body;
+/* 001ec792 */	CASColor edge;
+/* 001ec7a2 */	body.Set(r, g, b, 255);
+/* 001ec7d6 */	edge.Set(0, 0, 0, 255);
+/* 001ec7fe */	CASCharSpriteProperty prop;
+/* 001ec80e */	prop.SetType(type);
+/* 001ec828 */	prop.SetSize(size);
+/* 001ec842 */	prop.SetColor(body);
+/* 001ec860 */	prop.SetEdgeWeight(isEdge ? getFontEdgeWidth(size) : 0.0);
+/* 001ec89e */	prop.SetEdgeColor(edge);
+/* 001ec8bc */	prop.SetBoldWeight(getFontBoldWeight(size));
+/* 001ec8de */	return prop;
+/* 001ec8ee */}
+
+float getFontBoldWeight(float fontSize)
+/* 001ec902 */{
+/* 001ec902 */	return fontSize / 120.0 + 0.16;
+/* 001ec91e */}
+
+float getFontEdgeWidth(float fontSize)
+/* 001ec932 */{
+/* 001ec932 */	if (fontSize < 20.0)
+/* 001ec94a */	{
+/* 001ec94a */		return getFontBoldWeight(fontSize) + Math.Max(1, fontSize / 16.0);
+/* 001ec984 */	}
+/* 001ec984 */	return getFontBoldWeight(fontSize) + fontSize / 16.0;
+/* 001ec9aa */}
+
+void getRenderedTextSize(ref int width, ref int height, string text, int size, int type, bool isEdge, int textSpanWidth)
+/* 001ec9be */{
+/* 001ec9be */	int partsNumber = 5000;
+/* 001ec9d0 */	Ｐ＿フォント設定(partsNumber, type, size, 0, 0, 0, getFontBoldWeight(size), 0, 0, 0, isEdge ? getFontEdgeWidth(size) : 0.0, 1);
+/* 001eca5e */	Ｐ＿テキスト字間隔設定(partsNumber, textSpanWidth, 1);
+/* 001eca7e */	Ｐ＿テキスト設定(partsNumber, text, 1);
+/* 001eca9e */	width = AFL_Parts_GetWidth(partsNumber, 1);
+/* 001ecac2 */	height = AFL_Parts_GetHeight(partsNumber, 1);
+/* 001ecae6 */	Ｐ＿削除(partsNumber);
+/* 001ecaf6 */}
+

@@ -1,0 +1,241 @@
+void SYS_Activity_RunSingle(string ActivityName, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 001537c0 */{
+/* 001537c0 */	array@string List;
+/* 001537ca */	List.PushBack(ActivityName);
+/* 001537de */	SYS_Activity_RunList(List, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00153814 */}
+
+void SYS_Activity_RunList(array@string ActivityName, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00153822 */{
+/* 00153822 */	CActivityIntentData IntentData;
+/* 00153832 */	IntentData.AddRangeDestination(ActivityName);
+/* 0015384c */	SYS_Activity_Run(IntentData, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00153884 */}
+
+void SYS_Activity_RunEXText(string Data, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00153892 */{
+/* 00153892 */	CActivityIntentData IntentData;
+/* 001538a2 */	IntentData.AddDestinationData(Data);
+/* 001538bc */	SYS_Activity_Run(IntentData, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 001538f4 */}
+
+void SYS_Activity_Run(CActivityIntentData IntentData, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00153902 */{
+/* 00153902 */	for (; ; )
+/* 00153902 */	{
+/* 00153902 */		CASPartsActivity PartsActivity;
+/* 00153912 */		IntentData = PartsActivity.Run(IntentData, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00153968 */		if (IntentData.IsRemoveActivity() && !IntentData.IsExistDestination())
+/* 001539ae */		{
+/* 001539ae */			break;
+/* 001539ba */		}
+/* 001539ba */	}
+/* 001539ba */}
+
+string SYS_Activity_GetFreeName(string BaseName)
+/* 001539d4 */{
+/* 001539d4 */	if (BaseName.Empty())
+/* 001539e6 */	{
+/* 001539e6 */		BaseName = "NoName";
+/* 001539fa */	}
+/* 001539fa */	string Name = BaseName;
+/* 00153a12 */	int Index;
+/* 00153a24 */	for (Index = 0; SYS_Activity_IsLoaded(Name); ++Index)
+/* 00153a68 */	{
+/* 00153a68 */		Name = "%s:%d" % BaseName % Index;
+/* 00153aa0 */	}
+/* 00153aa6 */	return Name;
+/* 00153ab2 */}
+
+bool SYS_Activity_IsLoaded(string Name)
+/* 00153ac6 */{
+/* 00153ac6 */	return PartsEngine.IsExistActivity(Name);
+/* 00153adc */}
+
+bool SYS_Activity_Create(string Name)
+/* 00153af0 */{
+/* 00153af0 */	return PartsEngine.CreateActivity(Name);
+/* 00153b06 */}
+
+bool SYS_Activity_IsExistFile(string FileName)
+/* 00153b1a */{
+/* 00153b1a */	return PartsEngine.IsExistActivityFile(FileName);
+/* 00153b30 */}
+
+bool SYS_Activity_AddParts(string Name, string PartsName, int Number)
+/* 00153b44 */{
+/* 00153b44 */	return PartsEngine.AddActivityParts(Name, PartsName, Number);
+/* 00153b6e */}
+
+bool SYS_Activity_RemoveParts(string Name, string PartsName)
+/* 00153b82 */{
+/* 00153b82 */	return PartsEngine.RemoveActivityParts(Name, PartsName);
+/* 00153ba2 */}
+
+bool SYS_Activity_RemoveAllParts(string Name)
+/* 00153bb6 */{
+/* 00153bb6 */	return PartsEngine.RemoveAllActivityParts(Name);
+/* 00153bcc */}
+
+int SYS_Activity_NumofParts(string Name)
+/* 00153be0 */{
+/* 00153be0 */	return PartsEngine.NumofActivityParts(Name);
+/* 00153bf6 */}
+
+bool SYS_Activity_GetParts(int Index, string Name, ref string PartsName, ref int Number)
+/* 00153c0a */{
+/* 00153c0a */	return PartsEngine.GetActivityParts(Index, Name, PartsName, Number);
+/* 00153c3e */}
+
+bool SYS_Activity_Release(string Name)
+/* 00153c52 */{
+/* 00153c52 */	array@int DelegateIndexList;
+/* 00153c5c */	if (!PartsEngine.ReleaseActivity(Name, DelegateIndexList))
+/* 00153c82 */	{
+/* 00153c82 */		SYS_ERROR("アクティビティの削除に失敗しました【%s】" % Name, 0);
+/* 00153ca6 */		return false;
+/* 00153cae */	}
+/* 00153cae */	g_PartsMessageManager.ReleaseFunctionSetList(DelegateIndexList);
+/* 00153cc8 */	return true;
+/* 00153cd0 */}
+
+bool SYS_Activity_SaveEXText(ref string Text, string Name)
+/* 00153ce4 */{
+/* 00153ce4 */	return PartsEngine.SaveActivityEXText(Text, Name);
+/* 00153d04 */}
+
+bool SYS_Activity_LoadEXText(string Name, string Text)
+/* 00153d18 */{
+/* 00153d18 */	return PartsEngine.LoadActivityEXText(Name, Text);
+/* 00153d38 */}
+
+bool SYS_Activity_ReadFile(string Name, string FileName)
+/* 00153d4c */{
+/* 00153d4c */	return PartsEngine.ReadActivityFile(Name, FileName);
+/* 00153d6c */}
+
+bool SYS_Activity_WriteFile(string Name, string FileName)
+/* 00153d80 */{
+/* 00153d80 */	return PartsEngine.WriteActivityFile(Name, FileName);
+/* 00153da0 */}
+
+bool SYS_Activity_IsExistPartsByName(string Name, string PartsName)
+/* 00153db4 */{
+/* 00153db4 */	return PartsEngine.IsExistActivityPartsByName(Name, PartsName);
+/* 00153dd4 */}
+
+bool SYS_Activity_IsExistPartsByNumber(string Name, int Number)
+/* 00153de8 */{
+/* 00153de8 */	return PartsEngine.IsExistActivityPartsByNumber(Name, Number);
+/* 00153e08 */}
+
+int SYS_Activity_GetPartsNumber(string Name, string PartsName)
+/* 00153e1c */{
+/* 00153e1c */	return PartsEngine.GetActivityPartsNumber(Name, PartsName);
+/* 00153e3c */}
+
+string SYS_Activity_GetPartsName(string Name, int Number)
+/* 00153e50 */{
+/* 00153e50 */	string Out;
+/* 00153e64 */	PartsEngine.GetActivityPartsName(Out, Name, Number);
+/* 00153e8c */	return Out;
+/* 00153e98 */}
+
+void SYS_Activity_AddClosePartsName(string Name, string PartsName)
+/* 00153eac */{
+/* 00153eac */	PartsEngine.AddActivityCloseParts(Name, PartsName);
+/* 00153eca */}
+
+void SYS_Activity_RemoveClosePartsName(string Name, string PartsName)
+/* 00153ed8 */{
+/* 00153ed8 */	PartsEngine.RemoveActivityCloseParts(Name, PartsName);
+/* 00153ef6 */}
+
+void SYS_Activity_RemoveAllClosePartsName(string Name)
+/* 00153f04 */{
+/* 00153f04 */	PartsEngine.RemoveAllActivityCloseParts(Name);
+/* 00153f18 */}
+
+bool SYS_Activity_IsExistClosePartsName(string Name, string PartsName)
+/* 00153f26 */{
+/* 00153f26 */	return PartsEngine.IsExistActivityCloseParts(Name, PartsName);
+/* 00153f46 */}
+
+void SYS_Activity_SetIntentData(string Name, string PartsName, string Destination, int IntentType)
+/* 00153f5a */{
+/* 00153f5a */	PartsEngine.SetActivityIntentData(Name, PartsName, Destination, IntentType);
+/* 00153f8c */}
+
+void SYS_Activity_SetIntentDataList(string Name, string PartsName, ref array@string Destination, int IntentType)
+/* 00153f9a */{
+/* 00153f9a */	if (Destination.Empty())
+/* 00153faa */	{
+/* 00153faa */		SYS_Activity_SetIntentData(Name, PartsName, "", IntentType);
+/* 00153fd4 */		return;
+/* 00153fd6 */	}
+/* 00153fd6 */	SYS_Activity_SetIntentData(Name, PartsName, Destination[0], IntentType);
+/* 0015400c */	int Index;
+/* 0015401e */	for (Index = 1; Index < Destination.Numof(); ++Index)
+/* 0015406e */	{
+/* 0015406e */		SYS_Activity_AddIntentDestination(Name, PartsName, Destination[Index]);
+/* 0015409e */	}
+/* 001540a4 */}
+
+void SYS_Activity_AddIntentDestination(string Name, string PartsName, string Destination)
+/* 001540b2 */{
+/* 001540b2 */	PartsEngine.AddActivityIntentDataDestination(Name, PartsName, Destination);
+/* 001540da */}
+
+bool SYS_Activity_IsExistIntentData(string Name, string PartsName)
+/* 001540e8 */{
+/* 001540e8 */	return PartsEngine.IsExistActivityIntentData(Name, PartsName);
+/* 00154108 */}
+
+int SYS_Activity_NumofIntentDataDestination(string Name, string PartsName)
+/* 0015411c */{
+/* 0015411c */	return PartsEngine.NumofActivityIntentDataDestination(Name, PartsName);
+/* 0015413c */}
+
+void SYS_Activity_GetIntentDataDestination(string Name, string PartsName, ref array@string List)
+/* 00154150 */{
+/* 00154150 */	List.Free();
+/* 0015415a */	int Numof = SYS_Activity_NumofIntentDataDestination(Name, PartsName);
+/* 00154180 */	int Index;
+/* 00154192 */	for (Index = 0; Index < Numof; ++Index)
+/* 001541dc */	{
+/* 001541dc */		string Out;
+/* 001541f0 */		PartsEngine.GetActivityIntentDataDestination(Out, Index, Name, PartsName);
+/* 00154222 */		List.PushBack(Out);
+/* 00154236 */	}
+/* 0015423c */}
+
+int SYS_Activity_GetIntentDataType(string Name, string PartsName)
+/* 0015424a */{
+/* 0015424a */	return PartsEngine.GetActivityIntentDataType(Name, PartsName);
+/* 0015426a */}
+
+void SYS_Activity_SetEndKey(string ActivityName, int Key)
+/* 0015427e */{
+/* 0015427e */	PartsEngine.SetActivityEndKey(ActivityName, Key);
+/* 0015429c */}
+
+void SYS_Activity_EraseEndKey(string ActivityName, int Key)
+/* 001542aa */{
+/* 001542aa */	PartsEngine.EraseActivityEndKey(ActivityName, Key);
+/* 001542c8 */}
+
+bool SYS_Activity_IsExistEndKey(string ActivityName, int Key)
+/* 001542d6 */{
+/* 001542d6 */	return PartsEngine.IsExistActivityEndKey(ActivityName, Key);
+/* 001542f6 */}
+
+void SYS_Activity_GetEndKeyList(string ActivityName, ref array@int KeyList)
+/* 0015430a */{
+/* 0015430a */	int Numof = PartsEngine.NumofActivityEndKey(ActivityName);
+/* 0015432a */	int Index;
+/* 0015433c */	for (Index = 0; Index < Numof; ++Index)
+/* 00154386 */	{
+/* 00154386 */		KeyList.PushBack(PartsEngine.GetActivityEndKey(ActivityName, Index));
+/* 001543ae */	}
+/* 001543b4 */}
+

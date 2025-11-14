@@ -1,0 +1,65 @@
+DebugFlag::DebugFlag()
+/* 001ca3c4 */{
+/* 001ca3cc */	this.isSkipBattle_ = false;
+/* 001ca3de */	this.isSkipDungeonEvent_ = false;
+/* 001ca3f0 */	this.isSkipDungeonClosedCard_ = false;
+/* 001ca402 */	this.isSkipWorldMapEncount_ = false;
+/* 001ca414 */	this.isUseAutoSelect_ = false;
+/* 001ca426 */	this.isAutoLevelUp_ = false;
+/* 001ca438 */}
+
+bool DebugFlag::isSkipBattle()
+/* 001ca440 */{
+/* 001ca440 */	return false;
+/* 001ca448 */}
+
+bool DebugFlag::isSkipDungeonEvent()
+/* 001ca456 */{
+/* 001ca456 */	return false;
+/* 001ca45e */}
+
+bool DebugFlag::isSkipDungeonClosedCard()
+/* 001ca46c */{
+/* 001ca46c */	return false;
+/* 001ca474 */}
+
+bool DebugFlag::isSkipWorldMapEncount()
+/* 001ca482 */{
+/* 001ca482 */	return false;
+/* 001ca48a */}
+
+bool DebugFlag::isAutoLevelUp()
+/* 001ca498 */{
+/* 001ca498 */	return false;
+/* 001ca4a0 */}
+
+void DebugFlag::setSkipBattle(bool val)
+/* 001ca4ae */{
+/* 001ca4ae */	this.isSkipBattle_ = val;
+/* 001ca4c4 */	共有セーブ();
+/* 001ca4ca */}
+
+void DebugFlag::setSkipDungeonEvent(bool val)
+/* 001ca4d2 */{
+/* 001ca4d2 */	this.isSkipDungeonEvent_ = val;
+/* 001ca4e8 */	共有セーブ();
+/* 001ca4ee */}
+
+void DebugFlag::setSkipDungeonClosedCard(bool val)
+/* 001ca4f6 */{
+/* 001ca4f6 */	this.isSkipDungeonClosedCard_ = val;
+/* 001ca50c */	共有セーブ();
+/* 001ca512 */}
+
+void DebugFlag::setSkipWorldMapEncount(bool val)
+/* 001ca51a */{
+/* 001ca51a */	this.isSkipWorldMapEncount_ = val;
+/* 001ca530 */	共有セーブ();
+/* 001ca536 */}
+
+void DebugFlag::setAutoLevelUp(bool val)
+/* 001ca53e */{
+/* 001ca53e */	this.isAutoLevelUp_ = val;
+/* 001ca554 */	共有セーブ();
+/* 001ca55a */}
+

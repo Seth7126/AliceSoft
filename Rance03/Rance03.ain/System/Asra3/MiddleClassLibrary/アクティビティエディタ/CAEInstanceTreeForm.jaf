@@ -1,0 +1,546 @@
+CAEInstanceTreeForm::CAEInstanceTreeForm()
+/* 00045112 */{
+/* 0004511c */}
+
+CAEInstanceTreeForm::~CAEInstanceTreeForm()
+/* 00045122 */{
+/* 00045122 */	this.Release();
+/* 0004512a */}
+
+int CAEInstanceTreeForm::Create(ref CAEInstanceItemList InstanceList)
+/* 00045132 */{
+/* 00045132 */	this.Release();
+/* 0004513a */	if (InstanceList === NULL)
+/* 00045152 */	{
+/* 00045152 */		return 0;
+/* 0004515a */	}
+/* 0004515a */	this.m_RenameMenuID = this.m_Menu.AddItem("名前を変更", this.SelectContextMenuItemEvent);
+/* 00045186 */	this.m_Menu.AddSeparator();
+/* 00045198 */	this.m_CopyMenuID = this.m_Menu.AddItem("コピー", this.SelectContextMenuItemEvent);
+/* 000451c4 */	this.m_SingleCopyMenuID = this.m_Menu.AddItem("単体コピー", this.SelectContextMenuItemEvent);
+/* 000451f0 */	this.m_PasteMenuID = this.m_Menu.AddItem("ペースト", this.SelectContextMenuItemEvent);
+/* 0004521c */	this.m_Menu.AddSeparator();
+/* 0004522e */	this.m_EraseMenuID = this.m_Menu.AddItem("削除", this.SelectContextMenuItemEvent);
+/* 0004525a */	this.m_InstanceItemList <- InstanceList;
+/* 0004527a */	this.m_InstanceItemList.AddSelectEvent(this.SelectInstance);
+/* 00045294 */	this.m_MainLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 000452a6 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_MainLayoutBox, 1);
+/* 000452bc */	this.m_ButtonLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 000452ce */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_ButtonLayoutBox, 2);
+/* 000452e4 */	Ｐ＿レイアウトボックス＿追加(this.m_MainLayoutBox, this.m_ButtonLayoutBox);
+/* 000452fe */	Ｐ＿レイアウトボックス＿折り返し設定(this.m_ButtonLayoutBox, true, 420.0);
+/* 0004531a */	this.m_EraseButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004532c */	Ｐ＿ボタン＿テキスト設定(this.m_EraseButton, "削除");
+/* 00045342 */	Ｐ＿ボタン＿サイズ設定(this.m_EraseButton, 120, 20);
+/* 0004535e */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_EraseButton);
+/* 00045378 */	this.m_RenameButton = PARTS_GetFreeSystemPartsNumber();
+/* 0004538a */	Ｐ＿ボタン＿テキスト設定(this.m_RenameButton, "名前(F2)");
+/* 000453a0 */	Ｐ＿ボタン＿サイズ設定(this.m_RenameButton, 120, 20);
+/* 000453bc */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_RenameButton);
+/* 000453d6 */	this.m_CopyButton = PARTS_GetFreeSystemPartsNumber();
+/* 000453e8 */	Ｐ＿ボタン＿テキスト設定(this.m_CopyButton, "コピー");
+/* 000453fe */	Ｐ＿ボタン＿サイズ設定(this.m_CopyButton, 120, 20);
+/* 0004541a */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_CopyButton);
+/* 00045434 */	this.m_SingleCopyButton = PARTS_GetFreeSystemPartsNumber();
+/* 00045446 */	Ｐ＿ボタン＿テキスト設定(this.m_SingleCopyButton, "単体コピー");
+/* 0004545c */	Ｐ＿ボタン＿サイズ設定(this.m_SingleCopyButton, 120, 20);
+/* 00045478 */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_SingleCopyButton);
+/* 00045492 */	this.m_PasteButton = PARTS_GetFreeSystemPartsNumber();
+/* 000454a4 */	Ｐ＿ボタン＿テキスト設定(this.m_PasteButton, "ペースト");
+/* 000454ba */	Ｐ＿ボタン＿サイズ設定(this.m_PasteButton, 120, 20);
+/* 000454d6 */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_PasteButton);
+/* 000454f0 */	Ｐ＿ボタン＿有効設定(this.m_PasteButton, false);
+/* 00045506 */	this.m_OpenTreeButton = PARTS_GetFreeSystemPartsNumber();
+/* 00045518 */	Ｐ＿ボタン＿テキスト設定(this.m_OpenTreeButton, "開く");
+/* 0004552e */	Ｐ＿ボタン＿サイズ設定(this.m_OpenTreeButton, 120, 20);
+/* 0004554a */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_OpenTreeButton);
+/* 00045564 */	this.m_CloseTreeButton = PARTS_GetFreeSystemPartsNumber();
+/* 00045576 */	Ｐ＿ボタン＿テキスト設定(this.m_CloseTreeButton, "閉じる");
+/* 0004558c */	Ｐ＿ボタン＿サイズ設定(this.m_CloseTreeButton, 120, 20);
+/* 000455a8 */	Ｐ＿レイアウトボックス＿追加(this.m_ButtonLayoutBox, this.m_CloseTreeButton);
+/* 000455c2 */	int TreeNumber = this.m_TreeView.Init();
+/* 000455de */	Ｐ＿レイアウトボックス＿追加(this.m_MainLayoutBox, TreeNumber);
+/* 000455f8 */	AFL_Parts_AddMouseLClickEvent(this.m_EraseButton, this.MouseClickEvent);
+/* 00045612 */	AFL_Parts_AddMouseLClickEvent(this.m_RenameButton, this.MouseClickEvent);
+/* 0004562c */	AFL_Parts_AddMouseLClickEvent(this.m_CopyButton, this.MouseCopyClickEvent);
+/* 00045646 */	AFL_Parts_AddMouseLClickEvent(this.m_SingleCopyButton, this.MouseSingleCopyClickEvent);
+/* 00045660 */	AFL_Parts_AddMouseLClickEvent(this.m_PasteButton, this.MousePasteClickEvent);
+/* 0004567a */	AFL_Parts_AddMouseLClickEvent(this.m_OpenTreeButton, this.MouseOpenTreeClickEvent);
+/* 00045694 */	AFL_Parts_AddMouseLClickEvent(this.m_CloseTreeButton, this.MouseCloseTreeClickEvent);
+/* 000456ae */	AFL_Parts_AddMouseWheelEvent(this.m_EraseButton, this.MouseWheelEvent);
+/* 000456c8 */	AFL_Parts_AddMouseWheelEvent(this.m_RenameButton, this.MouseWheelEvent);
+/* 000456e2 */	AFL_Parts_AddMouseWheelEvent(this.m_CopyButton, this.MouseWheelEvent);
+/* 000456fc */	AFL_Parts_AddMouseWheelEvent(this.m_SingleCopyButton, this.MouseWheelEvent);
+/* 00045716 */	AFL_Parts_AddMouseWheelEvent(this.m_PasteButton, this.MouseWheelEvent);
+/* 00045730 */	AFL_Parts_AddMouseWheelEvent(this.m_OpenTreeButton, this.MouseWheelEvent);
+/* 0004574a */	AFL_Parts_AddMouseWheelEvent(this.m_CloseTreeButton, this.MouseWheelEvent);
+/* 00045764 */	this.m_TreeView.AddMouseRClickEvent(this.MouseRClickEvent);
+/* 0004577e */	this.m_TreeView.AddUpdateTreeEvent(this.BookUpdateTree);
+/* 00045798 */	AFL_Parts_AddBeginUpdateEvent(this.UpdateTreeByUpdateFrame);
+/* 000457a8 */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 000457b8 */	AFL_Parts_AddWholeKeyPressEvent(this.KeyPressEvent);
+/* 000457c8 */	return this.m_MainLayoutBox;
+/* 000457d4 */}
+
+void CAEInstanceTreeForm::Release()
+/* 000457e2 */{
+/* 000457e2 */	this.m_BookUpdate = false;
+/* 000457f4 */	this.m_TreeView.Release();
+/* 00045804 */	PARTS_ReleaseWithInit(this.m_CloseTreeButton);
+/* 00045812 */	PARTS_ReleaseWithInit(this.m_OpenTreeButton);
+/* 00045820 */	PARTS_ReleaseWithInit(this.m_PasteButton);
+/* 0004582e */	PARTS_ReleaseWithInit(this.m_SingleCopyButton);
+/* 0004583c */	PARTS_ReleaseWithInit(this.m_CopyButton);
+/* 0004584a */	PARTS_ReleaseWithInit(this.m_RenameButton);
+/* 00045858 */	PARTS_ReleaseWithInit(this.m_EraseButton);
+/* 00045866 */	PARTS_ReleaseWithInit(this.m_ButtonLayoutBox);
+/* 00045874 */	PARTS_ReleaseWithInit(this.m_MainLayoutBox);
+/* 00045882 */	this.m_InstanceItemList <- NULL;
+/* 0004589a */}
+
+void CAEInstanceTreeForm::ReleaseAllInstance()
+/* 000458a2 */{
+/* 000458a2 */	this.m_InstanceItemList.ReleaseAllInstance();
+/* 000458b2 */	this.UpdateTree();
+/* 000458ba */}
+
+void CAEInstanceTreeForm::MouseClickEvent(int ID, int MouseX, int MouseY)
+/* 000458c2 */{
+/* 000458c2 */	if (ID == this.m_EraseButton)
+/* 000458de */	{
+/* 000458de */		this.EraseActiveItem();
+/* 000458e6 */	}
+/* 000458ec */	else if (ID == this.m_RenameButton)
+/* 00045908 */	{
+/* 00045908 */		this.RenameActiveItem();
+/* 00045910 */	}
+/* 00045910 */}
+
+void CAEInstanceTreeForm::MouseCopyClickEvent(int ID, int MouseX, int MouseY)
+/* 00045918 */{
+/* 00045918 */	this.CopyActiveItem();
+/* 00045920 */}
+
+void CAEInstanceTreeForm::MouseSingleCopyClickEvent(int ID, int MouseX, int MouseY)
+/* 00045928 */{
+/* 00045928 */	this.SingleCopyActiveItem();
+/* 00045930 */}
+
+void CAEInstanceTreeForm::MousePasteClickEvent(int ID, int MouseX, int MouseY)
+/* 00045938 */{
+/* 00045938 */	this.PasteActiveItem();
+/* 00045940 */}
+
+void CAEInstanceTreeForm::MouseOpenTreeClickEvent(int ID, int MouseX, int MouseY)
+/* 00045948 */{
+/* 00045948 */	this.m_InstanceItemList.SetOpen(true);
+/* 0004595e */	this.UpdateTree();
+/* 00045966 */}
+
+void CAEInstanceTreeForm::MouseCloseTreeClickEvent(int ID, int MouseX, int MouseY)
+/* 0004596e */{
+/* 0004596e */	this.m_InstanceItemList.SetOpen(false);
+/* 00045984 */	this.UpdateTree();
+/* 0004598c */}
+
+void CAEInstanceTreeForm::KeyUpEvent(int Number, int KeyCode)
+/* 00045994 */{
+/* 00045994 */	if (KeyCode == 113)
+/* 000459ac */	{
+/* 000459ac */		this.RenameActiveItem();
+/* 000459b4 */	}
+/* 000459b4 */}
+
+void CAEInstanceTreeForm::KeyPressEvent(int Number, int KeyCode)
+/* 000459bc */{
+/* 000459bc */	if (KeyCode == 38)
+/* 000459d4 */	{
+/* 000459d4 */		this.UpActive();
+/* 000459dc */	}
+/* 000459e2 */	else if (KeyCode == 40)
+/* 000459fa */	{
+/* 000459fa */		this.DownActive();
+/* 00045a02 */	}
+/* 00045a08 */	else if (KeyCode == 37)
+/* 00045a20 */	{
+/* 00045a20 */		this.SetOpenActive(false);
+/* 00045a2e */	}
+/* 00045a34 */	else if (KeyCode == 39)
+/* 00045a4c */	{
+/* 00045a4c */		this.SetOpenActive(true);
+/* 00045a5a */	}
+/* 00045a5a */}
+
+void CAEInstanceTreeForm::MouseRClickEvent(int ID, int MouseX, int MouseY)
+/* 00045a62 */{
+/* 00045a62 */	this.m_Menu.SetItemEnable(this.m_PasteMenuID, this.m_InstanceItemList.IsExistCopyData());
+/* 00045a8c */	this.m_Menu.Open(-2147483648, -2147483648);
+/* 00045aa8 */}
+
+void CAEInstanceTreeForm::SelectContextMenuItemEvent(int Index, string ItemText)
+/* 00045ab0 */{
+/* 00045ab0 */	if (Index == this.m_RenameMenuID)
+/* 00045acc */	{
+/* 00045acc */		this.RenameActiveItem();
+/* 00045ad4 */	}
+/* 00045ada */	else if (Index == this.m_CopyMenuID)
+/* 00045af6 */	{
+/* 00045af6 */		this.CopyActiveItem();
+/* 00045afe */	}
+/* 00045b04 */	else if (Index == this.m_SingleCopyMenuID)
+/* 00045b20 */	{
+/* 00045b20 */		this.SingleCopyActiveItem();
+/* 00045b28 */	}
+/* 00045b2e */	else if (Index == this.m_PasteMenuID)
+/* 00045b4a */	{
+/* 00045b4a */		this.PasteActiveItem();
+/* 00045b52 */	}
+/* 00045b58 */	else if (Index == this.m_EraseMenuID)
+/* 00045b74 */	{
+/* 00045b74 */		this.EraseActiveItem();
+/* 00045b7c */	}
+/* 00045b7c */}
+
+void CAEInstanceTreeForm::CopyActiveItem()
+/* 00045b84 */{
+/* 00045b84 */	this.m_InstanceItemList.CopyActiveParts();
+/* 00045b96 */	this.EnablePasteButton();
+/* 00045b9e */}
+
+void CAEInstanceTreeForm::SingleCopyActiveItem()
+/* 00045ba6 */{
+/* 00045ba6 */	this.m_InstanceItemList.SingleCopyActiveParts();
+/* 00045bb8 */	this.EnablePasteButton();
+/* 00045bc0 */}
+
+void CAEInstanceTreeForm::PasteActiveItem()
+/* 00045bc8 */{
+/* 00045bc8 */	this.m_InstanceItemList.PasteActiveParts();
+/* 00045bda */	this.UpdateTree();
+/* 00045be2 */}
+
+void CAEInstanceTreeForm::EnablePasteButton()
+/* 00045bea */{
+/* 00045bea */	Ｐ＿ボタン＿有効設定(this.m_PasteButton, this.m_InstanceItemList.IsExistCopyData());
+/* 00045c0a */}
+
+void CAEInstanceTreeForm::EraseActiveItem()
+/* 00045c12 */{
+/* 00045c12 */	ref CAEInstanceItem Item = this.m_InstanceItemList.GetActive();
+/* 00045c58 */	if (Item === NULL)
+/* 00045c70 */	{
+/* 00045c70 */		return;
+/* 00045c72 */	}
+/* 00045c72 */	int Number = Item.GetID();
+/* 00045c8e */	if (!DIALOG_YESNO("【%s】削除しますか？" % Item.GetName()))
+/* 00045cba */	{
+/* 00045cba */		return;
+/* 00045cbc */	}
+/* 00045cbc */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 00045d02 */	if (Item === ActiveItem)
+/* 00045d1e */	{
+/* 00045d1e */		this.m_InstanceItemList.Passive();
+/* 00045d2e */	}
+/* 00045d2e */	int Parent = Ｐ＿親設定取得(Number);
+/* 00045d4a */	int MyIndex = Ｐ＿子インデックス取得(Parent, Number);
+/* 00045d70 */	int MyNumofChild = Ｐ＿子数取得(Number);
+/* 00045d8c */	bool IsReleaseChild = false;
+/* 00045d9e */	if (MyNumofChild != 0)
+/* 00045db6 */	{
+/* 00045db6 */		IsReleaseChild = DIALOG_YESNO("子も同時に削除しますか？");
+/* 00045dce */	}
+/* 00045dce */	Ｐ＿子解放(Parent, Number);
+/* 00045de8 */	if (IsReleaseChild)
+/* 00045df8 */	{
+/* 00045df8 */		this.EraseItemWithChild(Item);
+/* 00045e0a */	}
+/* 00045e10 */	else
+/* 00045e10 */	{
+/* 00045e10 */		int Index;
+/* 00045e22 */		for (Index = MyNumofChild - 1; 0 <= Index; --Index)
+/* 00045e74 */		{
+/* 00045e74 */			int ChildNumber = Ｐ＿子取得(Number, Index);
+/* 00045e9a */			Ｐ＿子挿入(Parent, MyIndex, ChildNumber);
+/* 00045ebe */		}
+/* 00045ec4 */		Item.Release();
+/* 00045ed4 */	}
+/* 00045ed4 */	int NumofChild = Ｐ＿子数取得(Parent);
+/* 00045ef0 */	int NextActiveNumber;
+/* 00045f02 */	if (NumofChild == 0)
+/* 00045f1a */	{
+/* 00045f1a */		NextActiveNumber = Parent;
+/* 00045f30 */	}
+/* 00045f36 */	else if (MyIndex < NumofChild)
+/* 00045f52 */	{
+/* 00045f52 */		NextActiveNumber = Ｐ＿子取得(Parent, MyIndex);
+/* 00045f78 */	}
+/* 00045f7e */	else
+/* 00045f7e */	{
+/* 00045f7e */		NextActiveNumber = Ｐ＿子取得(Parent, NumofChild - 1);
+/* 00045fac */	}
+/* 00045fac */	ref CAEInstanceItem NextActiveItem = this.m_InstanceItemList.FindInstanceByNumber(NextActiveNumber);
+/* 00045ffc */	if (NextActiveItem !== NULL)
+/* 00046014 */	{
+/* 00046014 */		NextActiveItem.Active(true);
+/* 0004602a */	}
+/* 0004602a */	this.UpdateTree();
+/* 00046032 */}
+
+void CAEInstanceTreeForm::EraseItemWithChild(ref CAEInstanceItem Item)
+/* 0004603a */{
+/* 0004603a */	if (Item === NULL)
+/* 00046052 */	{
+/* 00046052 */		return;
+/* 00046054 */	}
+/* 00046054 */	int MyNumofChild = Ｐ＿子数取得(Item.GetID());
+/* 00046076 */	int Index;
+/* 00046088 */	for (Index = MyNumofChild - 1; 0 <= Index; --Index)
+/* 000460da */	{
+/* 000460da */		int ChildNumber = Ｐ＿子取得(Item.GetID(), Index);
+/* 00046106 */		this.EraseItemWithChild(this.m_InstanceItemList.FindInstanceByNumber(ChildNumber));
+/* 00046142 */	}
+/* 0004614e */	Item.Release();
+/* 0004615e */}
+
+void CAEInstanceTreeForm::Add(int GUIType)
+/* 00046166 */{
+/* 00046166 */	ref CAEInstanceItem Item = this.m_InstanceItemList.AddInstance(GUIType);
+/* 000461b6 */	int AddNumbr = Item.GetID();
+/* 000461d2 */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 00046218 */	if (ActiveItem === NULL)
+/* 00046230 */	{
+/* 00046230 */		Ｐ＿子追加(this.m_InstanceItemList.GetRootParts(), AddNumbr);
+/* 00046250 */	}
+/* 00046256 */	else
+/* 00046256 */	{
+/* 00046256 */		int MyParent = Ｐ＿親設定取得(ActiveItem.GetID());
+/* 00046278 */		int MyIndex = Ｐ＿子インデックス取得(MyParent, ActiveItem.GetID());
+/* 000462a4 */		Ｐ＿子挿入(MyParent, MyIndex + 1, AddNumbr);
+/* 000462d0 */	}
+/* 000462d0 */	Item.Active(true);
+/* 000462e6 */	this.UpdateTree();
+/* 000462ee */}
+
+void CAEInstanceTreeForm::RenameActiveItem()
+/* 000462f6 */{
+/* 000462f6 */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 0004633c */	if (ActiveItem === NULL)
+/* 00046354 */	{
+/* 00046354 */		return;
+/* 00046356 */	}
+/* 00046356 */	string Name = ActiveItem.GetName();
+/* 00046374 */	if (DIALOG_GETTEXT("パーツ名を入力してください", Name))
+/* 00046390 */	{
+/* 00046390 */		if (this.RenameItem(ActiveItem, Name))
+/* 000463b2 */		{
+/* 000463b2 */			return;
+/* 000463b4 */		}
+/* 000463b4 */		this.RenameActiveItem();
+/* 000463bc */	}
+/* 000463bc */}
+
+bool CAEInstanceTreeForm::RenameItem(ref CAEInstanceItem Item, string Name)
+/* 000463c4 */{
+/* 000463c4 */	if (Item === NULL)
+/* 000463dc */	{
+/* 000463dc */		return true;
+/* 000463e4 */	}
+/* 000463e4 */	if (Name.Empty())
+/* 000463f6 */	{
+/* 000463f6 */		DIALOG_OK("最低でも１文字入力してください");
+/* 00046402 */		return false;
+/* 0004640a */	}
+/* 0004640a */	if (Item.GetName() == Name)
+/* 0004642c */	{
+/* 0004642c */		return true;
+/* 00046434 */	}
+/* 00046434 */	if (this.m_InstanceItemList.IsExist(Name))
+/* 00046454 */	{
+/* 00046454 */		DIALOG_OK("同名のパーツが存在します\n【%s】" % Name);
+/* 00046472 */		return false;
+/* 0004647a */	}
+/* 0004647a */	if ("ルートパーツ" == Name)
+/* 00046492 */	{
+/* 00046492 */		DIALOG_OK("%sはシステムで使用する名前です。別の名前を使用してください。" % "ルートパーツ");
+/* 000464ac */		return false;
+/* 000464b4 */	}
+/* 000464b4 */	Item.SetName(Name);
+/* 000464ce */	this.UpdateTree();
+/* 000464d6 */	return true;
+/* 000464de */}
+
+void CAEInstanceTreeForm::SelectInstance(ref CAEInstanceItem Item)
+/* 000464ec */{
+/* 000464ec */	this.BookUpdateTree();
+/* 000464f4 */}
+
+void CAEInstanceTreeForm::UpdateButton()
+/* 000464fc */{
+/* 000464fc */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 00046542 */	bool IsExistActive = ActiveItem !== NULL;
+/* 00046562 */	Ｐ＿ボタン＿有効設定(this.m_EraseButton, IsExistActive);
+/* 0004657c */	Ｐ＿ボタン＿有効設定(this.m_RenameButton, IsExistActive);
+/* 00046596 */	Ｐ＿ボタン＿有効設定(this.m_CopyButton, IsExistActive);
+/* 000465b0 */	Ｐ＿ボタン＿有効設定(this.m_SingleCopyButton, IsExistActive);
+/* 000465ca */}
+
+void CAEInstanceTreeForm::GetPartsListByShowdItem(ref array@int List)
+/* 000465d2 */{
+/* 000465d2 */	int Root = this.m_InstanceItemList.GetRootParts();
+/* 000465ee */	int NumofChild = Ｐ＿子数取得(Root);
+/* 0004660a */	int i;
+/* 0004661c */	for (i = 0; i < NumofChild; ++i)
+/* 00046666 */	{
+/* 00046666 */		this.GetPartsListByShowdItemImp(Ｐ＿子取得(Root, i), List);
+/* 00046692 */	}
+/* 00046698 */}
+
+void CAEInstanceTreeForm::GetPartsListByShowdItemImp(int Parent, ref array@int List)
+/* 000466a0 */{
+/* 000466a0 */	if (Parent == 0)
+/* 000466b8 */	{
+/* 000466b8 */		return;
+/* 000466ba */	}
+/* 000466ba */	List.PushBack(Parent);
+/* 000466ce */	ref CAEInstanceItem Item = this.m_InstanceItemList.FindInstanceByNumber(Parent);
+/* 0004671e */	if (Item === NULL)
+/* 00046736 */	{
+/* 00046736 */		return;
+/* 00046738 */	}
+/* 00046738 */	if (!Item.IsOpen())
+/* 00046750 */	{
+/* 00046750 */		return;
+/* 00046752 */	}
+/* 00046752 */	int NumofChild = Ｐ＿子数取得(Parent);
+/* 0004676e */	int i;
+/* 00046780 */	for (i = 0; i < NumofChild; ++i)
+/* 000467ca */	{
+/* 000467ca */		this.GetPartsListByShowdItemImp(Ｐ＿子取得(Parent, i), List);
+/* 000467f6 */	}
+/* 000467fc */}
+
+void CAEInstanceTreeForm::UpActive()
+/* 00046804 */{
+/* 00046804 */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 0004684a */	if (ActiveItem === NULL)
+/* 00046862 */	{
+/* 00046862 */		return;
+/* 00046864 */	}
+/* 00046864 */	array@int List;
+/* 0004686e */	this.GetPartsListByShowdItem(List);
+/* 00046880 */	int Index = List.Find(0, List.Numof(), ActiveItem.GetID());
+/* 000468c2 */	if (Index == -1)
+/* 000468da */	{
+/* 000468da */		return;
+/* 000468dc */	}
+/* 000468dc */	if (Index == 0)
+/* 000468f4 */	{
+/* 000468f4 */		return;
+/* 000468f6 */	}
+/* 000468f6 */	this.m_InstanceItemList.Active(List[Index - 1]);
+/* 00046924 */}
+
+void CAEInstanceTreeForm::DownActive()
+/* 0004692c */{
+/* 0004692c */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 00046972 */	if (ActiveItem === NULL)
+/* 0004698a */	{
+/* 0004698a */		return;
+/* 0004698c */	}
+/* 0004698c */	array@int List;
+/* 00046996 */	this.GetPartsListByShowdItem(List);
+/* 000469a8 */	int Index = List.Find(0, List.Numof(), ActiveItem.GetID());
+/* 000469ea */	if (Index == -1)
+/* 00046a02 */	{
+/* 00046a02 */		return;
+/* 00046a04 */	}
+/* 00046a04 */	if (Index == List.Numof() - 1)
+/* 00046a2e */	{
+/* 00046a2e */		return;
+/* 00046a30 */	}
+/* 00046a30 */	this.m_InstanceItemList.Active(List[Index + 1]);
+/* 00046a5e */}
+
+void CAEInstanceTreeForm::SetOpenActive(bool Open)
+/* 00046a66 */{
+/* 00046a66 */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 00046aac */	if (ActiveItem === NULL)
+/* 00046ac4 */	{
+/* 00046ac4 */		return;
+/* 00046ac6 */	}
+/* 00046ac6 */	ActiveItem.SetOpen(Open);
+/* 00046ae0 */	this.BookUpdateTree();
+/* 00046ae8 */}
+
+void CAEInstanceTreeForm::UpdateZPosAllParts()
+/* 00046af0 */{
+/* 00046af0 */	this.UpdateZPos(this.m_InstanceItemList.GetRootParts(), 1);
+/* 00046b0e */}
+
+void CAEInstanceTreeForm::UpdateZPos(int Parts, int Count)
+/* 00046b16 */{
+/* 00046b16 */	ref CAEInstanceItem Item = this.m_InstanceItemList.FindInstanceByNumber(Parts);
+/* 00046b66 */	if (Item === NULL)
+/* 00046b7e */	{
+/* 00046b7e */		Ｐ＿Ｚ座標設定(Parts, Count);
+/* 00046b98 */	}
+/* 00046b9e */	else
+/* 00046b9e */	{
+/* 00046b9e */		Item.SetZ(Count);
+/* 00046bb8 */	}
+/* 00046bb8 */	int NumofChild = Ｐ＿子数取得(Parts);
+/* 00046bd4 */	int Index;
+/* 00046be6 */	int PosZ = 1;
+/* 00046bf8 */	for (Index = 0; Index < NumofChild; ++Index)
+/* 00046c42 */	{
+/* 00046c42 */		int Child = Ｐ＿子取得(Parts, Index);
+/* 00046c68 */		this.UpdateZPos(Child, PosZ);
+/* 00046c84 */		int ChildMaxPosZ = PARTS_GetAbsoluteMaxZ(Child) - PARTS_GetAbsoluteZ(Parts);
+/* 00046cb2 */		PosZ = ChildMaxPosZ + 1;
+/* 00046cd0 */	}
+/* 00046cd6 */}
+
+void CAEInstanceTreeForm::UpdateTree()
+/* 00046cde */{
+/* 00046cde */	this.UpdateButton();
+/* 00046ce6 */	this.m_TreeView.CreateTree(this.m_InstanceItemList);
+/* 00046d00 */	this.UpdateZPosAllParts();
+/* 00046d08 */}
+
+void CAEInstanceTreeForm::UpdateTreeByUpdateFrame(int PassedTime)
+/* 00046d10 */{
+/* 00046d10 */	if (!this.m_BookUpdate)
+/* 00046d22 */	{
+/* 00046d22 */		return;
+/* 00046d24 */	}
+/* 00046d24 */	this.m_BookUpdate = false;
+/* 00046d36 */	this.UpdateTree();
+/* 00046d3e */}
+
+void CAEInstanceTreeForm::BookUpdateTree()
+/* 00046d46 */{
+/* 00046d46 */	this.m_BookUpdate = true;
+/* 00046d58 */}
+
+void CAEInstanceTreeForm::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00046d60 */{
+/* 00046d60 */	this.m_TreeView.MouseWheelEvent(ID, Forward, Back);
+/* 00046d8e */}
+
+bool CAEInstanceTreeForm::SaveActivity(ref CActivityData ActivityData)
+/* 00046d96 */{
+/* 00046d96 */	if (!this.m_InstanceItemList.SaveActivity(ActivityData))
+/* 00046db8 */	{
+/* 00046db8 */		return false;
+/* 00046dc0 */	}
+/* 00046dc0 */	return true;
+/* 00046dc8 */}
+
+bool CAEInstanceTreeForm::LoadActivity(ref CActivityData ActivityData)
+/* 00046dd6 */{
+/* 00046dd6 */	this.m_InstanceItemList.LoadActivity(ActivityData);
+/* 00046df2 */	this.UpdateTree();
+/* 00046dfa */	this.UpdateZPosAllParts();
+/* 00046e02 */	return true;
+/* 00046e0a */}
+

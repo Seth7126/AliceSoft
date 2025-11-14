@@ -1,0 +1,67 @@
+bool SYS_ホイールバック即確認()
+/* 00144f2e */{
+/* 00144f2e */	int Forward;
+/* 00144f40 */	int Back;
+/* 00144f52 */	AFL_MouseWheel_GetCount(Forward, Back);
+/* 00144f68 */	return Back != 0;
+/* 00144f7e */}
+
+bool SYS_ホイールバック確認()
+/* 00144f92 */{
+/* 00144f92 */	if (!SYS_ホイールバック即確認())
+/* 00144fa0 */	{
+/* 00144fa0 */		return false;
+/* 00144fa8 */	}
+/* 00144fa8 */	int nCurrentTime = system.GetTime();
+/* 00144fba */	if (_g_Ｍ送ホイール確認時刻 == -2147483648)
+/* 00144fd2 */	{
+/* 00144fd2 */		_g_Ｍ送ホイール確認時刻 = nCurrentTime;
+/* 00144fe8 */		return true;
+/* 00144ff0 */	}
+/* 00144ff0 */	if (nCurrentTime > _g_Ｍ送ホイール確認時刻 + 200)
+/* 00145014 */	{
+/* 00145014 */		_g_Ｍ送ホイール確認時刻 = nCurrentTime;
+/* 0014502a */		return true;
+/* 00145032 */	}
+/* 00145032 */	return false;
+/* 0014503a */}
+
+bool SYS_ホイールフォア即確認()
+/* 0014504e */{
+/* 0014504e */	int Forward;
+/* 00145060 */	int Back;
+/* 00145072 */	AFL_MouseWheel_GetCount(Forward, Back);
+/* 00145088 */	return Forward != 0;
+/* 0014509e */}
+
+bool SYS_ホイールフォア確認()
+/* 001450b2 */{
+/* 001450b2 */	if (!SYS_ホイールフォア即確認())
+/* 001450c0 */	{
+/* 001450c0 */		return false;
+/* 001450c8 */	}
+/* 001450c8 */	int nCurrentTime = system.GetTime();
+/* 001450da */	if (_g_Ｍ送ホイール確認時刻 == -2147483648)
+/* 001450f2 */	{
+/* 001450f2 */		_g_Ｍ送ホイール確認時刻 = nCurrentTime;
+/* 00145108 */		return true;
+/* 00145110 */	}
+/* 00145110 */	if (nCurrentTime > _g_Ｍ送ホイール確認時刻 + 200)
+/* 00145134 */	{
+/* 00145134 */		_g_Ｍ送ホイール確認時刻 = nCurrentTime;
+/* 0014514a */		return true;
+/* 00145152 */	}
+/* 00145152 */	return false;
+/* 0014515a */}
+
+void SYS_ホイール回転時刻クリア()
+/* 0014516e */{
+/* 0014516e */	int Forward;
+/* 00145180 */	int Back;
+/* 00145192 */	AFL_MouseWheel_GetCount(Forward, Back);
+/* 001451a8 */	if (Forward != 0 || Back != 0)
+/* 001451f0 */	{
+/* 001451f0 */		_g_Ｍ送ホイール確認時刻 = system.GetTime();
+/* 00145202 */	}
+/* 00145202 */}
+

@@ -1,0 +1,74 @@
+ThumbnailList::ThumbnailList()
+/* 001c1070 */{
+/* 001c1078 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001c109e */}
+
+void ThumbnailList::init(bool isCg)
+/* 001c10a6 */{
+/* 001c10a6 */	this.isCg_ = isCg;
+/* 001c10bc */	this.count_ = this.getThumbnailCount();
+/* 001c10d0 */	this.pageCount_ = (this.count_ + 11) / 12;
+/* 001c10f6 */	this.base_.init(this.pageCount_, this.isCg_ ? "システム／ＣＧ鑑賞／下地" : "システム／シーン回想／下地", false);
+/* 001c1138 */	this.initThumbnail();
+/* 001c1140 */}
+
+void ThumbnailList::initThumbnail()
+/* 001c1148 */{
+/* 001c1148 */	this.thumbnail_.Alloc(this.count_);
+/* 001c1162 */	int i;
+/* 001c1174 */	for (i = 0; i < this.thumbnail_.Numof(); ++i)
+/* 001c11c4 */	{
+/* 001c11c4 */		if (this.isCg_)
+/* 001c11d4 */		{
+/* 001c11d4 */			this.thumbnail_[i].init(g_cgList[i].getThumbnailCg(), g_cgList[i].isAvailable(), this.base_.getPartsNumber());
+/* 001c1238 */		}
+/* 001c123e */		else
+/* 001c123e */		{
+/* 001c123e */			this.thumbnail_[i].init(g_replay[i].getThumbnailCg(), g_replay[i].isAvailable(), this.base_.getPartsNumber());
+/* 001c12a2 */		}
+/* 001c12a2 */	}
+/* 001c12a8 */	this.setThumbnailPosition();
+/* 001c12b0 */}
+
+void ThumbnailList::setThumbnailPosition()
+/* 001c12b8 */{
+/* 001c12b8 */	int i;
+/* 001c12ca */	for (i = 0; i < this.thumbnail_.Numof(); ++i)
+/* 001c131a */	{
+/* 001c131a */		int page = i / 12;
+/* 001c1338 */		int x = i % 12 % 4;
+/* 001c135e */		int y = (i % 12) / 4;
+/* 001c1384 */		this.thumbnail_[i].setPos(68 + page * 1024 + x * 224, 123 + y * 184);
+/* 001c13e8 */		this.thumbnail_[i].setOnClickCallback(this.onClickThumbnail, i);
+/* 001c1418 */	}
+/* 001c141e */}
+
+int ThumbnailList::getThumbnailCount()
+/* 001c1426 */{
+/* 001c1426 */	return this.isCg_ ? g_cgList.Numof() : g_replay.Numof();
+/* 001c145e */}
+
+void ThumbnailList::update()
+/* 001c146c */{
+/* 001c146e */}
+
+void ThumbnailList::fadeIn(bool val, unknown_delegate onFinish)
+/* 001c1474 */{
+/* 001c1474 */	int i;
+/* 001c1486 */	for (i = 0; i < this.thumbnail_.Numof(); ++i)
+/* 001c14d6 */	{
+/* 001c14d6 */		this.thumbnail_[i].fadeIn(val);
+/* 001c14fc */	}
+/* 001c1502 */	this.base_.fadeIn(val, NULL);
+/* 001c151e */}
+
+void ThumbnailList::onClickThumbnail(int index)
+/* 001c1526 */{
+/* 001c1526 */	this.cb_(index);
+/* 001c1550 */}
+
+void ThumbnailList::setOnClickCallback(DG_ThumbnailButtonClickCallback cb)
+/* 001c1558 */{
+/* 001c1558 */	this.cb_ = cb;
+/* 001c1572 */}
+

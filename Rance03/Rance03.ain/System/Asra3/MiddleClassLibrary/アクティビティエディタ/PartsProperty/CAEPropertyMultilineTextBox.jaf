@@ -1,0 +1,252 @@
+CAEPropertyMultilineTextBox::CAEPropertyMultilineTextBox()
+/* 00067620 */{
+/* 00067628 */	this.Init(0, NULL);
+/* 0006763c */}
+
+CAEPropertyMultilineTextBox::~CAEPropertyMultilineTextBox()
+/* 00067644 */{
+/* 00067644 */	this.Release();
+/* 0006764c */}
+
+void CAEPropertyMultilineTextBox::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 00067654 */{
+/* 00067654 */	this.Release();
+/* 0006765c */	if (Item === NULL)
+/* 00067674 */	{
+/* 00067674 */		return;
+/* 00067676 */	}
+/* 00067676 */	this.m_Item <- Item;
+/* 00067696 */	this.m_Panel.Init(LayoutID);
+/* 000676b0 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 000676ca */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 000676e4 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 000676fe */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 00067718 */	this.m_Panel.AddChangedCheckBoxEvent(this.ChangedCheckBoxEvent);
+/* 00067732 */	int ID = this.m_Item.GetID();
+/* 0006774e */	float 太字幅;
+/* 00067760 */	float 縁取り幅;
+/* 00067772 */	int 種類;
+/* 00067784 */	int サイズ;
+/* 00067796 */	int 赤;
+/* 000677a8 */	int 緑;
+/* 000677ba */	int 青;
+/* 000677cc */	int 縁取り赤;
+/* 000677de */	int 縁取り緑;
+/* 000677f0 */	int 縁取り青;
+/* 00067802 */	Ｐ＿マルチラインテキストボックス＿フォント取得(ID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00067862 */	int SelectRed = Ｐ＿マルチラインテキストボックス＿選択色赤取得(ID);
+/* 0006787e */	int SelectGreen = Ｐ＿マルチラインテキストボックス＿選択色緑取得(ID);
+/* 0006789a */	int SelectBlue = Ｐ＿マルチラインテキストボックス＿選択色青取得(ID);
+/* 000678b6 */	this.m_Panel.AddTextBoxItem("幅", string(AFL_Parts_GetWidth(ID, 1)), false);
+/* 00067906 */	this.m_Panel.AddTextBoxItem("高さ", string(AFL_Parts_GetHeight(ID, 1)), false);
+/* 00067956 */	this.m_Panel.AddButtonItem("フォント", "%s, サイズ[%d]" % PARTS_GetFontName(種類) % サイズ);
+/* 000679b8 */	this.m_Panel.AddCheckBoxItem("読み取り専用", Ｐ＿マルチラインテキストボックス＿読み取り専用確認(ID));
+/* 000679fa */	this.m_Panel.AddButtonItem("テキスト", Ｐ＿マルチラインテキストボックス＿テキスト取得(ID));
+/* 00067a3c */	this.m_Panel.AddTextBoxItem("最大文字数", string(Ｐ＿マルチラインテキストボックス＿最大文字数取得(ID)), false);
+/* 00067a86 */	this.m_Panel.AddButtonItem("背景色", "%d,%d,%d" % Ｐ＿マルチラインテキストボックス＿背景色赤取得(ID) % Ｐ＿マルチラインテキストボックス＿背景色緑取得(ID) % Ｐ＿マルチラインテキストボックス＿背景色青取得(ID));
+/* 00067b06 */	this.m_Panel.AddButtonItem("読み取り専用背景色", "%d,%d,%d" % Ｐ＿マルチラインテキストボックス＿読み取り専用背景色赤取得(ID) % Ｐ＿マルチラインテキストボックス＿読み取り専用背景色緑取得(ID) % Ｐ＿マルチラインテキストボックス＿読み取り専用背景色青取得(ID));
+/* 00067b86 */	this.m_Panel.AddButtonItem("枠色", "%d,%d,%d" % Ｐ＿マルチラインテキストボックス＿枠色赤取得(ID) % Ｐ＿マルチラインテキストボックス＿枠色緑取得(ID) % Ｐ＿マルチラインテキストボックス＿枠色青取得(ID));
+/* 00067c06 */	this.m_Panel.AddButtonItem("選択色", "%d,%d,%d" % SelectRed % SelectGreen % SelectBlue);
+/* 00067c74 */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿マルチラインテキストボックス＿ＣＧ名取得(ID), true);
+/* 00067cbc */}
+
+void CAEPropertyMultilineTextBox::Release()
+/* 00067cc4 */{
+/* 00067cc4 */	this.m_dgMouseWheelEvent.Clear();
+/* 00067cd0 */	this.m_dgKeyDownEvent.Clear();
+/* 00067cdc */	this.m_Item <- NULL;
+/* 00067cf4 */	this.m_Panel.Release();
+/* 00067d04 */}
+
+void CAEPropertyMultilineTextBox::KeyDownEvent(int ID, int KeyID)
+/* 00067d0c */{
+/* 00067d0c */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00067d40 */}
+
+void CAEPropertyMultilineTextBox::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00067d48 */{
+/* 00067d48 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00067d86 */}
+
+void CAEPropertyMultilineTextBox::ChangeTextEvent(int ID)
+/* 00067d8e */{
+/* 00067d8e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00067dde */	if (Item === NULL)
+/* 00067df6 */	{
+/* 00067df6 */		return;
+/* 00067df8 */	}
+/* 00067df8 */	int PartsID = this.m_Item.GetID();
+/* 00067e14 */	if (Item.GetLabel() == "幅")
+/* 00067e32 */	{
+/* 00067e32 */		Ｐ＿マルチラインテキストボックス＿サイズ設定(PartsID, Item.GetTextBoxInt(), AFL_Parts_GetHeight(PartsID, 1));
+/* 00067e68 */	}
+/* 00067e6e */	else if (Item.GetLabel() == "高さ")
+/* 00067e8c */	{
+/* 00067e8c */		Ｐ＿マルチラインテキストボックス＿サイズ設定(PartsID, AFL_Parts_GetWidth(PartsID, 1), Item.GetTextBoxInt());
+/* 00067ec2 */	}
+/* 00067ec8 */	else if (Item.GetLabel() == "最大文字数")
+/* 00067ee6 */	{
+/* 00067ee6 */		Ｐ＿マルチラインテキストボックス＿最大文字数設定(PartsID, Item.GetTextBoxInt());
+/* 00067f06 */	}
+/* 00067f0c */	else if (Item.GetLabel() == "ＣＧ名")
+/* 00067f2a */	{
+/* 00067f2a */		Ｐ＿マルチラインテキストボックス＿ＣＧ名設定(PartsID, Item.GetTextBoxText());
+/* 00067f4a */	}
+/* 00067f4a */}
+
+void CAEPropertyMultilineTextBox::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00067f52 */{
+/* 00067f52 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00067fa2 */	if (Item === NULL)
+/* 00067fba */	{
+/* 00067fba */		return;
+/* 00067fbc */	}
+/* 00067fbc */	int PartsID = this.m_Item.GetID();
+/* 00067fd8 */	if (Item.GetLabel() == "フォント")
+/* 00067ff6 */	{
+/* 00067ff6 */		float 太字幅;
+/* 00068008 */		float 縁取り幅;
+/* 0006801a */		int 種類;
+/* 0006802c */		int サイズ;
+/* 0006803e */		int 赤;
+/* 00068050 */		int 緑;
+/* 00068062 */		int 青;
+/* 00068074 */		int 縁取り赤;
+/* 00068086 */		int 縁取り緑;
+/* 00068098 */		int 縁取り青;
+/* 000680aa */		Ｐ＿マルチラインテキストボックス＿フォント取得(PartsID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 0006810a */		CASCharSpriteProperty Font;
+/* 0006811a */		Font.SetType(種類);
+/* 00068134 */		Font.SetSize(サイズ);
+/* 0006814e */		Font.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 00068188 */		Font.SetBoldWeight(太字幅);
+/* 000681a2 */		Font.SetEdgeWeight(縁取り幅);
+/* 000681bc */		Font.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 000681f6 */		CAESelectFontDialog Form;
+/* 00068206 */		Form.Show(ID, MouseX, MouseY, Font, this.ChangedFontEvent);
+/* 0006824c */	}
+/* 0006825e */	else if (Item.GetLabel() == "テキスト")
+/* 0006827c */	{
+/* 0006827c */		CAEEditTextDialog Form;
+/* 0006828c */		Form.Show(ID, MouseX, MouseY, Ｐ＿マルチラインテキストボックス＿テキスト取得(PartsID), this.ChangedStringEvent);
+/* 000682d6 */	}
+/* 000682dc */	if (Item.GetLabel() == "背景色")
+/* 000682fa */	{
+/* 000682fa */		CAESelectColorDialog Form;
+/* 0006830a */		Form.Show(ID, MouseX, MouseY, Ｐ＿マルチラインテキストボックス＿背景色赤取得(PartsID), Ｐ＿マルチラインテキストボックス＿背景色緑取得(PartsID), Ｐ＿マルチラインテキストボックス＿背景色青取得(PartsID), this.ChangedColorEvent);
+/* 00068372 */	}
+/* 0006837e */	else if (Item.GetLabel() == "読み取り専用背景色")
+/* 0006839c */	{
+/* 0006839c */		CAESelectColorDialog Form;
+/* 000683ac */		Form.Show(ID, MouseX, MouseY, Ｐ＿マルチラインテキストボックス＿読み取り専用背景色赤取得(PartsID), Ｐ＿マルチラインテキストボックス＿読み取り専用背景色緑取得(PartsID), Ｐ＿マルチラインテキストボックス＿読み取り専用背景色青取得(PartsID), this.ChangedColorEvent);
+/* 00068414 */	}
+/* 00068420 */	else if (Item.GetLabel() == "枠色")
+/* 0006843e */	{
+/* 0006843e */		CAESelectColorDialog Form;
+/* 0006844e */		Form.Show(ID, MouseX, MouseY, Ｐ＿マルチラインテキストボックス＿枠色赤取得(PartsID), Ｐ＿マルチラインテキストボックス＿枠色緑取得(PartsID), Ｐ＿マルチラインテキストボックス＿枠色青取得(PartsID), this.ChangedColorEvent);
+/* 000684b6 */	}
+/* 000684c2 */	else if (Item.GetLabel() == "選択色")
+/* 000684e0 */	{
+/* 000684e0 */		CAESelectColorDialog Form;
+/* 000684f0 */		Form.Show(ID, MouseX, MouseY, Ｐ＿マルチラインテキストボックス＿選択色赤取得(PartsID), Ｐ＿マルチラインテキストボックス＿選択色緑取得(PartsID), Ｐ＿マルチラインテキストボックス＿選択色青取得(PartsID), this.ChangedColorEvent);
+/* 00068558 */	}
+/* 00068558 */}
+
+void CAEPropertyMultilineTextBox::ChangedFontEvent(int ID, ref CASCharSpriteProperty Font)
+/* 00068566 */{
+/* 00068566 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000685b6 */	if (Item === NULL)
+/* 000685ce */	{
+/* 000685ce */		return;
+/* 000685d0 */	}
+/* 000685d0 */	int PartsID = this.m_Item.GetID();
+/* 000685ec */	CASColor Color;
+/* 000685fc */	Color = Font.GetColor();
+/* 00068620 */	CASColor EdgeColor;
+/* 00068630 */	EdgeColor = Font.GetEdgeColor();
+/* 00068654 */	if (Item.GetLabel() == "フォント")
+/* 00068672 */	{
+/* 00068672 */		Ｐ＿マルチラインテキストボックス＿フォント設定(PartsID, Font.GetType(), Font.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), Font.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Font.GetEdgeWeight());
+/* 00068722 */		Item.SetButtonText("%s, サイズ[%d]" % PARTS_GetFontName(Font.GetType()) % Font.GetSize());
+/* 0006876e */	}
+/* 0006876e */}
+
+void CAEPropertyMultilineTextBox::ChangedStringEvent(int ID, string Text)
+/* 00068776 */{
+/* 00068776 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000687c6 */	if (Item === NULL)
+/* 000687de */	{
+/* 000687de */		return;
+/* 000687e0 */	}
+/* 000687e0 */	int PartsID = this.m_Item.GetID();
+/* 000687fc */	if (Item.GetLabel() == "テキスト")
+/* 0006881a */	{
+/* 0006881a */		Ｐ＿マルチラインテキストボックス＿テキスト設定(PartsID, Text);
+/* 00068834 */		Item.SetButtonText(Text);
+/* 0006884e */	}
+/* 0006884e */}
+
+void CAEPropertyMultilineTextBox::ChangedColorEvent(int ID, int Red, int Green, int Blue)
+/* 00068856 */{
+/* 00068856 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000688a6 */	if (Item === NULL)
+/* 000688be */	{
+/* 000688be */		return;
+/* 000688c0 */	}
+/* 000688c0 */	int PartsID = this.m_Item.GetID();
+/* 000688dc */	if (Item.GetLabel() == "背景色")
+/* 000688fa */	{
+/* 000688fa */		Ｐ＿マルチラインテキストボックス＿背景色設定(PartsID, Red, Green, Blue);
+/* 00068928 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00068974 */	}
+/* 0006897a */	else if (Item.GetLabel() == "読み取り専用背景色")
+/* 00068998 */	{
+/* 00068998 */		Ｐ＿マルチラインテキストボックス＿読み取り専用背景色設定(PartsID, Red, Green, Blue);
+/* 000689c6 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00068a12 */	}
+/* 00068a18 */	else if (Item.GetLabel() == "枠色")
+/* 00068a36 */	{
+/* 00068a36 */		Ｐ＿マルチラインテキストボックス＿枠色設定(PartsID, Red, Green, Blue);
+/* 00068a64 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00068ab0 */	}
+/* 00068ab6 */	else if (Item.GetLabel() == "選択色")
+/* 00068ad4 */	{
+/* 00068ad4 */		Ｐ＿マルチラインテキストボックス＿選択色設定(PartsID, Red, Green, Blue);
+/* 00068b02 */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00068b4e */	}
+/* 00068b4e */}
+
+void CAEPropertyMultilineTextBox::ChangedCheckBoxEvent(int ID, bool Check)
+/* 00068b56 */{
+/* 00068b56 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00068ba6 */	if (Item === NULL)
+/* 00068bbe */	{
+/* 00068bbe */		return;
+/* 00068bc0 */	}
+/* 00068bc0 */	int PartsID = this.m_Item.GetID();
+/* 00068bdc */	if (Item.GetLabel() == "読み取り専用")
+/* 00068bfa */	{
+/* 00068bfa */		Ｐ＿マルチラインテキストボックス＿読み取り専用設定(PartsID, Item.GetFlg());
+/* 00068c1a */	}
+/* 00068c1a */}
+
+void CAEPropertyMultilineTextBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00068c22 */{
+/* 00068c22 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00068c3c */}
+
+void CAEPropertyMultilineTextBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00068c44 */{
+/* 00068c44 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00068c5e */}
+
+void CAEPropertyMultilineTextBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00068c66 */{
+/* 00068c66 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00068c80 */}
+
+void CAEPropertyMultilineTextBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00068c88 */{
+/* 00068c88 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 00068ca2 */}
+

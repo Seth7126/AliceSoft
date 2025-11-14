@@ -1,0 +1,358 @@
+void SYS_GetFuncNameList(ref array@string List, DG_IsSelectableFuncName DelegateObject)
+/* 00155482 */{
+/* 00155482 */	array@string FunctionNameList;
+/* 0015548c */	Sys43VM.GetFunctionNameList(FunctionNameList);
+/* 001554a2 */	int Index;
+/* 001554b4 */	for (Index = 0; Index < FunctionNameList.Numof(); ++Index)
+/* 00155504 */	{
+/* 00155504 */		if (!DelegateObject(FunctionNameList[Index]))
+/* 00155542 */		{
+/* 00155542 */			continue;
+/* 00155548 */		}
+/* 00155548 */		List.PushBack(FunctionNameList[Index]);
+/* 00155568 */	}
+/* 0015556e */	List.Sort();
+/* 0015557e */}
+
+bool SYS_IsNotifyFuncName(string FuncName)
+/* 0015558c */{
+/* 0015558c */	DG_NotifyHandler Func;
+/* 00155598 */	Func = FuncName;
+/* 001555be */	return Func.Numof() != 0;
+/* 001555d8 */}
+
+bool SYS_IsSetIntFuncName(string FuncName)
+/* 001555ec */{
+/* 001555ec */	DG_SetIntHandler Func;
+/* 001555f8 */	Func = FuncName;
+/* 0015561e */	return Func.Numof() != 0;
+/* 00155638 */}
+
+bool SYS_IsGetIntFuncName(string FuncName)
+/* 0015564c */{
+/* 0015564c */	DG_GetIntHandler Func;
+/* 00155658 */	Func = FuncName;
+/* 0015567e */	return Func.Numof() != 0;
+/* 00155698 */}
+
+bool SYS_IsSetFloatFuncName(string FuncName)
+/* 001556ac */{
+/* 001556ac */	DG_SetFloatHandler Func;
+/* 001556b8 */	Func = FuncName;
+/* 001556de */	return Func.Numof() != 0;
+/* 001556f8 */}
+
+bool SYS_IsGetFloatFuncName(string FuncName)
+/* 0015570c */{
+/* 0015570c */	DG_GetFloatHandler Func;
+/* 00155718 */	Func = FuncName;
+/* 0015573e */	return Func.Numof() != 0;
+/* 00155758 */}
+
+bool SYS_IsSetBoolFuncName(string FuncName)
+/* 0015576c */{
+/* 0015576c */	DG_SetBoolHandler Func;
+/* 00155778 */	Func = FuncName;
+/* 0015579e */	return Func.Numof() != 0;
+/* 001557b8 */}
+
+bool SYS_IsGetBoolFuncName(string FuncName)
+/* 001557cc */{
+/* 001557cc */	DG_GetBoolHandler Func;
+/* 001557d8 */	Func = FuncName;
+/* 001557fe */	return Func.Numof() != 0;
+/* 00155818 */}
+
+bool SYS_IsSetStringFuncName(string FuncName)
+/* 0015582c */{
+/* 0015582c */	DG_SetStringHandler Func;
+/* 00155838 */	Func = FuncName;
+/* 0015585e */	return Func.Numof() != 0;
+/* 00155878 */}
+
+bool SYS_IsGetStringFuncName(string FuncName)
+/* 0015588c */{
+/* 0015588c */	DG_GetStringHandler Func;
+/* 00155898 */	Func = FuncName;
+/* 001558be */	return Func.Numof() != 0;
+/* 001558d8 */}
+
+bool SYS_IsSetColorFuncName(string FuncName)
+/* 001558ec */{
+/* 001558ec */	DG_SetColorHandler Func;
+/* 001558f8 */	Func = FuncName;
+/* 0015591e */	return Func.Numof() != 0;
+/* 00155938 */}
+
+bool SYS_IsGetColorFuncName(string FuncName)
+/* 0015594c */{
+/* 0015594c */	DG_GetColorHandler Func;
+/* 00155958 */	Func = FuncName;
+/* 0015597e */	return Func.Numof() != 0;
+/* 00155998 */}
+
+bool SYS_IsSetFontFuncName(string FuncName)
+/* 001559ac */{
+/* 001559ac */	DG_SetFontHandler Func;
+/* 001559b8 */	Func = FuncName;
+/* 001559de */	return Func.Numof() != 0;
+/* 001559f8 */}
+
+bool SYS_IsGetFontFuncName(string FuncName)
+/* 00155a0c */{
+/* 00155a0c */	DG_GetFontHandler Func;
+/* 00155a18 */	Func = FuncName;
+/* 00155a3e */	return Func.Numof() != 0;
+/* 00155a58 */}
+
+bool SYS_IsSetNumeralWidthFuncName(string FuncName)
+/* 00155a6c */{
+/* 00155a6c */	DG_SetNumeralWidthHandler Func;
+/* 00155a78 */	Func = FuncName;
+/* 00155a9e */	return Func.Numof() != 0;
+/* 00155ab8 */}
+
+bool SYS_IsGetNumeralWidthFuncName(string FuncName)
+/* 00155acc */{
+/* 00155acc */	DG_GetNumeralWidthHandler Func;
+/* 00155ad8 */	Func = FuncName;
+/* 00155afe */	return Func.Numof() != 0;
+/* 00155b18 */}
+
+bool SYS_IsSetIntListFuncName(string FuncName)
+/* 00155b2c */{
+/* 00155b2c */	DG_SetIntListHandler Func;
+/* 00155b38 */	Func = FuncName;
+/* 00155b5e */	return Func.Numof() != 0;
+/* 00155b78 */}
+
+bool SYS_IsGetIntListFuncName(string FuncName)
+/* 00155b8c */{
+/* 00155b8c */	DG_GetIntListHandler Func;
+/* 00155b98 */	Func = FuncName;
+/* 00155bbe */	return Func.Numof() != 0;
+/* 00155bd8 */}
+
+bool SYS_IsSetStringListFuncName(string FuncName)
+/* 00155bec */{
+/* 00155bec */	DG_SetStringListHandler Func;
+/* 00155bf8 */	Func = FuncName;
+/* 00155c1e */	return Func.Numof() != 0;
+/* 00155c38 */}
+
+bool SYS_IsGetStringListFuncName(string FuncName)
+/* 00155c4c */{
+/* 00155c4c */	DG_GetStringListHandler Func;
+/* 00155c58 */	Func = FuncName;
+/* 00155c7e */	return Func.Numof() != 0;
+/* 00155c98 */}
+
+bool SYS_IsMouseEnterFuncName(string FuncName)
+/* 00155cac */{
+/* 00155cac */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155cc2 */	{
+/* 00155cc2 */		return true;
+/* 00155cca */	}
+/* 00155cca */	DG_MouseEnterHandler Func;
+/* 00155cd6 */	Func = FuncName;
+/* 00155cfc */	return Func.Numof() != 0;
+/* 00155d16 */}
+
+bool SYS_IsMouseMoveFuncName(string FuncName)
+/* 00155d2a */{
+/* 00155d2a */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155d40 */	{
+/* 00155d40 */		return true;
+/* 00155d48 */	}
+/* 00155d48 */	DG_MouseMoveHandler Func;
+/* 00155d54 */	Func = FuncName;
+/* 00155d7a */	return Func.Numof() != 0;
+/* 00155d94 */}
+
+bool SYS_IsMouseLeaveFuncName(string FuncName)
+/* 00155da8 */{
+/* 00155da8 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155dbe */	{
+/* 00155dbe */		return true;
+/* 00155dc6 */	}
+/* 00155dc6 */	DG_MouseLeaveHandler Func;
+/* 00155dd2 */	Func = FuncName;
+/* 00155df8 */	return Func.Numof() != 0;
+/* 00155e12 */}
+
+bool SYS_IsMouseWheelFuncName(string FuncName)
+/* 00155e26 */{
+/* 00155e26 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155e3c */	{
+/* 00155e3c */		return true;
+/* 00155e44 */	}
+/* 00155e44 */	DG_MouseWheelHandler Func;
+/* 00155e50 */	Func = FuncName;
+/* 00155e76 */	return Func.Numof() != 0;
+/* 00155e90 */}
+
+bool SYS_IsMouseClickFuncName(string FuncName)
+/* 00155ea4 */{
+/* 00155ea4 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155eba */	{
+/* 00155eba */		return true;
+/* 00155ec2 */	}
+/* 00155ec2 */	DG_MouseClickHandler Func;
+/* 00155ece */	Func = FuncName;
+/* 00155ef4 */	return Func.Numof() != 0;
+/* 00155f0e */}
+
+bool SYS_IsMouseOnFuncName(string FuncName)
+/* 00155f22 */{
+/* 00155f22 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155f38 */	{
+/* 00155f38 */		return true;
+/* 00155f40 */	}
+/* 00155f40 */	DG_MouseOnHandler Func;
+/* 00155f4c */	Func = FuncName;
+/* 00155f72 */	return Func.Numof() != 0;
+/* 00155f8c */}
+
+bool SYS_IsKeyTriggerFuncName(string FuncName)
+/* 00155fa0 */{
+/* 00155fa0 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00155fb6 */	{
+/* 00155fb6 */		return true;
+/* 00155fbe */	}
+/* 00155fbe */	DG_KeyTriggerHandler Func;
+/* 00155fca */	Func = FuncName;
+/* 00155ff0 */	return Func.Numof() != 0;
+/* 0015600a */}
+
+bool SYS_IsKeyDownFuncName(string FuncName)
+/* 0015601e */{
+/* 0015601e */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00156034 */	{
+/* 00156034 */		return true;
+/* 0015603c */	}
+/* 0015603c */	DG_KeyDownHandler Func;
+/* 00156048 */	Func = FuncName;
+/* 0015606e */	return Func.Numof() != 0;
+/* 00156088 */}
+
+bool SYS_IsKeyPressFuncName(string FuncName)
+/* 0015609c */{
+/* 0015609c */	if (SYS_IsNotifyFuncName(FuncName))
+/* 001560b2 */	{
+/* 001560b2 */		return true;
+/* 001560ba */	}
+/* 001560ba */	DG_KeyPressHandler Func;
+/* 001560c6 */	Func = FuncName;
+/* 001560ec */	return Func.Numof() != 0;
+/* 00156106 */}
+
+bool SYS_IsKeyUpFuncName(string FuncName)
+/* 0015611a */{
+/* 0015611a */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00156130 */	{
+/* 00156130 */		return true;
+/* 00156138 */	}
+/* 00156138 */	DG_KeyUpHandler Func;
+/* 00156144 */	Func = FuncName;
+/* 0015616a */	return Func.Numof() != 0;
+/* 00156184 */}
+
+bool SYS_IsDragBeginFuncName(string FuncName)
+/* 00156198 */{
+/* 00156198 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 001561ae */	{
+/* 001561ae */		return true;
+/* 001561b6 */	}
+/* 001561b6 */	DG_DragBeginHandler Func;
+/* 001561c2 */	Func = FuncName;
+/* 001561e8 */	return Func.Numof() != 0;
+/* 00156202 */}
+
+bool SYS_IsDragingFuncName(string FuncName)
+/* 00156216 */{
+/* 00156216 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 0015622c */	{
+/* 0015622c */		return true;
+/* 00156234 */	}
+/* 00156234 */	DG_DragingHandler Func;
+/* 00156240 */	Func = FuncName;
+/* 00156266 */	return Func.Numof() != 0;
+/* 00156280 */}
+
+bool SYS_IsDragEndFuncName(string FuncName)
+/* 00156294 */{
+/* 00156294 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 001562aa */	{
+/* 001562aa */		return true;
+/* 001562b2 */	}
+/* 001562b2 */	DG_DragEndHandler Func;
+/* 001562be */	Func = FuncName;
+/* 001562e4 */	return Func.Numof() != 0;
+/* 001562fe */}
+
+bool SYS_IsDropEnterFuncName(string FuncName)
+/* 00156312 */{
+/* 00156312 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00156328 */	{
+/* 00156328 */		return true;
+/* 00156330 */	}
+/* 00156330 */	DG_DropEnterHandler Func;
+/* 0015633c */	Func = FuncName;
+/* 00156362 */	return Func.Numof() != 0;
+/* 0015637c */}
+
+bool SYS_IsDropOnFuncName(string FuncName)
+/* 00156390 */{
+/* 00156390 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 001563a6 */	{
+/* 001563a6 */		return true;
+/* 001563ae */	}
+/* 001563ae */	DG_DropOnHandler Func;
+/* 001563ba */	Func = FuncName;
+/* 001563e0 */	return Func.Numof() != 0;
+/* 001563fa */}
+
+bool SYS_IsDroppedFuncName(string FuncName)
+/* 0015640e */{
+/* 0015640e */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00156424 */	{
+/* 00156424 */		return true;
+/* 0015642c */	}
+/* 0015642c */	DG_DroppedHandler Func;
+/* 00156438 */	Func = FuncName;
+/* 0015645e */	return Func.Numof() != 0;
+/* 00156478 */}
+
+bool SYS_IsDropLeaveFuncName(string FuncName)
+/* 0015648c */{
+/* 0015648c */	if (SYS_IsNotifyFuncName(FuncName))
+/* 001564a2 */	{
+/* 001564a2 */		return true;
+/* 001564aa */	}
+/* 001564aa */	DG_DropLeaveHandler Func;
+/* 001564b6 */	Func = FuncName;
+/* 001564dc */	return Func.Numof() != 0;
+/* 001564f6 */}
+
+bool SYS_IsFocusFuncName(string FuncName)
+/* 0015650a */{
+/* 0015650a */	if (SYS_IsNotifyFuncName(FuncName))
+/* 00156520 */	{
+/* 00156520 */		return true;
+/* 00156528 */	}
+/* 00156528 */	DG_FocusHandler Func;
+/* 00156534 */	Func = FuncName;
+/* 0015655a */	return Func.Numof() != 0;
+/* 00156574 */}
+
+bool SYS_IsLostFocusFuncName(string FuncName)
+/* 00156588 */{
+/* 00156588 */	if (SYS_IsNotifyFuncName(FuncName))
+/* 0015659e */	{
+/* 0015659e */		return true;
+/* 001565a6 */	}
+/* 001565a6 */	DG_LostFocusHandler Func;
+/* 001565b2 */	Func = FuncName;
+/* 001565d8 */	return Func.Numof() != 0;
+/* 001565f2 */}
+

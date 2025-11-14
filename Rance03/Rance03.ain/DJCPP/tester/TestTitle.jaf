@@ -1,0 +1,15 @@
+void test_Scene_Title()
+/* 001ff782 */{
+/* 001ff782 */	openTitle();
+/* 001ff788 */}
+
+void test_NetworkConnection()
+/* 001ff796 */{
+/* 001ff796 */	openNetworkConnection();
+/* 001ff79c */}
+
+void test_EnquiteSendValue()
+/* 001ff7aa */{
+/* 001ff7aa */	g_enquiteSender.checkValue();
+/* 001ff7ba */}
+

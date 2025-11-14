@@ -1,0 +1,20 @@
+CReplacePair::CReplacePair()
+/* 0001c366 */{
+/* 0001c370 */}
+
+void CReplacePair::SetPair(string Src, string Dest)
+/* 0001c376 */{
+/* 0001c376 */	this.m_Src = Src;
+/* 0001c38e */	this.m_Dest = Dest;
+/* 0001c3a6 */}
+
+string CReplacePair::GetSrc()
+/* 0001c3ae */{
+/* 0001c3ae */	return this.m_Src;
+/* 0001c3ba */}
+
+string CReplacePair::GetDest()
+/* 0001c3c8 */{
+/* 0001c3c8 */	return this.m_Dest;
+/* 0001c3d4 */}
+

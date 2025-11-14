@@ -1,0 +1,118 @@
+SaveObjectList::SaveObjectList()
+/* 001b899e */{
+/* 001b89a6 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b89cc */}
+
+void SaveObjectList::reset()
+/* 001b89d4 */{
+/* 001b89d4 */	this.initButton();
+/* 001b89dc */	this.showButtonImmediate();
+/* 001b89e4 */	this.setPartsNewPos();
+/* 001b89ec */}
+
+void SaveObjectList::init(bool isLoadMode)
+/* 001b89f4 */{
+/* 001b89f4 */	this.pageCount_ = 8;
+/* 001b8a06 */	this.isLoadMode_ = isLoadMode;
+/* 001b8a1c */	string baseName;
+/* 001b8a30 */	if (isLoadMode)
+/* 001b8a40 */	{
+/* 001b8a40 */		baseName = "システム／ロード／下地";
+/* 001b8a54 */	}
+/* 001b8a5a */	else
+/* 001b8a5a */	{
+/* 001b8a5a */		baseName = "システム／セーブ／下地";
+/* 001b8a6e */	}
+/* 001b8a6e */	this.base_.init(this.pageCount_, baseName, false);
+/* 001b8a98 */	this.partsNew_.init("システム／セーブ／ＮＥＷ", 0);
+/* 001b8ab4 */	this.partsNew_.setOrigin(4);
+/* 001b8aca */	this.partsNew_.setParent(this.base_.getPartsNumber());
+/* 001b8aea */	this.partsNew_.setZ(5000.0);
+/* 001b8b00 */	this.setPartsNewPos();
+/* 001b8b08 */	this.initButton();
+/* 001b8b10 */}
+
+void SaveObjectList::initButton()
+/* 001b8b18 */{
+/* 001b8b18 */	int i;
+/* 001b8b2a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b8b7a */	{
+/* 001b8b7a */		string n = g_saveDataManager.getSaveComment(i);
+/* 001b8ba2 */		this.btn_[i].init("システム／ボタン／幅８６６", n, "", true);
+/* 001b8bda */		this.btn_[i].setParent(this.base_.getPartsNumber());
+/* 001b8c06 */		this.btn_[i].setZ(4500);
+/* 001b8c28 */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001b8c58 */		this.btn_[i].setTextLeftAlign(100);
+/* 001b8c7a */		int x;
+/* 001b8c8c */		int y;
+/* 001b8c9e */		this.getButtonPos(x, y, i);
+/* 001b8cc0 */		this.btn_[i].setPos(x, y);
+/* 001b8cf0 */		if (this.isLoadMode_)
+/* 001b8d00 */		{
+/* 001b8d00 */			this.btn_[i].setEnable(n != "データがありません");
+/* 001b8d30 */		}
+/* 001b8d30 */	}
+/* 001b8d36 */}
+
+void SaveObjectList::getButtonPos(ref int x, ref int y, int index)
+/* 001b8d3e */{
+/* 001b8d3e */	int page = index / 10;
+/* 001b8d5c */	int py = index % 10;
+/* 001b8d7a */	x = 81 + 1024 * page;
+/* 001b8da2 */	y = 122 + py * 56;
+/* 001b8dca */}
+
+void SaveObjectList::update()
+/* 001b8dd2 */{
+/* 001b8dd4 */}
+
+void SaveObjectList::setOnClickCallback(DG_OnClickSaveObjectCallback cb)
+/* 001b8dda */{
+/* 001b8dda */	this.cb_ = cb;
+/* 001b8df4 */}
+
+void SaveObjectList::onClick(int id)
+/* 001b8dfc */{
+/* 001b8dfc */	this.cb_(id);
+/* 001b8e26 */}
+
+void SaveObjectList::fadeIn(bool val)
+/* 001b8e2e */{
+/* 001b8e2e */	int i;
+/* 001b8e40 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b8e90 */	{
+/* 001b8e90 */		this.btn_[i].fadeIn(val);
+/* 001b8eb6 */	}
+/* 001b8ebc */	this.base_.fadeIn(val, NULL);
+/* 001b8ed8 */	if (val)
+/* 001b8ee8 */	{
+/* 001b8ee8 */		this.base_.jumpPage(g_common_latestSaveIndex / 10);
+/* 001b8f0a */	}
+/* 001b8f0a */	this.partsNew_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001b8f44 */}
+
+void SaveObjectList::showButtonImmediate()
+/* 001b8f4c */{
+/* 001b8f4c */	int i;
+/* 001b8f5e */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b8fae */	{
+/* 001b8fae */		this.btn_[i].setShow(true);
+/* 001b8fd0 */	}
+/* 001b8fd6 */}
+
+void SaveObjectList::setPartsNewPos()
+/* 001b8fde */{
+/* 001b8fde */	if (g_common_latestSaveIndex == -1)
+/* 001b8ff6 */	{
+/* 001b8ff6 */		this.partsNew_.setShow(false);
+/* 001b900c */	}
+/* 001b9012 */	else
+/* 001b9012 */	{
+/* 001b9012 */		int x;
+/* 001b9024 */		int y;
+/* 001b9036 */		this.partsNew_.setShow(true);
+/* 001b904c */		this.getButtonPos(x, y, g_common_latestSaveIndex);
+/* 001b906e */		this.partsNew_.setPos(x + 20, y + 24);
+/* 001b90a6 */	}
+/* 001b90a6 */}
+

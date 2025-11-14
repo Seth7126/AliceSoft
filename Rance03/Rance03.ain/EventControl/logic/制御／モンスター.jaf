@@ -1,0 +1,4909 @@
+void 制御／モンスター／イベント(string group)
+/* 0020c292 */{
+/* 0020c292 */	BattleInfomation info;
+/* 0020c2a2 */	switch (group)
+/* 0020c2b8 */	{
+/* 0020c2b8 */	case "プロローグ／親衛隊1":
+/* 0020c2b8 */		info.addMonster("リーザス親衛隊");
+/* 0020c2ce */		info.setItem("換金2", 制御／戦闘／アイテム確率設定(3));
+/* 0020c2f0 */		info.setBattleBackGroundId("居館／地下一階");
+/* 0020c306 */		break;
+/* 0020c30c */	case "プロローグ／親衛隊2":
+/* 0020c30c */		info.addMonster("リーザス親衛隊");
+/* 0020c322 */		info.addMonster("リーザス親衛隊");
+/* 0020c338 */		info.addMonster("リーザス親衛隊");
+/* 0020c34e */		info.setItem("換金2", 制御／戦闘／アイテム確率設定(9));
+/* 0020c370 */		info.setBattleBackGroundId("居館／地下一階");
+/* 0020c386 */		break;
+/* 0020c38c */	case "リスの洞窟／みつめとかげ":
+/* 0020c38c */		info.addMonster("みつめとかげ");
+/* 0020c3a2 */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020c3b8 */		break;
+/* 0020c3be */	case "リスの洞窟／リスのウーくん":
+/* 0020c3be */		info.addMonster("リスのウーくん");
+/* 0020c3d4 */		info.setBattleBackGroundId("リスの洞窟／家");
+/* 0020c3ea */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c400 */		break;
+/* 0020c406 */	case "悪魔回廊／ゴールデンハニー脚部":
+/* 0020c406 */		info.addMonster("ゴールデンハニー脚部");
+/* 0020c41c */		info.setBattleBackGroundId("悪魔回廊");
+/* 0020c432 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c448 */		break;
+/* 0020c44e */	case "地上灯台／サファイア":
+/* 0020c44e */		info.addMonster("サファイアd");
+/* 0020c464 */		info.setBattleBackGroundId("地上灯台");
+/* 0020c47a */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c490 */		break;
+/* 0020c496 */	case "烈火鉱山／ルイス":
+/* 0020c496 */		info.addMonster("ルイス");
+/* 0020c4ac */		info.setBattleBackGroundId("烈火鉱山");
+/* 0020c4c2 */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(99));
+/* 0020c4e4 */		break;
+/* 0020c4ea */	case "烈火鉱山／カナリアン1":
+/* 0020c4ea */		info.addMonster("カナリアンe1");
+/* 0020c500 */		info.setBattleBackGroundId("烈火鉱山");
+/* 0020c516 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c52c */		break;
+/* 0020c532 */	case "烈火鉱山／カナリアン2":
+/* 0020c532 */		info.addMonster("カナリアンe2");
+/* 0020c548 */		info.setBattleBackGroundId("烈火鉱山");
+/* 0020c55e */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c574 */		break;
+/* 0020c57a */	case "烈火鉱山／カナリアン3":
+/* 0020c57a */		info.addMonster("カナリアンe3");
+/* 0020c590 */		info.setBattleBackGroundId("烈火鉱山");
+/* 0020c5a6 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c5bc */		break;
+/* 0020c5c2 */	case "都市／レッド／ヘルマン歩兵1":
+/* 0020c5c2 */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c5d8 */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c5ee */		info.addMonster("ヘルマン騎士f");
+/* 0020c604 */		info.addMonster("ヘルマン工兵f");
+/* 0020c61a */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c630 */		info.addMonster("ヘルマン弩兵群f");
+/* 0020c646 */		info.addMonster("ヘルマン士官f");
+/* 0020c65c */		info.setBattleBackGroundId("平野");
+/* 0020c672 */		break;
+/* 0020c678 */	case "都市／レッド／ヘルマン歩兵2":
+/* 0020c678 */		info.addMonster("ヘルマン歩兵f");
+/* 0020c68e */		info.addMonster("ヘルマン歩兵f");
+/* 0020c6a4 */		info.addMonster("ヘルマン弩兵群f");
+/* 0020c6ba */		info.addMonster("ヘルマン操兵f");
+/* 0020c6d0 */		info.addMonster("デカントf");
+/* 0020c6e6 */		info.setBattleBackGroundId("平野");
+/* 0020c6fc */		break;
+/* 0020c702 */	case "都市／レッド／ヘルマン歩兵3":
+/* 0020c702 */		info.addMonster("ヘルマン騎士f");
+/* 0020c718 */		info.addMonster("ヘルマン工兵f");
+/* 0020c72e */		info.addMonster("ヘルマン工兵f");
+/* 0020c744 */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c75a */		info.addMonster("ヘルマン士官f");
+/* 0020c770 */		info.addMonster("ヘルマン弩兵群f");
+/* 0020c786 */		info.setBattleBackGroundId("平野");
+/* 0020c79c */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020c7b2 */		break;
+/* 0020c7b8 */	case "レッド／ヘルマン歩兵1":
+/* 0020c7b8 */		info.addMonster("ヘルマン歩兵f");
+/* 0020c7ce */		info.addMonster("ヘルマン工兵f");
+/* 0020c7e4 */		info.addMonster("ヘルマン騎士f");
+/* 0020c7fa */		info.setItem("バラバラ時計", 制御／戦闘／アイテム確率設定(99));
+/* 0020c81c */		info.setExp(0);
+/* 0020c832 */		info.setBattleBackGroundId("都市／レッド");
+/* 0020c848 */		break;
+/* 0020c84e */	case "レッド／ヘルマン歩兵2":
+/* 0020c84e */		info.addMonster("ヘルマン弩兵群f");
+/* 0020c864 */		info.addMonster("ヘルマン操兵f");
+/* 0020c87a */		info.addMonster("デカントf");
+/* 0020c890 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(99));
+/* 0020c8b2 */		info.setExp(0);
+/* 0020c8c8 */		info.setBattleBackGroundId("都市／レッド");
+/* 0020c8de */		break;
+/* 0020c8e4 */	case "レッド／ヘルマン歩兵3":
+/* 0020c8e4 */		info.addMonster("ヘルマン操兵f");
+/* 0020c8fa */		info.addMonster("デカントf");
+/* 0020c910 */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c926 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(99));
+/* 0020c948 */		info.setExp(0);
+/* 0020c95e */		info.setBattleBackGroundId("都市／レッド");
+/* 0020c974 */		break;
+/* 0020c97a */	case "レッド／ヘルマン歩兵4":
+/* 0020c97a */		info.addMonster("ヘルマン騎士f");
+/* 0020c990 */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c9a6 */		info.addMonster("ヘルマン歩兵群f");
+/* 0020c9bc */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(99));
+/* 0020c9de */		info.setExp(0);
+/* 0020c9f4 */		info.setBattleBackGroundId("都市／レッド");
+/* 0020ca0a */		break;
+/* 0020ca10 */	case "レッド／ヘルマン歩兵5":
+/* 0020ca10 */		info.addMonster("ヘルマン弩兵群f");
+/* 0020ca26 */		info.addMonster("ヘルマン弩兵群f");
+/* 0020ca3c */		info.addMonster("ヘルマン弩兵群f");
+/* 0020ca52 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(99));
+/* 0020ca74 */		info.setExp(0);
+/* 0020ca8a */		info.setBattleBackGroundId("都市／レッド");
+/* 0020caa0 */		break;
+/* 0020caa6 */	case "レッド／ヘルマン歩兵6":
+/* 0020caa6 */		info.addMonster("ヘルマン工兵f");
+/* 0020cabc */		info.addMonster("ヘルマン工兵f");
+/* 0020cad2 */		info.addMonster("ヘルマン工兵f");
+/* 0020cae8 */		info.addMonster("ヘルマン工兵f");
+/* 0020cafe */		info.addMonster("ヘルマン工兵f");
+/* 0020cb14 */		info.addMonster("ヘルマン工兵f");
+/* 0020cb2a */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(99));
+/* 0020cb4c */		info.setExp(0);
+/* 0020cb62 */		info.setBattleBackGroundId("都市／レッド");
+/* 0020cb78 */		break;
+/* 0020cb7e */	case "レッド／フレッチャー":
+/* 0020cb7e */		info.addMonster("フレッチャー");
+/* 0020cb94 */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(99));
+/* 0020cbb6 */		info.setBattleBackGroundId("オレリイ大聖堂");
+/* 0020cbcc */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020cbe2 */		break;
+/* 0020cbe8 */	case "レッド／レイラ":
+/* 0020cbe8 */		info.addMonster("レイラ");
+/* 0020cbfe */		info.setBattleBackGroundId("オレリイ大聖堂");
+/* 0020cc14 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020cc2a */		break;
+/* 0020cc30 */	case "迷子の森／ユニコーン":
+/* 0020cc30 */		info.addMonster("ユニコーン");
+/* 0020cc46 */		info.setItem("セーブライオン", 制御／戦闘／アイテム確率設定(99));
+/* 0020cc68 */		info.setBattleBackGroundId("迷子の森");
+/* 0020cc7e */		info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0020cc94 */		break;
+/* 0020cc9a */	case "迷子の森／スー1":
+/* 0020cc9a */		info.addMonster("スー");
+/* 0020ccb0 */		info.addMonster("ラプ群");
+/* 0020ccc6 */		info.setBattleBackGroundId("迷子の森");
+/* 0020ccdc */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020ccf2 */		break;
+/* 0020ccf8 */	case "迷子の森／スー2":
+/* 0020ccf8 */		info.addMonster("ラプ群");
+/* 0020cd0e */		info.addMonster("スー");
+/* 0020cd24 */		info.addMonster("ラプ群");
+/* 0020cd3a */		info.setBattleBackGroundId("迷子の森");
+/* 0020cd50 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020cd66 */		break;
+/* 0020cd6c */	case "迷子の森／イシス":
+/* 0020cd6c */		info.addMonster("イシス");
+/* 0020cd82 */		info.setBattleBackGroundId("迷子の森／家");
+/* 0020cd98 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020cdae */		break;
+/* 0020cdb4 */	case "ハイパービル／シーザー1":
+/* 0020cdb4 */		info.addMonster("シーザーh1");
+/* 0020cdca */		info.setBattleBackGroundId("ハイパービル");
+/* 0020cde0 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020cdf6 */		break;
+/* 0020cdfc */	case "ハイパービル／シーザー2":
+/* 0020cdfc */		info.addMonster("シーザーh2");
+/* 0020ce12 */		info.setBattleBackGroundId("ハイパービル");
+/* 0020ce28 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020ce3e */		break;
+/* 0020ce44 */	case "ハイパービル／シーザー3":
+/* 0020ce44 */		info.addMonster("シーザーh3");
+/* 0020ce5a */		info.setBattleBackGroundId("ハイパービル");
+/* 0020ce70 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020ce86 */		break;
+/* 0020ce8c */	case "ハイパービル／バグ1":
+/* 0020ce8c */		info.addMonster("バグ");
+/* 0020cea2 */		info.addMonster("バグ");
+/* 0020ceb8 */		info.addMonster("バグ群");
+/* 0020cece */		info.addMonster("バグ");
+/* 0020cee4 */		info.addMonster("バグ群");
+/* 0020cefa */		info.addMonster("バグ");
+/* 0020cf10 */		info.setBattleBackGroundId("ハイパービル");
+/* 0020cf26 */		break;
+/* 0020cf2c */	case "ハイパービル／バグ2":
+/* 0020cf2c */		info.addMonster("バグ群");
+/* 0020cf42 */		info.addMonster("バグ");
+/* 0020cf58 */		info.addMonster("バグ群");
+/* 0020cf6e */		info.setBattleBackGroundId("ハイパービル");
+/* 0020cf84 */		break;
+/* 0020cf8a */	case "ハイパービル／バグ3":
+/* 0020cf8a */		info.addMonster("バグ群");
+/* 0020cfa0 */		info.addMonster("バグ");
+/* 0020cfb6 */		info.addMonster("バグ");
+/* 0020cfcc */		info.addMonster("バグ");
+/* 0020cfe2 */		info.addMonster("バグ群");
+/* 0020cff8 */		info.addMonster("バグ");
+/* 0020d00e */		info.addMonster("バグ");
+/* 0020d024 */		info.addMonster("バグ群");
+/* 0020d03a */		info.addMonster("バグ");
+/* 0020d050 */		info.addMonster("バグ群");
+/* 0020d066 */		info.addMonster("バグ群");
+/* 0020d07c */		info.addMonster("バグ群");
+/* 0020d092 */		info.setBattleBackGroundId("ハイパービル");
+/* 0020d0a8 */		break;
+/* 0020d0ae */	case "ホッホ峡／巨兵小隊":
+/* 0020d0ae */		info.addMonster("ヘルマン弩兵j");
+/* 0020d0c4 */		info.addMonster("ヘルマン操兵j");
+/* 0020d0da */		info.addMonster("デカントj");
+/* 0020d0f0 */		info.addMonster("ヘルマン操兵j");
+/* 0020d106 */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d11c */		break;
+/* 0020d122 */	case "ホッホ峡／射撃拠点":
+/* 0020d122 */		info.addMonster("防衛陣地j");
+/* 0020d138 */		info.addMonster("ヘルマン弩兵群j");
+/* 0020d14e */		info.addMonster("ヘルマン工兵j");
+/* 0020d164 */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d17a */		break;
+/* 0020d180 */	case "ホッホ峡／ランドスター隊1":
+/* 0020d180 */		info.addMonster("ヘルマン歩兵群j");
+/* 0020d196 */		info.addMonster("ヘルマン歩兵群j");
+/* 0020d1ac */		info.addMonster("ヘルマン弩兵群j");
+/* 0020d1c2 */		info.addMonster("ヘルマン歩兵群j");
+/* 0020d1d8 */		info.addMonster("ヘルマン術兵j");
+/* 0020d1ee */		info.addMonster("ヘルマン工兵j");
+/* 0020d204 */		info.addMonster("ヘルマン工兵j");
+/* 0020d21a */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d230 */		break;
+/* 0020d236 */	case "ホッホ峡／ランドスター隊2":
+/* 0020d236 */		info.addMonster("ヘルマン弩兵群j");
+/* 0020d24c */		info.addMonster("ヘルマン工兵j");
+/* 0020d262 */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d278 */		break;
+/* 0020d27e */	case "ホッホ峡／サファイア1":
+/* 0020d27e */		info.addMonster("サファイアj1");
+/* 0020d294 */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d2aa */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d2c0 */		break;
+/* 0020d2c6 */	case "ホッホ峡／サファイア2":
+/* 0020d2c6 */		getMonsterFromId("ガーネットj").setFixedPosition(true, 0);
+/* 0020d2fa */		getMonsterFromId("サファイアj2").setFixedPosition(true, 0);
+/* 0020d32e */		getMonsterFromId("トパーズj").setFixedPosition(true, 0);
+/* 0020d362 */		getMonsterFromId("ガーネットj").setPosition(175, 52, 430, 320, 384, 256);
+/* 0020d3ae */		getMonsterFromId("サファイアj2").setPosition(574, -7, 767, 288, 845, 196);
+/* 0020d3fa */		getMonsterFromId("トパーズj").setPosition(364, -50, 576, 237, 608, 157);
+/* 0020d446 */		info.addMonster("ガーネットj");
+/* 0020d45c */		info.addMonster("サファイアj2");
+/* 0020d472 */		info.addMonster("トパーズj");
+/* 0020d488 */		info.setBattleBackGroundId("ホッホ峡／高台");
+/* 0020d49e */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d4b4 */		break;
+/* 0020d4de */	case "ホッホ峡／ヘルマン歩兵1":
+/* 0020d4de */		info.addMonster("デカントj");
+/* 0020d4f4 */		info.addMonster("ヘルマン操兵j");
+/* 0020d50a */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d520 */		break;
+/* 0020d54a */	case "ホッホ峡／ヘルマン歩兵2":
+/* 0020d54a */		info.addMonster("ヘルマン工兵j");
+/* 0020d560 */		info.addMonster("ヘルマン弩兵群j");
+/* 0020d576 */		info.addMonster("ヘルマン歩兵j");
+/* 0020d58c */		info.addMonster("ヘルマン弩兵j");
+/* 0020d5a2 */		info.addMonster("ヘルマン弩兵j");
+/* 0020d5b8 */		info.addMonster("ヘルマン歩兵群j");
+/* 0020d5ce */		info.addMonster("ヘルマン工兵j");
+/* 0020d5e4 */		info.addMonster("ヘルマン歩兵j");
+/* 0020d5fa */		info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0020d610 */		break;
+/* 0020d63a */	case "パッキャマラード・デン／触手":
+/* 0020d63a */		info.addMonster("触手j1");
+/* 0020d650 */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020d666 */		break;
+/* 0020d690 */	case "パッキャマラード・デン／カースA1":
+/* 0020d690 */		info.addMonster("カースA");
+/* 0020d6a6 */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020d6bc */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d6d2 */		break;
+/* 0020d6fc */	case "パッキャマラード・デン／カースA2":
+/* 0020d6fc */		info.addMonster("触手j2");
+/* 0020d712 */		info.addMonster("カースA");
+/* 0020d728 */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020d73e */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d754 */		break;
+/* 0020d77e */	case "パッキャマラード・デン／カースA3":
+/* 0020d77e */		info.addMonster("触手j2");
+/* 0020d794 */		info.addMonster("カースA");
+/* 0020d7aa */		info.addMonster("触手j2");
+/* 0020d7c0 */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020d7d6 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d7ec */		break;
+/* 0020d816 */	case "パッキャマラード・デン／カースA4":
+/* 0020d816 */		info.addMonster("触手j2");
+/* 0020d82c */		info.addMonster("カースA");
+/* 0020d842 */		info.addMonster("触手j2");
+/* 0020d858 */		info.addMonster("触手j2");
+/* 0020d86e */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020d884 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d89a */		break;
+/* 0020d8c4 */	case "パッキャマラード・デン／カースA5":
+/* 0020d8c4 */		info.addMonster("触手j2");
+/* 0020d8da */		info.addMonster("カースA");
+/* 0020d8f0 */		info.addMonster("触手j2");
+/* 0020d906 */		info.addMonster("触手j2");
+/* 0020d91c */		info.addMonster("触手j2");
+/* 0020d932 */		info.setBattleBackGroundId("リスの洞窟");
+/* 0020d948 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020d95e */		break;
+/* 0020d988 */	case "都市／ノース／ヘルマン歩兵1":
+/* 0020d988 */		info.addMonster("ヘルマン騎士j");
+/* 0020d99e */		info.addMonster("ヘルマン騎士j");
+/* 0020d9b4 */		info.addMonster("ヘルマン歩兵群j");
+/* 0020d9ca */		info.addMonster("ヘルマン歩兵j");
+/* 0020d9e0 */		info.addMonster("ヘルマン弩兵j");
+/* 0020d9f6 */		info.addMonster("ヘルマン騎士j");
+/* 0020da0c */		info.setBattleBackGroundId("平野");
+/* 0020da22 */		break;
+/* 0020da4c */	case "都市／ノース／ヘルマン歩兵2":
+/* 0020da4c */		info.addMonster("ヘルマン騎士群l");
+/* 0020da62 */		info.addMonster("ヘルマン歩兵j");
+/* 0020da78 */		info.addMonster("ヘルマン弩兵j");
+/* 0020da8e */		info.addMonster("ヘルマン弩兵群j");
+/* 0020daa4 */		info.addMonster("ヘルマン騎士j");
+/* 0020daba */		info.addMonster("ヘルマン士官j");
+/* 0020dad0 */		info.setBattleBackGroundId("平野");
+/* 0020dae6 */		break;
+/* 0020db10 */	case "都市／ノース／トーマ":
+/* 0020db10 */		info.addMonster("ヘルマン騎士j");
+/* 0020db26 */		info.addMonster("トーマ");
+/* 0020db3c */		info.addMonster("ヘルマン工兵j");
+/* 0020db52 */		info.addMonster("ヘルマン弩兵j");
+/* 0020db68 */		info.addMonster("ヘルマン工兵j");
+/* 0020db7e */		info.setBattleBackGroundId("平野");
+/* 0020db94 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020dbaa */		break;
+/* 0020dbd4 */	case "都市／サウス／ミネバ":
+/* 0020dbd4 */		info.addMonster("ミネバl1");
+/* 0020dbea */		info.addMonster("ヘルマン術兵j");
+/* 0020dc00 */		info.addMonster("ヘルマン術兵j");
+/* 0020dc16 */		info.addMonster("ヘルマン工兵j");
+/* 0020dc2c */		info.addMonster("ヘルマン弩兵j");
+/* 0020dc42 */		info.addMonster("ミネバl3");
+/* 0020dc58 */		info.addMonster("ヘルマン弩兵j");
+/* 0020dc6e */		info.addMonster("ヘルマン弩兵j");
+/* 0020dc84 */		info.addMonster("ヘルマン弩兵群j");
+/* 0020dc9a */		info.setBattleBackGroundId("都市／サウス");
+/* 0020dcb0 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020dcc6 */		break;
+/* 0020dcf0 */	case "下水道／ヘルマン歩兵":
+/* 0020dcf0 */		info.addMonster("ヘルマン弩兵q");
+/* 0020dd06 */		info.addMonster("ヘルマン歩兵q");
+/* 0020dd1c */		info.addMonster("ヘルマン歩兵q");
+/* 0020dd32 */		info.setBattleBackGroundId("居館／地下一階");
+/* 0020dd48 */		break;
+/* 0020dd72 */	case "東の塔／ヘルマン歩兵":
+/* 0020dd72 */		info.addMonster("ヘルマン歩兵q");
+/* 0020dd88 */		info.addMonster("ヘルマン工兵q");
+/* 0020dd9e */		info.setBattleBackGroundId("塔／東");
+/* 0020ddb4 */		break;
+/* 0020ddde */	case "東の塔／NATO":
+/* 0020ddde */		info.addMonster("ヘルマン工兵q");
+/* 0020ddf4 */		info.addMonster("NATO");
+/* 0020de0a */		info.setBattleBackGroundId("塔／東");
+/* 0020de20 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020de36 */		break;
+/* 0020de60 */	case "西の塔／リーザス歩兵1":
+/* 0020de60 */		info.addMonster("リーザス歩兵群");
+/* 0020de76 */		info.addMonster("リーザス歩兵群");
+/* 0020de8c */		info.setBattleBackGroundId("塔／西");
+/* 0020dea2 */		break;
+/* 0020decc */	case "西の塔／リーザス歩兵2":
+/* 0020decc */		info.addMonster("リーザス歩兵");
+/* 0020dee2 */		info.addMonster("リーザス歩兵");
+/* 0020def8 */		info.addMonster("ヘルマン歩兵群q");
+/* 0020df0e */		info.addMonster("ヘルマン工兵q");
+/* 0020df24 */		info.addMonster("リーザス歩兵群");
+/* 0020df3a */		info.addMonster("ヘルマン弩兵q");
+/* 0020df50 */		info.setBattleBackGroundId("塔／西");
+/* 0020df66 */		break;
+/* 0020df90 */	case "西の塔／リーザス歩兵3":
+/* 0020df90 */		info.addMonster("リーザス歩兵群");
+/* 0020dfa6 */		info.addMonster("リーザス歩兵群");
+/* 0020dfbc */		info.addMonster("ヘルマン弩兵群q");
+/* 0020dfd2 */		info.addMonster("ヘルマン術兵q");
+/* 0020dfe8 */		info.addMonster("リーザス歩兵");
+/* 0020dffe */		info.addMonster("フルパワーゴリラZII");
+/* 0020e014 */		info.setBattleBackGroundId("塔／西");
+/* 0020e02a */		break;
+/* 0020e054 */	case "西の塔／ランス":
+/* 0020e054 */		info.addMonster("ランス");
+/* 0020e06a */		info.setBattleBackGroundId("塔／西");
+/* 0020e080 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020e096 */		break;
+/* 0020e0c0 */	case "西の塔／サファイア":
+/* 0020e0c0 */		info.addMonster("サファイアr");
+/* 0020e0d6 */		info.addMonster("リーザス歩兵");
+/* 0020e0ec */		info.addMonster("ヘルマン術兵q");
+/* 0020e102 */		info.addMonster("トパーズr");
+/* 0020e118 */		info.addMonster("リーザス歩兵");
+/* 0020e12e */		info.setBattleBackGroundId("塔／西");
+/* 0020e144 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020e15a */		break;
+/* 0020e184 */	case "中庭／ガーネット":
+/* 0020e184 */		info.addMonster("ヘルマン騎士q");
+/* 0020e19a */		info.addMonster("ガーネットs");
+/* 0020e1b0 */		info.addMonster("ヘルマン弩兵q");
+/* 0020e1c6 */		info.addMonster("ヘルマン工兵q");
+/* 0020e1dc */		info.setBattleBackGroundId("中庭");
+/* 0020e1f2 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020e208 */		break;
+/* 0020e232 */	case "中庭／アイゼル":
+/* 0020e232 */		info.addMonster("アイゼル");
+/* 0020e248 */		info.setBattleBackGroundId("中庭");
+/* 0020e25e */		info.setMusicId("音楽／戦闘／アイゼル");
+/* 0020e274 */		break;
+/* 0020e29e */	case "居館／二階／ライカンスロープ":
+/* 0020e29e */		info.addMonster("ライカンスロープZt1");
+/* 0020e2b4 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(1));
+/* 0020e2d6 */		info.setBattleBackGroundId("居館／二階");
+/* 0020e2ec */		info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0020e302 */		break;
+/* 0020e32c */	case "居館／二階／ワーシィル":
+/* 0020e32c */		info.addMonster("ワーシィル");
+/* 0020e342 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(1));
+/* 0020e364 */		info.setBattleBackGroundId("居館／二階");
+/* 0020e37a */		info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0020e390 */		break;
+/* 0020e3ba */	case "居館／二階／ノス1":
+/* 0020e3ba */		info.addMonster("ノスt1");
+/* 0020e3d0 */		info.setBattleBackGroundId("居館／二階");
+/* 0020e3e6 */		info.setMusicId("音楽／戦闘／大ボス");
+/* 0020e3fc */		break;
+/* 0020e426 */	case "居館／二階／ノス3":
+/* 0020e426 */		getMonsterFromId("ノスt3左腕").setFixedPosition(true, 1);
+/* 0020e45a */		getMonsterFromId("ノスt3右腕").setFixedPosition(true, 1);
+/* 0020e48e */		getMonsterFromId("ノスt3").setFixedPosition(true, 2);
+/* 0020e4c2 */		getMonsterFromId("ノスt3左腕").setPosition(758, -96, 751, 333, 908, 291);
+/* 0020e50e */		getMonsterFromId("ノスt3右腕").setPosition(-80, 7, 201, 306, 191, 264);
+/* 0020e55a */		getMonsterFromId("ノスt3").setPosition(-50, -50, 550, 260, 658, 222);
+/* 0020e5a6 */		info.setEffectFlat("システム／戦闘／ノス戦");
+/* 0020e5bc */		info.addMonster("ノスt3左腕");
+/* 0020e5d2 */		info.addMonster("ノスt3右腕");
+/* 0020e5e8 */		info.addMonster("ノスt3");
+/* 0020e5fe */		info.setBattleBackGroundId("居館／二階");
+/* 0020e614 */		info.setMusicId("音楽／戦闘／ノス２");
+/* 0020e62a */		break;
+/* 0020e678 */	case "デ・ラ・アドミラル空間／ジル":
+/* 0020e678 */		getMonsterFromId("ジル").setFixedPosition(true, 2);
+/* 0020e6ac */		getMonsterFromId("ジル").setPosition(-50, -50, 664, 342, 585, 272);
+/* 0020e6f8 */		info.setEffectFlat("システム／戦闘／ジル戦");
+/* 0020e70e */		info.addMonster("ジル");
+/* 0020e724 */		info.setBattleBackGroundId("居館／二階");
+/* 0020e73a */		info.setMusicId("音楽／戦闘／ジル");
+/* 0020e750 */		break;
+/* 0020e7aa */	case "コー／腐った死体":
+/* 0020e7aa */		info.addMonster("ゾンビ");
+/* 0020e7c0 */		info.addMonster("腐った死体群");
+/* 0020e7d6 */		info.addMonster("腐った死体群");
+/* 0020e7ec */		info.addMonster("ゾンビ");
+/* 0020e802 */		info.addMonster("腐った死体群");
+/* 0020e818 */		info.addMonster("腐った死体群");
+/* 0020e82e */		info.addMonster("腐った死体群");
+/* 0020e844 */		info.addMonster("腐った死体群");
+/* 0020e85a */		info.addMonster("腐った死体群");
+/* 0020e870 */		info.addMonster("ゾンビ");
+/* 0020e886 */		info.addMonster("腐った死体群");
+/* 0020e89c */		info.addMonster("腐った死体群");
+/* 0020e8b2 */		info.setItem("換金3", 制御／戦闘／アイテム確率設定(90));
+/* 0020e8d4 */		info.setBattleBackGroundId("都市／コー");
+/* 0020e8ea */		break;
+/* 0020e944 */	case "地平線／シィル":
+/* 0020e944 */		info.addMonster("ロンメル");
+/* 0020e95a */		info.addMonster("ロンメル");
+/* 0020e970 */		info.setBattleBackGroundId("平野");
+/* 0020e986 */		break;
+/* 0020e9e0 */	case "地平線／リア":
+/* 0020e9e0 */		info.addMonster("みつめとかげ");
+/* 0020e9f6 */		info.addMonster("みつめとかげ");
+/* 0020ea0c */		info.addMonster("みつめとかげ");
+/* 0020ea22 */		info.addMonster("みつめとかげ");
+/* 0020ea38 */		info.addMonster("みつめとかげ");
+/* 0020ea4e */		info.addMonster("みつめとかげ");
+/* 0020ea64 */		info.addMonster("みつめとかげ");
+/* 0020ea7a */		info.setBattleBackGroundId("平野");
+/* 0020ea90 */		break;
+/* 0020eaea */	case "地平線／マリス":
+/* 0020eaea */		info.addMonster("食通");
+/* 0020eb00 */		info.addMonster("食通");
+/* 0020eb16 */		info.addMonster("食通");
+/* 0020eb2c */		info.setBattleBackGroundId("平野");
+/* 0020eb42 */		break;
+/* 0020eb9c */	case "地平線／かなみ":
+/* 0020eb9c */		info.addMonster("イカマン");
+/* 0020ebb2 */		info.addMonster("ニンタートル");
+/* 0020ebc8 */		info.addMonster("ニンタートル");
+/* 0020ebde */		info.addMonster("人形遣い");
+/* 0020ebf4 */		info.addMonster("人形遣い");
+/* 0020ec0a */		info.setBattleBackGroundId("平野");
+/* 0020ec20 */		break;
+/* 0020ec7a */	case "地平線／フェリス":
+/* 0020ec7a */		info.addMonster("こんばんわ");
+/* 0020ec90 */		info.addMonster("こんばんわ");
+/* 0020eca6 */		info.addMonster("こんばんわ");
+/* 0020ecbc */		info.setBattleBackGroundId("平野");
+/* 0020ecd2 */		break;
+/* 0020ed2c */	case "地平線／マリア":
+/* 0020ed2c */		info.addMonster("ザコ群");
+/* 0020ed42 */		info.addMonster("無課金戦士群");
+/* 0020ed58 */		info.addMonster("無課金戦士群");
+/* 0020ed6e */		info.addMonster("無課金戦士群");
+/* 0020ed84 */		info.setBattleBackGroundId("平野");
+/* 0020ed9a */		break;
+/* 0020edf4 */	case "地平線／志津香":
+/* 0020edf4 */		info.addMonster("ゲーリング");
+/* 0020ee0a */		info.addMonster("ゲーリング");
+/* 0020ee20 */		info.addMonster("ゲーリング");
+/* 0020ee36 */		info.addMonster("ゲーリング");
+/* 0020ee4c */		info.setBattleBackGroundId("平野");
+/* 0020ee62 */		break;
+/* 0020eebc */	case "地平線／ミリ":
+/* 0020eebc */		info.addMonster("イカマン");
+/* 0020eed2 */		info.addMonster("パワーゴリラ");
+/* 0020eee8 */		info.addMonster("パワーゴリラ");
+/* 0020eefe */		info.setBattleBackGroundId("平野");
+/* 0020ef14 */		break;
+/* 0020ef6e */	case "地平線／ミル":
+/* 0020ef6e */		info.addMonster("デカントf");
+/* 0020ef84 */		info.addMonster("グリーンハニー");
+/* 0020ef9a */		info.setBattleBackGroundId("平野");
+/* 0020efb0 */		break;
+/* 0020f00a */	case "地平線／セル":
+/* 0020f00a */		info.addMonster("くずの悪魔群");
+/* 0020f020 */		info.addMonster("NEOぬぼぼ");
+/* 0020f036 */		info.addMonster("みつめとかげ");
+/* 0020f04c */		info.addMonster("みつめとかげ");
+/* 0020f062 */		info.addMonster("ロンメル");
+/* 0020f078 */		info.setBattleBackGroundId("平野");
+/* 0020f08e */		break;
+/* 0020f0e8 */	case "地平線／バレス":
+/* 0020f0e8 */		info.addMonster("人食いTOWNS");
+/* 0020f0fe */		info.setBattleBackGroundId("平野");
+/* 0020f114 */		break;
+/* 0020f16e */	case "地平線／スー":
+/* 0020f16e */		info.addMonster("凶悪ハニー");
+/* 0020f184 */		info.addMonster("レッドハニー");
+/* 0020f19a */		info.addMonster("レッドハニー");
+/* 0020f1b0 */		info.setBattleBackGroundId("平野");
+/* 0020f1c6 */		break;
+/* 0020f220 */	case "地平線／リック":
+/* 0020f220 */		info.addMonster("ミミミック");
+/* 0020f236 */		info.setBattleBackGroundId("平野");
+/* 0020f24c */		break;
+/* 0020f2a6 */	case "地平線／メナド":
+/* 0020f2a6 */		info.addMonster("イカマン");
+/* 0020f2bc */		info.addMonster("大王イカマン");
+/* 0020f2d2 */		info.addMonster("スーパーハニー");
+/* 0020f2e8 */		info.addMonster("人食いX68");
+/* 0020f2fe */		info.addMonster("ミミミック");
+/* 0020f314 */		info.addMonster("ミミミック");
+/* 0020f32a */		info.addMonster("オッズ群");
+/* 0020f340 */		info.setBattleBackGroundId("平野");
+/* 0020f356 */		break;
+/* 0020f3b0 */	case "地平線／ユラン":
+/* 0020f3b0 */		info.addMonster("アカナリアンt2");
+/* 0020f3c6 */		info.setBattleBackGroundId("平野");
+/* 0020f3dc */		break;
+/* 0020f436 */	case "地平線／レイラ":
+/* 0020f436 */		info.addMonster("うっぴー");
+/* 0020f44c */		info.addMonster("うっぴー");
+/* 0020f462 */		info.addMonster("うっぴー");
+/* 0020f478 */		info.addMonster("うっぴー");
+/* 0020f48e */		info.addMonster("うっぴー");
+/* 0020f4a4 */		info.addMonster("うっぴー");
+/* 0020f4ba */		info.addMonster("うっぴー");
+/* 0020f4d0 */		info.addMonster("うっぴー");
+/* 0020f4e6 */		info.addMonster("うっぴー");
+/* 0020f4fc */		info.addMonster("うっぴー");
+/* 0020f512 */		info.addMonster("うっぴー");
+/* 0020f528 */		info.addMonster("うっぴー");
+/* 0020f53e */		info.addMonster("うっぴー");
+/* 0020f554 */		info.addMonster("うっぴー");
+/* 0020f56a */		info.addMonster("うっぴー");
+/* 0020f580 */		info.addMonster("うっぴー");
+/* 0020f596 */		info.addMonster("うっぴー");
+/* 0020f5ac */		info.addMonster("うっぴー");
+/* 0020f5c2 */		info.addMonster("うっぴー");
+/* 0020f5d8 */		info.addMonster("うっぴー");
+/* 0020f5ee */		info.addMonster("うっぴー");
+/* 0020f604 */		info.addMonster("うっぴー");
+/* 0020f61a */		info.addMonster("うっぴー");
+/* 0020f630 */		info.addMonster("うっぴー");
+/* 0020f646 */		info.setBattleBackGroundId("平野");
+/* 0020f65c */		break;
+/* 0020f6b6 */	case "地平線／アテン":
+/* 0020f6b6 */		info.addMonster("サイクロナイト");
+/* 0020f6cc */		info.addMonster("ニンタートル");
+/* 0020f6e2 */		info.addMonster("ニンタートル");
+/* 0020f6f8 */		info.setBattleBackGroundId("平野");
+/* 0020f70e */		break;
+/* 0020f768 */	case "地平線／ネカイ":
+/* 0020f768 */		info.addMonster("金魚群");
+/* 0020f77e */		info.addMonster("人形遣い");
+/* 0020f794 */		info.addMonster("ちゃいむ");
+/* 0020f7aa */		info.addMonster("人形遣い");
+/* 0020f7c0 */		info.addMonster("金魚群");
+/* 0020f7d6 */		info.setBattleBackGroundId("平野");
+/* 0020f7ec */		break;
+/* 0020f846 */	case "地平線／バーニング":
+/* 0020f846 */		info.addMonster("ヒトラー");
+/* 0020f85c */		info.setBattleBackGroundId("平野");
+/* 0020f872 */		break;
+/* 0020f8cc */	case "地平線／イェリコ":
+/* 0020f8cc */		info.addMonster("ニンタートル");
+/* 0020f8e2 */		info.addMonster("ニンタートル");
+/* 0020f8f8 */		info.addMonster("ニンタートル");
+/* 0020f90e */		info.addMonster("わんわん");
+/* 0020f924 */		info.setBattleBackGroundId("平野");
+/* 0020f93a */		break;
+/* 0020f994 */	default:
+/* 0020f994 */		info.addMonster("ルイス");
+/* 0020f9aa */		info.setBattleBackGroundId("平野");
+/* 0020f9c0 */		break;
+/* 0020fa1a */	}
+/* 0020fa6e */	info.setExtraBattleFlag(1);
+/* 0020fa84 */	openBattle2(info);
+/* 0020fa96 */}
+
+void 制御／モンスター／プロローグ／ヘルマン歩兵()
+/* 0020faa4 */{
+/* 0020faa4 */	BattleInfomation info;
+/* 0020fab4 */	info.addMonster("ヘルマン歩兵a");
+/* 0020faca */	info.setBattleBackGroundId("居館／地下一階");
+/* 0020fae0 */	openBattle2(info);
+/* 0020faf2 */}
+
+void 制御／モンスター／プロローグ／ヘルマン歩兵／Ｂ()
+/* 0020fb00 */{
+/* 0020fb00 */	BattleInfomation info;
+/* 0020fb10 */	info.addMonster("ヘルマン歩兵群a");
+/* 0020fb26 */	info.setBattleBackGroundId("居館／地下一階");
+/* 0020fb3c */	openBattle2(info);
+/* 0020fb4e */}
+
+void 制御／モンスター／プロローグ／リーザス親衛隊()
+/* 0020fb5c */{
+/* 0020fb5c */	BattleInfomation info;
+/* 0020fb6c */	info.addMonster("リーザス親衛隊");
+/* 0020fb82 */	info.addMonster("リーザス親衛隊");
+/* 0020fb98 */	info.setItem("換金2", 制御／戦闘／アイテム確率設定(6));
+/* 0020fbba */	info.setBattleBackGroundId("居館／地下一階");
+/* 0020fbd0 */	openBattle2(info);
+/* 0020fbe2 */}
+
+void 制御／モンスター／リスの洞窟／イカマン()
+/* 0020fbf0 */{
+/* 0020fbf0 */	BattleInfomation info;
+/* 0020fc00 */	if (RAND(6) != 1)
+/* 0020fc1a */	{
+/* 0020fc1a */		info.addMonster("イカマン");
+/* 0020fc30 */		info.addMonster("イカマン");
+/* 0020fc46 */		info.addMonster("イカマン");
+/* 0020fc5c */	}
+/* 0020fc62 */	else
+/* 0020fc62 */	{
+/* 0020fc62 */		info.addMonster("イカマン");
+/* 0020fc78 */		info.addMonster("イカマン");
+/* 0020fc8e */		info.addMonster("イカマン");
+/* 0020fca4 */		info.addMonster("イカマン");
+/* 0020fcba */	}
+/* 0020fcba */	info.setBattleBackGroundId("リスの洞窟");
+/* 0020fcd0 */	openBattle2(info);
+/* 0020fce2 */}
+
+void 制御／モンスター／リスの洞窟／イカマン／Ｂ()
+/* 0020fcf0 */{
+/* 0020fcf0 */	BattleInfomation info;
+/* 0020fd00 */	if (RAND(3) != 1)
+/* 0020fd1a */	{
+/* 0020fd1a */		info.addMonster("イカマン群");
+/* 0020fd30 */		info.addMonster("イカマン群");
+/* 0020fd46 */	}
+/* 0020fd4c */	else
+/* 0020fd4c */	{
+/* 0020fd4c */		info.addMonster("イカマン群");
+/* 0020fd62 */		info.addMonster("グリーンハニー");
+/* 0020fd78 */	}
+/* 0020fd78 */	info.setBattleBackGroundId("リスの洞窟");
+/* 0020fd8e */	openBattle2(info);
+/* 0020fda0 */}
+
+void 制御／モンスター／リスの洞窟／ニンタートル()
+/* 0020fdae */{
+/* 0020fdae */	BattleInfomation info;
+/* 0020fdbe */	if (RAND(3) != 1)
+/* 0020fdd8 */	{
+/* 0020fdd8 */		info.addMonster("ニンタートル");
+/* 0020fdee */		info.addMonster("グリーンハニー");
+/* 0020fe04 */	}
+/* 0020fe0a */	else
+/* 0020fe0a */	{
+/* 0020fe0a */		info.addMonster("イカマン");
+/* 0020fe20 */		info.addMonster("ニンタートル");
+/* 0020fe36 */		info.addMonster("グリーンハニー");
+/* 0020fe4c */	}
+/* 0020fe4c */	info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 0020fe6e */	info.setBattleBackGroundId("リスの洞窟");
+/* 0020fe84 */	openBattle2(info);
+/* 0020fe96 */}
+
+void 制御／モンスター／リスの洞窟／げこげこ()
+/* 0020fea4 */{
+/* 0020fea4 */	BattleInfomation info;
+/* 0020feb4 */	info.addMonster("げこげこ");
+/* 0020feca */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0020feec */	info.setBattleBackGroundId("リスの洞窟");
+/* 0020ff02 */	openBattle2(info);
+/* 0020ff14 */}
+
+void 制御／モンスター／リスの洞窟／げこげこ／Ｂ()
+/* 0020ff22 */{
+/* 0020ff22 */	BattleInfomation info;
+/* 0020ff32 */	if (RAND(3) != 1)
+/* 0020ff4c */	{
+/* 0020ff4c */		info.addMonster("げこげこ");
+/* 0020ff62 */		info.addMonster("げこげこ");
+/* 0020ff78 */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(6));
+/* 0020ff9a */	}
+/* 0020ffa0 */	else
+/* 0020ffa0 */	{
+/* 0020ffa0 */		info.addMonster("げこげこ");
+/* 0020ffb6 */		info.addMonster("グリーンハニー");
+/* 0020ffcc */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0020ffee */	}
+/* 0020ffee */	info.setBattleBackGroundId("リスの洞窟");
+/* 00210004 */	openBattle2(info);
+/* 00210016 */}
+
+void 制御／モンスター／リスの洞窟／ロンメル()
+/* 00210024 */{
+/* 00210024 */	BattleInfomation info;
+/* 00210034 */	info.addMonster("ロンメル");
+/* 0021004a */	info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 0021006c */	info.setBattleBackGroundId("リスの洞窟");
+/* 00210082 */	openBattle2(info);
+/* 00210094 */}
+
+void 制御／モンスター／リスの洞窟／グリーンハニー()
+/* 002100a2 */{
+/* 002100a2 */	BattleInfomation info;
+/* 002100b2 */	info.addMonster("グリーンハニー");
+/* 002100c8 */	info.addMonster("グリーンハニー");
+/* 002100de */	info.setBattleBackGroundId("リスの洞窟");
+/* 002100f4 */	openBattle2(info);
+/* 00210106 */}
+
+void 制御／モンスター／リスの洞窟／グリーンハニー／Ｂ()
+/* 00210114 */{
+/* 00210114 */	BattleInfomation info;
+/* 00210124 */	info.addMonster("イカマン群");
+/* 0021013a */	info.addMonster("グリーンハニー");
+/* 00210150 */	info.addMonster("グリーンハニー");
+/* 00210166 */	info.setBattleBackGroundId("リスの洞窟");
+/* 0021017c */	openBattle2(info);
+/* 0021018e */}
+
+void 制御／モンスター／リスの洞窟／ちゃいむ()
+/* 0021019c */{
+/* 0021019c */	BattleInfomation info;
+/* 002101ac */	info.addMonster("ちゃいむ");
+/* 002101c2 */	info.setItem("換金2", 3);
+/* 002101de */	info.setBattleBackGroundId("リスの洞窟");
+/* 002101f4 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021020a */	openBattle2(info);
+/* 0021021c */}
+
+void 制御／モンスター／悪魔回廊／イカマン()
+/* 0021022a */{
+/* 0021022a */	BattleInfomation info;
+/* 0021023a */	if (RAND(3) != 1)
+/* 00210254 */	{
+/* 00210254 */		info.addMonster("イカマン群");
+/* 0021026a */		info.addMonster("イカマン群");
+/* 00210280 */	}
+/* 00210286 */	else
+/* 00210286 */	{
+/* 00210286 */		info.addMonster("イカマン群");
+/* 0021029c */		info.addMonster("げこげこ");
+/* 002102b2 */		info.addMonster("イカマン群");
+/* 002102c8 */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 002102ea */	}
+/* 002102ea */	info.setBattleBackGroundId("悪魔回廊");
+/* 00210300 */	openBattle2(info);
+/* 00210312 */}
+
+void 制御／モンスター／悪魔回廊／げこげこ()
+/* 00210320 */{
+/* 00210320 */	BattleInfomation info;
+/* 00210330 */	if (RAND(3) != 1)
+/* 0021034a */	{
+/* 0021034a */		info.addMonster("げこげこ");
+/* 00210360 */		info.addMonster("げこげこ");
+/* 00210376 */		info.addMonster("くずの悪魔");
+/* 0021038c */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(6));
+/* 002103ae */	}
+/* 002103b4 */	else
+/* 002103b4 */	{
+/* 002103b4 */		info.addMonster("グリーンハニー");
+/* 002103ca */		info.addMonster("げこげこ");
+/* 002103e0 */		info.addMonster("げこげこ");
+/* 002103f6 */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(6));
+/* 00210418 */	}
+/* 00210418 */	info.setBattleBackGroundId("悪魔回廊");
+/* 0021042e */	openBattle2(info);
+/* 00210440 */}
+
+void 制御／モンスター／悪魔回廊／人形遣い()
+/* 0021044e */{
+/* 0021044e */	BattleInfomation info;
+/* 0021045e */	if (RAND(3) != 1)
+/* 00210478 */	{
+/* 00210478 */		info.addMonster("人形遣い");
+/* 0021048e */		info.addMonster("人形遣い");
+/* 002104a4 */		info.addMonster("イカマン群");
+/* 002104ba */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(6));
+/* 002104dc */	}
+/* 002104e2 */	else
+/* 002104e2 */	{
+/* 002104e2 */		info.addMonster("人形遣い");
+/* 002104f8 */		info.addMonster("ニンタートル");
+/* 0021050e */		info.addMonster("人形遣い");
+/* 00210524 */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(6));
+/* 00210546 */	}
+/* 00210546 */	info.setBattleBackGroundId("悪魔回廊");
+/* 0021055c */	openBattle2(info);
+/* 0021056e */}
+
+void 制御／モンスター／悪魔回廊／人形遣い／Ｂ()
+/* 0021057c */{
+/* 0021057c */	BattleInfomation info;
+/* 0021058c */	if (RAND(3) != 1)
+/* 002105a6 */	{
+/* 002105a6 */		info.addMonster("イカマン群");
+/* 002105bc */		info.addMonster("くずの悪魔");
+/* 002105d2 */		info.addMonster("人形遣い");
+/* 002105e8 */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(3));
+/* 0021060a */	}
+/* 00210610 */	else
+/* 00210610 */	{
+/* 00210610 */		info.addMonster("こんにちわc1");
+/* 00210626 */		info.addMonster("人形遣い");
+/* 0021063c */		info.addMonster("人形遣い");
+/* 00210652 */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00210674 */	}
+/* 00210674 */	info.setBattleBackGroundId("悪魔回廊");
+/* 0021068a */	openBattle2(info);
+/* 0021069c */}
+
+void 制御／モンスター／悪魔回廊／くずの悪魔()
+/* 002106aa */{
+/* 002106aa */	BattleInfomation info;
+/* 002106ba */	if (RAND(3) != 1)
+/* 002106d4 */	{
+/* 002106d4 */		info.addMonster("くずの悪魔");
+/* 002106ea */		info.addMonster("くずの悪魔");
+/* 00210700 */		info.addMonster("くずの悪魔");
+/* 00210716 */	}
+/* 0021071c */	else
+/* 0021071c */	{
+/* 0021071c */		info.addMonster("くずの悪魔");
+/* 00210732 */		info.addMonster("くずの悪魔");
+/* 00210748 */		info.addMonster("くずの悪魔");
+/* 0021075e */		info.addMonster("くずの悪魔");
+/* 00210774 */	}
+/* 00210774 */	info.setBattleBackGroundId("悪魔回廊");
+/* 0021078a */	openBattle2(info);
+/* 0021079c */}
+
+void 制御／モンスター／悪魔回廊／くずの悪魔／Ｂ()
+/* 002107aa */{
+/* 002107aa */	BattleInfomation info;
+/* 002107ba */	info.addMonster("くずの悪魔群");
+/* 002107d0 */	info.addMonster("くずの悪魔群");
+/* 002107e6 */	info.addMonster("くずの悪魔群");
+/* 002107fc */	info.addMonster("人形遣い");
+/* 00210812 */	info.addMonster("人形遣い");
+/* 00210828 */	info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(6));
+/* 0021084a */	info.setBattleBackGroundId("悪魔回廊");
+/* 00210860 */	openBattle2(info);
+/* 00210872 */}
+
+void 制御／モンスター／悪魔回廊／こんにちわ()
+/* 00210880 */{
+/* 00210880 */	BattleInfomation info;
+/* 00210890 */	if (RAND(3) != 1)
+/* 002108aa */	{
+/* 002108aa */		info.addMonster("こんにちわc1");
+/* 002108c0 */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 002108e2 */	}
+/* 002108e8 */	else
+/* 002108e8 */	{
+/* 002108e8 */		info.addMonster("こんにちわc1");
+/* 002108fe */		info.addMonster("くずの悪魔");
+/* 00210914 */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00210936 */	}
+/* 00210936 */	info.setBattleBackGroundId("悪魔回廊");
+/* 0021094c */	openBattle2(info);
+/* 0021095e */}
+
+void 制御／モンスター／悪魔回廊／ちょーちん()
+/* 0021096c */{
+/* 0021096c */	BattleInfomation info;
+/* 0021097c */	if (RAND(3) != 1)
+/* 00210996 */	{
+/* 00210996 */		info.addMonster("こんにちわc1");
+/* 002109ac */		info.addMonster("ちょーちん");
+/* 002109c2 */		info.setItem("換金2", 制御／戦闘／アイテム確率設定(3));
+/* 002109e4 */	}
+/* 002109ea */	else
+/* 002109ea */	{
+/* 002109ea */		info.addMonster("グリーンハニー");
+/* 00210a00 */		info.addMonster("グリーンハニー");
+/* 00210a16 */		info.addMonster("グリーンハニー");
+/* 00210a2c */		info.addMonster("グリーンハニー");
+/* 00210a42 */		info.addMonster("ちょーちん");
+/* 00210a58 */		info.setItem("換金2", 制御／戦闘／アイテム確率設定(3));
+/* 00210a7a */	}
+/* 00210a7a */	info.setBattleBackGroundId("悪魔回廊");
+/* 00210a90 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00210aa6 */	openBattle2(info);
+/* 00210ab8 */}
+
+void 制御／モンスター／地上灯台／ロンメル()
+/* 00210ac6 */{
+/* 00210ac6 */	BattleInfomation info;
+/* 00210ad6 */	info.addMonster("ロンメル");
+/* 00210aec */	info.setBattleBackGroundId("地上灯台");
+/* 00210b02 */	info.setItem("珍味1", 制御／戦闘／アイテム確率設定(15));
+/* 00210b24 */	openBattle2(info);
+/* 00210b36 */}
+
+void 制御／モンスター／地上灯台／ロンメル／Ｂ()
+/* 00210b44 */{
+/* 00210b44 */	BattleInfomation info;
+/* 00210b54 */	info.addMonster("ロンメル");
+/* 00210b6a */	info.addMonster("ロンメル");
+/* 00210b80 */	info.setBattleBackGroundId("地上灯台");
+/* 00210b96 */	info.setItem("珍味1", 制御／戦闘／アイテム確率設定(30));
+/* 00210bb8 */	openBattle2(info);
+/* 00210bca */}
+
+void 制御／モンスター／地上灯台／人形遣い()
+/* 00210bd8 */{
+/* 00210bd8 */	BattleInfomation info;
+/* 00210be8 */	if (RAND(3) != 1)
+/* 00210c02 */	{
+/* 00210c02 */		info.addMonster("人形遣い");
+/* 00210c18 */		info.addMonster("人形遣い");
+/* 00210c2e */		info.addMonster("グリーンハニー");
+/* 00210c44 */		info.addMonster("人形遣い");
+/* 00210c5a */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(9));
+/* 00210c7c */	}
+/* 00210c82 */	else
+/* 00210c82 */	{
+/* 00210c82 */		info.addMonster("人形遣い群");
+/* 00210c98 */		info.addMonster("人形遣い群");
+/* 00210cae */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(12));
+/* 00210cd0 */	}
+/* 00210cd0 */	info.setBattleBackGroundId("地上灯台");
+/* 00210ce6 */	openBattle2(info);
+/* 00210cf8 */}
+
+void 制御／モンスター／地上灯台／人形遣い／Ｂ()
+/* 00210d06 */{
+/* 00210d06 */	BattleInfomation info;
+/* 00210d16 */	if (RAND(3) != 1)
+/* 00210d30 */	{
+/* 00210d30 */		info.addMonster("ミートボール");
+/* 00210d46 */		info.addMonster("人形遣い群");
+/* 00210d5c */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(6));
+/* 00210d7e */	}
+/* 00210d84 */	else
+/* 00210d84 */	{
+/* 00210d84 */		info.addMonster("ミートボール");
+/* 00210d9a */		info.addMonster("人形遣い");
+/* 00210db0 */		info.addMonster("ミートボール");
+/* 00210dc6 */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(3));
+/* 00210de8 */	}
+/* 00210de8 */	info.setBattleBackGroundId("地上灯台");
+/* 00210dfe */	openBattle2(info);
+/* 00210e10 */}
+
+void 制御／モンスター／地上灯台／ミートボール()
+/* 00210e1e */{
+/* 00210e1e */	BattleInfomation info;
+/* 00210e2e */	if (RAND(3) != 1)
+/* 00210e48 */	{
+/* 00210e48 */		info.addMonster("ミートボール");
+/* 00210e5e */		info.addMonster("ミートボール");
+/* 00210e74 */	}
+/* 00210e7a */	else
+/* 00210e7a */	{
+/* 00210e7a */		info.addMonster("ミートボール");
+/* 00210e90 */		info.addMonster("人形遣い");
+/* 00210ea6 */		info.setItem("マヨネーズ", 制御／戦闘／アイテム確率設定(3));
+/* 00210ec8 */	}
+/* 00210ec8 */	info.setBattleBackGroundId("地上灯台");
+/* 00210ede */	openBattle2(info);
+/* 00210ef0 */}
+
+void 制御／モンスター／地上灯台／ミートボール／Ｂ()
+/* 00210efe */{
+/* 00210efe */	BattleInfomation info;
+/* 00210f0e */	if (RAND(3) != 1)
+/* 00210f28 */	{
+/* 00210f28 */		info.addMonster("ミートボール群");
+/* 00210f3e */		info.addMonster("グリーンハニー");
+/* 00210f54 */		info.addMonster("ミートボール群");
+/* 00210f6a */	}
+/* 00210f70 */	else
+/* 00210f70 */	{
+/* 00210f70 */		info.addMonster("ミートボール群");
+/* 00210f86 */		info.addMonster("ミートボール群");
+/* 00210f9c */		info.addMonster("グリーンハニー");
+/* 00210fb2 */	}
+/* 00210fb2 */	info.setBattleBackGroundId("地上灯台");
+/* 00210fc8 */	openBattle2(info);
+/* 00210fda */}
+
+void 制御／モンスター／地上灯台／ブルーハニー()
+/* 00210fe8 */{
+/* 00210fe8 */	BattleInfomation info;
+/* 00210ff8 */	if (RAND(3) != 1)
+/* 00211012 */	{
+/* 00211012 */		info.addMonster("ミートボール");
+/* 00211028 */		info.addMonster("ブルーハニー");
+/* 0021103e */	}
+/* 00211044 */	else
+/* 00211044 */	{
+/* 00211044 */		info.addMonster("ブルーハニー");
+/* 0021105a */		info.addMonster("ブルーハニー");
+/* 00211070 */	}
+/* 00211070 */	info.setBattleBackGroundId("地上灯台");
+/* 00211086 */	openBattle2(info);
+/* 00211098 */}
+
+void 制御／モンスター／地上灯台／ブルーハニー／Ｂ()
+/* 002110a6 */{
+/* 002110a6 */	BattleInfomation info;
+/* 002110b6 */	if (RAND(3) != 1)
+/* 002110d0 */	{
+/* 002110d0 */		info.addMonster("ブルーハニー");
+/* 002110e6 */		info.addMonster("人形遣い群");
+/* 002110fc */	}
+/* 00211102 */	else
+/* 00211102 */	{
+/* 00211102 */		info.addMonster("ミートボール");
+/* 00211118 */		info.addMonster("ブルーハニー");
+/* 0021112e */		info.addMonster("ブルーハニー");
+/* 00211144 */	}
+/* 00211144 */	info.setBattleBackGroundId("地上灯台");
+/* 0021115a */	openBattle2(info);
+/* 0021116c */}
+
+void 制御／モンスター／地上灯台／ラーメン()
+/* 0021117a */{
+/* 0021117a */	BattleInfomation info;
+/* 0021118a */	if (RAND(3) != 1)
+/* 002111a4 */	{
+/* 002111a4 */		info.addMonster("グリーンハニー");
+/* 002111ba */		info.addMonster("ミートボール");
+/* 002111d0 */		info.addMonster("ラーメン");
+/* 002111e6 */		info.setItem("珍味1", 制御／戦闘／アイテム確率設定(3));
+/* 00211208 */	}
+/* 0021120e */	else
+/* 0021120e */	{
+/* 0021120e */		info.addMonster("ラーメン");
+/* 00211224 */		info.addMonster("ラーメン");
+/* 0021123a */		info.setItem("珍味1", 制御／戦闘／アイテム確率設定(6));
+/* 0021125c */	}
+/* 0021125c */	info.setBattleBackGroundId("地上灯台");
+/* 00211272 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00211288 */	openBattle2(info);
+/* 0021129a */}
+
+void 制御／モンスター／地上灯台／ミミック()
+/* 002112a8 */{
+/* 002112a8 */	BattleInfomation info;
+/* 002112b8 */	info.addMonster("ミミック");
+/* 002112ce */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(15));
+/* 002112f0 */	info.setBattleBackGroundId("地上灯台");
+/* 00211306 */	openBattle2(info);
+/* 00211318 */}
+
+void 制御／モンスター／烈火鉱山／みつめとかげ()
+/* 00211326 */{
+/* 00211326 */	BattleInfomation info;
+/* 00211336 */	if (RAND(3) != 1)
+/* 00211350 */	{
+/* 00211350 */		info.addMonster("みつめとかげ");
+/* 00211366 */		info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(9));
+/* 00211388 */	}
+/* 0021138e */	else
+/* 0021138e */	{
+/* 0021138e */		info.addMonster("みつめとかげ");
+/* 002113a4 */		info.addMonster("みつめとかげ");
+/* 002113ba */		info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(18));
+/* 002113dc */	}
+/* 002113dc */	info.setBattleBackGroundId("烈火鉱山");
+/* 002113f2 */	openBattle2(info);
+/* 00211404 */}
+
+void 制御／モンスター／烈火鉱山／ライカンスロープ()
+/* 00211412 */{
+/* 00211412 */	BattleInfomation info;
+/* 00211422 */	if (RAND(3) != 1)
+/* 0021143c */	{
+/* 0021143c */		info.addMonster("ライカンスロープe2");
+/* 00211452 */	}
+/* 00211458 */	else
+/* 00211458 */	{
+/* 00211458 */		info.addMonster("ライカンスロープd1");
+/* 0021146e */	}
+/* 0021146e */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 00211490 */	info.setBattleBackGroundId("烈火鉱山");
+/* 002114a6 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002114bc */	openBattle2(info);
+/* 002114ce */}
+
+void 制御／モンスター／烈火鉱山／ブルーハニー()
+/* 002114dc */{
+/* 002114dc */	BattleInfomation info;
+/* 002114ec */	if (RAND(3) != 1)
+/* 00211506 */	{
+/* 00211506 */		info.addMonster("ブルーハニー");
+/* 0021151c */		info.addMonster("ブルーハニー");
+/* 00211532 */	}
+/* 00211538 */	else
+/* 00211538 */	{
+/* 00211538 */		info.addMonster("げこげこ");
+/* 0021154e */		info.addMonster("ブルーハニー");
+/* 00211564 */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 00211586 */	}
+/* 00211586 */	info.setBattleBackGroundId("烈火鉱山");
+/* 0021159c */	openBattle2(info);
+/* 002115ae */}
+
+void 制御／モンスター／烈火鉱山／ミミック()
+/* 002115bc */{
+/* 002115bc */	BattleInfomation info;
+/* 002115cc */	info.addMonster("ミミック");
+/* 002115e2 */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(15));
+/* 00211604 */	info.setBattleBackGroundId("烈火鉱山");
+/* 0021161a */	openBattle2(info);
+/* 0021162c */}
+
+void 制御／モンスター／烈火鉱山／金魚()
+/* 0021163a */{
+/* 0021163a */	BattleInfomation info;
+/* 0021164a */	if (RAND(3) != 1)
+/* 00211664 */	{
+/* 00211664 */		info.addMonster("金魚");
+/* 0021167a */		info.addMonster("金魚");
+/* 00211690 */	}
+/* 00211696 */	else
+/* 00211696 */	{
+/* 00211696 */		info.addMonster("金魚");
+/* 002116ac */	}
+/* 002116ac */	info.setBattleBackGroundId("烈火鉱山");
+/* 002116c2 */	openBattle2(info);
+/* 002116d4 */}
+
+void 制御／モンスター／烈火鉱山／金魚／Ｂ()
+/* 002116e2 */{
+/* 002116e2 */	BattleInfomation info;
+/* 002116f2 */	if (RAND(3) != 1)
+/* 0021170c */	{
+/* 0021170c */		info.addMonster("金魚群");
+/* 00211722 */	}
+/* 00211728 */	else
+/* 00211728 */	{
+/* 00211728 */		info.addMonster("金魚群");
+/* 0021173e */		info.addMonster("げこげこ");
+/* 00211754 */		info.addMonster("げこげこ");
+/* 0021176a */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(6));
+/* 0021178c */	}
+/* 0021178c */	info.setBattleBackGroundId("烈火鉱山");
+/* 002117a2 */	openBattle2(info);
+/* 002117b4 */}
+
+void 制御／モンスター／烈火鉱山／ＮＥＯぬぼぼ()
+/* 002117c2 */{
+/* 002117c2 */	BattleInfomation info;
+/* 002117d2 */	if (RAND(3) != 1)
+/* 002117ec */	{
+/* 002117ec */		info.addMonster("NEOぬぼぼ");
+/* 00211802 */		info.addMonster("NEOぬぼぼ");
+/* 00211818 */		info.addMonster("NEOぬぼぼ");
+/* 0021182e */	}
+/* 00211834 */	else
+/* 00211834 */	{
+/* 00211834 */		info.addMonster("NEOぬぼぼ");
+/* 0021184a */		info.addMonster("NEOぬぼぼ");
+/* 00211860 */		info.addMonster("NEOぬぼぼ");
+/* 00211876 */		info.addMonster("ブルーハニー");
+/* 0021188c */	}
+/* 0021188c */	info.setBattleBackGroundId("烈火鉱山");
+/* 002118a2 */	openBattle2(info);
+/* 002118b4 */}
+
+void 制御／モンスター／烈火鉱山／マーダー()
+/* 002118c2 */{
+/* 002118c2 */	BattleInfomation info;
+/* 002118d2 */	info.addMonster("マーダー");
+/* 002118e8 */	info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 0021190a */	info.setBattleBackGroundId("烈火鉱山");
+/* 00211920 */	openBattle2(info);
+/* 00211932 */}
+
+void 制御／モンスター／烈火鉱山／金魚使い()
+/* 00211940 */{
+/* 00211940 */	BattleInfomation info;
+/* 00211950 */	if (RAND(3) != 1)
+/* 0021196a */	{
+/* 0021196a */		info.addMonster("金魚");
+/* 00211980 */		info.addMonster("金魚");
+/* 00211996 */		info.addMonster("金魚");
+/* 002119ac */		info.addMonster("金魚");
+/* 002119c2 */		info.addMonster("金魚使い");
+/* 002119d8 */	}
+/* 002119de */	else
+/* 002119de */	{
+/* 002119de */		info.addMonster("金魚群");
+/* 002119f4 */		info.addMonster("金魚群");
+/* 00211a0a */		info.addMonster("金魚使い");
+/* 00211a20 */		info.addMonster("金魚群");
+/* 00211a36 */	}
+/* 00211a36 */	info.setBattleBackGroundId("烈火鉱山");
+/* 00211a4c */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00211a62 */	openBattle2(info);
+/* 00211a74 */}
+
+void 制御／モンスター／迷子の森／マーダー()
+/* 00211a82 */{
+/* 00211a82 */	BattleInfomation info;
+/* 00211a92 */	info.addMonster("マーダー");
+/* 00211aa8 */	info.setItem("珍味2", 制御／戦闘／アイテム確率設定(15));
+/* 00211aca */	info.setBattleBackGroundId("迷子の森");
+/* 00211ae0 */	openBattle2(info);
+/* 00211af2 */}
+
+void 制御／モンスター／迷子の森／いもむしＤＸマークＩＩ()
+/* 00211b00 */{
+/* 00211b00 */	BattleInfomation info;
+/* 00211b10 */	if (RAND(3) != 1)
+/* 00211b2a */	{
+/* 00211b2a */		info.addMonster("いもむしDXマークII");
+/* 00211b40 */		info.addMonster("レッドハニー");
+/* 00211b56 */		info.addMonster("いもむしDXマークII");
+/* 00211b6c */	}
+/* 00211b72 */	else
+/* 00211b72 */	{
+/* 00211b72 */		info.addMonster("いもむしDXマークII");
+/* 00211b88 */		info.addMonster("いもむしDXマークII");
+/* 00211b9e */		info.addMonster("うっぴー");
+/* 00211bb4 */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00211bd6 */	}
+/* 00211bd6 */	info.setBattleBackGroundId("迷子の森");
+/* 00211bec */	openBattle2(info);
+/* 00211bfe */}
+
+void 制御／モンスター／迷子の森／いもむしＤＸマークＩＩ／Ｂ()
+/* 00211c0c */{
+/* 00211c0c */	BattleInfomation info;
+/* 00211c1c */	if (RAND(3) != 1)
+/* 00211c36 */	{
+/* 00211c36 */		info.addMonster("いもむしDXマークII群");
+/* 00211c4c */		info.addMonster("いもむしDXマークII群");
+/* 00211c62 */		info.addMonster("わんわん群");
+/* 00211c78 */	}
+/* 00211c7e */	else
+/* 00211c7e */	{
+/* 00211c7e */		info.addMonster("いもむしDXマークII群");
+/* 00211c94 */		info.addMonster("レッドハニー");
+/* 00211caa */		info.addMonster("いもむしDXマークII群");
+/* 00211cc0 */	}
+/* 00211cc0 */	info.setBattleBackGroundId("迷子の森");
+/* 00211cd6 */	openBattle2(info);
+/* 00211ce8 */}
+
+void 制御／モンスター／迷子の森／いもむしＤＸマークＩＩ／Ｃ()
+/* 00211cf6 */{
+/* 00211cf6 */	BattleInfomation info;
+/* 00211d06 */	if (RAND(3) != 1)
+/* 00211d20 */	{
+/* 00211d20 */		info.addMonster("いもむしDXマークII");
+/* 00211d36 */	}
+/* 00211d3c */	else
+/* 00211d3c */	{
+/* 00211d3c */		info.addMonster("いもむしDXマークII");
+/* 00211d52 */		info.addMonster("いもむしDXマークII");
+/* 00211d68 */	}
+/* 00211d68 */	info.setBattleBackGroundId("迷子の森");
+/* 00211d7e */	openBattle2(info);
+/* 00211d90 */}
+
+void 制御／モンスター／迷子の森／うっぴー()
+/* 00211d9e */{
+/* 00211d9e */	BattleInfomation info;
+/* 00211dae */	if (RAND(3) != 1)
+/* 00211dc8 */	{
+/* 00211dc8 */		info.addMonster("うっぴー");
+/* 00211dde */		info.addMonster("うっぴー");
+/* 00211df4 */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00211e16 */	}
+/* 00211e1c */	else
+/* 00211e1c */	{
+/* 00211e1c */		info.addMonster("うっぴー");
+/* 00211e32 */		info.addMonster("レッドハニー");
+/* 00211e48 */		info.addMonster("わんわん群");
+/* 00211e5e */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00211e80 */	}
+/* 00211e80 */	info.setBattleBackGroundId("迷子の森");
+/* 00211e96 */	openBattle2(info);
+/* 00211ea8 */}
+
+void 制御／モンスター／迷子の森／パワーゴリラ()
+/* 00211eb6 */{
+/* 00211eb6 */	BattleInfomation info;
+/* 00211ec6 */	if (RAND(3) != 1)
+/* 00211ee0 */	{
+/* 00211ee0 */		info.addMonster("パワーゴリラ");
+/* 00211ef6 */		info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00211f18 */	}
+/* 00211f1e */	else
+/* 00211f1e */	{
+/* 00211f1e */		info.addMonster("パワーゴリラ");
+/* 00211f34 */		info.addMonster("パワーゴリラ");
+/* 00211f4a */		info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00211f6c */	}
+/* 00211f6c */	info.setBattleBackGroundId("迷子の森");
+/* 00211f82 */	openBattle2(info);
+/* 00211f94 */}
+
+void 制御／モンスター／迷子の森／パワーゴリラ／Ｂ()
+/* 00211fa2 */{
+/* 00211fa2 */	BattleInfomation info;
+/* 00211fb2 */	info.addMonster("いもむしDXマークII");
+/* 00211fc8 */	info.addMonster("パワーゴリラ");
+/* 00211fde */	info.addMonster("レッドハニー");
+/* 00211ff4 */	info.addMonster("わんわん群");
+/* 0021200a */	info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 0021202c */	info.setBattleBackGroundId("迷子の森");
+/* 00212042 */	openBattle2(info);
+/* 00212054 */}
+
+void 制御／モンスター／迷子の森／ミスコーン()
+/* 00212062 */{
+/* 00212062 */	BattleInfomation info;
+/* 00212072 */	if (RAND(3) != 1)
+/* 0021208c */	{
+/* 0021208c */		info.addMonster("ミスコーン");
+/* 002120a2 */		info.setItem("カッパーマトック", 制御／戦闘／アイテム確率設定(3));
+/* 002120c4 */	}
+/* 002120ca */	else
+/* 002120ca */	{
+/* 002120ca */		info.addMonster("ミスコーン");
+/* 002120e0 */		info.addMonster("わんわん群");
+/* 002120f6 */		info.setItem("カッパーマトック", 制御／戦闘／アイテム確率設定(3));
+/* 00212118 */	}
+/* 00212118 */	info.setBattleBackGroundId("迷子の森");
+/* 0021212e */	openBattle2(info);
+/* 00212140 */}
+
+void 制御／モンスター／迷子の森／レッドハニー()
+/* 0021214e */{
+/* 0021214e */	BattleInfomation info;
+/* 0021215e */	if (RAND(3) != 1)
+/* 00212178 */	{
+/* 00212178 */		info.addMonster("レッドハニー");
+/* 0021218e */		info.addMonster("レッドハニー");
+/* 002121a4 */	}
+/* 002121aa */	else
+/* 002121aa */	{
+/* 002121aa */		info.addMonster("レッドハニー");
+/* 002121c0 */		info.addMonster("ブルーハニー");
+/* 002121d6 */		info.addMonster("グリーンハニー");
+/* 002121ec */	}
+/* 002121ec */	info.setBattleBackGroundId("迷子の森");
+/* 00212202 */	openBattle2(info);
+/* 00212214 */}
+
+void 制御／モンスター／迷子の森／ハチ女()
+/* 00212222 */{
+/* 00212222 */	BattleInfomation info;
+/* 00212232 */	if (RAND(3) != 1)
+/* 0021224c */	{
+/* 0021224c */		info.addMonster("ハチ女");
+/* 00212262 */		info.addMonster("レッドハニー");
+/* 00212278 */		info.addMonster("レッドハニー");
+/* 0021228e */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(6));
+/* 002122b0 */	}
+/* 002122b6 */	else
+/* 002122b6 */	{
+/* 002122b6 */		info.addMonster("ミスコーン");
+/* 002122cc */		info.addMonster("いもむしDXマークII");
+/* 002122e2 */		info.addMonster("ハチ女");
+/* 002122f8 */		info.addMonster("ハチ女");
+/* 0021230e */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(12));
+/* 00212330 */	}
+/* 00212330 */	info.setBattleBackGroundId("迷子の森");
+/* 00212346 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021235c */	openBattle2(info);
+/* 0021236e */}
+
+void 制御／モンスター／迷子の森／ミミック()
+/* 0021237c */{
+/* 0021237c */	BattleInfomation info;
+/* 0021238c */	info.addMonster("ミミック");
+/* 002123a2 */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(15));
+/* 002123c4 */	info.setBattleBackGroundId("迷子の森");
+/* 002123da */	openBattle2(info);
+/* 002123ec */}
+
+void 制御／モンスター／ハイパービル／ライカンスロープ()
+/* 002123fa */{
+/* 002123fa */	BattleInfomation info;
+/* 0021240a */	switch (RAND(6))
+/* 00212422 */	{
+/* 00212422 */	case 1:
+/* 00212422 */	case 2:
+/* 00212422 */	case 3:
+/* 00212422 */		info.addMonster("ライカンスロープh2");
+/* 00212438 */		break;
+/* 0021243e */	case 4:
+/* 0021243e */	case 5:
+/* 0021243e */		info.addMonster("ライカンスロープe2");
+/* 00212454 */		break;
+/* 0021245a */	default:
+/* 0021245a */		info.addMonster("ライカンスロープd1");
+/* 00212470 */		break;
+/* 00212476 */	}
+/* 00212476 */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 00212498 */	info.setBattleBackGroundId("ハイパービル");
+/* 002124ae */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002124c4 */	openBattle2(info);
+/* 002124d6 */}
+
+void 制御／モンスター／ハイパービル／ライカンスロープ／Ｂ()
+/* 002124e4 */{
+/* 002124e4 */	BattleInfomation info;
+/* 002124f4 */	switch (RAND(6))
+/* 0021250c */	{
+/* 0021250c */	case 1:
+/* 0021250c */	case 2:
+/* 0021250c */	case 3:
+/* 0021250c */	case 4:
+/* 0021250c */		info.addMonster("リヤカー");
+/* 00212522 */		info.addMonster("リヤカー");
+/* 00212538 */		info.addMonster("ライカンスロープh2");
+/* 0021254e */		break;
+/* 00212554 */	case 5:
+/* 00212554 */		info.addMonster("リヤカー");
+/* 0021256a */		info.addMonster("リヤカー");
+/* 00212580 */		info.addMonster("ライカンスロープe2");
+/* 00212596 */		break;
+/* 0021259c */	default:
+/* 0021259c */		info.addMonster("リヤカー");
+/* 002125b2 */		info.addMonster("リヤカー");
+/* 002125c8 */		info.addMonster("ライカンスロープd1");
+/* 002125de */		break;
+/* 002125e4 */	}
+/* 002125e4 */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 00212606 */	info.setBattleBackGroundId("ハイパービル");
+/* 0021261c */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00212632 */	openBattle2(info);
+/* 00212644 */}
+
+void 制御／モンスター／ハイパービル／レッドハニー()
+/* 00212652 */{
+/* 00212652 */	BattleInfomation info;
+/* 00212662 */	if (RAND(3) != 1)
+/* 0021267c */	{
+/* 0021267c */		info.addMonster("レッドハニー");
+/* 00212692 */		info.addMonster("レッドハニー");
+/* 002126a8 */		info.addMonster("レッドハニー");
+/* 002126be */	}
+/* 002126c4 */	else
+/* 002126c4 */	{
+/* 002126c4 */		info.addMonster("グリーンハニー");
+/* 002126da */		info.addMonster("グリーンハニー");
+/* 002126f0 */		info.addMonster("グリーンハニー");
+/* 00212706 */		info.addMonster("レッドハニー");
+/* 0021271c */		info.addMonster("レッドハニー");
+/* 00212732 */	}
+/* 00212732 */	info.setBattleBackGroundId("ハイパービル");
+/* 00212748 */	openBattle2(info);
+/* 0021275a */}
+
+void 制御／モンスター／ハイパービル／ザコ()
+/* 00212768 */{
+/* 00212768 */	BattleInfomation info;
+/* 00212778 */	if (RAND(3) != 1)
+/* 00212792 */	{
+/* 00212792 */		info.addMonster("リヤカー");
+/* 002127a8 */		info.addMonster("ザコ群");
+/* 002127be */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(3));
+/* 002127e0 */	}
+/* 002127e6 */	else
+/* 002127e6 */	{
+/* 002127e6 */		info.addMonster("ザコ");
+/* 002127fc */		info.addMonster("ザコ");
+/* 00212812 */		info.addMonster("リヤカー");
+/* 00212828 */		info.addMonster("ザコ");
+/* 0021283e */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(3));
+/* 00212860 */	}
+/* 00212860 */	info.setBattleBackGroundId("ハイパービル");
+/* 00212876 */	openBattle2(info);
+/* 00212888 */}
+
+void 制御／モンスター／ハイパービル／ザコ／Ｂ()
+/* 00212896 */{
+/* 00212896 */	BattleInfomation info;
+/* 002128a6 */	if (RAND(3) != 1)
+/* 002128c0 */	{
+/* 002128c0 */		info.addMonster("ザコ");
+/* 002128d6 */		info.addMonster("ザコ");
+/* 002128ec */		info.addMonster("ザコ群");
+/* 00212902 */	}
+/* 00212908 */	else
+/* 00212908 */	{
+/* 00212908 */		info.addMonster("ザコ群");
+/* 0021291e */		info.addMonster("ザコ群");
+/* 00212934 */		info.addMonster("ザコ");
+/* 0021294a */	}
+/* 0021294a */	info.setBattleBackGroundId("ハイパービル");
+/* 00212960 */	openBattle2(info);
+/* 00212972 */}
+
+void 制御／モンスター／ハイパービル／リヤカー()
+/* 00212980 */{
+/* 00212980 */	BattleInfomation info;
+/* 00212990 */	if (RAND(3) != 1)
+/* 002129aa */	{
+/* 002129aa */		info.addMonster("リヤカー");
+/* 002129c0 */		info.addMonster("リヤカー");
+/* 002129d6 */		info.addMonster("ザコ");
+/* 002129ec */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 00212a0e */	}
+/* 00212a14 */	else
+/* 00212a14 */	{
+/* 00212a14 */		info.addMonster("リヤカー");
+/* 00212a2a */		info.addMonster("ザコ");
+/* 00212a40 */		info.addMonster("リヤカー");
+/* 00212a56 */		info.addMonster("ザコ");
+/* 00212a6c */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 00212a8e */	}
+/* 00212a8e */	info.setBattleBackGroundId("ハイパービル");
+/* 00212aa4 */	openBattle2(info);
+/* 00212ab6 */}
+
+void 制御／モンスター／ハイパービル／リヤカー／Ｂ()
+/* 00212ac4 */{
+/* 00212ac4 */	BattleInfomation info;
+/* 00212ad4 */	if (RAND(3) != 1)
+/* 00212aee */	{
+/* 00212aee */		info.addMonster("リヤカー群");
+/* 00212b04 */		info.addMonster("リヤカー群");
+/* 00212b1a */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(12));
+/* 00212b3c */	}
+/* 00212b42 */	else
+/* 00212b42 */	{
+/* 00212b42 */		info.addMonster("リヤカー");
+/* 00212b58 */		info.addMonster("リヤカー群");
+/* 00212b6e */		info.addMonster("ザコ群");
+/* 00212b84 */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 00212ba6 */	}
+/* 00212ba6 */	info.setBattleBackGroundId("ハイパービル");
+/* 00212bbc */	openBattle2(info);
+/* 00212bce */}
+
+void 制御／モンスター／ハイパービル／ＰＫタートル()
+/* 00212bdc */{
+/* 00212bdc */	BattleInfomation info;
+/* 00212bec */	if (RAND(3) != 1)
+/* 00212c06 */	{
+/* 00212c06 */		info.addMonster("PKタートル");
+/* 00212c1c */		info.addMonster("リヤカー");
+/* 00212c32 */		info.addMonster("レッドハニー");
+/* 00212c48 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00212c6a */	}
+/* 00212c70 */	else
+/* 00212c70 */	{
+/* 00212c70 */		info.addMonster("PKタートル");
+/* 00212c86 */		info.addMonster("PKタートル");
+/* 00212c9c */		info.addMonster("ザコ");
+/* 00212cb2 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00212cd4 */	}
+/* 00212cd4 */	info.setBattleBackGroundId("ハイパービル");
+/* 00212cea */	openBattle2(info);
+/* 00212cfc */}
+
+void 制御／モンスター／ハイパービル／ＰＫタートル／Ｂ()
+/* 00212d0a */{
+/* 00212d0a */	BattleInfomation info;
+/* 00212d1a */	if (RAND(3) != 1)
+/* 00212d34 */	{
+/* 00212d34 */		info.addMonster("PKタートル");
+/* 00212d4a */		info.addMonster("PKタートル");
+/* 00212d60 */		info.addMonster("PKタートル");
+/* 00212d76 */		info.addMonster("ザコ群");
+/* 00212d8c */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(9));
+/* 00212dae */	}
+/* 00212db4 */	else
+/* 00212db4 */	{
+/* 00212db4 */		info.addMonster("リヤカー");
+/* 00212dca */		info.addMonster("ザコ");
+/* 00212de0 */		info.addMonster("PKタートル");
+/* 00212df6 */		info.addMonster("リヤカー");
+/* 00212e0c */		info.addMonster("レッドハニー");
+/* 00212e22 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00212e44 */	}
+/* 00212e44 */	info.setBattleBackGroundId("ハイパービル");
+/* 00212e5a */	openBattle2(info);
+/* 00212e6c */}
+
+void 制御／モンスター／ハイパービル／ゲーリング()
+/* 00212e7a */{
+/* 00212e7a */	BattleInfomation info;
+/* 00212e8a */	if (RAND(3) != 1)
+/* 00212ea4 */	{
+/* 00212ea4 */		info.addMonster("リヤカー");
+/* 00212eba */		info.addMonster("ゲーリング");
+/* 00212ed0 */		info.addMonster("リヤカー");
+/* 00212ee6 */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 00212f08 */	}
+/* 00212f0e */	else
+/* 00212f0e */	{
+/* 00212f0e */		info.addMonster("ゲーリング");
+/* 00212f24 */		info.addMonster("リヤカー群");
+/* 00212f3a */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 00212f5c */	}
+/* 00212f5c */	info.setBattleBackGroundId("ハイパービル");
+/* 00212f72 */	openBattle2(info);
+/* 00212f84 */}
+
+void 制御／モンスター／ハイパービル／ゲーリング／Ｂ()
+/* 00212f92 */{
+/* 00212f92 */	BattleInfomation info;
+/* 00212fa2 */	if (RAND(3) != 1)
+/* 00212fbc */	{
+/* 00212fbc */		info.addMonster("リヤカー群");
+/* 00212fd2 */		info.addMonster("ゲーリング");
+/* 00212fe8 */		info.addMonster("リヤカー群");
+/* 00212ffe */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 00213020 */	}
+/* 00213026 */	else
+/* 00213026 */	{
+/* 00213026 */		info.addMonster("リヤカー");
+/* 0021303c */		info.addMonster("リヤカー");
+/* 00213052 */		info.addMonster("ゲーリング");
+/* 00213068 */		info.addMonster("リヤカー群");
+/* 0021307e */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 002130a0 */	}
+/* 002130a0 */	info.setBattleBackGroundId("ハイパービル");
+/* 002130b6 */	openBattle2(info);
+/* 002130c8 */}
+
+void 制御／モンスター／ハイパービル／パワーゴリラＺ()
+/* 002130d6 */{
+/* 002130d6 */	BattleInfomation info;
+/* 002130e6 */	info.addMonster("パワーゴリラZ");
+/* 002130fc */	info.setBattleBackGroundId("ハイパービル");
+/* 00213112 */	openBattle2(info);
+/* 00213124 */}
+
+void 制御／モンスター／ハイパービル／パワーゴリラＺ／Ｂ()
+/* 00213132 */{
+/* 00213132 */	BattleInfomation info;
+/* 00213142 */	info.addMonster("パワーゴリラZ");
+/* 00213158 */	info.addMonster("パワーゴリラZ");
+/* 0021316e */	info.setBattleBackGroundId("ハイパービル");
+/* 00213184 */	openBattle2(info);
+/* 00213196 */}
+
+void 制御／モンスター／ハイパービル／うしドバーン()
+/* 002131a4 */{
+/* 002131a4 */	BattleInfomation info;
+/* 002131b4 */	if (RAND(3) != 1)
+/* 002131ce */	{
+/* 002131ce */		info.addMonster("うしドバーン");
+/* 002131e4 */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(3));
+/* 00213206 */	}
+/* 0021320c */	else
+/* 0021320c */	{
+/* 0021320c */		info.addMonster("うしドバーン");
+/* 00213222 */		info.addMonster("グリーンハニー");
+/* 00213238 */		info.addMonster("グリーンハニー");
+/* 0021324e */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(3));
+/* 00213270 */	}
+/* 00213270 */	info.setBattleBackGroundId("ハイパービル");
+/* 00213286 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021329c */	openBattle2(info);
+/* 002132ae */}
+
+void 制御／モンスター／ハイパービル／うしドバーン／Ｂ()
+/* 002132bc */{
+/* 002132bc */	BattleInfomation info;
+/* 002132cc */	if (RAND(3) != 1)
+/* 002132e6 */	{
+/* 002132e6 */		info.addMonster("うしドバーン");
+/* 002132fc */		info.addMonster("PKタートル");
+/* 00213312 */		info.addMonster("レッドハニー");
+/* 00213328 */		info.addMonster("うしドバーン");
+/* 0021333e */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(6));
+/* 00213360 */	}
+/* 00213366 */	else
+/* 00213366 */	{
+/* 00213366 */		info.addMonster("うしドバーン");
+/* 0021337c */		info.addMonster("グリーンハニー");
+/* 00213392 */		info.addMonster("グリーンハニー");
+/* 002133a8 */		info.addMonster("グリーンハニー");
+/* 002133be */		info.addMonster("グリーンハニー");
+/* 002133d4 */		info.addMonster("グリーンハニー");
+/* 002133ea */		info.addMonster("グリーンハニー");
+/* 00213400 */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(3));
+/* 00213422 */	}
+/* 00213422 */	info.setBattleBackGroundId("ハイパービル");
+/* 00213438 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021344e */	openBattle2(info);
+/* 00213460 */}
+
+void 制御／モンスター／ハイパービル／ミミミック()
+/* 0021346e */{
+/* 0021346e */	BattleInfomation info;
+/* 0021347e */	info.addMonster("ミミミック");
+/* 00213494 */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(30));
+/* 002134b6 */	info.setBattleBackGroundId("ハイパービル");
+/* 002134cc */	openBattle2(info);
+/* 002134de */}
+
+void 制御／モンスター／ジオ／ヘルマン歩兵()
+/* 002134ec */{
+/* 002134ec */	BattleInfomation info;
+/* 002134fc */	if (RAND(3) != 1)
+/* 00213516 */	{
+/* 00213516 */		info.addMonster("ヘルマン歩兵f");
+/* 0021352c */	}
+/* 00213532 */	else
+/* 00213532 */	{
+/* 00213532 */		info.addMonster("ヘルマン歩兵f");
+/* 00213548 */		info.addMonster("ヘルマン歩兵f");
+/* 0021355e */	}
+/* 0021355e */	info.setBattleBackGroundId("都市／ジオ");
+/* 00213574 */	openBattle2(info);
+/* 00213586 */}
+
+void 制御／モンスター／ジオ／ヘルマン弩兵()
+/* 00213594 */{
+/* 00213594 */	BattleInfomation info;
+/* 002135a4 */	if (RAND(3) != 1)
+/* 002135be */	{
+/* 002135be */		info.addMonster("ヘルマン弩兵f");
+/* 002135d4 */	}
+/* 002135da */	else
+/* 002135da */	{
+/* 002135da */		info.addMonster("ヘルマン弩兵f");
+/* 002135f0 */		info.addMonster("ヘルマン弩兵f");
+/* 00213606 */	}
+/* 00213606 */	info.setBattleBackGroundId("都市／ジオ");
+/* 0021361c */	openBattle2(info);
+/* 0021362e */}
+
+void 制御／モンスター／ジオ／ヘルマン工兵()
+/* 0021363c */{
+/* 0021363c */	BattleInfomation info;
+/* 0021364c */	if (RAND(3) != 1)
+/* 00213666 */	{
+/* 00213666 */		info.addMonster("ヘルマン工兵f");
+/* 0021367c */	}
+/* 00213682 */	else
+/* 00213682 */	{
+/* 00213682 */		info.addMonster("ヘルマン工兵f");
+/* 00213698 */		info.addMonster("ヘルマン工兵f");
+/* 002136ae */	}
+/* 002136ae */	info.setBattleBackGroundId("都市／ジオ");
+/* 002136c4 */	openBattle2(info);
+/* 002136d6 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン歩兵()
+/* 002136e4 */{
+/* 002136e4 */	BattleInfomation info;
+/* 002136f4 */	if (RAND(3) != 1)
+/* 0021370e */	{
+/* 0021370e */		info.addMonster("ヘルマン歩兵j");
+/* 00213724 */		info.addMonster("ヘルマン歩兵j");
+/* 0021373a */		info.addMonster("ヘルマン歩兵群j");
+/* 00213750 */	}
+/* 00213756 */	else
+/* 00213756 */	{
+/* 00213756 */		info.addMonster("ヘルマン歩兵群j");
+/* 0021376c */		info.addMonster("ヘルマン歩兵j");
+/* 00213782 */		info.addMonster("ヘルマン工兵j");
+/* 00213798 */		info.addMonster("ヘルマン歩兵群j");
+/* 002137ae */	}
+/* 002137ae */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 002137c4 */	openBattle2(info);
+/* 002137d6 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン歩兵／Ｂ()
+/* 002137e4 */{
+/* 002137e4 */	BattleInfomation info;
+/* 002137f4 */	if (RAND(3) != 1)
+/* 0021380e */	{
+/* 0021380e */		info.addMonster("ヘルマン歩兵群j");
+/* 00213824 */		info.addMonster("ヘルマン歩兵群j");
+/* 0021383a */		info.addMonster("ヘルマン弩兵j");
+/* 00213850 */	}
+/* 00213856 */	else
+/* 00213856 */	{
+/* 00213856 */		info.addMonster("ヘルマン歩兵j");
+/* 0021386c */		info.addMonster("ヘルマン歩兵群f");
+/* 00213882 */		info.addMonster("ヘルマン弩兵群j");
+/* 00213898 */		info.addMonster("ヘルマン歩兵群f");
+/* 002138ae */	}
+/* 002138ae */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 002138c4 */	openBattle2(info);
+/* 002138d6 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン弩兵()
+/* 002138e4 */{
+/* 002138e4 */	BattleInfomation info;
+/* 002138f4 */	if (RAND(3) != 1)
+/* 0021390e */	{
+/* 0021390e */		info.addMonster("ヘルマン歩兵j");
+/* 00213924 */		info.addMonster("ヘルマン弩兵群j");
+/* 0021393a */	}
+/* 00213940 */	else
+/* 00213940 */	{
+/* 00213940 */		info.addMonster("ヘルマン弩兵j");
+/* 00213956 */		info.addMonster("ヘルマン弩兵j");
+/* 0021396c */		info.addMonster("ヘルマン歩兵j");
+/* 00213982 */		info.addMonster("ヘルマン弩兵j");
+/* 00213998 */	}
+/* 00213998 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 002139ae */	openBattle2(info);
+/* 002139c0 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン弩兵／Ｂ()
+/* 002139ce */{
+/* 002139ce */	BattleInfomation info;
+/* 002139de */	if (RAND(3) != 1)
+/* 002139f8 */	{
+/* 002139f8 */		info.addMonster("ヘルマン弩兵群j");
+/* 00213a0e */		info.addMonster("ヘルマン工兵j");
+/* 00213a24 */		info.addMonster("ヘルマン弩兵群j");
+/* 00213a3a */	}
+/* 00213a40 */	else
+/* 00213a40 */	{
+/* 00213a40 */		info.addMonster("ヘルマン歩兵群f");
+/* 00213a56 */		info.addMonster("ヘルマン弩兵f");
+/* 00213a6c */		info.addMonster("ヘルマン弩兵群j");
+/* 00213a82 */		info.addMonster("ヘルマン弩兵群j");
+/* 00213a98 */	}
+/* 00213a98 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 00213aae */	openBattle2(info);
+/* 00213ac0 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン工兵()
+/* 00213ace */{
+/* 00213ace */	BattleInfomation info;
+/* 00213ade */	if (RAND(3) != 1)
+/* 00213af8 */	{
+/* 00213af8 */		info.addMonster("ヘルマン工兵j");
+/* 00213b0e */		info.addMonster("ヘルマン工兵j");
+/* 00213b24 */		info.addMonster("ヘルマン弩兵j");
+/* 00213b3a */	}
+/* 00213b40 */	else
+/* 00213b40 */	{
+/* 00213b40 */		info.addMonster("ヘルマン歩兵j");
+/* 00213b56 */		info.addMonster("ヘルマン工兵j");
+/* 00213b6c */		info.addMonster("ヘルマン工兵j");
+/* 00213b82 */		info.addMonster("ヘルマン歩兵j");
+/* 00213b98 */	}
+/* 00213b98 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 00213bae */	openBattle2(info);
+/* 00213bc0 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン工兵／Ｂ()
+/* 00213bce */{
+/* 00213bce */	BattleInfomation info;
+/* 00213bde */	if (RAND(3) != 1)
+/* 00213bf8 */	{
+/* 00213bf8 */		info.addMonster("ヘルマン弩兵群j");
+/* 00213c0e */		info.addMonster("ヘルマン工兵j");
+/* 00213c24 */		info.addMonster("ヘルマン歩兵群j");
+/* 00213c3a */		info.addMonster("ヘルマン工兵j");
+/* 00213c50 */	}
+/* 00213c56 */	else
+/* 00213c56 */	{
+/* 00213c56 */		info.addMonster("ヘルマン歩兵f");
+/* 00213c6c */		info.addMonster("ヘルマン工兵f");
+/* 00213c82 */		info.addMonster("ヘルマン工兵j");
+/* 00213c98 */		info.addMonster("ヘルマン弩兵群j");
+/* 00213cae */		info.addMonster("ヘルマン工兵f");
+/* 00213cc4 */		info.addMonster("ヘルマン工兵j");
+/* 00213cda */		info.addMonster("ヘルマン弩兵群j");
+/* 00213cf0 */	}
+/* 00213cf0 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 00213d06 */	openBattle2(info);
+/* 00213d18 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン術兵()
+/* 00213d26 */{
+/* 00213d26 */	BattleInfomation info;
+/* 00213d36 */	if (RAND(3) != 1)
+/* 00213d50 */	{
+/* 00213d50 */		info.addMonster("ヘルマン歩兵j");
+/* 00213d66 */		info.addMonster("ヘルマン歩兵j");
+/* 00213d7c */		info.addMonster("ヘルマン歩兵j");
+/* 00213d92 */		info.addMonster("ヘルマン術兵j");
+/* 00213da8 */	}
+/* 00213dae */	else
+/* 00213dae */	{
+/* 00213dae */		info.addMonster("ヘルマン歩兵群j");
+/* 00213dc4 */		info.addMonster("ヘルマン術兵j");
+/* 00213dda */		info.addMonster("ヘルマン工兵j");
+/* 00213df0 */	}
+/* 00213df0 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 00213e06 */	openBattle2(info);
+/* 00213e18 */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン術兵／Ｂ()
+/* 00213e26 */{
+/* 00213e26 */	BattleInfomation info;
+/* 00213e36 */	if (RAND(3) != 1)
+/* 00213e50 */	{
+/* 00213e50 */		info.addMonster("ヘルマン歩兵群j");
+/* 00213e66 */		info.addMonster("ヘルマン弩兵j");
+/* 00213e7c */		info.addMonster("ヘルマン術兵j");
+/* 00213e92 */		info.addMonster("ヘルマン術兵j");
+/* 00213ea8 */	}
+/* 00213eae */	else
+/* 00213eae */	{
+/* 00213eae */		info.addMonster("ヘルマン弩兵群j");
+/* 00213ec4 */		info.addMonster("ヘルマン工兵j");
+/* 00213eda */		info.addMonster("ヘルマン歩兵j");
+/* 00213ef0 */		info.addMonster("ヘルマン術兵j");
+/* 00213f06 */		info.addMonster("ヘルマン術兵j");
+/* 00213f1c */		info.addMonster("ヘルマン術兵j");
+/* 00213f32 */	}
+/* 00213f32 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 00213f48 */	openBattle2(info);
+/* 00213f5a */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン騎士()
+/* 00213f68 */{
+/* 00213f68 */	BattleInfomation info;
+/* 00213f78 */	if (RAND(3) != 1)
+/* 00213f92 */	{
+/* 00213f92 */		info.addMonster("ヘルマン歩兵群j");
+/* 00213fa8 */		info.addMonster("ヘルマン騎士j");
+/* 00213fbe */	}
+/* 00213fc4 */	else
+/* 00213fc4 */	{
+/* 00213fc4 */		info.addMonster("ヘルマン騎士j");
+/* 00213fda */		info.addMonster("ヘルマン工兵j");
+/* 00213ff0 */		info.addMonster("ヘルマン弩兵j");
+/* 00214006 */	}
+/* 00214006 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0021401c */	openBattle2(info);
+/* 0021402e */}
+
+void 制御／モンスター／ホッホ峡／ヘルマン騎士／Ｂ()
+/* 0021403c */{
+/* 0021403c */	BattleInfomation info;
+/* 0021404c */	if (RAND(3) != 1)
+/* 00214066 */	{
+/* 00214066 */		info.addMonster("ヘルマン騎士j");
+/* 0021407c */		info.addMonster("ヘルマン歩兵j");
+/* 00214092 */		info.addMonster("ヘルマン工兵j");
+/* 002140a8 */		info.addMonster("ヘルマン弩兵群j");
+/* 002140be */	}
+/* 002140c4 */	else
+/* 002140c4 */	{
+/* 002140c4 */		info.addMonster("ヘルマン騎士j");
+/* 002140da */		info.addMonster("ヘルマン弩兵群j");
+/* 002140f0 */		info.addMonster("ヘルマン騎士j");
+/* 00214106 */	}
+/* 00214106 */	info.setBattleBackGroundId("ホッホ峡／暗");
+/* 0021411c */	openBattle2(info);
+/* 0021412e */}
+
+void 制御／モンスター／ホッホ峡Ｂ／腐った死体()
+/* 0021413c */{
+/* 0021413c */	BattleInfomation info;
+/* 0021414c */	if (RAND(3) != 1)
+/* 00214166 */	{
+/* 00214166 */		info.addMonster("腐った死体");
+/* 0021417c */		info.addMonster("腐った死体");
+/* 00214192 */		info.setItem("珍味1", 制御／戦闘／アイテム確率設定(30));
+/* 002141b4 */	}
+/* 002141ba */	else
+/* 002141ba */	{
+/* 002141ba */		info.addMonster("ミスコーン");
+/* 002141d0 */		info.addMonster("腐った死体");
+/* 002141e6 */		info.addMonster("腐った死体");
+/* 002141fc */		info.setItem("カッパーマトック", 制御／戦闘／アイテム確率設定(3));
+/* 0021421e */	}
+/* 0021421e */	info.setBattleBackGroundId("ホッホ峡／明");
+/* 00214234 */	openBattle2(info);
+/* 00214246 */}
+
+void 制御／モンスター／ホッホ峡Ｂ／腐った死体／Ｂ()
+/* 00214254 */{
+/* 00214254 */	BattleInfomation info;
+/* 00214264 */	if (RAND(3) != 1)
+/* 0021427e */	{
+/* 0021427e */		info.addMonster("腐った死体群");
+/* 00214294 */		info.addMonster("腐った死体群");
+/* 002142aa */		info.setItem("珍味1", 制御／戦闘／アイテム確率設定(60));
+/* 002142cc */	}
+/* 002142d2 */	else
+/* 002142d2 */	{
+/* 002142d2 */		info.addMonster("腐った死体群");
+/* 002142e8 */		info.addMonster("腐った死体群");
+/* 002142fe */		info.addMonster("腐った死体群");
+/* 00214314 */		info.addMonster("ゲーリング");
+/* 0021432a */		info.setItem("珍味1", 制御／戦闘／アイテム確率設定(90));
+/* 0021434c */	}
+/* 0021434c */	info.setBattleBackGroundId("ホッホ峡／明");
+/* 00214362 */	openBattle2(info);
+/* 00214374 */}
+
+void 制御／モンスター／ホッホ峡Ｂ／ライカンスロープ()
+/* 00214382 */{
+/* 00214382 */	BattleInfomation info;
+/* 00214392 */	if (RAND(3) != 1)
+/* 002143ac */	{
+/* 002143ac */		info.addMonster("ライカンスロープd1");
+/* 002143c2 */		info.addMonster("ライカンスロープh2");
+/* 002143d8 */		info.addMonster("ライカンスロープe2");
+/* 002143ee */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(9));
+/* 00214410 */	}
+/* 00214416 */	else
+/* 00214416 */	{
+/* 00214416 */		info.addMonster("ライカンスロープe2");
+/* 0021442c */		info.addMonster("ライカンスロープh2");
+/* 00214442 */		info.addMonster("ライカンスロープh2");
+/* 00214458 */		info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(9));
+/* 0021447a */	}
+/* 0021447a */	info.setBattleBackGroundId("ホッホ峡／明");
+/* 00214490 */	openBattle2(info);
+/* 002144a2 */}
+
+void 制御／モンスター／ホッホ峡Ｂ／サメラ～イ()
+/* 002144b0 */{
+/* 002144b0 */	BattleInfomation info;
+/* 002144c0 */	if (RAND(3) != 1)
+/* 002144da */	{
+/* 002144da */		info.addMonster("サメラ～イ");
+/* 002144f0 */		info.addMonster("サメラ～イ");
+/* 00214506 */		info.addMonster("サメラ～イ");
+/* 0021451c */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(9));
+/* 0021453e */	}
+/* 00214544 */	else
+/* 00214544 */	{
+/* 00214544 */		info.addMonster("ライカンスロープe2");
+/* 0021455a */		info.addMonster("サメラ～イ");
+/* 00214570 */		info.addMonster("サメラ～イ");
+/* 00214586 */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(6));
+/* 002145a8 */	}
+/* 002145a8 */	info.setBattleBackGroundId("ホッホ峡／明");
+/* 002145be */	openBattle2(info);
+/* 002145d0 */}
+
+void 制御／モンスター／ホッホ峡Ｂ／おかゆフィーバー()
+/* 002145de */{
+/* 002145de */	BattleInfomation info;
+/* 002145ee */	if (RAND(3) != 1)
+/* 00214608 */	{
+/* 00214608 */		info.addMonster("おかゆフィーバー");
+/* 0021461e */		info.addMonster("ちょーちん");
+/* 00214634 */		info.setItem("換金4", 制御／戦闘／アイテム確率設定(15));
+/* 00214656 */	}
+/* 0021465c */	else
+/* 0021465c */	{
+/* 0021465c */		info.addMonster("ちゃいむ");
+/* 00214672 */		info.addMonster("おかゆフィーバー");
+/* 00214688 */		info.setItem("換金4", 制御／戦闘／アイテム確率設定(15));
+/* 002146aa */	}
+/* 002146aa */	info.setBattleBackGroundId("ホッホ峡／明");
+/* 002146c0 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002146d6 */	openBattle2(info);
+/* 002146e8 */}
+
+void 制御／モンスター／パッキャマラード・デン／ライカンスロープ()
+/* 002146f6 */{
+/* 002146f6 */	BattleInfomation info;
+/* 00214706 */	switch (RAND(6))
+/* 0021471e */	{
+/* 0021471e */	case 1:
+/* 0021471e */	case 2:
+/* 0021471e */	case 3:
+/* 0021471e */	case 4:
+/* 0021471e */		info.addMonster("凶悪ハニー");
+/* 00214734 */		info.addMonster("ライカンスロープh2");
+/* 0021474a */		info.addMonster("凶悪ハニー");
+/* 00214760 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00214782 */		break;
+/* 00214788 */	case 5:
+/* 00214788 */		info.addMonster("凶悪ハニー");
+/* 0021479e */		info.addMonster("ライカンスロープe2");
+/* 002147b4 */		info.addMonster("凶悪ハニー");
+/* 002147ca */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 002147ec */		break;
+/* 002147f2 */	default:
+/* 002147f2 */		info.addMonster("凶悪ハニー");
+/* 00214808 */		info.addMonster("ライカンスロープd1");
+/* 0021481e */		info.addMonster("凶悪ハニー");
+/* 00214834 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00214856 */		break;
+/* 0021485c */	}
+/* 0021485c */	info.setBattleBackGroundId("リスの洞窟");
+/* 00214872 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00214888 */	openBattle2(info);
+/* 0021489a */}
+
+void 制御／モンスター／パッキャマラード・デン／住民()
+/* 002148a8 */{
+/* 002148a8 */	BattleInfomation info;
+/* 002148b8 */	if (RAND(3) != 1)
+/* 002148d2 */	{
+/* 002148d2 */		info.addMonster("住民");
+/* 002148e8 */		info.addMonster("住民");
+/* 002148fe */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(30));
+/* 00214920 */	}
+/* 00214926 */	else
+/* 00214926 */	{
+/* 00214926 */		info.addMonster("住民");
+/* 0021493c */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(15));
+/* 0021495e */	}
+/* 0021495e */	info.setBattleBackGroundId("リスの洞窟");
+/* 00214974 */	openBattle2(info);
+/* 00214986 */}
+
+void 制御／モンスター／パッキャマラード・デン／凶悪ハニー()
+/* 00214994 */{
+/* 00214994 */	BattleInfomation info;
+/* 002149a4 */	if (RAND(3) != 1)
+/* 002149be */	{
+/* 002149be */		info.addMonster("凶悪ハニー");
+/* 002149d4 */		info.addMonster("住民");
+/* 002149ea */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00214a0c */	}
+/* 00214a12 */	else
+/* 00214a12 */	{
+/* 00214a12 */		info.addMonster("凶悪ハニー");
+/* 00214a28 */		info.addMonster("凶悪ハニー");
+/* 00214a3e */		info.addMonster("住民");
+/* 00214a54 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00214a76 */	}
+/* 00214a76 */	info.setBattleBackGroundId("リスの洞窟");
+/* 00214a8c */	openBattle2(info);
+/* 00214a9e */}
+
+void 制御／モンスター／ハニービル／背景チーム()
+/* 00214aac */{
+/* 00214aac */	BattleInfomation info;
+/* 00214abc */	info.addMonster("なかじー");
+/* 00214ad2 */	info.addMonster("古介");
+/* 00214ae8 */	info.addMonster("れんれん");
+/* 00214afe */	info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(3));
+/* 00214b20 */	info.setBattleBackGroundId("ハニービル");
+/* 00214b36 */	openBattle2(info);
+/* 00214b48 */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｂ()
+/* 00214b56 */{
+/* 00214b56 */	BattleInfomation info;
+/* 00214b66 */	if (RAND(3) != 1)
+/* 00214b80 */	{
+/* 00214b80 */		info.addMonster("なかじー");
+/* 00214b96 */		info.addMonster("なかじー");
+/* 00214bac */		info.addMonster("古介B");
+/* 00214bc2 */		info.addMonster("れんれん");
+/* 00214bd8 */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(6));
+/* 00214bfa */	}
+/* 00214c00 */	else
+/* 00214c00 */	{
+/* 00214c00 */		info.addMonster("なかじー");
+/* 00214c16 */		info.addMonster("れんれん");
+/* 00214c2c */		info.addMonster("古介B");
+/* 00214c42 */		info.addMonster("なかじー");
+/* 00214c58 */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(6));
+/* 00214c7a */	}
+/* 00214c7a */	info.setBattleBackGroundId("ハニービル");
+/* 00214c90 */	openBattle2(info);
+/* 00214ca2 */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｃ()
+/* 00214cb0 */{
+/* 00214cb0 */	BattleInfomation info;
+/* 00214cc0 */	if (RAND(3) != 1)
+/* 00214cda */	{
+/* 00214cda */		info.addMonster("なかじーB");
+/* 00214cf0 */		info.addMonster("れんれん");
+/* 00214d06 */		info.addMonster("れんれん");
+/* 00214d1c */		info.addMonster("古介C");
+/* 00214d32 */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(3));
+/* 00214d54 */	}
+/* 00214d5a */	else
+/* 00214d5a */	{
+/* 00214d5a */		info.addMonster("なかじー");
+/* 00214d70 */		info.addMonster("なかじーB");
+/* 00214d86 */		info.addMonster("古介");
+/* 00214d9c */		info.addMonster("古介");
+/* 00214db2 */		info.addMonster("古介");
+/* 00214dc8 */		info.addMonster("れんれん");
+/* 00214dde */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(6));
+/* 00214e00 */	}
+/* 00214e00 */	info.setBattleBackGroundId("ハニービル");
+/* 00214e16 */	openBattle2(info);
+/* 00214e28 */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｄ()
+/* 00214e36 */{
+/* 00214e36 */	BattleInfomation info;
+/* 00214e46 */	if (RAND(3) != 1)
+/* 00214e60 */	{
+/* 00214e60 */		info.addMonster("古介");
+/* 00214e76 */		info.addMonster("古介");
+/* 00214e8c */		info.addMonster("なかじーC");
+/* 00214ea2 */		info.addMonster("れんれん");
+/* 00214eb8 */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(3));
+/* 00214eda */	}
+/* 00214ee0 */	else
+/* 00214ee0 */	{
+/* 00214ee0 */		info.addMonster("れんれん");
+/* 00214ef6 */		info.addMonster("古介");
+/* 00214f0c */		info.addMonster("れんれん");
+/* 00214f22 */		info.addMonster("なかじーC");
+/* 00214f38 */		info.addMonster("なかじーC");
+/* 00214f4e */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(6));
+/* 00214f70 */	}
+/* 00214f70 */	info.setBattleBackGroundId("ハニービル");
+/* 00214f86 */	openBattle2(info);
+/* 00214f98 */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｅ()
+/* 00214fa6 */{
+/* 00214fa6 */	BattleInfomation info;
+/* 00214fb6 */	if (RAND(3) != 1)
+/* 00214fd0 */	{
+/* 00214fd0 */		info.addMonster("古介");
+/* 00214fe6 */		info.addMonster("古介");
+/* 00214ffc */		info.addMonster("古介");
+/* 00215012 */		info.addMonster("古介");
+/* 00215028 */		info.addMonster("古介");
+/* 0021503e */		info.addMonster("なかじー");
+/* 00215054 */		info.addMonster("れんれんB");
+/* 0021506a */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(15));
+/* 0021508c */	}
+/* 00215092 */	else
+/* 00215092 */	{
+/* 00215092 */		info.addMonster("古介");
+/* 002150a8 */		info.addMonster("古介");
+/* 002150be */		info.addMonster("古介");
+/* 002150d4 */		info.addMonster("れんれん");
+/* 002150ea */		info.addMonster("れんれん");
+/* 00215100 */		info.addMonster("なかじー");
+/* 00215116 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(9));
+/* 00215138 */	}
+/* 00215138 */	info.setBattleBackGroundId("ハニービル");
+/* 0021514e */	openBattle2(info);
+/* 00215160 */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｆ()
+/* 0021516e */{
+/* 0021516e */	BattleInfomation info;
+/* 0021517e */	switch (RAND(6))
+/* 00215196 */	{
+/* 00215196 */	case 1:
+/* 00215196 */	case 2:
+/* 00215196 */	case 3:
+/* 00215196 */		info.addMonster("なかじー");
+/* 002151ac */		info.addMonster("古介B");
+/* 002151c2 */		info.addMonster("古介B");
+/* 002151d8 */		info.addMonster("れんれん");
+/* 002151ee */		info.addMonster("古介B");
+/* 00215204 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(15));
+/* 00215226 */		break;
+/* 0021522c */	case 4:
+/* 0021522c */	case 5:
+/* 0021522c */		info.addMonster("古介B");
+/* 00215242 */		info.addMonster("れんれんB");
+/* 00215258 */		info.addMonster("古介B");
+/* 0021526e */		info.addMonster("なかじー");
+/* 00215284 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(9));
+/* 002152a6 */		break;
+/* 002152ac */	case 6:
+/* 002152ac */		info.addMonster("なかじーB");
+/* 002152c2 */		info.addMonster("れんれんB");
+/* 002152d8 */		info.addMonster("古介D");
+/* 002152ee */		info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00215310 */		break;
+/* 00215316 */	}
+/* 00215316 */	info.setBattleBackGroundId("ハニービル");
+/* 0021532c */	openBattle2(info);
+/* 0021533e */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｇ()
+/* 0021534c */{
+/* 0021534c */	BattleInfomation info;
+/* 0021535c */	if (RAND(3) != 1)
+/* 00215376 */	{
+/* 00215376 */		info.addMonster("なかじーB");
+/* 0021538c */		info.addMonster("古介C");
+/* 002153a2 */		info.addMonster("れんれん");
+/* 002153b8 */		info.addMonster("れんれん");
+/* 002153ce */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(3));
+/* 002153f0 */	}
+/* 002153f6 */	else
+/* 002153f6 */	{
+/* 002153f6 */		info.addMonster("れんれんB");
+/* 0021540c */		info.addMonster("古介C");
+/* 00215422 */		info.addMonster("古介C");
+/* 00215438 */		info.addMonster("なかじー");
+/* 0021544e */		info.addMonster("古介C");
+/* 00215464 */		info.setItem("珍味2", 制御／戦闘／アイテム確率設定(9));
+/* 00215486 */	}
+/* 00215486 */	info.setBattleBackGroundId("ハニービル");
+/* 0021549c */	openBattle2(info);
+/* 002154ae */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｈ()
+/* 002154bc */{
+/* 002154bc */	BattleInfomation info;
+/* 002154cc */	switch (RAND(6))
+/* 002154e4 */	{
+/* 002154e4 */	case 1:
+/* 002154e4 */	case 2:
+/* 002154e4 */	case 3:
+/* 002154e4 */		info.addMonster("なかじー");
+/* 002154fa */		info.addMonster("なかじー");
+/* 00215510 */		info.addMonster("れんれんB");
+/* 00215526 */		info.addMonster("古介C");
+/* 0021553c */		info.setItem("換金2", 制御／戦闘／アイテム確率設定(3));
+/* 0021555e */		break;
+/* 00215564 */	case 4:
+/* 00215564 */	case 5:
+/* 00215564 */		info.addMonster("なかじー");
+/* 0021557a */		info.addMonster("なかじー");
+/* 00215590 */		info.addMonster("れんれんB");
+/* 002155a6 */		info.addMonster("古介C");
+/* 002155bc */		info.setItem("換金2", 制御／戦闘／アイテム確率設定(3));
+/* 002155de */		break;
+/* 002155e4 */	case 6:
+/* 002155e4 */		info.addMonster("れんれんC");
+/* 002155fa */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 0021561c */		break;
+/* 00215622 */	}
+/* 00215622 */	info.setBattleBackGroundId("ハニービル");
+/* 00215638 */	openBattle2(info);
+/* 0021564a */}
+
+void 制御／モンスター／ハニービル／背景チーム／Ｉ()
+/* 00215658 */{
+/* 00215658 */	BattleInfomation info;
+/* 00215668 */	if (RAND(3) != 1)
+/* 00215682 */	{
+/* 00215682 */		info.addMonster("なかじーB");
+/* 00215698 */		info.addMonster("れんれんB");
+/* 002156ae */		info.addMonster("古介C");
+/* 002156c4 */		info.addMonster("古介B");
+/* 002156da */		info.addMonster("なかじー");
+/* 002156f0 */		info.addMonster("れんれん");
+/* 00215706 */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(6));
+/* 00215728 */	}
+/* 0021572e */	else
+/* 0021572e */	{
+/* 0021572e */		info.addMonster("古介C");
+/* 00215744 */		info.addMonster("古介C");
+/* 0021575a */		info.addMonster("古介C");
+/* 00215770 */		info.addMonster("なかじーB");
+/* 00215786 */		info.addMonster("なかじーC");
+/* 0021579c */		info.addMonster("古介C");
+/* 002157b2 */		info.addMonster("れんれん");
+/* 002157c8 */		info.setItem("ピッキングドリル", 制御／戦闘／アイテム確率設定(6));
+/* 002157ea */	}
+/* 002157ea */	info.setBattleBackGroundId("ハニービル");
+/* 00215800 */	openBattle2(info);
+/* 00215812 */}
+
+void 制御／モンスター／下水道／ライカンスロープ()
+/* 00215820 */{
+/* 00215820 */	BattleInfomation info;
+/* 00215830 */	switch (RAND(6))
+/* 00215848 */	{
+/* 00215848 */	case 1:
+/* 00215848 */	case 2:
+/* 00215848 */	case 3:
+/* 00215848 */	case 4:
+/* 00215848 */		info.addMonster("ライカンスロープm2");
+/* 0021585e */		break;
+/* 00215864 */	case 5:
+/* 00215864 */		info.addMonster("ライカンスロープh2");
+/* 0021587a */		break;
+/* 00215880 */	default:
+/* 00215880 */		info.addMonster("ライカンスロープd1");
+/* 00215896 */		break;
+/* 0021589c */	}
+/* 0021589c */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 002158be */	info.setBattleBackGroundId("下水道");
+/* 002158d4 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002158ea */	openBattle2(info);
+/* 002158fc */}
+
+void 制御／モンスター／下水道／ライカンスロープ／Ｂ()
+/* 0021590a */{
+/* 0021590a */	BattleInfomation info;
+/* 0021591a */	switch (RAND(6))
+/* 00215932 */	{
+/* 00215932 */	case 1:
+/* 00215932 */	case 2:
+/* 00215932 */	case 3:
+/* 00215932 */	case 4:
+/* 00215932 */		info.addMonster("つみれマン");
+/* 00215948 */		info.addMonster("ライカンスロープm2");
+/* 0021595e */		info.addMonster("大王イカマン群");
+/* 00215974 */		break;
+/* 0021597a */	case 5:
+/* 0021597a */		info.addMonster("つみれマン");
+/* 00215990 */		info.addMonster("ライカンスロープh2");
+/* 002159a6 */		info.addMonster("大王イカマン群");
+/* 002159bc */		break;
+/* 002159c2 */	default:
+/* 002159c2 */		info.addMonster("つみれマン");
+/* 002159d8 */		info.addMonster("ライカンスロープd1");
+/* 002159ee */		info.addMonster("大王イカマン群");
+/* 00215a04 */		break;
+/* 00215a0a */	}
+/* 00215a0a */	info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00215a2c */	info.setBattleBackGroundId("下水道");
+/* 00215a42 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00215a58 */	openBattle2(info);
+/* 00215a6a */}
+
+void 制御／モンスター／下水道／さかなモンスター()
+/* 00215a78 */{
+/* 00215a78 */	BattleInfomation info;
+/* 00215a88 */	if (RAND(3) != 1)
+/* 00215aa2 */	{
+/* 00215aa2 */		info.addMonster("さかなモンスター");
+/* 00215ab8 */		info.addMonster("さかなモンスター");
+/* 00215ace */		info.addMonster("さかなモンスター");
+/* 00215ae4 */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(9));
+/* 00215b06 */	}
+/* 00215b0c */	else
+/* 00215b0c */	{
+/* 00215b0c */		info.addMonster("さかなモンスター");
+/* 00215b22 */		info.addMonster("さかなモンスター");
+/* 00215b38 */		info.addMonster("さかなモンスター");
+/* 00215b4e */		info.addMonster("さかなモンスター");
+/* 00215b64 */		info.addMonster("さかなモンスター");
+/* 00215b7a */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(12));
+/* 00215b9c */	}
+/* 00215b9c */	info.setBattleBackGroundId("下水道");
+/* 00215bb2 */	openBattle2(info);
+/* 00215bc4 */}
+
+void 制御／モンスター／下水道／さかなモンスター／Ｂ()
+/* 00215bd2 */{
+/* 00215bd2 */	BattleInfomation info;
+/* 00215be2 */	if (RAND(3) != 1)
+/* 00215bfc */	{
+/* 00215bfc */		info.addMonster("さかなモンスター群");
+/* 00215c12 */		info.addMonster("さかなモンスター群");
+/* 00215c28 */		info.addMonster("さかなモンスター群");
+/* 00215c3e */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(18));
+/* 00215c60 */	}
+/* 00215c66 */	else
+/* 00215c66 */	{
+/* 00215c66 */		info.addMonster("大王イカマン");
+/* 00215c7c */		info.addMonster("さかなモンスター群");
+/* 00215c92 */		info.addMonster("さかなモンスター群");
+/* 00215ca8 */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(12));
+/* 00215cca */	}
+/* 00215cca */	info.setBattleBackGroundId("下水道");
+/* 00215ce0 */	openBattle2(info);
+/* 00215cf2 */}
+
+void 制御／モンスター／下水道／大王イカマン()
+/* 00215d00 */{
+/* 00215d00 */	BattleInfomation info;
+/* 00215d10 */	if (RAND(3) != 1)
+/* 00215d2a */	{
+/* 00215d2a */		info.addMonster("大王イカマン");
+/* 00215d40 */		info.addMonster("大王イカマン");
+/* 00215d56 */	}
+/* 00215d5c */	else
+/* 00215d5c */	{
+/* 00215d5c */		info.addMonster("さかなモンスター");
+/* 00215d72 */		info.addMonster("大王イカマン");
+/* 00215d88 */		info.addMonster("さかなモンスター");
+/* 00215d9e */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 00215dc0 */	}
+/* 00215dc0 */	info.setBattleBackGroundId("下水道");
+/* 00215dd6 */	openBattle2(info);
+/* 00215de8 */}
+
+void 制御／モンスター／下水道／つみれマン()
+/* 00215df6 */{
+/* 00215df6 */	BattleInfomation info;
+/* 00215e06 */	if (RAND(3) != 1)
+/* 00215e20 */	{
+/* 00215e20 */		info.addMonster("つみれマン");
+/* 00215e36 */		info.addMonster("つみれマン");
+/* 00215e4c */		info.addMonster("ダブルハニー");
+/* 00215e62 */		info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00215e84 */	}
+/* 00215e8a */	else
+/* 00215e8a */	{
+/* 00215e8a */		info.addMonster("つみれマン");
+/* 00215ea0 */		info.addMonster("さかなモンスター");
+/* 00215eb6 */		info.addMonster("さかなモンスター");
+/* 00215ecc */		info.addMonster("つみれマン");
+/* 00215ee2 */		info.addMonster("ダブルハニー");
+/* 00215ef8 */		info.setItem("丹下犬ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00215f1a */	}
+/* 00215f1a */	info.setBattleBackGroundId("下水道");
+/* 00215f30 */	openBattle2(info);
+/* 00215f42 */}
+
+void 制御／モンスター／下水道／ダブルハニー()
+/* 00215f50 */{
+/* 00215f50 */	BattleInfomation info;
+/* 00215f60 */	if (RAND(3) != 1)
+/* 00215f7a */	{
+/* 00215f7a */		info.addMonster("ダブルハニー");
+/* 00215f90 */	}
+/* 00215f96 */	else
+/* 00215f96 */	{
+/* 00215f96 */		info.addMonster("さかなモンスター群");
+/* 00215fac */		info.addMonster("ダブルハニー");
+/* 00215fc2 */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 00215fe4 */	}
+/* 00215fe4 */	info.setBattleBackGroundId("下水道");
+/* 00215ffa */	openBattle2(info);
+/* 0021600c */}
+
+void 制御／モンスター／下水道／ダブルハニー／Ｂ()
+/* 0021601a */{
+/* 0021601a */	BattleInfomation info;
+/* 0021602a */	if (RAND(3) != 1)
+/* 00216044 */	{
+/* 00216044 */		info.addMonster("ダブルハニー");
+/* 0021605a */		info.addMonster("ダブルハニー");
+/* 00216070 */	}
+/* 00216076 */	else
+/* 00216076 */	{
+/* 00216076 */		info.addMonster("さかなモンスター群");
+/* 0021608c */		info.addMonster("大王イカマン");
+/* 002160a2 */		info.addMonster("ダブルハニー");
+/* 002160b8 */		info.addMonster("ダブルハニー");
+/* 002160ce */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 002160f0 */	}
+/* 002160f0 */	info.setBattleBackGroundId("下水道");
+/* 00216106 */	openBattle2(info);
+/* 00216118 */}
+
+void 制御／モンスター／下水道／コンテ()
+/* 00216126 */{
+/* 00216126 */	BattleInfomation info;
+/* 00216136 */	if (RAND(3) != 1)
+/* 00216150 */	{
+/* 00216150 */		info.addMonster("コンテ");
+/* 00216166 */		info.addMonster("大王イカマン群");
+/* 0021617c */	}
+/* 00216182 */	else
+/* 00216182 */	{
+/* 00216182 */		info.addMonster("つみれマン");
+/* 00216198 */		info.addMonster("コンテ");
+/* 002161ae */	}
+/* 002161ae */	info.setBattleBackGroundId("下水道");
+/* 002161c4 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002161da */	openBattle2(info);
+/* 002161ec */}
+
+void 制御／モンスター／下水道／コンテ／Ｂ()
+/* 002161fa */{
+/* 002161fa */	BattleInfomation info;
+/* 0021620a */	if (RAND(3) != 1)
+/* 00216224 */	{
+/* 00216224 */		info.addMonster("つみれマン");
+/* 0021623a */		info.addMonster("大王イカマン群");
+/* 00216250 */		info.addMonster("コンテ");
+/* 00216266 */		info.addMonster("大王イカマン群");
+/* 0021627c */	}
+/* 00216282 */	else
+/* 00216282 */	{
+/* 00216282 */		info.addMonster("大王イカマン");
+/* 00216298 */		info.addMonster("大王イカマン");
+/* 002162ae */		info.addMonster("コンテ");
+/* 002162c4 */		info.addMonster("大王イカマン");
+/* 002162da */		info.addMonster("大王イカマン");
+/* 002162f0 */	}
+/* 002162f0 */	info.setBattleBackGroundId("下水道");
+/* 00216306 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021631c */	openBattle2(info);
+/* 0021632e */}
+
+void 制御／モンスター／下水道／Ζくらげ()
+/* 0021633c */{
+/* 0021633c */	BattleInfomation info;
+/* 0021634c */	info.addMonster("Ζくらげ");
+/* 00216362 */	info.addMonster("さかなモンスター群");
+/* 00216378 */	info.addMonster("さかなモンスター群");
+/* 0021638e */	info.addMonster("大王イカマン群");
+/* 002163a4 */	info.addMonster("大王イカマン群");
+/* 002163ba */	info.setItem("換金1", 制御／戦闘／アイテム確率設定(12));
+/* 002163dc */	info.setBattleBackGroundId("下水道");
+/* 002163f2 */	openBattle2(info);
+/* 00216404 */}
+
+void 制御／モンスター／下水道／ミミミック()
+/* 00216412 */{
+/* 00216412 */	BattleInfomation info;
+/* 00216422 */	info.addMonster("ミミミック");
+/* 00216438 */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(30));
+/* 0021645a */	info.setBattleBackGroundId("下水道");
+/* 00216470 */	openBattle2(info);
+/* 00216482 */}
+
+void 制御／モンスター／牢獄／ライカンスロープ()
+/* 00216490 */{
+/* 00216490 */	BattleInfomation info;
+/* 002164a0 */	switch (RAND(6))
+/* 002164b8 */	{
+/* 002164b8 */	case 1:
+/* 002164b8 */	case 2:
+/* 002164b8 */	case 3:
+/* 002164b8 */	case 4:
+/* 002164b8 */		info.addMonster("ライカンスロープn2");
+/* 002164ce */		break;
+/* 002164d4 */	case 5:
+/* 002164d4 */		info.addMonster("ライカンスロープm2");
+/* 002164ea */		break;
+/* 002164f0 */	default:
+/* 002164f0 */		info.addMonster("ライカンスロープd1");
+/* 00216506 */		break;
+/* 0021650c */	}
+/* 0021650c */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0021652e */	info.setBattleBackGroundId("牢獄");
+/* 00216544 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021655a */	openBattle2(info);
+/* 0021656c */}
+
+void 制御／モンスター／牢獄／ヘルマン歩兵()
+/* 0021657a */{
+/* 0021657a */	BattleInfomation info;
+/* 0021658a */	if (RAND(3) != 1)
+/* 002165a4 */	{
+/* 002165a4 */		info.addMonster("ヘルマン歩兵q");
+/* 002165ba */		info.addMonster("ヘルマン歩兵q");
+/* 002165d0 */	}
+/* 002165d6 */	else
+/* 002165d6 */	{
+/* 002165d6 */		info.addMonster("ヘルマン歩兵q");
+/* 002165ec */		info.addMonster("ヘルマン弩兵q");
+/* 00216602 */	}
+/* 00216602 */	info.setBattleBackGroundId("牢獄");
+/* 00216618 */	openBattle2(info);
+/* 0021662a */}
+
+void 制御／モンスター／牢獄／コンテ()
+/* 00216638 */{
+/* 00216638 */	BattleInfomation info;
+/* 00216648 */	if (RAND(3) != 1)
+/* 00216662 */	{
+/* 00216662 */		info.addMonster("コンテ");
+/* 00216678 */		info.addMonster("コンテ");
+/* 0021668e */	}
+/* 00216694 */	else
+/* 00216694 */	{
+/* 00216694 */		info.addMonster("こんばんわ");
+/* 002166aa */		info.addMonster("コンテ");
+/* 002166c0 */		info.addMonster("こんばんわ");
+/* 002166d6 */		info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 002166f8 */	}
+/* 002166f8 */	info.setBattleBackGroundId("牢獄");
+/* 0021670e */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00216724 */	openBattle2(info);
+/* 00216736 */}
+
+void 制御／モンスター／牢獄／フルパワーゴリラＺＩＩ()
+/* 00216744 */{
+/* 00216744 */	BattleInfomation info;
+/* 00216754 */	if (RAND(3) != 1)
+/* 0021676e */	{
+/* 0021676e */		info.addMonster("フルパワーゴリラZII");
+/* 00216784 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 002167a6 */	}
+/* 002167ac */	else
+/* 002167ac */	{
+/* 002167ac */		info.addMonster("フルパワーゴリラZII");
+/* 002167c2 */		info.addMonster("コンテ");
+/* 002167d8 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 002167fa */		info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00216810 */	}
+/* 00216810 */	info.setBattleBackGroundId("牢獄");
+/* 00216826 */	openBattle2(info);
+/* 00216838 */}
+
+void 制御／モンスター／居館／地下一階／ラーカイム()
+/* 00216846 */{
+/* 00216846 */	BattleInfomation info;
+/* 00216856 */	if (RAND(3) != 1)
+/* 00216870 */	{
+/* 00216870 */		info.addMonster("ラーカイム");
+/* 00216886 */		info.addMonster("ラーカイム");
+/* 0021689c */		info.addMonster("ラーカイム");
+/* 002168b2 */		info.addMonster("ラーカイム");
+/* 002168c8 */		info.addMonster("ラーカイム");
+/* 002168de */		switch (RAND(3))
+/* 002168f6 */		{
+/* 002168f6 */		case 1:
+/* 002168f6 */			info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(75));
+/* 00216918 */			break;
+/* 0021691e */		case 2:
+/* 0021691e */			info.setItem("バラバラ時計", 制御／戦闘／アイテム確率設定(75));
+/* 00216940 */			break;
+/* 00216946 */		case 3:
+/* 00216946 */			info.setItem("換金3", 制御／戦闘／アイテム確率設定(75));
+/* 00216968 */		}
+/* 00216968 */	}
+/* 0021696e */	else
+/* 0021696e */	{
+/* 0021696e */		info.addMonster("ラーカイム");
+/* 00216984 */		info.addMonster("ラーカイム");
+/* 0021699a */		info.addMonster("ラーカイム");
+/* 002169b0 */		info.addMonster("ラーカイム");
+/* 002169c6 */		info.addMonster("ラーカイム");
+/* 002169dc */		info.addMonster("ラーカイム");
+/* 002169f2 */		info.addMonster("ラーカイム");
+/* 00216a08 */		info.addMonster("ラーカイム");
+/* 00216a1e */		info.addMonster("ラーカイム");
+/* 00216a34 */		switch (RAND(3))
+/* 00216a4c */		{
+/* 00216a4c */		case 1:
+/* 00216a4c */			info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(99));
+/* 00216a6e */			break;
+/* 00216a74 */		case 2:
+/* 00216a74 */			info.setItem("バラバラ時計", 制御／戦闘／アイテム確率設定(99));
+/* 00216a96 */			break;
+/* 00216a9c */		case 3:
+/* 00216a9c */			info.setItem("換金3", 制御／戦闘／アイテム確率設定(99));
+/* 00216abe */		}
+/* 00216abe */	}
+/* 00216abe */	info.setBattleBackGroundId("居館／地下一階");
+/* 00216ad4 */	openBattle2(info);
+/* 00216ae6 */}
+
+void 制御／モンスター／東の塔／ライカンスロープ()
+/* 00216af4 */{
+/* 00216af4 */	BattleInfomation info;
+/* 00216b04 */	switch (RAND(6))
+/* 00216b1c */	{
+/* 00216b1c */	case 1:
+/* 00216b1c */	case 2:
+/* 00216b1c */	case 3:
+/* 00216b1c */	case 4:
+/* 00216b1c */		info.addMonster("ライカンスロープn2");
+/* 00216b32 */		info.addMonster("わんわん群");
+/* 00216b48 */		info.addMonster("わんわん群");
+/* 00216b5e */		info.addMonster("わんわん群");
+/* 00216b74 */		break;
+/* 00216b7a */	case 5:
+/* 00216b7a */		info.addMonster("ライカンスロープh2");
+/* 00216b90 */		info.addMonster("わんわん群");
+/* 00216ba6 */		info.addMonster("わんわん群");
+/* 00216bbc */		info.addMonster("わんわん群");
+/* 00216bd2 */		break;
+/* 00216bd8 */	default:
+/* 00216bd8 */		info.addMonster("ライカンスロープe2");
+/* 00216bee */		info.addMonster("わんわん群");
+/* 00216c04 */		info.addMonster("わんわん群");
+/* 00216c1a */		info.addMonster("わんわん群");
+/* 00216c30 */		break;
+/* 00216c36 */	}
+/* 00216c36 */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 00216c58 */	info.setBattleBackGroundId("塔／東");
+/* 00216c6e */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00216c84 */	openBattle2(info);
+/* 00216c96 */}
+
+void 制御／モンスター／東の塔／ヘルマン歩兵()
+/* 00216ca4 */{
+/* 00216ca4 */	BattleInfomation info;
+/* 00216cb4 */	if (RAND(3) != 1)
+/* 00216cce */	{
+/* 00216cce */		info.addMonster("ヘルマン歩兵q");
+/* 00216ce4 */		info.addMonster("ヘルマン歩兵q");
+/* 00216cfa */	}
+/* 00216d00 */	else
+/* 00216d00 */	{
+/* 00216d00 */		info.addMonster("ヘルマン歩兵群q");
+/* 00216d16 */		info.addMonster("ヘルマン弩兵q");
+/* 00216d2c */	}
+/* 00216d2c */	info.setBattleBackGroundId("塔／東");
+/* 00216d42 */	openBattle2(info);
+/* 00216d54 */}
+
+void 制御／モンスター／東の塔／ヘルマン弩兵()
+/* 00216d62 */{
+/* 00216d62 */	BattleInfomation info;
+/* 00216d72 */	if (RAND(3) != 1)
+/* 00216d8c */	{
+/* 00216d8c */		info.addMonster("ヘルマン歩兵q");
+/* 00216da2 */		info.addMonster("ヘルマン弩兵q");
+/* 00216db8 */		info.addMonster("ヘルマン弩兵q");
+/* 00216dce */	}
+/* 00216dd4 */	else
+/* 00216dd4 */	{
+/* 00216dd4 */		info.addMonster("ヘルマン歩兵q");
+/* 00216dea */		info.addMonster("ヘルマン弩兵群q");
+/* 00216e00 */		info.addMonster("ヘルマン弩兵群q");
+/* 00216e16 */	}
+/* 00216e16 */	info.setBattleBackGroundId("塔／東");
+/* 00216e2c */	openBattle2(info);
+/* 00216e3e */}
+
+void 制御／モンスター／東の塔／ヘルマン工兵()
+/* 00216e4c */{
+/* 00216e4c */	BattleInfomation info;
+/* 00216e5c */	if (RAND(3) != 1)
+/* 00216e76 */	{
+/* 00216e76 */		info.addMonster("ヘルマン歩兵q");
+/* 00216e8c */		info.addMonster("ヘルマン工兵q");
+/* 00216ea2 */		info.addMonster("ヘルマン弩兵q");
+/* 00216eb8 */		info.addMonster("ヘルマン工兵q");
+/* 00216ece */	}
+/* 00216ed4 */	else
+/* 00216ed4 */	{
+/* 00216ed4 */		info.addMonster("ヘルマン歩兵群q");
+/* 00216eea */		info.addMonster("ヘルマン工兵q");
+/* 00216f00 */		info.addMonster("ヘルマン弩兵q");
+/* 00216f16 */	}
+/* 00216f16 */	info.setBattleBackGroundId("塔／東");
+/* 00216f2c */	openBattle2(info);
+/* 00216f3e */}
+
+void 制御／モンスター／東の塔／ヘルマン術兵()
+/* 00216f4c */{
+/* 00216f4c */	BattleInfomation info;
+/* 00216f5c */	if (RAND(3) != 1)
+/* 00216f76 */	{
+/* 00216f76 */		info.addMonster("ヘルマン歩兵q");
+/* 00216f8c */		info.addMonster("ヘルマン工兵q");
+/* 00216fa2 */		info.addMonster("ヘルマン術兵q");
+/* 00216fb8 */	}
+/* 00216fbe */	else
+/* 00216fbe */	{
+/* 00216fbe */		info.addMonster("ヘルマン弩兵群q");
+/* 00216fd4 */		info.addMonster("ヘルマン術兵q");
+/* 00216fea */		info.addMonster("ヘルマン術兵q");
+/* 00217000 */	}
+/* 00217000 */	info.setBattleBackGroundId("塔／東");
+/* 00217016 */	openBattle2(info);
+/* 00217028 */}
+
+void 制御／モンスター／東の塔／ヘルマン騎士()
+/* 00217036 */{
+/* 00217036 */	BattleInfomation info;
+/* 00217046 */	if (RAND(3) != 1)
+/* 00217060 */	{
+/* 00217060 */		info.addMonster("ヘルマン騎士q");
+/* 00217076 */		info.addMonster("ヘルマン工兵q");
+/* 0021708c */	}
+/* 00217092 */	else
+/* 00217092 */	{
+/* 00217092 */		info.addMonster("ヘルマン騎士q");
+/* 002170a8 */		info.addMonster("ヘルマン弩兵群q");
+/* 002170be */	}
+/* 002170be */	info.setBattleBackGroundId("塔／東");
+/* 002170d4 */	openBattle2(info);
+/* 002170e6 */}
+
+void 制御／モンスター／東の塔／ヘルマン士官()
+/* 002170f4 */{
+/* 002170f4 */	BattleInfomation info;
+/* 00217104 */	if (RAND(3) != 1)
+/* 0021711e */	{
+/* 0021711e */		info.addMonster("ヘルマン歩兵群q");
+/* 00217134 */		info.addMonster("ヘルマン歩兵群q");
+/* 0021714a */		info.addMonster("ヘルマン士官q");
+/* 00217160 */	}
+/* 00217166 */	else
+/* 00217166 */	{
+/* 00217166 */		info.addMonster("ヘルマン士官q");
+/* 0021717c */		info.addMonster("ヘルマン弩兵群q");
+/* 00217192 */		info.addMonster("ヘルマン工兵q");
+/* 002171a8 */	}
+/* 002171a8 */	info.setBattleBackGroundId("塔／東");
+/* 002171be */	openBattle2(info);
+/* 002171d0 */}
+
+void 制御／モンスター／東の塔／ヘルマン操兵()
+/* 002171de */{
+/* 002171de */	BattleInfomation info;
+/* 002171ee */	if (RAND(3) != 1)
+/* 00217208 */	{
+/* 00217208 */		info.addMonster("オッズ");
+/* 0021721e */		info.addMonster("オッズ");
+/* 00217234 */		info.addMonster("ヘルマン操兵q");
+/* 0021724a */	}
+/* 00217250 */	else
+/* 00217250 */	{
+/* 00217250 */		info.addMonster("オッズ");
+/* 00217266 */		info.addMonster("ヘルマン操兵q");
+/* 0021727c */		info.addMonster("ヘルマン工兵q");
+/* 00217292 */	}
+/* 00217292 */	info.setBattleBackGroundId("塔／東");
+/* 002172a8 */	openBattle2(info);
+/* 002172ba */}
+
+void 制御／モンスター／東の塔／ヘルマン操兵／Ｂ()
+/* 002172c8 */{
+/* 002172c8 */	BattleInfomation info;
+/* 002172d8 */	if (RAND(3) != 1)
+/* 002172f2 */	{
+/* 002172f2 */		info.addMonster("オッズ群");
+/* 00217308 */		info.addMonster("オッズ群");
+/* 0021731e */		info.addMonster("ヘルマン操兵q");
+/* 00217334 */	}
+/* 0021733a */	else
+/* 0021733a */	{
+/* 0021733a */		info.addMonster("オッズ群");
+/* 00217350 */		info.addMonster("ヘルマン操兵q");
+/* 00217366 */		info.addMonster("ヘルマン術兵q");
+/* 0021737c */	}
+/* 0021737c */	info.setBattleBackGroundId("塔／東");
+/* 00217392 */	openBattle2(info);
+/* 002173a4 */}
+
+void 制御／モンスター／東の塔／防衛陣地()
+/* 002173b2 */{
+/* 002173b2 */	BattleInfomation info;
+/* 002173c2 */	if (RAND(3) != 1)
+/* 002173dc */	{
+/* 002173dc */		info.addMonster("防衛陣地q");
+/* 002173f2 */		info.addMonster("ヘルマン工兵q");
+/* 00217408 */		info.addMonster("ヘルマン弩兵群q");
+/* 0021741e */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(15));
+/* 00217440 */	}
+/* 00217446 */	else
+/* 00217446 */	{
+/* 00217446 */		info.addMonster("防衛陣地q");
+/* 0021745c */		info.addMonster("ヘルマン弩兵q");
+/* 00217472 */		info.addMonster("ヘルマン弩兵q");
+/* 00217488 */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(15));
+/* 002174aa */	}
+/* 002174aa */	info.setBattleBackGroundId("塔／東");
+/* 002174c0 */	openBattle2(info);
+/* 002174d2 */}
+
+void 制御／モンスター／東の塔／スーパーハニー()
+/* 002174e0 */{
+/* 002174e0 */	BattleInfomation info;
+/* 002174f0 */	if (RAND(3) != 1)
+/* 0021750a */	{
+/* 0021750a */		info.addMonster("スーパーハニー");
+/* 00217520 */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(3));
+/* 00217542 */	}
+/* 00217548 */	else
+/* 00217548 */	{
+/* 00217548 */		info.addMonster("スーパーハニー");
+/* 0021755e */		info.addMonster("スーパーハニー");
+/* 00217574 */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(6));
+/* 00217596 */	}
+/* 00217596 */	info.setBattleBackGroundId("塔／東");
+/* 002175ac */	openBattle2(info);
+/* 002175be */}
+
+void 制御／モンスター／東の塔／デュラピー()
+/* 002175cc */{
+/* 002175cc */	BattleInfomation info;
+/* 002175dc */	if (RAND(3) != 1)
+/* 002175f6 */	{
+/* 002175f6 */		info.addMonster("ミスコーン");
+/* 0021760c */		info.addMonster("デュラピー");
+/* 00217622 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 00217644 */	}
+/* 0021764a */	else
+/* 0021764a */	{
+/* 0021764a */		info.addMonster("デュラピー");
+/* 00217660 */		info.addMonster("ミスコーン");
+/* 00217676 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 00217698 */	}
+/* 00217698 */	info.setBattleBackGroundId("塔／東");
+/* 002176ae */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002176c4 */	openBattle2(info);
+/* 002176d6 */}
+
+void 制御／モンスター／東の塔／デュラピー／Ｂ()
+/* 002176e4 */{
+/* 002176e4 */	BattleInfomation info;
+/* 002176f4 */	if (RAND(3) != 1)
+/* 0021770e */	{
+/* 0021770e */		info.addMonster("ダブルハニー");
+/* 00217724 */		info.addMonster("デュラピー");
+/* 0021773a */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 0021775c */	}
+/* 00217762 */	else
+/* 00217762 */	{
+/* 00217762 */		info.addMonster("デュラピー");
+/* 00217778 */		info.addMonster("ダブルハニー");
+/* 0021778e */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 002177b0 */	}
+/* 002177b0 */	info.setBattleBackGroundId("塔／東");
+/* 002177c6 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002177dc */	openBattle2(info);
+/* 002177ee */}
+
+void 制御／モンスター／東の塔／ゆみみみっく()
+/* 002177fc */{
+/* 002177fc */	BattleInfomation info;
+/* 0021780c */	info.addMonster("ゆみみみっく");
+/* 00217822 */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(60));
+/* 00217844 */	info.setBattleBackGroundId("塔／東");
+/* 0021785a */	openBattle2(info);
+/* 0021786c */}
+
+void 制御／モンスター／西の塔／ライカンスロープ()
+/* 0021787a */{
+/* 0021787a */	BattleInfomation info;
+/* 0021788a */	switch (RAND(6))
+/* 002178a2 */	{
+/* 002178a2 */	case 1:
+/* 002178a2 */	case 2:
+/* 002178a2 */	case 3:
+/* 002178a2 */		info.addMonster("ライカンスロープn2");
+/* 002178b8 */		info.addMonster("ライカンスロープn2");
+/* 002178ce */		info.addMonster("わんわん群");
+/* 002178e4 */		break;
+/* 002178ea */	case 4:
+/* 002178ea */	case 5:
+/* 002178ea */		info.addMonster("ライカンスロープe2");
+/* 00217900 */		info.addMonster("ライカンスロープn2");
+/* 00217916 */		info.addMonster("わんわん群");
+/* 0021792c */		break;
+/* 00217932 */	default:
+/* 00217932 */		info.addMonster("ライカンスロープn2");
+/* 00217948 */		info.addMonster("ライカンスロープm2");
+/* 0021795e */		info.addMonster("わんわん群");
+/* 00217974 */		break;
+/* 0021797a */	}
+/* 0021797a */	info.setItem("世色癌2", 制御／戦闘／アイテム確率設定(6));
+/* 0021799c */	info.setBattleBackGroundId("塔／西");
+/* 002179b2 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 002179c8 */	openBattle2(info);
+/* 002179da */}
+
+void 制御／モンスター／西の塔／フルパワーゴリラＺＩＩ()
+/* 002179e8 */{
+/* 002179e8 */	BattleInfomation info;
+/* 002179f8 */	if (RAND(3) != 1)
+/* 00217a12 */	{
+/* 00217a12 */		info.addMonster("フルパワーゴリラZII");
+/* 00217a28 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 00217a4a */	}
+/* 00217a50 */	else
+/* 00217a50 */	{
+/* 00217a50 */		info.addMonster("フルパワーゴリラZII");
+/* 00217a66 */		info.addMonster("フルパワーゴリラZII");
+/* 00217a7c */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(6));
+/* 00217a9e */	}
+/* 00217a9e */	info.setBattleBackGroundId("塔／西");
+/* 00217ab4 */	openBattle2(info);
+/* 00217ac6 */}
+
+void 制御／モンスター／西の塔／ヘルマン歩兵()
+/* 00217ad4 */{
+/* 00217ad4 */	BattleInfomation info;
+/* 00217ae4 */	if (RAND(3) != 1)
+/* 00217afe */	{
+/* 00217afe */		info.addMonster("ヘルマン歩兵群q");
+/* 00217b14 */		info.addMonster("ヘルマン歩兵群q");
+/* 00217b2a */		info.addMonster("ヘルマン歩兵群q");
+/* 00217b40 */	}
+/* 00217b46 */	else
+/* 00217b46 */	{
+/* 00217b46 */		info.addMonster("ヘルマン歩兵群q");
+/* 00217b5c */		info.addMonster("ヘルマン弩兵q");
+/* 00217b72 */	}
+/* 00217b72 */	info.setBattleBackGroundId("塔／西");
+/* 00217b88 */	openBattle2(info);
+/* 00217b9a */}
+
+void 制御／モンスター／西の塔／ヘルマン弩兵()
+/* 00217ba8 */{
+/* 00217ba8 */	BattleInfomation info;
+/* 00217bb8 */	if (RAND(3) != 1)
+/* 00217bd2 */	{
+/* 00217bd2 */		info.addMonster("ヘルマン弩兵群q");
+/* 00217be8 */		info.addMonster("ヘルマン弩兵群q");
+/* 00217bfe */		info.addMonster("ヘルマン工兵q");
+/* 00217c14 */	}
+/* 00217c1a */	else
+/* 00217c1a */	{
+/* 00217c1a */		info.addMonster("ヘルマン歩兵q");
+/* 00217c30 */		info.addMonster("ヘルマン弩兵q");
+/* 00217c46 */		info.addMonster("ヘルマン弩兵q");
+/* 00217c5c */	}
+/* 00217c5c */	info.setBattleBackGroundId("塔／西");
+/* 00217c72 */	openBattle2(info);
+/* 00217c84 */}
+
+void 制御／モンスター／西の塔／ヘルマン工兵()
+/* 00217c92 */{
+/* 00217c92 */	BattleInfomation info;
+/* 00217ca2 */	if (RAND(3) != 1)
+/* 00217cbc */	{
+/* 00217cbc */		info.addMonster("ヘルマン工兵q");
+/* 00217cd2 */		info.addMonster("ヘルマン工兵q");
+/* 00217ce8 */		info.addMonster("ヘルマン弩兵q");
+/* 00217cfe */		info.setItem("換金4", 制御／戦闘／アイテム確率設定(6));
+/* 00217d20 */	}
+/* 00217d26 */	else
+/* 00217d26 */	{
+/* 00217d26 */		info.addMonster("ヘルマン歩兵群q");
+/* 00217d3c */		info.addMonster("ヘルマン工兵q");
+/* 00217d52 */		info.addMonster("ヘルマン弩兵q");
+/* 00217d68 */		info.setItem("換金4", 制御／戦闘／アイテム確率設定(3));
+/* 00217d8a */	}
+/* 00217d8a */	info.setBattleBackGroundId("塔／西");
+/* 00217da0 */	openBattle2(info);
+/* 00217db2 */}
+
+void 制御／モンスター／西の塔／ヘルマン術兵()
+/* 00217dc0 */{
+/* 00217dc0 */	BattleInfomation info;
+/* 00217dd0 */	if (RAND(3) != 1)
+/* 00217dea */	{
+/* 00217dea */		info.addMonster("ヘルマン歩兵群q");
+/* 00217e00 */		info.addMonster("ヘルマン工兵q");
+/* 00217e16 */		info.addMonster("ヘルマン術兵q");
+/* 00217e2c */		info.addMonster("ヘルマン術兵q");
+/* 00217e42 */	}
+/* 00217e48 */	else
+/* 00217e48 */	{
+/* 00217e48 */		info.addMonster("ヘルマン術兵q");
+/* 00217e5e */		info.addMonster("ヘルマン術兵q");
+/* 00217e74 */		info.addMonster("ヘルマン術兵q");
+/* 00217e8a */	}
+/* 00217e8a */	info.setBattleBackGroundId("塔／西");
+/* 00217ea0 */	openBattle2(info);
+/* 00217eb2 */}
+
+void 制御／モンスター／西の塔／ヘルマン操兵()
+/* 00217ec0 */{
+/* 00217ec0 */	BattleInfomation info;
+/* 00217ed0 */	if (RAND(3) != 1)
+/* 00217eea */	{
+/* 00217eea */		info.addMonster("サイクロナイト");
+/* 00217f00 */		info.addMonster("ヘルマン操兵q");
+/* 00217f16 */	}
+/* 00217f1c */	else
+/* 00217f1c */	{
+/* 00217f1c */		info.addMonster("サイクロナイト");
+/* 00217f32 */		info.addMonster("ヘルマン操兵q");
+/* 00217f48 */		info.addMonster("ヘルマン術兵q");
+/* 00217f5e */	}
+/* 00217f5e */	info.setBattleBackGroundId("塔／西");
+/* 00217f74 */	openBattle2(info);
+/* 00217f86 */}
+
+void 制御／モンスター／西の塔／ヘルマン操兵／Ｂ()
+/* 00217f94 */{
+/* 00217f94 */	BattleInfomation info;
+/* 00217fa4 */	if (RAND(3) != 1)
+/* 00217fbe */	{
+/* 00217fbe */		info.addMonster("サイクロナイト");
+/* 00217fd4 */		info.addMonster("ヘルマン操兵q");
+/* 00217fea */		info.addMonster("ヘルマン工兵q");
+/* 00218000 */		info.addMonster("サイクロナイト");
+/* 00218016 */	}
+/* 0021801c */	else
+/* 0021801c */	{
+/* 0021801c */		info.addMonster("オッズ群");
+/* 00218032 */		info.addMonster("サイクロナイト");
+/* 00218048 */		info.addMonster("ヘルマン操兵q");
+/* 0021805e */	}
+/* 0021805e */	info.setBattleBackGroundId("塔／西");
+/* 00218074 */	openBattle2(info);
+/* 00218086 */}
+
+void 制御／モンスター／西の塔／スーパーハニー()
+/* 00218094 */{
+/* 00218094 */	BattleInfomation info;
+/* 002180a4 */	if (RAND(3) != 1)
+/* 002180be */	{
+/* 002180be */		info.addMonster("スーパーハニー");
+/* 002180d4 */		info.addMonster("スーパーハニー");
+/* 002180ea */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(6));
+/* 0021810c */	}
+/* 00218112 */	else
+/* 00218112 */	{
+/* 00218112 */		info.addMonster("スーパーハニー");
+/* 00218128 */		info.addMonster("スーパーハニー");
+/* 0021813e */		info.addMonster("スーパーハニー");
+/* 00218154 */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(9));
+/* 00218176 */	}
+/* 00218176 */	info.setBattleBackGroundId("塔／西");
+/* 0021818c */	openBattle2(info);
+/* 0021819e */}
+
+void 制御／モンスター／西の塔／ヒトラー()
+/* 002181ac */{
+/* 002181ac */	BattleInfomation info;
+/* 002181bc */	info.addMonster("ヒトラー");
+/* 002181d2 */	info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(9));
+/* 002181f4 */	info.setBattleBackGroundId("塔／西");
+/* 0021820a */	openBattle2(info);
+/* 0021821c */}
+
+void 制御／モンスター／西の塔／フローズン()
+/* 0021822a */{
+/* 0021822a */	BattleInfomation info;
+/* 0021823a */	if (RAND(3) != 1)
+/* 00218254 */	{
+/* 00218254 */		info.addMonster("スーパーハニー");
+/* 0021826a */		info.addMonster("フローズン");
+/* 00218280 */		info.setItem("珍味4", 制御／戦闘／アイテム確率設定(15));
+/* 002182a2 */	}
+/* 002182a8 */	else
+/* 002182a8 */	{
+/* 002182a8 */		info.addMonster("大王イカマン群");
+/* 002182be */		info.addMonster("フローズン");
+/* 002182d4 */		info.addMonster("大王イカマン群");
+/* 002182ea */		info.setItem("珍味4", 制御／戦闘／アイテム確率設定(15));
+/* 0021830c */	}
+/* 0021830c */	info.setBattleBackGroundId("塔／西");
+/* 00218322 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00218338 */	openBattle2(info);
+/* 0021834a */}
+
+void 制御／モンスター／西の塔／フローズン／Ｂ()
+/* 00218358 */{
+/* 00218358 */	BattleInfomation info;
+/* 00218368 */	if (RAND(3) != 1)
+/* 00218382 */	{
+/* 00218382 */		info.addMonster("フローズン");
+/* 00218398 */		info.addMonster("フローズン");
+/* 002183ae */		info.setItem("珍味4", 制御／戦闘／アイテム確率設定(30));
+/* 002183d0 */	}
+/* 002183d6 */	else
+/* 002183d6 */	{
+/* 002183d6 */		info.addMonster("フローズン");
+/* 002183ec */		info.addMonster("大王イカマン群");
+/* 00218402 */		info.addMonster("大王イカマン群");
+/* 00218418 */		info.addMonster("フローズン");
+/* 0021842e */		info.setItem("珍味4", 制御／戦闘／アイテム確率設定(60));
+/* 00218450 */	}
+/* 00218450 */	info.setBattleBackGroundId("塔／西");
+/* 00218466 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021847c */	openBattle2(info);
+/* 0021848e */}
+
+void 制御／モンスター／西の塔／ゆみみみっく()
+/* 0021849c */{
+/* 0021849c */	BattleInfomation info;
+/* 002184ac */	info.addMonster("ゆみみみっく");
+/* 002184c2 */	info.setItem("スカウトキー", 制御／戦闘／アイテム確率設定(60));
+/* 002184e4 */	info.setBattleBackGroundId("塔／西");
+/* 002184fa */	openBattle2(info);
+/* 0021850c */}
+
+void 制御／モンスター／中庭／ヘルマン歩兵()
+/* 0021851a */{
+/* 0021851a */	BattleInfomation info;
+/* 0021852a */	if (RAND(3) != 1)
+/* 00218544 */	{
+/* 00218544 */		info.addMonster("ヘルマン歩兵q");
+/* 0021855a */		info.addMonster("ヘルマン歩兵q");
+/* 00218570 */		info.addMonster("ヘルマン弩兵q");
+/* 00218586 */	}
+/* 0021858c */	else
+/* 0021858c */	{
+/* 0021858c */		info.addMonster("ヘルマン歩兵q");
+/* 002185a2 */		info.addMonster("ヘルマン歩兵q");
+/* 002185b8 */		info.addMonster("ヘルマン歩兵q");
+/* 002185ce */		info.addMonster("ヘルマン弩兵q");
+/* 002185e4 */		info.addMonster("ヘルマン弩兵q");
+/* 002185fa */		info.addMonster("ヘルマン弩兵q");
+/* 00218610 */	}
+/* 00218610 */	info.setBattleBackGroundId("中庭");
+/* 00218626 */	openBattle2(info);
+/* 00218638 */}
+
+void 制御／モンスター／中庭／ヘルマン歩兵／Ｂ()
+/* 00218646 */{
+/* 00218646 */	BattleInfomation info;
+/* 00218656 */	if (RAND(3) != 1)
+/* 00218670 */	{
+/* 00218670 */		info.addMonster("ヘルマン歩兵群q");
+/* 00218686 */		info.addMonster("ヘルマン歩兵群q");
+/* 0021869c */		info.addMonster("ヘルマン弩兵群q");
+/* 002186b2 */	}
+/* 002186b8 */	else
+/* 002186b8 */	{
+/* 002186b8 */		info.addMonster("ヘルマン歩兵群q");
+/* 002186ce */		info.addMonster("ヘルマン工兵q");
+/* 002186e4 */		info.addMonster("ヘルマン歩兵群q");
+/* 002186fa */		info.addMonster("ヘルマン工兵q");
+/* 00218710 */	}
+/* 00218710 */	info.setBattleBackGroundId("中庭");
+/* 00218726 */	openBattle2(info);
+/* 00218738 */}
+
+void 制御／モンスター／中庭／ヘルマン弩兵()
+/* 00218746 */{
+/* 00218746 */	BattleInfomation info;
+/* 00218756 */	if (RAND(3) != 1)
+/* 00218770 */	{
+/* 00218770 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218786 */		info.addMonster("ヘルマン弩兵群q");
+/* 0021879c */		info.addMonster("ヘルマン工兵q");
+/* 002187b2 */		info.addMonster("ヘルマン弩兵q");
+/* 002187c8 */	}
+/* 002187ce */	else
+/* 002187ce */	{
+/* 002187ce */		info.addMonster("ヘルマン歩兵群q");
+/* 002187e4 */		info.addMonster("ヘルマン弩兵q");
+/* 002187fa */		info.addMonster("ヘルマン弩兵q");
+/* 00218810 */		info.addMonster("ヘルマン弩兵q");
+/* 00218826 */		info.addMonster("ヘルマン弩兵q");
+/* 0021883c */		info.addMonster("ヘルマン弩兵q");
+/* 00218852 */	}
+/* 00218852 */	info.setBattleBackGroundId("中庭");
+/* 00218868 */	openBattle2(info);
+/* 0021887a */}
+
+void 制御／モンスター／中庭／ヘルマン工兵()
+/* 00218888 */{
+/* 00218888 */	BattleInfomation info;
+/* 00218898 */	if (RAND(3) != 1)
+/* 002188b2 */	{
+/* 002188b2 */		info.addMonster("ヘルマン歩兵群q");
+/* 002188c8 */		info.addMonster("ヘルマン工兵q");
+/* 002188de */		info.addMonster("ヘルマン歩兵q");
+/* 002188f4 */		info.addMonster("ヘルマン工兵q");
+/* 0021890a */		info.setItem("換金4", 制御／戦闘／アイテム確率設定(6));
+/* 0021892c */	}
+/* 00218932 */	else
+/* 00218932 */	{
+/* 00218932 */		info.addMonster("ヘルマン工兵q");
+/* 00218948 */		info.addMonster("ヘルマン工兵q");
+/* 0021895e */		info.addMonster("ヘルマン弩兵群q");
+/* 00218974 */		info.addMonster("ヘルマン工兵q");
+/* 0021898a */		info.addMonster("ヘルマン術兵q");
+/* 002189a0 */		info.addMonster("ヘルマン工兵q");
+/* 002189b6 */		info.setItem("換金4", 制御／戦闘／アイテム確率設定(12));
+/* 002189d8 */	}
+/* 002189d8 */	info.setBattleBackGroundId("中庭");
+/* 002189ee */	openBattle2(info);
+/* 00218a00 */}
+
+void 制御／モンスター／中庭／ヘルマン術兵()
+/* 00218a0e */{
+/* 00218a0e */	BattleInfomation info;
+/* 00218a1e */	if (RAND(3) != 1)
+/* 00218a38 */	{
+/* 00218a38 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218a4e */		info.addMonster("ヘルマン術兵q");
+/* 00218a64 */		info.addMonster("ヘルマン歩兵群q");
+/* 00218a7a */	}
+/* 00218a80 */	else
+/* 00218a80 */	{
+/* 00218a80 */		info.addMonster("ヘルマン工兵q");
+/* 00218a96 */		info.addMonster("ヘルマン工兵q");
+/* 00218aac */		info.addMonster("ヘルマン工兵q");
+/* 00218ac2 */		info.addMonster("ヘルマン術兵q");
+/* 00218ad8 */		info.addMonster("ヘルマン術兵q");
+/* 00218aee */		info.addMonster("ヘルマン術兵q");
+/* 00218b04 */	}
+/* 00218b04 */	info.setBattleBackGroundId("中庭");
+/* 00218b1a */	openBattle2(info);
+/* 00218b2c */}
+
+void 制御／モンスター／中庭／ヘルマン騎士()
+/* 00218b3a */{
+/* 00218b3a */	BattleInfomation info;
+/* 00218b4a */	if (RAND(3) != 1)
+/* 00218b64 */	{
+/* 00218b64 */		info.addMonster("ヘルマン歩兵群q");
+/* 00218b7a */		info.addMonster("ヘルマン弩兵q");
+/* 00218b90 */		info.addMonster("ヘルマン騎士q");
+/* 00218ba6 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218bbc */	}
+/* 00218bc2 */	else
+/* 00218bc2 */	{
+/* 00218bc2 */		info.addMonster("ヘルマン騎士q");
+/* 00218bd8 */		info.addMonster("ヘルマン弩兵q");
+/* 00218bee */		info.addMonster("ヘルマン工兵q");
+/* 00218c04 */		info.addMonster("ヘルマン騎士q");
+/* 00218c1a */	}
+/* 00218c1a */	info.setBattleBackGroundId("中庭");
+/* 00218c30 */	openBattle2(info);
+/* 00218c42 */}
+
+void 制御／モンスター／中庭／ヘルマン騎士／Ｂ()
+/* 00218c50 */{
+/* 00218c50 */	BattleInfomation info;
+/* 00218c60 */	if (RAND(3) != 1)
+/* 00218c7a */	{
+/* 00218c7a */		info.addMonster("ヘルマン騎士群q");
+/* 00218c90 */		info.addMonster("ヘルマン工兵q");
+/* 00218ca6 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218cbc */		info.addMonster("ヘルマン術兵q");
+/* 00218cd2 */	}
+/* 00218cd8 */	else
+/* 00218cd8 */	{
+/* 00218cd8 */		info.addMonster("ヘルマン歩兵群q");
+/* 00218cee */		info.addMonster("ヘルマン騎士群q");
+/* 00218d04 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218d1a */	}
+/* 00218d1a */	info.setBattleBackGroundId("中庭");
+/* 00218d30 */	openBattle2(info);
+/* 00218d42 */}
+
+void 制御／モンスター／中庭／ヘルマン士官()
+/* 00218d50 */{
+/* 00218d50 */	BattleInfomation info;
+/* 00218d60 */	if (RAND(3) != 1)
+/* 00218d7a */	{
+/* 00218d7a */		info.addMonster("ヘルマン士官q");
+/* 00218d90 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218da6 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218dbc */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(3));
+/* 00218dde */	}
+/* 00218de4 */	else
+/* 00218de4 */	{
+/* 00218de4 */		info.addMonster("ヘルマン騎士群q");
+/* 00218dfa */		info.addMonster("ヘルマン工兵q");
+/* 00218e10 */		info.addMonster("ヘルマン弩兵群q");
+/* 00218e26 */		info.addMonster("ヘルマン士官q");
+/* 00218e3c */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(3));
+/* 00218e5e */	}
+/* 00218e5e */	info.setBattleBackGroundId("中庭");
+/* 00218e74 */	openBattle2(info);
+/* 00218e86 */}
+
+void 制御／モンスター／中庭／ヘルマン操兵()
+/* 00218e94 */{
+/* 00218e94 */	BattleInfomation info;
+/* 00218ea4 */	if (RAND(3) != 1)
+/* 00218ebe */	{
+/* 00218ebe */		info.addMonster("オッズ");
+/* 00218ed4 */		info.addMonster("オッズ");
+/* 00218eea */		info.addMonster("コンタートル");
+/* 00218f00 */		info.addMonster("ヘルマン操兵q");
+/* 00218f16 */	}
+/* 00218f1c */	else
+/* 00218f1c */	{
+/* 00218f1c */		info.addMonster("オッズ");
+/* 00218f32 */		info.addMonster("オッズ");
+/* 00218f48 */		info.addMonster("ヘルマン操兵q");
+/* 00218f5e */		info.addMonster("デカントマムル");
+/* 00218f74 */		info.addMonster("ヘルマン操兵q");
+/* 00218f8a */	}
+/* 00218f8a */	info.setBattleBackGroundId("中庭");
+/* 00218fa0 */	openBattle2(info);
+/* 00218fb2 */}
+
+void 制御／モンスター／中庭／ヘルマン操兵／Ｂ()
+/* 00218fc0 */{
+/* 00218fc0 */	BattleInfomation info;
+/* 00218fd0 */	if (RAND(3) != 1)
+/* 00218fea */	{
+/* 00218fea */		info.addMonster("サイクロナイト");
+/* 00219000 */		info.addMonster("オッズ");
+/* 00219016 */		info.addMonster("ヘルマン操兵q");
+/* 0021902c */		info.addMonster("デカントマムル");
+/* 00219042 */		info.addMonster("ヘルマン操兵q");
+/* 00219058 */	}
+/* 0021905e */	else
+/* 0021905e */	{
+/* 0021905e */		info.addMonster("オッズ群");
+/* 00219074 */		info.addMonster("サイクロナイト");
+/* 0021908a */		info.addMonster("ヘルマン操兵q");
+/* 002190a0 */		info.addMonster("コンタートル");
+/* 002190b6 */	}
+/* 002190b6 */	info.setBattleBackGroundId("中庭");
+/* 002190cc */	openBattle2(info);
+/* 002190de */}
+
+void 制御／モンスター／中庭／防衛陣地()
+/* 002190ec */{
+/* 002190ec */	BattleInfomation info;
+/* 002190fc */	if (RAND(3) != 1)
+/* 00219116 */	{
+/* 00219116 */		info.addMonster("ヘルマン工兵q");
+/* 0021912c */		info.addMonster("防衛陣地q");
+/* 00219142 */		info.addMonster("ヘルマン弩兵群q");
+/* 00219158 */		info.addMonster("ヘルマン弩兵q");
+/* 0021916e */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(30));
+/* 00219190 */	}
+/* 00219196 */	else
+/* 00219196 */	{
+/* 00219196 */		info.addMonster("防衛陣地q");
+/* 002191ac */		info.addMonster("ヘルマン弩兵群q");
+/* 002191c2 */		info.addMonster("ヘルマン士官q");
+/* 002191d8 */		info.setItem("珍味3", 制御／戦闘／アイテム確率設定(30));
+/* 002191fa */	}
+/* 002191fa */	info.setBattleBackGroundId("中庭");
+/* 00219210 */	openBattle2(info);
+/* 00219222 */}
+
+void 制御／モンスター／中庭／オッズ()
+/* 00219230 */{
+/* 00219230 */	BattleInfomation info;
+/* 00219240 */	if (RAND(3) != 1)
+/* 0021925a */	{
+/* 0021925a */		info.addMonster("オッズ群");
+/* 00219270 */		info.addMonster("オッズ群");
+/* 00219286 */		info.addMonster("オッズ群");
+/* 0021929c */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(18));
+/* 002192be */	}
+/* 002192c4 */	else
+/* 002192c4 */	{
+/* 002192c4 */		info.addMonster("オッズ");
+/* 002192da */		info.addMonster("コンタートル");
+/* 002192f0 */		info.addMonster("オッズ群");
+/* 00219306 */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 00219328 */	}
+/* 00219328 */	info.setBattleBackGroundId("中庭");
+/* 0021933e */	openBattle2(info);
+/* 00219350 */}
+
+void 制御／モンスター／中庭／サイクロナイト()
+/* 0021935e */{
+/* 0021935e */	BattleInfomation info;
+/* 0021936e */	if (RAND(3) != 1)
+/* 00219388 */	{
+/* 00219388 */		info.addMonster("オッズ");
+/* 0021939e */		info.addMonster("サイクロナイト");
+/* 002193b4 */		info.addMonster("スーパーハニー");
+/* 002193ca */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(3));
+/* 002193ec */	}
+/* 002193f2 */	else
+/* 002193f2 */	{
+/* 002193f2 */		info.addMonster("サイクロナイト");
+/* 00219408 */		info.addMonster("スーパーハニー");
+/* 0021941e */		info.addMonster("サイクロナイト");
+/* 00219434 */		info.setItem("アサクヒロク2", 制御／戦闘／アイテム確率設定(3));
+/* 00219456 */	}
+/* 00219456 */	info.setBattleBackGroundId("中庭");
+/* 0021946c */	openBattle2(info);
+/* 0021947e */}
+
+void 制御／モンスター／中庭／コンタートル()
+/* 0021948c */{
+/* 0021948c */	BattleInfomation info;
+/* 0021949c */	if (RAND(3) != 1)
+/* 002194b6 */	{
+/* 002194b6 */		info.addMonster("オッズ");
+/* 002194cc */		info.addMonster("オッズ");
+/* 002194e2 */		info.addMonster("コンタートル");
+/* 002194f8 */		info.addMonster("コンタートル");
+/* 0021950e */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 00219530 */	}
+/* 00219536 */	else
+/* 00219536 */	{
+/* 00219536 */		info.addMonster("コンタートル");
+/* 0021954c */		info.addMonster("スーパーハニー");
+/* 00219562 */		info.addMonster("オッズ");
+/* 00219578 */		info.addMonster("コンタートル");
+/* 0021958e */		info.setItem("守り神様ストラップ", 制御／戦闘／アイテム確率設定(6));
+/* 002195b0 */	}
+/* 002195b0 */	info.setBattleBackGroundId("中庭");
+/* 002195c6 */	openBattle2(info);
+/* 002195d8 */}
+
+void 制御／モンスター／中庭／デカントマムル()
+/* 002195e6 */{
+/* 002195e6 */	BattleInfomation info;
+/* 002195f6 */	if (RAND(3) != 1)
+/* 00219610 */	{
+/* 00219610 */		info.addMonster("デカントマムル");
+/* 00219626 */		info.addMonster("オッズ群");
+/* 0021963c */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(6));
+/* 0021965e */	}
+/* 00219664 */	else
+/* 00219664 */	{
+/* 00219664 */		info.addMonster("デカントマムル");
+/* 0021967a */		info.addMonster("デカントマムル");
+/* 00219690 */		info.addMonster("オッズ");
+/* 002196a6 */		info.addMonster("スーパーハニー");
+/* 002196bc */		info.setItem("換金1", 制御／戦闘／アイテム確率設定(3));
+/* 002196de */	}
+/* 002196de */	info.setBattleBackGroundId("中庭");
+/* 002196f4 */	openBattle2(info);
+/* 00219706 */}
+
+void 制御／モンスター／中庭／神風()
+/* 00219714 */{
+/* 00219714 */	BattleInfomation info;
+/* 00219724 */	if (RAND(3) != 1)
+/* 0021973e */	{
+/* 0021973e */		info.addMonster("神風");
+/* 00219754 */		info.addMonster("スーパーハニー");
+/* 0021976a */		info.setItem("コンビーフの鍵", 制御／戦闘／アイテム確率設定(1));
+/* 0021978c */	}
+/* 00219792 */	else
+/* 00219792 */	{
+/* 00219792 */		info.addMonster("神風");
+/* 002197a8 */		info.addMonster("神風");
+/* 002197be */		info.setItem("コンビーフの鍵", 制御／戦闘／アイテム確率設定(2));
+/* 002197e0 */	}
+/* 002197e0 */	info.setBattleBackGroundId("中庭");
+/* 002197f6 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021980c */	openBattle2(info);
+/* 0021981e */}
+
+void 制御／モンスター／居館／二階／ヒトラー()
+/* 0021982c */{
+/* 0021982c */	BattleInfomation info;
+/* 0021983c */	if (RAND(3) != 1)
+/* 00219856 */	{
+/* 00219856 */		info.addMonster("ナースホルン");
+/* 0021986c */		info.addMonster("ヒトラー");
+/* 00219882 */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(18));
+/* 002198a4 */	}
+/* 002198aa */	else
+/* 002198aa */	{
+/* 002198aa */		info.addMonster("ヒトラー");
+/* 002198c0 */		info.addMonster("ナースホルン");
+/* 002198d6 */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(18));
+/* 002198f8 */	}
+/* 002198f8 */	info.setBattleBackGroundId("居館／二階");
+/* 0021990e */	openBattle2(info);
+/* 00219920 */}
+
+void 制御／モンスター／居館／二階／ヒトラー／Ｂ()
+/* 0021992e */{
+/* 0021992e */	BattleInfomation info;
+/* 0021993e */	if (RAND(3) != 1)
+/* 00219958 */	{
+/* 00219958 */		info.addMonster("ナースホルン");
+/* 0021996e */		info.addMonster("ナースホルン");
+/* 00219984 */		info.addMonster("ヒトラー");
+/* 0021999a */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(27));
+/* 002199bc */	}
+/* 002199c2 */	else
+/* 002199c2 */	{
+/* 002199c2 */		info.addMonster("ナースホルン");
+/* 002199d8 */		info.addMonster("ヒトラー");
+/* 002199ee */		info.addMonster("ナースホルン");
+/* 00219a04 */		info.setItem("徳用魔池", 制御／戦闘／アイテム確率設定(27));
+/* 00219a26 */	}
+/* 00219a26 */	info.setBattleBackGroundId("居館／二階");
+/* 00219a3c */	openBattle2(info);
+/* 00219a4e */}
+
+void 制御／モンスター／居館／二階／シルバ～サメラ～イ()
+/* 00219a5c */{
+/* 00219a5c */	BattleInfomation info;
+/* 00219a6c */	if (RAND(3) != 1)
+/* 00219a86 */	{
+/* 00219a86 */		info.addMonster("シルバ～サメラ～イ");
+/* 00219a9c */		info.addMonster("トリプルハニー");
+/* 00219ab2 */		info.setItem("珍味5", 制御／戦闘／アイテム確率設定(1));
+/* 00219ad4 */	}
+/* 00219ada */	else
+/* 00219ada */	{
+/* 00219ada */		info.addMonster("トリプルハニー");
+/* 00219af0 */		info.addMonster("シルバ～サメラ～イ");
+/* 00219b06 */		info.setItem("珍味5", 制御／戦闘／アイテム確率設定(1));
+/* 00219b28 */	}
+/* 00219b28 */	info.setBattleBackGroundId("居館／二階");
+/* 00219b3e */	openBattle2(info);
+/* 00219b50 */}
+
+void 制御／モンスター／居館／二階／シルバ～サメラ～イ／Ｂ()
+/* 00219b5e */{
+/* 00219b5e */	BattleInfomation info;
+/* 00219b6e */	if (RAND(3) != 1)
+/* 00219b88 */	{
+/* 00219b88 */		info.addMonster("シルバ～サメラ～イ");
+/* 00219b9e */		info.addMonster("ナースホルン");
+/* 00219bb4 */		info.addMonster("ヒトラー");
+/* 00219bca */		info.setItem("珍味5", 制御／戦闘／アイテム確率設定(1));
+/* 00219bec */	}
+/* 00219bf2 */	else
+/* 00219bf2 */	{
+/* 00219bf2 */		info.addMonster("シルバ～サメラ～イ");
+/* 00219c08 */		info.addMonster("シルバ～サメラ～イ");
+/* 00219c1e */		info.addMonster("ヒトラー");
+/* 00219c34 */		info.addMonster("ナースホルン");
+/* 00219c4a */		info.setItem("珍味5", 制御／戦闘／アイテム確率設定(2));
+/* 00219c6c */	}
+/* 00219c6c */	info.setBattleBackGroundId("居館／二階");
+/* 00219c82 */	openBattle2(info);
+/* 00219c94 */}
+
+void 制御／モンスター／居館／二階／トリプルハニー()
+/* 00219ca2 */{
+/* 00219ca2 */	BattleInfomation info;
+/* 00219cb2 */	if (RAND(3) != 1)
+/* 00219ccc */	{
+/* 00219ccc */		info.addMonster("トリプルハニー");
+/* 00219ce2 */		info.addMonster("トリプルハニー");
+/* 00219cf8 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(2));
+/* 00219d1a */	}
+/* 00219d20 */	else
+/* 00219d20 */	{
+/* 00219d20 */		info.addMonster("トリプルハニー");
+/* 00219d36 */		info.addMonster("トリプルハニー");
+/* 00219d4c */		info.addMonster("トリプルハニー");
+/* 00219d62 */		info.setItem("換金5", 制御／戦闘／アイテム確率設定(3));
+/* 00219d84 */	}
+/* 00219d84 */	info.setBattleBackGroundId("居館／二階");
+/* 00219d9a */	openBattle2(info);
+/* 00219dac */}
+
+void 制御／モンスター／居館／二階／ライカンスロープＺ()
+/* 00219dba */{
+/* 00219dba */	BattleInfomation info;
+/* 00219dca */	if (RAND(3) != 1)
+/* 00219de4 */	{
+/* 00219de4 */		info.addMonster("ライカンスロープZt1");
+/* 00219dfa */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(1));
+/* 00219e1c */	}
+/* 00219e22 */	else
+/* 00219e22 */	{
+/* 00219e22 */		info.addMonster("ライカンスロープZt1");
+/* 00219e38 */		info.addMonster("ライカンスロープZt1");
+/* 00219e4e */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 00219e70 */	}
+/* 00219e70 */	info.setBattleBackGroundId("居館／二階");
+/* 00219e86 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00219e9c */	openBattle2(info);
+/* 00219eae */}
+
+void 制御／モンスター／居館／二階／ライカンスロープＺ／Ｂ()
+/* 00219ebc */{
+/* 00219ebc */	BattleInfomation info;
+/* 00219ecc */	if (RAND(3) != 1)
+/* 00219ee6 */	{
+/* 00219ee6 */		info.addMonster("ライカンスロープZt2");
+/* 00219efc */		info.addMonster("ライカンスロープZt3");
+/* 00219f12 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 00219f34 */	}
+/* 00219f3a */	else
+/* 00219f3a */	{
+/* 00219f3a */		info.addMonster("ライカンスロープZt3");
+/* 00219f50 */		info.addMonster("ライカンスロープZt4");
+/* 00219f66 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 00219f88 */	}
+/* 00219f88 */	info.setBattleBackGroundId("居館／二階");
+/* 00219f9e */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 00219fb4 */	openBattle2(info);
+/* 00219fc6 */}
+
+void 制御／モンスター／居館／二階／ライカンスロープＺ／Ｃ()
+/* 00219fd4 */{
+/* 00219fd4 */	BattleInfomation info;
+/* 00219fe4 */	if (RAND(3) != 1)
+/* 00219ffe */	{
+/* 00219ffe */		info.addMonster("ライカンスロープZt4");
+/* 0021a014 */		info.addMonster("ライカンスロープZt2");
+/* 0021a02a */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 0021a04c */	}
+/* 0021a052 */	else
+/* 0021a052 */	{
+/* 0021a052 */		info.addMonster("ライカンスロープZt4");
+/* 0021a068 */		info.addMonster("ライカンスロープZt4");
+/* 0021a07e */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 0021a0a0 */	}
+/* 0021a0a0 */	info.setBattleBackGroundId("居館／二階");
+/* 0021a0b6 */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021a0cc */	openBattle2(info);
+/* 0021a0de */}
+
+void 制御／モンスター／居館／二階／ライカンスロープＺ／Ｄ()
+/* 0021a0ec */{
+/* 0021a0ec */	BattleInfomation info;
+/* 0021a0fc */	if (RAND(3) != 1)
+/* 0021a116 */	{
+/* 0021a116 */		info.addMonster("ライカンスロープZt3");
+/* 0021a12c */		info.addMonster("ライカンスロープZt2");
+/* 0021a142 */		info.addMonster("ライカンスロープZt4");
+/* 0021a158 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 0021a17a */	}
+/* 0021a180 */	else
+/* 0021a180 */	{
+/* 0021a180 */		info.addMonster("ライカンスロープZt3");
+/* 0021a196 */		info.addMonster("ライカンスロープZt4");
+/* 0021a1ac */		info.addMonster("ライカンスロープZt4");
+/* 0021a1c2 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(2));
+/* 0021a1e4 */	}
+/* 0021a1e4 */	info.setBattleBackGroundId("居館／二階");
+/* 0021a1fa */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021a210 */	openBattle2(info);
+/* 0021a222 */}
+
+void 制御／モンスター／居館／二階／ライカンスロープＺ／Ｅ()
+/* 0021a230 */{
+/* 0021a230 */	BattleInfomation info;
+/* 0021a240 */	if (RAND(3) != 1)
+/* 0021a25a */	{
+/* 0021a25a */		info.addMonster("ライカンスロープZt3");
+/* 0021a270 */		info.addMonster("ライカンスロープZt3");
+/* 0021a286 */		info.addMonster("ライカンスロープZt2");
+/* 0021a29c */		info.addMonster("ライカンスロープZt4");
+/* 0021a2b2 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(4));
+/* 0021a2d4 */	}
+/* 0021a2da */	else
+/* 0021a2da */	{
+/* 0021a2da */		info.addMonster("ライカンスロープZt2");
+/* 0021a2f0 */		info.addMonster("ライカンスロープZt4");
+/* 0021a306 */		info.addMonster("ライカンスロープZt3");
+/* 0021a31c */		info.addMonster("ライカンスロープZt2");
+/* 0021a332 */		info.setItem("世色癌4", 制御／戦闘／アイテム確率設定(4));
+/* 0021a354 */	}
+/* 0021a354 */	info.setBattleBackGroundId("居館／二階");
+/* 0021a36a */	info.setMusicId("音楽／戦闘／女の子モンスター");
+/* 0021a380 */	openBattle2(info);
+/* 0021a392 */}
+
+void 制御／モンスター／コー／こんにちわ()
+/* 0021a3a0 */{
+/* 0021a3a0 */	BattleInfomation info;
+/* 0021a3b0 */	info.addMonster("こんにちわv2");
+/* 0021a3c6 */	info.setItem("毎度ありストラップ", 制御／戦闘／アイテム確率設定(3));
+/* 0021a3e8 */	info.setBattleBackGroundId("都市／コー");
+/* 0021a3fe */	openBattle2(info);
+/* 0021a410 */}
+
+void 制御／モンスター／コー／腐った死体()
+/* 0021a41e */{
+/* 0021a41e */	BattleInfomation info;
+/* 0021a42e */	if (RAND(3) != 1)
+/* 0021a448 */	{
+/* 0021a448 */		info.addMonster("腐った死体");
+/* 0021a45e */		info.addMonster("腐った死体");
+/* 0021a474 */		info.addMonster("ゾンビ");
+/* 0021a48a */		info.addMonster("腐った死体");
+/* 0021a4a0 */		info.addMonster("腐った死体");
+/* 0021a4b6 */		info.setItem("換金3", 制御／戦闘／アイテム確率設定(30));
+/* 0021a4d8 */	}
+/* 0021a4de */	else
+/* 0021a4de */	{
+/* 0021a4de */		info.addMonster("腐った死体");
+/* 0021a4f4 */		info.addMonster("ゾンビ");
+/* 0021a50a */		info.addMonster("腐った死体");
+/* 0021a520 */		info.addMonster("腐った死体");
+/* 0021a536 */		info.addMonster("腐った死体");
+/* 0021a54c */		info.addMonster("ゾンビ");
+/* 0021a562 */		info.addMonster("腐った死体");
+/* 0021a578 */		info.setItem("換金3", 制御／戦闘／アイテム確率設定(60));
+/* 0021a59a */	}
+/* 0021a59a */	info.setBattleBackGroundId("都市／コー");
+/* 0021a5b0 */	openBattle2(info);
+/* 0021a5c2 */}
+
+void 制御／モンスター／コー／腐った死体／Ｂ()
+/* 0021a5d0 */{
+/* 0021a5d0 */	BattleInfomation info;
+/* 0021a5e0 */	if (RAND(3) != 1)
+/* 0021a5fa */	{
+/* 0021a5fa */		info.addMonster("腐った死体群");
+/* 0021a610 */		info.addMonster("腐った死体群");
+/* 0021a626 */		info.addMonster("腐った死体群");
+/* 0021a63c */		info.addMonster("腐った死体群");
+/* 0021a652 */	}
+/* 0021a658 */	else
+/* 0021a658 */	{
+/* 0021a658 */		info.addMonster("腐った死体群");
+/* 0021a66e */		info.addMonster("腐った死体群");
+/* 0021a684 */		info.addMonster("腐った死体群");
+/* 0021a69a */		info.addMonster("腐った死体群");
+/* 0021a6b0 */		info.addMonster("腐った死体群");
+/* 0021a6c6 */		info.addMonster("腐った死体群");
+/* 0021a6dc */	}
+/* 0021a6dc */	info.setBattleBackGroundId("都市／コー");
+/* 0021a6f2 */	openBattle2(info);
+/* 0021a704 */}
+
+void 制御／モンスター／コー／ピンキー()
+/* 0021a712 */{
+/* 0021a712 */	BattleInfomation info;
+/* 0021a722 */	if (RAND(3) != 1)
+/* 0021a73c */	{
+/* 0021a73c */		info.addMonster("ピンキー");
+/* 0021a752 */		info.addMonster("ピンキー");
+/* 0021a768 */		info.addMonster("腐った死体群");
+/* 0021a77e */	}
+/* 0021a784 */	else
+/* 0021a784 */	{
+/* 0021a784 */		info.addMonster("ピンキー");
+/* 0021a79a */		info.addMonster("腐った死体");
+/* 0021a7b0 */		info.addMonster("ゾンビ");
+/* 0021a7c6 */		info.addMonster("ピンキー");
+/* 0021a7dc */		info.addMonster("ピンキー");
+/* 0021a7f2 */		info.setItem("換金3", 制御／戦闘／アイテム確率設定(30));
+/* 0021a814 */	}
+/* 0021a814 */	info.setBattleBackGroundId("都市／コー");
+/* 0021a82a */	openBattle2(info);
+/* 0021a83c */}
+
+void 制御／モンスター／はにわ大神殿／グリーンハニー()
+/* 0021a84a */{
+/* 0021a84a */	BattleInfomation info;
+/* 0021a85a */	if (RAND(3) != 1)
+/* 0021a874 */	{
+/* 0021a874 */		info.addMonster("グリーンハニー");
+/* 0021a88a */		info.addMonster("グリーンハニー");
+/* 0021a8a0 */	}
+/* 0021a8a6 */	else
+/* 0021a8a6 */	{
+/* 0021a8a6 */		info.addMonster("グリーンハニー");
+/* 0021a8bc */		info.addMonster("グリーンハニー");
+/* 0021a8d2 */		info.addMonster("グリーンハニー");
+/* 0021a8e8 */	}
+/* 0021a8e8 */	info.setBattleBackGroundId("はにわ大神殿／グリーン");
+/* 0021a8fe */	openBattle2(info);
+/* 0021a910 */}
+
+void 制御／モンスター／はにわ大神殿／グリーンハニー／Ｂ()
+/* 0021a91e */{
+/* 0021a91e */	BattleInfomation info;
+/* 0021a92e */	info.addMonster("グリーンハニー");
+/* 0021a944 */	info.addMonster("グリーンハニー");
+/* 0021a95a */	info.addMonster("グリーンハニー");
+/* 0021a970 */	info.addMonster("グリーンハニー");
+/* 0021a986 */	info.addMonster("グリーンハニー");
+/* 0021a99c */	info.addMonster("グリーンハニー");
+/* 0021a9b2 */	info.addMonster("グリーンハニー");
+/* 0021a9c8 */	info.addMonster("グリーンハニー");
+/* 0021a9de */	info.setBattleBackGroundId("はにわ大神殿／グリーン");
+/* 0021a9f4 */	openBattle2(info);
+/* 0021aa06 */}
+
+void 制御／モンスター／はにわ大神殿／ブルーハニー()
+/* 0021aa14 */{
+/* 0021aa14 */	BattleInfomation info;
+/* 0021aa24 */	if (RAND(3) != 1)
+/* 0021aa3e */	{
+/* 0021aa3e */		info.addMonster("ブルーハニー");
+/* 0021aa54 */		info.addMonster("ブルーハニー");
+/* 0021aa6a */	}
+/* 0021aa70 */	else
+/* 0021aa70 */	{
+/* 0021aa70 */		info.addMonster("ブルーハニー");
+/* 0021aa86 */	}
+/* 0021aa86 */	info.setBattleBackGroundId("はにわ大神殿／ブルー");
+/* 0021aa9c */	openBattle2(info);
+/* 0021aaae */}
+
+void 制御／モンスター／はにわ大神殿／ブルーハニー／Ｂ()
+/* 0021aabc */{
+/* 0021aabc */	BattleInfomation info;
+/* 0021aacc */	info.addMonster("ブルーハニー");
+/* 0021aae2 */	info.addMonster("ブルーハニー");
+/* 0021aaf8 */	info.addMonster("ブルーハニー");
+/* 0021ab0e */	info.addMonster("ブルーハニー");
+/* 0021ab24 */	info.addMonster("ブルーハニー");
+/* 0021ab3a */	info.addMonster("ブルーハニー");
+/* 0021ab50 */	info.addMonster("ブルーハニー");
+/* 0021ab66 */	info.addMonster("ブルーハニー");
+/* 0021ab7c */	info.setBattleBackGroundId("はにわ大神殿／ブルー");
+/* 0021ab92 */	openBattle2(info);
+/* 0021aba4 */}
+
+void 制御／モンスター／はにわ大神殿／レッドハニー()
+/* 0021abb2 */{
+/* 0021abb2 */	BattleInfomation info;
+/* 0021abc2 */	if (RAND(3) != 1)
+/* 0021abdc */	{
+/* 0021abdc */		info.addMonster("レッドハニー");
+/* 0021abf2 */		info.addMonster("レッドハニー");
+/* 0021ac08 */		info.addMonster("レッドハニー");
+/* 0021ac1e */	}
+/* 0021ac24 */	else
+/* 0021ac24 */	{
+/* 0021ac24 */		info.addMonster("レッドハニー");
+/* 0021ac3a */		info.addMonster("レッドハニー");
+/* 0021ac50 */		info.addMonster("レッドハニー");
+/* 0021ac66 */		info.addMonster("レッドハニー");
+/* 0021ac7c */	}
+/* 0021ac7c */	info.setBattleBackGroundId("はにわ大神殿／レッド");
+/* 0021ac92 */	openBattle2(info);
+/* 0021aca4 */}
+
+void 制御／モンスター／はにわ大神殿／レッドハニー／Ｂ()
+/* 0021acb2 */{
+/* 0021acb2 */	BattleInfomation info;
+/* 0021acc2 */	info.addMonster("レッドハニー");
+/* 0021acd8 */	info.addMonster("レッドハニー");
+/* 0021acee */	info.addMonster("レッドハニー");
+/* 0021ad04 */	info.addMonster("レッドハニー");
+/* 0021ad1a */	info.addMonster("レッドハニー");
+/* 0021ad30 */	info.addMonster("レッドハニー");
+/* 0021ad46 */	info.addMonster("レッドハニー");
+/* 0021ad5c */	info.addMonster("レッドハニー");
+/* 0021ad72 */	info.setBattleBackGroundId("はにわ大神殿／レッド");
+/* 0021ad88 */	openBattle2(info);
+/* 0021ad9a */}
+
+void 制御／モンスター／はにわ大神殿／スーパーハニー()
+/* 0021ada8 */{
+/* 0021ada8 */	BattleInfomation info;
+/* 0021adb8 */	if (RAND(3) != 1)
+/* 0021add2 */	{
+/* 0021add2 */		info.addMonster("スーパーハニー");
+/* 0021ade8 */		info.addMonster("スーパーハニー");
+/* 0021adfe */		info.addMonster("スーパーハニー");
+/* 0021ae14 */	}
+/* 0021ae1a */	else
+/* 0021ae1a */	{
+/* 0021ae1a */		info.addMonster("スーパーハニー");
+/* 0021ae30 */		info.addMonster("スーパーハニー");
+/* 0021ae46 */		info.addMonster("スーパーハニー");
+/* 0021ae5c */		info.addMonster("スーパーハニー");
+/* 0021ae72 */	}
+/* 0021ae72 */	info.setBattleBackGroundId("はにわ大神殿／スーパー");
+/* 0021ae88 */	openBattle2(info);
+/* 0021ae9a */}
+
+void 制御／モンスター／はにわ大神殿／スーパーハニー／Ｂ()
+/* 0021aea8 */{
+/* 0021aea8 */	BattleInfomation info;
+/* 0021aeb8 */	if (RAND(3) != 1)
+/* 0021aed2 */	{
+/* 0021aed2 */		info.addMonster("スーパーハニー");
+/* 0021aee8 */		info.addMonster("スーパーハニー");
+/* 0021aefe */		info.addMonster("スーパーハニー");
+/* 0021af14 */		info.addMonster("スーパーハニー");
+/* 0021af2a */		info.addMonster("スーパーハニー");
+/* 0021af40 */		info.addMonster("スーパーハニー");
+/* 0021af56 */		info.addMonster("スーパーハニー");
+/* 0021af6c */		info.addMonster("スーパーハニー");
+/* 0021af82 */	}
+/* 0021af88 */	else
+/* 0021af88 */	{
+/* 0021af88 */		info.addMonster("スーパーハニー");
+/* 0021af9e */		info.addMonster("スーパーハニー");
+/* 0021afb4 */		info.addMonster("スーパーハニー");
+/* 0021afca */		info.addMonster("スーパーハニー");
+/* 0021afe0 */		info.addMonster("スーパーハニー");
+/* 0021aff6 */		info.addMonster("スーパーハニー");
+/* 0021b00c */		info.addMonster("凶悪ハニー");
+/* 0021b022 */		info.addMonster("スーパーハニー");
+/* 0021b038 */	}
+/* 0021b038 */	info.setBattleBackGroundId("はにわ大神殿／スーパー");
+/* 0021b04e */	openBattle2(info);
+/* 0021b060 */}
+
+void 制御／モンスター／はにわ大神殿／ハニーナイト()
+/* 0021b06e */{
+/* 0021b06e */	BattleInfomation info;
+/* 0021b07e */	info.addMonster("ハニーナイト");
+/* 0021b094 */	info.addMonster("グリーンハニー");
+/* 0021b0aa */	info.addMonster("スーパーハニー");
+/* 0021b0c0 */	info.addMonster("ハニーナイト");
+/* 0021b0d6 */	info.setBattleBackGroundId("はにわ大神殿／スーパー");
+/* 0021b0ec */	openBattle2(info);
+/* 0021b0fe */}
+
+void 制御／モンスター／はにわ大神殿／ハニーキング()
+/* 0021b10c */{
+/* 0021b10c */	BattleInfomation info;
+/* 0021b11c */	info.addMonster("グリーンハニー");
+/* 0021b132 */	info.addMonster("ブルーハニー");
+/* 0021b148 */	info.addMonster("レッドハニー");
+/* 0021b15e */	info.addMonster("グリーンハニー");
+/* 0021b174 */	info.addMonster("ブルーハニー");
+/* 0021b18a */	info.addMonster("レッドハニー");
+/* 0021b1a0 */	info.addMonster("ハニーキング");
+/* 0021b1b6 */	info.addMonster("グリーンハニー");
+/* 0021b1cc */	info.addMonster("ブルーハニー");
+/* 0021b1e2 */	info.addMonster("レッドハニー");
+/* 0021b1f8 */	info.addMonster("グリーンハニー");
+/* 0021b20e */	info.addMonster("ブルーハニー");
+/* 0021b224 */	info.addMonster("レッドハニー");
+/* 0021b23a */	info.addMonster("グリーンハニー");
+/* 0021b250 */	info.addMonster("ブルーハニー");
+/* 0021b266 */	info.addMonster("レッドハニー");
+/* 0021b27c */	info.addMonster("グリーンハニー");
+/* 0021b292 */	info.addMonster("ブルーハニー");
+/* 0021b2a8 */	info.addMonster("レッドハニー");
+/* 0021b2be */	info.addMonster("グリーンハニー");
+/* 0021b2d4 */	info.addMonster("ブルーハニー");
+/* 0021b2ea */	info.addMonster("レッドハニー");
+/* 0021b300 */	info.addMonster("グリーンハニー");
+/* 0021b316 */	info.addMonster("ブルーハニー");
+/* 0021b32c */	info.addMonster("レッドハニー");
+/* 0021b342 */	info.addMonster("グリーンハニー");
+/* 0021b358 */	info.addMonster("ブルーハニー");
+/* 0021b36e */	info.addMonster("レッドハニー");
+/* 0021b384 */	info.addMonster("グリーンハニー");
+/* 0021b39a */	info.addMonster("ブルーハニー");
+/* 0021b3b0 */	info.addMonster("レッドハニー");
+/* 0021b3c6 */	info.setBattleBackGroundId("はにわ大神殿／スーパー");
+/* 0021b3dc */	info.setMusicId("音楽／戦闘／大ボス");
+/* 0021b3f2 */	info.setExtraBattleFlag(1);
+/* 0021b408 */	openBattle2(info);
+/* 0021b41a */}
+
+void 制御／モンスター／ＴＯＷＥＲ／一層Ａ()
+/* 0021b428 */{
+/* 0021b428 */	BattleInfomation info;
+/* 0021b438 */	int num;
+/* 0021b44a */	switch (RAND(12))
+/* 0021b462 */	{
+/* 0021b462 */	case 1:
+/* 0021b462 */		num = 1;
+/* 0021b474 */		break;
+/* 0021b47a */	case 2:
+/* 0021b47a */	case 3:
+/* 0021b47a */		num = 2;
+/* 0021b48c */		break;
+/* 0021b492 */	case 4:
+/* 0021b492 */	case 5:
+/* 0021b492 */	case 6:
+/* 0021b492 */	case 7:
+/* 0021b492 */	case 8:
+/* 0021b492 */		num = 3;
+/* 0021b4a4 */		break;
+/* 0021b4aa */	case 9:
+/* 0021b4aa */	case 10:
+/* 0021b4aa */		num = RAND(3) + 3;
+/* 0021b4ca */		break;
+/* 0021b4d0 */	case 11:
+/* 0021b4d0 */		num = RAND(6) + 3;
+/* 0021b4f0 */		break;
+/* 0021b4f6 */	default:
+/* 0021b4f6 */		num = RAND(9) + 3;
+/* 0021b516 */		break;
+/* 0021b51c */	}
+/* 0021b51c */	int i;
+/* 0021b52e */	for (i = 0; i < num; ++i)
+/* 0021b578 */	{
+/* 0021b578 */		switch (RAND(12))
+/* 0021b590 */		{
+/* 0021b590 */		case 1:
+/* 0021b590 */			info.addMonster("イカマン群");
+/* 0021b5a6 */			break;
+/* 0021b5ac */		case 2:
+/* 0021b5ac */			info.addMonster("げこげこ");
+/* 0021b5c2 */			break;
+/* 0021b5c8 */		case 3:
+/* 0021b5c8 */			info.addMonster("ニンタートル");
+/* 0021b5de */			break;
+/* 0021b5e4 */		case 4:
+/* 0021b5e4 */			info.addMonster("ロンメル");
+/* 0021b5fa */			break;
+/* 0021b600 */		case 5:
+/* 0021b600 */		case 6:
+/* 0021b600 */			info.addMonster("グリーンハニー");
+/* 0021b616 */			break;
+/* 0021b61c */		case 7:
+/* 0021b61c */		case 8:
+/* 0021b61c */			info.addMonster("無課金戦士群");
+/* 0021b632 */			break;
+/* 0021b638 */		case 9:
+/* 0021b638 */		case 10:
+/* 0021b638 */			info.addMonster("人形遣い");
+/* 0021b64e */			break;
+/* 0021b654 */		default:
+/* 0021b654 */			info.addMonster("くずの悪魔");
+/* 0021b66a */			break;
+/* 0021b670 */		}
+/* 0021b670 */	}
+/* 0021b676 */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0021b698 */	info.setBattleBackGroundId("地上灯台");
+/* 0021b6ae */	openBattle2(info);
+/* 0021b6c0 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／一層Ｂ()
+/* 0021b6ce */{
+/* 0021b6ce */	BattleInfomation info;
+/* 0021b6de */	int num;
+/* 0021b6f0 */	switch (RAND(12))
+/* 0021b708 */	{
+/* 0021b708 */	case 1:
+/* 0021b708 */		num = 1;
+/* 0021b71a */		break;
+/* 0021b720 */	case 2:
+/* 0021b720 */	case 3:
+/* 0021b720 */		num = 2;
+/* 0021b732 */		break;
+/* 0021b738 */	case 4:
+/* 0021b738 */	case 5:
+/* 0021b738 */	case 6:
+/* 0021b738 */	case 7:
+/* 0021b738 */	case 8:
+/* 0021b738 */		num = 3;
+/* 0021b74a */		break;
+/* 0021b750 */	case 9:
+/* 0021b750 */	case 10:
+/* 0021b750 */		num = RAND(3) + 3;
+/* 0021b770 */		break;
+/* 0021b776 */	case 11:
+/* 0021b776 */		num = RAND(6) + 3;
+/* 0021b796 */		break;
+/* 0021b79c */	default:
+/* 0021b79c */		num = RAND(9) + 3;
+/* 0021b7bc */		break;
+/* 0021b7c2 */	}
+/* 0021b7c2 */	int i;
+/* 0021b7d4 */	for (i = 0; i < num; ++i)
+/* 0021b81e */	{
+/* 0021b81e */		switch (RAND(12))
+/* 0021b836 */		{
+/* 0021b836 */		case 1:
+/* 0021b836 */			info.addMonster("ロンメル");
+/* 0021b84c */			break;
+/* 0021b852 */		case 2:
+/* 0021b852 */			info.addMonster("グリーンハニー");
+/* 0021b868 */			break;
+/* 0021b86e */		case 3:
+/* 0021b86e */			info.addMonster("こんにちわc1");
+/* 0021b884 */			break;
+/* 0021b88a */		case 4:
+/* 0021b88a */			info.addMonster("ブルーハニー");
+/* 0021b8a0 */			break;
+/* 0021b8a6 */		case 5:
+/* 0021b8a6 */		case 6:
+/* 0021b8a6 */			info.addMonster("ロンメル");
+/* 0021b8bc */			break;
+/* 0021b8c2 */		case 7:
+/* 0021b8c2 */		case 8:
+/* 0021b8c2 */			info.addMonster("無課金戦士群");
+/* 0021b8d8 */			break;
+/* 0021b8de */		case 9:
+/* 0021b8de */		case 10:
+/* 0021b8de */			info.addMonster("人形遣い群");
+/* 0021b8f4 */			break;
+/* 0021b8fa */		default:
+/* 0021b8fa */			info.addMonster("くずの悪魔群");
+/* 0021b910 */			break;
+/* 0021b916 */		}
+/* 0021b916 */	}
+/* 0021b91c */	info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(3));
+/* 0021b93e */	info.setBattleBackGroundId("地上灯台");
+/* 0021b954 */	openBattle2(info);
+/* 0021b966 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／一層Ｃ()
+/* 0021b974 */{
+/* 0021b974 */	BattleInfomation info;
+/* 0021b984 */	info.addMonster("ウルンセル");
+/* 0021b99a */	info.addMonster("ウルンセル");
+/* 0021b9b0 */	info.addMonster("ウルンセル");
+/* 0021b9c6 */	info.addMonster("ウルンセル緑");
+/* 0021b9dc */	info.addMonster("ウルンセル");
+/* 0021b9f2 */	info.setBattleBackGroundId("地上灯台");
+/* 0021ba08 */	info.setMusicId("音楽／戦闘／大ボス");
+/* 0021ba1e */	info.setExtraBattleFlag(1);
+/* 0021ba34 */	openBattle2(info);
+/* 0021ba46 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／二層Ａ()
+/* 0021ba54 */{
+/* 0021ba54 */	BattleInfomation info;
+/* 0021ba64 */	int num;
+/* 0021ba76 */	switch (RAND(12))
+/* 0021ba8e */	{
+/* 0021ba8e */	case 1:
+/* 0021ba8e */		num = 1;
+/* 0021baa0 */		break;
+/* 0021baa6 */	case 2:
+/* 0021baa6 */	case 3:
+/* 0021baa6 */		num = 2;
+/* 0021bab8 */		break;
+/* 0021babe */	case 4:
+/* 0021babe */	case 5:
+/* 0021babe */	case 6:
+/* 0021babe */	case 7:
+/* 0021babe */	case 8:
+/* 0021babe */		num = 3;
+/* 0021bad0 */		break;
+/* 0021bad6 */	case 9:
+/* 0021bad6 */	case 10:
+/* 0021bad6 */		num = RAND(3) + 3;
+/* 0021baf6 */		break;
+/* 0021bafc */	case 11:
+/* 0021bafc */		num = RAND(6) + 3;
+/* 0021bb1c */		break;
+/* 0021bb22 */	default:
+/* 0021bb22 */		num = RAND(9) + 3;
+/* 0021bb42 */		break;
+/* 0021bb48 */	}
+/* 0021bb48 */	int i;
+/* 0021bb5a */	for (i = 0; i < num; ++i)
+/* 0021bba4 */	{
+/* 0021bba4 */		switch (RAND(12))
+/* 0021bbbc */		{
+/* 0021bbbc */		case 1:
+/* 0021bbbc */			info.addMonster("ロンメル");
+/* 0021bbd2 */			break;
+/* 0021bbd8 */		case 2:
+/* 0021bbd8 */			info.addMonster("人形遣い群");
+/* 0021bbee */			break;
+/* 0021bbf4 */		case 3:
+/* 0021bbf4 */			info.addMonster("くずの悪魔");
+/* 0021bc0a */			break;
+/* 0021bc10 */		case 4:
+/* 0021bc10 */			info.addMonster("こんにちわc1");
+/* 0021bc26 */			break;
+/* 0021bc2c */		case 5:
+/* 0021bc2c */		case 6:
+/* 0021bc2c */			info.addMonster("ミートボール群");
+/* 0021bc42 */			break;
+/* 0021bc48 */		case 7:
+/* 0021bc48 */		case 8:
+/* 0021bc48 */			info.addMonster("ブルーハニー");
+/* 0021bc5e */			break;
+/* 0021bc64 */		case 9:
+/* 0021bc64 */		case 10:
+/* 0021bc64 */			info.addMonster("金魚");
+/* 0021bc7a */			break;
+/* 0021bc80 */		default:
+/* 0021bc80 */			info.addMonster("NEOぬぼぼ");
+/* 0021bc96 */			break;
+/* 0021bc9c */		}
+/* 0021bc9c */	}
+/* 0021bca2 */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0021bcc4 */	info.setBattleBackGroundId("地上灯台");
+/* 0021bcda */	openBattle2(info);
+/* 0021bcec */}
+
+void 制御／モンスター／ＴＯＷＥＲ／二層Ｂ()
+/* 0021bcfa */{
+/* 0021bcfa */	BattleInfomation info;
+/* 0021bd0a */	int num;
+/* 0021bd1c */	switch (RAND(12))
+/* 0021bd34 */	{
+/* 0021bd34 */	case 1:
+/* 0021bd34 */		num = 1;
+/* 0021bd46 */		break;
+/* 0021bd4c */	case 2:
+/* 0021bd4c */	case 3:
+/* 0021bd4c */		num = 2;
+/* 0021bd5e */		break;
+/* 0021bd64 */	case 4:
+/* 0021bd64 */	case 5:
+/* 0021bd64 */	case 6:
+/* 0021bd64 */	case 7:
+/* 0021bd64 */	case 8:
+/* 0021bd64 */		num = 3;
+/* 0021bd76 */		break;
+/* 0021bd7c */	case 9:
+/* 0021bd7c */	case 10:
+/* 0021bd7c */		num = RAND(3) + 3;
+/* 0021bd9c */		break;
+/* 0021bda2 */	case 11:
+/* 0021bda2 */		num = RAND(6) + 3;
+/* 0021bdc2 */		break;
+/* 0021bdc8 */	default:
+/* 0021bdc8 */		num = RAND(9) + 3;
+/* 0021bde8 */		break;
+/* 0021bdee */	}
+/* 0021bdee */	int i;
+/* 0021be00 */	for (i = 0; i < num; ++i)
+/* 0021be4a */	{
+/* 0021be4a */		switch (RAND(12))
+/* 0021be62 */		{
+/* 0021be62 */		case 1:
+/* 0021be62 */			info.addMonster("ロンメル");
+/* 0021be78 */			break;
+/* 0021be7e */		case 2:
+/* 0021be7e */			info.addMonster("人形遣い群");
+/* 0021be94 */			break;
+/* 0021be9a */		case 3:
+/* 0021be9a */			info.addMonster("くずの悪魔群");
+/* 0021beb0 */			break;
+/* 0021beb6 */		case 4:
+/* 0021beb6 */			info.addMonster("マーダー");
+/* 0021becc */			break;
+/* 0021bed2 */		case 5:
+/* 0021bed2 */		case 6:
+/* 0021bed2 */			info.addMonster("みつめとかげ");
+/* 0021bee8 */			break;
+/* 0021beee */		case 7:
+/* 0021beee */		case 8:
+/* 0021beee */			info.addMonster("こんにちわc1");
+/* 0021bf04 */			break;
+/* 0021bf0a */		case 9:
+/* 0021bf0a */		case 10:
+/* 0021bf0a */			info.addMonster("ブルーハニー");
+/* 0021bf20 */			break;
+/* 0021bf26 */		default:
+/* 0021bf26 */			info.addMonster("NEOぬぼぼ");
+/* 0021bf3c */			break;
+/* 0021bf42 */		}
+/* 0021bf42 */	}
+/* 0021bf48 */	info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(3));
+/* 0021bf6a */	info.setBattleBackGroundId("地上灯台");
+/* 0021bf80 */	openBattle2(info);
+/* 0021bf92 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／二層Ｃ()
+/* 0021bfa0 */{
+/* 0021bfa0 */	BattleInfomation info;
+/* 0021bfb0 */	info.addMonster("ウルンセル");
+/* 0021bfc6 */	info.addMonster("ウルンセル緑");
+/* 0021bfdc */	info.addMonster("ウルンセル青");
+/* 0021bff2 */	info.addMonster("ウルンセル");
+/* 0021c008 */	info.addMonster("ウルンセル");
+/* 0021c01e */	info.addMonster("ウルンセル青");
+/* 0021c034 */	info.addMonster("ウルンセル");
+/* 0021c04a */	info.setBattleBackGroundId("地上灯台");
+/* 0021c060 */	info.setMusicId("音楽／戦闘／大ボス");
+/* 0021c076 */	info.setExtraBattleFlag(1);
+/* 0021c08c */	openBattle2(info);
+/* 0021c09e */}
+
+void 制御／モンスター／ＴＯＷＥＲ／三層Ａ()
+/* 0021c0ac */{
+/* 0021c0ac */	BattleInfomation info;
+/* 0021c0bc */	int num;
+/* 0021c0ce */	switch (RAND(12))
+/* 0021c0e6 */	{
+/* 0021c0e6 */	case 1:
+/* 0021c0e6 */		num = 1;
+/* 0021c0f8 */		break;
+/* 0021c0fe */	case 2:
+/* 0021c0fe */	case 3:
+/* 0021c0fe */		num = 2;
+/* 0021c110 */		break;
+/* 0021c116 */	case 4:
+/* 0021c116 */	case 5:
+/* 0021c116 */	case 6:
+/* 0021c116 */	case 7:
+/* 0021c116 */	case 8:
+/* 0021c116 */		num = 3;
+/* 0021c128 */		break;
+/* 0021c12e */	case 9:
+/* 0021c12e */	case 10:
+/* 0021c12e */		num = RAND(3) + 3;
+/* 0021c14e */		break;
+/* 0021c154 */	case 11:
+/* 0021c154 */		num = RAND(6) + 3;
+/* 0021c174 */		break;
+/* 0021c17a */	default:
+/* 0021c17a */		num = RAND(9) + 3;
+/* 0021c19a */		break;
+/* 0021c1a0 */	}
+/* 0021c1a0 */	int i;
+/* 0021c1b2 */	for (i = 0; i < num; ++i)
+/* 0021c1fc */	{
+/* 0021c1fc */		switch (RAND(12))
+/* 0021c214 */		{
+/* 0021c214 */		case 1:
+/* 0021c214 */			info.addMonster("くずの悪魔群");
+/* 0021c22a */			break;
+/* 0021c230 */		case 2:
+/* 0021c230 */			info.addMonster("こんにちわc1");
+/* 0021c246 */			break;
+/* 0021c24c */		case 3:
+/* 0021c24c */			info.addMonster("ミートボール群");
+/* 0021c262 */			break;
+/* 0021c268 */		case 4:
+/* 0021c268 */			info.addMonster("ブルーハニー");
+/* 0021c27e */			break;
+/* 0021c284 */		case 5:
+/* 0021c284 */		case 6:
+/* 0021c284 */			info.addMonster("金魚群");
+/* 0021c29a */			break;
+/* 0021c2a0 */		case 7:
+/* 0021c2a0 */		case 8:
+/* 0021c2a0 */			info.addMonster("わんわん群");
+/* 0021c2b6 */			break;
+/* 0021c2bc */		case 9:
+/* 0021c2bc */		case 10:
+/* 0021c2bc */			info.addMonster("さかなモンスター");
+/* 0021c2d2 */			break;
+/* 0021c2d8 */		default:
+/* 0021c2d8 */			info.addMonster("ザコ");
+/* 0021c2ee */			break;
+/* 0021c2f4 */		}
+/* 0021c2f4 */	}
+/* 0021c2fa */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0021c31c */	info.setBattleBackGroundId("地上灯台");
+/* 0021c332 */	openBattle2(info);
+/* 0021c344 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／三層Ｂ()
+/* 0021c352 */{
+/* 0021c352 */	BattleInfomation info;
+/* 0021c362 */	int num;
+/* 0021c374 */	switch (RAND(12))
+/* 0021c38c */	{
+/* 0021c38c */	case 1:
+/* 0021c38c */		num = 1;
+/* 0021c39e */		break;
+/* 0021c3a4 */	case 2:
+/* 0021c3a4 */	case 3:
+/* 0021c3a4 */		num = 2;
+/* 0021c3b6 */		break;
+/* 0021c3bc */	case 4:
+/* 0021c3bc */	case 5:
+/* 0021c3bc */	case 6:
+/* 0021c3bc */	case 7:
+/* 0021c3bc */	case 8:
+/* 0021c3bc */		num = 3;
+/* 0021c3ce */		break;
+/* 0021c3d4 */	case 9:
+/* 0021c3d4 */	case 10:
+/* 0021c3d4 */		num = RAND(3) + 3;
+/* 0021c3f4 */		break;
+/* 0021c3fa */	case 11:
+/* 0021c3fa */		num = RAND(6) + 3;
+/* 0021c41a */		break;
+/* 0021c420 */	default:
+/* 0021c420 */		num = RAND(9) + 3;
+/* 0021c440 */		break;
+/* 0021c446 */	}
+/* 0021c446 */	int i;
+/* 0021c458 */	for (i = 0; i < num; ++i)
+/* 0021c4a2 */	{
+/* 0021c4a2 */		switch (RAND(12))
+/* 0021c4ba */		{
+/* 0021c4ba */		case 1:
+/* 0021c4ba */			info.addMonster("こんにちわc1");
+/* 0021c4d0 */			break;
+/* 0021c4d6 */		case 2:
+/* 0021c4d6 */			info.addMonster("マーダー");
+/* 0021c4ec */			break;
+/* 0021c4f2 */		case 3:
+/* 0021c4f2 */			info.addMonster("カナリアンe1");
+/* 0021c508 */			break;
+/* 0021c50e */		case 4:
+/* 0021c50e */			info.addMonster("レッドハニー");
+/* 0021c524 */			break;
+/* 0021c52a */		case 5:
+/* 0021c52a */		case 6:
+/* 0021c52a */			info.addMonster("金魚群");
+/* 0021c540 */			break;
+/* 0021c546 */		case 7:
+/* 0021c546 */		case 8:
+/* 0021c546 */			info.addMonster("わんわん群");
+/* 0021c55c */			break;
+/* 0021c562 */		case 9:
+/* 0021c562 */		case 10:
+/* 0021c562 */			info.addMonster("ザコ");
+/* 0021c578 */			break;
+/* 0021c57e */		default:
+/* 0021c57e */			info.addMonster("PKタートル");
+/* 0021c594 */			break;
+/* 0021c59a */		}
+/* 0021c59a */	}
+/* 0021c5a0 */	info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(3));
+/* 0021c5c2 */	info.setBattleBackGroundId("地上灯台");
+/* 0021c5d8 */	openBattle2(info);
+/* 0021c5ea */}
+
+void 制御／モンスター／ＴＯＷＥＲ／三層Ｃ()
+/* 0021c5f8 */{
+/* 0021c5f8 */	BattleInfomation info;
+/* 0021c608 */	info.addMonster("ウルンセル");
+/* 0021c61e */	info.addMonster("ウルンセル赤");
+/* 0021c634 */	info.addMonster("ウルンセル緑");
+/* 0021c64a */	info.addMonster("ウルンセル青");
+/* 0021c660 */	info.addMonster("ウルンセル");
+/* 0021c676 */	info.addMonster("ウルンセル");
+/* 0021c68c */	info.addMonster("ウルンセル緑");
+/* 0021c6a2 */	info.addMonster("ウルンセル赤");
+/* 0021c6b8 */	info.addMonster("ウルンセル赤");
+/* 0021c6ce */	info.setBattleBackGroundId("地上灯台");
+/* 0021c6e4 */	info.setMusicId("音楽／戦闘／大ボス");
+/* 0021c6fa */	info.setExtraBattleFlag(1);
+/* 0021c710 */	openBattle2(info);
+/* 0021c722 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／四層Ａ()
+/* 0021c730 */{
+/* 0021c730 */	BattleInfomation info;
+/* 0021c740 */	int num;
+/* 0021c752 */	switch (RAND(12))
+/* 0021c76a */	{
+/* 0021c76a */	case 1:
+/* 0021c76a */		num = 1;
+/* 0021c77c */		break;
+/* 0021c782 */	case 2:
+/* 0021c782 */	case 3:
+/* 0021c782 */		num = 2;
+/* 0021c794 */		break;
+/* 0021c79a */	case 4:
+/* 0021c79a */	case 5:
+/* 0021c79a */	case 6:
+/* 0021c79a */	case 7:
+/* 0021c79a */	case 8:
+/* 0021c79a */		num = 3;
+/* 0021c7ac */		break;
+/* 0021c7b2 */	case 9:
+/* 0021c7b2 */	case 10:
+/* 0021c7b2 */		num = RAND(3) + 3;
+/* 0021c7d2 */		break;
+/* 0021c7d8 */	case 11:
+/* 0021c7d8 */		num = RAND(6) + 3;
+/* 0021c7f8 */		break;
+/* 0021c7fe */	default:
+/* 0021c7fe */		num = RAND(9) + 3;
+/* 0021c81e */		break;
+/* 0021c824 */	}
+/* 0021c824 */	int i;
+/* 0021c836 */	for (i = 0; i < num; ++i)
+/* 0021c880 */	{
+/* 0021c880 */		switch (RAND(12))
+/* 0021c898 */		{
+/* 0021c898 */		case 1:
+/* 0021c898 */			info.addMonster("わんわん群");
+/* 0021c8ae */			break;
+/* 0021c8b4 */		case 2:
+/* 0021c8b4 */			info.addMonster("うっぴー");
+/* 0021c8ca */			break;
+/* 0021c8d0 */		case 3:
+/* 0021c8d0 */			info.addMonster("レッドハニー");
+/* 0021c8e6 */			break;
+/* 0021c8ec */		case 4:
+/* 0021c8ec */			info.addMonster("パワーゴリラ");
+/* 0021c902 */			break;
+/* 0021c908 */		case 5:
+/* 0021c908 */		case 6:
+/* 0021c908 */			info.addMonster("いもむしDXマークII");
+/* 0021c91e */			break;
+/* 0021c924 */		case 7:
+/* 0021c924 */		case 8:
+/* 0021c924 */			info.addMonster("ザコ群");
+/* 0021c93a */			break;
+/* 0021c940 */		case 9:
+/* 0021c940 */		case 10:
+/* 0021c940 */			info.addMonster("バグ");
+/* 0021c956 */			break;
+/* 0021c95c */		default:
+/* 0021c95c */			info.addMonster("PKタートル");
+/* 0021c972 */			break;
+/* 0021c978 */		}
+/* 0021c978 */	}
+/* 0021c97e */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0021c9a0 */	info.setBattleBackGroundId("地上灯台");
+/* 0021c9b6 */	openBattle2(info);
+/* 0021c9c8 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／四層Ｂ()
+/* 0021c9d6 */{
+/* 0021c9d6 */	BattleInfomation info;
+/* 0021c9e6 */	int num;
+/* 0021c9f8 */	switch (RAND(12))
+/* 0021ca10 */	{
+/* 0021ca10 */	case 1:
+/* 0021ca10 */		num = 1;
+/* 0021ca22 */		break;
+/* 0021ca28 */	case 2:
+/* 0021ca28 */	case 3:
+/* 0021ca28 */		num = 2;
+/* 0021ca3a */		break;
+/* 0021ca40 */	case 4:
+/* 0021ca40 */	case 5:
+/* 0021ca40 */	case 6:
+/* 0021ca40 */	case 7:
+/* 0021ca40 */	case 8:
+/* 0021ca40 */		num = 3;
+/* 0021ca52 */		break;
+/* 0021ca58 */	case 9:
+/* 0021ca58 */	case 10:
+/* 0021ca58 */		num = RAND(3) + 3;
+/* 0021ca78 */		break;
+/* 0021ca7e */	case 11:
+/* 0021ca7e */		num = RAND(6) + 3;
+/* 0021ca9e */		break;
+/* 0021caa4 */	default:
+/* 0021caa4 */		num = RAND(9) + 3;
+/* 0021cac4 */		break;
+/* 0021caca */	}
+/* 0021caca */	int i;
+/* 0021cadc */	for (i = 0; i < num; ++i)
+/* 0021cb26 */	{
+/* 0021cb26 */		switch (RAND(12))
+/* 0021cb3e */		{
+/* 0021cb3e */		case 1:
+/* 0021cb3e */			info.addMonster("カナリアンe1");
+/* 0021cb54 */			break;
+/* 0021cb5a */		case 2:
+/* 0021cb5a */			info.addMonster("デカントf");
+/* 0021cb70 */			break;
+/* 0021cb76 */		case 3:
+/* 0021cb76 */			info.addMonster("ミスコーン");
+/* 0021cb8c */			break;
+/* 0021cb92 */		case 4:
+/* 0021cb92 */			info.addMonster("ゲーリング");
+/* 0021cba8 */			break;
+/* 0021cbae */		case 5:
+/* 0021cbae */		case 6:
+/* 0021cbae */			info.addMonster("レッドハニー");
+/* 0021cbc4 */			break;
+/* 0021cbca */		case 7:
+/* 0021cbca */		case 8:
+/* 0021cbca */			info.addMonster("ザコ群");
+/* 0021cbe0 */			break;
+/* 0021cbe6 */		case 9:
+/* 0021cbe6 */		case 10:
+/* 0021cbe6 */			info.addMonster("ピンキー");
+/* 0021cbfc */			break;
+/* 0021cc02 */		default:
+/* 0021cc02 */			info.addMonster("サメラ～イ");
+/* 0021cc18 */			break;
+/* 0021cc1e */		}
+/* 0021cc1e */	}
+/* 0021cc24 */	info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(3));
+/* 0021cc46 */	info.setBattleBackGroundId("地上灯台");
+/* 0021cc5c */	openBattle2(info);
+/* 0021cc6e */}
+
+void 制御／モンスター／ＴＯＷＥＲ／四層Ｃ()
+/* 0021cc7c */{
+/* 0021cc7c */	BattleInfomation info;
+/* 0021cc8c */	info.addMonster("ウルンセル");
+/* 0021cca2 */	info.addMonster("ウルンセル赤");
+/* 0021ccb8 */	info.addMonster("ウルンセル緑");
+/* 0021ccce */	info.addMonster("ウルンセル青");
+/* 0021cce4 */	info.addMonster("ウルンセル");
+/* 0021ccfa */	info.addMonster("ウルンセル");
+/* 0021cd10 */	info.addMonster("ウルンセル緑");
+/* 0021cd26 */	info.addMonster("ウルンセル赤");
+/* 0021cd3c */	info.addMonster("ウルンセル赤");
+/* 0021cd52 */	info.addMonster("ウルンセル");
+/* 0021cd68 */	info.addMonster("ウルンセル緑");
+/* 0021cd7e */	info.addMonster("ウルンセル緑");
+/* 0021cd94 */	info.setBattleBackGroundId("地上灯台");
+/* 0021cdaa */	info.setMusicId("音楽／戦闘／大ボス");
+/* 0021cdc0 */	info.setExtraBattleFlag(1);
+/* 0021cdd6 */	openBattle2(info);
+/* 0021cde8 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／五層Ａ()
+/* 0021cdf6 */{
+/* 0021cdf6 */	BattleInfomation info;
+/* 0021ce06 */	int num;
+/* 0021ce18 */	switch (RAND(12))
+/* 0021ce30 */	{
+/* 0021ce30 */	case 1:
+/* 0021ce30 */		num = 1;
+/* 0021ce42 */		break;
+/* 0021ce48 */	case 2:
+/* 0021ce48 */	case 3:
+/* 0021ce48 */		num = 2;
+/* 0021ce5a */		break;
+/* 0021ce60 */	case 4:
+/* 0021ce60 */	case 5:
+/* 0021ce60 */	case 6:
+/* 0021ce60 */	case 7:
+/* 0021ce60 */	case 8:
+/* 0021ce60 */		num = 3;
+/* 0021ce72 */		break;
+/* 0021ce78 */	case 9:
+/* 0021ce78 */	case 10:
+/* 0021ce78 */		num = RAND(3) + 3;
+/* 0021ce98 */		break;
+/* 0021ce9e */	case 11:
+/* 0021ce9e */		num = RAND(6) + 3;
+/* 0021cebe */		break;
+/* 0021cec4 */	default:
+/* 0021cec4 */		num = RAND(9) + 3;
+/* 0021cee4 */		break;
+/* 0021ceea */	}
+/* 0021ceea */	int i;
+/* 0021cefc */	for (i = 0; i < num; ++i)
+/* 0021cf46 */	{
+/* 0021cf46 */		switch (RAND(12))
+/* 0021cf5e */		{
+/* 0021cf5e */		case 1:
+/* 0021cf5e */			info.addMonster("こんにちわv2");
+/* 0021cf74 */			break;
+/* 0021cf7a */		case 2:
+/* 0021cf7a */			info.addMonster("重課金戦士群");
+/* 0021cf90 */			break;
+/* 0021cf96 */		case 3:
+/* 0021cf96 */			info.addMonster("凶悪ハニー");
+/* 0021cfac */			break;
+/* 0021cfb2 */		case 4:
+/* 0021cfb2 */			info.addMonster("つみれマン");
+/* 0021cfc8 */			break;
+/* 0021cfce */		case 5:
+/* 0021cfce */		case 6:
+/* 0021cfce */			info.addMonster("ゲーリング");
+/* 0021cfe4 */			break;
+/* 0021cfea */		case 7:
+/* 0021cfea */		case 8:
+/* 0021cfea */			info.addMonster("バグ群");
+/* 0021d000 */			break;
+/* 0021d006 */		case 9:
+/* 0021d006 */		case 10:
+/* 0021d006 */			info.addMonster("サメラ～イ");
+/* 0021d01c */			break;
+/* 0021d022 */		default:
+/* 0021d022 */			info.addMonster("オッズ");
+/* 0021d038 */			break;
+/* 0021d03e */		}
+/* 0021d03e */	}
+/* 0021d044 */	info.setItem("世色癌1", 制御／戦闘／アイテム確率設定(3));
+/* 0021d066 */	info.setBattleBackGroundId("地上灯台");
+/* 0021d07c */	openBattle2(info);
+/* 0021d08e */}
+
+void 制御／モンスター／ＴＯＷＥＲ／五層Ｂ()
+/* 0021d09c */{
+/* 0021d09c */	BattleInfomation info;
+/* 0021d0ac */	int num;
+/* 0021d0be */	switch (RAND(12))
+/* 0021d0d6 */	{
+/* 0021d0d6 */	case 1:
+/* 0021d0d6 */		num = 1;
+/* 0021d0e8 */		break;
+/* 0021d0ee */	case 2:
+/* 0021d0ee */	case 3:
+/* 0021d0ee */		num = 2;
+/* 0021d100 */		break;
+/* 0021d106 */	case 4:
+/* 0021d106 */	case 5:
+/* 0021d106 */	case 6:
+/* 0021d106 */	case 7:
+/* 0021d106 */	case 8:
+/* 0021d106 */		num = 3;
+/* 0021d118 */		break;
+/* 0021d11e */	case 9:
+/* 0021d11e */	case 10:
+/* 0021d11e */		num = RAND(3) + 3;
+/* 0021d13e */		break;
+/* 0021d144 */	case 11:
+/* 0021d144 */		num = RAND(6) + 3;
+/* 0021d164 */		break;
+/* 0021d16a */	default:
+/* 0021d16a */		num = RAND(9) + 3;
+/* 0021d18a */		break;
+/* 0021d190 */	}
+/* 0021d190 */	int i;
+/* 0021d1a2 */	for (i = 0; i < num; ++i)
+/* 0021d1ec */	{
+/* 0021d1ec */		switch (RAND(12))
+/* 0021d204 */		{
+/* 0021d204 */		case 1:
+/* 0021d204 */			info.addMonster("バグ群");
+/* 0021d21a */			break;
+/* 0021d220 */		case 2:
+/* 0021d220 */			info.addMonster("ダブルハニー");
+/* 0021d236 */			break;
+/* 0021d23c */		case 3:
+/* 0021d23c */			info.addMonster("コンテ");
+/* 0021d252 */			break;
+/* 0021d258 */		case 4:
+/* 0021d258 */			info.addMonster("コンタートル");
+/* 0021d26e */			break;
+/* 0021d274 */		case 5:
+/* 0021d274 */		case 6:
+/* 0021d274 */			info.addMonster("ゲーリング");
+/* 0021d28a */			break;
+/* 0021d290 */		case 7:
+/* 0021d290 */		case 8:
+/* 0021d290 */			info.addMonster("こんにちわv2");
+/* 0021d2a6 */			break;
+/* 0021d2ac */		case 9:
+/* 0021d2ac */			info.addMonster("ハチ女");
+/* 0021d2c2 */			break;
+/* 0021d2c8 */		case 10:
+/* 0021d2c8 */			info.addMonster("うしドバーン");
+/* 0021d2de */			break;
+/* 0021d2e4 */		default:
+/* 0021d2e4 */			info.addMonster("大王イカマン群");
+/* 0021d2fa */			break;
+/* 0021d300 */		}
+/* 0021d300 */	}
+/* 0021d306 */	info.setItem("アサクヒロク1", 制御／戦闘／アイテム確率設定(3));
+/* 0021d328 */	info.setBattleBackGroundId("地上灯台");
+/* 0021d33e */	openBattle2(info);
+/* 0021d350 */}
+
+void 制御／モンスター／ＴＯＷＥＲ／五層Ｃ()
+/* 0021d35e */{
+/* 0021d35e */	BattleInfomation info;
+/* 0021d36e */	info.addMonster("ウルンセル赤");
+/* 0021d384 */	info.addMonster("ウルンセル青");
+/* 0021d39a */	info.addMonster("ウルンセル緑");
+/* 0021d3b0 */	info.addMonster("ウルンセル天");
+/* 0021d3c6 */	info.addMonster("ウルンセル");
+/* 0021d3dc */	info.addMonster("ウルンセル");
+/* 0021d3f2 */	info.addMonster("ウルンセル青");
+/* 0021d408 */	info.addMonster("ウルンセル");
+/* 0021d41e */	info.addMonster("ウルンセル");
+/* 0021d434 */	info.addMonster("ウルンセル緑");
+/* 0021d44a */	info.addMonster("ウルンセル");
+/* 0021d460 */	info.setBattleBackGroundId("地上灯台");
+/* 0021d476 */	info.setMusicId("音楽／戦闘／大ボス");
+/* 0021d48c */	info.setExtraBattleFlag(1);
+/* 0021d4a2 */	openBattle2(info);
+/* 0021d4b4 */}
+

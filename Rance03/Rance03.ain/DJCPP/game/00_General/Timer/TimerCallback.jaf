@@ -1,0 +1,42 @@
+TimerCallback::TimerCallback()
+/* 001800e4 */{
+/* 001800ec */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00180112 */	this.release();
+/* 0018011a */}
+
+void TimerCallback::setTimer(int time, DG_GeneralCallback cb)
+/* 00180122 */{
+/* 00180122 */	this.time_ = time;
+/* 00180138 */	this.isRunning_ = true;
+/* 0018014a */	this.cb_ = cb;
+/* 00180164 */	this.timer_.reset();
+/* 00180174 */}
+
+void TimerCallback::update()
+/* 0018017c */{
+/* 0018017c */	if (this.time_ >= 0 && this.timer_.getTime() > this.time_)
+/* 001801ce */	{
+/* 001801ce */		DG_GeneralCallback bk = this.cb_;
+/* 001801ee */		this.release();
+/* 001801f6 */		bk();
+/* 00180216 */		bk.Clear();
+/* 00180222 */	}
+/* 00180222 */}
+
+void TimerCallback::release()
+/* 0018022a */{
+/* 0018022a */	this.isRunning_ = false;
+/* 0018023c */	this.time_ = -1;
+/* 0018024e */	this.cb_.Clear();
+/* 0018025a */}
+
+int TimerCallback::getTime()
+/* 00180262 */{
+/* 00180262 */	return this.timer_.getTime();
+/* 00180274 */}
+
+bool TimerCallback::isRunning()
+/* 00180282 */{
+/* 00180282 */	return this.isRunning_;
+/* 0018028e */}
+

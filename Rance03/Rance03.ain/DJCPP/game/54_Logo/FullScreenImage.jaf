@@ -1,0 +1,46 @@
+FullScreenImage::FullScreenImage()
+/* 001c544a */{
+/* 001c5452 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001c5478 */}
+
+void FullScreenImage::init(string imageName)
+/* 001c5480 */{
+/* 001c5480 */	this.parts_[0].init(imageName, 0);
+/* 001c54a8 */	createPartsGroup(this.parent_, this.parts_, 6000);
+/* 001c54c8 */}
+
+void FullScreenImage::update()
+/* 001c54d0 */{
+/* 001c54d2 */}
+
+void FullScreenImage::run(DG_GeneralCallback onFinish)
+/* 001c54d8 */{
+/* 001c54d8 */	this.setPartsShow();
+/* 001c54e0 */	array@PartsMotion m[3];
+/* 001c54f6 */	m[0].setAlpha(0, 255, 0);
+/* 001c5520 */	m[0].setTime(500);
+/* 001c553e */	m[1].setTime(500);
+/* 001c555c */	m[2].setAlpha(255, 0, 0);
+/* 001c5586 */	m[2].setTime(500);
+/* 001c55a4 */	this.parent_.runMotionArray(m, onFinish);
+/* 001c55cc */}
+
+void FullScreenImage::initParts()
+/* 001c55d4 */{
+/* 001c55d4 */	this.setPartsPos();
+/* 001c55dc */}
+
+void FullScreenImage::setPartsShow()
+/* 001c55e4 */{
+/* 001c55e4 */	int i;
+/* 001c55f6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001c5646 */	{
+/* 001c5646 */		this.parts_[i].setShow(true);
+/* 001c5668 */	}
+/* 001c566e */	this.parent_.setShow(true);
+/* 001c5684 */}
+
+void FullScreenImage::setPartsPos()
+/* 001c568c */{
+/* 001c568e */}
+

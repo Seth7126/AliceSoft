@@ -1,0 +1,122 @@
+void キー待ち(bool _ignore_skip_mode)
+/* 0015e948 */{
+/* 0015e948 */	SYS_バックシーン登録();
+/* 0015e94e */	CASClick LButtonClick;
+/* 0015e95e */	CASClick MButtonClick;
+/* 0015e96e */	CASClick EnterKeyClick;
+/* 0015e97e */	CASClick UpKeyClick;
+/* 0015e98e */	CASClick DownKeyClick;
+/* 0015e99e */	CASClick EscapeKeyClick;
+/* 0015e9ae */	CASClick AKeyClick;
+/* 0015e9be */	CASClick SKeyClick;
+/* 0015e9ce */	CASClick PageUpKeyClick;
+/* 0015e9de */	CASClick HomeKeyClick;
+/* 0015e9ee */	CASClick BackSpaceKeyClick;
+/* 0015e9fe */	LButtonClick.Init(1, true);
+/* 0015ea1a */	MButtonClick.Init(4, true);
+/* 0015ea36 */	EnterKeyClick.Init(13, true);
+/* 0015ea52 */	UpKeyClick.Init(38, true);
+/* 0015ea6e */	DownKeyClick.Init(40, true);
+/* 0015ea8a */	EscapeKeyClick.Init(27, true);
+/* 0015eaa6 */	AKeyClick.Init(65, true);
+/* 0015eac2 */	SKeyClick.Init(83, true);
+/* 0015eade */	PageUpKeyClick.Init(33, true);
+/* 0015eafa */	HomeKeyClick.Init(36, true);
+/* 0015eb16 */	BackSpaceKeyClick.Init(32, true);
+/* 0015eb32 */	CASJoyClickAssignedKey JoyOkClick;
+/* 0015eb42 */	JoyOkClick.Init(4, true);
+/* 0015eb5e */	int _time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0015eb7e */	bool IsViewUpdate = false;
+/* 0015eb90 */	for (; ; )
+/* 0015eb90 */	{
+/* 0015eb90 */		if (SYS_全文スキップ中確認())
+/* 0015eb9c */		{
+/* 0015eb9c */			SYS_メッセージスキップ待ち();
+/* 0015eba2 */			break;
+/* 0015eba8 */		}
+/* 0015eba8 */		if (LButtonClick.IsClick(-2147483648))
+/* 0015ebc4 */		{
+/* 0015ebc4 */			break;
+/* 0015ebca */		}
+/* 0015ebca */		if (MButtonClick.IsClick(-2147483648))
+/* 0015ebe6 */		{
+/* 0015ebe6 */			Ｓ＿既読スキップ();
+/* 0015ebec */		}
+/* 0015ebec */		if (EnterKeyClick.IsClick(-2147483648))
+/* 0015ec08 */		{
+/* 0015ec08 */			break;
+/* 0015ec0e */		}
+/* 0015ec0e */		if (UpKeyClick.IsClick(-2147483648))
+/* 0015ec2a */		{
+/* 0015ec2a */			SYS_RunCommandMouseWheelForward();
+/* 0015ec30 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0015ec50 */		}
+/* 0015ec50 */		if (DownKeyClick.IsClick(-2147483648))
+/* 0015ec6c */		{
+/* 0015ec6c */			break;
+/* 0015ec72 */		}
+/* 0015ec72 */		if (EscapeKeyClick.IsClick(-2147483648))
+/* 0015ec8e */		{
+/* 0015ec8e */			Ｓ＿コンフィグ();
+/* 0015ec94 */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0015ecb4 */		}
+/* 0015ecb4 */		if (AKeyClick.IsClick(-2147483648))
+/* 0015ecd0 */		{
+/* 0015ecd0 */			Ｓ＿オート();
+/* 0015ecd6 */		}
+/* 0015ecd6 */		if (SKeyClick.IsClick(-2147483648))
+/* 0015ecf2 */		{
+/* 0015ecf2 */			Ｓ＿既読スキップ();
+/* 0015ecf8 */		}
+/* 0015ecf8 */		if (PageUpKeyClick.IsClick(-2147483648))
+/* 0015ed14 */		{
+/* 0015ed14 */			Ｓ＿バックログ();
+/* 0015ed1a */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0015ed3a */		}
+/* 0015ed3a */		if (HomeKeyClick.IsClick(-2147483648))
+/* 0015ed56 */		{
+/* 0015ed56 */			Ｓ＿バックシーン();
+/* 0015ed5c */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0015ed7c */		}
+/* 0015ed7c */		if (BackSpaceKeyClick.IsClick(-2147483648))
+/* 0015ed98 */		{
+/* 0015ed98 */			Ｓ＿ボイスリプレイ();
+/* 0015ed9e */		}
+/* 0015ed9e */		if (JoyOkClick.IsClick(-2147483648))
+/* 0015edba */		{
+/* 0015edba */			break;
+/* 0015edc0 */		}
+/* 0015edc0 */		if (!_ignore_skip_mode)
+/* 0015edd2 */		{
+/* 0015edd2 */			if (SYS_全文スキップ中確認() || SYS_スキップ中確認())
+/* 0015ee02 */			{
+/* 0015ee02 */				SYS_メッセージスキップ待ち();
+/* 0015ee08 */				break;
+/* 0015ee0e */			}
+/* 0015ee0e */			if (Ａ＿オートモード中確認())
+/* 0015ee1a */			{
+/* 0015ee1a */				if (system.GetTime() >= _time_out)
+/* 0015ee32 */				{
+/* 0015ee32 */					break;
+/* 0015ee38 */				}
+/* 0015ee38 */			}
+/* 0015ee38 */		}
+/* 0015ee38 */		if (SYS_ホイールフォア即確認())
+/* 0015ee44 */		{
+/* 0015ee44 */			SYS_RunCommandMouseWheelForward();
+/* 0015ee4a */			_time_out = system.GetTime() + SYS_オートモード待機時間計算(15);
+/* 0015ee6a */		}
+/* 0015ee6a */		if (SYS_ホイールバック確認())
+/* 0015ee76 */		{
+/* 0015ee76 */			break;
+/* 0015ee7c */		}
+/* 0015ee7c */		AFL_View_Update(true);
+/* 0015ee88 */		IsViewUpdate = true;
+/* 0015ee9a */	}
+/* 0015eea0 */	if (!IsViewUpdate)
+/* 0015eeb2 */	{
+/* 0015eeb2 */		AFL_View_Update(true);
+/* 0015eebe */	}
+/* 0015eebe */	IbisInputEngine.Mouse_HideByStepMessage();
+/* 0015eec8 */}
+

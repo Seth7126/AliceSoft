@@ -1,0 +1,104 @@
+SceneReplaySelection::SceneReplaySelection()
+/* 001c1a08 */{
+/* 001c1a10 */	this.isFadeOutFinish_ = false;
+/* 001c1a22 */}
+
+void SceneReplaySelection::init(array@string selection)
+/* 001c1a2a */{
+/* 001c1a2a */	this.clickedIndex_ = -2;
+/* 001c1a3c */	this.selection_.Alloc(selection.Numof());
+/* 001c1a5c */	this.selection_.Copy(0, selection, 0, selection.Numof());
+/* 001c1a8e */	this.initBg();
+/* 001c1a96 */	this.initButton();
+/* 001c1a9e */}
+
+void SceneReplaySelection::initBg()
+/* 001c1aa6 */{
+/* 001c1aa6 */	this.partsBg_.initAsPlaneImage(1024, 768, 0, 0, 0, 160);
+/* 001c1ada */	this.partsBg_.setZ(8500.0);
+/* 001c1af0 */}
+
+void SceneReplaySelection::initButton()
+/* 001c1af8 */{
+/* 001c1af8 */	this.btn_.Alloc(this.selection_.Numof());
+/* 001c1b18 */	int i;
+/* 001c1b2a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c1b7a */	{
+/* 001c1b7a */		this.btn_[i].init("システム／ボタン／幅２８２", this.selection_[i], "", true);
+/* 001c1bbe */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001c1bee */		this.btn_[i].setZ(8550);
+/* 001c1c10 */	}
+/* 001c1c16 */	this.btn_[this.btn_.Numof() - 1].setOnFinishFadeOutCallback(this.onFinishFadeOut);
+/* 001c1c4a */}
+
+void SceneReplaySelection::run()
+/* 001c1c52 */{
+/* 001c1c52 */	this.fadeIn(true);
+/* 001c1c60 */}
+
+bool SceneReplaySelection::update()
+/* 001c1c68 */{
+/* 001c1c68 */	if (this.isFadeOutFinish_)
+/* 001c1c78 */	{
+/* 001c1c78 */		return false;
+/* 001c1c80 */	}
+/* 001c1c80 */	if (this.clickedIndex_ == -2 && g_mouse.isClick(1))
+/* 001c1ccc */	{
+/* 001c1ccc */		playCancel();
+/* 001c1cd2 */		this.clickedIndex_ = -1;
+/* 001c1ce4 */		this.fadeIn(false);
+/* 001c1cf2 */	}
+/* 001c1cf2 */	return true;
+/* 001c1cfa */}
+
+void SceneReplaySelection::fadeIn(bool val)
+/* 001c1d08 */{
+/* 001c1d08 */	int i;
+/* 001c1d1a */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c1d6a */	{
+/* 001c1d6a */		int x;
+/* 001c1d7c */		int y;
+/* 001c1d8e */		this.getPos(x, y, i);
+/* 001c1db0 */		array@PartsMotion m[1];
+/* 001c1dc6 */		if (val)
+/* 001c1dd6 */		{
+/* 001c1dd6 */			m[0].setTime(250);
+/* 001c1df4 */			m[0].setMove(371, 360, x, y, 1);
+/* 001c1e32 */			m[0].setAlpha(0, 255, 0);
+/* 001c1e5c */		}
+/* 001c1e62 */		else
+/* 001c1e62 */		{
+/* 001c1e62 */			m[0].setTime(100);
+/* 001c1e80 */			m[0].setMove(x, y, 371, 360, 1);
+/* 001c1ebe */			m[0].setAlpha(255, 0, 0);
+/* 001c1ee8 */		}
+/* 001c1ee8 */		this.btn_[i].fadeInCustomized(val, m);
+/* 001c1f22 */	}
+/* 001c1f28 */	this.partsBg_.setShow(true);
+/* 001c1f3e */	this.partsBg_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c1f78 */}
+
+void SceneReplaySelection::onClick(int index)
+/* 001c1f80 */{
+/* 001c1f80 */	this.clickedIndex_ = index;
+/* 001c1f96 */	this.fadeIn(false);
+/* 001c1fa4 */}
+
+int SceneReplaySelection::getClickedIndex()
+/* 001c1fac */{
+/* 001c1fac */	return this.clickedIndex_;
+/* 001c1fb8 */}
+
+void SceneReplaySelection::getPos(ref int x, ref int y, int index)
+/* 001c1fc6 */{
+/* 001c1fc6 */	int c = this.selection_.Numof();
+/* 001c1fe2 */	int h = c * 48 + (c - 1) * 8;
+/* 001c201c */	x = 371;
+/* 001c2030 */	y = ((384 - h / 2) + index * 56) - 24;
+/* 001c2074 */}
+
+void SceneReplaySelection::onFinishFadeOut()
+/* 001c207c */{
+/* 001c207c */	this.isFadeOutFinish_ = true;
+/* 001c208e */}
+

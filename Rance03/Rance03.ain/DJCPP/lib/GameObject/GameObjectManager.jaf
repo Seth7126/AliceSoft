@@ -1,0 +1,131 @@
+int GameObjectManager::addFocusObject(DELEGATE_UPDATE_METHOD cbUpdate, DELEGATE_FOCUSED_METHOD cbFocused)
+/* 001e55e2 */{
+/* 001e55e2 */	GameObject m;
+/* 001e55f2 */	m.setId(this.getNewObjectId());
+/* 001e560a */	m.setObjectName(system.GetFuncStackName(1));
+/* 001e5626 */	m.setUpdateMethod(cbUpdate);
+/* 001e5642 */	m.setFocusedMethod(cbFocused);
+/* 001e565e */	this.gameObject_.PushBack(m);
+/* 001e5676 */	return m.getId();
+/* 001e5688 */}
+
+int GameObjectManager::addObject(DELEGATE_UPDATE_METHOD cbUpdate)
+/* 001e5696 */{
+/* 001e5696 */	GameObject m;
+/* 001e56a6 */	m.setId(this.getNewObjectId());
+/* 001e56be */	m.setObjectName(system.GetFuncStackName(1));
+/* 001e56da */	m.setUpdateMethod(cbUpdate);
+/* 001e56f6 */	this.gameObject_.PushBack(m);
+/* 001e570e */	return m.getId();
+/* 001e5720 */}
+
+int GameObjectManager::addIndependentObject(DELEGATE_UPDATE_METHOD cbUpdate)
+/* 001e572e */{
+/* 001e572e */	GameObject m;
+/* 001e573e */	m.setId(this.getNewObjectId());
+/* 001e5756 */	m.setObjectName(system.GetFuncStackName(1));
+/* 001e5772 */	m.setUpdateMethod(cbUpdate);
+/* 001e578e */	m.setIndependentObject(true);
+/* 001e57a4 */	this.gameObject_.PushBack(m);
+/* 001e57bc */	return m.getId();
+/* 001e57ce */}
+
+void GameObjectManager::update()
+/* 001e57dc */{
+/* 001e57dc */	int i;
+/* 001e57ee */	while (i < this.gameObject_.Numof())
+/* 001e5810 */	{
+/* 001e5810 */		if (this.gameObject_[i].isAlive())
+/* 001e5832 */		{
+/* 001e5832 */			if (!this.gameObject_[i].isStacked())
+/* 001e5856 */			{
+/* 001e5856 */				this.gameObject_[i].callUpdateMethod();
+/* 001e5874 */			}
+/* 001e5874 */			++i;
+/* 001e5884 */		}
+/* 001e588a */		else
+/* 001e588a */		{
+/* 001e588a */			this.gameObject_.Erase(i);
+/* 001e58a0 */		}
+/* 001e58a0 */	}
+/* 001e58a6 */}
+
+void GameObjectManager::pushScene()
+/* 001e58ae */{
+/* 001e58ae */	this.stackGameObject(true);
+/* 001e58bc */}
+
+void GameObjectManager::popScene()
+/* 001e58c4 */{
+/* 001e58c4 */	this.stackGameObject(false);
+/* 001e58d2 */}
+
+void GameObjectManager::stackGameObject(bool val)
+/* 001e58da */{
+/* 001e58da */	int i;
+/* 001e58ec */	while (i < this.gameObject_.Numof())
+/* 001e590e */	{
+/* 001e590e */		if (!this.gameObject_[i].isAlive())
+/* 001e5932 */		{
+/* 001e5932 */			this.gameObject_.Erase(i);
+/* 001e5948 */		}
+/* 001e594e */		else
+/* 001e594e */		{
+/* 001e594e */			if (val)
+/* 001e595e */			{
+/* 001e595e */				this.gameObject_[i].addSceneStackLevel();
+/* 001e597a */			}
+/* 001e5980 */			else
+/* 001e5980 */			{
+/* 001e5980 */				this.gameObject_[i].decSceneStackLevel();
+/* 001e599c */			}
+/* 001e599c */			++i;
+/* 001e59ac */		}
+/* 001e59ac */	}
+/* 001e59b2 */}
+
+void GameObjectManager::setSceneStackLevel(int id, int level)
+/* 001e59ba */{
+/* 001e59ba */	int i;
+/* 001e59cc */	for (i = 0; i < this.gameObject_.Numof(); ++i)
+/* 001e5a1c */	{
+/* 001e5a1c */		if (this.gameObject_[i].getId() == id)
+/* 001e5a4a */		{
+/* 001e5a4a */			this.gameObject_[i].setSceneStackLevel(level);
+/* 001e5a70 */			return;
+/* 001e5a72 */		}
+/* 001e5a72 */	}
+/* 001e5a78 */}
+
+int GameObjectManager::getSceneStackLevel(int id)
+/* 001e5a80 */{
+/* 001e5a80 */	int i;
+/* 001e5a92 */	for (i = 0; i < this.gameObject_.Numof(); ++i)
+/* 001e5ae2 */	{
+/* 001e5ae2 */		if (this.gameObject_[i].getId() == id)
+/* 001e5b10 */		{
+/* 001e5b10 */			return this.gameObject_[i].getSceneStackLevel();
+/* 001e5b2e */		}
+/* 001e5b2e */	}
+/* 001e5b34 */	return 0;
+/* 001e5b3c */}
+
+int GameObjectManager::getNewObjectId()
+/* 001e5b4a */{
+/* 001e5b4a */	this.objectId_ = this.objectId_ + 1 & 65535;
+/* 001e5b70 */	return this.objectId_;
+/* 001e5b7c */}
+
+int GameObjectManager::getFocusedObjectId()
+/* 001e5b8a */{
+/* 001e5b8a */	int i;
+/* 001e5b9c */	for (i = 0; i < this.gameObject_.Numof(); ++i)
+/* 001e5bec */	{
+/* 001e5bec */		if (!this.gameObject_[i].isStacked() && this.gameObject_[i].callFocuedMethod())
+/* 001e5c4a */		{
+/* 001e5c4a */			return this.gameObject_[i].getId();
+/* 001e5c68 */		}
+/* 001e5c68 */	}
+/* 001e5c6e */	return -1;
+/* 001e5c76 */}
+

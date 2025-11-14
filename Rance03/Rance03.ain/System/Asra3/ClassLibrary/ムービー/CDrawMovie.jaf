@@ -1,0 +1,110 @@
+CDrawMovie::CDrawMovie()
+/* 000129fa */{
+/* 00012a02 */	this.m_MovieParts = 0;
+/* 00012a14 */	this.m_anKeyCode.PushBack(1);
+/* 00012a24 */	this.m_anKeyCode.PushBack(2);
+/* 00012a34 */	this.m_anKeyCode.PushBack(13);
+/* 00012a44 */	this.m_anKeyCode.PushBack(32);
+/* 00012a54 */	this.m_abKeyDown.Alloc(this.m_anKeyCode.Numof());
+/* 00012a74 */	this.m_abKeyDown.Fill(0, this.m_abKeyDown.Numof(), false);
+/* 00012a9c */	this.m_nBackColorY = 0;
+/* 00012aae */	this.m_nBackColorCb = 128;
+/* 00012ac0 */	this.m_nBackColorCr = 128;
+/* 00012ad2 */}
+
+CDrawMovie::~CDrawMovie()
+/* 00012ada */{
+/* 00012ada */	this.Release();
+/* 00012ae2 */}
+
+void CDrawMovie::Release()
+/* 00012aea */{
+/* 00012aea */	PARTS_Release(this.m_MovieParts);
+/* 00012afa */	this.m_abKeyDown.Fill(0, this.m_abKeyDown.Numof(), false);
+/* 00012b22 */}
+
+bool CDrawMovie::CreateMovieParts(string FileName, int SoundGroup)
+/* 00012b2a */{
+/* 00012b2a */	PARTS_Release(this.m_MovieParts);
+/* 00012b3a */	this.m_MovieParts = PARTS_GetFreeSystemPartsNumber();
+/* 00012b4c */	PartsEngine.CreatePartsMovie(this.m_MovieParts, FileName, 1000, SoundGroup, this.m_nBackColorY, this.m_nBackColorCb, this.m_nBackColorCr, 1);
+/* 00012ba0 */	Ｐ＿Ｚ座標設定(this.m_MovieParts, 0);
+/* 00012bb6 */	return true;
+/* 00012bbe */}
+
+bool CDrawMovie::IsClick()
+/* 00012bcc */{
+/* 00012bcc */	int n;
+/* 00012bde */	for (n = 0; n < this.m_anKeyCode.Numof(); n++)
+/* 00012c32 */	{
+/* 00012c32 */		if (AFL_IsKeyDown(this.m_anKeyCode[n]))
+/* 00012c54 */		{
+/* 00012c54 */			this.m_abKeyDown[n] = true;
+/* 00012c72 */		}
+/* 00012c78 */		else if (this.m_abKeyDown[n])
+/* 00012c94 */		{
+/* 00012c94 */			this.m_abKeyDown[n] = false;
+/* 00012cb2 */			return true;
+/* 00012cba */		}
+/* 00012cba */	}
+/* 00012cc0 */	return false;
+/* 00012cc8 */}
+
+bool CDrawMovie::Play(string FileName, int SoundGroup, bool bKeyCancel)
+/* 00012cd6 */{
+/* 00012cd6 */	this.Release();
+/* 00012cde */	CASPartsLayer Layer;
+/* 00012cee */	if (!this.CreateMovieParts(FileName, SoundGroup))
+/* 00012d12 */	{
+/* 00012d12 */		return false;
+/* 00012d1a */	}
+/* 00012d1a */	IbisInputEngine.Mouse_HideCursorByGame(true);
+/* 00012d2c */	this.m_EscapeKeyClick.Init(27, true);
+/* 00012d48 */	CASJoyClickAssignedKey CancelOKButton;
+/* 00012d58 */	CASJoyClickAssignedKey CancelJoyClick;
+/* 00012d68 */	CancelOKButton.Init(4, true);
+/* 00012d84 */	CancelJoyClick.Init(5, true);
+/* 00012da0 */	int nStartTime = system.GetTime();
+/* 00012db2 */	if (!PartsEngine.PlayPartsMovie(this.m_MovieParts, 1))
+/* 00012dd4 */	{
+/* 00012dd4 */		IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00012de6 */		return false;
+/* 00012dee */	}
+/* 00012dee */	while (!PartsEngine.IsEndPartsMovie(this.m_MovieParts, 1))
+/* 00012e10 */	{
+/* 00012e10 */		if (bKeyCancel && system.GetTime() - nStartTime >= 1000)
+/* 00012e58 */		{
+/* 00012e58 */			if (this.IsClick())
+/* 00012e66 */			{
+/* 00012e66 */				break;
+/* 00012e6c */			}
+/* 00012e6c */			if (CancelOKButton.IsClick(-2147483648))
+/* 00012e88 */			{
+/* 00012e88 */				break;
+/* 00012e8e */			}
+/* 00012e8e */			if (CancelJoyClick.IsClick(-2147483648))
+/* 00012eaa */			{
+/* 00012eaa */				break;
+/* 00012eb0 */			}
+/* 00012eb0 */		}
+/* 00012eb0 */		if (this.m_EscapeKeyClick.IsClick(-2147483648))
+/* 00012ecc */		{
+/* 00012ecc */			IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00012ede */			Ｓ＿コンフィグ();
+/* 00012ee4 */			IbisInputEngine.Mouse_HideCursorByGame(true);
+/* 00012ef6 */		}
+/* 00012ef6 */		AFL_View_Update(true);
+/* 00012f02 */		SYS_RestrainScreensaverWhileAutoMode();
+/* 00012f08 */	}
+/* 00012f0e */	this.Release();
+/* 00012f16 */	IbisInputEngine.Mouse_HideCursorByGame(false);
+/* 00012f28 */	return true;
+/* 00012f30 */}
+
+void CDrawMovie::SetBackColor(int nR, int nG, int nB)
+/* 00012f3e */{
+/* 00012f3e */	this.m_nBackColorY = 0.29891 * nR + 0.58661 * nG + 0.11448 * nB;
+/* 00012f8c */	this.m_nBackColorCb = (-0.16874 * nR - 0.33126 * nG) + 0.5 * nB + 128.0;
+/* 00012fe2 */	this.m_nBackColorCr = (0.5 * nR - 0.41869 * nG - 0.08131 * nB) + 128.0;
+/* 00013038 */}
+

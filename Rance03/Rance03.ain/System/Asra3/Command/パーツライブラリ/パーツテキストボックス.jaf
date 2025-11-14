@@ -1,0 +1,175 @@
+void Ｐ＿テキストボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 001664f8 */{
+/* 001664f8 */	PartsEngine.SetTextBoxSize(パーツ番号, 幅, 高さ);
+/* 00166520 */}
+
+void Ｐ＿テキストボックス＿フォント設定(int パーツ番号, int 種類, int 赤, int 緑, int 青, float 太字幅, int 縁取り赤, int 縁取り緑, int 縁取り青, float 縁取り幅)
+/* 0016652e */{
+/* 0016652e */	PartsEngine.SetTextBoxFontProperty(パーツ番号, 種類, 16, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 001665a2 */}
+
+void Ｐ＿テキストボックス＿フォント取得(int パーツ番号, ref int 種類, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青, ref float 縁取り幅)
+/* 001665b0 */{
+/* 001665b0 */	int サイズ;
+/* 001665c2 */	PartsEngine.GetTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00166638 */}
+
+void Ｐ＿テキストボックス＿読み取り専用設定(int パーツ番号, bool 読み取り)
+/* 00166646 */{
+/* 00166646 */	PartsEngine.SetTextBoxReadOnly(パーツ番号, 読み取り);
+/* 00166664 */}
+
+bool Ｐ＿テキストボックス＿読み取り専用確認(int パーツ番号)
+/* 00166672 */{
+/* 00166672 */	return PartsEngine.IsTextBoxReadOnly(パーツ番号);
+/* 00166688 */}
+
+void Ｐ＿テキストボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 0016669c */{
+/* 0016669c */	PartsEngine.SetTextBoxText(パーツ番号, テキスト);
+/* 001666ba */}
+
+string Ｐ＿テキストボックス＿テキスト取得(int パーツ番号)
+/* 001666c8 */{
+/* 001666c8 */	string Text;
+/* 001666dc */	PartsEngine.GetTextBoxText(パーツ番号, Text);
+/* 001666fa */	return Text;
+/* 00166706 */}
+
+void Ｐ＿テキストボックス＿最大文字数設定(int パーツ番号, int 最大文字数)
+/* 0016671a */{
+/* 0016671a */	PartsEngine.SetTextBoxMaxTextLength(パーツ番号, 最大文字数);
+/* 00166738 */}
+
+int Ｐ＿テキストボックス＿最大文字数取得(int パーツ番号)
+/* 00166746 */{
+/* 00166746 */	return PartsEngine.GetTextBoxMaxTextLength(パーツ番号);
+/* 0016675c */}
+
+void Ｐ＿テキストボックス＿背景色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00166770 */{
+/* 00166770 */	PartsEngine.SetTextBoxBGColor(パーツ番号, 赤, 緑, 青);
+/* 001667a2 */}
+
+int Ｐ＿テキストボックス＿背景色赤取得(int パーツ番号)
+/* 001667b0 */{
+/* 001667b0 */	return PartsEngine.GetTextBoxBGR(パーツ番号);
+/* 001667c6 */}
+
+int Ｐ＿テキストボックス＿背景色緑取得(int パーツ番号)
+/* 001667da */{
+/* 001667da */	return PartsEngine.GetTextBoxBGG(パーツ番号);
+/* 001667f0 */}
+
+int Ｐ＿テキストボックス＿背景色青取得(int パーツ番号)
+/* 00166804 */{
+/* 00166804 */	return PartsEngine.GetTextBoxBGB(パーツ番号);
+/* 0016681a */}
+
+void Ｐ＿テキストボックス＿読み取り専用背景色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 0016682e */{
+/* 0016682e */	PartsEngine.SetTextBoxReadOnlyBGColor(パーツ番号, 赤, 緑, 青);
+/* 00166860 */}
+
+int Ｐ＿テキストボックス＿読み取り専用背景色赤取得(int パーツ番号)
+/* 0016686e */{
+/* 0016686e */	return PartsEngine.GetTextBoxReadOnlyBGR(パーツ番号);
+/* 00166884 */}
+
+int Ｐ＿テキストボックス＿読み取り専用背景色緑取得(int パーツ番号)
+/* 00166898 */{
+/* 00166898 */	return PartsEngine.GetTextBoxReadOnlyBGG(パーツ番号);
+/* 001668ae */}
+
+int Ｐ＿テキストボックス＿読み取り専用背景色青取得(int パーツ番号)
+/* 001668c2 */{
+/* 001668c2 */	return PartsEngine.GetTextBoxReadOnlyBGB(パーツ番号);
+/* 001668d8 */}
+
+void Ｐ＿テキストボックス＿枠色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 001668ec */{
+/* 001668ec */	PartsEngine.SetTextBoxFrameColor(パーツ番号, 赤, 緑, 青);
+/* 0016691e */}
+
+int Ｐ＿テキストボックス＿枠色赤取得(int パーツ番号)
+/* 0016692c */{
+/* 0016692c */	return PartsEngine.GetTextBoxFrameR(パーツ番号);
+/* 00166942 */}
+
+int Ｐ＿テキストボックス＿枠色緑取得(int パーツ番号)
+/* 00166956 */{
+/* 00166956 */	return PartsEngine.GetTextBoxFrameG(パーツ番号);
+/* 0016696c */}
+
+int Ｐ＿テキストボックス＿枠色青取得(int パーツ番号)
+/* 00166980 */{
+/* 00166980 */	return PartsEngine.GetTextBoxFrameB(パーツ番号);
+/* 00166996 */}
+
+void Ｐ＿テキストボックス＿選択色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 001669aa */{
+/* 001669aa */	PartsEngine.SetTextBoxSelectColor(パーツ番号, 赤, 緑, 青);
+/* 001669dc */}
+
+int Ｐ＿テキストボックス＿選択色赤取得(int パーツ番号)
+/* 001669ea */{
+/* 001669ea */	return PartsEngine.GetTextBoxSelectR(パーツ番号);
+/* 00166a00 */}
+
+int Ｐ＿テキストボックス＿選択色緑取得(int パーツ番号)
+/* 00166a14 */{
+/* 00166a14 */	return PartsEngine.GetTextBoxSelectG(パーツ番号);
+/* 00166a2a */}
+
+int Ｐ＿テキストボックス＿選択色青取得(int パーツ番号)
+/* 00166a3e */{
+/* 00166a3e */	return PartsEngine.GetTextBoxSelectB(パーツ番号);
+/* 00166a54 */}
+
+void Ｐ＿テキストボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00166a68 */{
+/* 00166a68 */	PartsEngine.SetTextBoxCGName(パーツ番号, ＣＧ名);
+/* 00166a86 */}
+
+string Ｐ＿テキストボックス＿ＣＧ名取得(int パーツ番号)
+/* 00166a94 */{
+/* 00166a94 */	string Name;
+/* 00166aa8 */	PartsEngine.GetTextBoxCGName(パーツ番号, Name);
+/* 00166ac6 */	return Name;
+/* 00166ad2 */}
+
+void Ｐ＿テキストボックス＿文字間隔設定(int パーツ番号, int 間隔)
+/* 00166ae6 */{
+/* 00166ae6 */	PartsEngine.SetTextBoxCharSpace(パーツ番号, 間隔);
+/* 00166b04 */}
+
+int Ｐ＿テキストボックス＿文字間隔取得(int パーツ番号)
+/* 00166b12 */{
+/* 00166b12 */	return PartsEngine.GetTextBoxCharSpace(パーツ番号);
+/* 00166b28 */}
+
+void Ｐ＿テキストボックス＿全角入力(int パーツ番号)
+/* 00166b3c */{
+/* 00166b3c */	PartsEngine.SetOpenTextBoxIME(パーツ番号, true);
+/* 00166b56 */}
+
+void Ｐ＿テキストボックス＿半角入力(int パーツ番号)
+/* 00166b64 */{
+/* 00166b64 */	PartsEngine.SetOpenTextBoxIME(パーツ番号, false);
+/* 00166b7e */}
+
+void Ｐ＿テキストボックス＿全角入力設定(int パーツ番号, bool 有効)
+/* 00166b8c */{
+/* 00166b8c */	PartsEngine.SetOpenTextBoxIME(パーツ番号, 有効);
+/* 00166baa */}
+
+bool Ｐ＿テキストボックス＿全角入力確認(int パーツ番号)
+/* 00166bb8 */{
+/* 00166bb8 */	return PartsEngine.IsOpenTextBoxIME(パーツ番号);
+/* 00166bce */}
+
+void Ｐ＿テキストボックス＿全選択(int パーツ番号)
+/* 00166be2 */{
+/* 00166be2 */	PartsEngine.SelectTextBoxAll(パーツ番号);
+/* 00166bf6 */}
+

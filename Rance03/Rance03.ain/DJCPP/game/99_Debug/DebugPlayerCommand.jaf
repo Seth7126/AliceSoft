@@ -1,0 +1,59 @@
+void debugPlayerLevelUp()
+/* 001ca800 */{
+/* 001ca800 */	int i;
+/* 001ca812 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001ca862 */	{
+/* 001ca862 */		while (true)
+/* 001ca86e */		{
+/* 001ca86e */			g_player[i].setExp(1000000);
+/* 001ca890 */			if (!g_player[i].levelUp())
+/* 001ca8b4 */			{
+/* 001ca8b4 */				break;
+/* 001ca8ba */			}
+/* 001ca8ba */		}
+/* 001ca8c0 */	}
+/* 001ca8c6 */}
+
+void debugPlayerJoinAll()
+/* 001ca8d4 */{
+/* 001ca8d4 */	int i;
+/* 001ca8e6 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001ca936 */	{
+/* 001ca936 */		g_player[i].setJoin(true);
+/* 001ca958 */	}
+/* 001ca95e */}
+
+void debugPlayerSkillLevelMax()
+/* 001ca96c */{
+/* 001ca96c */	int i;
+/* 001ca97e */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001ca9ce */	{
+/* 001ca9ce */		int j;
+/* 001ca9e0 */		for (j = 0; j < g_attackSkill.Numof(); ++j)
+/* 001caa30 */		{
+/* 001caa30 */			if (g_player[i].isAttackSkillUpgradable(g_attackSkill[j].getId()))
+/* 001caa6e */			{
+/* 001caa6e */				g_player[i].upgradeSkill(g_attackSkill[j].getId());
+/* 001caaa8 */			}
+/* 001caaa8 */		}
+/* 001caaae */	}
+/* 001caab4 */}
+
+void debugPlayerHpRecovery()
+/* 001caac2 */{
+/* 001caac2 */	int i;
+/* 001caad4 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001cab24 */	{
+/* 001cab24 */		g_player[i].setHp(g_player[i].getMaxHp());
+/* 001cab5e */	}
+/* 001cab64 */}
+
+void debugPlayerZeroThreeSkillOpen()
+/* 001cab72 */{
+/* 001cab72 */	int i;
+/* 001cab84 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001cabd4 */	{
+/* 001cabd4 */		g_player[i].setZeroThreeSkillOpened(true);
+/* 001cabf6 */	}
+/* 001cabfc */}
+

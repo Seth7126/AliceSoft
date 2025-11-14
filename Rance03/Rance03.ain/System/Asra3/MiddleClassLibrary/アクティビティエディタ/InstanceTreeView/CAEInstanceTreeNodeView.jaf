@@ -1,0 +1,433 @@
+CAEInstanceTreeNodeView::CAEInstanceTreeNodeView()
+/* 000780c6 */{
+/* 000780d0 */}
+
+CAEInstanceTreeNodeView::~CAEInstanceTreeNodeView()
+/* 000780d6 */{
+/* 000780d6 */	this.Release();
+/* 000780de */}
+
+void CAEInstanceTreeNodeView::Create(int Layout, int Clipper, ref CAEInstanceItem Item, ref array@CAEInstanceTreeNodeView NodeView)
+/* 000780e6 */{
+/* 000780e6 */	this.Release();
+/* 000780ee */	if (Item === NULL)
+/* 00078106 */	{
+/* 00078106 */		return;
+/* 00078108 */	}
+/* 00078108 */	if (NodeView === NULL)
+/* 00078120 */	{
+/* 00078120 */		return;
+/* 00078122 */	}
+/* 00078122 */	this.m_RefItem <- Item;
+/* 00078142 */	this.m_RefNodeView <- NodeView;
+/* 00078162 */	CASCharSpriteProperty Font;
+/* 00078172 */	Font.SetSize(12);
+/* 00078188 */	Font.SetColor(CF_CASColor(0, 0, 0, 255));
+/* 000781b6 */	Font.SetBoldWeight(0.0);
+/* 000781cc */	Font.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 000781fa */	this.m_MainLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 0007820c */	Ｐ＿レイアウトボックス＿追加(Layout, this.m_MainLayoutBox);
+/* 00078226 */	this.m_Text = PARTS_GetFreeSystemPartsNumber();
+/* 00078238 */	Ｐ＿レイアウトボックス＿追加(this.m_MainLayoutBox, this.m_Text);
+/* 00078252 */	PARTS_SetLockInputState(this.m_Text, true);
+/* 00078268 */	string Name = Item.GetName();
+/* 00078286 */	int Parts = Item.GetID();
+/* 000782a2 */	int NumofChild = Ｐ＿子数取得(Parts);
+/* 000782be */	if (NumofChild != 0)
+/* 000782d6 */	{
+/* 000782d6 */		Name = (Item.IsOpen() ? "－" : "＋") + Name;
+/* 00078318 */	}
+/* 0007831e */	else
+/* 0007831e */	{
+/* 0007831e */		int MyParent = Ｐ＿親設定取得(Parts);
+/* 0007833a */		int MyIndex = Ｐ＿子インデックス取得(MyParent, Parts);
+/* 00078360 */		int NumofChild = Ｐ＿子数取得(MyParent);
+/* 0007837c */		if (MyIndex == NumofChild - 1)
+/* 000783a0 */		{
+/* 000783a0 */			Name = "└" + Name;
+/* 000783c0 */		}
+/* 000783c6 */		else
+/* 000783c6 */		{
+/* 000783c6 */			Name = "├" + Name;
+/* 000783e6 */		}
+/* 000783e6 */	}
+/* 000783e6 */	int ParentCount = this.GetParentCount(Parts);
+/* 00078404 */	int Index;
+/* 00078416 */	for (Index = 0; Index <= ParentCount - 1; ++Index)
+/* 00078468 */	{
+/* 00078468 */		Name = "　" + Name;
+/* 00078488 */	}
+/* 0007848e */	int TextWidth;
+/* 000784a0 */	int TextHeight;
+/* 000784b2 */	PARTS_TextParts_CalcSize(Font, Name, TextWidth, TextHeight, 0, 0);
+/* 000784e8 */	Ｐ＿構築手順＿ピクセル作成(this.m_Text, TextWidth + 6, TextHeight + 6, 1);
+/* 00078522 */	Ｐ＿構築手順＿色塗り(this.m_Text, 0, 0, TextWidth + 6, TextHeight + 6, 255, 255, 255, -1, 1);
+/* 00078580 */	Ｐ＿構築手順＿テキストブレンド(this.m_Text, 3, 3, Name, Font, 0, 0, 1);
+/* 000785c6 */	Ｐ＿構築ビルド(this.m_Text, 1);
+/* 000785dc */	Ｐ＿構築手順＿ピクセル作成(this.m_Text, TextWidth + 6, TextHeight + 6, 2);
+/* 00078616 */	Ｐ＿構築手順＿色塗り(this.m_Text, 0, 0, TextWidth + 6, TextHeight + 6, 255, 200, 200, -1, 2);
+/* 00078674 */	Ｐ＿構築手順＿テキストブレンド(this.m_Text, 3, 3, Name, Font, 0, 0, 2);
+/* 000786ba */	Ｐ＿構築ビルド(this.m_Text, 2);
+/* 000786d0 */	if (Item.IsActive())
+/* 000786e6 */	{
+/* 000786e6 */		Ｐ＿乗算色設定(this.m_Text, 200, 200, 255);
+/* 00078708 */	}
+/* 00078708 */	this.m_Overlay = PARTS_GetFreeSystemPartsNumber();
+/* 0007871a */	Ｐ＿構築手順＿作成(this.m_Overlay, AFL_Parts_GetWidth(this.m_Text, 1), AFL_Parts_GetHeight(this.m_Text, 1), 1);
+/* 0007875c */	Ｐ＿構築手順＿色塗り(this.m_Overlay, 0, 0, AFL_Parts_GetWidth(this.m_Text, 1), AFL_Parts_GetHeight(this.m_Text, 1), 0, 0, 0, 1, 1);
+/* 000787c2 */	Ｐ＿構築ビルド(this.m_Overlay, 1);
+/* 000787d8 */	Ｐ＿Ｚ座標設定(this.m_Overlay, 10);
+/* 000787ee */	Ｐ＿クリック可能設定(this.m_Overlay, true);
+/* 00078804 */	Ｐ＿ドラッグ可能設定(this.m_Overlay, true);
+/* 0007881a */	Ｐ＿親設定(this.m_Overlay, this.m_Text);
+/* 00078834 */	Ｐ＿アルファクリッパー設定(this.m_Overlay, Clipper);
+/* 0007884e */	this.m_DropMark = PARTS_GetFreeSystemPartsNumber();
+/* 00078860 */	Ｐ＿Ｚ座標設定(this.m_DropMark, 5);
+/* 00078876 */	Ｐ＿構築手順＿作成(this.m_DropMark, TextWidth + 6, 6, 1);
+/* 000788a4 */	Ｐ＿構築手順＿色塗り(this.m_DropMark, 0, 0, TextWidth + 6, 6, 0, 255, 0, 100, 1);
+/* 000788f6 */	Ｐ＿構築ビルド(this.m_DropMark, 1);
+/* 0007890c */	Ｐ＿親設定(this.m_DropMark, this.m_Text);
+/* 00078926 */	Ｐ＿オンカーソル透過設定(this.m_DropMark, true);
+/* 0007893c */	Ｐ＿表示設定(this.m_DropMark, false);
+/* 00078952 */	Ｐ＿アルファクリッパー設定(this.m_DropMark, Clipper);
+/* 0007896c */	AFL_Parts_AddMouseWheelEvent(this.m_Overlay, this.MouseWheelEvent);
+/* 00078986 */	AFL_Parts_AddMouseLClickEvent(this.m_Overlay, this.MouseLClickEvent);
+/* 000789a0 */	AFL_Parts_AddMouseRClickEvent(this.m_Overlay, this.MouseRClickEvent);
+/* 000789ba */	AFL_Parts_AddDragBeginEvent(this.m_Overlay, this.DragBeginEvent);
+/* 000789d4 */	AFL_Parts_AddDragingEvent(this.m_Overlay, this.DragingEvent);
+/* 000789ee */	AFL_Parts_AddDragEndEvent(this.m_Overlay, this.DragEndEvent);
+/* 00078a08 */	AFL_Parts_AddDropEnterEvent(this.m_Overlay, this.DropEnterEvent);
+/* 00078a22 */	AFL_Parts_AddDropOnEvent(this.m_Overlay, this.DropOnEvent);
+/* 00078a3c */	AFL_Parts_AddDroppedEvent(this.m_Overlay, this.DroppedEvent);
+/* 00078a56 */	AFL_Parts_AddDropLeaveEvent(this.m_Overlay, this.DropLeaveEvent);
+/* 00078a70 */}
+
+void CAEInstanceTreeNodeView::Release()
+/* 00078a78 */{
+/* 00078a78 */	this.m_dgMouseRClickEvent.Clear();
+/* 00078a84 */	this.m_dgDropBottomEvent.Clear();
+/* 00078a90 */	this.m_dgDropEvent.Clear();
+/* 00078a9c */	this.m_dgDropTopEvent.Clear();
+/* 00078aa8 */	this.m_dgRefreshTreeEvent.Clear();
+/* 00078ab4 */	this.m_dgMouseWheelEvent.Clear();
+/* 00078ac0 */	this.m_RefItem <- NULL;
+/* 00078ad8 */	this.m_RefNodeView <- NULL;
+/* 00078af0 */	this.m_Droppable = false;
+/* 00078b02 */	PARTS_ReleaseWithInit(this.m_DropMark);
+/* 00078b10 */	PARTS_ReleaseWithInit(this.m_Text);
+/* 00078b1e */	PARTS_ReleaseWithInit(this.m_Overlay);
+/* 00078b2c */	PARTS_ReleaseWithInit(this.m_MainLayoutBox);
+/* 00078b3a */}
+
+ref CAEInstanceItem CAEInstanceTreeNodeView::GetItem()
+/* 00078b42 */{
+/* 00078b42 */	return this.m_RefItem;
+/* 00078b52 */}
+
+float CAEInstanceTreeNodeView::GetPosY()
+/* 00078b60 */{
+/* 00078b60 */	return Ｐ＿Ｙ座標取得(this.m_MainLayoutBox);
+/* 00078b72 */}
+
+int CAEInstanceTreeNodeView::GetHeight()
+/* 00078b80 */{
+/* 00078b80 */	return AFL_Parts_GetHeight(this.m_MainLayoutBox, 1);
+/* 00078b98 */}
+
+bool CAEInstanceTreeNodeView::IsExist(int PartsNumber)
+/* 00078ba6 */{
+/* 00078ba6 */	if (PartsNumber == this.m_Text)
+/* 00078bc2 */	{
+/* 00078bc2 */		return true;
+/* 00078bca */	}
+/* 00078bca */	if (PartsNumber == this.m_Overlay)
+/* 00078be6 */	{
+/* 00078be6 */		return true;
+/* 00078bee */	}
+/* 00078bee */	if (PartsNumber == this.m_MainLayoutBox)
+/* 00078c0a */	{
+/* 00078c0a */		return true;
+/* 00078c12 */	}
+/* 00078c12 */	return false;
+/* 00078c1a */}
+
+bool CAEInstanceTreeNodeView::IsFocus()
+/* 00078c28 */{
+/* 00078c28 */	if (Ｐ＿フォーカス確認(this.m_Text))
+/* 00078c3e */	{
+/* 00078c3e */		return true;
+/* 00078c46 */	}
+/* 00078c46 */	if (Ｐ＿フォーカス確認(this.m_Overlay))
+/* 00078c5c */	{
+/* 00078c5c */		return true;
+/* 00078c64 */	}
+/* 00078c64 */	if (Ｐ＿フォーカス確認(this.m_MainLayoutBox))
+/* 00078c7a */	{
+/* 00078c7a */		return true;
+/* 00078c82 */	}
+/* 00078c82 */	return false;
+/* 00078c8a */}
+
+int CAEInstanceTreeNodeView::GetParentCount(int PartsNumber)
+/* 00078c98 */{
+/* 00078c98 */	int Parent = Ｐ＿親設定取得(PartsNumber);
+/* 00078cb4 */	int ParentCount;
+/* 00078cb4 */	for (ParentCount = 0; Parent != 0; ++ParentCount)
+/* 00078cfa */	{
+/* 00078cfa */		Parent = Ｐ＿親設定取得(Parent);
+/* 00078d16 */	}
+/* 00078d1c */	return ParentCount - 1;
+/* 00078d30 */}
+
+bool CAEInstanceTreeNodeView::IsExistChild(int PanelNumber)
+/* 00078d3e */{
+/* 00078d3e */	if (this.m_RefItem === NULL)
+/* 00078d56 */	{
+/* 00078d56 */		return false;
+/* 00078d5e */	}
+/* 00078d5e */	int MyNumber = this.m_RefItem.GetID();
+/* 00078d7a */	if (MyNumber == PanelNumber)
+/* 00078d96 */	{
+/* 00078d96 */		return true;
+/* 00078d9e */	}
+/* 00078d9e */	int ChildNumber;
+/* 00078db0 */	int Index;
+/* 00078dc2 */	int Length = this.m_RefNodeView.Numof();
+/* 00078dde */	for (Index = 0; Index < Length; ++Index)
+/* 00078e28 */	{
+/* 00078e28 */		if (!this.m_RefNodeView[Index].IsExist(PanelNumber))
+/* 00078e56 */		{
+/* 00078e56 */			continue;
+/* 00078e5c */		}
+/* 00078e5c */		if (this.m_RefNodeView[Index].GetItem() === NULL)
+/* 00078ea0 */		{
+/* 00078ea0 */			continue;
+/* 00078eac */		}
+/* 00078eac */		if (this.m_RefNodeView[Index].GetItem() === this.m_RefItem)
+/* 00078ef4 */		{
+/* 00078ef4 */			continue;
+/* 00078f06 */		}
+/* 00078f06 */		ChildNumber = this.m_RefNodeView[Index].GetItem().GetID();
+/* 00078f4e */		break;
+/* 00078f66 */	}
+/* 00078f7e */	if (ChildNumber == 0)
+/* 00078f96 */	{
+/* 00078f96 */		return false;
+/* 00078f9e */	}
+/* 00078f9e */	int Parent;
+/* 00078f9e */	for (Parent = Ｐ＿親設定取得(ChildNumber); Parent != 0; Parent = Ｐ＿親設定取得(Parent))
+/* 00078ffa */	{
+/* 00078ffa */		if (MyNumber == Parent)
+/* 00079016 */		{
+/* 00079016 */			return true;
+/* 0007901e */		}
+/* 0007901e */	}
+/* 00079024 */	return false;
+/* 0007902c */}
+
+void CAEInstanceTreeNodeView::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0007903a */{
+/* 0007903a */	this.m_dgMouseWheelEvent(this.m_Overlay, Forward, Back);
+/* 00079078 */}
+
+void CAEInstanceTreeNodeView::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00079080 */{
+/* 00079080 */	if (this.m_RefItem === NULL)
+/* 00079098 */	{
+/* 00079098 */		return;
+/* 0007909a */	}
+/* 0007909a */	bool NeedUpdate = false;
+/* 000790ac */	if (this.m_RefItem.IsActive())
+/* 000790c2 */	{
+/* 000790c2 */		this.m_RefItem.SetOpen(!this.m_RefItem.IsOpen());
+/* 000790e6 */		NeedUpdate = true;
+/* 000790f8 */	}
+/* 000790f8 */	this.m_RefItem.Active(true);
+/* 0007910e */	Ｐ＿フォーカス設定(ID);
+/* 0007911e */	if (NeedUpdate)
+/* 0007912e */	{
+/* 0007912e */		this.m_dgRefreshTreeEvent();
+/* 0007914e */	}
+/* 0007914e */}
+
+void CAEInstanceTreeNodeView::MouseRClickEvent(int ID, int MouseX, int MouseY)
+/* 00079156 */{
+/* 00079156 */	if (this.m_RefItem === NULL)
+/* 0007916e */	{
+/* 0007916e */		return;
+/* 00079170 */	}
+/* 00079170 */	this.m_RefItem.Active(true);
+/* 00079186 */	Ｐ＿フォーカス設定(ID);
+/* 00079196 */	this.m_dgMouseRClickEvent(ID, MouseX, MouseY);
+/* 000791d4 */}
+
+void CAEInstanceTreeNodeView::MouseEnterEvent(int ID, int MouseX, int MouseY)
+/* 000791dc */{
+/* 000791dc */	bool Lock = PARTS_IsLockInputState(this.m_Text);
+/* 000791f8 */	PARTS_SetLockInputState(this.m_Text, false);
+/* 0007920e */	AFL_Parts_SetStatus(this.m_Text, 2);
+/* 00079224 */	PARTS_SetLockInputState(this.m_Text, Lock);
+/* 0007923e */}
+
+void CAEInstanceTreeNodeView::MouseLeaveEvent(int ID, int MouseX, int MouseY)
+/* 00079246 */{
+/* 00079246 */	bool Lock = PARTS_IsLockInputState(this.m_Text);
+/* 00079262 */	PARTS_SetLockInputState(this.m_Text, false);
+/* 00079278 */	AFL_Parts_SetStatus(this.m_Text, 1);
+/* 0007928e */	PARTS_SetLockInputState(this.m_Text, Lock);
+/* 000792a8 */}
+
+void CAEInstanceTreeNodeView::DragBeginEvent(int ID)
+/* 000792b0 */{
+/* 000792b0 */	Ｐ＿Ｚ座標設定(this.m_Overlay, 32767);
+/* 000792c6 */}
+
+void CAEInstanceTreeNodeView::DragingEvent(int ID, int BeginMouseX, int BeginMouseY, int MouseX, int MouseY)
+/* 000792ce */{
+/* 000792d0 */}
+
+void CAEInstanceTreeNodeView::DragEndEvent(int ID)
+/* 000792d6 */{
+/* 000792d6 */	Ｐ＿座標設定(this.m_Overlay, 0.0, 0.0);
+/* 000792f2 */	Ｐ＿Ｚ座標設定(this.m_Overlay, 10);
+/* 00079308 */}
+
+void CAEInstanceTreeNodeView::DropEnterEvent(int ID, int DragPartsNumber)
+/* 00079310 */{
+/* 00079310 */	this.m_Droppable = false;
+/* 00079322 */	if (this.m_RefNodeView === NULL)
+/* 0007933a */	{
+/* 0007933a */		return;
+/* 0007933c */	}
+/* 0007933c */	int Index;
+/* 0007934e */	int Length = this.m_RefNodeView.Numof();
+/* 0007936a */	for (Index = 0; Index < Length; ++Index)
+/* 000793b4 */	{
+/* 000793b4 */		if (this.m_RefNodeView[Index].IsExist(DragPartsNumber))
+/* 000793e0 */		{
+/* 000793e0 */			this.m_Droppable = !this.m_RefNodeView[Index].IsExistChild(ID);
+/* 00079416 */			break;
+/* 0007941c */		}
+/* 0007941c */	}
+/* 00079422 */}
+
+void CAEInstanceTreeNodeView::DropOnEvent(int ID, int DragPartsNumber, int MouseX, int MouseY)
+/* 0007942a */{
+/* 0007942a */	if (!this.m_Droppable)
+/* 0007943c */	{
+/* 0007943c */		return;
+/* 0007943e */	}
+/* 0007943e */	MouseY = MouseY - PARTS_GetAbsoluteY(this.m_Text);
+/* 0007946e */	int Height = AFL_Parts_GetHeight(this.m_Text, 1);
+/* 00079490 */	float Rate = float(MouseY) / float(AFL_Parts_GetHeight(this.m_Text, 1));
+/* 000794c2 */	Ｐ＿表示設定(this.m_DropMark, true);
+/* 000794d8 */	if (Rate <= 0.25)
+/* 000794f0 */	{
+/* 000794f0 */		Ｐ＿座標設定(this.m_DropMark, 0.0, 0.0);
+/* 0007950c */		Ｐ＿原点座標設定(this.m_DropMark, 1);
+/* 00079522 */	}
+/* 00079528 */	else if (0.75 <= Rate)
+/* 00079540 */	{
+/* 00079540 */		Ｐ＿座標設定(this.m_DropMark, 0.0, Height);
+/* 00079562 */		Ｐ＿原点座標設定(this.m_DropMark, 7);
+/* 00079578 */	}
+/* 0007957e */	else
+/* 0007957e */	{
+/* 0007957e */		Ｐ＿座標設定(this.m_DropMark, 0.0, Height / 2);
+/* 000795a8 */		Ｐ＿原点座標設定(this.m_DropMark, 4);
+/* 000795be */	}
+/* 000795be */}
+
+void CAEInstanceTreeNodeView::DroppedEvent(int ID, int DragPartsNumber, int MouseX, int MouseY)
+/* 000795c6 */{
+/* 000795c6 */	if (!this.m_Droppable)
+/* 000795d8 */	{
+/* 000795d8 */		return;
+/* 000795da */	}
+/* 000795da */	MouseY = MouseY - PARTS_GetAbsoluteY(this.m_Text);
+/* 0007960a */	int Height = AFL_Parts_GetHeight(this.m_Text, 1);
+/* 0007962c */	float Rate = float(MouseY) / float(AFL_Parts_GetHeight(this.m_Text, 1));
+/* 0007965e */	if (Rate <= 0.25)
+/* 00079676 */	{
+/* 00079676 */		this.m_dgDropTopEvent(ID, DragPartsNumber, MouseX, MouseY);
+/* 000796be */	}
+/* 000796c4 */	else if (0.75 <= Rate)
+/* 000796dc */	{
+/* 000796dc */		this.m_dgDropBottomEvent(ID, DragPartsNumber, MouseX, MouseY);
+/* 00079724 */	}
+/* 0007972a */	else
+/* 0007972a */	{
+/* 0007972a */		this.m_dgDropEvent(ID, DragPartsNumber, MouseX, MouseY);
+/* 00079772 */	}
+/* 00079772 */	this.m_dgRefreshTreeEvent();
+/* 00079792 */}
+
+void CAEInstanceTreeNodeView::DropLeaveEvent(int ID, int DragPartsNumber)
+/* 0007979a */{
+/* 0007979a */	if (!this.m_Droppable)
+/* 000797ac */	{
+/* 000797ac */		return;
+/* 000797ae */	}
+/* 000797ae */	Ｐ＿表示設定(this.m_DropMark, false);
+/* 000797c4 */}
+
+void CAEInstanceTreeNodeView::AddMouseWheelEvent(DG_MouseWheelHandler dgObject)
+/* 000797cc */{
+/* 000797cc */	this.m_dgMouseWheelEvent += dgObject;
+/* 000797e6 */}
+
+void CAEInstanceTreeNodeView::EraseMouseWheelEvent(DG_MouseWheelHandler dgObject)
+/* 000797ee */{
+/* 000797ee */	this.m_dgMouseWheelEvent -= dgObject;
+/* 00079808 */}
+
+void CAEInstanceTreeNodeView::AddRefreshTreeEvent(DG_NotifyHandler dgObject)
+/* 00079810 */{
+/* 00079810 */	this.m_dgRefreshTreeEvent += dgObject;
+/* 0007982a */}
+
+void CAEInstanceTreeNodeView::EraseRefreshTreeEvent(DG_NotifyHandler dgObject)
+/* 00079832 */{
+/* 00079832 */	this.m_dgRefreshTreeEvent -= dgObject;
+/* 0007984c */}
+
+void CAEInstanceTreeNodeView::AddDropTopEvent(DG_DroppedHandler dgObject)
+/* 00079854 */{
+/* 00079854 */	this.m_dgDropTopEvent += dgObject;
+/* 0007986e */}
+
+void CAEInstanceTreeNodeView::EraseDropTopEvent(DG_DroppedHandler dgObject)
+/* 00079876 */{
+/* 00079876 */	this.m_dgDropTopEvent -= dgObject;
+/* 00079890 */}
+
+void CAEInstanceTreeNodeView::AddDropEvent(DG_DroppedHandler dgObject)
+/* 00079898 */{
+/* 00079898 */	this.m_dgDropEvent += dgObject;
+/* 000798b2 */}
+
+void CAEInstanceTreeNodeView::EraseDropEvent(DG_DroppedHandler dgObject)
+/* 000798ba */{
+/* 000798ba */	this.m_dgDropEvent -= dgObject;
+/* 000798d4 */}
+
+void CAEInstanceTreeNodeView::AddDropBottomEvent(DG_DroppedHandler dgObject)
+/* 000798dc */{
+/* 000798dc */	this.m_dgDropBottomEvent += dgObject;
+/* 000798f6 */}
+
+void CAEInstanceTreeNodeView::EraseDropBottomEvent(DG_DroppedHandler dgObject)
+/* 000798fe */{
+/* 000798fe */	this.m_dgDropBottomEvent -= dgObject;
+/* 00079918 */}
+
+void CAEInstanceTreeNodeView::AddMouseRClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00079920 */{
+/* 00079920 */	this.m_dgMouseRClickEvent += DelegateObject;
+/* 0007993a */}
+
+void CAEInstanceTreeNodeView::EraseMouseRClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00079942 */{
+/* 00079942 */	this.m_dgMouseRClickEvent -= DelegateObject;
+/* 0007995c */}
+

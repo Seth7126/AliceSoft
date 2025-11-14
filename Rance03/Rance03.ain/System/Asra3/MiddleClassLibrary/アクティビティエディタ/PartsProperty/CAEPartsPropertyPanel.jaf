@@ -1,0 +1,135 @@
+CAEPartsPropertyPanel::CAEPartsPropertyPanel()
+/* 0005cf18 */{
+/* 0005cf22 */}
+
+CAEPartsPropertyPanel::~CAEPartsPropertyPanel()
+/* 0005cf28 */{
+/* 0005cf28 */	this.Release();
+/* 0005cf30 */}
+
+void CAEPartsPropertyPanel::Init(int LayoutID)
+/* 0005cf38 */{
+/* 0005cf38 */	this.Release();
+/* 0005cf40 */	this.m_Panel.Init(LayoutID);
+/* 0005cf5a */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 0005cf74 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0005cf8e */}
+
+void CAEPartsPropertyPanel::Release()
+/* 0005cf96 */{
+/* 0005cf96 */	this.m_dgKeyDownEvent.Clear();
+/* 0005cfa2 */	this.m_dgMouseWheelEvent.Clear();
+/* 0005cfae */	this.m_Panel.Release();
+/* 0005cfbe */	PARTS_ReleaseListWithFree(this.m_PartsList);
+/* 0005cfce */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::AddTextBoxItem(string Label, string Text, bool OpenIMEGainFocus)
+/* 0005cfd6 */{
+/* 0005cfd6 */	return this.m_Panel.AddTextBoxItem(Label, 155, Text, 80, OpenIMEGainFocus);
+/* 0005d030 */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::AddButtonItem(string Label, string Text)
+/* 0005d03e */{
+/* 0005d03e */	return this.m_Panel.AddButtonItem(Label, 155, Text, 80, 5);
+/* 0005d094 */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::AddCheckBoxItem(string Label, bool Flg)
+/* 0005d0a2 */{
+/* 0005d0a2 */	return this.m_Panel.AddCheckBoxItem(Label, 155, 80, Flg);
+/* 0005d0f2 */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::AddComboBoxItem(string Label, array@string List, int Index)
+/* 0005d100 */{
+/* 0005d100 */	return this.m_Panel.AddComboBoxItem(Label, 155, 80, 80, List, Index);
+/* 0005d162 */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::AddLabelItem(string Label)
+/* 0005d170 */{
+/* 0005d170 */	return this.m_Panel.AddLabelItem(Label, 235);
+/* 0005d1b0 */}
+
+bool CAEPartsPropertyPanel::IsExistItem(string Label)
+/* 0005d1be */{
+/* 0005d1be */	return this.m_Panel.IsExistItem(Label);
+/* 0005d1da */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::GetItem(int ID)
+/* 0005d1e8 */{
+/* 0005d1e8 */	return this.m_Panel.GetItem(ID);
+/* 0005d222 */}
+
+ref CAEPropertyItem CAEPartsPropertyPanel::GetItemByLabel(string Label)
+/* 0005d230 */{
+/* 0005d230 */	return this.m_Panel.GetItemByLabel(Label);
+/* 0005d26a */}
+
+void CAEPartsPropertyPanel::KeyDownEvent(int ID, int KeyID)
+/* 0005d278 */{
+/* 0005d278 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 0005d2ac */}
+
+void CAEPartsPropertyPanel::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0005d2b4 */{
+/* 0005d2b4 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0005d2f2 */}
+
+void CAEPartsPropertyPanel::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0005d2fa */{
+/* 0005d2fa */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0005d314 */}
+
+void CAEPartsPropertyPanel::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0005d31c */{
+/* 0005d31c */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0005d336 */}
+
+void CAEPartsPropertyPanel::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0005d33e */{
+/* 0005d33e */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0005d358 */}
+
+void CAEPartsPropertyPanel::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0005d360 */{
+/* 0005d360 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0005d37a */}
+
+void CAEPartsPropertyPanel::AddChangeTextEvent(DG_ChangedHandler DelegateObject)
+/* 0005d382 */{
+/* 0005d382 */	this.m_Panel.AddChangeTextEvent(DelegateObject);
+/* 0005d39e */}
+
+void CAEPartsPropertyPanel::EraseChangeTextEvent(DG_ChangedHandler DelegateObject)
+/* 0005d3a6 */{
+/* 0005d3a6 */	this.m_Panel.EraseChangeTextEvent(DelegateObject);
+/* 0005d3c2 */}
+
+void CAEPartsPropertyPanel::AddMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0005d3ca */{
+/* 0005d3ca */	this.m_Panel.AddMouseClickEvent(DelegateObject);
+/* 0005d3e6 */}
+
+void CAEPartsPropertyPanel::EraseMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0005d3ee */{
+/* 0005d3ee */	this.m_Panel.EraseMouseClickEvent(DelegateObject);
+/* 0005d40a */}
+
+void CAEPartsPropertyPanel::AddChangedCheckBoxEvent(DG_ChangedFlgHandler DelegateObject)
+/* 0005d412 */{
+/* 0005d412 */	this.m_Panel.AddChangedCheckBoxEvent(DelegateObject);
+/* 0005d42e */}
+
+void CAEPartsPropertyPanel::EraseChangedCheckBoxEvent(DG_ChangedFlgHandler DelegateObject)
+/* 0005d436 */{
+/* 0005d436 */	this.m_Panel.EraseChangedCheckBoxEvent(DelegateObject);
+/* 0005d452 */}
+
+void CAEPartsPropertyPanel::AddSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 0005d45a */{
+/* 0005d45a */	this.m_Panel.AddSelectedEvent(DelegateObject);
+/* 0005d476 */}
+
+void CAEPartsPropertyPanel::EraseSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 0005d47e */{
+/* 0005d47e */	this.m_Panel.EraseSelectedEvent(DelegateObject);
+/* 0005d49a */}
+

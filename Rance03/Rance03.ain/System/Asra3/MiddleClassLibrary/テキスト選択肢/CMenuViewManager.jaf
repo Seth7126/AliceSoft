@@ -1,0 +1,38 @@
+SYS_選択_result_t CMenuViewManager::_Execute(bool _キャンセルあり, int _キャンセル値)
+/* 0003cf16 */{
+/* 0003cf16 */	int _nHandle = this._CreateHandle();
+/* 0003cf2a */	this._m_MenuViewList[_nHandle]._Execute(_キャンセルあり, _キャンセル値);
+/* 0003cf5a */	SYS_選択_result_t _result;
+/* 0003cf6a */	_result = this._m_MenuViewList[_nHandle]._GetResult();
+/* 0003cf9a */	this._DeleteHandle(_nHandle);
+/* 0003cfac */	return _result;
+/* 0003cfbc */}
+
+int CMenuViewManager::_CreateHandle()
+/* 0003cfca */{
+/* 0003cfca */	int _n;
+/* 0003cfdc */	for (_n = 0; _n < this._m_MenuViewList.Numof(); _n++)
+/* 0003d030 */	{
+/* 0003d030 */		if (!this._m_MenuViewList[_n]._IsCreate())
+/* 0003d054 */		{
+/* 0003d054 */			return _n;
+/* 0003d060 */		}
+/* 0003d060 */	}
+/* 0003d066 */	this._m_MenuViewList.Realloc(this._m_MenuViewList.Numof() + 1);
+/* 0003d08e */	return this._m_MenuViewList.Numof() - 1;
+/* 0003d0a8 */}
+
+void CMenuViewManager::_DeleteHandle(int _nHandle)
+/* 0003d0b6 */{
+/* 0003d0b6 */	this._m_MenuViewList[_nHandle]._Release();
+/* 0003d0d2 */}
+
+void CMenuViewManager::SetShow(bool bShow)
+/* 0003d0da */{
+/* 0003d0da */	int nMenu;
+/* 0003d0ec */	for (nMenu = 0; nMenu < this._m_MenuViewList.Numof(); nMenu++)
+/* 0003d140 */	{
+/* 0003d140 */		this._m_MenuViewList[nMenu].SetShow(bShow);
+/* 0003d166 */	}
+/* 0003d16c */}
+

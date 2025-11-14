@@ -1,0 +1,87 @@
+CAEPropertyItemLabel::CAEPropertyItemLabel()
+/* 00075ddc */{
+/* 00075de6 */}
+
+CAEPropertyItemLabel::~CAEPropertyItemLabel()
+/* 00075dec */{
+/* 00075dec */	this.Release();
+/* 00075df4 */}
+
+int CAEPropertyItemLabel::Init(string Name, int LabelWidth, ref CAEPropertyToolTip ToolTip)
+/* 00075dfc */{
+/* 00075dfc */	this.Release();
+/* 00075e04 */	this.m_LayoutID = PARTS_GetFreeSystemPartsNumber();
+/* 00075e16 */	this.m_Label = PARTS_GetFreeSystemPartsNumber();
+/* 00075e28 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_LayoutID, 2);
+/* 00075e3e */	Ｐ＿レイアウトボックス＿配置設定(this.m_LayoutID, 4);
+/* 00075e54 */	Ｐ＿マージン設定(this.m_LayoutID, 1, 1, 3, 3);
+/* 00075e7c */	Ｐ＿フォント設定(this.m_Label, 0, 14, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1);
+/* 00075ece */	Ｐ＿テキスト設定(this.m_Label, Name, 1);
+/* 00075eee */	Ｐ＿オンカーソル透過設定(this.m_Label, true);
+/* 00075f04 */	Ｐ＿マージン設定(this.m_Label, 0, 0, 0, LabelWidth - AFL_Parts_GetWidth(this.m_Label, 1));
+/* 00075f48 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, this.m_Label);
+/* 00075f62 */	AFL_Parts_AddKeyDownEvent(this.m_LayoutID, this.KeyDownEvent);
+/* 00075f7c */	AFL_Parts_AddKeyDownEvent(this.m_Label, this.KeyDownEvent);
+/* 00075f96 */	AFL_Parts_AddMouseWheelEvent(this.m_LayoutID, this.MouseWheelEvent);
+/* 00075fb0 */	AFL_Parts_AddMouseWheelEvent(this.m_Label, this.MouseWheelEvent);
+/* 00075fca */	return this.m_LayoutID;
+/* 00075fd6 */}
+
+void CAEPropertyItemLabel::Release()
+/* 00075fe4 */{
+/* 00075fe4 */	this.m_dgMouseWheelEvent.Clear();
+/* 00075ff0 */	this.m_dgKeyDownEvent.Clear();
+/* 00075ffc */	PARTS_ReleaseWithInit(this.m_Label);
+/* 0007600a */	PARTS_ReleaseWithInit(this.m_LayoutID);
+/* 00076018 */}
+
+int CAEPropertyItemLabel::GetID()
+/* 00076020 */{
+/* 00076020 */	return this.m_LayoutID;
+/* 0007602c */}
+
+string CAEPropertyItemLabel::GetLabel()
+/* 0007603a */{
+/* 0007603a */	return Ｐ＿テキスト取得(this.m_Label, 1);
+/* 00076052 */}
+
+string CAEPropertyItemLabel::GetToolTipText()
+/* 00076060 */{
+/* 00076060 */	return "";
+/* 00076068 */}
+
+void CAEPropertyItemLabel::AddParts(int Number)
+/* 00076076 */{
+/* 00076076 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, Number);
+/* 00076090 */}
+
+void CAEPropertyItemLabel::KeyDownEvent(int ID, int KeyID)
+/* 00076098 */{
+/* 00076098 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 000760cc */}
+
+void CAEPropertyItemLabel::MouseWheelEvent(int ID, int Forward, int Back)
+/* 000760d4 */{
+/* 000760d4 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00076112 */}
+
+void CAEPropertyItemLabel::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0007611a */{
+/* 0007611a */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00076134 */}
+
+void CAEPropertyItemLabel::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0007613c */{
+/* 0007613c */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00076156 */}
+
+void CAEPropertyItemLabel::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0007615e */{
+/* 0007615e */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00076178 */}
+
+void CAEPropertyItemLabel::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00076180 */{
+/* 00076180 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0007619a */}
+

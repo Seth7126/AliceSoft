@@ -1,0 +1,45 @@
+void PlayerBuff::init(string id)
+/* 001df318 */{
+/* 001df318 */	this.id_ = id;
+/* 001df330 */	this.loadParam();
+/* 001df338 */}
+
+void PlayerBuff::loadParam()
+/* 001df340 */{
+/* 001df340 */	string key = "プレイヤーバフ情報";
+/* 001df354 */	this.name_ = EX_SA2String(key, this.id_, "name", "");
+/* 001df388 */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001df3bc */	this.type_ = EX_SA2Int(key, this.id_, "type", 0);
+/* 001df3ee */	this.calcType_ = EX_SA2Int(key, this.id_, "calcType", 0);
+/* 001df420 */}
+
+string PlayerBuff::getId()
+/* 001df428 */{
+/* 001df428 */	return this.id_;
+/* 001df434 */}
+
+string PlayerBuff::getName()
+/* 001df442 */{
+/* 001df442 */	return this.name_;
+/* 001df44e */}
+
+int PlayerBuff::getType()
+/* 001df45c */{
+/* 001df45c */	return this.type_;
+/* 001df468 */}
+
+string PlayerBuff::getImageName()
+/* 001df476 */{
+/* 001df476 */	return this.imageName_;
+/* 001df482 */}
+
+int PlayerBuff::getCalcType()
+/* 001df490 */{
+/* 001df490 */	return this.calcType_;
+/* 001df49c */}
+
+bool PlayerBuff::isAttackBuff()
+/* 001df4aa */{
+/* 001df4aa */	return this.type_ < 100;
+/* 001df4c0 */}
+

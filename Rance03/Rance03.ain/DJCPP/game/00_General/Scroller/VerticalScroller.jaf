@@ -1,0 +1,309 @@
+VerticalScroller::VerticalScroller()
+/* 0017d3ec */{
+/* 0017d3f4 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0017d41a */	this.state_ = 0;
+/* 0017d42c */}
+
+void VerticalScroller::init(int x, int y, int width, int height, int virtualHeight, int wheelScrollPixel, bool isVertical)
+/* 0017d434 */{
+/* 0017d434 */	this.x_ = x;
+/* 0017d44a */	this.y_ = y;
+/* 0017d460 */	this.width_ = width;
+/* 0017d476 */	this.height_ = height;
+/* 0017d48c */	this.virtualScrollSize_ = virtualHeight;
+/* 0017d4a2 */	this.wheelScrollPixel_ = wheelScrollPixel;
+/* 0017d4b8 */	this.isVertical_ = isVertical;
+/* 0017d4ce */	this.wheelScrollTime_ = 300;
+/* 0017d4e0 */	this.motionType_ = 1;
+/* 0017d4f2 */	this.parent_.initAsDummy();
+/* 0017d502 */	this.parent_.setShow(true);
+/* 0017d518 */}
+
+void VerticalScroller::setScrollType(int time, int type)
+/* 0017d520 */{
+/* 0017d520 */	this.wheelScrollTime_ = time;
+/* 0017d536 */	this.motionType_ = type;
+/* 0017d54c */}
+
+void VerticalScroller::changeVirtualHeight(int virtualHeight)
+/* 0017d554 */{
+/* 0017d554 */	this.virtualScrollSize_ = Math.Max(0, virtualHeight);
+/* 0017d57a */	if (this.virtualScrollSize_ == 0)
+/* 0017d592 */	{
+/* 0017d592 */		if (this.getRealPosition() < 0.0)
+/* 0017d5a8 */		{
+/* 0017d5a8 */			this.state_ = 6;
+/* 0017d5ba */			this.rpWheelStartPos_ = this.getRealPosition();
+/* 0017d5d0 */			this.rpWheelEndPos_ = 0;
+/* 0017d5e2 */			this.timer_.reset();
+/* 0017d5f2 */		}
+/* 0017d5f2 */	}
+/* 0017d5f8 */	else if (this.getRealPosition() < -this.virtualScrollSize_)
+/* 0017d616 */	{
+/* 0017d616 */		this.state_ = 6;
+/* 0017d628 */		this.rpWheelStartPos_ = this.getRealPosition();
+/* 0017d63e */		this.rpWheelEndPos_ = -this.virtualScrollSize_;
+/* 0017d656 */		this.timer_.reset();
+/* 0017d666 */	}
+/* 0017d666 */}
+
+int VerticalScroller::getPartsNumber()
+/* 0017d66e */{
+/* 0017d66e */	return this.parent_.getPartsNumber();
+/* 0017d680 */}
+
+void VerticalScroller::update()
+/* 0017d68e */{
+/* 0017d68e */	if (this.virtualScrollSize_ == 0 && this.state_ != 6)
+/* 0017d6d6 */	{
+/* 0017d6d6 */		return;
+/* 0017d6d8 */	}
+/* 0017d6d8 */	switch (this.state_)
+/* 0017d6ee */	{
+/* 0017d6ee */	case 4:
+/* 0017d6ee */		if (this.timer_.getTime() < this.rollOverTime_)
+/* 0017d710 */		{
+/* 0017d710 */			float val = getMotionValue(1, this.rpRollOverStart_, this.rpRollOverDest_, float(this.timer_.getTime()) / float(this.rollOverTime_));
+/* 0017d760 */			if (this.setValiableRangeF(val))
+/* 0017d776 */			{
+/* 0017d776 */				this.state_ = 0;
+/* 0017d788 */			}
+/* 0017d788 */			this.setRealPosition(val);
+/* 0017d79a */		}
+/* 0017d7a0 */		else
+/* 0017d7a0 */		{
+/* 0017d7a0 */			this.setRealPosition(this.rpRollOverDest_);
+/* 0017d7b4 */			this.state_ = 0;
+/* 0017d7c6 */		}
+/* 0017d7c6 */	case 0:
+/* 0017d7c6 */		if (g_mouse.onDown(0) && g_mouse.getFocusedObjectId() == -1)
+/* 0017d818 */		{
+/* 0017d818 */			if (this.isInRect())
+/* 0017d826 */			{
+/* 0017d826 */				this.state_ = 1;
+/* 0017d838 */				this.rpDragStartX_ = g_mouse.getX();
+/* 0017d854 */				this.rpDragStartY_ = g_mouse.getY();
+/* 0017d870 */				this.rpDragStartParentPartsPos_ = this.getRealPosition();
+/* 0017d886 */			}
+/* 0017d886 */		}
+/* 0017d886 */		if (g_mouse.getWheel() != 0 && this.isInRect())
+/* 0017d8ca */		{
+/* 0017d8ca */			this.startWheel(g_mouse.getWheel() < 0);
+/* 0017d8ec */		}
+/* 0017d8ec */		break;
+/* 0017d8f2 */	case 5:
+/* 0017d8f2 */		if (g_mouse.getWheel() != 0 && this.isInRect())
+/* 0017d936 */		{
+/* 0017d936 */			this.startWheel(g_mouse.getWheel() < 0);
+/* 0017d958 */		}
+/* 0017d958 */		if (this.timer_.getTime() < this.wheelScrollTime_)
+/* 0017d97a */		{
+/* 0017d97a */			float val = getMotionValue(this.motionType_, this.rpWheelStartPos_, this.rpWheelEndPos_, float(this.timer_.getTime()) / float(this.wheelScrollTime_));
+/* 0017d9ce */			this.setRealPosition(val);
+/* 0017d9e0 */		}
+/* 0017d9e6 */		else
+/* 0017d9e6 */		{
+/* 0017d9e6 */			this.setRealPosition(this.rpWheelEndPos_);
+/* 0017d9fa */			this.state_ = 0;
+/* 0017da0c */		}
+/* 0017da0c */		break;
+/* 0017da12 */	case 1:
+/* 0017da12 */		if (!g_mouse.isDown(0))
+/* 0017da30 */		{
+/* 0017da30 */			this.state_ = 0;
+/* 0017da42 */			this.snap();
+/* 0017da4a */		}
+/* 0017da4a */		if (Math.Abs(this.rpDragStartX_ - g_mouse.getX()) > 10 || Math.Abs(this.rpDragStartY_ - g_mouse.getY()) > 10)
+/* 0017daca */		{
+/* 0017daca */			this.state_ = 2;
+/* 0017dadc */			g_mouse.setNextMouseUpIgnore();
+/* 0017daec */		}
+/* 0017daec */		break;
+/* 0017daf2 */	case 2:
+/* 0017daf2 */		int d = this.getDragDistance();
+/* 0017db06 */		int pos = this.rpDragStartParentPartsPos_ + d;
+/* 0017db28 */		this.setValiableRange(pos);
+/* 0017db38 */		this.setRealPosition(pos);
+/* 0017db4c */		if (!g_mouse.isDown(0))
+/* 0017db6a */		{
+/* 0017db6a */			this.state_ = 0;
+/* 0017db7c */			this.rollOverValue_ = this.getMouseAccelaration();
+/* 0017db92 */			if (Math.Abs(this.rollOverValue_) > 2)
+/* 0017dbb4 */			{
+/* 0017dbb4 */				this.timer_.reset();
+/* 0017dbc4 */				this.rollOverTime_ = 100 + Math.Min(Math.Abs(this.rollOverValue_) * 50, 1000);
+/* 0017dc04 */				this.rpRollOverStart_ = this.getRealPosition();
+/* 0017dc1a */				this.rpRollOverDest_ = this.getNearlySnapPosition(this.rpRollOverStart_ + this.rollOverValue_ * 50);
+/* 0017dc4e */				this.state_ = 4;
+/* 0017dc60 */			}
+/* 0017dc66 */			else
+/* 0017dc66 */			{
+/* 0017dc66 */				this.snap();
+/* 0017dc6e */			}
+/* 0017dc6e */		}
+/* 0017dc6e */		break;
+/* 0017dc74 */	case 6:
+/* 0017dc74 */		if (this.timer_.getTime() < this.wheelScrollTime_)
+/* 0017dc96 */		{
+/* 0017dc96 */			float val = getMotionValue(this.motionType_, this.rpWheelStartPos_, this.rpWheelEndPos_, float(this.timer_.getTime()) / float(this.wheelScrollTime_));
+/* 0017dcea */			this.setRealPosition(val);
+/* 0017dcfc */		}
+/* 0017dd02 */		else
+/* 0017dd02 */		{
+/* 0017dd02 */			this.setRealPosition(this.rpWheelEndPos_);
+/* 0017dd16 */			this.state_ = 0;
+/* 0017dd28 */		}
+/* 0017dd28 */		break;
+/* 0017dd2e */	}
+/* 0017dd2e */}
+
+void VerticalScroller::startWheel(bool isBackward)
+/* 0017dd36 */{
+/* 0017dd36 */	this.rpWheelStartPos_ = this.getRealPosition();
+/* 0017dd4c */	if (isBackward && this.rpWheelStartPos_ == -this.virtualScrollSize_)
+/* 0017dd92 */	{
+/* 0017dd92 */		return;
+/* 0017dd94 */	}
+/* 0017dd94 */	if (!isBackward && this.rpWheelStartPos_ == 0)
+/* 0017ddd6 */	{
+/* 0017ddd6 */		return;
+/* 0017ddd8 */	}
+/* 0017ddd8 */	if (this.state_ == 5)
+/* 0017ddf0 */	{
+/* 0017ddf0 */		this.rpWheelEndPos_ = this.rpWheelEndPos_ + (isBackward ? -this.wheelScrollPixel_ : this.wheelScrollPixel_);
+/* 0017de34 */	}
+/* 0017de3a */	else
+/* 0017de3a */	{
+/* 0017de3a */		this.rpWheelEndPos_ = this.rpWheelStartPos_ + (isBackward ? -this.wheelScrollPixel_ : this.wheelScrollPixel_);
+/* 0017de7e */	}
+/* 0017de7e */	this.rpWheelEndPos_ = this.getNearlySnapPosition(this.rpWheelEndPos_);
+/* 0017de9e */	this.setValiableRange(this.rpWheelEndPos_);
+/* 0017deae */	this.timer_.reset();
+/* 0017debe */	this.state_ = 5;
+/* 0017ded0 */}
+
+void VerticalScroller::setValiableRange(ref int value)
+/* 0017ded8 */{
+/* 0017ded8 */	if (value > 0)
+/* 0017def2 */	{
+/* 0017def2 */		value = 0;
+/* 0017df06 */	}
+/* 0017df06 */	if (value < -this.virtualScrollSize_)
+/* 0017df26 */	{
+/* 0017df26 */		value = -this.virtualScrollSize_;
+/* 0017df40 */	}
+/* 0017df40 */}
+
+bool VerticalScroller::setValiableRangeF(ref float value)
+/* 0017df48 */{
+/* 0017df48 */	bool isAdjusted = false;
+/* 0017df5a */	if (value > 0.0)
+/* 0017df74 */	{
+/* 0017df74 */		isAdjusted = true;
+/* 0017df86 */		value = 0.0;
+/* 0017df9a */	}
+/* 0017df9a */	if (value < -this.virtualScrollSize_)
+/* 0017dfbc */	{
+/* 0017dfbc */		isAdjusted = true;
+/* 0017dfce */		value = -this.virtualScrollSize_;
+/* 0017dfea */	}
+/* 0017dfea */	return isAdjusted;
+/* 0017dff6 */}
+
+float VerticalScroller::getNearlySnapPosition(int val)
+/* 0017e004 */{
+/* 0017e004 */	float v = float(val) / float(this.wheelScrollPixel_);
+/* 0017e02a */	int vv = roundOff(v) * this.wheelScrollPixel_;
+/* 0017e052 */	return vv;
+/* 0017e060 */}
+
+void VerticalScroller::setRealPosition(float value)
+/* 0017e06e */{
+/* 0017e06e */	if (this.isVertical_)
+/* 0017e07e */	{
+/* 0017e07e */		this.parent_.setPos(0.0, value);
+/* 0017e09e */	}
+/* 0017e0a4 */	else
+/* 0017e0a4 */	{
+/* 0017e0a4 */		this.parent_.setPos(value, 0.0);
+/* 0017e0c4 */	}
+/* 0017e0c4 */}
+
+float VerticalScroller::getRealPosition()
+/* 0017e0cc */{
+/* 0017e0cc */	if (this.isVertical_)
+/* 0017e0dc */	{
+/* 0017e0dc */		return this.parent_.getY();
+/* 0017e0ee */	}
+/* 0017e0ee */	return this.parent_.getX();
+/* 0017e100 */}
+
+bool VerticalScroller::isInRect()
+/* 0017e10e */{
+/* 0017e10e */	int mx = g_mouse.getX();
+/* 0017e12a */	int my = g_mouse.getY();
+/* 0017e146 */	return this.x_ <= mx && mx <= this.x_ + this.width_ && this.y_ <= my && my <= this.y_ + this.height_;
+/* 0017e214 */}
+
+void VerticalScroller::setPos(float pos)
+/* 0017e222 */{
+/* 0017e222 */	int v = -pos;
+/* 0017e23c */	this.setValiableRange(v);
+/* 0017e24c */	this.setRealPosition(-pos);
+/* 0017e260 */}
+
+int VerticalScroller::getDragDistance()
+/* 0017e268 */{
+/* 0017e268 */	if (this.isVertical_)
+/* 0017e278 */	{
+/* 0017e278 */		return g_mouse.getY() - this.rpDragStartY_;
+/* 0017e296 */	}
+/* 0017e296 */	return g_mouse.getX() - this.rpDragStartX_;
+/* 0017e2b4 */}
+
+float VerticalScroller::getMouseAccelaration()
+/* 0017e2c2 */{
+/* 0017e2c2 */	if (this.isVertical_)
+/* 0017e2d2 */	{
+/* 0017e2d2 */		return g_mouse.getAccelarationY();
+/* 0017e2e4 */	}
+/* 0017e2e4 */	return g_mouse.getAccelarationX();
+/* 0017e2f6 */}
+
+void VerticalScroller::scrollTo(float pos)
+/* 0017e304 */{
+/* 0017e304 */	this.rpWheelStartPos_ = this.getRealPosition();
+/* 0017e31a */	this.rpWheelEndPos_ = -pos;
+/* 0017e334 */	this.setValiableRange(this.rpWheelEndPos_);
+/* 0017e344 */	this.timer_.reset();
+/* 0017e354 */	this.state_ = 5;
+/* 0017e366 */}
+
+void VerticalScroller::snap()
+/* 0017e36e */{
+/* 0017e36e */	this.rpWheelStartPos_ = this.getRealPosition();
+/* 0017e384 */	this.rpWheelEndPos_ = this.getNearlySnapPosition(this.rpWheelStartPos_);
+/* 0017e3a4 */	this.timer_.reset();
+/* 0017e3b4 */	this.state_ = 5;
+/* 0017e3c6 */}
+
+float VerticalScroller::getMoveToDestination()
+/* 0017e3ce */{
+/* 0017e3ce */	if (this.state_ == 5)
+/* 0017e3e6 */	{
+/* 0017e3e6 */		return this.rpWheelEndPos_;
+/* 0017e3f4 */	}
+/* 0017e3f4 */	return this.getRealPosition();
+/* 0017e3fe */}
+
+float VerticalScroller::getCurrentPosition()
+/* 0017e40c */{
+/* 0017e40c */	int v = -this.getRealPosition();
+/* 0017e424 */	return Math.MinF(Math.MaxF(0.0, v), this.virtualScrollSize_);
+/* 0017e458 */}
+
+void VerticalScroller::forceWheel(bool isBackward)
+/* 0017e466 */{
+/* 0017e466 */	this.startWheel(isBackward);
+/* 0017e478 */}
+

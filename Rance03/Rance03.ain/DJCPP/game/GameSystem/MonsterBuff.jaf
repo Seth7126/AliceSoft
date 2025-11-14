@@ -1,0 +1,34 @@
+void MonsterBuff::init(string id)
+/* 001da5ec */{
+/* 001da5ec */	this.id_ = id;
+/* 001da604 */	this.loadParam();
+/* 001da60c */}
+
+void MonsterBuff::loadParam()
+/* 001da614 */{
+/* 001da614 */	string key = "モンスターバフ情報";
+/* 001da628 */	this.name_ = EX_SA2String(key, this.id_, "name", "");
+/* 001da65c */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001da690 */	this.type_ = EX_SA2Int(key, this.id_, "type", 0);
+/* 001da6c2 */}
+
+string MonsterBuff::getId()
+/* 001da6ca */{
+/* 001da6ca */	return this.id_;
+/* 001da6d6 */}
+
+string MonsterBuff::getName()
+/* 001da6e4 */{
+/* 001da6e4 */	return this.name_;
+/* 001da6f0 */}
+
+int MonsterBuff::getType()
+/* 001da6fe */{
+/* 001da6fe */	return this.type_;
+/* 001da70a */}
+
+string MonsterBuff::getImageName()
+/* 001da718 */{
+/* 001da718 */	return this.imageName_;
+/* 001da724 */}
+

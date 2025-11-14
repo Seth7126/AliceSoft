@@ -1,0 +1,32 @@
+void PartsFloatingLayout::reset(int x, int y, bool isLeftAlign)
+/* 001cb8fe */{
+/* 001cb8fe */	this.sx_ = x;
+/* 001cb914 */	this.sy_ = y;
+/* 001cb92a */	this.x_ = this.sx_;
+/* 001cb940 */	this.y_ = this.sy_;
+/* 001cb956 */	this.isLeftAlign_ = isLeftAlign;
+/* 001cb96c */}
+
+void PartsFloatingLayout::add(ref Parts p)
+/* 001cb974 */{
+/* 001cb974 */	p.setPos(this.x_, this.y_);
+/* 001cb99c */	if (this.isLeftAlign_)
+/* 001cb9ac */	{
+/* 001cb9ac */		p.setOrigin(7);
+/* 001cb9c2 */		this.x_ += p.getWidth();
+/* 001cb9de */	}
+/* 001cb9e4 */	else
+/* 001cb9e4 */	{
+/* 001cb9e4 */		p.setOrigin(9);
+/* 001cb9fa */		this.x_ -= p.getWidth();
+/* 001cba16 */	}
+/* 001cba16 */	this.lineMaxHeight_ = Math.Max(this.lineMaxHeight_, p.getHeight());
+/* 001cba46 */}
+
+void PartsFloatingLayout::br()
+/* 001cba4e */{
+/* 001cba4e */	this.x_ = this.sx_;
+/* 001cba64 */	this.y_ += this.lineMaxHeight_;
+/* 001cba7a */	this.lineMaxHeight_ = 0;
+/* 001cba8c */}
+

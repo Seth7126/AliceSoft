@@ -1,0 +1,43 @@
+ButtonState::ButtonState()
+/* 001e5c8a */{
+/* 001e5c92 */	this.isLastDown_ = this.isDown_ = this.isForcePress_ = this.onUpIgnore_ = false;
+/* 001e5cc2 */}
+
+bool ButtonState::isDown()
+/* 001e5cca */{
+/* 001e5cca */	return this.isDown_;
+/* 001e5cd6 */}
+
+bool ButtonState::isPress()
+/* 001e5ce4 */{
+/* 001e5ce4 */	return this.isPress_;
+/* 001e5cf0 */}
+
+void ButtonState::update(bool newState)
+/* 001e5cfe */{
+/* 001e5cfe */	this.isLastDown_ = this.isDown_;
+/* 001e5d14 */	this.isDown_ = newState;
+/* 001e5d2a */	this.isForcePress_ = false;
+/* 001e5d3c */	this.isPress_ = !this.isDown_ && this.isLastDown_ || this.isForcePress_;
+/* 001e5da6 */	if (this.isPress_ && this.onUpIgnore_)
+/* 001e5dde */	{
+/* 001e5dde */		this.onUpIgnore_ = false;
+/* 001e5df0 */		this.isPress_ = false;
+/* 001e5e02 */	}
+/* 001e5e02 */}
+
+void ButtonState::forceClick()
+/* 001e5e0a */{
+/* 001e5e0a */	this.isForcePress_ = true;
+/* 001e5e1c */}
+
+void ButtonState::setNextMouseUpIgnore()
+/* 001e5e24 */{
+/* 001e5e24 */	this.onUpIgnore_ = true;
+/* 001e5e36 */}
+
+bool ButtonState::onDown()
+/* 001e5e3e */{
+/* 001e5e3e */	return !this.isLastDown_ && this.isDown_;
+/* 001e5e76 */}
+

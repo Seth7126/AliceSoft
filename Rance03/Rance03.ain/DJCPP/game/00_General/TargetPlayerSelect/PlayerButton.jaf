@@ -1,0 +1,182 @@
+PlayerButton::PlayerButton()
+/* 0017e486 */{
+/* 0017e48e */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0017e4be */	this.isEnable_ = true;
+/* 0017e4d0 */}
+
+void PlayerButton::init(string playerId, DG_PlayerButtonClickCallback cb)
+/* 0017e4d8 */{
+/* 0017e4d8 */	this.player_ <- getPlayerFromId(playerId);
+/* 0017e514 */	this.cb_ = cb;
+/* 0017e52e */	this.initParts();
+/* 0017e536 */}
+
+void PlayerButton::initParts()
+/* 0017e53e */{
+/* 0017e53e */	this.parts_[0].init("システム／キャラクター選択／キャラボタン", 0);
+/* 0017e562 */	this.parts_[11].initAsText(this.player_.getShortName(), 20, true, 256, 255, 255, 255);
+/* 0017e5ae */	this.parts_[1].init("システム／キャラクター選択／顔／%s" % this.player_.getShortName(), 0);
+/* 0017e5ea */	this.parts_[2].init("システム／キャラクター選択／ＨＰ／バー", 0);
+/* 0017e60e */	this.parts_[3].init("システム／キャラクター選択／ＥＸＰ／バー", 0);
+/* 0017e632 */	this.parts_[6].initAsNumber("システム／数字／幅７／黒", NULL);
+/* 0017e656 */	this.parts_[5].init("システム／キャラクター選択／ＨＰ／スラッシュ", 0);
+/* 0017e67a */	this.parts_[4].initAsNumber("システム／数字／幅６／黒", NULL);
+/* 0017e69e */	this.parts_[9].initAsNumber("システム／数字／幅７／黒", NULL);
+/* 0017e6c2 */	this.parts_[8].init("システム／キャラクター選択／ＨＰ／スラッシュ", 0);
+/* 0017e6e6 */	this.parts_[7].initAsNumber("システム／数字／幅６／黒", NULL);
+/* 0017e70a */	this.parts_[10].initAsNumber("システム／数字／幅１５／黒", NULL);
+/* 0017e72e */	createPartsGroup(this.parent_, this.parts_, 5100);
+/* 0017e74e */	this.w_ = this.parts_[0].getWidth() / 4;
+/* 0017e77a */	this.h_ = this.parts_[0].getHeight();
+/* 0017e79e */	this.setPartsParam();
+/* 0017e7a6 */	this.setPartsPos();
+/* 0017e7ae */}
+
+void PlayerButton::setNumberPartsPos(int start, int x, int y)
+/* 0017e7b6 */{
+/* 0017e7b6 */	int i;
+/* 0017e7c8 */	int px = x;
+/* 0017e7de */	int py = y;
+/* 0017e7f4 */	for (i = 0; i < 3; ++i)
+/* 0017e83a */	{
+/* 0017e83a */		int index = i + start;
+/* 0017e85c */		this.parts_[index].setPos(px, py);
+/* 0017e890 */		this.parts_[index].setOrigin(3);
+/* 0017e8b2 */		px -= this.parts_[index].getWidth();
+/* 0017e8da */	}
+/* 0017e8e0 */}
+
+void PlayerButton::setPartsParam()
+/* 0017e8e8 */{
+/* 0017e8e8 */	this.parts_[6].setNumber(this.player_.getHp());
+/* 0017e912 */	this.parts_[4].setNumber(this.player_.getMaxHp());
+/* 0017e93c */	this.parts_[9].setNumber(this.player_.getExp());
+/* 0017e966 */	this.parts_[7].setNumber(this.player_.getNextExp());
+/* 0017e990 */	this.parts_[10].setNumber(this.player_.getLevel());
+/* 0017e9ba */	float r;
+/* 0017e9cc */	r = float(this.player_.getHp()) / float(this.player_.getMaxHp());
+/* 0017e9fe */	int w = this.parts_[2].getWidth() * r;
+/* 0017ea36 */	if (w == 0 && this.player_.getHp() > 0)
+/* 0017ea84 */	{
+/* 0017ea84 */		w = 1;
+/* 0017ea96 */	}
+/* 0017ea96 */	this.parts_[2].setCgRange(0, 0, w, this.parts_[2].getHeight());
+/* 0017eadc */	r = float(this.player_.getExp()) / float(this.player_.getNextExp());
+/* 0017eb0e */	if (r > 1.0)
+/* 0017eb26 */	{
+/* 0017eb26 */		r = 1.0;
+/* 0017eb38 */	}
+/* 0017eb38 */	this.parts_[3].setCgRange(0, 0, this.parts_[3].getWidth() * r, this.parts_[3].getHeight());
+/* 0017eba0 */}
+
+void PlayerButton::setPartsShow()
+/* 0017eba8 */{
+/* 0017eba8 */	int i;
+/* 0017ebba */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017ec0a */	{
+/* 0017ec0a */		this.parts_[i].setShow(true);
+/* 0017ec2c */	}
+/* 0017ec32 */	this.parent_.setShow(true);
+/* 0017ec48 */}
+
+void PlayerButton::setPartsPos()
+/* 0017ec50 */{
+/* 0017ec50 */	this.parts_[0].setPos(0.0, 0.0);
+/* 0017ec74 */	this.parts_[1].setPos(0.0, 0.0);
+/* 0017ec98 */	this.parts_[10].setPos(131.0, 52.0);
+/* 0017ecbc */	this.parts_[10].setOrigin(3);
+/* 0017ecda */	this.parts_[11].setPos(132.0, 32.0);
+/* 0017ecfe */	this.parts_[11].setOrigin(3);
+/* 0017ed1c */	this.parts_[2].setPos(35.0, 93.0);
+/* 0017ed40 */	this.parts_[3].setPos(35.0, 110.0);
+/* 0017ed64 */}
+
+void PlayerButton::update()
+/* 0017ed6c */{
+/* 0017ed6c */	this.updateHover();
+/* 0017ed74 */	this.updatePartsShowState();
+/* 0017ed7c */	if (g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 0017ed9c */	{
+/* 0017ed9c */		this.cb_(this.player_.getId());
+/* 0017edcc */	}
+/* 0017edcc */	if (!this.lastHover_ && this.isHover_)
+/* 0017ee06 */	{
+/* 0017ee06 */		playCursor();
+/* 0017ee0c */	}
+/* 0017ee0c */	if (this.isHover_ && g_mouse.onDown(0))
+/* 0017ee50 */	{
+/* 0017ee50 */		playClick();
+/* 0017ee56 */	}
+/* 0017ee56 */	this.lastHover_ = this.isHover_;
+/* 0017ee6c */}
+
+void PlayerButton::updateHover()
+/* 0017ee74 */{
+/* 0017ee74 */	this.isHover_ = !this.parent_.isMotion() && this.isEnable_ && this.parts_[0].isHit(g_mouse.getX(), g_mouse.getY());
+/* 0017ef12 */}
+
+void PlayerButton::updatePartsShowState()
+/* 0017ef1a */{
+/* 0017ef1a */	int n = this.isEnable_ ? 0 : 3;
+/* 0017ef48 */	if (this.isHover_)
+/* 0017ef58 */	{
+/* 0017ef58 */		n = g_mouse.isDown(0) ? 2 : 1;
+/* 0017ef92 */	}
+/* 0017ef92 */	this.parts_[0].setCgRange(n * this.w_, 0, this.w_, this.h_);
+/* 0017efda */	this.setNumberPartsPos(4, 131, 106);
+/* 0017eff4 */	this.setNumberPartsPos(7, 131, 123);
+/* 0017f00e */	int i;
+/* 0017f020 */	int v = this.isEnable_ ? 255 : 160;
+/* 0017f04e */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017f09e */	{
+/* 0017f09e */		if (i != 0)
+/* 0017f0b6 */		{
+/* 0017f0b6 */			this.parts_[i].setMultiColorValue(v, v, v);
+/* 0017f0f0 */		}
+/* 0017f0f0 */	}
+/* 0017f0f6 */}
+
+void PlayerButton::setPos(int x, int y)
+/* 0017f0fe */{
+/* 0017f0fe */	this.x_ = x;
+/* 0017f114 */	this.y_ = y;
+/* 0017f12a */	this.parent_.setPos(x, y);
+/* 0017f152 */}
+
+bool PlayerButton::isHover()
+/* 0017f15a */{
+/* 0017f15a */	this.updateHover();
+/* 0017f162 */	return this.isHover_;
+/* 0017f16e */}
+
+void PlayerButton::setEnable(bool val)
+/* 0017f17c */{
+/* 0017f17c */	this.isEnable_ = val;
+/* 0017f192 */}
+
+void PlayerButton::fadeIn(bool val, int delay, DG_GeneralCallback cb)
+/* 0017f19a */{
+/* 0017f19a */	this.setPartsShow();
+/* 0017f1a2 */	if (val)
+/* 0017f1b2 */	{
+/* 0017f1b2 */		array@PartsMotion m[2];
+/* 0017f1c8 */		m[0].setTime(delay);
+/* 0017f1ea */		m[0].setAlpha(0, 0, 0);
+/* 0017f214 */		m[1].setMove(315, 329, this.x_, this.y_, 1);
+/* 0017f252 */		m[1].setAlpha(0, 255, 0);
+/* 0017f27c */		this.parent_.runMotionArray(m, cb);
+/* 0017f2ae */	}
+/* 0017f2b4 */	else
+/* 0017f2b4 */	{
+/* 0017f2b4 */		PartsMotion m;
+/* 0017f2c4 */		m.setTime(100);
+/* 0017f2da */		m.setAlpha(255, 0, 0);
+/* 0017f2fc */		this.parent_.runMotion(m, cb);
+/* 0017f326 */	}
+/* 0017f326 */}
+
+bool PlayerButton::isEnable()
+/* 0017f334 */{
+/* 0017f334 */	return this.isEnable_;
+/* 0017f340 */}
+

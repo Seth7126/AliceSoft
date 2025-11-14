@@ -1,0 +1,113 @@
+CAEPropertyRectDetection::CAEPropertyRectDetection()
+/* 000701da */{
+/* 000701e2 */	this.Release();
+/* 000701ea */}
+
+CAEPropertyRectDetection::~CAEPropertyRectDetection()
+/* 000701f2 */{
+/* 000701f2 */	this.Release();
+/* 000701fa */}
+
+void CAEPropertyRectDetection::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 00070202 */{
+/* 00070202 */	this.Release();
+/* 0007020a */	if (Item === NULL)
+/* 00070222 */	{
+/* 00070222 */		return;
+/* 00070224 */	}
+/* 00070224 */	this.m_Item <- Item;
+/* 00070244 */	this.m_Panel.Init(LayoutID);
+/* 0007025e */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00070278 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 00070292 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 000702ac */	int ID = this.m_Item.GetID();
+/* 000702c8 */	int X;
+/* 000702da */	int Y;
+/* 000702ec */	int Width;
+/* 000702fe */	int Height;
+/* 00070310 */	Ｐ＿矩形判定範囲取得(ID, X, Y, Width, Height);
+/* 00070340 */	this.m_Panel.AddTextBoxItem("判定範囲／幅", string(AFL_Parts_GetWidth(ID, 1)), false);
+/* 00070390 */	this.m_Panel.AddTextBoxItem("判定範囲／高さ", string(AFL_Parts_GetHeight(ID, 1)), false);
+/* 000703e0 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｘ", string(X), false);
+/* 00070424 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｙ", string(Y), false);
+/* 00070468 */	this.m_Panel.AddTextBoxItem("表示範囲／幅", string(Width), false);
+/* 000704ac */	this.m_Panel.AddTextBoxItem("表示範囲／高さ", string(Height), false);
+/* 000704f0 */}
+
+void CAEPropertyRectDetection::Release()
+/* 000704f8 */{
+/* 000704f8 */	this.m_dgMouseWheelEvent.Clear();
+/* 00070504 */	this.m_dgKeyDownEvent.Clear();
+/* 00070510 */	this.m_Item <- NULL;
+/* 00070528 */	this.m_Panel.Release();
+/* 00070538 */}
+
+void CAEPropertyRectDetection::KeyDownEvent(int ID, int KeyID)
+/* 00070540 */{
+/* 00070540 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00070574 */}
+
+void CAEPropertyRectDetection::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0007057c */{
+/* 0007057c */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 000705ba */}
+
+void CAEPropertyRectDetection::ChangeTextEvent(int ID)
+/* 000705c2 */{
+/* 000705c2 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00070612 */	if (Item === NULL)
+/* 0007062a */	{
+/* 0007062a */		return;
+/* 0007062c */	}
+/* 0007062c */	int PartsID = this.m_Item.GetID();
+/* 00070648 */	int X;
+/* 0007065a */	int Y;
+/* 0007066c */	int Width;
+/* 0007067e */	int Height;
+/* 00070690 */	Ｐ＿矩形判定範囲取得(PartsID, X, Y, Width, Height);
+/* 000706c0 */	if (Item.GetLabel() == "判定範囲／幅")
+/* 000706de */	{
+/* 000706de */		Ｐ＿矩形判定設定(PartsID, Ｐ＿Ｘ座標取得(PartsID), Ｐ＿Ｙ座標取得(PartsID), Item.GetTextBoxInt(), AFL_Parts_GetHeight(PartsID, 1));
+/* 00070738 */	}
+/* 0007073e */	else if (Item.GetLabel() == "判定範囲／高さ")
+/* 0007075c */	{
+/* 0007075c */		Ｐ＿矩形判定設定(PartsID, Ｐ＿Ｘ座標取得(PartsID), Ｐ＿Ｙ座標取得(PartsID), AFL_Parts_GetWidth(PartsID, 1), Item.GetTextBoxInt());
+/* 000707b6 */	}
+/* 000707bc */	else if (Item.GetLabel() == "表示範囲／Ｘ")
+/* 000707da */	{
+/* 000707da */		Ｐ＿矩形判定範囲設定(PartsID, Item.GetTextBoxInt(), Y, Width, Height);
+/* 00070818 */	}
+/* 0007081e */	else if (Item.GetLabel() == "表示範囲／Ｙ")
+/* 0007083c */	{
+/* 0007083c */		Ｐ＿矩形判定範囲設定(PartsID, X, Item.GetTextBoxInt(), Width, Height);
+/* 0007087a */	}
+/* 00070880 */	else if (Item.GetLabel() == "表示範囲／幅")
+/* 0007089e */	{
+/* 0007089e */		Ｐ＿矩形判定範囲設定(PartsID, X, Y, Item.GetTextBoxInt(), Height);
+/* 000708dc */	}
+/* 000708e2 */	else if (Item.GetLabel() == "表示範囲／高さ")
+/* 00070900 */	{
+/* 00070900 */		Ｐ＿矩形判定範囲設定(PartsID, X, Y, Width, Item.GetTextBoxInt());
+/* 0007093e */	}
+/* 0007093e */}
+
+void CAEPropertyRectDetection::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00070946 */{
+/* 00070946 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00070960 */}
+
+void CAEPropertyRectDetection::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00070968 */{
+/* 00070968 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00070982 */}
+
+void CAEPropertyRectDetection::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0007098a */{
+/* 0007098a */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 000709a4 */}
+
+void CAEPropertyRectDetection::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000709ac */{
+/* 000709ac */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 000709c6 */}
+

@@ -1,0 +1,19 @@
+void EnquiteInfoDialog::open(string activityFileName)
+/* 001c478e */{
+/* 001c478e */	Ｐ＿アクティビティ実行(activityFileName, this.onLoad, NULL, NULL);
+/* 001c47ac */}
+
+void EnquiteInfoDialog::onLoad(string activityFileName, string activityName)
+/* 001c47b4 */{
+/* 001c47b4 */	this.activityFileName_ = activityFileName;
+/* 001c47cc */	this.activityName_ = activityName;
+/* 001c47e4 */	setCursorClickSoundToActivity(activityName);
+/* 001c47f4 */	AFL_Parts_AddWholeMouseLClickEvent(this.onClick);
+/* 001c4804 */	AFL_Parts_AddWholeMouseRClickEvent(this.onClick);
+/* 001c4814 */}
+
+void EnquiteInfoDialog::onClick(int partsNumber, int mouseX, int mouseY)
+/* 001c481c */{
+/* 001c481c */	AFL_Activity_End();
+/* 001c4822 */}
+

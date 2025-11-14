@@ -1,0 +1,17 @@
+bool Ａ＿プレイングマニュアル存在確認()
+/* 00169900 */{
+/* 00169900 */	return SystemService.IsExistPlayingManual();
+/* 0016990c */}
+
+void Ａ＿プレイングマニュアル表示()
+/* 00169920 */{
+/* 00169920 */	SystemService.OpenPlayingManual();
+/* 0016992a */	++g_NumofOpenManual;
+/* 0016993a */	SYS_情報集計データセーブ();
+/* 00169942 */}
+
+int Ａ＿プレイングマニュアル表示回数取得()
+/* 00169950 */{
+/* 00169950 */	return g_NumofOpenManual;
+/* 0016995c */}
+

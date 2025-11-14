@@ -1,0 +1,209 @@
+void MapChain::addChain(string n, string m, bool isNewChain)
+/* 001d7b70 */{
+/* 001d7b70 */	if (n == m)
+/* 001d7b8c */	{
+/* 001d7b8c */		return;
+/* 001d7b8e */	}
+/* 001d7b8e */	if (n > m)
+/* 001d7baa */	{
+/* 001d7baa */		n <=> m;
+/* 001d7bc2 */	}
+/* 001d7bc2 */	int i;
+/* 001d7bd4 */	for (i = 0; i < this.chain_.Numof(); ++i)
+/* 001d7c24 */	{
+/* 001d7c24 */		if (this.chain_[i].pId1 == n && this.chain_[i].pId2 == m)
+/* 001d7c9c */		{
+/* 001d7c9c */			return;
+/* 001d7c9e */		}
+/* 001d7c9e */	}
+/* 001d7ca4 */	MapChainInfo info;
+/* 001d7cb4 */	info.pId1 = n;
+/* 001d7cd4 */	info.pId2 = m;
+/* 001d7cf4 */	info.isNew = isNewChain;
+/* 001d7d12 */	this.chain_.PushBack(info);
+/* 001d7d2a */	getMapPlaceFromId(n).setAvailable(true);
+/* 001d7d5c */	getMapPlaceFromId(m).setAvailable(true);
+/* 001d7d8e */}
+
+bool MapChain::isNew(int index)
+/* 001d7d96 */{
+/* 001d7d96 */	if (0 <= index && index < this.chain_.Numof())
+/* 001d7de8 */	{
+/* 001d7de8 */		return this.chain_[index].isNew;
+/* 001d7e08 */	}
+/* 001d7e08 */	return false;
+/* 001d7e10 */}
+
+void MapChain::setNew(int index, bool val)
+/* 001d7e1e */{
+/* 001d7e1e */	if (0 <= index && index < this.chain_.Numof())
+/* 001d7e70 */	{
+/* 001d7e70 */		this.chain_[index].isNew = val;
+/* 001d7e9a */	}
+/* 001d7e9a */}
+
+void MapChain::eraseChain(string n, string m)
+/* 001d7ea2 */{
+/* 001d7ea2 */	if (n == m)
+/* 001d7ebe */	{
+/* 001d7ebe */		return;
+/* 001d7ec0 */	}
+/* 001d7ec0 */	if (n > m)
+/* 001d7edc */	{
+/* 001d7edc */		n <=> m;
+/* 001d7ef4 */	}
+/* 001d7ef4 */	int i;
+/* 001d7f06 */	for (i = 0; i < this.chain_.Numof(); ++i)
+/* 001d7f56 */	{
+/* 001d7f56 */		if (this.chain_[i].pId1 == n && this.chain_[i].pId2 == m)
+/* 001d7fce */		{
+/* 001d7fce */			this.erasedChain_.PushBack(this.chain_[i]);
+/* 001d7ff2 */			this.chain_.Erase(i);
+/* 001d8008 */			return;
+/* 001d800a */		}
+/* 001d800a */	}
+/* 001d8010 */}
+
+void MapChain::getNeighbor(ref array@string pId, string nord)
+/* 001d8018 */{
+/* 001d8018 */	pId.Free();
+/* 001d8022 */	int i;
+/* 001d8034 */	for (i = 0; i < this.chain_.Numof(); ++i)
+/* 001d8084 */	{
+/* 001d8084 */		if (this.chain_[i].pId1 == nord)
+/* 001d80b4 */		{
+/* 001d80b4 */			pId.PushBack(this.chain_[i].pId2);
+/* 001d80dc */		}
+/* 001d80e2 */		else if (this.chain_[i].pId2 == nord)
+/* 001d8112 */		{
+/* 001d8112 */			pId.PushBack(this.chain_[i].pId1);
+/* 001d813a */		}
+/* 001d813a */	}
+/* 001d8140 */}
+
+bool MapChain::getRoute(ref array@string route, string start, string goal)
+/* 001d8148 */{
+/* 001d8148 */	if (start == goal)
+/* 001d8164 */	{
+/* 001d8164 */		return true;
+/* 001d816c */	}
+/* 001d816c */	if (this.chain_.Empty())
+/* 001d817c */	{
+/* 001d817c */		return false;
+/* 001d8184 */	}
+/* 001d8184 */	route.Free();
+/* 001d818e */	this.initDistanceInfo();
+/* 001d8196 */	if (this.getMapDistanceInfoIndex(start) == -1)
+/* 001d81b6 */	{
+/* 001d81b6 */		return false;
+/* 001d81be */	}
+/* 001d81be */	this.searchMap(start, 0);
+/* 001d81d6 */	int r = this.getMapDistanceInfoIndex(goal);
+/* 001d81f4 */	if (r != -1 && this.mark_[r].distance != -1)
+/* 001d8250 */	{
+/* 001d8250 */		this.getRouteFromGoal(route, start, goal);
+/* 001d8276 */		route.Reverse();
+/* 001d8280 */		return true;
+/* 001d8288 */	}
+/* 001d8288 */	return false;
+/* 001d8290 */}
+
+void MapChain::getRouteFromGoal(ref array@string route, string start, string goal)
+/* 001d829e */{
+/* 001d829e */	int index = this.getMapDistanceInfoIndex(goal);
+/* 001d82bc */	int cd = this.mark_[index].distance;
+/* 001d82e6 */	string cpos = this.mark_[index].pId;
+/* 001d8312 */	while (true)
+/* 001d831e */	{
+/* 001d831e */		array@string neighbor;
+/* 001d8328 */		this.getNeighbor(neighbor, cpos);
+/* 001d8344 */		int i;
+/* 001d8356 */		for (i = 0; i < neighbor.Numof(); ++i)
+/* 001d83a6 */		{
+/* 001d83a6 */			int index = this.getMapDistanceInfoIndex(neighbor[i]);
+/* 001d83d0 */			if (this.mark_[index].distance == cd - 1)
+/* 001d8408 */			{
+/* 001d8408 */				route.PushBack(cpos);
+/* 001d841c */				--cd;
+/* 001d842c */				cpos = this.mark_[index].pId;
+/* 001d8458 */				if (cd == 0)
+/* 001d8470 */				{
+/* 001d8470 */					route.PushBack(cpos);
+/* 001d8484 */					return;
+/* 001d8486 */				}
+/* 001d8486 */				break;
+/* 001d848c */			}
+/* 001d848c */		}
+/* 001d849c */	}
+/* 001d84a2 */}
+
+void MapChain::searchMap(string current, int distance)
+/* 001d84aa */{
+/* 001d84aa */	array@string neighbor;
+/* 001d84b4 */	int n = this.getMapDistanceInfoIndex(current);
+/* 001d84d2 */	this.mark_[n].distance = distance;
+/* 001d84fc */	this.getNeighbor(neighbor, current);
+/* 001d8518 */	int i;
+/* 001d852a */	for (i = 0; i < neighbor.Numof(); ++i)
+/* 001d857a */	{
+/* 001d857a */		int n = this.getMapDistanceInfoIndex(neighbor[i]);
+/* 001d85a4 */		if (this.mark_[n].distance == -1 || this.mark_[n].distance > distance)
+/* 001d8618 */		{
+/* 001d8618 */			this.searchMap(neighbor[i], distance + 1);
+/* 001d8648 */		}
+/* 001d8648 */	}
+/* 001d864e */}
+
+void MapChain::initDistanceInfo()
+/* 001d8656 */{
+/* 001d8656 */	this.mark_.Free();
+/* 001d8660 */	int i;
+/* 001d8672 */	for (i = 0; i < this.chain_.Numof(); ++i)
+/* 001d86c2 */	{
+/* 001d86c2 */		int n = this.getMapDistanceInfoIndex(this.chain_[i].pId1);
+/* 001d86f4 */		if (n == -1)
+/* 001d870c */		{
+/* 001d870c */			MapDistanceInfo info;
+/* 001d871c */			info.pId = this.chain_[i].pId1;
+/* 001d8750 */			info.distance = -1;
+/* 001d876a */			this.mark_.PushBack(info);
+/* 001d8782 */		}
+/* 001d8788 */		n = this.getMapDistanceInfoIndex(this.chain_[i].pId2);
+/* 001d87ba */		if (n == -1)
+/* 001d87d2 */		{
+/* 001d87d2 */			MapDistanceInfo info;
+/* 001d87e2 */			info.pId = this.chain_[i].pId2;
+/* 001d8816 */			info.distance = -1;
+/* 001d8830 */			this.mark_.PushBack(info);
+/* 001d8848 */		}
+/* 001d8848 */	}
+/* 001d8854 */}
+
+int MapChain::getMapDistanceInfoIndex(string n)
+/* 001d885c */{
+/* 001d885c */	int i;
+/* 001d886e */	for (i = 0; i < this.mark_.Numof(); ++i)
+/* 001d88be */	{
+/* 001d88be */		if (this.mark_[i].pId == n)
+/* 001d88ee */		{
+/* 001d88ee */			return i;
+/* 001d88fa */		}
+/* 001d88fa */	}
+/* 001d8900 */	return -1;
+/* 001d8908 */}
+
+bool MapChain::getChain(int index, ref MapChainInfo info)
+/* 001d8916 */{
+/* 001d8916 */	if (0 <= index && index < this.chain_.Numof())
+/* 001d8968 */	{
+/* 001d8968 */		info = this.chain_[index];
+/* 001d8996 */		return true;
+/* 001d899e */	}
+/* 001d899e */	return false;
+/* 001d89a6 */}
+
+int MapChain::getCount()
+/* 001d89b4 */{
+/* 001d89b4 */	return this.chain_.Numof();
+/* 001d89c6 */}
+

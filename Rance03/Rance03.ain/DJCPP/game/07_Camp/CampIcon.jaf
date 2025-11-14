@@ -1,0 +1,134 @@
+CampIcon::CampIcon()
+/* 001b71e6 */{
+/* 001b71ee */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b7214 */}
+
+void CampIcon::init(DG_GeneralCallback onClickMirrorPiece)
+/* 001b721c */{
+/* 001b721c */	gameGetJoinedPlayer(this.playerId_);
+/* 001b722c */	int i;
+/* 001b723e */	while (i < this.playerId_.Numof())
+/* 001b7260 */	{
+/* 001b7260 */		string sn = getPlayerFromId(this.playerId_[i]).getShortName();
+/* 001b72a6 */		if (Ａ＿ＣＧ存在確認("システム／キャンプ／ＳＤ／%s" % sn))
+/* 001b72ca */		{
+/* 001b72ca */			++i;
+/* 001b72da */		}
+/* 001b72e0 */		else
+/* 001b72e0 */		{
+/* 001b72e0 */			this.playerId_.Erase(i);
+/* 001b72f6 */		}
+/* 001b72f6 */	}
+/* 001b7302 */	while (this.playerId_.Numof() > 4)
+/* 001b7320 */	{
+/* 001b7320 */		this.playerId_.Erase(RAND(this.playerId_.Numof()) - 1);
+/* 001b734a */	}
+/* 001b7350 */	array@int pos[4];
+/* 001b7366 */	for (i = 0; i < pos.Numof(); ++i)
+/* 001b73b6 */	{
+/* 001b73b6 */		pos[i] = i;
+/* 001b73d8 */	}
+/* 001b73de */	for (i = 0; i < 10; ++i)
+/* 001b7424 */	{
+/* 001b7424 */		int r = RAND(4) - 1;
+/* 001b7444 */		int r2 = RAND(4) - 1;
+/* 001b7464 */		pos[r] <=> pos[r2];
+/* 001b7494 */	}
+/* 001b749a */	this.icon_.Alloc(this.playerId_.Numof());
+/* 001b74ba */	for (i = 0; i < this.icon_.Numof(); ++i)
+/* 001b750a */	{
+/* 001b750a */		string sn = getPlayerFromId(this.playerId_[i]).getShortName();
+/* 001b7550 */		this.icon_[i].init("システム／キャンプ／ＳＤ／%s" % sn);
+/* 001b7584 */		this.icon_[i].setIconPosition(pos[i]);
+/* 001b75b6 */		this.icon_[i].run();
+/* 001b75d2 */	}
+/* 001b75de */	if (this.isGetMirrorPiece())
+/* 001b75ec */	{
+/* 001b75ec */		this.icon_.Realloc(this.icon_.Numof() + 1);
+/* 001b7614 */		int index = this.icon_.Numof() - 1;
+/* 001b7638 */		this.icon_[index].init("システム／キャンプ／鏡の破片");
+/* 001b765a */		this.icon_[index].setIconPosition(-1);
+/* 001b767c */		this.icon_[index].setOnClickCallback(onClickMirrorPiece);
+/* 001b76a4 */		this.icon_[index].run();
+/* 001b76c0 */	}
+/* 001b76c0 */	this.initParts();
+/* 001b76c8 */}
+
+bool CampIcon::isGetMirrorPiece()
+/* 001b76d0 */{
+/* 001b76d0 */	int i;
+/* 001b76e2 */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001b7732 */	{
+/* 001b7732 */		if (g_mirrorPiece[i].getCount() > 0)
+/* 001b775c */		{
+/* 001b775c */			return true;
+/* 001b7764 */		}
+/* 001b7764 */	}
+/* 001b776a */	return false;
+/* 001b7772 */}
+
+void CampIcon::initParts()
+/* 001b7780 */{
+/* 001b7780 */	this.parts_[0].init("システム／キャンプ／土台", 0);
+/* 001b77a4 */	this.parts_[1].init("システム／キャンプ／木", 0);
+/* 001b77c8 */	this.parts_[2].init("システム／キャンプ／テント", 0);
+/* 001b77ec */	this.parts_[3].init("システム／キャンプ／焚き火", 0);
+/* 001b7810 */	int i;
+/* 001b7822 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b7872 */	{
+/* 001b7872 */		this.parts_[i].setOrigin(2);
+/* 001b7894 */	}
+/* 001b789a */	createPartsGroup(this.parent_, this.parts_, 4200);
+/* 001b78ba */	this.setPartsShow();
+/* 001b78c2 */	this.setPartsPos();
+/* 001b78ca */}
+
+void CampIcon::setPartsShow()
+/* 001b78d2 */{
+/* 001b78d2 */	int i;
+/* 001b78e4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b7934 */	{
+/* 001b7934 */		this.parts_[i].setShow(true);
+/* 001b7956 */	}
+/* 001b795c */	this.parent_.setShow(true);
+/* 001b7972 */}
+
+void CampIcon::setPartsPos()
+/* 001b797a */{
+/* 001b797a */	this.parts_[0].setPos(404.0, 551.0);
+/* 001b799e */	this.parts_[1].setPos(540.0, 377.0);
+/* 001b79c2 */	this.parts_[2].setPos(399.0, 451.0);
+/* 001b79e6 */	this.parts_[3].setPos(406.0, 512.0);
+/* 001b7a0a */}
+
+void CampIcon::update()
+/* 001b7a12 */{
+/* 001b7a14 */}
+
+void CampIcon::run()
+/* 001b7a1a */{
+/* 001b7a1c */}
+
+void CampIcon::fadeIn(bool val)
+/* 001b7a22 */{
+/* 001b7a22 */	if (val)
+/* 001b7a32 */	{
+/* 001b7a32 */		PartsMotion m;
+/* 001b7a42 */		m.setTime(350);
+/* 001b7a58 */		m.setScaling(0, 100, 1);
+/* 001b7a7a */		this.parent_.runMotion(m, NULL);
+/* 001b7a9a */	}
+/* 001b7aa6 */	else
+/* 001b7aa6 */	{
+/* 001b7aa6 */		PartsMotion m;
+/* 001b7ab6 */		m.setTime(50);
+/* 001b7acc */		m.setScaling(100, 0, 0);
+/* 001b7aee */		this.parent_.runMotion(m, NULL);
+/* 001b7b0e */		int i;
+/* 001b7b20 */		for (i = 0; i < this.icon_.Numof(); ++i)
+/* 001b7b70 */		{
+/* 001b7b70 */			this.icon_[i].fall();
+/* 001b7b8c */		}
+/* 001b7b92 */	}
+/* 001b7b92 */}
+

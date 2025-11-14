@@ -1,0 +1,79 @@
+CAEComponentListForm::CAEComponentListForm()
+/* 00044cea */{
+/* 00044cf4 */}
+
+CAEComponentListForm::~CAEComponentListForm()
+/* 00044cfa */{
+/* 00044cfa */	this.Release();
+/* 00044d02 */}
+
+int CAEComponentListForm::Create()
+/* 00044d0a */{
+/* 00044d0a */	this.Release();
+/* 00044d12 */	this.m_LayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 00044d24 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_LayoutBox, 1);
+/* 00044d3a */	Ｐ＿レイアウトボックス＿折り返し設定(this.m_LayoutBox, true, 420.0);
+/* 00044d56 */	this.m_AddButton = PARTS_GetFreeSystemPartsNumber();
+/* 00044d68 */	Ｐ＿ボタン＿サイズ設定(this.m_AddButton, 40, 20);
+/* 00044d84 */	Ｐ＿ボタン＿テキスト設定(this.m_AddButton, "追加");
+/* 00044d9a */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutBox, this.m_AddButton);
+/* 00044db4 */	this.m_ComponentList.PushBack("ボタン");
+/* 00044dc4 */	this.m_ComponentList.PushBack("チェックボックス");
+/* 00044dd4 */	this.m_ComponentList.PushBack("縦スクロールバー");
+/* 00044de4 */	this.m_ComponentList.PushBack("横スクロールバー");
+/* 00044df4 */	this.m_ComponentList.PushBack("テキストボックス");
+/* 00044e04 */	this.m_ComponentList.PushBack("リストボックス");
+/* 00044e14 */	this.m_ComponentList.PushBack("コンボボックス");
+/* 00044e24 */	this.m_ComponentList.PushBack("マルチラインテキストボックス");
+/* 00044e34 */	this.m_ComponentList.PushBack("ラジオボタンボックス");
+/* 00044e44 */	this.m_ComponentList.PushBack("レイアウトボックス");
+/* 00044e54 */	this.m_ComponentList.PushBack("ＣＧパーツ");
+/* 00044e64 */	this.m_ComponentList.PushBack("ループＣＧパーツ");
+/* 00044e74 */	this.m_ComponentList.PushBack("テキストパーツ");
+/* 00044e84 */	this.m_ComponentList.PushBack("横ゲージパーツ");
+/* 00044e94 */	this.m_ComponentList.PushBack("縦ゲージパーツ");
+/* 00044ea4 */	this.m_ComponentList.PushBack("数字パーツ");
+/* 00044eb4 */	this.m_ComponentList.PushBack("矩形パーツ");
+/* 00044ec4 */	this.m_ComponentList.PushBack("構築パーツ");
+/* 00044ed4 */	this.m_ComponentList.PushBack("ＣＧ判定パーツ");
+/* 00044ee4 */	this.m_ComponentList.PushBack("フラットパーツ");
+/* 00044ef4 */	this.m_ListBox = PARTS_GetFreeSystemPartsNumber();
+/* 00044f06 */	Ｐ＿リストボックス＿サイズ設定(this.m_ListBox, 420, 130);
+/* 00044f22 */	Ｐ＿リストボックス＿行高さ設定(this.m_ListBox, 16);
+/* 00044f38 */	int Index;
+/* 00044f4a */	for (Index = 0; Index < this.m_ComponentList.Numof(); ++Index)
+/* 00044f9a */	{
+/* 00044f9a */		Ｐ＿リストボックス＿アイテム追加(this.m_ListBox, this.m_ComponentList[Index]);
+/* 00044fc0 */	}
+/* 00044fc6 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutBox, this.m_ListBox);
+/* 00044fe0 */	AFL_Parts_AddMouseLClickEvent(this.m_AddButton, this.MouseClickEvent);
+/* 00044ffa */	return this.m_LayoutBox;
+/* 00045006 */}
+
+void CAEComponentListForm::Release()
+/* 00045014 */{
+/* 00045014 */	this.m_dgAddComponentEvent.Clear();
+/* 00045020 */	this.m_ComponentList.Free();
+/* 0004502a */}
+
+void CAEComponentListForm::MouseClickEvent(int ID, int MouseX, int MouseY)
+/* 00045032 */{
+/* 00045032 */	int Index = Ｐ＿リストボックス＿選択位置取得(this.m_ListBox);
+/* 0004504e */	if (Index < 0)
+/* 00045066 */	{
+/* 00045066 */		return;
+/* 00045068 */	}
+/* 00045068 */	string Item = Ｐ＿リストボックス＿アイテム取得(this.m_ListBox, Index);
+/* 00045090 */	this.m_dgAddComponentEvent(PARTS_GetComponentTypeID(Item));
+/* 000450c0 */}
+
+void CAEComponentListForm::AddAddComponentEvent(DG_AddComponentEvent DelegateObject)
+/* 000450c8 */{
+/* 000450c8 */	this.m_dgAddComponentEvent += DelegateObject;
+/* 000450e2 */}
+
+void CAEComponentListForm::EraseAddComponentEvent(DG_AddComponentEvent DelegateObject)
+/* 000450ea */{
+/* 000450ea */	this.m_dgAddComponentEvent -= DelegateObject;
+/* 00045104 */}
+

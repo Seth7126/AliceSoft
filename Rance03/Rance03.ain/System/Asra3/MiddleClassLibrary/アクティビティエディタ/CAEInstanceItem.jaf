@@ -1,0 +1,1047 @@
+CAEInstanceItem::CAEInstanceItem()
+/* 00048294 */{
+/* 0004829c */	this.Release();
+/* 000482a4 */}
+
+CAEInstanceItem::~CAEInstanceItem()
+/* 000482ac */{
+/* 000482ac */	this.Release();
+/* 000482b4 */}
+
+void CAEInstanceItem::Init(int ComponentType, int LayerID, string Name, int Line1, int Line2, int Line3, int Line4)
+/* 000482bc */{
+/* 000482bc */	this.Release();
+/* 000482c4 */	this.m_Name = Name;
+/* 000482dc */	int PrevActiveID = AFL_Parts_SetActiveLayer(LayerID);
+/* 000482f8 */	this.m_ID = PARTS_GetFreeSystemPartsNumber();
+/* 0004830a */	this.SetType(ComponentType, 1);
+/* 00048322 */	AFL_Parts_SetActiveLayer(PrevActiveID);
+/* 00048334 */	this.m_Overlay = PARTS_GetFreeSystemPartsNumber();
+/* 00048346 */	this.m_Overlay1 = Line1;
+/* 0004835c */	this.m_Overlay2 = Line2;
+/* 00048372 */	this.m_Overlay3 = Line3;
+/* 00048388 */	this.m_Overlay4 = Line4;
+/* 0004839e */	Ｐ＿クリック可能設定(this.m_Overlay, true);
+/* 000483b4 */	AFL_Parts_AddDragBeginEvent(this.m_Overlay, this.DragBeginEvent);
+/* 000483ce */	AFL_Parts_AddDragingEvent(this.m_Overlay, this.DragingEvent);
+/* 000483e8 */	AFL_Parts_AddDragEndEvent(this.m_Overlay, this.DragEndEvent);
+/* 00048402 */	AFL_Parts_AddMouseLClickEvent(this.m_Overlay, this.MouseClickEvent);
+/* 0004841c */	this.SetPos(0.0, 0.0);
+/* 00048430 */	this.SetZ(0);
+/* 0004843e */	this.EditMode(true);
+/* 0004844c */	AFL_Parts_AddBeginUpdateEvent(this.UpdateOverlay);
+/* 0004845c */}
+
+void CAEInstanceItem::Set(int Number, string Name, int LayerID, int Line1, int Line2, int Line3, int Line4)
+/* 00048464 */{
+/* 00048464 */	this.Release();
+/* 0004846c */	this.m_Name = Name;
+/* 00048484 */	this.m_ID = Number;
+/* 0004849a */	this.m_Overlay = PARTS_GetFreeSystemPartsNumber();
+/* 000484ac */	this.m_Overlay1 = Line1;
+/* 000484c2 */	this.m_Overlay2 = Line2;
+/* 000484d8 */	this.m_Overlay3 = Line3;
+/* 000484ee */	this.m_Overlay4 = Line4;
+/* 00048504 */	Ｐ＿クリック可能設定(this.m_Overlay, true);
+/* 0004851a */	AFL_Parts_AddDragBeginEvent(this.m_Overlay, this.DragBeginEvent);
+/* 00048534 */	AFL_Parts_AddDragingEvent(this.m_Overlay, this.DragingEvent);
+/* 0004854e */	AFL_Parts_AddDragEndEvent(this.m_Overlay, this.DragEndEvent);
+/* 00048568 */	AFL_Parts_AddMouseLClickEvent(this.m_Overlay, this.MouseClickEvent);
+/* 00048582 */	this.EditMode(true);
+/* 00048590 */	AFL_Parts_AddBeginUpdateEvent(this.UpdateOverlay);
+/* 000485a0 */}
+
+void CAEInstanceItem::Release()
+/* 000485a8 */{
+/* 000485a8 */	this.m_IntentType = 0;
+/* 000485ba */	this.m_Destination.Free();
+/* 000485c4 */	PARTS_ReleaseWithInit(this.m_Overlay);
+/* 000485d2 */	PARTS_ReleaseWithInit(this.m_ID);
+/* 000485e0 */	this.m_Name = "";
+/* 000485f4 */	this.m_Active = false;
+/* 00048606 */	this.m_Open = true;
+/* 00048618 */}
+
+void CAEInstanceItem::EditMode(bool Mode)
+/* 00048620 */{
+/* 00048620 */	if (!this.IsCreated())
+/* 00048630 */	{
+/* 00048630 */		return;
+/* 00048632 */	}
+/* 00048632 */	PARTS_SetLockInputState(this.m_ID, Mode);
+/* 0004864c */	Ｐ＿表示設定(this.m_Overlay, Mode);
+/* 00048666 */	if (Mode)
+/* 00048676 */	{
+/* 00048676 */		AFL_Parts_AddBeginUpdateEvent(this.UpdateOverlay);
+/* 00048686 */	}
+/* 0004868c */	else
+/* 0004868c */	{
+/* 0004868c */		AFL_Parts_EraseBeginUpdateEvent(this.UpdateOverlay);
+/* 0004869c */	}
+/* 0004869c */}
+
+bool CAEInstanceItem::IsCreated()
+/* 000486a4 */{
+/* 000486a4 */	return this.m_ID != 0;
+/* 000486ba */}
+
+void CAEInstanceItem::SetOpen(bool Open)
+/* 000486c8 */{
+/* 000486c8 */	this.m_Open = Open;
+/* 000486de */}
+
+bool CAEInstanceItem::IsOpen()
+/* 000486e6 */{
+/* 000486e6 */	return this.m_Open;
+/* 000486f2 */}
+
+void CAEInstanceItem::SetName(string Name)
+/* 00048700 */{
+/* 00048700 */	this.m_Name = Name;
+/* 00048718 */}
+
+string CAEInstanceItem::GetName()
+/* 00048720 */{
+/* 00048720 */	return this.m_Name;
+/* 0004872c */}
+
+void CAEInstanceItem::DragBeginEvent(int ID)
+/* 0004873a */{
+/* 0004873a */	this.m_DragStartPartsX = this.GetX();
+/* 0004874e */	this.m_DragStartPartsY = this.GetY();
+/* 00048762 */}
+
+void CAEInstanceItem::DragingEvent(int ID, int BeginMouseX, int BeginMouseY, int MouseX, int MouseY)
+/* 0004876a */{
+/* 0004876a */	if (!this.IsCreated())
+/* 0004877a */	{
+/* 0004877a */		return;
+/* 0004877c */	}
+/* 0004877c */	float PosX = MouseX - BeginMouseX;
+/* 000487a0 */	float PosY = MouseY - BeginMouseY;
+/* 000487c4 */	if (Ｐ＿座標レート設定取得(this.m_ID))
+/* 000487da */	{
+/* 000487da */		PosX = PosX / AFL_View_GetWidth();
+/* 000487fa */		PosY = PosY / AFL_View_GetHeight();
+/* 0004881a */	}
+/* 0004881a */	PosX += this.m_DragStartPartsX;
+/* 00048830 */	PosY += this.m_DragStartPartsY;
+/* 00048846 */	this.SetPos(PosX, PosY);
+/* 00048862 */	this.m_dgMoveEvent(ID);
+/* 0004888c */}
+
+void CAEInstanceItem::DragEndEvent(int ID)
+/* 00048894 */{
+/* 00048894 */	this.m_DragStartPartsX = 0.0;
+/* 000488a6 */	this.m_DragStartPartsY = 0.0;
+/* 000488b8 */}
+
+void CAEInstanceItem::MouseClickEvent(int ID, int MouseX, int MouseY)
+/* 000488c0 */{
+/* 000488c0 */	this.Active(true);
+/* 000488ce */}
+
+void CAEInstanceItem::SetType(int ComponentType, int State)
+/* 000488d6 */{
+/* 000488d6 */	if (!this.IsCreated())
+/* 000488e6 */	{
+/* 000488e6 */		return;
+/* 000488e8 */	}
+/* 000488e8 */	PARTS_SetComponentType(this.m_ID, ComponentType, State);
+/* 0004890c */}
+
+int CAEInstanceItem::GetType(int State)
+/* 00048914 */{
+/* 00048914 */	if (!this.IsCreated())
+/* 00048924 */	{
+/* 00048924 */		return -1;
+/* 0004892c */	}
+/* 0004892c */	return PARTS_GetComponentType(this.m_ID, State);
+/* 00048948 */}
+
+int CAEInstanceItem::GetID()
+/* 00048956 */{
+/* 00048956 */	return this.m_ID;
+/* 00048962 */}
+
+void CAEInstanceItem::SetPos(float X, float Y)
+/* 00048970 */{
+/* 00048970 */	if (!this.IsCreated())
+/* 00048980 */	{
+/* 00048980 */		return;
+/* 00048982 */	}
+/* 00048982 */	if (Ｐ＿Ｘ座標取得(this.m_ID) == X && Ｐ＿Ｙ座標取得(this.m_ID) == Y)
+/* 000489de */	{
+/* 000489de */		return;
+/* 000489e0 */	}
+/* 000489e0 */	Ｐ＿座標設定(this.m_ID, X, Y);
+/* 00048a04 */}
+
+void CAEInstanceItem::SetZ(int Z)
+/* 00048a0c */{
+/* 00048a0c */	if (!this.IsCreated())
+/* 00048a1c */	{
+/* 00048a1c */		return;
+/* 00048a1e */	}
+/* 00048a1e */	if (Ｐ＿Ｚ座標取得(this.m_ID) == Z)
+/* 00048a40 */	{
+/* 00048a40 */		return;
+/* 00048a42 */	}
+/* 00048a42 */	Ｐ＿Ｚ座標設定(this.m_ID, Z);
+/* 00048a5c */}
+
+float CAEInstanceItem::GetX()
+/* 00048a64 */{
+/* 00048a64 */	if (!this.IsCreated())
+/* 00048a74 */	{
+/* 00048a74 */		return 0.0;
+/* 00048a7c */	}
+/* 00048a7c */	return Ｐ＿Ｘ座標取得(this.m_ID);
+/* 00048a8e */}
+
+float CAEInstanceItem::GetY()
+/* 00048a9c */{
+/* 00048a9c */	if (!this.IsCreated())
+/* 00048aac */	{
+/* 00048aac */		return 0.0;
+/* 00048ab4 */	}
+/* 00048ab4 */	return Ｐ＿Ｙ座標取得(this.m_ID);
+/* 00048ac6 */}
+
+int CAEInstanceItem::GetZ()
+/* 00048ad4 */{
+/* 00048ad4 */	if (!this.IsCreated())
+/* 00048ae4 */	{
+/* 00048ae4 */		return 0;
+/* 00048aec */	}
+/* 00048aec */	return Ｐ＿Ｚ座標取得(this.m_ID) / 2;
+/* 00048b06 */}
+
+void CAEInstanceItem::SetOriginPosMode(int Mode)
+/* 00048b14 */{
+/* 00048b14 */	if (!this.IsCreated())
+/* 00048b24 */	{
+/* 00048b24 */		return;
+/* 00048b26 */	}
+/* 00048b26 */	if (Ｐ＿原点座標取得(this.m_ID) == Mode)
+/* 00048b48 */	{
+/* 00048b48 */		return;
+/* 00048b4a */	}
+/* 00048b4a */	Ｐ＿原点座標設定(this.m_ID, Mode);
+/* 00048b64 */}
+
+int CAEInstanceItem::GetOriginPosMode()
+/* 00048b6c */{
+/* 00048b6c */	if (!this.IsCreated())
+/* 00048b7c */	{
+/* 00048b7c */		return 1;
+/* 00048b84 */	}
+/* 00048b84 */	return Ｐ＿原点座標取得(this.m_ID);
+/* 00048b96 */}
+
+void CAEInstanceItem::UpdateOverlay(int PassedTime)
+/* 00048ba4 */{
+/* 00048ba4 */	if (!this.IsCreated())
+/* 00048bb4 */	{
+/* 00048bb4 */		return;
+/* 00048bb6 */	}
+/* 00048bb6 */	float X1;
+/* 00048bc8 */	float Y1;
+/* 00048bda */	float X2;
+/* 00048bec */	float Y2;
+/* 00048bfe */	float X3;
+/* 00048c10 */	float Y3;
+/* 00048c22 */	float X4;
+/* 00048c34 */	float Y4;
+/* 00048c46 */	PartsEngine.GetComponentAbsolutePos(this.m_ID, X1, Y1, X2, Y2, X3, Y3, X4, Y4, AFL_Parts_GetStatus(this.m_ID));
+/* 00048caa */	int AbsoluteZPos = PARTS_GetAbsoluteZ(this.m_ID);
+/* 00048cc6 */	if (this.IsActive())
+/* 00048cd4 */	{
+/* 00048cd4 */		this.CreateActiveLine(this.m_Overlay1, X1, Y1, X2, Y2);
+/* 00048d0e */		this.CreateActiveLine(this.m_Overlay2, X2, Y2, X4, Y4);
+/* 00048d48 */		this.CreateActiveLine(this.m_Overlay3, X4, Y4, X3, Y3);
+/* 00048d82 */		this.CreateActiveLine(this.m_Overlay4, X3, Y3, X1, Y1);
+/* 00048dbc */		Ｐ＿Ｚ座標設定(this.m_Overlay1, AbsoluteZPos);
+/* 00048dd6 */		Ｐ＿Ｚ座標設定(this.m_Overlay2, AbsoluteZPos);
+/* 00048df0 */		Ｐ＿Ｚ座標設定(this.m_Overlay3, AbsoluteZPos);
+/* 00048e0a */		Ｐ＿Ｚ座標設定(this.m_Overlay4, AbsoluteZPos);
+/* 00048e24 */	}
+/* 00048e24 */	int MinX = Math.Min(Math.Min(X1, X2), Math.Min(X3, X4));
+/* 00048e7e */	int MinY = Math.Min(Math.Min(Y1, Y2), Math.Min(Y3, Y4));
+/* 00048ed8 */	Ｐ＿矩形判定ポイント設定(this.m_Overlay, X1 - MinX, Y1 - MinY, X2 - MinX, Y2 - MinY, X3 - MinX, Y3 - MinY, X4 - MinX, Y4 - MinY);
+/* 00048fb8 */	Ｐ＿座標設定(this.m_Overlay, MinX, MinY);
+/* 00048fe0 */	Ｐ＿Ｚ座標設定(this.m_Overlay, AbsoluteZPos + 1);
+/* 00049002 */	bool PrevDraggable = Ｐ＿ドラッグ可能設定取得(this.m_Overlay);
+/* 0004901e */	bool Draggable = this.m_Active && this.IsDraggableOverlay();
+/* 0004905c */	Ｐ＿ドラッグ可能設定(this.m_Overlay, Draggable);
+/* 00049076 */	if (PrevDraggable != Draggable)
+/* 00049092 */	{
+/* 00049092 */		this.m_dgDraggableInsntace(Draggable);
+/* 000490bc */	}
+/* 000490bc */}
+
+bool CAEInstanceItem::IsDraggableOverlay()
+/* 000490c4 */{
+/* 000490c4 */	int Parent = this.GetParentNumber();
+/* 000490d8 */	if (Parent == 0)
+/* 000490f0 */	{
+/* 000490f0 */		return false;
+/* 000490f8 */	}
+/* 000490f8 */	if (PARTS_GetComponentType(Parent, 1) != 8)
+/* 0004911c */	{
+/* 0004911c */		return true;
+/* 00049124 */	}
+/* 00049124 */	if (Ｐ＿レイアウトボックス＿レイアウトタイプ取得(Parent) == 0)
+/* 00049142 */	{
+/* 00049142 */		return true;
+/* 0004914a */	}
+/* 0004914a */	return false;
+/* 00049152 */}
+
+void CAEInstanceItem::CreateActiveLine(int ID, float Pos1X, float Pos1Y, float Pos2X, float Pos2Y)
+/* 00049160 */{
+/* 00049160 */	float VecX = Pos2X - Pos1X;
+/* 00049182 */	float VecY = Pos2Y - Pos1Y;
+/* 000491a4 */	float Width = 2.0;
+/* 000491b6 */	float Length = Math.Sqrt(VecX * VecX + VecY * VecY);
+/* 000491fa */	if (Length <= 0.0)
+/* 00049212 */	{
+/* 00049212 */		Ｐ＿表示設定(ID, false);
+/* 00049228 */		return;
+/* 0004922a */	}
+/* 0004922a */	Ｐ＿表示設定(ID, true);
+/* 00049240 */	bool DraggableOverlay = this.IsDraggableOverlay();
+/* 00049254 */	int Red = DraggableOverlay ? 0 : 255;
+/* 00049282 */	int Green;
+/* 00049294 */	int Blue = DraggableOverlay ? 255 : 0;
+/* 000492c2 */	Length += Width / 2.0;
+/* 000492e0 */	Ｐ＿構築手順＿作成(ID, 32, Width, 1);
+/* 00049308 */	Ｐ＿構築手順＿色塗り(ID, 0, 0, 32, Width, Red, Green, Blue, 255, 1);
+/* 00049360 */	Ｐ＿構築ビルド(ID, 1);
+/* 00049376 */	Ｐ＿Ｘ拡大率設定(ID, Length / 32.0);
+/* 00049398 */	Ｐ＿座標設定(ID, Pos1X, Pos1Y);
+/* 000493bc */	Ｐ＿原点座標設定(ID, 4);
+/* 000493d2 */	if (VecY == 0.0 && 0 < VecX)
+/* 00049420 */	{
+/* 00049420 */		Ｐ＿Ｚ回転角度設定(ID, 0.0);
+/* 00049436 */		return;
+/* 00049438 */	}
+/* 00049438 */	float Angle = Math.Atan2(VecY, VecX);
+/* 00049462 */	Ｐ＿Ｚ回転角度設定(ID, Angle * 57.295776);
+/* 00049484 */}
+
+int CAEInstanceItem::GetWidth()
+/* 0004948c */{
+/* 0004948c */	if (!this.IsCreated())
+/* 0004949c */	{
+/* 0004949c */		return 0;
+/* 000494a4 */	}
+/* 000494a4 */	return AFL_Parts_GetWidth(this.m_ID, AFL_Parts_GetStatus(this.m_ID));
+/* 000494c6 */}
+
+int CAEInstanceItem::GetHeight()
+/* 000494d4 */{
+/* 000494d4 */	if (!this.IsCreated())
+/* 000494e4 */	{
+/* 000494e4 */		return 0;
+/* 000494ec */	}
+/* 000494ec */	return AFL_Parts_GetHeight(this.m_ID, AFL_Parts_GetStatus(this.m_ID));
+/* 0004950e */}
+
+void CAEInstanceItem::SetShow(bool Show)
+/* 0004951c */{
+/* 0004951c */	if (!this.IsCreated())
+/* 0004952c */	{
+/* 0004952c */		return;
+/* 0004952e */	}
+/* 0004952e */	Ｐ＿表示設定(this.m_ID, Show);
+/* 00049548 */}
+
+bool CAEInstanceItem::IsShow()
+/* 00049550 */{
+/* 00049550 */	if (!this.IsCreated())
+/* 00049560 */	{
+/* 00049560 */		return false;
+/* 00049568 */	}
+/* 00049568 */	return Ｐ＿表示設定取得(this.m_ID);
+/* 0004957a */}
+
+void CAEInstanceItem::SetMessageWindowShowLink(bool Link)
+/* 00049588 */{
+/* 00049588 */	if (!this.IsCreated())
+/* 00049598 */	{
+/* 00049598 */		return;
+/* 0004959a */	}
+/* 0004959a */	Ｐ＿メッセージウィンドウ表示連動設定(this.m_ID, Link);
+/* 000495b4 */}
+
+bool CAEInstanceItem::IsMessageWindowShowLink()
+/* 000495bc */{
+/* 000495bc */	if (!this.IsCreated())
+/* 000495cc */	{
+/* 000495cc */		return false;
+/* 000495d4 */	}
+/* 000495d4 */	return Ｐ＿メッセージウィンドウ表示連動設定取得(this.m_ID);
+/* 000495e6 */}
+
+void CAEInstanceItem::SetAlpha(int Alpha)
+/* 000495f4 */{
+/* 000495f4 */	if (!this.IsCreated())
+/* 00049604 */	{
+/* 00049604 */		return;
+/* 00049606 */	}
+/* 00049606 */	Ｐ＿アルファ値設定(this.m_ID, Alpha);
+/* 00049620 */}
+
+int CAEInstanceItem::GetAlpha()
+/* 00049628 */{
+/* 00049628 */	if (!this.IsCreated())
+/* 00049638 */	{
+/* 00049638 */		return 0;
+/* 00049640 */	}
+/* 00049640 */	return Ｐ＿アルファ値取得(this.m_ID);
+/* 00049652 */}
+
+void CAEInstanceItem::SetAddColorR(int Color)
+/* 00049660 */{
+/* 00049660 */	if (!this.IsCreated())
+/* 00049670 */	{
+/* 00049670 */		return;
+/* 00049672 */	}
+/* 00049672 */	PartsEngine.SetComponentAddColor(this.m_ID, Color, this.GetAddColorG(), this.GetAddColorB());
+/* 000496a0 */}
+
+void CAEInstanceItem::SetAddColorG(int Color)
+/* 000496a8 */{
+/* 000496a8 */	if (!this.IsCreated())
+/* 000496b8 */	{
+/* 000496b8 */		return;
+/* 000496ba */	}
+/* 000496ba */	PartsEngine.SetComponentAddColor(this.m_ID, this.GetAddColorR(), Color, this.GetAddColorB());
+/* 000496e8 */}
+
+void CAEInstanceItem::SetAddColorB(int Color)
+/* 000496f0 */{
+/* 000496f0 */	if (!this.IsCreated())
+/* 00049700 */	{
+/* 00049700 */		return;
+/* 00049702 */	}
+/* 00049702 */	PartsEngine.SetComponentAddColor(this.m_ID, this.GetAddColorR(), this.GetAddColorG(), Color);
+/* 00049730 */}
+
+int CAEInstanceItem::GetAddColorR()
+/* 00049738 */{
+/* 00049738 */	if (!this.IsCreated())
+/* 00049748 */	{
+/* 00049748 */		return 0;
+/* 00049750 */	}
+/* 00049750 */	return PartsEngine.GetComponentAddColorR(this.m_ID);
+/* 00049766 */}
+
+int CAEInstanceItem::GetAddColorG()
+/* 00049774 */{
+/* 00049774 */	if (!this.IsCreated())
+/* 00049784 */	{
+/* 00049784 */		return 0;
+/* 0004978c */	}
+/* 0004978c */	return PartsEngine.GetComponentAddColorG(this.m_ID);
+/* 000497a2 */}
+
+int CAEInstanceItem::GetAddColorB()
+/* 000497b0 */{
+/* 000497b0 */	if (!this.IsCreated())
+/* 000497c0 */	{
+/* 000497c0 */		return 0;
+/* 000497c8 */	}
+/* 000497c8 */	return PartsEngine.GetComponentAddColorB(this.m_ID);
+/* 000497de */}
+
+void CAEInstanceItem::SetMulColorR(int Color)
+/* 000497ec */{
+/* 000497ec */	if (!this.IsCreated())
+/* 000497fc */	{
+/* 000497fc */		return;
+/* 000497fe */	}
+/* 000497fe */	PartsEngine.SetComponentMulColor(this.m_ID, Color, this.GetMulColorG(), this.GetMulColorB());
+/* 0004982c */}
+
+void CAEInstanceItem::SetMulColorG(int Color)
+/* 00049834 */{
+/* 00049834 */	if (!this.IsCreated())
+/* 00049844 */	{
+/* 00049844 */		return;
+/* 00049846 */	}
+/* 00049846 */	PartsEngine.SetComponentMulColor(this.m_ID, this.GetMulColorR(), Color, this.GetMulColorB());
+/* 00049874 */}
+
+void CAEInstanceItem::SetMulColorB(int Color)
+/* 0004987c */{
+/* 0004987c */	if (!this.IsCreated())
+/* 0004988c */	{
+/* 0004988c */		return;
+/* 0004988e */	}
+/* 0004988e */	PartsEngine.SetComponentMulColor(this.m_ID, this.GetMulColorR(), this.GetMulColorG(), Color);
+/* 000498bc */}
+
+int CAEInstanceItem::GetMulColorR()
+/* 000498c4 */{
+/* 000498c4 */	if (!this.IsCreated())
+/* 000498d4 */	{
+/* 000498d4 */		return 0;
+/* 000498dc */	}
+/* 000498dc */	return PartsEngine.GetComponentMulColorR(this.m_ID);
+/* 000498f2 */}
+
+int CAEInstanceItem::GetMulColorG()
+/* 00049900 */{
+/* 00049900 */	if (!this.IsCreated())
+/* 00049910 */	{
+/* 00049910 */		return 0;
+/* 00049918 */	}
+/* 00049918 */	return PartsEngine.GetComponentMulColorG(this.m_ID);
+/* 0004992e */}
+
+int CAEInstanceItem::GetMulColorB()
+/* 0004993c */{
+/* 0004993c */	if (!this.IsCreated())
+/* 0004994c */	{
+/* 0004994c */		return 0;
+/* 00049954 */	}
+/* 00049954 */	return PartsEngine.GetComponentMulColorB(this.m_ID);
+/* 0004996a */}
+
+void CAEInstanceItem::SetDrawFilter(int Type)
+/* 00049978 */{
+/* 00049978 */	if (!this.IsCreated())
+/* 00049988 */	{
+/* 00049988 */		return;
+/* 0004998a */	}
+/* 0004998a */	Ｐ＿描画フィルタ設定(this.m_ID, Type);
+/* 000499a4 */}
+
+int CAEInstanceItem::GetDrawFilter()
+/* 000499ac */{
+/* 000499ac */	if (!this.IsCreated())
+/* 000499bc */	{
+/* 000499bc */		return 0;
+/* 000499c4 */	}
+/* 000499c4 */	return Ｐ＿描画フィルタ取得(this.m_ID);
+/* 000499d6 */}
+
+void CAEInstanceItem::SetMagX(float Mag)
+/* 000499e4 */{
+/* 000499e4 */	if (!this.IsCreated())
+/* 000499f4 */	{
+/* 000499f4 */		return;
+/* 000499f6 */	}
+/* 000499f6 */	if (Ｐ＿Ｘ拡大率取得(this.m_ID) == Mag)
+/* 00049a18 */	{
+/* 00049a18 */		return;
+/* 00049a1a */	}
+/* 00049a1a */	Ｐ＿Ｘ拡大率設定(this.m_ID, Mag);
+/* 00049a34 */}
+
+void CAEInstanceItem::SetMagY(float Mag)
+/* 00049a3c */{
+/* 00049a3c */	if (!this.IsCreated())
+/* 00049a4c */	{
+/* 00049a4c */		return;
+/* 00049a4e */	}
+/* 00049a4e */	if (Ｐ＿Ｙ拡大率取得(this.m_ID) == Mag)
+/* 00049a70 */	{
+/* 00049a70 */		return;
+/* 00049a72 */	}
+/* 00049a72 */	Ｐ＿Ｙ拡大率設定(this.m_ID, Mag);
+/* 00049a8c */}
+
+float CAEInstanceItem::GetMagX()
+/* 00049a94 */{
+/* 00049a94 */	if (!this.IsCreated())
+/* 00049aa4 */	{
+/* 00049aa4 */		return 0.0;
+/* 00049aac */	}
+/* 00049aac */	return Ｐ＿Ｘ拡大率取得(this.m_ID);
+/* 00049abe */}
+
+float CAEInstanceItem::GetMagY()
+/* 00049acc */{
+/* 00049acc */	if (!this.IsCreated())
+/* 00049adc */	{
+/* 00049adc */		return 0.0;
+/* 00049ae4 */	}
+/* 00049ae4 */	return Ｐ＿Ｙ拡大率取得(this.m_ID);
+/* 00049af6 */}
+
+void CAEInstanceItem::SetRotateX(float Angle)
+/* 00049b04 */{
+/* 00049b04 */	if (!this.IsCreated())
+/* 00049b14 */	{
+/* 00049b14 */		return;
+/* 00049b16 */	}
+/* 00049b16 */	if (Ｐ＿Ｘ回転角度取得(this.m_ID) == Angle)
+/* 00049b38 */	{
+/* 00049b38 */		return;
+/* 00049b3a */	}
+/* 00049b3a */	Ｐ＿Ｘ回転角度設定(this.m_ID, Angle);
+/* 00049b54 */}
+
+void CAEInstanceItem::SetRotateY(float Angle)
+/* 00049b5c */{
+/* 00049b5c */	if (!this.IsCreated())
+/* 00049b6c */	{
+/* 00049b6c */		return;
+/* 00049b6e */	}
+/* 00049b6e */	if (Ｐ＿Ｙ回転角度取得(this.m_ID) == Angle)
+/* 00049b90 */	{
+/* 00049b90 */		return;
+/* 00049b92 */	}
+/* 00049b92 */	Ｐ＿Ｙ回転角度設定(this.m_ID, Angle);
+/* 00049bac */}
+
+void CAEInstanceItem::SetRotateZ(float Angle)
+/* 00049bb4 */{
+/* 00049bb4 */	if (!this.IsCreated())
+/* 00049bc4 */	{
+/* 00049bc4 */		return;
+/* 00049bc6 */	}
+/* 00049bc6 */	if (Ｐ＿Ｚ回転角度取得(this.m_ID) == Angle)
+/* 00049be8 */	{
+/* 00049be8 */		return;
+/* 00049bea */	}
+/* 00049bea */	Ｐ＿Ｚ回転角度設定(this.m_ID, Angle);
+/* 00049c04 */}
+
+float CAEInstanceItem::GetRotateX()
+/* 00049c0c */{
+/* 00049c0c */	if (!this.IsCreated())
+/* 00049c1c */	{
+/* 00049c1c */		return 0.0;
+/* 00049c24 */	}
+/* 00049c24 */	return Ｐ＿Ｘ回転角度取得(this.m_ID);
+/* 00049c36 */}
+
+float CAEInstanceItem::GetRotateY()
+/* 00049c44 */{
+/* 00049c44 */	if (!this.IsCreated())
+/* 00049c54 */	{
+/* 00049c54 */		return 0.0;
+/* 00049c5c */	}
+/* 00049c5c */	return Ｐ＿Ｙ回転角度取得(this.m_ID);
+/* 00049c6e */}
+
+float CAEInstanceItem::GetRotateZ()
+/* 00049c7c */{
+/* 00049c7c */	if (!this.IsCreated())
+/* 00049c8c */	{
+/* 00049c8c */		return 0.0;
+/* 00049c94 */	}
+/* 00049c94 */	return Ｐ＿Ｚ回転角度取得(this.m_ID);
+/* 00049ca6 */}
+
+void CAEInstanceItem::SetMarginTop(int Size)
+/* 00049cb4 */{
+/* 00049cb4 */	if (!this.IsCreated())
+/* 00049cc4 */	{
+/* 00049cc4 */		return;
+/* 00049cc6 */	}
+/* 00049cc6 */	if (Ｐ＿上マージン取得(this.m_ID) == Size)
+/* 00049ce8 */	{
+/* 00049ce8 */		return;
+/* 00049cea */	}
+/* 00049cea */	Ｐ＿マージン設定(this.m_ID, Size, Ｐ＿下マージン取得(this.m_ID), Ｐ＿左マージン取得(this.m_ID), Ｐ＿右マージン取得(this.m_ID));
+/* 00049d34 */}
+
+void CAEInstanceItem::SetMarginBottom(int Size)
+/* 00049d3c */{
+/* 00049d3c */	if (!this.IsCreated())
+/* 00049d4c */	{
+/* 00049d4c */		return;
+/* 00049d4e */	}
+/* 00049d4e */	if (Ｐ＿下マージン取得(this.m_ID) == Size)
+/* 00049d70 */	{
+/* 00049d70 */		return;
+/* 00049d72 */	}
+/* 00049d72 */	Ｐ＿マージン設定(this.m_ID, Ｐ＿上マージン取得(this.m_ID), Size, Ｐ＿左マージン取得(this.m_ID), Ｐ＿右マージン取得(this.m_ID));
+/* 00049dbc */}
+
+void CAEInstanceItem::SetMarginLeft(int Size)
+/* 00049dc4 */{
+/* 00049dc4 */	if (!this.IsCreated())
+/* 00049dd4 */	{
+/* 00049dd4 */		return;
+/* 00049dd6 */	}
+/* 00049dd6 */	if (Ｐ＿左マージン取得(this.m_ID) == Size)
+/* 00049df8 */	{
+/* 00049df8 */		return;
+/* 00049dfa */	}
+/* 00049dfa */	Ｐ＿マージン設定(this.m_ID, Ｐ＿上マージン取得(this.m_ID), Ｐ＿下マージン取得(this.m_ID), Size, Ｐ＿右マージン取得(this.m_ID));
+/* 00049e44 */}
+
+void CAEInstanceItem::SetMarginRight(int Size)
+/* 00049e4c */{
+/* 00049e4c */	if (!this.IsCreated())
+/* 00049e5c */	{
+/* 00049e5c */		return;
+/* 00049e5e */	}
+/* 00049e5e */	if (Ｐ＿右マージン取得(this.m_ID) == Size)
+/* 00049e80 */	{
+/* 00049e80 */		return;
+/* 00049e82 */	}
+/* 00049e82 */	Ｐ＿マージン設定(this.m_ID, Ｐ＿上マージン取得(this.m_ID), Ｐ＿下マージン取得(this.m_ID), Ｐ＿左マージン取得(this.m_ID), Size);
+/* 00049ecc */}
+
+int CAEInstanceItem::GetMarginTop()
+/* 00049ed4 */{
+/* 00049ed4 */	if (!this.IsCreated())
+/* 00049ee4 */	{
+/* 00049ee4 */		return 0;
+/* 00049eec */	}
+/* 00049eec */	return Ｐ＿上マージン取得(this.m_ID);
+/* 00049efe */}
+
+int CAEInstanceItem::GetMarginBottom()
+/* 00049f0c */{
+/* 00049f0c */	if (!this.IsCreated())
+/* 00049f1c */	{
+/* 00049f1c */		return 0;
+/* 00049f24 */	}
+/* 00049f24 */	return Ｐ＿下マージン取得(this.m_ID);
+/* 00049f36 */}
+
+int CAEInstanceItem::GetMarginLeft()
+/* 00049f44 */{
+/* 00049f44 */	if (!this.IsCreated())
+/* 00049f54 */	{
+/* 00049f54 */		return 0;
+/* 00049f5c */	}
+/* 00049f5c */	return Ｐ＿左マージン取得(this.m_ID);
+/* 00049f6e */}
+
+int CAEInstanceItem::GetMarginRight()
+/* 00049f7c */{
+/* 00049f7c */	if (!this.IsCreated())
+/* 00049f8c */	{
+/* 00049f8c */		return 0;
+/* 00049f94 */	}
+/* 00049f94 */	return Ｐ＿右マージン取得(this.m_ID);
+/* 00049fa6 */}
+
+void CAEInstanceItem::SetAlphaClipper(int Number)
+/* 00049fb4 */{
+/* 00049fb4 */	if (!this.IsCreated())
+/* 00049fc4 */	{
+/* 00049fc4 */		return;
+/* 00049fc6 */	}
+/* 00049fc6 */	Ｐ＿アルファクリッパー設定(this.m_ID, Number);
+/* 00049fe0 */}
+
+int CAEInstanceItem::GetAlphaClipper()
+/* 00049fe8 */{
+/* 00049fe8 */	if (!this.IsCreated())
+/* 00049ff8 */	{
+/* 00049ff8 */		return 0;
+/* 0004a000 */	}
+/* 0004a000 */	return Ｐ＿アルファクリッパー取得(this.m_ID);
+/* 0004a012 */}
+
+void CAEInstanceItem::SetOnCursorShowLink(int Number)
+/* 0004a020 */{
+/* 0004a020 */	if (!this.IsCreated())
+/* 0004a030 */	{
+/* 0004a030 */		return;
+/* 0004a032 */	}
+/* 0004a032 */	Ｐ＿オンカーソル表示連動設定(this.m_ID, Number);
+/* 0004a04c */}
+
+int CAEInstanceItem::GetOnCursorShowLink()
+/* 0004a054 */{
+/* 0004a054 */	if (!this.IsCreated())
+/* 0004a064 */	{
+/* 0004a064 */		return 0;
+/* 0004a06c */	}
+/* 0004a06c */	return Ｐ＿オンカーソル表示連動設定取得(this.m_ID);
+/* 0004a07e */}
+
+void CAEInstanceItem::SetScrollPosXLink(int Number)
+/* 0004a08c */{
+/* 0004a08c */	if (!this.IsCreated())
+/* 0004a09c */	{
+/* 0004a09c */		return;
+/* 0004a09e */	}
+/* 0004a09e */	PARTS_SetScrollPosXLink(this.m_ID, Number);
+/* 0004a0b8 */}
+
+void CAEInstanceItem::SetScrollPosYLink(int Number)
+/* 0004a0c0 */{
+/* 0004a0c0 */	if (!this.IsCreated())
+/* 0004a0d0 */	{
+/* 0004a0d0 */		return;
+/* 0004a0d2 */	}
+/* 0004a0d2 */	PARTS_SetScrollPosYLink(this.m_ID, Number);
+/* 0004a0ec */}
+
+int CAEInstanceItem::GetScrollPosXLink()
+/* 0004a0f4 */{
+/* 0004a0f4 */	if (!this.IsCreated())
+/* 0004a104 */	{
+/* 0004a104 */		return 0;
+/* 0004a10c */	}
+/* 0004a10c */	return PARTS_GetScrollPosXLink(this.m_ID);
+/* 0004a11e */}
+
+int CAEInstanceItem::GetScrollPosYLink()
+/* 0004a12c */{
+/* 0004a12c */	if (!this.IsCreated())
+/* 0004a13c */	{
+/* 0004a13c */		return 0;
+/* 0004a144 */	}
+/* 0004a144 */	return PARTS_GetScrollPosYLink(this.m_ID);
+/* 0004a156 */}
+
+void CAEInstanceItem::SetScrollAlphaLink(int Number)
+/* 0004a164 */{
+/* 0004a164 */	if (!this.IsCreated())
+/* 0004a174 */	{
+/* 0004a174 */		return;
+/* 0004a176 */	}
+/* 0004a176 */	PARTS_SetScrollAlphaLink(this.m_ID, Number);
+/* 0004a190 */}
+
+int CAEInstanceItem::GetScrollAlphaLink()
+/* 0004a198 */{
+/* 0004a198 */	if (!this.IsCreated())
+/* 0004a1a8 */	{
+/* 0004a1a8 */		return 0;
+/* 0004a1b0 */	}
+/* 0004a1b0 */	return PARTS_GetScrollAlphaLink(this.m_ID);
+/* 0004a1c2 */}
+
+void CAEInstanceItem::SetCheckBoxShowLink(int Number)
+/* 0004a1d0 */{
+/* 0004a1d0 */	if (!this.IsCreated())
+/* 0004a1e0 */	{
+/* 0004a1e0 */		return;
+/* 0004a1e2 */	}
+/* 0004a1e2 */	PARTS_SetCheckBoxShowLinkNumber(this.m_ID, Number);
+/* 0004a1fc */}
+
+int CAEInstanceItem::GetCheckBoxShowLink()
+/* 0004a204 */{
+/* 0004a204 */	if (!this.IsCreated())
+/* 0004a214 */	{
+/* 0004a214 */		return 0;
+/* 0004a21c */	}
+/* 0004a21c */	return PARTS_GetCheckBoxShowLinkNumber(this.m_ID);
+/* 0004a22e */}
+
+void CAEInstanceItem::SetTextureFilter(int Type)
+/* 0004a23c */{
+/* 0004a23c */	if (!this.IsCreated())
+/* 0004a24c */	{
+/* 0004a24c */		return;
+/* 0004a24e */	}
+/* 0004a24e */	Ｐ＿テクスチャフィルタ設定(this.m_ID, Type);
+/* 0004a268 */}
+
+int CAEInstanceItem::GetTextureFilter()
+/* 0004a270 */{
+/* 0004a270 */	if (!this.IsCreated())
+/* 0004a280 */	{
+/* 0004a280 */		return 0;
+/* 0004a288 */	}
+/* 0004a288 */	return Ｐ＿テクスチャフィルタ取得(this.m_ID);
+/* 0004a29a */}
+
+void CAEInstanceItem::SetMipmap(bool Mipmap)
+/* 0004a2a8 */{
+/* 0004a2a8 */	if (!this.IsCreated())
+/* 0004a2b8 */	{
+/* 0004a2b8 */		return;
+/* 0004a2ba */	}
+/* 0004a2ba */	Ｐ＿ミップマップ設定(this.m_ID, Mipmap);
+/* 0004a2d4 */}
+
+bool CAEInstanceItem::IsMipmap()
+/* 0004a2dc */{
+/* 0004a2dc */	if (!this.IsCreated())
+/* 0004a2ec */	{
+/* 0004a2ec */		return false;
+/* 0004a2f4 */	}
+/* 0004a2f4 */	return Ｐ＿ミップマップ設定取得(this.m_ID);
+/* 0004a306 */}
+
+void CAEInstanceItem::SetSpeedup(bool Speedup)
+/* 0004a314 */{
+/* 0004a314 */	if (!this.IsCreated())
+/* 0004a324 */	{
+/* 0004a324 */		return;
+/* 0004a326 */	}
+/* 0004a326 */	Ｐ＿高速再生設定(this.m_ID, Speedup);
+/* 0004a340 */}
+
+bool CAEInstanceItem::IsSpeedup()
+/* 0004a348 */{
+/* 0004a348 */	if (!this.IsCreated())
+/* 0004a358 */	{
+/* 0004a358 */		return false;
+/* 0004a360 */	}
+/* 0004a360 */	return Ｐ＿高速再生設定取得(this.m_ID);
+/* 0004a372 */}
+
+void CAEInstanceItem::SetParentNumber(int Number)
+/* 0004a380 */{
+/* 0004a380 */	if (!this.IsCreated())
+/* 0004a390 */	{
+/* 0004a390 */		return;
+/* 0004a392 */	}
+/* 0004a392 */	if (Ｐ＿親設定取得(this.m_ID) == Number)
+/* 0004a3b4 */	{
+/* 0004a3b4 */		return;
+/* 0004a3b6 */	}
+/* 0004a3b6 */	Ｐ＿親設定(this.m_ID, Number);
+/* 0004a3d0 */}
+
+int CAEInstanceItem::GetParentNumber()
+/* 0004a3d8 */{
+/* 0004a3d8 */	if (!this.IsCreated())
+/* 0004a3e8 */	{
+/* 0004a3e8 */		return 0;
+/* 0004a3f0 */	}
+/* 0004a3f0 */	return Ｐ＿親設定取得(this.m_ID);
+/* 0004a402 */}
+
+void CAEInstanceItem::SetParentMessageWindowNumber(int Number)
+/* 0004a410 */{
+/* 0004a410 */	if (!this.IsCreated())
+/* 0004a420 */	{
+/* 0004a420 */		return;
+/* 0004a422 */	}
+/* 0004a422 */	if (Ｐ＿親メッセージウィンドウ設定取得(this.m_ID) == Number)
+/* 0004a444 */	{
+/* 0004a444 */		return;
+/* 0004a446 */	}
+/* 0004a446 */	Ｐ＿親メッセージウィンドウ設定(this.m_ID, Number);
+/* 0004a460 */}
+
+int CAEInstanceItem::GetParentMessageWindowNumber()
+/* 0004a468 */{
+/* 0004a468 */	if (!this.IsCreated())
+/* 0004a478 */	{
+/* 0004a478 */		return 0;
+/* 0004a480 */	}
+/* 0004a480 */	return Ｐ＿親メッセージウィンドウ設定取得(this.m_ID);
+/* 0004a492 */}
+
+void CAEInstanceItem::AddSelectEvent(DG_InstanceItem_SelectHandler DelegateObject)
+/* 0004a4a0 */{
+/* 0004a4a0 */	this.m_dgSelectEvent += DelegateObject;
+/* 0004a4ba */}
+
+void CAEInstanceItem::EraseSelectEvent(DG_InstanceItem_SelectHandler DelegateObject)
+/* 0004a4c2 */{
+/* 0004a4c2 */	this.m_dgSelectEvent -= DelegateObject;
+/* 0004a4dc */}
+
+void CAEInstanceItem::SetMoveEvent(DG_ChangedHandler DelegateObject)
+/* 0004a4e4 */{
+/* 0004a4e4 */	this.m_dgMoveEvent.Clear();
+/* 0004a4f0 */	this.m_dgMoveEvent += DelegateObject;
+/* 0004a50a */}
+
+void CAEInstanceItem::SetDraggableInstanceEvent(DG_InstanceItem_SetDraggableInstance DelegateObject)
+/* 0004a512 */{
+/* 0004a512 */	this.m_dgDraggableInsntace.Clear();
+/* 0004a51e */	this.m_dgDraggableInsntace += DelegateObject;
+/* 0004a538 */}
+
+void CAEInstanceItem::Active(bool Flg)
+/* 0004a540 */{
+/* 0004a540 */	if (!Flg)
+/* 0004a552 */	{
+/* 0004a552 */		this.SetState(1);
+/* 0004a560 */	}
+/* 0004a560 */	bool PrevActive = this.m_Active;
+/* 0004a576 */	this.m_Active = Flg;
+/* 0004a58c */	if (!PrevActive && Flg)
+/* 0004a5c6 */	{
+/* 0004a5c6 */		this.m_dgSelectEvent(this);
+/* 0004a5e8 */	}
+/* 0004a5e8 */	Ｐ＿ドラッグ可能設定(this.m_Overlay, this.m_Active && this.IsDraggableOverlay());
+/* 0004a62a */}
+
+bool CAEInstanceItem::IsActive()
+/* 0004a632 */{
+/* 0004a632 */	return this.m_Active;
+/* 0004a63e */}
+
+void CAEInstanceItem::SetState(int State)
+/* 0004a64c */{
+/* 0004a64c */	if (AFL_Parts_GetStatus(this.GetID()) == State)
+/* 0004a66c */	{
+/* 0004a66c */		return;
+/* 0004a66e */	}
+/* 0004a66e */	bool Lock = PARTS_IsLockInputState(this.GetID());
+/* 0004a688 */	PARTS_SetLockInputState(this.GetID(), false);
+/* 0004a69c */	AFL_Parts_SetStatus(this.GetID(), State);
+/* 0004a6b4 */	PARTS_SetLockInputState(this.GetID(), Lock);
+/* 0004a6cc */}
+
+int CAEInstanceItem::GetState()
+/* 0004a6d4 */{
+/* 0004a6d4 */	return AFL_Parts_GetStatus(this.GetID());
+/* 0004a6e4 */}
+
+void CAEInstanceItem::SetDestination(string ActivityName)
+/* 0004a6f2 */{
+/* 0004a6f2 */	this.m_Destination.Free();
+/* 0004a6fc */	if (ActivityName.Empty())
+/* 0004a70e */	{
+/* 0004a70e */		return;
+/* 0004a710 */	}
+/* 0004a710 */	this.m_Destination.PushBack(ActivityName);
+/* 0004a724 */}
+
+void CAEInstanceItem::SetDestinationList(ref array@string List)
+/* 0004a72c */{
+/* 0004a72c */	this.m_Destination.Free();
+/* 0004a736 */	int Index;
+/* 0004a748 */	for (Index = 0; Index < List.Numof(); ++Index)
+/* 0004a798 */	{
+/* 0004a798 */		if (List[Index].Empty())
+/* 0004a7b6 */		{
+/* 0004a7b6 */			continue;
+/* 0004a7bc */		}
+/* 0004a7bc */		this.m_Destination.PushBack(List[Index]);
+/* 0004a7dc */	}
+/* 0004a7e2 */}
+
+string CAEInstanceItem::GetDestinationFirst()
+/* 0004a7ea */{
+/* 0004a7ea */	if (this.m_Destination.Empty())
+/* 0004a7fa */	{
+/* 0004a7fa */		return "";
+/* 0004a802 */	}
+/* 0004a802 */	return this.m_Destination[0];
+/* 0004a816 */}
+
+void CAEInstanceItem::GetDestination(ref array@string List)
+/* 0004a824 */{
+/* 0004a824 */	List.Realloc(this.m_Destination.Numof());
+/* 0004a844 */	List.Copy(0, this.m_Destination, 0, this.m_Destination.Numof());
+/* 0004a876 */}
+
+void CAEInstanceItem::SetIntentType(int Type)
+/* 0004a87e */{
+/* 0004a87e */	this.m_IntentType = Type;
+/* 0004a894 */}
+
+int CAEInstanceItem::GetIntentType()
+/* 0004a89c */{
+/* 0004a89c */	return this.m_IntentType;
+/* 0004a8a8 */}
+
+bool CAEInstanceItem::IsExistIntentData()
+/* 0004a8b6 */{
+/* 0004a8b6 */	return this.m_IntentType != 0 || !this.m_Destination.Empty();
+/* 0004a8f6 */}
+

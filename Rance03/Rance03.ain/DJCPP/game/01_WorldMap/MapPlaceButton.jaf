@@ -1,0 +1,130 @@
+MapPlaceButton::MapPlaceButton()
+/* 0018854e */{
+/* 00188556 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 00188586 */	this.isClickable_ = false;
+/* 00188598 */}
+
+void MapPlaceButton::init(int parentPartsNumber, string placeId, DG_MapPlaceButtonClickCallback cb, int id)
+/* 001885a0 */{
+/* 001885a0 */	this.place_ <- getMapPlaceFromId(placeId);
+/* 001885dc */	this.callback_ = cb;
+/* 001885f6 */	this.id_ = id;
+/* 0018860c */	this.initParts();
+/* 00188614 */	this.parent_.setParent(parentPartsNumber);
+/* 0018862e */	this.buttonWidth_ = this.parts_[1].getWidth() / 4;
+/* 0018865a */	this.buttonHeight_ = this.parts_[1].getHeight();
+/* 0018867e */	this.updateButtonState();
+/* 00188686 */}
+
+void MapPlaceButton::update()
+/* 0018868e */{
+/* 0018868e */	this.updateHover();
+/* 00188696 */	this.updateButtonState();
+/* 0018869e */	if (this.isClick())
+/* 001886ac */	{
+/* 001886ac */		this.callback_(this.id_);
+/* 001886d6 */	}
+/* 001886d6 */	this.parent_.setShow(this.place_.isAvailable());
+/* 001886f6 */	if (!this.lastHover_ && this.isHover_)
+/* 00188730 */	{
+/* 00188730 */		playCursor();
+/* 00188736 */	}
+/* 00188736 */	if (this.isHover_ && g_mouse.onDown(0))
+/* 0018877a */	{
+/* 0018877a */		playClick();
+/* 00188780 */		g_sysSound.play(6, "効果音／場所移動");
+/* 0018879c */	}
+/* 0018879c */	this.lastHover_ = this.isHover_;
+/* 001887b2 */}
+
+void MapPlaceButton::updateHover()
+/* 001887ba */{
+/* 001887ba */	this.isHover_ = this.place_.isAvailable() && this.isClickable_ && this.parts_[1].isHit(g_mouse.getX(), g_mouse.getY());
+/* 00188856 */}
+
+void MapPlaceButton::initParts()
+/* 0018885e */{
+/* 0018885e */	this.parts_[0].init(this.place_.getImageName(), 0);
+/* 0018888c */	this.parts_[1].init("システム／マップ／枠", 0);
+/* 001888b0 */	this.parts_[2].init("システム／マップ／名札", 0);
+/* 001888d4 */	this.parts_[3].initAsText(this.place_.getCaption(), 28, false, 256, 0, 0, 0);
+/* 00188920 */	this.parts_[0].setShow(true);
+/* 0018893e */	this.parts_[1].setShow(true);
+/* 0018895c */	this.parts_[2].setShow(true);
+/* 0018897a */	this.parts_[3].setShow(true);
+/* 00188998 */	createPartsGroup(this.parent_, this.parts_, 30);
+/* 001889b8 */	this.parts_[2].setPos(0.0, 50.0);
+/* 001889dc */	this.parts_[3].setPos(0.0, 40.0);
+/* 00188a00 */	this.parts_[1].setCgRange(0, 0, this.parts_[1].getWidth() / 4, this.parts_[1].getHeight());
+/* 00188a5c */	this.parts_[1].setOrigin(5);
+/* 00188a7a */	this.parts_[0].setOrigin(5);
+/* 00188a98 */	this.parts_[2].setOrigin(5);
+/* 00188ab6 */	this.parts_[3].setOrigin(5);
+/* 00188ad4 */	int i;
+/* 00188ae6 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00188b36 */	{
+/* 00188b36 */		this.parts_[i].changeOrigin(5);
+/* 00188b58 */	}
+/* 00188b5e */	this.parent_.setPos(this.place_.getX(), this.place_.getY());
+/* 00188b92 */}
+
+void MapPlaceButton::fadeIn(bool val)
+/* 00188b9a */{
+/* 00188b9a */	PartsMotion m;
+/* 00188baa */	if (val)
+/* 00188bba */	{
+/* 00188bba */		m.setScaling(0, 100, 3);
+/* 00188bdc */		m.setTime(250);
+/* 00188bf2 */		this.parent_.runMotion(m, this.onFinishFadeIn);
+/* 00188c1a */		this.state_ = 1;
+/* 00188c2c */	}
+/* 00188c32 */	else
+/* 00188c32 */	{
+/* 00188c32 */		m.setScaling(100, 0, 1);
+/* 00188c54 */		m.setTime(150);
+/* 00188c6a */		this.parent_.runMotion(m, this.onFinishFadeOut);
+/* 00188c92 */		this.state_ = 3;
+/* 00188ca4 */	}
+/* 00188ca4 */}
+
+void MapPlaceButton::onFinishFadeIn()
+/* 00188cac */{
+/* 00188cac */	this.state_ = 2;
+/* 00188cbe */}
+
+void MapPlaceButton::onFinishFadeOut()
+/* 00188cc6 */{
+/* 00188cc6 */	this.state_ = 0;
+/* 00188cd8 */}
+
+bool MapPlaceButton::isHover()
+/* 00188ce0 */{
+/* 00188ce0 */	this.updateHover();
+/* 00188ce8 */	return this.isHover_;
+/* 00188cf4 */}
+
+void MapPlaceButton::updateButtonState()
+/* 00188d02 */{
+/* 00188d02 */	int n;
+/* 00188d14 */	if (this.isHover())
+/* 00188d22 */	{
+/* 00188d22 */		n = g_mouse.isDown(0) ? 2 : 1;
+/* 00188d5c */	}
+/* 00188d5c */	this.parts_[1].setCgRange(n * this.buttonWidth_, 0, this.buttonWidth_, this.buttonHeight_);
+/* 00188da4 */}
+
+bool MapPlaceButton::isClick()
+/* 00188dac */{
+/* 00188dac */	return this.state_ == 2 && g_mouse.isClickWithFocus(this.gameObjectId_);
+/* 00188dfa */}
+
+void MapPlaceButton::setParent(int partsNumber)
+/* 00188e08 */{
+/* 00188e08 */	this.parent_.setParent(partsNumber);
+/* 00188e22 */}
+
+void MapPlaceButton::setClickable(bool val)
+/* 00188e2a */{
+/* 00188e2a */	this.isClickable_ = val;
+/* 00188e40 */}
+

@@ -1,0 +1,41 @@
+void Ａ＿システムボタンＣＧ設定(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ, string 通常ＣＧ名, string 選択ＣＧ名, string キーダウンＣＧ名, sys_btn_fnc_t 呼出コマンド, bool ピクセル判定)
+/* 0015a636 */{
+/* 0015a636 */	g_SystemButtonModelMap.SetCGButtonModel(Ｍ番号, 呼出コマンド, Ｘ, Ｙ, Ｚ, 通常ＣＧ名, 選択ＣＧ名, キーダウンＣＧ名, ピクセル判定);
+/* 0015a6a2 */}
+
+void Ａ＿システムボタンフラット設定(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ, string 通常フラット名, string 選択フラット名, string キーダウンフラット名, sys_btn_fnc_t 呼出コマンド, bool ピクセル判定)
+/* 0015a6b0 */{
+/* 0015a6b0 */	g_SystemButtonModelMap.SetFlatButtonModel(Ｍ番号, 呼出コマンド, Ｘ, Ｙ, Ｚ, 通常フラット名, 選択フラット名, キーダウンフラット名, ピクセル判定);
+/* 0015a71c */}
+
+void Ａ＿システムボタン回想中蓋ＣＧ設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, string 蓋ＣＧ名)
+/* 0015a72a */{
+/* 0015a72a */	g_SystemButtonModelMap.SetCGButtonModelForReminisceMode(Ｍ番号, 呼出コマンド, 蓋ＣＧ名);
+/* 0015a75a */}
+
+void Ａ＿システムボタン回想中蓋フラット設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, string 蓋フラット名)
+/* 0015a768 */{
+/* 0015a768 */	g_SystemButtonModelMap.SetFlatButtonModelForReminisceMode(Ｍ番号, 呼出コマンド, 蓋フラット名);
+/* 0015a798 */}
+
+void Ａ＿システムボタン選択不可ＣＧ設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, string ＣＧ名)
+/* 0015a7a6 */{
+/* 0015a7a6 */	g_SystemButtonModelMap.SetDisableCG(Ｍ番号, 呼出コマンド, ＣＧ名);
+/* 0015a7d6 */}
+
+void Ａ＿システムボタン選択不可フラット設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, string フラット名)
+/* 0015a7e4 */{
+/* 0015a7e4 */	g_SystemButtonModelMap.SetDisableFlat(Ｍ番号, 呼出コマンド, フラット名);
+/* 0015a814 */}
+
+void システムボタン選択不可判定関数設定(int Ｍ番号, sys_btn_fnc_t 呼出コマンド, FTIsEnableSystemButton 判定関数)
+/* 0015a822 */{
+/* 0015a822 */	g_SystemButtonModelMap.SetIsEnableSystemButtonFunc(Ｍ番号, 呼出コマンド, 判定関数);
+/* 0015a854 */}
+
+void システムボタン効果音(string _click, string _cursor)
+/* 0015a862 */{
+/* 0015a862 */	g_SystemButtonViewList.SetClickSoundName(_click);
+/* 0015a87c */	g_SystemButtonViewList.SetOnCursorSoundName(_cursor);
+/* 0015a896 */}
+

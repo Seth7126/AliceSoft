@@ -1,0 +1,719 @@
+_CMsgKeyWait::_CMsgKeyWait()
+/* 00019ee0 */{
+/* 00019eea */}
+
+void _CMsgKeyWait::_Execute(bool _ignore_skip_mode)
+/* 00019ef0 */{
+/* 00019ef0 */	this._Prepare(_ignore_skip_mode);
+/* 00019f02 */	this._Loop(_ignore_skip_mode);
+/* 00019f14 */	this._Cleanup();
+/* 00019f1c */	IbisInputEngine.Mouse_HideByStepMessage();
+/* 00019f26 */}
+
+void _CMsgKeyWait::_Prepare(bool _ignore_skip_mode)
+/* 00019f2e */{
+/* 00019f2e */	g_SystemButtonViewList.Update();
+/* 00019f3e */	if (this._IsSetQuakeScreen())
+/* 00019f4c */	{
+/* 00019f4c */		this._ExecuteQuakeScreen();
+/* 00019f54 */	}
+/* 00019f54 */	_g_MsgKeyWaitAnime._Init(g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber()));
+/* 00019f9e */	this.m_bExistVoiceInMessage = g_MessageTextModel.IsExistVoice();
+/* 00019fba */	this.InitAutoModeTimer();
+/* 00019fc2 */	this._m_exit = false;
+/* 00019fd4 */	g_SystemButtonViewList.Update();
+/* 00019fe4 */	this._m_crsr_sys_btn = g_SystemButtonViewList.GetSelectedFunc();
+/* 0001a002 */	this.CheckKeyThroughFlag();
+/* 0001a00a */	this._ClearKeyDownFlag();
+/* 0001a012 */	SYS_ホイール回転時刻クリア();
+/* 0001a018 */	this.InitJoyClick(_ignore_skip_mode);
+/* 0001a02a */	if (SYS_バックログオープン確認())
+/* 0001a036 */	{
+/* 0001a036 */		this._DoCommand(&SYS_RunCommandMouseWheelForward);
+/* 0001a04e */	}
+/* 0001a04e */}
+
+void _CMsgKeyWait::InitJoyClick(bool _ignore_skip_mode)
+/* 0001a056 */{
+/* 0001a056 */	bool FirstKeyDownCancel = _ignore_skip_mode || !SYS_スキップ中確認();
+/* 0001a094 */	this.m_StepMessageJoyClick.Init(4, FirstKeyDownCancel);
+/* 0001a0b4 */	this.m_HideMessageWindowJoyClick.Init(6, false);
+/* 0001a0d0 */	this.m_OpenBackLog.Init(8, true);
+/* 0001a0ec */	this.m_OpenBackScene.Init(15, true);
+/* 0001a108 */	this.m_JoyClickForCallbackList.Alloc(50);
+/* 0001a11e */	int Index;
+/* 0001a130 */	for (Index = 0; Index < this.m_JoyClickForCallbackList.Numof(); Index++)
+/* 0001a184 */	{
+/* 0001a184 */		if (g_InputJoypadCallbackList[Index].Empty())
+/* 0001a1a6 */		{
+/* 0001a1a6 */			continue;
+/* 0001a1ac */		}
+/* 0001a1ac */		this.m_JoyClickForCallbackList[Index].Init(Index, false);
+/* 0001a1d8 */	}
+/* 0001a1de */}
+
+void _CMsgKeyWait::_Loop(bool _ignore_skip_mode)
+/* 0001a1e6 */{
+/* 0001a1e6 */	while (!this._m_exit)
+/* 0001a1f8 */	{
+/* 0001a1f8 */		this._Update(_ignore_skip_mode);
+/* 0001a20a */	}
+/* 0001a210 */}
+
+void _CMsgKeyWait::_Update(bool _ignore_skip_mode)
+/* 0001a218 */{
+/* 0001a218 */	g_SystemButtonViewList.Update();
+/* 0001a228 */	if (!_ignore_skip_mode && SYS_スキップ中確認())
+/* 0001a25e */	{
+/* 0001a25e */		this._OnReadSkipMode();
+/* 0001a266 */	}
+/* 0001a26c */	else if (!_ignore_skip_mode && Ａ＿オートモード中確認())
+/* 0001a2a2 */	{
+/* 0001a2a2 */		this._OnAutoMode();
+/* 0001a2aa */	}
+/* 0001a2b0 */	else
+/* 0001a2b0 */	{
+/* 0001a2b0 */		this._OnPlainMode(_ignore_skip_mode);
+/* 0001a2c2 */	}
+/* 0001a2c2 */	if (!_ignore_skip_mode && SYS_スキップ中確認() && this._m_exit)
+/* 0001a320 */	{
+/* 0001a320 */		return;
+/* 0001a322 */	}
+/* 0001a322 */	SYS_キー待ちマーク表示設定(true);
+/* 0001a32e */	PARTS_UpdateMotion(true);
+/* 0001a33a */	AFL_View_Update(true);
+/* 0001a346 */}
+
+void _CMsgKeyWait::_OnAutoMode()
+/* 0001a34e */{
+/* 0001a34e */	this._CheckSystemButtonOnCursor();
+/* 0001a356 */	if (this.CheckKeyClick())
+/* 0001a364 */	{
+/* 0001a364 */		return;
+/* 0001a366 */	}
+/* 0001a366 */	if (this.CheckJoyClick())
+/* 0001a374 */	{
+/* 0001a374 */		return;
+/* 0001a376 */	}
+/* 0001a376 */	if (SYS_全文スキップ中確認())
+/* 0001a382 */	{
+/* 0001a382 */		SYS_StopSE();
+/* 0001a388 */		this._m_exit = true;
+/* 0001a39a */		return;
+/* 0001a39c */	}
+/* 0001a39c */	if (!this.IsAllKeyUp() || !this.IsAllJoyKeyUp())
+/* 0001a3d4 */	{
+/* 0001a3d4 */		return;
+/* 0001a3d6 */	}
+/* 0001a3d6 */	if (this._IsAutoModeTimeOut())
+/* 0001a3e4 */	{
+/* 0001a3e4 */		SYS_RestrainScreensaverWhileAutoMode();
+/* 0001a3ea */		this._m_exit = true;
+/* 0001a3fc */		return;
+/* 0001a3fe */	}
+/* 0001a3fe */}
+
+void _CMsgKeyWait::_OnReadSkipMode()
+/* 0001a406 */{
+/* 0001a406 */	this._CheckSystemButtonOnCursor();
+/* 0001a40e */	if (this.CheckKeyClick())
+/* 0001a41c */	{
+/* 0001a41c */		return;
+/* 0001a41e */	}
+/* 0001a41e */	if (this.CheckJoyClick())
+/* 0001a42c */	{
+/* 0001a42c */		return;
+/* 0001a42e */	}
+/* 0001a42e */	if (SYS_全文スキップ中確認())
+/* 0001a43a */	{
+/* 0001a43a */		SYS_StopSE();
+/* 0001a440 */		this._m_exit = true;
+/* 0001a452 */		return;
+/* 0001a454 */	}
+/* 0001a454 */	if (!this.IsAllKeyUp() || !this.IsAllJoyKeyUp())
+/* 0001a48c */	{
+/* 0001a48c */		return;
+/* 0001a48e */	}
+/* 0001a48e */	this._m_exit = true;
+/* 0001a4a0 */}
+
+void _CMsgKeyWait::_OnPlainMode(bool _ignore_skip_mode)
+/* 0001a4a8 */{
+/* 0001a4a8 */	this._CheckSystemButtonOnCursor();
+/* 0001a4b0 */	if (this.CheckKeyClick())
+/* 0001a4be */	{
+/* 0001a4be */		return;
+/* 0001a4c0 */	}
+/* 0001a4c0 */	if (this.CheckJoyClick())
+/* 0001a4ce */	{
+/* 0001a4ce */		return;
+/* 0001a4d0 */	}
+/* 0001a4d0 */	if (!_ignore_skip_mode && SYS_全文スキップ中確認())
+/* 0001a506 */	{
+/* 0001a506 */		SYS_StopSE();
+/* 0001a50c */		this._m_exit = true;
+/* 0001a51e */		return;
+/* 0001a520 */	}
+/* 0001a520 */}
+
+bool _CMsgKeyWait::CheckReleaseModeByClick()
+/* 0001a528 */{
+/* 0001a528 */	if (AFL_Config_GetReleaseSkipModeByClick() && SYS_スキップ中確認() || AFL_Config_GetReleaseAutoModeByClick() && Ａ＿オートモード中確認())
+/* 0001a5a0 */	{
+/* 0001a5a0 */		SYS_ReleaseModeByClickCancel();
+/* 0001a5a6 */		return true;
+/* 0001a5ae */	}
+/* 0001a5ae */	return false;
+/* 0001a5b6 */}
+
+bool _CMsgKeyWait::CheckKeyClick()
+/* 0001a5c4 */{
+/* 0001a5c4 */	if (AFL_IsKeyDown(1))
+/* 0001a5d6 */	{
+/* 0001a5d6 */		if (!this.m_LButtonDown)
+/* 0001a5e8 */		{
+/* 0001a5e8 */			this.m_FirstKeyDownSystemButton = this._m_crsr_sys_btn;
+/* 0001a602 */		}
+/* 0001a602 */		this.m_LButtonDown = true;
+/* 0001a614 */	}
+/* 0001a61a */	else if (this.m_LButtonDown)
+/* 0001a62a */	{
+/* 0001a62a */		this.m_LButtonDown = false;
+/* 0001a63c */		if (SYS_IsSame_sys_btn_fnc_t(this.m_FirstKeyDownSystemButton, this._m_crsr_sys_btn) && this._m_crsr_sys_btn.Numof() != 0)
+/* 0001a694 */		{
+/* 0001a694 */			if (this.CheckSystemButton())
+/* 0001a6a2 */			{
+/* 0001a6a2 */				return true;
+/* 0001a6aa */			}
+/* 0001a6aa */		}
+/* 0001a6aa */		this.m_LButtonThrough = this.m_LButtonThrough | this.m_FirstKeyDownSystemButton.Numof() != 0;
+/* 0001a6da */		this.m_LButtonThrough = this.m_LButtonThrough | this._m_crsr_sys_btn.Numof() != 0;
+/* 0001a70a */		if (this.CheckReleaseModeByClick())
+/* 0001a718 */		{
+/* 0001a718 */			return true;
+/* 0001a720 */		}
+/* 0001a720 */		if (this.m_LButtonThrough)
+/* 0001a730 */		{
+/* 0001a730 */			this.m_LButtonThrough = false;
+/* 0001a742 */		}
+/* 0001a748 */		else if (!SYS_スキップ中確認())
+/* 0001a756 */		{
+/* 0001a756 */			this._m_exit = true;
+/* 0001a768 */			return true;
+/* 0001a770 */		}
+/* 0001a770 */	}
+/* 0001a770 */	if (AFL_IsKeyDown(13))
+/* 0001a782 */	{
+/* 0001a782 */		this.m_ReturnKeyDown = true;
+/* 0001a794 */	}
+/* 0001a79a */	else if (this.m_ReturnKeyDown)
+/* 0001a7aa */	{
+/* 0001a7aa */		this.m_ReturnKeyDown = false;
+/* 0001a7bc */		if (this.CheckReleaseModeByClick())
+/* 0001a7ca */		{
+/* 0001a7ca */			return true;
+/* 0001a7d2 */		}
+/* 0001a7d2 */		if (this.m_ReturnKeyThrough)
+/* 0001a7e2 */		{
+/* 0001a7e2 */			this.m_ReturnKeyThrough = false;
+/* 0001a7f4 */		}
+/* 0001a7fa */		else if (!SYS_スキップ中確認())
+/* 0001a808 */		{
+/* 0001a808 */			this._m_exit = true;
+/* 0001a81a */			return true;
+/* 0001a822 */		}
+/* 0001a822 */	}
+/* 0001a822 */	if (SYS_ホイールフォア即確認())
+/* 0001a82e */	{
+/* 0001a82e */		this._DoCommand(&SYS_RunCommandMouseWheelForward);
+/* 0001a846 */		return true;
+/* 0001a84e */	}
+/* 0001a84e */	if (!SYS_スキップ中確認())
+/* 0001a85c */	{
+/* 0001a85c */		if (SYS_ホイールバック確認())
+/* 0001a868 */		{
+/* 0001a868 */			this._m_exit = true;
+/* 0001a87a */			return true;
+/* 0001a882 */		}
+/* 0001a882 */	}
+/* 0001a882 */	if (AFL_IsKeyDown(2))
+/* 0001a894 */	{
+/* 0001a894 */		this.m_RButtonDown = true;
+/* 0001a8a8 */	}
+/* 0001a8ae */	else if (this.m_RButtonDown)
+/* 0001a8be */	{
+/* 0001a8be */		this.m_RButtonDown = false;
+/* 0001a8d2 */		this._OnRButton();
+/* 0001a8da */		return true;
+/* 0001a8e2 */	}
+/* 0001a8e2 */	if (AFL_IsKeyDown(27))
+/* 0001a8f4 */	{
+/* 0001a8f4 */		this.m_EscapeKeyDown = true;
+/* 0001a908 */	}
+/* 0001a90e */	else if (this.m_EscapeKeyDown)
+/* 0001a91e */	{
+/* 0001a91e */		this.m_EscapeKeyDown = false;
+/* 0001a932 */		this._OnEscapeKey();
+/* 0001a93a */		return true;
+/* 0001a942 */	}
+/* 0001a942 */	if (AFL_IsKeyDown(32))
+/* 0001a954 */	{
+/* 0001a954 */		this.m_SpaceKeyDown = true;
+/* 0001a968 */	}
+/* 0001a96e */	else if (this.m_SpaceKeyDown)
+/* 0001a97e */	{
+/* 0001a97e */		this.m_SpaceKeyDown = false;
+/* 0001a992 */		this._OnSpaceKey();
+/* 0001a99a */		return true;
+/* 0001a9a2 */	}
+/* 0001a9a2 */	if (AFL_IsKeyDown(65))
+/* 0001a9b4 */	{
+/* 0001a9b4 */		this.m_AKeyDown = true;
+/* 0001a9c8 */	}
+/* 0001a9ce */	else if (this.m_AKeyDown)
+/* 0001a9de */	{
+/* 0001a9de */		this.m_AKeyDown = false;
+/* 0001a9f2 */		this._DoCommand(&Ｓ＿オート);
+/* 0001aa0a */		return true;
+/* 0001aa12 */	}
+/* 0001aa12 */	if (AFL_IsKeyDown(83))
+/* 0001aa24 */	{
+/* 0001aa24 */		this.m_SKeyDown = true;
+/* 0001aa38 */	}
+/* 0001aa3e */	else if (this.m_SKeyDown)
+/* 0001aa4e */	{
+/* 0001aa4e */		this.m_SKeyDown = false;
+/* 0001aa62 */		this._DoCommand(&Ｓ＿既読スキップ);
+/* 0001aa7a */		return true;
+/* 0001aa82 */	}
+/* 0001aa82 */	if (AFL_IsKeyDown(4))
+/* 0001aa94 */	{
+/* 0001aa94 */		this.m_MButtonDown = true;
+/* 0001aaa8 */	}
+/* 0001aaae */	else if (this.m_MButtonDown)
+/* 0001aabe */	{
+/* 0001aabe */		this.m_MButtonDown = false;
+/* 0001aad2 */		this._DoCommand(&Ｓ＿既読スキップ);
+/* 0001aaea */		return true;
+/* 0001aaf2 */	}
+/* 0001aaf2 */	if (AFL_IsKeyDown(90))
+/* 0001ab04 */	{
+/* 0001ab04 */		this.m_ZKeyDown = true;
+/* 0001ab18 */	}
+/* 0001ab1e */	else if (this.m_ZKeyDown)
+/* 0001ab2e */	{
+/* 0001ab2e */		this.m_ZKeyDown = false;
+/* 0001ab42 */		this._DoCommand(&SYS_メッセージウィンドウ非表示);
+/* 0001ab5a */		return true;
+/* 0001ab62 */	}
+/* 0001ab62 */	if (AFL_IsKeyDown(33))
+/* 0001ab74 */	{
+/* 0001ab74 */		this.m_PageUpKeyDown = true;
+/* 0001ab86 */	}
+/* 0001ab8c */	else if (this.m_PageUpKeyDown)
+/* 0001ab9c */	{
+/* 0001ab9c */		this.m_PageUpKeyDown = false;
+/* 0001abae */		this._DoCommand(&Ｓ＿バックログ);
+/* 0001abc6 */		return true;
+/* 0001abce */	}
+/* 0001abce */	if (AFL_IsKeyDown(36))
+/* 0001abe0 */	{
+/* 0001abe0 */		this.m_HomeKeyDown = true;
+/* 0001abf2 */	}
+/* 0001abf8 */	else if (this.m_HomeKeyDown)
+/* 0001ac08 */	{
+/* 0001ac08 */		this.m_HomeKeyDown = false;
+/* 0001ac1a */		this._DoCommand(&Ｓ＿バックシーン);
+/* 0001ac32 */		return true;
+/* 0001ac3a */	}
+/* 0001ac3a */	if (AFL_IsKeyDown(8))
+/* 0001ac4c */	{
+/* 0001ac4c */		this.m_BackspaceKeyDown = true;
+/* 0001ac60 */	}
+/* 0001ac66 */	else if (this.m_BackspaceKeyDown)
+/* 0001ac76 */	{
+/* 0001ac76 */		this.m_BackspaceKeyDown = false;
+/* 0001ac8a */		this._OnBackspaceKey();
+/* 0001ac92 */		return true;
+/* 0001ac9a */	}
+/* 0001ac9a */	if (system.IsDebugMode())
+/* 0001aca6 */	{
+/* 0001aca6 */		if (AFL_IsKeyDown(16) && AFL_IsKeyDown(67))
+/* 0001ace2 */		{
+/* 0001ace2 */			this.m_ShiftCKeyDown = true;
+/* 0001acf4 */		}
+/* 0001acfa */		else if (this.m_ShiftCKeyDown)
+/* 0001ad0a */		{
+/* 0001ad0a */			this.m_ShiftCKeyDown = false;
+/* 0001ad1c */			this._ClearKeyDownFlag();
+/* 0001ad24 */			this.OnShiftCKeyClick();
+/* 0001ad2c */			return true;
+/* 0001ad34 */		}
+/* 0001ad34 */	}
+/* 0001ad34 */	if (AFL_IsKeyDown(38))
+/* 0001ad46 */	{
+/* 0001ad46 */		this.m_UpKeyDown = true;
+/* 0001ad58 */	}
+/* 0001ad5e */	else if (this.m_UpKeyDown)
+/* 0001ad6e */	{
+/* 0001ad6e */		this.m_UpKeyDown = false;
+/* 0001ad80 */		if (this.m_UpKeyThrough)
+/* 0001ad90 */		{
+/* 0001ad90 */			this.m_UpKeyThrough = false;
+/* 0001ada2 */		}
+/* 0001ada8 */		else
+/* 0001ada8 */		{
+/* 0001ada8 */			this._DoCommand(&SYS_RunCommandMouseWheelForward);
+/* 0001adc0 */			return true;
+/* 0001adc8 */		}
+/* 0001adc8 */	}
+/* 0001adc8 */	if (AFL_IsKeyDown(40))
+/* 0001adda */	{
+/* 0001adda */		this.m_DownKeyDown = true;
+/* 0001adec */	}
+/* 0001adf2 */	else if (this.m_DownKeyDown)
+/* 0001ae02 */	{
+/* 0001ae02 */		this.m_DownKeyDown = false;
+/* 0001ae14 */		if (this.CheckReleaseModeByClick())
+/* 0001ae22 */		{
+/* 0001ae22 */			return true;
+/* 0001ae2a */		}
+/* 0001ae2a */		if (this.m_DownKeyThrough)
+/* 0001ae3a */		{
+/* 0001ae3a */			this.m_DownKeyThrough = false;
+/* 0001ae4c */		}
+/* 0001ae52 */		else if (!SYS_スキップ中確認())
+/* 0001ae60 */		{
+/* 0001ae60 */			this._m_exit = true;
+/* 0001ae72 */			return true;
+/* 0001ae7a */		}
+/* 0001ae7a */	}
+/* 0001ae7a */	return false;
+/* 0001ae82 */}
+
+bool _CMsgKeyWait::IsAllKeyUp()
+/* 0001ae90 */{
+/* 0001ae90 */	if (AFL_IsKeyDown(1))
+/* 0001aea2 */	{
+/* 0001aea2 */		return false;
+/* 0001aeaa */	}
+/* 0001aeaa */	if (AFL_IsKeyDown(2))
+/* 0001aebc */	{
+/* 0001aebc */		return false;
+/* 0001aec4 */	}
+/* 0001aec4 */	if (AFL_IsKeyDown(4))
+/* 0001aed6 */	{
+/* 0001aed6 */		return false;
+/* 0001aede */	}
+/* 0001aede */	if (AFL_IsKeyDown(13))
+/* 0001aef0 */	{
+/* 0001aef0 */		return false;
+/* 0001aef8 */	}
+/* 0001aef8 */	if (AFL_IsKeyDown(32))
+/* 0001af0a */	{
+/* 0001af0a */		return false;
+/* 0001af12 */	}
+/* 0001af12 */	if (AFL_IsKeyDown(27))
+/* 0001af24 */	{
+/* 0001af24 */		return false;
+/* 0001af2c */	}
+/* 0001af2c */	if (AFL_IsKeyDown(65))
+/* 0001af3e */	{
+/* 0001af3e */		return false;
+/* 0001af46 */	}
+/* 0001af46 */	if (AFL_IsKeyDown(83))
+/* 0001af58 */	{
+/* 0001af58 */		return false;
+/* 0001af60 */	}
+/* 0001af60 */	if (AFL_IsKeyDown(90))
+/* 0001af72 */	{
+/* 0001af72 */		return false;
+/* 0001af7a */	}
+/* 0001af7a */	if (AFL_IsKeyDown(33))
+/* 0001af8c */	{
+/* 0001af8c */		return false;
+/* 0001af94 */	}
+/* 0001af94 */	if (AFL_IsKeyDown(8))
+/* 0001afa6 */	{
+/* 0001afa6 */		return false;
+/* 0001afae */	}
+/* 0001afae */	if (AFL_IsKeyDown(36))
+/* 0001afc0 */	{
+/* 0001afc0 */		return false;
+/* 0001afc8 */	}
+/* 0001afc8 */	if (AFL_IsKeyDown(38))
+/* 0001afda */	{
+/* 0001afda */		return false;
+/* 0001afe2 */	}
+/* 0001afe2 */	if (AFL_IsKeyDown(40))
+/* 0001aff4 */	{
+/* 0001aff4 */		return false;
+/* 0001affc */	}
+/* 0001affc */	return true;
+/* 0001b004 */}
+
+bool _CMsgKeyWait::CheckJoyClick()
+/* 0001b012 */{
+/* 0001b012 */	if (this.m_StepMessageJoyClick.IsClick(-2147483648))
+/* 0001b02e */	{
+/* 0001b02e */		if (this.CheckReleaseModeByClick())
+/* 0001b03c */		{
+/* 0001b03c */			return true;
+/* 0001b044 */		}
+/* 0001b044 */		if (!SYS_スキップ中確認())
+/* 0001b052 */		{
+/* 0001b052 */			this._m_exit = true;
+/* 0001b064 */			return true;
+/* 0001b06c */		}
+/* 0001b06c */	}
+/* 0001b06c */	if (this.m_HideMessageWindowJoyClick.IsClick(-2147483648))
+/* 0001b088 */	{
+/* 0001b088 */		this._DoCommand(&SYS_メッセージウィンドウ非表示);
+/* 0001b0a0 */		return true;
+/* 0001b0a8 */	}
+/* 0001b0a8 */	if (this.m_OpenBackLog.IsClick(-2147483648))
+/* 0001b0c4 */	{
+/* 0001b0c4 */		this._DoCommand(&Ｓ＿バックログ);
+/* 0001b0dc */		return true;
+/* 0001b0e4 */	}
+/* 0001b0e4 */	if (this.m_OpenBackScene.IsClick(-2147483648))
+/* 0001b100 */	{
+/* 0001b100 */		this._DoCommand(&Ｓ＿バックシーン);
+/* 0001b118 */	}
+/* 0001b118 */	int Index;
+/* 0001b12a */	for (Index = 0; Index < this.m_JoyClickForCallbackList.Numof(); Index++)
+/* 0001b17e */	{
+/* 0001b17e */		if (this.m_JoyClickForCallbackList[Index].IsClick(-2147483648))
+/* 0001b1a6 */		{
+/* 0001b1a6 */			this._DoCommand(g_InputJoypadCallbackList[Index].GetCallback());
+/* 0001b1ca */			return true;
+/* 0001b1d2 */		}
+/* 0001b1d2 */	}
+/* 0001b1d8 */	return false;
+/* 0001b1e0 */}
+
+bool _CMsgKeyWait::IsAllJoyKeyUp()
+/* 0001b1ee */{
+/* 0001b1ee */	int Key;
+/* 0001b200 */	for (Key = 5; Key <= 20; Key++)
+/* 0001b24a */	{
+/* 0001b24a */		if (AFL_Joystick_IsKeyDown(0, Key))
+/* 0001b266 */		{
+/* 0001b266 */			return false;
+/* 0001b26e */		}
+/* 0001b26e */	}
+/* 0001b274 */	return true;
+/* 0001b27c */}
+
+bool _CMsgKeyWait::CheckSystemButton()
+/* 0001b28a */{
+/* 0001b28a */	if (this._m_crsr_sys_btn.Numof() != 0)
+/* 0001b2a6 */	{
+/* 0001b2a6 */		if (this.m_LButtonThrough)
+/* 0001b2b6 */		{
+/* 0001b2b6 */			this.m_LButtonThrough = false;
+/* 0001b2c8 */		}
+/* 0001b2c8 */		if (!this._m_crsr_sys_btn.Exist(&Ｓ＿ボイスリプレイ))
+/* 0001b2ea */		{
+/* 0001b2ea */			g_SystemButtonViewList.PlayClickSound();
+/* 0001b2fa */		}
+/* 0001b2fa */		this._DoCommand(this._m_crsr_sys_btn);
+/* 0001b30e */		this._m_crsr_sys_btn = g_SystemButtonViewList.GetSelectedFunc();
+/* 0001b32c */		return true;
+/* 0001b334 */	}
+/* 0001b334 */	return false;
+/* 0001b33c */}
+
+void _CMsgKeyWait::InitAutoModeTimer()
+/* 0001b34a */{
+/* 0001b34a */	this._ComputeAutoModeTimeLength();
+/* 0001b352 */	this.m_AutoModeTimer.Reset();
+/* 0001b362 */	if (this.m_bExistVoiceInMessage)
+/* 0001b372 */	{
+/* 0001b372 */		this._m_auto_mode_time_start = 0;
+/* 0001b384 */	}
+/* 0001b38a */	else
+/* 0001b38a */	{
+/* 0001b38a */		this._m_auto_mode_time_start = this.m_AutoModeTimer.Get();
+/* 0001b3a6 */	}
+/* 0001b3a6 */}
+
+bool _CMsgKeyWait::_IsAutoModeTimeOut()
+/* 0001b3ae */{
+/* 0001b3ae */	if (this.m_bExistVoiceInMessage)
+/* 0001b3be */	{
+/* 0001b3be */		if (KiwiSoundEngine.IsPlay(12))
+/* 0001b3d4 */		{
+/* 0001b3d4 */			return false;
+/* 0001b3dc */		}
+/* 0001b3dc */		if (this._m_auto_mode_time_start == 0)
+/* 0001b3f4 */		{
+/* 0001b3f4 */			this._m_auto_mode_time_start = this.m_AutoModeTimer.Get();
+/* 0001b410 */		}
+/* 0001b416 */		else
+/* 0001b416 */		{
+/* 0001b416 */			int nLapseTime = this.m_AutoModeTimer.Get() - this._m_auto_mode_time_start;
+/* 0001b43e */			if (nLapseTime >= this._m_auto_mode_time_length)
+/* 0001b45a */			{
+/* 0001b45a */				return true;
+/* 0001b462 */			}
+/* 0001b462 */		}
+/* 0001b462 */	}
+/* 0001b468 */	else
+/* 0001b468 */	{
+/* 0001b468 */		int nLapseTime = this.m_AutoModeTimer.Get() - this._m_auto_mode_time_start;
+/* 0001b490 */		if (nLapseTime >= this._m_auto_mode_time_length)
+/* 0001b4ac */		{
+/* 0001b4ac */			return true;
+/* 0001b4b4 */		}
+/* 0001b4b4 */	}
+/* 0001b4b4 */	return false;
+/* 0001b4bc */}
+
+void _CMsgKeyWait::_ComputeAutoModeTimeLength()
+/* 0001b4ca */{
+/* 0001b4ca */	if (g_MessageTextModel.IsExistVoice())
+/* 0001b4e0 */	{
+/* 0001b4e0 */		this._m_auto_mode_time_length = 150;
+/* 0001b4f2 */	}
+/* 0001b4f8 */	else
+/* 0001b4f8 */	{
+/* 0001b4f8 */		this._m_auto_mode_time_length = SYS_オートモード待機時間計算(g_MessageTextModel.GetMessageTextLength());
+/* 0001b51a */	}
+/* 0001b51a */}
+
+void _CMsgKeyWait::_DoCommand(sys_btn_fnc_t _f)
+/* 0001b522 */{
+/* 0001b522 */	this._ClearKeyDownFlag();
+/* 0001b52a */	SYS_キー待ちマーク表示設定(false);
+/* 0001b536 */	PARTS_PauseMotion();
+/* 0001b53c */	_f();
+/* 0001b55c */	PARTS_PlayMotion();
+/* 0001b562 */	g_SystemButtonViewList.Update();
+/* 0001b572 */	this.InitAutoModeTimer();
+/* 0001b57a */	SYS_キー待ちマーク表示設定(true);
+/* 0001b586 */}
+
+void _CMsgKeyWait::_Cleanup()
+/* 0001b58e */{
+/* 0001b58e */	SYS_キー待ちマーク表示設定(false);
+/* 0001b59a */}
+
+bool _CMsgKeyWait::_IsSetQuakeScreen()
+/* 0001b5a2 */{
+/* 0001b5a2 */	return _文字表示後画面揺らし時 > 0 && (_文字表示後画面揺らし横 > 0 || _文字表示後画面揺らし縦 > 0);
+/* 0001b618 */}
+
+void _CMsgKeyWait::_ExecuteQuakeScreen()
+/* 0001b626 */{
+/* 0001b626 */	if (!SYS_全文スキップ中確認() && !SYS_スキップ中確認())
+/* 0001b65a */	{
+/* 0001b65a */		SYS_画面揺らし(_文字表示後画面揺らし横, _文字表示後画面揺らし縦, _文字表示後画面揺らし時);
+/* 0001b67e */	}
+/* 0001b67e */}
+
+void _CMsgKeyWait::_OnRButton()
+/* 0001b686 */{
+/* 0001b686 */	if (_g_rbutton_callback_fnc.Numof() != 0)
+/* 0001b6a2 */	{
+/* 0001b6a2 */		this._DoCommand(_g_rbutton_callback_fnc);
+/* 0001b6b6 */	}
+/* 0001b6bc */	else
+/* 0001b6bc */	{
+/* 0001b6bc */		this._DoCommand(&SYS_メッセージウィンドウ非表示);
+/* 0001b6d4 */	}
+/* 0001b6d4 */}
+
+void _CMsgKeyWait::_OnSpaceKey()
+/* 0001b6dc */{
+/* 0001b6dc */	if (_g_spacekey_callback_fnc.Numof() != 0)
+/* 0001b6f8 */	{
+/* 0001b6f8 */		this._DoCommand(_g_spacekey_callback_fnc);
+/* 0001b70c */	}
+/* 0001b712 */	else
+/* 0001b712 */	{
+/* 0001b712 */		this._DoCommand(&SYS_メッセージウィンドウ非表示);
+/* 0001b72a */	}
+/* 0001b72a */}
+
+void _CMsgKeyWait::_OnBackspaceKey()
+/* 0001b732 */{
+/* 0001b732 */	Ｓ＿ボイスリプレイ();
+/* 0001b738 */	this._ClearKeyDownFlag();
+/* 0001b740 */}
+
+void _CMsgKeyWait::_OnEscapeKey()
+/* 0001b748 */{
+/* 0001b748 */	if (_g_escapekey_callback_fnc.Numof() != 0)
+/* 0001b764 */	{
+/* 0001b764 */		this._DoCommand(_g_escapekey_callback_fnc);
+/* 0001b778 */	}
+/* 0001b77e */	else
+/* 0001b77e */	{
+/* 0001b77e */		this._DoCommand(&Ｓ＿コンフィグ);
+/* 0001b796 */	}
+/* 0001b796 */}
+
+void _CMsgKeyWait::OnShiftCKeyClick()
+/* 0001b79e */{
+/* 0001b79e */	g_MessageTextModel.DebugOutputMessageText();
+/* 0001b7ae */	g_MessageTextModel.DebugMessageTextToClipboard();
+/* 0001b7be */}
+
+void _CMsgKeyWait::_CheckSystemButtonOnCursor()
+/* 0001b7c6 */{
+/* 0001b7c6 */	sys_btn_fnc_t _sys_btn = g_SystemButtonViewList.GetSelectedFunc();
+/* 0001b7ea */	if (!SYS_IsSame_sys_btn_fnc_t(_sys_btn, this._m_crsr_sys_btn))
+/* 0001b810 */	{
+/* 0001b810 */		this._m_crsr_sys_btn = _sys_btn;
+/* 0001b82a */		if (this._m_crsr_sys_btn.Numof() != 0)
+/* 0001b846 */		{
+/* 0001b846 */			g_SystemButtonViewList.PlayOnCursorSound();
+/* 0001b856 */		}
+/* 0001b856 */	}
+/* 0001b856 */}
+
+void _CMsgKeyWait::_ClearKeyDownFlag()
+/* 0001b85e */{
+/* 0001b85e */	this.m_LButtonDown = false;
+/* 0001b870 */	this.m_ReturnKeyDown = false;
+/* 0001b882 */	this.m_RButtonDown = false;
+/* 0001b894 */	this.m_EscapeKeyDown = false;
+/* 0001b8a6 */	this.m_SpaceKeyDown = false;
+/* 0001b8b8 */	this.m_AKeyDown = false;
+/* 0001b8ca */	this.m_SKeyDown = false;
+/* 0001b8dc */	this.m_MButtonDown = false;
+/* 0001b8ee */	this.m_ZKeyDown = false;
+/* 0001b900 */	this.m_PageUpKeyDown = false;
+/* 0001b912 */	this.m_HomeKeyDown = false;
+/* 0001b924 */	this.m_BackspaceKeyDown = false;
+/* 0001b936 */	this.m_ShiftCKeyDown = false;
+/* 0001b948 */	this.m_UpKeyDown = false;
+/* 0001b95a */	this.m_DownKeyDown = false;
+/* 0001b96c */	this.m_StepMessageJoyClick.Reset(true);
+/* 0001b982 */	this.m_HideMessageWindowJoyClick.Reset(true);
+/* 0001b998 */	this.m_OpenBackLog.Reset(true);
+/* 0001b9ae */	this.m_OpenBackScene.Reset(true);
+/* 0001b9c4 */	int Index;
+/* 0001b9d6 */	for (Index = 0; Index < this.m_JoyClickForCallbackList.Numof(); Index++)
+/* 0001ba2a */	{
+/* 0001ba2a */		this.m_JoyClickForCallbackList[Index].Reset(true);
+/* 0001ba4c */	}
+/* 0001ba52 */}
+
+void _CMsgKeyWait::CheckKeyThroughFlag()
+/* 0001ba5a */{
+/* 0001ba5a */	this.m_LButtonThrough = AFL_IsKeyDown(1);
+/* 0001ba72 */	this.m_ReturnKeyThrough = AFL_IsKeyDown(13);
+/* 0001ba8a */	this.m_UpKeyThrough = AFL_IsKeyDown(38);
+/* 0001baa2 */	this.m_DownKeyThrough = AFL_IsKeyDown(40);
+/* 0001baba */}
+
+void _CMsgKeyWait::ClearKeyThroughFlag()
+/* 0001bac2 */{
+/* 0001bac2 */	this.m_LButtonThrough = false;
+/* 0001bad4 */	this.m_ReturnKeyThrough = false;
+/* 0001bae6 */	this.m_UpKeyThrough = false;
+/* 0001baf8 */	this.m_DownKeyThrough = false;
+/* 0001bb0a */}
+

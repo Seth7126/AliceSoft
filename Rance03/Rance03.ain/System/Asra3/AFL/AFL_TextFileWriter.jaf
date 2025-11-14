@@ -1,0 +1,15 @@
+bool AFL_TextFileWriter_Create(string FileName)
+/* 001732a2 */{
+/* 001732a2 */	return TextFile.Create(FileName);
+/* 001732b8 */}
+
+bool AFL_TextFileWriter_Close()
+/* 001732cc */{
+/* 001732cc */	return TextFile.Close();
+/* 001732d8 */}
+
+bool AFL_TextFileWriter_Write(string Text)
+/* 001732ec */{
+/* 001732ec */	return TextFile.Write(Text);
+/* 00173302 */}
+

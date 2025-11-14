@@ -1,0 +1,130 @@
+void Ｐ＿数字ＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 00162162 */{
+/* 00162162 */	if (!PartsEngine.Parts_SetNumeralCG(パーツ番号, ＣＧ名, 状態))
+/* 00162192 */	{
+/* 00162192 */		PARTS_Warning("Ｐ＿数字ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 001621d4 */	}
+/* 001621d4 */}
+
+string Ｐ＿数字ＣＧ名取得(int パーツ番号, int 状態)
+/* 001621e2 */{
+/* 001621e2 */	string Out;
+/* 001621f6 */	PartsEngine.Parts_GetNumeralCGName(Out, パーツ番号, 状態);
+/* 0016221e */	return Out;
+/* 0016222a */}
+
+void Ｐ＿数字連結ＣＧ設定(int パーツ番号, string ＣＧ名, int 幅０, int 幅１, int 幅２, int 幅３, int 幅４, int 幅５, int 幅６, int 幅７, int 幅８, int 幅９, int 幅マイナス, int 幅コンマ, int 状態)
+/* 0016223e */{
+/* 0016223e */	if (!PartsEngine.Parts_SetNumeralLinkedCGNumberWidthWidthList(パーツ番号, ＣＧ名, 幅０, 幅１, 幅２, 幅３, 幅４, 幅５, 幅６, 幅７, 幅８, 幅９, 幅マイナス, 幅コンマ, 状態))
+/* 001622e6 */	{
+/* 001622e6 */		PARTS_Warning("Ｐ＿数字連結ＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 00162328 */	}
+/* 00162328 */}
+
+void Ｐ＿数字連結幅取得(int パーツ番号, ref int 幅０, ref int 幅１, ref int 幅２, ref int 幅３, ref int 幅４, ref int 幅５, ref int 幅６, ref int 幅７, ref int 幅８, ref int 幅９, ref int 幅マイナス, ref int 幅コンマ, int 状態)
+/* 00162336 */{
+/* 00162336 */	PartsEngine.GetNumeralCGNumberWidthList(パーツ番号, 幅０, 幅１, 幅２, 幅３, 幅４, 幅５, 幅６, 幅７, 幅８, 幅９, 幅マイナス, 幅コンマ, 状態);
+/* 001623cc */}
+
+void Ｐ＿数字半角フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 001623da */{
+/* 001623da */	Ｐ＿数字フォント設定(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 00162458 */	Ｐ＿数字フォント全角設定(パーツ番号, false, 状態);
+/* 00162478 */}
+
+void Ｐ＿数字全角フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 00162486 */{
+/* 00162486 */	Ｐ＿数字フォント設定(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 00162504 */	Ｐ＿数字フォント全角設定(パーツ番号, true, 状態);
+/* 00162524 */}
+
+void Ｐ＿数字フォント設定(int パーツ番号, int 種類, int サイズ, int Ｒ, int Ｇ, int Ｂ, float 太字幅, int 縁取りＲ, int 縁取りＧ, int 縁取りＢ, float 縁取り幅, int 状態)
+/* 00162532 */{
+/* 00162532 */	PartsEngine.SetNumeralFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 001625b4 */}
+
+void Ｐ＿数字フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int Ｒ, ref int Ｇ, ref int Ｂ, ref float 太字幅, ref int 縁取りＲ, ref int 縁取りＧ, ref int 縁取りＢ, ref float 縁取り幅, int 状態)
+/* 001625c2 */{
+/* 001625c2 */	PartsEngine.GetNumeralFont(パーツ番号, 種類, サイズ, Ｒ, Ｇ, Ｂ, 太字幅, 縁取りＲ, 縁取りＧ, 縁取りＢ, 縁取り幅, 状態);
+/* 00162644 */}
+
+void Ｐ＿数字フォント全角設定(int パーツ番号, bool 全角, int 状態)
+/* 00162652 */{
+/* 00162652 */	PartsEngine.SetNumeralFullPitch(パーツ番号, 全角, 状態);
+/* 0016267a */}
+
+bool Ｐ＿数字フォント全角設定取得(int パーツ番号, int 状態)
+/* 00162688 */{
+/* 00162688 */	return PartsEngine.IsNumerarlFullPitch(パーツ番号, 状態);
+/* 001626a8 */}
+
+void Ｐ＿数字設定(int パーツ番号, int 数, int 状態)
+/* 001626bc */{
+/* 001626bc */	PartsEngine.Parts_SetNumeralNumber(パーツ番号, 数, 状態);
+/* 001626e6 */}
+
+int Ｐ＿数字取得(int パーツ番号, int 状態)
+/* 001626f4 */{
+/* 001626f4 */	return PartsEngine.Parts_GetNumeralNumber(パーツ番号, 状態);
+/* 00162714 */}
+
+void Ｐ＿数字コンマ表示設定(int パーツ番号, bool 表示フラグ, int 状態)
+/* 00162728 */{
+/* 00162728 */	PartsEngine.Parts_SetNumeralShowComma(パーツ番号, 表示フラグ, 状態);
+/* 00162752 */}
+
+bool Ｐ＿数字コンマ表示設定取得(int パーツ番号, int 状態)
+/* 00162760 */{
+/* 00162760 */	return PartsEngine.Parts_IsNumeralShowComma(パーツ番号, 状態);
+/* 00162780 */}
+
+void Ｐ＿数字字間隔設定(int パーツ番号, int _字間隔, int 状態)
+/* 00162794 */{
+/* 00162794 */	PartsEngine.Parts_SetNumeralSpace(パーツ番号, _字間隔, 状態);
+/* 001627be */}
+
+int Ｐ＿数字字間隔取得(int パーツ番号, int 状態)
+/* 001627cc */{
+/* 001627cc */	return PartsEngine.Parts_GetNumeralSpace(パーツ番号, 状態);
+/* 001627ec */}
+
+void Ｐ＿数字桁設定(int パーツ番号, int 桁数, int 状態)
+/* 00162800 */{
+/* 00162800 */	PartsEngine.Parts_SetNumeralLength(パーツ番号, 桁数, 状態);
+/* 0016282a */}
+
+int Ｐ＿数字桁取得(int パーツ番号, int 状態)
+/* 00162838 */{
+/* 00162838 */	return PartsEngine.GetNumeralLength(パーツ番号, 状態);
+/* 00162858 */}
+
+void Ｐ＿数字表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 0016286c */{
+/* 0016286c */	PartsEngine.Parts_SetNumeralSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 001628b4 */}
+
+void Ｐ＿数字表示範囲取得(int パーツ番号, ref int Ｘ, ref int Ｙ, ref int 幅, ref int 高さ, int 状態)
+/* 001628c2 */{
+/* 001628c2 */	PartsEngine.GetNumeralSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 00162908 */}
+
+void Ｐ＿数字表示タイプ設定(int パーツ番号, int 種類, int 状態)
+/* 00162916 */{
+/* 00162916 */	PartsEngine.SetNumeralShowType(パーツ番号, 種類, 状態);
+/* 0016293e */}
+
+int Ｐ＿数字表示タイプ取得(int パーツ番号, int 状態)
+/* 0016294c */{
+/* 0016294c */	return PartsEngine.Parts_GetNumeralCGType(パーツ番号, 状態);
+/* 0016296c */}
+
+void Ｐ＿数字パディング表示設定(int パーツ番号, bool 表示フラグ, int 状態)
+/* 00162980 */{
+/* 00162980 */	PartsEngine.SetNumeralShowPadding(パーツ番号, 表示フラグ, 状態);
+/* 001629a8 */}
+
+bool Ｐ＿数字パディング表示設定取得(int パーツ番号, int 状態)
+/* 001629b6 */{
+/* 001629b6 */	return PartsEngine.IsNumeralShowPadding(パーツ番号, 状態);
+/* 001629d6 */}
+

@@ -1,0 +1,28 @@
+void BadCondition::init(string id, string name, string imageName, string desc)
+/* 001cc8c6 */{
+/* 001cc8c6 */	this.id_ = id;
+/* 001cc8de */	this.name_ = name;
+/* 001cc8f6 */	this.imageName_ = imageName;
+/* 001cc90e */	this.desc_ = desc;
+/* 001cc926 */}
+
+string BadCondition::getId()
+/* 001cc92e */{
+/* 001cc92e */	return this.id_;
+/* 001cc93a */}
+
+string BadCondition::getName()
+/* 001cc948 */{
+/* 001cc948 */	return this.name_;
+/* 001cc954 */}
+
+string BadCondition::getImageName()
+/* 001cc962 */{
+/* 001cc962 */	return this.imageName_;
+/* 001cc96e */}
+
+string BadCondition::getDesc()
+/* 001cc97c */{
+/* 001cc97c */	return this.desc_;
+/* 001cc988 */}
+

@@ -1,0 +1,32 @@
+void LoopSound::playSound(int soundNumber)
+/* 001ecb0a */{
+/* 001ecb0a */	if (this.sound_ == soundNumber)
+/* 001ecb26 */	{
+/* 001ecb26 */		++this.stack_;
+/* 001ecb36 */	}
+/* 001ecb3c */	else
+/* 001ecb3c */	{
+/* 001ecb3c */		this.innerPlay(0);
+/* 001ecb4a */		this.sound_ = soundNumber;
+/* 001ecb60 */		this.stack_ = 1;
+/* 001ecb72 */		this.innerPlay(this.sound_);
+/* 001ecb84 */	}
+/* 001ecb84 */}
+
+void LoopSound::stopSound(int soundNumber)
+/* 001ecb8c */{
+/* 001ecb8c */	if (this.sound_ == soundNumber)
+/* 001ecba8 */	{
+/* 001ecba8 */		--this.stack_;
+/* 001ecbb8 */		if (this.stack_ == 0)
+/* 001ecbd0 */		{
+/* 001ecbd0 */			this.innerPlay(0);
+/* 001ecbde */			this.sound_ = 0;
+/* 001ecbf0 */		}
+/* 001ecbf0 */	}
+/* 001ecbf0 */}
+
+void LoopSound::innerPlay(int number)
+/* 001ecbf8 */{
+/* 001ecbfa */}
+

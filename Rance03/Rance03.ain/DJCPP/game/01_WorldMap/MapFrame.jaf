@@ -1,0 +1,67 @@
+MapFrame::MapFrame()
+/* 001879b4 */{
+/* 001879bc */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001879e2 */}
+
+void MapFrame::init()
+/* 001879ea */{
+/* 001879ea */	this.initParts();
+/* 001879f2 */}
+
+void MapFrame::update()
+/* 001879fa */{
+/* 001879fc */}
+
+void MapFrame::fadeIn(bool val, unknown_delegate onFinish)
+/* 00187a02 */{
+/* 00187a02 */	this.setPartsShow();
+/* 00187a0a */	PartsMotion m;
+/* 00187a1a */	int w = this.parts_[0].getWidth();
+/* 00187a3e */	if (val)
+/* 00187a4e */	{
+/* 00187a4e */		m.setMove(-w, 0, 0, 0, 1);
+/* 00187a82 */	}
+/* 00187a88 */	else
+/* 00187a88 */	{
+/* 00187a88 */		m.setMove(0, 0, -w, 0, 1);
+/* 00187abc */	}
+/* 00187abc */	this.parts_[0].runMotion(m, NULL);
+/* 00187ae4 */	PartsMotion m;
+/* 00187afa */	int w = this.parts_[1].getWidth();
+/* 00187b1e */	if (val)
+/* 00187b2e */	{
+/* 00187b2e */		m.setMove(1024 + w, 768, 1024, 768, 1);
+/* 00187b68 */	}
+/* 00187b6e */	else
+/* 00187b6e */	{
+/* 00187b6e */		m.setMove(1024, 768, 1024 + w, 768, 1);
+/* 00187ba8 */	}
+/* 00187ba8 */	this.parts_[1].runMotion(m, NULL);
+/* 00187bd0 */}
+
+void MapFrame::initParts()
+/* 00187bde */{
+/* 00187bde */	this.parts_[0].init("システム／マップ／上フレーム", 0);
+/* 00187c02 */	this.parts_[1].init("システム／マップ／下フレーム", 0);
+/* 00187c26 */	createPartsGroup(this.parent_, this.parts_, 1400);
+/* 00187c46 */	this.setPartsPos();
+/* 00187c4e */}
+
+void MapFrame::setPartsShow()
+/* 00187c56 */{
+/* 00187c56 */	int i;
+/* 00187c68 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00187cb8 */	{
+/* 00187cb8 */		this.parts_[i].setShow(true);
+/* 00187cda */	}
+/* 00187ce0 */	this.parent_.setShow(true);
+/* 00187cf6 */}
+
+void MapFrame::setPartsPos()
+/* 00187cfe */{
+/* 00187cfe */	this.parts_[0].setPos(0.0, 0.0);
+/* 00187d22 */	this.parts_[1].setPos(1024.0, 768.0);
+/* 00187d46 */	this.parts_[0].setOrigin(7);
+/* 00187d64 */	this.parts_[1].setOrigin(3);
+/* 00187d82 */}
+

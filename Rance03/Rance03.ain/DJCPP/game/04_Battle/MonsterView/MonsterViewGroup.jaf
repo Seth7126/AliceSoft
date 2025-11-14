@@ -1,0 +1,277 @@
+MonsterViewGroup::MonsterViewGroup()
+/* 0019ce58 */{
+/* 0019ce60 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0019ce86 */}
+
+void MonsterViewGroup::init(ref BattleModel model, string battleBackGroundId)
+/* 0019ce8e */{
+/* 0019ce8e */	this.battleModel_ <- model;
+/* 0019ceae */	this.battleBackGroundId_ = battleBackGroundId;
+/* 0019cec6 */}
+
+void MonsterViewGroup::update()
+/* 0019cece */{
+/* 0019cece */	int i;
+/* 0019cee0 */	while (i < this.deadMotionWaitList_.Numof())
+/* 0019cf02 */	{
+/* 0019cf02 */		if (this.deadMotionWaitList_[i].val.isDeadMotionFinish())
+/* 0019cf2c */		{
+/* 0019cf2c */			this.deadMotionWaitList_.Erase(i);
+/* 0019cf42 */		}
+/* 0019cf48 */		else
+/* 0019cf48 */		{
+/* 0019cf48 */			++i;
+/* 0019cf58 */		}
+/* 0019cf58 */	}
+/* 0019cf5e */}
+
+void MonsterViewGroup::setNewTurn(int turn)
+/* 0019cf66 */{
+/* 0019cf66 */	int i;
+/* 0019cf78 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019cfc8 */	{
+/* 0019cfc8 */		this.view_[i].val.setTurn(turn);
+/* 0019cff6 */	}
+/* 0019cffc */}
+
+void MonsterViewGroup::showAttack(int index, DG_GeneralCallback onFinish, bool isUpdateBuff)
+/* 0019d004 */{
+/* 0019d004 */	if (isUpdateBuff)
+/* 0019d014 */	{
+/* 0019d014 */		this.updateBuffView();
+/* 0019d01c */	}
+/* 0019d01c */	this.view_[index].val.showAttack();
+/* 0019d040 */	this.timer_.setTimer(350, onFinish);
+/* 0019d062 */}
+
+void MonsterViewGroup::setFocusByTargetInfomation(ref array@TargetInfomation targets)
+/* 0019d06a */{
+/* 0019d06a */	int i;
+/* 0019d07c */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019d0cc */	{
+/* 0019d0cc */		bool isFocus = false;
+/* 0019d0de */		int j;
+/* 0019d0f0 */		for (j = 0; j < targets.Numof(); ++j)
+/* 0019d140 */		{
+/* 0019d140 */			if (targets[j].getTargetIndex() == i)
+/* 0019d16e */			{
+/* 0019d16e */				isFocus = true;
+/* 0019d180 */				break;
+/* 0019d186 */			}
+/* 0019d186 */		}
+/* 0019d18c */		this.view_[i].val.setFocus(isFocus);
+/* 0019d1ba */	}
+/* 0019d1c0 */}
+
+void MonsterViewGroup::resetFocus()
+/* 0019d1c8 */{
+/* 0019d1c8 */	int i;
+/* 0019d1da */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019d22a */	{
+/* 0019d22a */		this.view_[i].val.setFocus(true);
+/* 0019d254 */	}
+/* 0019d25a */}
+
+void MonsterViewGroup::showBuffEffect(ref array@TargetInfomation targets, string effectName, DG_GeneralCallback onFinish)
+/* 0019d262 */{
+/* 0019d262 */	this.updateBuffView();
+/* 0019d26a */	int i;
+/* 0019d27c */	for (i = 0; i < targets.Numof(); ++i)
+/* 0019d2cc */	{
+/* 0019d2cc */		int index = targets[i].getTargetIndex();
+/* 0019d2f4 */		this.view_[index].val.showEffect(effectName);
+/* 0019d322 */	}
+/* 0019d328 */	this.timer_.setTimer(1000, onFinish);
+/* 0019d34a */}
+
+void MonsterViewGroup::updateBuffView()
+/* 0019d352 */{
+/* 0019d352 */	int i;
+/* 0019d364 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019d3b4 */	{
+/* 0019d3b4 */		this.view_[i].val.updateBuffView();
+/* 0019d3d8 */	}
+/* 0019d3de */}
+
+void MonsterViewGroup::showName(DG_GeneralCallback onFinishShowName)
+/* 0019d3e6 */{
+/* 0019d3e6 */	if (this.isExistNotShowNameMonster())
+/* 0019d3f4 */	{
+/* 0019d3f4 */		this.onFinishShowNameCallback_ = onFinishShowName;
+/* 0019d40e */		this.innerShowName();
+/* 0019d416 */	}
+/* 0019d41c */	else
+/* 0019d41c */	{
+/* 0019d41c */		onFinishShowName();
+/* 0019d43c */	}
+/* 0019d43c */}
+
+void MonsterViewGroup::innerShowName()
+/* 0019d444 */{
+/* 0019d444 */	int min = this.view_.Numof();
+/* 0019d460 */	int max = -1;
+/* 0019d472 */	int i;
+/* 0019d484 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019d4d4 */	{
+/* 0019d4d4 */		ref MonsterInstance inst = this.battleModel_.getMonsterInstance(i);
+/* 0019d524 */		if (!this.view_[i].val.isShownName() || inst.isChanged())
+/* 0019d57e */		{
+/* 0019d57e */			min = Math.Min(i, min);
+/* 0019d5a8 */			max = Math.Max(i, max);
+/* 0019d5d2 */		}
+/* 0019d5d2 */	}
+/* 0019d5e4 */	if (min > max)
+/* 0019d600 */	{
+/* 0019d600 */		this.resetFocus();
+/* 0019d608 */		this.showNameTimer_.setTimer(300, this.onFinishShowNameCallback_);
+/* 0019d62a */	}
+/* 0019d630 */	else
+/* 0019d630 */	{
+/* 0019d630 */		int i;
+/* 0019d642 */		for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019d692 */		{
+/* 0019d692 */			this.view_[i].val.setFocus(i == min);
+/* 0019d6ce */			if (i == min)
+/* 0019d6ea */			{
+/* 0019d6ea */				ref MonsterInstance inst = this.battleModel_.getMonsterInstance(i);
+/* 0019d73a */				if (inst.isChanged())
+/* 0019d750 */				{
+/* 0019d750 */					inst.setChanged(false);
+/* 0019d766 */					this.view_[i].val <- NULL;
+/* 0019d792 */					this.view_[i].val <- new MonsterView;
+/* 0019d7da */					this.view_[i].val.initAsChange(inst, this.battleBackGroundId_, this.battleModel_.getTurn());
+/* 0019d822 */					this.view_[i].val.getIn();
+/* 0019d846 */				}
+/* 0019d84c */				this.view_[i].val.showName(this.showMonsterNameNext);
+/* 0019d87a */			}
+/* 0019d87a */		}
+/* 0019d88c */	}
+/* 0019d88c */}
+
+bool MonsterViewGroup::isExistNotShowNameMonster()
+/* 0019d894 */{
+/* 0019d894 */	int i;
+/* 0019d8a6 */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019d8f6 */	{
+/* 0019d8f6 */		ref MonsterInstance inst = this.battleModel_.getMonsterInstance(i);
+/* 0019d946 */		if (!this.view_[i].val.isShownName() || inst.isChanged())
+/* 0019d9a0 */		{
+/* 0019d9a0 */			return true;
+/* 0019d9a8 */		}
+/* 0019d9a8 */	}
+/* 0019d9ba */	return false;
+/* 0019d9c2 */}
+
+void MonsterViewGroup::showMonsterNameNext()
+/* 0019d9d0 */{
+/* 0019d9d0 */	this.innerShowName();
+/* 0019d9d8 */}
+
+void MonsterViewGroup::showDamage(ref array@TargetInfomation targets, string effectName, DG_GeneralCallback onFinish)
+/* 0019d9e0 */{
+/* 0019d9e0 */	this.updateBuffView();
+/* 0019d9e8 */	int i;
+/* 0019d9fa */	for (i = 0; i < targets.Numof(); ++i)
+/* 0019da4a */	{
+/* 0019da4a */		int index = targets[i].getTargetIndex();
+/* 0019da72 */		int dmg = targets[i].getDamage();
+/* 0019da9a */		int type = targets[i].getType();
+/* 0019dac2 */		int delay = i * 20;
+/* 0019dae0 */		if (i == 0)
+/* 0019daf8 */		{
+/* 0019daf8 */			this.view_[index].val.setDamage(dmg, effectName, true, type, delay, onFinish);
+/* 0019db56 */		}
+/* 0019db5c */		else
+/* 0019db5c */		{
+/* 0019db5c */			this.view_[index].val.setDamage(dmg, effectName, true, type, delay, NULL);
+/* 0019dbb0 */		}
+/* 0019dbb0 */	}
+/* 0019dbb6 */}
+
+void MonsterViewGroup::showHeal(ref array@TargetInfomation targets, string effectName, DG_GeneralCallback onFinish)
+/* 0019dbbe */{
+/* 0019dbbe */	int i;
+/* 0019dbd0 */	for (i = 0; i < targets.Numof(); ++i)
+/* 0019dc20 */	{
+/* 0019dc20 */		int index = targets[i].getTargetIndex();
+/* 0019dc48 */		int dmg = targets[i].getDamage();
+/* 0019dc70 */		int type = targets[i].getType();
+/* 0019dc98 */		if (i == 0)
+/* 0019dcb0 */		{
+/* 0019dcb0 */			this.view_[index].val.setDamage(dmg, effectName, false, type, 0, onFinish);
+/* 0019dd0a */		}
+/* 0019dd10 */		else
+/* 0019dd10 */		{
+/* 0019dd10 */			this.view_[index].val.setDamage(dmg, effectName, false, type, 0, NULL);
+/* 0019dd60 */		}
+/* 0019dd60 */	}
+/* 0019dd66 */}
+
+void MonsterViewGroup::add(ref MonsterInstance instance)
+/* 0019dd6e */{
+/* 0019dd6e */	int c = this.view_.Numof();
+/* 0019dd8a */	this.view_.Realloc(c + 1);
+/* 0019ddac */	this.view_[c].val <- new MonsterView;
+/* 0019ddf4 */	this.view_[c].val.init(instance, this.battleBackGroundId_, this.battleModel_.getTurn());
+/* 0019de3c */}
+
+void MonsterViewGroup::erase(int index)
+/* 0019de44 */{
+/* 0019de44 */	if (this.view_[index].val.isFixedPosition())
+/* 0019de6e */	{
+/* 0019de6e */		this.deadStock_.PushBack(this.view_[index]);
+/* 0019de92 */	}
+/* 0019de98 */	else
+/* 0019de98 */	{
+/* 0019de98 */		this.deadMotionWaitList_.PushBack(this.view_[index]);
+/* 0019debc */	}
+/* 0019debc */	this.view_.Erase(index);
+/* 0019ded2 */}
+
+void MonsterViewGroup::setTarget(int targetType, bool val)
+/* 0019deda */{
+/* 0019deda */	int i;
+/* 0019deec */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019df3c */	{
+/* 0019df3c */		this.view_[i].val.setTargetMark(false);
+/* 0019df66 */	}
+/* 0019df6c */	switch (targetType)
+/* 0019df82 */	{
+/* 0019df82 */	case 2:
+/* 0019df82 */		int i;
+/* 0019df94 */		for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019dfe4 */		{
+/* 0019dfe4 */			this.view_[i].val.setTargetMark(val);
+/* 0019e012 */		}
+/* 0019e018 */		break;
+/* 0019e01e */	case 0:
+/* 0019e01e */		this.view_[0].val.setTargetMark(val);
+/* 0019e048 */		break;
+/* 0019e04e */	case 1:
+/* 0019e04e */		this.view_[this.view_.Numof() - 1].val.setTargetMark(val);
+/* 0019e08a */		break;
+/* 0019e090 */	}
+/* 0019e090 */}
+
+void MonsterViewGroup::resetPosition(DG_GeneralCallback cb)
+/* 0019e098 */{
+/* 0019e098 */	int i;
+/* 0019e0aa */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019e0fa */	{
+/* 0019e0fa */		this.view_[i].val.resetPosition();
+/* 0019e11e */	}
+/* 0019e124 */	if (cb.Numof() != 0)
+/* 0019e140 */	{
+/* 0019e140 */		this.timer_.setTimer(1000, cb);
+/* 0019e162 */	}
+/* 0019e162 */}
+
+void MonsterViewGroup::fadeOut()
+/* 0019e16a */{
+/* 0019e16a */	int i;
+/* 0019e17c */	for (i = 0; i < this.view_.Numof(); ++i)
+/* 0019e1cc */	{
+/* 0019e1cc */		this.view_[i].val.fadeOut();
+/* 0019e1f0 */	}
+/* 0019e1f6 */}
+

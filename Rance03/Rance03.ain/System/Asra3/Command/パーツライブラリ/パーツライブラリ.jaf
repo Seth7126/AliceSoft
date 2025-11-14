@@ -1,0 +1,575 @@
+void Ｐ＿削除(int パーツ番号)
+/* 0015f766 */{
+/* 0015f766 */	if (1000000000 <= パーツ番号)
+/* 0015f77e */	{
+/* 0015f77e */		string ErrorText;
+/* 0015f792 */		ErrorText += "指定されたパーツ番号【%d】はシステムが使用しています。\n" % パーツ番号;
+/* 0015f7b8 */		ErrorText += "削除することができません。\n";
+/* 0015f7cc */		ErrorText += "使用可能なパーツ番号は【 1 ～ %d 】です" % 999999999;
+/* 0015f7ee */		system.Error(ErrorText);
+/* 0015f800 */		return;
+/* 0015f802 */	}
+/* 0015f802 */	PARTS_Release(パーツ番号);
+/* 0015f812 */}
+
+bool Ｐ＿存在確認(int PartsNumber)
+/* 0015f820 */{
+/* 0015f820 */	return PartsEngine.IsExist(PartsNumber);
+/* 0015f836 */}
+
+void Ｐ＿クリックミス効果音設定(string 効果音名)
+/* 0015f84a */{
+/* 0015f84a */	PartsEngine.SetClickMissSoundName(効果音名);
+/* 0015f85e */}
+
+void Ｐ＿モーション画面振動設定(int 横振幅, int 縦振幅, int 開始時間, int 終了時間)
+/* 0015f86c */{
+/* 0015f86c */	PartsEngine.AddWholeMotionVibrationSize(横振幅, 縦振幅, 開始時間, 終了時間);
+/* 0015f89e */}
+
+void Ｐ＿モーション効果音設定(string 効果音名, int 開始時間)
+/* 0015f8ac */{
+/* 0015f8ac */	PartsEngine.AddMotionSound(効果音名, 開始時間);
+/* 0015f8ca */}
+
+void Ｐ＿フォーカス設定(int PartsNumber)
+/* 0015f8d8 */{
+/* 0015f8d8 */	PartsEngine.SetFocus(PartsNumber);
+/* 0015f8ec */}
+
+bool Ｐ＿フォーカス確認(int PartsNumber)
+/* 0015f8fa */{
+/* 0015f8fa */	return PartsEngine.IsFocus(PartsNumber);
+/* 0015f910 */}
+
+void Ｐ＿座標設定(int パーツ番号, float Ｘ, float Ｙ)
+/* 0015f924 */{
+/* 0015f924 */	PartsEngine.SetComponentPos(パーツ番号, Ｘ, Ｙ);
+/* 0015f94c */}
+
+void Ｐ＿Ｚ座標設定(int パーツ番号, int Ｚ)
+/* 0015f95a */{
+/* 0015f95a */	SYS_ASSERTE_Z(Ｚ);
+/* 0015f968 */	PartsEngine.SetComponentPosZ(パーツ番号, Ｚ);
+/* 0015f986 */}
+
+float Ｐ＿Ｘ座標取得(int パーツ番号)
+/* 0015f994 */{
+/* 0015f994 */	return PartsEngine.GetComponentPosX(パーツ番号);
+/* 0015f9aa */}
+
+float Ｐ＿Ｙ座標取得(int パーツ番号)
+/* 0015f9be */{
+/* 0015f9be */	return PartsEngine.GetComponentPosY(パーツ番号);
+/* 0015f9d4 */}
+
+int Ｐ＿Ｚ座標取得(int パーツ番号)
+/* 0015f9e8 */{
+/* 0015f9e8 */	return PartsEngine.GetComponentPosZ(パーツ番号);
+/* 0015f9fe */}
+
+void Ｐ＿原点座標設定(int パーツ番号, int 原点座標)
+/* 0015fa12 */{
+/* 0015fa12 */	PartsEngine.SetComponentOriginPosMode(パーツ番号, 原点座標);
+/* 0015fa30 */}
+
+int Ｐ＿原点座標取得(int パーツ番号)
+/* 0015fa3e */{
+/* 0015fa3e */	return PartsEngine.GetComponentOriginPosMode(パーツ番号);
+/* 0015fa54 */}
+
+void Ｐ＿表示設定(int パーツ番号, bool 表示フラグ)
+/* 0015fa68 */{
+/* 0015fa68 */	PartsEngine.SetComponentShow(パーツ番号, 表示フラグ);
+/* 0015fa86 */}
+
+bool Ｐ＿表示設定取得(int パーツ番号)
+/* 0015fa94 */{
+/* 0015fa94 */	return PartsEngine.IsComponentShow(パーツ番号);
+/* 0015faaa */}
+
+void Ｐ＿メッセージウィンドウ表示連動設定(int パーツ番号, bool 表示連動設定)
+/* 0015fabe */{
+/* 0015fabe */	PartsEngine.SetComponentMessageWindowShowLink(パーツ番号, 表示連動設定);
+/* 0015fadc */}
+
+bool Ｐ＿メッセージウィンドウ表示連動設定取得(int パーツ番号)
+/* 0015faea */{
+/* 0015faea */	return PartsEngine.IsComponentMessageWindowShowLink(パーツ番号);
+/* 0015fb00 */}
+
+void Ｐ＿アルファ値設定(int パーツ番号, int アルファ値)
+/* 0015fb14 */{
+/* 0015fb14 */	PartsEngine.SetComponentAlpha(パーツ番号, アルファ値);
+/* 0015fb32 */}
+
+int Ｐ＿アルファ値取得(int パーツ番号)
+/* 0015fb40 */{
+/* 0015fb40 */	return PartsEngine.GetComponentAlpha(パーツ番号);
+/* 0015fb56 */}
+
+void Ｐ＿加算色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 0015fb6a */{
+/* 0015fb6a */	PartsEngine.SetComponentAddColor(パーツ番号, 赤, 緑, 青);
+/* 0015fb9c */}
+
+void Ｐ＿加算色取得(int パーツ番号, ref int 赤, ref int 緑, ref int 青)
+/* 0015fbaa */{
+/* 0015fbaa */	赤 = PartsEngine.GetComponentAddColorR(パーツ番号);
+/* 0015fbcc */	緑 = PartsEngine.GetComponentAddColorG(パーツ番号);
+/* 0015fbee */	青 = PartsEngine.GetComponentAddColorB(パーツ番号);
+/* 0015fc10 */}
+
+void Ｐ＿乗算色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 0015fc1e */{
+/* 0015fc1e */	PartsEngine.SetComponentMulColor(パーツ番号, 赤, 緑, 青);
+/* 0015fc50 */}
+
+void Ｐ＿乗算色取得(int パーツ番号, ref int 赤, ref int 緑, ref int 青)
+/* 0015fc5e */{
+/* 0015fc5e */	赤 = PartsEngine.GetComponentMulColorR(パーツ番号);
+/* 0015fc80 */	緑 = PartsEngine.GetComponentMulColorG(パーツ番号);
+/* 0015fca2 */	青 = PartsEngine.GetComponentMulColorB(パーツ番号);
+/* 0015fcc4 */}
+
+void Ｐ＿描画フィルタ設定(int パーツ番号, int 描画フィルタ)
+/* 0015fcd2 */{
+/* 0015fcd2 */	PartsEngine.SetComponentDrawFilter(パーツ番号, 描画フィルタ);
+/* 0015fcf0 */}
+
+int Ｐ＿描画フィルタ取得(int パーツ番号)
+/* 0015fcfe */{
+/* 0015fcfe */	return PartsEngine.GetComponentDrawFilter(パーツ番号);
+/* 0015fd14 */}
+
+void Ｐ＿Ｘ拡大率設定(int パーツ番号, float Ｘ拡大率)
+/* 0015fd28 */{
+/* 0015fd28 */	PartsEngine.SetComponentMagX(パーツ番号, Ｘ拡大率);
+/* 0015fd46 */}
+
+void Ｐ＿Ｙ拡大率設定(int パーツ番号, float Ｙ拡大率)
+/* 0015fd54 */{
+/* 0015fd54 */	PartsEngine.SetComponentMagY(パーツ番号, Ｙ拡大率);
+/* 0015fd72 */}
+
+float Ｐ＿Ｘ拡大率取得(int パーツ番号)
+/* 0015fd80 */{
+/* 0015fd80 */	return PartsEngine.GetComponentMagX(パーツ番号);
+/* 0015fd96 */}
+
+float Ｐ＿Ｙ拡大率取得(int パーツ番号)
+/* 0015fdaa */{
+/* 0015fdaa */	return PartsEngine.GetComponentMagY(パーツ番号);
+/* 0015fdc0 */}
+
+void Ｐ＿Ｘ回転角度設定(int パーツ番号, float Ｘ回転角度)
+/* 0015fdd4 */{
+/* 0015fdd4 */	PartsEngine.SetComponentRotateX(パーツ番号, Ｘ回転角度);
+/* 0015fdf2 */}
+
+void Ｐ＿Ｙ回転角度設定(int パーツ番号, float Ｙ回転角度)
+/* 0015fe00 */{
+/* 0015fe00 */	PartsEngine.SetComponentRotateY(パーツ番号, Ｙ回転角度);
+/* 0015fe1e */}
+
+void Ｐ＿Ｚ回転角度設定(int パーツ番号, float Ｚ回転角度)
+/* 0015fe2c */{
+/* 0015fe2c */	PartsEngine.SetComponentRotateZ(パーツ番号, Ｚ回転角度);
+/* 0015fe4a */}
+
+float Ｐ＿Ｘ回転角度取得(int パーツ番号)
+/* 0015fe58 */{
+/* 0015fe58 */	return PartsEngine.GetComponentRotateX(パーツ番号);
+/* 0015fe6e */}
+
+float Ｐ＿Ｙ回転角度取得(int パーツ番号)
+/* 0015fe82 */{
+/* 0015fe82 */	return PartsEngine.GetComponentRotateY(パーツ番号);
+/* 0015fe98 */}
+
+float Ｐ＿Ｚ回転角度取得(int パーツ番号)
+/* 0015feac */{
+/* 0015feac */	return PartsEngine.GetComponentRotateZ(パーツ番号);
+/* 0015fec2 */}
+
+void Ｐ＿マージン設定(int パーツ番号, int 上マージン, int 下マージン, int 左マージン, int 右マージン)
+/* 0015fed6 */{
+/* 0015fed6 */	PartsEngine.SetComponentMargin(パーツ番号, 上マージン, 下マージン, 左マージン, 右マージン);
+/* 0015ff12 */}
+
+int Ｐ＿上マージン取得(int パーツ番号)
+/* 0015ff20 */{
+/* 0015ff20 */	return PartsEngine.GetComponentMarginTop(パーツ番号);
+/* 0015ff36 */}
+
+int Ｐ＿下マージン取得(int パーツ番号)
+/* 0015ff4a */{
+/* 0015ff4a */	return PartsEngine.GetComponentMarginBottom(パーツ番号);
+/* 0015ff60 */}
+
+int Ｐ＿左マージン取得(int パーツ番号)
+/* 0015ff74 */{
+/* 0015ff74 */	return PartsEngine.GetComponentMarginLeft(パーツ番号);
+/* 0015ff8a */}
+
+int Ｐ＿右マージン取得(int パーツ番号)
+/* 0015ff9e */{
+/* 0015ff9e */	return PartsEngine.GetComponentMarginRight(パーツ番号);
+/* 0015ffb4 */}
+
+void Ｐ＿アルファクリッパー設定(int パーツ番号, int アルファクリッパーパーツ番号)
+/* 0015ffc8 */{
+/* 0015ffc8 */	PartsEngine.SetComponentAlphaClipper(パーツ番号, アルファクリッパーパーツ番号);
+/* 0015ffe6 */}
+
+int Ｐ＿アルファクリッパー取得(int パーツ番号)
+/* 0015fff4 */{
+/* 0015fff4 */	return PartsEngine.GetComponentAlphaClipper(パーツ番号);
+/* 0016000a */}
+
+void Ｐ＿オンカーソル表示連動設定(int パーツ番号, int 参照パーツ番号)
+/* 0016001e */{
+/* 0016001e */	PartsEngine.Parts_SetOnCursorShowLinkPartsNumber(パーツ番号, 参照パーツ番号);
+/* 0016003c */}
+
+int Ｐ＿オンカーソル表示連動設定取得(int パーツ番号)
+/* 0016004a */{
+/* 0016004a */	return PartsEngine.Parts_GetOnCursorShowLinkPartsNumber(パーツ番号);
+/* 00160060 */}
+
+void Ｐ＿テクスチャフィルタ設定(int パーツ番号, int 種類)
+/* 00160074 */{
+/* 00160074 */	PartsEngine.SetComponentTextureFilterType(パーツ番号, 種類);
+/* 00160092 */}
+
+int Ｐ＿テクスチャフィルタ取得(int パーツ番号)
+/* 001600a0 */{
+/* 001600a0 */	return PartsEngine.GetComponentTextureFilterType(パーツ番号);
+/* 001600b6 */}
+
+void Ｐ＿ミップマップ設定(int パーツ番号, bool ミップマップ)
+/* 001600ca */{
+/* 001600ca */	PartsEngine.SetComponentMipmap(パーツ番号, ミップマップ);
+/* 001600e8 */}
+
+bool Ｐ＿ミップマップ設定取得(int パーツ番号)
+/* 001600f6 */{
+/* 001600f6 */	return PartsEngine.IsComponentMipmap(パーツ番号);
+/* 0016010c */}
+
+void Ｐ＿高速再生設定(int PartsNumber, bool 高速再生)
+/* 00160120 */{
+/* 00160120 */	PARTS_SetSpeedupRateByMessageSkip(PartsNumber, 高速再生 ? 3 : 1);
+/* 00160152 */}
+
+bool Ｐ＿高速再生設定取得(int PartsNumber)
+/* 00160160 */{
+/* 00160160 */	return PARTS_GetSpeedupRateByMessageSkip(PartsNumber) != 1;
+/* 0016017c */}
+
+void Ｐ＿親設定(int パーツ番号, int 親パーツ番号)
+/* 00160190 */{
+/* 00160190 */	PartsEngine.Parts_SetParentPartsNumber(パーツ番号, 親パーツ番号);
+/* 001601ae */}
+
+int Ｐ＿親設定取得(int パーツ番号)
+/* 001601bc */{
+/* 001601bc */	return PartsEngine.Parts_GetParentPartsNumber(パーツ番号);
+/* 001601d2 */}
+
+void Ｐ＿親解放(int パーツ番号)
+/* 001601e6 */{
+/* 001601e6 */	Ｐ＿親設定(パーツ番号, 0);
+/* 001601fc */}
+
+bool Ｐ＿子存在確認(int パーツ番号, int 子パーツ番号)
+/* 0016020a */{
+/* 0016020a */	return PartsEngine.IsExistChild(パーツ番号, 子パーツ番号);
+/* 0016022a */}
+
+void Ｐ＿子全解放(int パーツ番号)
+/* 0016023e */{
+/* 0016023e */	PartsEngine.ClearChild(パーツ番号);
+/* 00160252 */}
+
+void Ｐ＿子追加(int パーツ番号, int 子パーツ番号)
+/* 00160260 */{
+/* 00160260 */	PartsEngine.AddChild(パーツ番号, 子パーツ番号);
+/* 0016027e */}
+
+void Ｐ＿子挿入(int パーツ番号, int インデックス, int 子パーツ番号)
+/* 0016028c */{
+/* 0016028c */	PartsEngine.InsertChild(パーツ番号, インデックス, 子パーツ番号);
+/* 001602b4 */}
+
+void Ｐ＿子解放(int パーツ番号, int 子パーツ番号)
+/* 001602c2 */{
+/* 001602c2 */	PartsEngine.RemoveChild(パーツ番号, 子パーツ番号);
+/* 001602e0 */}
+
+int Ｐ＿子数取得(int パーツ番号)
+/* 001602ee */{
+/* 001602ee */	return PartsEngine.NumofChild(パーツ番号);
+/* 00160304 */}
+
+int Ｐ＿子インデックス取得(int パーツ番号, int 子パーツ番号)
+/* 00160318 */{
+/* 00160318 */	return PartsEngine.GetChildIndex(パーツ番号, 子パーツ番号);
+/* 00160338 */}
+
+int Ｐ＿子取得(int パーツ番号, int インデックス)
+/* 0016034c */{
+/* 0016034c */	return PartsEngine.GetChild(パーツ番号, インデックス);
+/* 0016036c */}
+
+void Ｐ＿親メッセージウィンドウ設定(int パーツ番号, int 親メッセージウィンドウ番号)
+/* 00160380 */{
+/* 00160380 */	Ｐ＿親設定(パーツ番号, 1000000000 + 親メッセージウィンドウ番号);
+/* 001603a2 */}
+
+int Ｐ＿親メッセージウィンドウ設定取得(int パーツ番号)
+/* 001603b0 */{
+/* 001603b0 */	int ParentPartsNumber = Ｐ＿親設定取得(パーツ番号);
+/* 001603cc */	int GrandParentNumber = Ｐ＿親設定取得(ParentPartsNumber);
+/* 001603e8 */	if (GrandParentNumber == 0)
+/* 00160400 */	{
+/* 00160400 */		return 0;
+/* 00160408 */	}
+/* 00160408 */	return ParentPartsNumber - 1000000000;
+/* 0016041c */}
+
+void Ｐ＿モーション移動設定(int パーツ番号, float 開始Ｘ座標, float 開始Ｙ座標, float 終了Ｘ座標, float 終了Ｙ座標, int 開始時間, int 終了時間, string カーブ定義名)
+/* 00160430 */{
+/* 00160430 */	PartsEngine.AddComponentMotionPos(パーツ番号, 開始Ｘ座標, 開始Ｙ座標, 終了Ｘ座標, 終了Ｙ座標, 開始時間, 終了時間, カーブ定義名);
+/* 0016048a */}
+
+void Ｐ＿モーションアルファ設定(int パーツ番号, int 開始アルファ値, int 終了アルファ値, int 開始時間, int 終了時間, string カーブ定義名)
+/* 00160498 */{
+/* 00160498 */	PartsEngine.AddComponentMotionAlpha(パーツ番号, 開始アルファ値, 終了アルファ値, 開始時間, 終了時間, カーブ定義名);
+/* 001604de */}
+
+void Ｐ＿モーション加算色設定(int パーツ番号, int 開始赤色, int 開始緑色, int 開始青色, int 終了赤色, int 終了緑色, int 終了青色, int 開始時間, int 終了時間, string カーブ定義名)
+/* 001604ec */{
+/* 001604ec */	PartsEngine.AddComponentMotionAddColor(パーツ番号, 開始赤色, 開始緑色, 開始青色, 終了赤色, 終了緑色, 終了青色, 開始時間, 終了時間, カーブ定義名);
+/* 0016055a */}
+
+void Ｐ＿モーション乗算色設定(int パーツ番号, int 開始赤色, int 開始緑色, int 開始青色, int 終了赤色, int 終了緑色, int 終了青色, int 開始時間, int 終了時間, string カーブ定義名)
+/* 00160568 */{
+/* 00160568 */	PartsEngine.AddComponentMotionMulColor(パーツ番号, 開始赤色, 開始緑色, 開始青色, 終了赤色, 終了緑色, 終了青色, 開始時間, 終了時間, カーブ定義名);
+/* 001605d6 */}
+
+void Ｐ＿モーションＣＧ設定(int パーツ番号, string 基準ＣＧ名, int 開始番号, int 枚数, int 開始時間, int 終了時間, string カーブ定義名)
+/* 001605e4 */{
+/* 001605e4 */	if (!PartsEngine.AddComponentMotionCG(パーツ番号, 基準ＣＧ名, 開始番号, 枚数, 開始時間, 終了時間, カーブ定義名))
+/* 0016063c */	{
+/* 0016063c */		PARTS_Warning("Ｐ＿ＣＧ判定設定(パーツ番号 = %d, 基準ＣＧ名 = %s, 開始番号 = %d, 枚数 = %d, 開始時間 = %d, 終了時間 = %d, カーブ定義名 = %s)\n" % パーツ番号 % 基準ＣＧ名 % 開始番号 % 枚数 % 開始時間 % 終了時間 % カーブ定義名);
+/* 001606c6 */	}
+/* 001606c6 */}
+
+void Ｐ＿モーションＣＧエフェクト設定(int パーツ番号, string 基準ＣＧ名, int 開始番号, int 枚数, int 開始時間, int 終了時間, string カーブ定義名)
+/* 001606d4 */{
+/* 001606d4 */	if (!PartsEngine.AddComponentMotionCG(パーツ番号, 基準ＣＧ名, 開始番号, 枚数, 開始時間, 終了時間, カーブ定義名))
+/* 0016072c */	{
+/* 0016072c */		PARTS_Warning("Ｐ＿モーションＣＧエフェクト設定(パーツ番号 = %d, 基準ＣＧ名 = %s, 開始番号 = %d, 枚数 = %d, 開始時間 = %d, 終了時間 = %d, カーブ定義名 = %s)\n" % パーツ番号 % 基準ＣＧ名 % 開始番号 % 枚数 % 開始時間 % 終了時間 % カーブ定義名);
+/* 001607b6 */	}
+/* 001607b6 */	PartsEngine.AddComponentMotionCG(パーツ番号, "", 0, 1, 終了時間, 終了時間, "");
+/* 001607f8 */}
+
+void Ｐ＿モーション横ゲージ率設定(int パーツ番号, float 開始分子, float 開始分母, float 終了分子, float 終了分母, int 開始時間, int 終了時間, string カーブ定義名)
+/* 00160806 */{
+/* 00160806 */	PartsEngine.AddComponentMotionHGaugeRate(パーツ番号, 開始分子, 開始分母, 終了分子, 終了分母, 開始時間, 終了時間, カーブ定義名);
+/* 00160860 */}
+
+void Ｐ＿モーション縦ゲージ率設定(int パーツ番号, float 開始分子, float 開始分母, float 終了分子, float 終了分母, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0016086e */{
+/* 0016086e */	PartsEngine.AddComponentMotionVGaugeRate(パーツ番号, 開始分子, 開始分母, 終了分子, 終了分母, 開始時間, 終了時間, カーブ定義名);
+/* 001608c8 */}
+
+void Ｐ＿モーション数字設定(int パーツ番号, int 開始数, int 終了数, int 開始時間, int 終了時間, string カーブ定義名)
+/* 001608d6 */{
+/* 001608d6 */	PartsEngine.AddComponentMotionNumeralNumber(パーツ番号, 開始数, 終了数, 開始時間, 終了時間, カーブ定義名);
+/* 0016091c */}
+
+void Ｐ＿モーションＸ拡大率設定(int パーツ番号, float 開始Ｘ拡大率, float 終了Ｘ拡大率, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0016092a */{
+/* 0016092a */	PartsEngine.AddComponentMotionMagX(パーツ番号, 開始Ｘ拡大率, 終了Ｘ拡大率, 開始時間, 終了時間, カーブ定義名);
+/* 00160970 */}
+
+void Ｐ＿モーションＹ拡大率設定(int パーツ番号, float 開始Ｙ拡大率, float 終了Ｙ拡大率, int 開始時間, int 終了時間, string カーブ定義名)
+/* 0016097e */{
+/* 0016097e */	PartsEngine.AddComponentMotionMagY(パーツ番号, 開始Ｙ拡大率, 終了Ｙ拡大率, 開始時間, 終了時間, カーブ定義名);
+/* 001609c4 */}
+
+void Ｐ＿モーションＸ回転角度設定(int パーツ番号, float 開始Ｘ回転角度, float 終了Ｘ回転角度, int 開始時間, int 終了時間, string カーブ定義名)
+/* 001609d2 */{
+/* 001609d2 */	PartsEngine.AddComponentMotionRotateX(パーツ番号, 開始Ｘ回転角度, 終了Ｘ回転角度, 開始時間, 終了時間, カーブ定義名);
+/* 00160a18 */}
+
+void Ｐ＿モーションＹ回転角度設定(int パーツ番号, float 開始Ｙ回転角度, float 終了Ｙ回転角度, int 開始時間, int 終了時間, string カーブ定義名)
+/* 00160a26 */{
+/* 00160a26 */	PartsEngine.AddComponentMotionRotateY(パーツ番号, 開始Ｙ回転角度, 終了Ｙ回転角度, 開始時間, 終了時間, カーブ定義名);
+/* 00160a6c */}
+
+void Ｐ＿モーションＺ回転角度設定(int パーツ番号, float 開始Ｚ回転角度, float 終了Ｚ回転角度, int 開始時間, int 終了時間, string カーブ定義名)
+/* 00160a7a */{
+/* 00160a7a */	PartsEngine.AddComponentMotionRotateZ(パーツ番号, 開始Ｚ回転角度, 終了Ｚ回転角度, 開始時間, 終了時間, カーブ定義名);
+/* 00160ac0 */}
+
+void Ｐ＿モーション振動設定(int パーツ番号, int 開始幅, int 開始高さ, int 開始時間, int 終了時間)
+/* 00160ace */{
+/* 00160ace */	PartsEngine.AddComponentMotionVibrationSize(パーツ番号, 開始幅, 開始高さ, 開始時間, 終了時間);
+/* 00160b0a */}
+
+void Ｐ＿ピクセル判定設定(int パーツ番号, bool ピクセル判定)
+/* 00160b18 */{
+/* 00160b18 */	PartsEngine.Parts_SetPartsPixelDecide(パーツ番号, ピクセル判定);
+/* 00160b36 */}
+
+bool Ｐ＿ピクセル判定設定取得(int パーツ番号)
+/* 00160b44 */{
+/* 00160b44 */	return PartsEngine.Parts_IsPartsPixelDecide(パーツ番号);
+/* 00160b5a */}
+
+void Ｐ＿座標レート設定(int パーツ番号, bool レート設定)
+/* 00160b6e */{
+/* 00160b6e */	PartsEngine.Parts_SetPosForRate(パーツ番号, レート設定);
+/* 00160b8c */}
+
+bool Ｐ＿座標レート設定取得(int パーツ番号)
+/* 00160b9a */{
+/* 00160b9a */	return PartsEngine.Parts_IsPosForRate(パーツ番号);
+/* 00160bb0 */}
+
+void Ｐ＿時間初期化許可設定(int パーツ番号, bool 許可, int 状態)
+/* 00160bc4 */{
+/* 00160bc4 */	PartsEngine.Parts_SetResetTimerByChangeInputStatus(パーツ番号, 許可, 状態);
+/* 00160bec */}
+
+bool Ｐ＿時間初期化許可取得(int パーツ番号, int 状態)
+/* 00160bfa */{
+/* 00160bfa */	return PartsEngine.Parts_GetResetTimerByChangeInputStatus(パーツ番号, 状態);
+/* 00160c1a */}
+
+void Ｐ＿ドラッグ可能設定(int パーツ番号, bool 可能)
+/* 00160c2e */{
+/* 00160c2e */	PartsEngine.Parts_SetDrag(パーツ番号, 可能);
+/* 00160c4c */}
+
+bool Ｐ＿ドラッグ可能設定取得(int パーツ番号)
+/* 00160c5a */{
+/* 00160c5a */	return PartsEngine.Parts_GetPartsDrag(パーツ番号);
+/* 00160c70 */}
+
+void Ｐ＿オンカーソル効果音設定(int パーツ番号, string 効果音名)
+/* 00160c84 */{
+/* 00160c84 */	PartsEngine.Parts_SetSoundName(パーツ番号, 効果音名, 2);
+/* 00160ca8 */}
+
+string Ｐ＿オンカーソル効果音取得(int パーツ番号)
+/* 00160cb6 */{
+/* 00160cb6 */	string SoundName;
+/* 00160cca */	PartsEngine.Parts_GetSoundName(パーツ番号, SoundName, 2);
+/* 00160cee */	return SoundName;
+/* 00160cfa */}
+
+void Ｐ＿クリック効果音設定(int パーツ番号, string 効果音名)
+/* 00160d0e */{
+/* 00160d0e */	PartsEngine.Parts_SetSoundName(パーツ番号, 効果音名, 3);
+/* 00160d32 */}
+
+string Ｐ＿クリック効果音取得(int パーツ番号)
+/* 00160d40 */{
+/* 00160d40 */	string SoundName;
+/* 00160d54 */	PartsEngine.Parts_GetSoundName(パーツ番号, SoundName, 3);
+/* 00160d78 */	return SoundName;
+/* 00160d84 */}
+
+void Ｐ＿クリック可能設定(int パーツ番号, bool 選択可能)
+/* 00160d98 */{
+/* 00160d98 */	PartsEngine.Parts_SetClickable(パーツ番号, 選択可能);
+/* 00160db6 */}
+
+bool Ｐ＿クリック可能設定取得(int パーツ番号)
+/* 00160dc4 */{
+/* 00160dc4 */	return PartsEngine.Parts_GetPartsClickable(パーツ番号);
+/* 00160dda */}
+
+void Ｐ＿オンカーソル透過設定(int パーツ番号, bool 透過許可)
+/* 00160dee */{
+/* 00160dee */	PartsEngine.Parts_SetPassCursor(パーツ番号, 透過許可);
+/* 00160e0c */}
+
+bool Ｐ＿オンカーソル透過設定取得(int パーツ番号)
+/* 00160e1a */{
+/* 00160e1a */	return PartsEngine.Parts_GetPartsPassCursor(パーツ番号);
+/* 00160e30 */}
+
+int Ｐ＿クリック実行(bool キーキャンセル)
+/* 00160e44 */{
+/* 00160e44 */	return PARTS_WaitForClick(NULL, キーキャンセル);
+/* 00160e58 */}
+
+void Ｐ＿アクティビティ実行(string アクティビティ名, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00160e6c */{
+/* 00160e6c */	SYS_Activity_RunSingle(アクティビティ名, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00160ea0 */}
+
+void Ｐ＿アクティビティリスト実行(array@string アクティビティ名リスト, DG_PARTS_LoadedActivityHandler dgLoadedObject, DG_PARTS_ReleasingActivityHandler dgReleasingObject, DG_PARTS_IntentActivityHandler dgIntentActivityEvent)
+/* 00160eae */{
+/* 00160eae */	SYS_Activity_RunList(アクティビティ名リスト, dgLoadedObject, dgReleasingObject, dgIntentActivityEvent);
+/* 00160ee4 */}
+
+void Ｐ＿モーション実行(bool 未読既読スキップ)
+/* 00160ef2 */{
+/* 00160ef2 */	PARTS_BeginMotion();
+/* 00160ef8 */	for (; ; )
+/* 00160ef8 */	{
+/* 00160ef8 */		PARTS_UpdateMotion(未読既読スキップ);
+/* 00160f08 */		AFL_View_Update(未読既読スキップ);
+/* 00160f18 */		if (!PARTS_IsMotion())
+/* 00160f26 */		{
+/* 00160f26 */			break;
+/* 00160f2c */		}
+/* 00160f2c */	}
+/* 00160f32 */	PARTS_EndMotion();
+/* 00160f38 */}
+
+void Ｐ＿モーション実行キャンセル可能()
+/* 00160f46 */{
+/* 00160f46 */	CASClick LButtonClick;
+/* 00160f56 */	CASClick RButtonClick;
+/* 00160f66 */	CASClick SpaceKeyClick;
+/* 00160f76 */	CASClick EnterKeyClick;
+/* 00160f86 */	LButtonClick.Init(1, true);
+/* 00160fa2 */	RButtonClick.Init(2, true);
+/* 00160fbe */	SpaceKeyClick.Init(32, true);
+/* 00160fda */	EnterKeyClick.Init(13, true);
+/* 00160ff6 */	PARTS_BeginMotion();
+/* 00160ffc */	for (; ; )
+/* 00160ffc */	{
+/* 00160ffc */		if (LButtonClick.IsClick(-2147483648) || RButtonClick.IsClick(-2147483648) || SpaceKeyClick.IsClick(-2147483648) || EnterKeyClick.IsClick(-2147483648) || 全文スキップ中確認() || 既読スキップ中確認() || SYS_ホイールバック確認())
+/* 00161120 */		{
+/* 00161120 */			PARTS_EndMotionFociby();
+/* 00161126 */			break;
+/* 0016112c */		}
+/* 0016112c */		PARTS_UpdateMotion(false);
+/* 00161138 */		AFL_View_Update(true);
+/* 00161144 */		if (!PARTS_IsMotion())
+/* 00161152 */		{
+/* 00161152 */			break;
+/* 00161158 */		}
+/* 00161158 */	}
+/* 0016115e */	PARTS_EndMotion();
+/* 00161164 */}
+
+bool Ｐ＿オンカーソル判定(int PartsNumber, int State)
+/* 00161172 */{
+/* 00161172 */	int MouseX;
+/* 00161184 */	int MouseY;
+/* 00161196 */	if (!AFL_Mouse_GetPos(MouseX, MouseY))
+/* 001611b4 */	{
+/* 001611b4 */		return false;
+/* 001611bc */	}
+/* 001611bc */	return AFL_Parts_IsPointIn(PartsNumber, MouseX, MouseY, State);
+/* 001611ec */}
+

@@ -1,0 +1,186 @@
+CBGMVolumeCapManager::CBGMVolumeCapManager()
+/* 0003e8c2 */{
+/* 0003e8ca */	this.m_CurrentBGMVolumeCapRate = 1.0;
+/* 0003e8dc */	this.m_bRunBGMFadeByVoice = false;
+/* 0003e8ee */	this.m_bWaitingBGMFadeByVoice = false;
+/* 0003e900 */	float CapVolume = 0.6;
+/* 0003e912 */	if (EX_Type("Ｅ＿ＢＧＭボリュームキャップ設定＿ボリューム") == 2)
+/* 0003e92c */	{
+/* 0003e92c */		CapVolume = EX_Float("Ｅ＿ＢＧＭボリュームキャップ設定＿ボリューム", 0.6);
+/* 0003e94a */	}
+/* 0003e950 */	else
+/* 0003e950 */	{
+/* 0003e950 */		CapVolume = EX_Int("Ｅ＿ＢＧＭボリュームキャップ設定＿ボリューム", 60) / 100.0;
+/* 0003e97c */	}
+/* 0003e97c */	this.m_CurrentBGMVolumeCap.Set(CapVolume, EX_Int("Ｅ＿ＢＧＭボリュームキャップ設定＿フェードアウト時間", 100), EX_Int("Ｅ＿ＢＧＭボリュームキャップ設定＿フェードイン待ち時間", 1000), EX_Int("Ｅ＿ＢＧＭボリュームキャップ設定＿フェードイン時間", 450));
+/* 0003e9cc */}
+
+bool CBGMVolumeCapManager::IsPlayList()
+/* 0003e9d4 */{
+/* 0003e9d4 */	while (!this.m_PlayChannelList.Empty())
+/* 0003e9e6 */	{
+/* 0003e9e6 */		BackSE_t Temp;
+/* 0003e9f6 */		Temp = SYS_GetBackSE(this.m_PlayChannelList[0]);
+/* 0003ea22 */		if (KiwiSoundEngine.IsPlay(this.m_PlayChannelList[0]) && !Temp.bStop)
+/* 0003ea76 */		{
+/* 0003ea76 */			return true;
+/* 0003ea7e */		}
+/* 0003ea7e */		this.m_PlayChannelList.Erase(0);
+/* 0003ea90 */	}
+/* 0003ea9c */	while (!this.m_PlaySystemSEChannelList.Empty())
+/* 0003eaae */	{
+/* 0003eaae */		if (AFL_SystemSE_IsPlay(this.m_PlaySystemSEChannelList[0]))
+/* 0003eacc */		{
+/* 0003eacc */			return true;
+/* 0003ead4 */		}
+/* 0003ead4 */		this.m_PlaySystemSEChannelList.Erase(0);
+/* 0003eae6 */	}
+/* 0003eaec */	return false;
+/* 0003eaf4 */}
+
+bool CBGMVolumeCapManager::IsWaitingBGMFadeByVoice()
+/* 0003eb02 */{
+/* 0003eb02 */	if (!this.m_bWaitingBGMFadeByVoice)
+/* 0003eb14 */	{
+/* 0003eb14 */		if (this.IsPlayList())
+/* 0003eb22 */		{
+/* 0003eb22 */			return false;
+/* 0003eb2a */		}
+/* 0003eb2a */		this.m_bWaitingBGMFadeByVoice = true;
+/* 0003eb3c */		this.m_WaitingBGMFadeByVoiceTimer.Reset();
+/* 0003eb4c */		return false;
+/* 0003eb54 */	}
+/* 0003eb54 */	return true;
+/* 0003eb5c */}
+
+bool CBGMVolumeCapManager::SeachCalcVolumeList(int GroupNumber)
+/* 0003eb6a */{
+/* 0003eb6a */	if (EX_IsExist("Ｅ＿サウンドグループ設定"))
+/* 0003eb7c */	{
+/* 0003eb7c */		return GroupNumber > SYS_SOUNDGROUP_BACKVOICE();
+/* 0003eb92 */	}
+/* 0003eb92 */	int TempGroupNumber = GroupNumber;
+/* 0003eba8 */	array@int GroupNumberLog;
+/* 0003ebb2 */	while (true)
+/* 0003ebbe */	{
+/* 0003ebbe */		int ParentGroupNumber = EX_IA2Int("Ｅ＿ＳＥボリューム計算", TempGroupNumber, "親サウンドグループ番号", -1);
+/* 0003ebec */		GroupNumberLog.PushBack(TempGroupNumber);
+/* 0003ec00 */		if (ParentGroupNumber < 0 || ParentGroupNumber == SYS_SOUNDGROUP_MASTER())
+/* 0003ec48 */		{
+/* 0003ec48 */			if (GroupNumberLog.Find(0, GroupNumberLog.Numof(), SYS_SOUNDGROUP_VOICE()) >= 0 || GroupNumberLog.Find(0, GroupNumberLog.Numof(), SYS_SOUNDGROUP_BACKVOICE()) >= 0)
+/* 0003ecd4 */			{
+/* 0003ecd4 */				break;
+/* 0003ecda */			}
+/* 0003ece0 */			else
+/* 0003ece0 */			{
+/* 0003ece0 */				return false;
+/* 0003ece8 */			}
+/* 0003ece8 */		}
+/* 0003ecee */		else if (ParentGroupNumber == SYS_SOUNDGROUP_BGM() || ParentGroupNumber == SYS_SOUNDGROUP_SE() || GroupNumberLog.Find(0, GroupNumberLog.Numof(), ParentGroupNumber) != -1)
+/* 0003ed8c */		{
+/* 0003ed8c */			return false;
+/* 0003ed94 */		}
+/* 0003ed9a */		else
+/* 0003ed9a */		{
+/* 0003ed9a */			TempGroupNumber = ParentGroupNumber;
+/* 0003edb0 */		}
+/* 0003edb0 */	}
+/* 0003edb6 */	return true;
+/* 0003edbe */}
+
+void CBGMVolumeCapManager::BeginBGMFadeImpl(string SoundName)
+/* 0003edcc */{
+/* 0003edcc */	if (!g_bConfigBGMFadeByVoice)
+/* 0003edde */	{
+/* 0003edde */		return;
+/* 0003ede0 */	}
+/* 0003ede0 */	int GroupNumber = KiwiSoundEngine.GetGroupNumFromFile(SoundName);
+/* 0003ee00 */	if (GroupNumber < 0 || GroupNumber == SYS_SOUNDGROUP_MASTER() || GroupNumber == SYS_SOUNDGROUP_BGM() || GroupNumber == SYS_SOUNDGROUP_SE() || GroupNumber == SYS_SOUNDGROUP_BACKVOICE())
+/* 0003eed8 */	{
+/* 0003eed8 */		return;
+/* 0003eeda */	}
+/* 0003eeda */	if (GroupNumber != SYS_SOUNDGROUP_VOICE())
+/* 0003eef2 */	{
+/* 0003eef2 */		if (!this.SeachCalcVolumeList(GroupNumber))
+/* 0003ef0c */		{
+/* 0003ef0c */			return;
+/* 0003ef0e */		}
+/* 0003ef0e */	}
+/* 0003ef0e */	this.m_CurrentBGMVolumeCapRate = this.m_CurrentBGMVolumeCap.GetCapVolume();
+/* 0003ef2a */	int TotalTime = this.m_CurrentBGMVolumeCap.GetFadeOutTime();
+/* 0003ef46 */	g_BGM.FadeWithVolumeCap(TotalTime, this.m_CurrentBGMVolumeCapRate, 5);
+/* 0003ef70 */	int i;
+/* 0003ef82 */	for (i = 0; i < 3; ++i)
+/* 0003efc8 */	{
+/* 0003efc8 */		g_LoopSE[i].FadeWithVolumeCap(TotalTime, this.m_CurrentBGMVolumeCapRate, 5);
+/* 0003effe */	}
+/* 0003f004 */	this.m_bRunBGMFadeByVoice = true;
+/* 0003f016 */	this.m_bWaitingBGMFadeByVoice = false;
+/* 0003f028 */}
+
+void CBGMVolumeCapManager::BeginBGMFade(int Channel, string SoundName)
+/* 0003f030 */{
+/* 0003f030 */	int Index = this.m_PlayChannelList.Find(0, this.m_PlayChannelList.Numof(), Channel);
+/* 0003f06c */	if (Index != -1)
+/* 0003f084 */	{
+/* 0003f084 */		return;
+/* 0003f086 */	}
+/* 0003f086 */	this.BeginBGMFadeImpl(SoundName);
+/* 0003f098 */	this.m_PlayChannelList.PushBack(Channel);
+/* 0003f0ac */}
+
+void CBGMVolumeCapManager::BeginBGMFadeBySystemSE(int Channel, string SoundName)
+/* 0003f0b4 */{
+/* 0003f0b4 */	int Index = this.m_PlaySystemSEChannelList.Find(0, this.m_PlaySystemSEChannelList.Numof(), Channel);
+/* 0003f0f0 */	if (Index != -1)
+/* 0003f108 */	{
+/* 0003f108 */		return;
+/* 0003f10a */	}
+/* 0003f10a */	this.BeginBGMFadeImpl(SoundName);
+/* 0003f11c */	this.m_PlaySystemSEChannelList.PushBack(Channel);
+/* 0003f130 */}
+
+void CBGMVolumeCapManager::UpdateBGMFade()
+/* 0003f138 */{
+/* 0003f138 */	if (!this.m_bRunBGMFadeByVoice)
+/* 0003f14a */	{
+/* 0003f14a */		return;
+/* 0003f14c */	}
+/* 0003f14c */	if (!this.IsWaitingBGMFadeByVoice())
+/* 0003f15c */	{
+/* 0003f15c */		return;
+/* 0003f15e */	}
+/* 0003f15e */	int nBGMFadeWaitTime = this.m_CurrentBGMVolumeCap.GetWaitForFadeInTime();
+/* 0003f17a */	if (this.m_WaitingBGMFadeByVoiceTimer.Get() < nBGMFadeWaitTime)
+/* 0003f19c */	{
+/* 0003f19c */		return;
+/* 0003f19e */	}
+/* 0003f19e */	this.m_CurrentBGMVolumeCapRate = 1.0;
+/* 0003f1b0 */	int TotalTime = this.m_CurrentBGMVolumeCap.GetFadeInTime();
+/* 0003f1cc */	g_BGM.FadeWithVolumeCap(TotalTime, this.m_CurrentBGMVolumeCapRate, 5);
+/* 0003f1f6 */	int i;
+/* 0003f208 */	for (i = 0; i < 3; ++i)
+/* 0003f24e */	{
+/* 0003f24e */		g_LoopSE[i].FadeWithVolumeCap(TotalTime, this.m_CurrentBGMVolumeCapRate, 5);
+/* 0003f284 */	}
+/* 0003f28a */	this.m_bRunBGMFadeByVoice = false;
+/* 0003f29c */	this.m_bWaitingBGMFadeByVoice = false;
+/* 0003f2ae */}
+
+void CBGMVolumeCapManager::ResetBGM()
+/* 0003f2b6 */{
+/* 0003f2b6 */	if (!this.IsPlayList() || this.m_PlayChannelList.Numof() == 0 && this.m_PlaySystemSEChannelList.Numof() == 0)
+/* 0003f332 */	{
+/* 0003f332 */		this.m_bRunBGMFadeByVoice = false;
+/* 0003f344 */		this.m_bWaitingBGMFadeByVoice = false;
+/* 0003f356 */		this.m_CurrentBGMVolumeCapRate = 1.0;
+/* 0003f368 */		this.m_PlayChannelList.Free();
+/* 0003f372 */		this.m_PlaySystemSEChannelList.Free();
+/* 0003f37c */	}
+/* 0003f37c */}
+
+float CBGMVolumeCapManager::GetCurrentBGMVolumeCapRate()
+/* 0003f384 */{
+/* 0003f384 */	return this.m_CurrentBGMVolumeCapRate;
+/* 0003f390 */}
+

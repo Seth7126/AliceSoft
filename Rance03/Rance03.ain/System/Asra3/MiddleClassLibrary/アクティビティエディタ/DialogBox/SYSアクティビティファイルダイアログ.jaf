@@ -1,0 +1,56 @@
+bool SYS_Activity_SelectFile(ref string SelectActivityPath)
+/* 0005cb62 */{
+/* 0005cb62 */	string GameFolderPath;
+/* 0005cb76 */	SystemService.GetGameFolderPath(GameFolderPath);
+/* 0005cb8a */	string ActivityFolderPath = GameFolderPath + "DebugData\\01_First\\Activity\\";
+/* 0005cbaa */	array@string FilterTitleList;
+/* 0005cbb4 */	FilterTitleList.PushBack("Activity");
+/* 0005cbc4 */	array@string FilterExtendList;
+/* 0005cbce */	FilterExtendList.PushBack("*.pact");
+/* 0005cbde */	string SelectActivityPathBuffer = SelectActivityPath;
+/* 0005cbf6 */	if (!FileDialog.OpenLoadDialog(SelectActivityPathBuffer, "アクティビティファイルを選択してください", ActivityFolderPath, FilterTitleList, FilterExtendList))
+/* 0005cc3a */	{
+/* 0005cc3a */		return false;
+/* 0005cc42 */	}
+/* 0005cc42 */	if (SelectActivityPathBuffer.Length() <= ActivityFolderPath.Length())
+/* 0005cc5e */	{
+/* 0005cc5e */		DIALOG_OK("選択できるファイルは【%s】以下のファイルです" % "DebugData\\01_First\\Activity\\");
+/* 0005cc78 */		return SYS_Activity_SelectFile(SelectActivityPath);
+/* 0005cc8a */	}
+/* 0005cc8a */	if (SelectActivityPathBuffer.GetPart(0, ActivityFolderPath.Length()) != ActivityFolderPath)
+/* 0005ccb8 */	{
+/* 0005ccb8 */		DIALOG_OK("選択できるファイルは【%s】以下のファイルです" % "DebugData\\01_First\\Activity\\");
+/* 0005ccd2 */		return SYS_Activity_SelectFile(SelectActivityPath);
+/* 0005cce4 */	}
+/* 0005cce4 */	SelectActivityPath = SelectActivityPathBuffer.GetPart(ActivityFolderPath.Length(), SelectActivityPathBuffer.Length() - ActivityFolderPath.Length());
+/* 0005cd1e */	return true;
+/* 0005cd26 */}
+
+bool SYS_Activity_SaveFile(ref string SelectActivityPath)
+/* 0005cd3a */{
+/* 0005cd3a */	string GameFolderPath;
+/* 0005cd4e */	SystemService.GetGameFolderPath(GameFolderPath);
+/* 0005cd62 */	string ActivityFolderPath = GameFolderPath + "DebugData\\01_First\\Activity\\";
+/* 0005cd82 */	array@string FilterTitleList;
+/* 0005cd8c */	FilterTitleList.PushBack("Activity");
+/* 0005cd9c */	array@string FilterExtendList;
+/* 0005cda6 */	FilterExtendList.PushBack("*.pact");
+/* 0005cdb6 */	string SelectActivityPathBuffer = SelectActivityPath;
+/* 0005cdce */	if (!FileDialog.OpenSaveDialog(SelectActivityPathBuffer, "保存するアクティビティファイルを設定してください", ActivityFolderPath, FilterTitleList, FilterExtendList))
+/* 0005ce12 */	{
+/* 0005ce12 */		return false;
+/* 0005ce1a */	}
+/* 0005ce1a */	if (SelectActivityPathBuffer.Length() <= ActivityFolderPath.Length())
+/* 0005ce36 */	{
+/* 0005ce36 */		DIALOG_OK("保存可能な場所は【%s】以下のファイルです" % "DebugData\\01_First\\Activity\\");
+/* 0005ce50 */		return SYS_Activity_SaveFile(SelectActivityPath);
+/* 0005ce62 */	}
+/* 0005ce62 */	if (SelectActivityPathBuffer.GetPart(0, ActivityFolderPath.Length()) != ActivityFolderPath)
+/* 0005ce90 */	{
+/* 0005ce90 */		DIALOG_OK("保存可能な場所は【%s】以下のファイルです" % "DebugData\\01_First\\Activity\\");
+/* 0005ceaa */		return SYS_Activity_SaveFile(SelectActivityPath);
+/* 0005cebc */	}
+/* 0005cebc */	SelectActivityPath = SelectActivityPathBuffer.GetPart(ActivityFolderPath.Length(), SelectActivityPathBuffer.Length() - ActivityFolderPath.Length());
+/* 0005cef6 */	return true;
+/* 0005cefe */}
+

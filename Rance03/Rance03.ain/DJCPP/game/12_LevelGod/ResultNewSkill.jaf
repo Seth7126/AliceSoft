@@ -1,0 +1,92 @@
+ReulstNewSkill::ReulstNewSkill()
+/* 001bb388 */{
+/* 001bb390 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001bb3b6 */}
+
+void ReulstNewSkill::init(string skillId, int nextLevel)
+/* 001bb3be */{
+/* 001bb3be */	this.skillId_ = skillId;
+/* 001bb3d6 */	this.nextLevel_ = nextLevel;
+/* 001bb3ec */	if (this.skillId_ != "")
+/* 001bb404 */	{
+/* 001bb404 */		if (this.nextLevel_ == -1)
+/* 001bb41c */		{
+/* 001bb41c */			this.view_.init(this.skillId_, 0, 0, 0);
+/* 001bb448 */			this.view_.setState(0);
+/* 001bb45e */			this.info_.init(this.skillId_);
+/* 001bb478 */			this.info_.setViewValue(0.0);
+/* 001bb48e */			this.info_.setPos(261, 618);
+/* 001bb4aa */		}
+/* 001bb4b0 */		else
+/* 001bb4b0 */		{
+/* 001bb4b0 */			this.view_.init(this.skillId_, 2, 0, 0);
+/* 001bb4dc */			this.view_.setState(3);
+/* 001bb4f2 */		}
+/* 001bb4f2 */		this.view_.setPos(140, 605);
+/* 001bb50e */		this.view_.setZ(4150);
+/* 001bb524 */		this.initParts();
+/* 001bb52c */	}
+/* 001bb532 */	this.isNotAvailable_ = this.skillId_.Empty();
+/* 001bb54c */}
+
+void ReulstNewSkill::initParts()
+/* 001bb554 */{
+/* 001bb554 */	if (this.nextLevel_ == -1)
+/* 001bb56c */	{
+/* 001bb56c */		this.parts_[0].init("システム／レベルアップ／スキル獲得", 0);
+/* 001bb590 */		this.parts_[1].initAsFlat("システム／後光");
+/* 001bb5ae */	}
+/* 001bb5b4 */	else
+/* 001bb5b4 */	{
+/* 001bb5b4 */		this.parts_[0].init("システム／レベルアップ／スキル非獲得", 0);
+/* 001bb5d8 */	}
+/* 001bb5d8 */	createPartsGroup(this.parent_, this.parts_, 4100);
+/* 001bb5f8 */	this.setPartsPos();
+/* 001bb600 */}
+
+void ReulstNewSkill::setPartsShow()
+/* 001bb608 */{
+/* 001bb608 */	int i;
+/* 001bb61a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001bb66a */	{
+/* 001bb66a */		this.parts_[i].setShow(true);
+/* 001bb68c */	}
+/* 001bb692 */	this.parent_.setShow(this.skillId_ != "");
+/* 001bb6b6 */}
+
+void ReulstNewSkill::setPartsPos()
+/* 001bb6be */{
+/* 001bb6be */	this.parts_[0].setPos(0.0, 463.0);
+/* 001bb6e2 */	this.parts_[1].setPos(198.0, 659.0);
+/* 001bb706 */}
+
+void ReulstNewSkill::update()
+/* 001bb70e */{
+/* 001bb710 */}
+
+void ReulstNewSkill::fadeIn(bool val)
+/* 001bb716 */{
+/* 001bb716 */	if (this.isNotAvailable_)
+/* 001bb726 */	{
+/* 001bb726 */		return;
+/* 001bb728 */	}
+/* 001bb728 */	this.setPartsShow();
+/* 001bb730 */	if (val)
+/* 001bb740 */	{
+/* 001bb740 */		if (this.nextLevel_ == -1)
+/* 001bb758 */		{
+/* 001bb758 */			this.parts_[1].startFlat(false, 1.0);
+/* 001bb77c */		}
+/* 001bb77c */		PartsMotion m;
+/* 001bb78c */		m.setCgRangeMove(0, 0, 0, 305, 0, 0, 910, 305, 1);
+/* 001bb7d2 */		m.setTime(500);
+/* 001bb7e8 */		this.parts_[0].runMotion(m, NULL);
+/* 001bb810 */	}
+/* 001bb81c */	else
+/* 001bb81c */	{
+/* 001bb81c */		this.parent_.runMotion(getStandardMotion(1), NULL);
+/* 001bb83a */	}
+/* 001bb83a */	this.info_.fadeIn(val, NULL);
+/* 001bb856 */	this.view_.fadeIn(val);
+/* 001bb870 */}
+

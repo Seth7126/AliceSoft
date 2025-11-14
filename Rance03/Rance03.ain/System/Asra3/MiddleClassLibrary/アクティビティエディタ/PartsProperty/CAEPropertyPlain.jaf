@@ -1,0 +1,494 @@
+CAEPropertyPlain::CAEPropertyPlain()
+/* 0005d4a8 */{
+/* 0005d4b0 */	this.Release();
+/* 0005d4b8 */}
+
+CAEPropertyPlain::~CAEPropertyPlain()
+/* 0005d4c0 */{
+/* 0005d4c0 */	this.Release();
+/* 0005d4c8 */}
+
+void CAEPropertyPlain::Init(int LayoutID, ref CAEInstanceItem Item, ref CAEInstanceItemList InstanceList)
+/* 0005d4d0 */{
+/* 0005d4d0 */	this.Release();
+/* 0005d4d8 */	if (Item === NULL)
+/* 0005d4f0 */	{
+/* 0005d4f0 */		return;
+/* 0005d4f2 */	}
+/* 0005d4f2 */	if (InstanceList === NULL)
+/* 0005d50a */	{
+/* 0005d50a */		return;
+/* 0005d50c */	}
+/* 0005d50c */	this.m_Item <- Item;
+/* 0005d52c */	this.m_InstanceItemList <- InstanceList;
+/* 0005d54c */	this.m_Item.SetMoveEvent(this.MoveItemEvent);
+/* 0005d566 */	this.m_Item.SetDraggableInstanceEvent(this.SetDraggableInstance);
+/* 0005d580 */	int ID = this.m_Item.GetID();
+/* 0005d59c */	this.m_Panel.Init(LayoutID);
+/* 0005d5b6 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 0005d5d0 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0005d5ea */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0005d604 */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 0005d61e */	this.m_Panel.AddChangedCheckBoxEvent(this.ChangedCheckBoxEvent);
+/* 0005d638 */	this.m_Panel.AddSelectedEvent(this.SelectedComboBoxEvent);
+/* 0005d652 */	array@string DrawFilterTypeList;
+/* 0005d65c */	DrawFilterTypeList.PushBack("通常");
+/* 0005d66c */	DrawFilterTypeList.PushBack("加算");
+/* 0005d67c */	DrawFilterTypeList.PushBack("乗算");
+/* 0005d68c */	DrawFilterTypeList.PushBack("スクリーン");
+/* 0005d69c */	array@string TextureFilterTypeList;
+/* 0005d6a6 */	TextureFilterTypeList.PushBack("ニアレスト");
+/* 0005d6b6 */	TextureFilterTypeList.PushBack("バイリニア");
+/* 0005d6c6 */	this.m_Panel.AddTextBoxItem("Ｘ座標", this.m_Item.GetX().String(), false);
+/* 0005d716 */	this.m_Panel.AddTextBoxItem("Ｙ座標", this.m_Item.GetY().String(), false);
+/* 0005d766 */	this.m_Panel.AddButtonItem("スクロールＸ座標連動", this.m_InstanceItemList.GetName(this.m_Item.GetScrollPosXLink()));
+/* 0005d7b8 */	this.m_Panel.AddButtonItem("スクロールＹ座標連動", this.m_InstanceItemList.GetName(this.m_Item.GetScrollPosYLink()));
+/* 0005d80a */	this.m_Panel.AddButtonItem("原点座標モード", PARTS_GetOriginPosModeName(this.m_Item.GetOriginPosMode()));
+/* 0005d852 */	this.m_Panel.AddCheckBoxItem("表示", this.m_Item.IsShow());
+/* 0005d894 */	this.m_Panel.AddTextBoxItem("α値", string(this.m_Item.GetAlpha()), false);
+/* 0005d8de */	this.m_Panel.AddButtonItem("スクロールα値連動", this.m_InstanceItemList.GetName(this.m_Item.GetScrollAlphaLink()));
+/* 0005d930 */	this.m_Panel.AddButtonItem("加算色", "%d,%d,%d" % this.m_Item.GetAddColorR() % this.m_Item.GetAddColorG() % this.m_Item.GetAddColorB());
+/* 0005d9b0 */	this.m_Panel.AddButtonItem("乗算色", "%d,%d,%d" % this.m_Item.GetMulColorR() % this.m_Item.GetMulColorG() % this.m_Item.GetMulColorB());
+/* 0005da30 */	this.m_Panel.AddComboBoxItem("描画フィルタ", DrawFilterTypeList, this.m_Item.GetDrawFilter());
+/* 0005da7e */	this.m_Panel.AddTextBoxItem("拡大率Ｘ", this.m_Item.GetMagX().String(), false);
+/* 0005dace */	this.m_Panel.AddTextBoxItem("拡大率Ｙ", this.m_Item.GetMagY().String(), false);
+/* 0005db1e */	this.m_Panel.AddTextBoxItem("回転角度Ｘ", this.m_Item.GetRotateX().String(), false);
+/* 0005db6e */	this.m_Panel.AddTextBoxItem("回転角度Ｙ", this.m_Item.GetRotateY().String(), false);
+/* 0005dbbe */	this.m_Panel.AddTextBoxItem("回転角度Ｚ", this.m_Item.GetRotateZ().String(), false);
+/* 0005dc0e */	this.m_Panel.AddTextBoxItem("上マージン", string(this.m_Item.GetMarginTop()), false);
+/* 0005dc58 */	this.m_Panel.AddTextBoxItem("下マージン", string(this.m_Item.GetMarginBottom()), false);
+/* 0005dca2 */	this.m_Panel.AddTextBoxItem("左マージン", string(this.m_Item.GetMarginLeft()), false);
+/* 0005dcec */	this.m_Panel.AddTextBoxItem("右マージン", string(this.m_Item.GetMarginRight()), false);
+/* 0005dd36 */	this.m_Panel.AddButtonItem("アルファクリッパ", this.m_InstanceItemList.GetName(this.m_Item.GetAlphaClipper()));
+/* 0005dd88 */	this.m_Panel.AddButtonItem("オンカーソル表示連動", this.m_InstanceItemList.GetName(this.m_Item.GetOnCursorShowLink()));
+/* 0005ddda */	this.m_Panel.AddButtonItem("チェック表示連動", this.m_InstanceItemList.GetName(this.m_Item.GetCheckBoxShowLink()));
+/* 0005de2c */	this.m_Panel.AddComboBoxItem("テクスチャフィルタ", TextureFilterTypeList, this.m_Item.GetTextureFilter());
+/* 0005de7a */	this.m_Panel.AddCheckBoxItem("ミップマップ", this.m_Item.IsMipmap());
+/* 0005debc */	this.m_Panel.AddCheckBoxItem("高速再生", this.m_Item.IsSpeedup());
+/* 0005defe */	this.m_Panel.AddCheckBoxItem("オンカーソル透過設定", Ｐ＿オンカーソル透過設定取得(ID));
+/* 0005df40 */	this.m_Panel.AddCheckBoxItem("クリック可能設定", Ｐ＿クリック可能設定取得(ID));
+/* 0005df82 */	this.m_Panel.AddCheckBoxItem("時間初期化許可／通常", Ｐ＿時間初期化許可取得(ID, 1));
+/* 0005dfca */	this.m_Panel.AddCheckBoxItem("時間初期化許可／オン", Ｐ＿時間初期化許可取得(ID, 2));
+/* 0005e012 */	this.m_Panel.AddCheckBoxItem("時間初期化許可／ダウン", Ｐ＿時間初期化許可取得(ID, 3));
+/* 0005e05a */	this.m_Panel.AddCheckBoxItem("ドラッグ可能設定", Ｐ＿ドラッグ可能設定取得(ID));
+/* 0005e09c */	this.m_Panel.AddTextBoxItem("オンカーソル効果音", Ｐ＿オンカーソル効果音取得(ID), false);
+/* 0005e0e4 */	this.m_Panel.AddTextBoxItem("クリック効果音", Ｐ＿クリック効果音取得(ID), false);
+/* 0005e12c */	this.m_Panel.AddCheckBoxItem("ピクセル判定設定", Ｐ＿ピクセル判定設定取得(ID));
+/* 0005e16e */	this.m_Panel.AddCheckBoxItem("座標レート設定", Ｐ＿座標レート設定取得(ID));
+/* 0005e1b0 */	this.SetDraggableInstance(this.m_Item.IsDraggableOverlay());
+/* 0005e1c8 */}
+
+void CAEPropertyPlain::Release()
+/* 0005e1d0 */{
+/* 0005e1d0 */	this.m_dgMouseWheelEvent.Clear();
+/* 0005e1dc */	this.m_dgKeyDownEvent.Clear();
+/* 0005e1e8 */	this.m_ResizePanel.Clear();
+/* 0005e1f4 */	this.m_InstanceItemList <- NULL;
+/* 0005e20c */	this.m_Item <- NULL;
+/* 0005e224 */	this.m_Panel.Release();
+/* 0005e234 */}
+
+void CAEPropertyPlain::KeyDownEvent(int ID, int KeyID)
+/* 0005e23c */{
+/* 0005e23c */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 0005e270 */}
+
+void CAEPropertyPlain::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0005e278 */{
+/* 0005e278 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0005e2b6 */}
+
+void CAEPropertyPlain::ChangeTextEvent(int ID)
+/* 0005e2be */{
+/* 0005e2be */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005e30e */	if (Item === NULL)
+/* 0005e326 */	{
+/* 0005e326 */		return;
+/* 0005e328 */	}
+/* 0005e328 */	int PartsID = this.m_Item.GetID();
+/* 0005e344 */	if (Item.GetLabel() == "Ｘ座標")
+/* 0005e362 */	{
+/* 0005e362 */		this.m_Item.SetPos(Item.GetTextBoxFloat(), this.m_Item.GetY());
+/* 0005e392 */	}
+/* 0005e398 */	else if (Item.GetLabel() == "Ｙ座標")
+/* 0005e3b6 */	{
+/* 0005e3b6 */		this.m_Item.SetPos(this.m_Item.GetX(), Item.GetTextBoxFloat());
+/* 0005e3e6 */	}
+/* 0005e3ec */	else if (Item.GetLabel() == "α値")
+/* 0005e40a */	{
+/* 0005e40a */		this.m_Item.SetAlpha(Item.GetTextBoxInt());
+/* 0005e42a */	}
+/* 0005e430 */	else if (Item.GetLabel() == "加算色 - 赤")
+/* 0005e44e */	{
+/* 0005e44e */		this.m_Item.SetAddColorR(Item.GetTextBoxInt());
+/* 0005e46e */	}
+/* 0005e474 */	else if (Item.GetLabel() == "加算色 - 緑")
+/* 0005e492 */	{
+/* 0005e492 */		this.m_Item.SetAddColorG(Item.GetTextBoxInt());
+/* 0005e4b2 */	}
+/* 0005e4b8 */	else if (Item.GetLabel() == "加算色 - 青")
+/* 0005e4d6 */	{
+/* 0005e4d6 */		this.m_Item.SetAddColorB(Item.GetTextBoxInt());
+/* 0005e4f6 */	}
+/* 0005e4fc */	else if (Item.GetLabel() == "乗算色 - 赤")
+/* 0005e51a */	{
+/* 0005e51a */		this.m_Item.SetMulColorR(Item.GetTextBoxInt());
+/* 0005e53a */	}
+/* 0005e540 */	else if (Item.GetLabel() == "乗算色 - 緑")
+/* 0005e55e */	{
+/* 0005e55e */		this.m_Item.SetMulColorG(Item.GetTextBoxInt());
+/* 0005e57e */	}
+/* 0005e584 */	else if (Item.GetLabel() == "乗算色 - 青")
+/* 0005e5a2 */	{
+/* 0005e5a2 */		this.m_Item.SetMulColorB(Item.GetTextBoxInt());
+/* 0005e5c2 */	}
+/* 0005e5c8 */	else if (Item.GetLabel() == "拡大率Ｘ")
+/* 0005e5e6 */	{
+/* 0005e5e6 */		this.m_Item.SetMagX(Item.GetTextBoxFloat());
+/* 0005e606 */	}
+/* 0005e60c */	else if (Item.GetLabel() == "拡大率Ｙ")
+/* 0005e62a */	{
+/* 0005e62a */		this.m_Item.SetMagY(Item.GetTextBoxFloat());
+/* 0005e64a */	}
+/* 0005e650 */	else if (Item.GetLabel() == "回転角度Ｘ")
+/* 0005e66e */	{
+/* 0005e66e */		this.m_Item.SetRotateX(Item.GetTextBoxFloat());
+/* 0005e68e */	}
+/* 0005e694 */	else if (Item.GetLabel() == "回転角度Ｙ")
+/* 0005e6b2 */	{
+/* 0005e6b2 */		this.m_Item.SetRotateY(Item.GetTextBoxFloat());
+/* 0005e6d2 */	}
+/* 0005e6d8 */	else if (Item.GetLabel() == "回転角度Ｚ")
+/* 0005e6f6 */	{
+/* 0005e6f6 */		this.m_Item.SetRotateZ(Item.GetTextBoxFloat());
+/* 0005e716 */	}
+/* 0005e71c */	else if (Item.GetLabel() == "上マージン")
+/* 0005e73a */	{
+/* 0005e73a */		this.m_Item.SetMarginTop(Item.GetTextBoxInt());
+/* 0005e75a */	}
+/* 0005e760 */	else if (Item.GetLabel() == "下マージン")
+/* 0005e77e */	{
+/* 0005e77e */		this.m_Item.SetMarginBottom(Item.GetTextBoxInt());
+/* 0005e79e */	}
+/* 0005e7a4 */	else if (Item.GetLabel() == "左マージン")
+/* 0005e7c2 */	{
+/* 0005e7c2 */		this.m_Item.SetMarginLeft(Item.GetTextBoxInt());
+/* 0005e7e2 */	}
+/* 0005e7e8 */	else if (Item.GetLabel() == "右マージン")
+/* 0005e806 */	{
+/* 0005e806 */		this.m_Item.SetMarginRight(Item.GetTextBoxInt());
+/* 0005e826 */	}
+/* 0005e82c */	else if (Item.GetLabel() == "オンカーソル効果音")
+/* 0005e84a */	{
+/* 0005e84a */		Ｐ＿オンカーソル効果音設定(PartsID, Item.GetTextBoxText());
+/* 0005e86a */	}
+/* 0005e870 */	else if (Item.GetLabel() == "クリック効果音")
+/* 0005e88e */	{
+/* 0005e88e */		Ｐ＿クリック効果音設定(PartsID, Item.GetTextBoxText());
+/* 0005e8ae */	}
+/* 0005e8ae */}
+
+void CAEPropertyPlain::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0005e8b6 */{
+/* 0005e8b6 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005e906 */	if (Item === NULL)
+/* 0005e91e */	{
+/* 0005e91e */		return;
+/* 0005e920 */	}
+/* 0005e920 */	if (Item.GetLabel() == "スクロールＸ座標連動")
+/* 0005e93e */	{
+/* 0005e93e */		CAESelectTextDialog Form;
+/* 0005e94e */		array@string List;
+/* 0005e958 */		this.m_InstanceItemList.GetPartsNameList(List, 2, this.m_Item.GetID());
+/* 0005e988 */		this.m_InstanceItemList.AddPartsNameList(List, 3, this.m_Item.GetID());
+/* 0005e9b8 */		Form.Show(ID, "", MouseX, MouseY, List, this.m_InstanceItemList.GetName(this.m_Item.GetScrollPosXLink()), this.SelecteTextEvent);
+/* 0005ea2c */	}
+/* 0005ea38 */	else if (Item.GetLabel() == "スクロールＹ座標連動")
+/* 0005ea56 */	{
+/* 0005ea56 */		CAESelectTextDialog Form;
+/* 0005ea66 */		array@string List;
+/* 0005ea70 */		this.m_InstanceItemList.GetPartsNameList(List, 2, this.m_Item.GetID());
+/* 0005eaa0 */		this.m_InstanceItemList.AddPartsNameList(List, 3, this.m_Item.GetID());
+/* 0005ead0 */		Form.Show(ID, "", MouseX, MouseY, List, this.m_InstanceItemList.GetName(this.m_Item.GetScrollPosYLink()), this.SelecteTextEvent);
+/* 0005eb44 */	}
+/* 0005eb50 */	else if (Item.GetLabel() == "スクロールα値連動")
+/* 0005eb6e */	{
+/* 0005eb6e */		CAESelectTextDialog Form;
+/* 0005eb7e */		array@string List;
+/* 0005eb88 */		this.m_InstanceItemList.GetPartsNameList(List, 2, this.m_Item.GetID());
+/* 0005ebb8 */		this.m_InstanceItemList.AddPartsNameList(List, 3, this.m_Item.GetID());
+/* 0005ebe8 */		Form.Show(ID, "", MouseX, MouseY, List, this.m_InstanceItemList.GetName(this.m_Item.GetScrollAlphaLink()), this.SelecteTextEvent);
+/* 0005ec5c */	}
+/* 0005ec68 */	else if (Item.GetLabel() == "加算色")
+/* 0005ec86 */	{
+/* 0005ec86 */		CAESelectColorDialog Form;
+/* 0005ec96 */		Form.Show(ID, MouseX, MouseY, this.m_Item.GetAddColorR(), this.m_Item.GetAddColorG(), this.m_Item.GetAddColorB(), this.ChangedColorEvent);
+/* 0005ecfe */	}
+/* 0005ed0a */	else if (Item.GetLabel() == "乗算色")
+/* 0005ed28 */	{
+/* 0005ed28 */		CAESelectColorDialog Form;
+/* 0005ed38 */		Form.Show(ID, MouseX, MouseY, this.m_Item.GetMulColorR(), this.m_Item.GetMulColorG(), this.m_Item.GetMulColorB(), this.ChangedColorEvent);
+/* 0005eda0 */	}
+/* 0005edac */	else if (Item.GetLabel() == "原点座標モード")
+/* 0005edca */	{
+/* 0005edca */		CAESelectOriginDialog Form;
+/* 0005edda */		Form.Show(ID, MouseX, MouseY, this.m_Item.GetOriginPosMode(), this.ChangedOriginTypeEvent);
+/* 0005ee22 */	}
+/* 0005ee2e */	else if (Item.GetLabel() == "アルファクリッパ")
+/* 0005ee4c */	{
+/* 0005ee4c */		CAESelectTextDialog Form;
+/* 0005ee5c */		array@string List;
+/* 0005ee66 */		this.m_InstanceItemList.GetAlphaClipperNameList(List, this.m_Item.GetID());
+/* 0005ee90 */		Form.Show(ID, "", MouseX, MouseY, List, this.m_InstanceItemList.GetName(this.m_Item.GetAlphaClipper()), this.SelecteTextEvent);
+/* 0005ef04 */	}
+/* 0005ef10 */	else if (Item.GetLabel() == "オンカーソル表示連動")
+/* 0005ef2e */	{
+/* 0005ef2e */		CAESelectTextDialog Form;
+/* 0005ef3e */		array@string List;
+/* 0005ef48 */		this.m_InstanceItemList.GetOnCursorShowLinkNameList(List, this.m_Item.GetID());
+/* 0005ef72 */		Form.Show(ID, "", MouseX, MouseY, List, this.m_InstanceItemList.GetName(this.m_Item.GetOnCursorShowLink()), this.SelecteTextEvent);
+/* 0005efe6 */	}
+/* 0005eff2 */	else if (Item.GetLabel() == "チェック表示連動")
+/* 0005f010 */	{
+/* 0005f010 */		CAESelectTextDialog Form;
+/* 0005f020 */		array@string List;
+/* 0005f02a */		this.m_InstanceItemList.GetPartsNameList(List, 1, this.m_Item.GetID());
+/* 0005f05a */		Form.Show(ID, "", MouseX, MouseY, List, this.m_InstanceItemList.GetName(this.m_Item.GetCheckBoxShowLink()), this.SelecteTextEvent);
+/* 0005f0ce */	}
+/* 0005f0ce */}
+
+void CAEPropertyPlain::SelecteTextEvent(int ID, string Name)
+/* 0005f0dc */{
+/* 0005f0dc */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005f12c */	if (Item === NULL)
+/* 0005f144 */	{
+/* 0005f144 */		return;
+/* 0005f146 */	}
+/* 0005f146 */	if (Item.GetLabel() == "スクロールＸ座標連動")
+/* 0005f164 */	{
+/* 0005f164 */		this.m_Item.SetScrollPosXLink(this.m_InstanceItemList.GetNumber(Name));
+/* 0005f18e */	}
+/* 0005f194 */	else if (Item.GetLabel() == "スクロールＹ座標連動")
+/* 0005f1b2 */	{
+/* 0005f1b2 */		this.m_Item.SetScrollPosYLink(this.m_InstanceItemList.GetNumber(Name));
+/* 0005f1dc */	}
+/* 0005f1e2 */	else if (Item.GetLabel() == "スクロールα値連動")
+/* 0005f200 */	{
+/* 0005f200 */		this.m_Item.SetScrollAlphaLink(this.m_InstanceItemList.GetNumber(Name));
+/* 0005f22a */	}
+/* 0005f230 */	else if (Item.GetLabel() == "アルファクリッパ")
+/* 0005f24e */	{
+/* 0005f24e */		this.m_Item.SetAlphaClipper(this.m_InstanceItemList.GetNumber(Name));
+/* 0005f278 */	}
+/* 0005f27e */	else if (Item.GetLabel() == "オンカーソル表示連動")
+/* 0005f29c */	{
+/* 0005f29c */		this.m_Item.SetOnCursorShowLink(this.m_InstanceItemList.GetNumber(Name));
+/* 0005f2c6 */	}
+/* 0005f2cc */	else if (Item.GetLabel() == "チェック表示連動")
+/* 0005f2ea */	{
+/* 0005f2ea */		this.m_Item.SetCheckBoxShowLink(this.m_InstanceItemList.GetNumber(Name));
+/* 0005f314 */	}
+/* 0005f314 */	Item.SetButtonText(Name);
+/* 0005f32e */}
+
+void CAEPropertyPlain::ChangedColorEvent(int ID, int Red, int Green, int Blue)
+/* 0005f336 */{
+/* 0005f336 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005f386 */	if (Item === NULL)
+/* 0005f39e */	{
+/* 0005f39e */		return;
+/* 0005f3a0 */	}
+/* 0005f3a0 */	if (Item.GetLabel() == "加算色")
+/* 0005f3be */	{
+/* 0005f3be */		this.m_Item.SetAddColorR(Red);
+/* 0005f3d8 */		this.m_Item.SetAddColorG(Green);
+/* 0005f3f2 */		this.m_Item.SetAddColorB(Blue);
+/* 0005f40c */	}
+/* 0005f412 */	else if (Item.GetLabel() == "乗算色")
+/* 0005f430 */	{
+/* 0005f430 */		this.m_Item.SetMulColorR(Red);
+/* 0005f44a */		this.m_Item.SetMulColorG(Green);
+/* 0005f464 */		this.m_Item.SetMulColorB(Blue);
+/* 0005f47e */	}
+/* 0005f47e */	Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 0005f4ca */}
+
+void CAEPropertyPlain::ChangedOriginTypeEvent(int ID, int Type)
+/* 0005f4d2 */{
+/* 0005f4d2 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005f522 */	if (Item === NULL)
+/* 0005f53a */	{
+/* 0005f53a */		return;
+/* 0005f53c */	}
+/* 0005f53c */	if (Item.GetLabel() == "原点座標モード")
+/* 0005f55a */	{
+/* 0005f55a */		this.m_Item.SetOriginPosMode(Type);
+/* 0005f574 */		Item.SetButtonText(PARTS_GetOriginPosModeName(Type));
+/* 0005f594 */	}
+/* 0005f594 */}
+
+void CAEPropertyPlain::SelectedComboBoxEvent(int ID, int Index)
+/* 0005f59c */{
+/* 0005f59c */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005f5ec */	if (Item === NULL)
+/* 0005f604 */	{
+/* 0005f604 */		return;
+/* 0005f606 */	}
+/* 0005f606 */	array@string List;
+/* 0005f610 */	Item.GetComboBoxItemList(List);
+/* 0005f62a */	if (Item.GetLabel() == "描画フィルタ")
+/* 0005f648 */	{
+/* 0005f648 */		int Type;
+/* 0005f65a */		switch (List[Index])
+/* 0005f67c */		{
+/* 0005f67c */		case "通常":
+/* 0005f67c */			Type = 0;
+/* 0005f68e */			break;
+/* 0005f694 */		case "加算":
+/* 0005f694 */			Type = 1;
+/* 0005f6a6 */			break;
+/* 0005f6ac */		case "乗算":
+/* 0005f6ac */			Type = 2;
+/* 0005f6be */			break;
+/* 0005f6c4 */		case "スクリーン":
+/* 0005f6c4 */			Type = 3;
+/* 0005f6d6 */			break;
+/* 0005f6dc */		}
+/* 0005f6dc */		this.m_Item.SetDrawFilter(Type);
+/* 0005f6f6 */	}
+/* 0005f6fc */	else if (Item.GetLabel() == "テクスチャフィルタ")
+/* 0005f71a */	{
+/* 0005f71a */		int Type;
+/* 0005f72c */		switch (List[Index])
+/* 0005f74e */		{
+/* 0005f74e */		case "ニアレスト":
+/* 0005f74e */			Type = 0;
+/* 0005f760 */			break;
+/* 0005f766 */		case "バイリニア":
+/* 0005f766 */			Type = 1;
+/* 0005f778 */			break;
+/* 0005f77e */		}
+/* 0005f77e */		this.m_Item.SetTextureFilter(Type);
+/* 0005f798 */	}
+/* 0005f798 */}
+
+void CAEPropertyPlain::ChangedCheckBoxEvent(int ID, bool Check)
+/* 0005f7a0 */{
+/* 0005f7a0 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0005f7f0 */	if (Item === NULL)
+/* 0005f808 */	{
+/* 0005f808 */		return;
+/* 0005f80a */	}
+/* 0005f80a */	int PartsID = this.m_Item.GetID();
+/* 0005f826 */	if (Item.GetLabel() == "表示")
+/* 0005f844 */	{
+/* 0005f844 */		this.m_Item.SetShow(Item.GetFlg());
+/* 0005f864 */	}
+/* 0005f86a */	else if (Item.GetLabel() == "高速再生")
+/* 0005f888 */	{
+/* 0005f888 */		this.m_Item.SetSpeedup(Item.GetFlg());
+/* 0005f8a8 */	}
+/* 0005f8ae */	else if (Item.GetLabel() == "ミップマップ")
+/* 0005f8cc */	{
+/* 0005f8cc */		this.m_Item.SetMipmap(Item.GetFlg());
+/* 0005f8ec */	}
+/* 0005f8f2 */	else if (Item.GetLabel() == "オンカーソル透過設定")
+/* 0005f910 */	{
+/* 0005f910 */		Ｐ＿オンカーソル透過設定(PartsID, Item.GetFlg());
+/* 0005f930 */	}
+/* 0005f936 */	else if (Item.GetLabel() == "クリック可能設定")
+/* 0005f954 */	{
+/* 0005f954 */		Ｐ＿クリック可能設定(PartsID, Item.GetFlg());
+/* 0005f974 */	}
+/* 0005f97a */	else if (Item.GetLabel() == "時間初期化許可／通常")
+/* 0005f998 */	{
+/* 0005f998 */		Ｐ＿時間初期化許可設定(PartsID, Item.GetFlg(), 1);
+/* 0005f9be */	}
+/* 0005f9c4 */	else if (Item.GetLabel() == "時間初期化許可／オン")
+/* 0005f9e2 */	{
+/* 0005f9e2 */		Ｐ＿時間初期化許可設定(PartsID, Item.GetFlg(), 2);
+/* 0005fa08 */	}
+/* 0005fa0e */	else if (Item.GetLabel() == "時間初期化許可／ダウン")
+/* 0005fa2c */	{
+/* 0005fa2c */		Ｐ＿時間初期化許可設定(PartsID, Item.GetFlg(), 3);
+/* 0005fa52 */	}
+/* 0005fa58 */	else if (Item.GetLabel() == "ドラッグ可能設定")
+/* 0005fa76 */	{
+/* 0005fa76 */		Ｐ＿ドラッグ可能設定(PartsID, Item.GetFlg());
+/* 0005fa96 */	}
+/* 0005fa9c */	else if (Item.GetLabel() == "ピクセル判定設定")
+/* 0005faba */	{
+/* 0005faba */		Ｐ＿ピクセル判定設定(PartsID, Item.GetFlg());
+/* 0005fada */	}
+/* 0005fae0 */	else if (Item.GetLabel() == "座標レート設定")
+/* 0005fafe */	{
+/* 0005fafe */		Ｐ＿座標レート設定(PartsID, Item.GetFlg());
+/* 0005fb1e */	}
+/* 0005fb1e */}
+
+void CAEPropertyPlain::MoveItemEvent(int ID)
+/* 0005fb26 */{
+/* 0005fb26 */	if (this.m_Item === NULL)
+/* 0005fb3e */	{
+/* 0005fb3e */		return;
+/* 0005fb40 */	}
+/* 0005fb40 */	ref CAEPropertyItem ItemPosX = this.m_Panel.GetItemByLabel("Ｘ座標");
+/* 0005fb8c */	ref CAEPropertyItem ItemPosY = this.m_Panel.GetItemByLabel("Ｙ座標");
+/* 0005fbd8 */	if (ItemPosX !== NULL)
+/* 0005fbf0 */	{
+/* 0005fbf0 */		ItemPosX.SetTextBoxText(this.m_Item.GetX().String());
+/* 0005fc18 */	}
+/* 0005fc18 */	if (ItemPosY !== NULL)
+/* 0005fc30 */	{
+/* 0005fc30 */		ItemPosY.SetTextBoxText(this.m_Item.GetY().String());
+/* 0005fc58 */	}
+/* 0005fc58 */}
+
+void CAEPropertyPlain::SetDraggableInstance(bool Flg)
+/* 0005fc60 */{
+/* 0005fc60 */	if (this.m_Item === NULL)
+/* 0005fc78 */	{
+/* 0005fc78 */		return;
+/* 0005fc7a */	}
+/* 0005fc7a */	ref CAEPropertyItem ItemPosX = this.m_Panel.GetItemByLabel("Ｘ座標");
+/* 0005fcc6 */	ref CAEPropertyItem ItemPosY = this.m_Panel.GetItemByLabel("Ｙ座標");
+/* 0005fd12 */	if (ItemPosX !== NULL)
+/* 0005fd2a */	{
+/* 0005fd2a */		ItemPosX.SetTextBoxReadOnly(!Flg);
+/* 0005fd48 */	}
+/* 0005fd48 */	if (ItemPosY !== NULL)
+/* 0005fd60 */	{
+/* 0005fd60 */		ItemPosY.SetTextBoxReadOnly(!Flg);
+/* 0005fd7e */	}
+/* 0005fd7e */}
+
+void CAEPropertyPlain::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0005fd86 */{
+/* 0005fd86 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0005fda0 */}
+
+void CAEPropertyPlain::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0005fda8 */{
+/* 0005fda8 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0005fdc2 */}
+
+void CAEPropertyPlain::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0005fdca */{
+/* 0005fdca */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0005fde4 */}
+
+void CAEPropertyPlain::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0005fdec */{
+/* 0005fdec */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0005fe06 */}
+
+void CAEPropertyPlain::AddResizePanelEvent(sys_btn_fnc_t DelegateObject)
+/* 0005fe0e */{
+/* 0005fe0e */	this.m_ResizePanel += DelegateObject;
+/* 0005fe28 */}
+
+void CAEPropertyPlain::EraseResizePanelEvent(sys_btn_fnc_t DelegateObject)
+/* 0005fe30 */{
+/* 0005fe30 */	this.m_ResizePanel -= DelegateObject;
+/* 0005fe4a */}
+

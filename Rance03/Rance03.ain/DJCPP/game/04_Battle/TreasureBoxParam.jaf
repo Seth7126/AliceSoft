@@ -1,0 +1,79 @@
+TreasureBoxParam::TreasureBoxParam()
+/* 001b3a30 */{
+/* 001b3a38 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001b3a5e */}
+
+void TreasureBoxParam::init(string itemId)
+/* 001b3a66 */{
+/* 001b3a66 */	ref Item item = getItemFromId(itemId);
+/* 001b3aa8 */	if (item !== NULL)
+/* 001b3ac0 */	{
+/* 001b3ac0 */		this.itemName_ = item.getName();
+/* 001b3ade */	}
+/* 001b3ade */	this.initParts();
+/* 001b3ae6 */	this.setPartsPos();
+/* 001b3aee */}
+
+void TreasureBoxParam::initParts()
+/* 001b3af6 */{
+/* 001b3af6 */	this.parts_[0].init("システム／戦闘／宝箱情報", 0);
+/* 001b3b1a */	if (this.itemName_ != "")
+/* 001b3b32 */	{
+/* 001b3b32 */		NumberPartsInfomation n;
+/* 001b3b42 */		n.setSameWidth(35);
+/* 001b3b58 */		this.parts_[1].initAsNumber("システム／数字／幅３５／白", n);
+/* 001b3b80 */		this.parts_[2].init("システム／戦闘／宝箱／パーセント", 0);
+/* 001b3ba4 */		this.parts_[3].initAsText(this.itemName_, 30, true, 256, 255, 255, 255);
+/* 001b3bea */	}
+/* 001b3bf0 */	createPartsGroup(this.parent_, this.parts_, 3000);
+/* 001b3c10 */}
+
+void TreasureBoxParam::setPartsShow()
+/* 001b3c18 */{
+/* 001b3c18 */	int i;
+/* 001b3c2a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b3c7a */	{
+/* 001b3c7a */		this.parts_[i].setShow(true);
+/* 001b3c9c */	}
+/* 001b3ca2 */	this.parent_.setShow(true);
+/* 001b3cb8 */}
+
+void TreasureBoxParam::setPartsPos()
+/* 001b3cc0 */{
+/* 001b3cc0 */	this.parts_[0].setPos(0.0, 0.0);
+/* 001b3ce4 */	this.parts_[1].setPos(141.0, 125.0);
+/* 001b3d08 */	this.parts_[2].setPos(141.0, 125.0);
+/* 001b3d2c */	this.parts_[1].setOrigin(1);
+/* 001b3d4a */	this.parts_[2].setOrigin(1);
+/* 001b3d68 */	this.parts_[3].setPos(141.0, 130.0);
+/* 001b3d8c */	this.parts_[3].setOrigin(8);
+/* 001b3daa */}
+
+void TreasureBoxParam::update()
+/* 001b3db2 */{
+/* 001b3db4 */}
+
+void TreasureBoxParam::setParam(int num)
+/* 001b3dba */{
+/* 001b3dba */	this.num_ = num;
+/* 001b3dd0 */	this.parts_[1].setNumber(this.num_);
+/* 001b3df4 */	int width = ("%d" % this.num_).Length() * 35 + this.parts_[2].getWidth();
+/* 001b3e3c */	this.parts_[1].setPos(141 - width / 2, 125.0);
+/* 001b3e76 */	this.parts_[2].setPos((141 + width / 2) - this.parts_[2].getWidth(), 125.0);
+/* 001b3eca */}
+
+void TreasureBoxParam::fadeIn(bool val)
+/* 001b3ed2 */{
+/* 001b3ed2 */	this.setPartsShow();
+/* 001b3eda */	PartsMotion m;
+/* 001b3eea */	if (val)
+/* 001b3efa */	{
+/* 001b3efa */		m.setMove(-300, 0, 0, 0, 1);
+/* 001b3f28 */	}
+/* 001b3f2e */	else
+/* 001b3f2e */	{
+/* 001b3f2e */		m.setMove(0, 0, -300, 0, 1);
+/* 001b3f5c */	}
+/* 001b3f5c */	this.parent_.runMotion(m, NULL);
+/* 001b3f7c */}
+

@@ -1,0 +1,40 @@
+void LatestDebugFunctions::update(string functionName)
+/* 001cb754 */{
+/* 001cb754 */	int r = this.functionName_.Find(0, this.functionName_.Numof(), functionName);
+/* 001cb790 */	if (r != -1)
+/* 001cb7a8 */	{
+/* 001cb7a8 */		this.functionName_.Erase(r);
+/* 001cb7be */		if (this.functionName_.Empty())
+/* 001cb7ce */		{
+/* 001cb7ce */			this.functionName_.PushBack(functionName);
+/* 001cb7e2 */		}
+/* 001cb7e8 */		else
+/* 001cb7e8 */		{
+/* 001cb7e8 */			this.functionName_.Insert(0, functionName);
+/* 001cb802 */		}
+/* 001cb802 */	}
+/* 001cb808 */	else
+/* 001cb808 */	{
+/* 001cb808 */		this.functionName_.Insert(0, functionName);
+/* 001cb822 */		if (this.functionName_.Numof() > 10)
+/* 001cb840 */		{
+/* 001cb840 */			this.functionName_.PopBack();
+/* 001cb84a */		}
+/* 001cb84a */	}
+/* 001cb84a */	共有セーブ();
+/* 001cb850 */}
+
+int LatestDebugFunctions::getCount()
+/* 001cb858 */{
+/* 001cb858 */	return this.functionName_.Numof();
+/* 001cb86a */}
+
+string LatestDebugFunctions::getFunctionName(int index)
+/* 001cb878 */{
+/* 001cb878 */	if (0 <= index && index < this.functionName_.Numof())
+/* 001cb8ca */	{
+/* 001cb8ca */		return this.functionName_[index];
+/* 001cb8e2 */	}
+/* 001cb8e2 */	return "";
+/* 001cb8ea */}
+

@@ -1,0 +1,481 @@
+CPartsPanel::CPartsPanel()
+/* 0002e1d8 */{
+/* 0002e1e2 */}
+
+CPartsPanel::~CPartsPanel()
+/* 0002e1e8 */{
+/* 0002e1e8 */	this.Release();
+/* 0002e1f0 */}
+
+void CPartsPanel::CreateBG()
+/* 0002e1f8 */{
+/* 0002e1f8 */	this.m_Base = PARTS_GetFreeSystemPartsNumber();
+/* 0002e20a */	this.m_BG = PARTS_GetFreeSystemPartsNumber();
+/* 0002e21c */	Ｐ＿親設定(this.m_BG, this.m_Base);
+/* 0002e236 */	Ｐ＿座標設定(this.m_BG, this.m_FrameSize, this.m_FrameSize + this.m_CaptionHeight);
+/* 0002e26a */	Ｐ＿オンカーソル透過設定(this.m_BG, true);
+/* 0002e280 */	this.UpdateBG();
+/* 0002e288 */}
+
+void CPartsPanel::CreateCaption()
+/* 0002e290 */{
+/* 0002e290 */	this.m_Caption = PARTS_GetFreeSystemPartsNumber();
+/* 0002e2a2 */	Ｐ＿親設定(this.m_Caption, this.m_Base);
+/* 0002e2bc */	Ｐ＿座標設定(this.m_Caption, this.m_FrameSize, this.m_FrameSize);
+/* 0002e2e4 */	this.m_CaptionText = PARTS_GetFreeSystemPartsNumber();
+/* 0002e2f6 */	Ｐ＿親設定(this.m_CaptionText, this.m_Base);
+/* 0002e310 */	Ｐ＿座標設定(this.m_CaptionText, this.m_FrameSize + this.m_CaptionHeight * 0.5, this.m_FrameSize + this.m_CaptionHeight * 0.1);
+/* 0002e374 */	Ｐ＿フォント設定(this.m_CaptionText, 0, this.m_CaptionHeight * 0.8, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1);
+/* 0002e3da */	this.m_CaptionMask = PARTS_GetFreeSystemPartsNumber();
+/* 0002e3ec */	Ｐ＿親設定(this.m_CaptionMask, this.m_Base);
+/* 0002e406 */	Ｐ＿ドラッグ可能設定(this.m_CaptionMask, true);
+/* 0002e41c */	AFL_Parts_AddDragBeginEvent(this.m_CaptionMask, this.CaptionDragBeginEvent);
+/* 0002e436 */	AFL_Parts_AddDragingEvent(this.m_CaptionMask, this.CaptionDragingEvent);
+/* 0002e450 */	AFL_Parts_AddDragEndEvent(this.m_CaptionMask, this.CaptionDragEndEvent);
+/* 0002e46a */	this.m_CloseButton = PARTS_GetFreeSystemPartsNumber();
+/* 0002e47c */	Ｐ＿親設定(this.m_CloseButton, this.m_Base);
+/* 0002e496 */	Ｐ＿原点座標設定(this.m_CloseButton, 3);
+/* 0002e4ac */	Ｐ＿ボタン＿サイズ設定(this.m_CloseButton, this.m_CaptionHeight * 0.8, this.m_CaptionHeight * 0.8);
+/* 0002e4f0 */	Ｐ＿ボタン＿フォント設定(this.m_CloseButton, 0, this.m_CaptionHeight * 0.7, 0, 0, 0, 0.0, 0, 0, 0, 0.0);
+/* 0002e550 */	Ｐ＿ボタン＿テキスト設定(this.m_CloseButton, this.GetCloseButtonText());
+/* 0002e568 */	AFL_Parts_AddMouseLClickEvent(this.m_CloseButton, this.CloseButtonClickEvent);
+/* 0002e582 */	this.UpdateCaption();
+/* 0002e58a */}
+
+void CPartsPanel::UpdateBG()
+/* 0002e592 */{
+/* 0002e592 */	if (this.m_Base)
+/* 0002e5a2 */	{
+/* 0002e5a2 */		int BaseWidth = this.m_FrameSize * 2 + this.m_Width;
+/* 0002e5cc */		int BaseHeight = this.m_FrameSize * 2 + this.m_CaptionHeight + (this.IsClosed() ? 0 : this.m_Height);
+/* 0002e61c */		Ｐ＿構築手順＿作成(this.m_Base, BaseWidth, BaseHeight, 1);
+/* 0002e646 */		Ｐ＿構築手順＿色塗り(this.m_Base, 0, 0, BaseWidth, BaseHeight, 100, 100, 100, 255, 1);
+/* 0002e694 */		Ｐ＿構築ビルド(this.m_Base, 1);
+/* 0002e6aa */	}
+/* 0002e6aa */	if (this.m_BG)
+/* 0002e6ba */	{
+/* 0002e6ba */		int BGWidth = this.m_Width;
+/* 0002e6d0 */		int BGHeight = this.m_Height;
+/* 0002e6e6 */		Ｐ＿構築手順＿作成(this.m_BG, BGWidth, BGHeight, 1);
+/* 0002e710 */		Ｐ＿構築手順＿色塗り(this.m_BG, 0, 0, BGWidth, BGHeight, 255, 255, 255, 255, 1);
+/* 0002e75e */		Ｐ＿構築ビルド(this.m_BG, 1);
+/* 0002e774 */		Ｐ＿乗算色設定(this.m_BG, 240, 235, 235);
+/* 0002e796 */		Ｐ＿オンカーソル透過設定(this.m_BG, true);
+/* 0002e7ac */		Ｐ＿表示設定(this.m_BG, !this.IsClosed());
+/* 0002e7c8 */	}
+/* 0002e7c8 */}
+
+void CPartsPanel::UpdateCaption()
+/* 0002e7d0 */{
+/* 0002e7d0 */	int CaptionWidth = this.m_Width;
+/* 0002e7e6 */	if (this.m_Caption)
+/* 0002e7f6 */	{
+/* 0002e7f6 */		Ｐ＿構築手順＿作成(this.m_Caption, CaptionWidth, this.m_CaptionHeight, 1);
+/* 0002e820 */		Ｐ＿構築手順＿色塗り(this.m_Caption, 0, 0, CaptionWidth, this.m_CaptionHeight, 255, 255, 255, 255, 1);
+/* 0002e86e */		Ｐ＿構築ビルド(this.m_Caption, 1);
+/* 0002e884 */	}
+/* 0002e884 */	if (this.m_CaptionText)
+/* 0002e894 */	{
+/* 0002e894 */		Ｐ＿テキスト表示範囲設定(this.m_CaptionText, 0, 0, CaptionWidth, this.m_CaptionHeight, 1);
+/* 0002e8ca */	}
+/* 0002e8ca */	if (this.m_CaptionMask)
+/* 0002e8da */	{
+/* 0002e8da */		Ｐ＿矩形判定設定(this.m_CaptionMask, 0, 0, this.m_Width + this.m_FrameSize * 2, this.m_CaptionHeight + this.m_FrameSize);
+/* 0002e92a */	}
+/* 0002e92a */	if (this.m_CloseButton)
+/* 0002e93a */	{
+/* 0002e93a */		Ｐ＿座標設定(this.m_CloseButton, (this.m_Width + this.m_FrameSize) - this.m_CaptionHeight * 0.1, this.m_FrameSize + this.m_CaptionHeight * 0.1);
+/* 0002e9aa */		Ｐ＿ボタン＿テキスト設定(this.m_CloseButton, this.GetCloseButtonText());
+/* 0002e9c2 */	}
+/* 0002e9c2 */}
+
+string CPartsPanel::GetCloseButtonText()
+/* 0002e9ca */{
+/* 0002e9ca */	if (!this.IsMinimizable())
+/* 0002e9da */	{
+/* 0002e9da */		return "×";
+/* 0002e9e2 */	}
+/* 0002e9e2 */	if (this.IsClosed())
+/* 0002e9f0 */	{
+/* 0002e9f0 */		return "＋";
+/* 0002e9f8 */	}
+/* 0002e9f8 */	return "－";
+/* 0002ea00 */}
+
+void CPartsPanel::BeginUpdateEvent(int PassedTime)
+/* 0002ea0e */{
+/* 0002ea0e */	if (this.IsTranslucent())
+/* 0002ea1c */	{
+/* 0002ea1c */		Ｐ＿アルファ値設定(this.m_Base, Ｐ＿オンカーソル判定(this.m_Base, 1) ? 255 : 128);
+/* 0002ea5a */	}
+/* 0002ea5a */	if (!this.IsActive())
+/* 0002ea6a */	{
+/* 0002ea6a */		int Number;
+/* 0002ea7c */		for (Number = PartsEngine.GetActiveParts(); Number != 0; Number = Ｐ＿親設定取得(Number))
+/* 0002ead2 */		{
+/* 0002ead2 */			if (Number == this.m_Base)
+/* 0002eaee */			{
+/* 0002eaee */				this.SetActive(true);
+/* 0002eafc */				return;
+/* 0002eafe */			}
+/* 0002eafe */		}
+/* 0002eb04 */	}
+/* 0002eb04 */}
+
+void CPartsPanel::CaptionDragBeginEvent(int PartsNumber)
+/* 0002eb0c */{
+/* 0002eb0c */	this.m_dgCaptionDragBeginEvent(this.GetBaseParts());
+/* 0002eb34 */}
+
+void CPartsPanel::CaptionDragingEvent(int PartsNumber, int BeginMouseX, int BeginMouseY, int MouseX, int MouseY)
+/* 0002eb3c */{
+/* 0002eb3c */	float X = this.m_X;
+/* 0002eb52 */	float Y = this.m_Y;
+/* 0002eb68 */	this.SetPos((this.m_X + MouseX) - BeginMouseX, (this.m_Y + MouseY) - BeginMouseY);
+/* 0002ebbc */	Ｐ＿座標設定(this.m_CaptionMask, 0.0, 0.0);
+/* 0002ebd8 */	this.m_X = X;
+/* 0002ebee */	this.m_Y = Y;
+/* 0002ec04 */	this.m_dgCaptionDragingEvent(this.GetBaseParts(), BeginMouseX, BeginMouseY, MouseX, MouseY);
+/* 0002ec54 */}
+
+void CPartsPanel::CaptionDragEndEvent(int PartsNumber)
+/* 0002ec5c */{
+/* 0002ec5c */	this.m_X = AFL_Parts_GetUpperLeftPosX(this.m_Base, 1);
+/* 0002ec7e */	this.m_Y = AFL_Parts_GetUpperLeftPosY(this.m_Base, 1);
+/* 0002eca0 */	this.m_dgCaptionDragEndEvent(this.GetBaseParts());
+/* 0002ecc8 */}
+
+void CPartsPanel::CloseButtonClickEvent(int PartsNumber, int MouseX, int MouseY)
+/* 0002ecd0 */{
+/* 0002ecd0 */	if (this.IsClosed())
+/* 0002ecde */	{
+/* 0002ecde */		this.Open();
+/* 0002ece6 */	}
+/* 0002ecec */	else
+/* 0002ecec */	{
+/* 0002ecec */		this.Close();
+/* 0002ecf4 */	}
+/* 0002ecf4 */}
+
+void CPartsPanel::Create()
+/* 0002ecfc */{
+/* 0002ecfc */	this.Reset(PARTS_GetFreeSystemPartsNumber());
+/* 0002ed0a */}
+
+void CPartsPanel::Reset(int Number)
+/* 0002ed12 */{
+/* 0002ed12 */	this.Release();
+/* 0002ed1a */	this.CreateBG();
+/* 0002ed22 */	this.CreateCaption();
+/* 0002ed2a */	this.m_Layout = Number;
+/* 0002ed40 */	Ｐ＿親設定(this.m_Layout, this.m_Base);
+/* 0002ed5a */	Ｐ＿座標設定(this.m_Layout, this.m_FrameSize, this.m_FrameSize + this.m_CaptionHeight);
+/* 0002ed8e */	AFL_Parts_AddBeginUpdateEvent(this.BeginUpdateEvent);
+/* 0002ed9e */	this.Refresh();
+/* 0002eda6 */}
+
+void CPartsPanel::Release()
+/* 0002edae */{
+/* 0002edae */	PARTS_ReleaseWithInit(this.m_Base);
+/* 0002edbc */	PARTS_ReleaseWithInit(this.m_Caption);
+/* 0002edca */	PARTS_ReleaseWithInit(this.m_CaptionText);
+/* 0002edd8 */	PARTS_ReleaseWithInit(this.m_CaptionMask);
+/* 0002ede6 */	PARTS_ReleaseWithInit(this.m_CloseButton);
+/* 0002edf4 */	PARTS_ReleaseWithInit(this.m_BG);
+/* 0002ee02 */	PARTS_ReleaseWithInit(this.m_Layout);
+/* 0002ee10 */	this.m_dgCaptionDragBeginEvent.Clear();
+/* 0002ee1c */	this.m_dgCaptionDragingEvent.Clear();
+/* 0002ee28 */	this.m_dgCaptionDragEndEvent.Clear();
+/* 0002ee34 */	this.m_dgUpdateSizeEvent.Clear();
+/* 0002ee40 */	this.m_dgChangedActiveFlgEvent.Clear();
+/* 0002ee4c */	this.m_dgChangedCloseFlgEvent.Clear();
+/* 0002ee58 */	this.m_X = 0.0;
+/* 0002ee6a */	this.m_Y = 0.0;
+/* 0002ee7c */	this.m_Z = 0;
+/* 0002ee8e */	this.m_CaptionHeight = 18;
+/* 0002eea0 */	this.m_FrameSize = 1;
+/* 0002eeb2 */	this.m_Width = 420;
+/* 0002eec4 */	this.m_Height = 240;
+/* 0002eed6 */	this.m_CaptionColor.Set(255, 90, 90, 255);
+/* 0002eefe */	this.m_CaptionLightColor.Set(255, 230, 230, 255);
+/* 0002ef26 */	this.m_Active = false;
+/* 0002ef38 */	this.m_Close = true;
+/* 0002ef4a */	this.m_Minimizable = false;
+/* 0002ef5c */	this.m_Translucent = false;
+/* 0002ef6e */	this.m_Title = "";
+/* 0002ef82 */}
+
+void CPartsPanel::Refresh()
+/* 0002ef8a */{
+/* 0002ef8a */	this.SetPos(this.m_X, this.m_Y);
+/* 0002efa6 */	this.SetZ(this.m_Z);
+/* 0002efb8 */	this.SetSize(this.m_Width, this.m_Height);
+/* 0002efd4 */	this.SetActive(this.m_Active);
+/* 0002efe6 */	this.SetTitle(this.m_Title);
+/* 0002eff8 */	this.SetCaptionColor(this.m_CaptionColor.GetR(), this.m_CaptionColor.GetG(), this.m_CaptionColor.GetB());
+/* 0002f030 */	this.SetCaptionLightColor(this.m_CaptionLightColor.GetR(), this.m_CaptionLightColor.GetG(), this.m_CaptionLightColor.GetB());
+/* 0002f068 */	if (this.IsMinimizable())
+/* 0002f076 */	{
+/* 0002f076 */		Ｐ＿表示設定(this.m_Base, true);
+/* 0002f08c */	}
+/* 0002f092 */	else
+/* 0002f092 */	{
+/* 0002f092 */		Ｐ＿表示設定(this.m_Base, !this.IsClosed());
+/* 0002f0ae */	}
+/* 0002f0ae */}
+
+int CPartsPanel::GetBaseParts()
+/* 0002f0b6 */{
+/* 0002f0b6 */	return this.m_Base;
+/* 0002f0c2 */}
+
+int CPartsPanel::GetLayout()
+/* 0002f0d0 */{
+/* 0002f0d0 */	return this.m_Layout;
+/* 0002f0dc */}
+
+void CPartsPanel::SetMinimizable(bool Flg)
+/* 0002f0ea */{
+/* 0002f0ea */	if (this.m_Minimizable && Flg || !this.m_Minimizable && !Flg)
+/* 0002f176 */	{
+/* 0002f176 */		return;
+/* 0002f178 */	}
+/* 0002f178 */	this.m_Minimizable = Flg;
+/* 0002f18e */	this.Refresh();
+/* 0002f196 */}
+
+bool CPartsPanel::IsMinimizable()
+/* 0002f19e */{
+/* 0002f19e */	return this.m_Minimizable;
+/* 0002f1aa */}
+
+void CPartsPanel::SetTranslucent(bool Flg)
+/* 0002f1b8 */{
+/* 0002f1b8 */	if (this.m_Translucent && Flg || !this.m_Translucent && !Flg)
+/* 0002f244 */	{
+/* 0002f244 */		return;
+/* 0002f246 */	}
+/* 0002f246 */	this.m_Translucent = Flg;
+/* 0002f25c */	this.Refresh();
+/* 0002f264 */}
+
+bool CPartsPanel::IsTranslucent()
+/* 0002f26c */{
+/* 0002f26c */	return this.m_Translucent;
+/* 0002f278 */}
+
+void CPartsPanel::SetActive(bool Flg)
+/* 0002f286 */{
+/* 0002f286 */	if (this.m_Caption)
+/* 0002f296 */	{
+/* 0002f296 */		if (Flg)
+/* 0002f2a6 */		{
+/* 0002f2a6 */			Ｐ＿乗算色設定(this.m_Caption, this.m_CaptionColor.GetR(), this.m_CaptionColor.GetG(), this.m_CaptionColor.GetB());
+/* 0002f2e6 */		}
+/* 0002f2ec */		else
+/* 0002f2ec */		{
+/* 0002f2ec */			Ｐ＿乗算色設定(this.m_Caption, this.m_CaptionLightColor.GetR(), this.m_CaptionLightColor.GetG(), this.m_CaptionLightColor.GetB());
+/* 0002f32c */		}
+/* 0002f32c */	}
+/* 0002f32c */	if (this.m_Active && !Flg || !this.m_Active && Flg)
+/* 0002f3b8 */	{
+/* 0002f3b8 */		this.m_Active = Flg;
+/* 0002f3ce */		this.m_dgChangedActiveFlgEvent(this.m_Base, this.m_Active);
+/* 0002f402 */	}
+/* 0002f402 */}
+
+bool CPartsPanel::IsActive()
+/* 0002f40a */{
+/* 0002f40a */	return this.m_Active;
+/* 0002f416 */}
+
+void CPartsPanel::SetPos(float X, float Y)
+/* 0002f424 */{
+/* 0002f424 */	this.m_X = X;
+/* 0002f43a */	this.m_Y = Y;
+/* 0002f450 */	if (!this.m_Base)
+/* 0002f462 */	{
+/* 0002f462 */		return;
+/* 0002f464 */	}
+/* 0002f464 */	Ｐ＿座標設定(this.m_Base, this.m_X, this.m_Y);
+/* 0002f488 */}
+
+void CPartsPanel::SetZ(int Z)
+/* 0002f490 */{
+/* 0002f490 */	this.m_Z = Z;
+/* 0002f4a6 */	if (!this.m_Base)
+/* 0002f4b8 */	{
+/* 0002f4b8 */		return;
+/* 0002f4ba */	}
+/* 0002f4ba */	Ｐ＿Ｚ座標設定(this.m_Base, this.m_Z);
+/* 0002f4d4 */	Ｐ＿Ｚ座標設定(this.m_Caption, 1);
+/* 0002f4ea */	Ｐ＿Ｚ座標設定(this.m_CaptionText, 2);
+/* 0002f500 */	Ｐ＿Ｚ座標設定(this.m_CaptionMask, 3);
+/* 0002f516 */	Ｐ＿Ｚ座標設定(this.m_CloseButton, 4);
+/* 0002f52c */	Ｐ＿Ｚ座標設定(this.m_BG, 1);
+/* 0002f542 */	Ｐ＿Ｚ座標設定(this.m_Layout, 2);
+/* 0002f558 */}
+
+float CPartsPanel::GetX()
+/* 0002f560 */{
+/* 0002f560 */	return this.m_X;
+/* 0002f56c */}
+
+float CPartsPanel::GetY()
+/* 0002f57a */{
+/* 0002f57a */	return this.m_Y;
+/* 0002f586 */}
+
+int CPartsPanel::GetZ()
+/* 0002f594 */{
+/* 0002f594 */	return this.m_Z;
+/* 0002f5a0 */}
+
+int CPartsPanel::GetLastZ()
+/* 0002f5ae */{
+/* 0002f5ae */	int Z;
+/* 0002f5c0 */	this.m_dgGetLastZEvent(Z);
+/* 0002f5e8 */	return Math.Max(Z, PARTS_GetAbsoluteMaxZ(this.m_Base));
+/* 0002f60e */}
+
+void CPartsPanel::SetSize(int Width, int Height)
+/* 0002f61c */{
+/* 0002f61c */	this.m_Width = Width;
+/* 0002f632 */	this.m_Height = Height;
+/* 0002f648 */	this.UpdateBG();
+/* 0002f650 */	this.UpdateCaption();
+/* 0002f658 */	Ｐ＿表示設定(this.m_Layout, !this.IsClosed());
+/* 0002f674 */	this.m_dgUpdateSizeEvent(this.m_Base, AFL_Parts_GetWidth(this.m_Base, 1), AFL_Parts_GetHeight(this.m_Base, 1));
+/* 0002f6ca */}
+
+int CPartsPanel::GetWidth()
+/* 0002f6d2 */{
+/* 0002f6d2 */	return this.m_Width;
+/* 0002f6de */}
+
+int CPartsPanel::GetHeight()
+/* 0002f6ec */{
+/* 0002f6ec */	return this.m_Height;
+/* 0002f6f8 */}
+
+void CPartsPanel::SetTitle(string Title)
+/* 0002f706 */{
+/* 0002f706 */	this.m_Title = Title;
+/* 0002f71e */	if (this.m_CaptionText)
+/* 0002f72e */	{
+/* 0002f72e */		Ｐ＿テキスト設定(this.m_CaptionText, this.m_Title, 1);
+/* 0002f74e */	}
+/* 0002f74e */}
+
+string CPartsPanel::GetTitle()
+/* 0002f756 */{
+/* 0002f756 */	return this.m_Title;
+/* 0002f762 */}
+
+void CPartsPanel::SetCaptionColor(int nR, int nG, int nB)
+/* 0002f770 */{
+/* 0002f770 */	this.m_CaptionColor.Set(nR, nG, nB, 255);
+/* 0002f7a4 */	if (this.m_Active && this.m_Caption)
+/* 0002f7dc */	{
+/* 0002f7dc */		Ｐ＿乗算色設定(this.m_Caption, this.m_CaptionColor.GetR(), this.m_CaptionColor.GetG(), this.m_CaptionColor.GetB());
+/* 0002f81c */	}
+/* 0002f81c */}
+
+void CPartsPanel::SetCaptionLightColor(int nR, int nG, int nB)
+/* 0002f824 */{
+/* 0002f824 */	this.m_CaptionLightColor.Set(nR, nG, nB, 255);
+/* 0002f858 */	if (!this.m_Active && this.m_Caption)
+/* 0002f892 */	{
+/* 0002f892 */		Ｐ＿乗算色設定(this.m_Caption, this.m_CaptionLightColor.GetR(), this.m_CaptionLightColor.GetG(), this.m_CaptionLightColor.GetB());
+/* 0002f8d2 */	}
+/* 0002f8d2 */}
+
+void CPartsPanel::Open()
+/* 0002f8da */{
+/* 0002f8da */	this.m_Close = false;
+/* 0002f8ec */	this.Refresh();
+/* 0002f8f4 */	this.m_dgChangedCloseFlgEvent(this.m_Base, this.m_Close);
+/* 0002f928 */}
+
+void CPartsPanel::Close()
+/* 0002f930 */{
+/* 0002f930 */	this.m_Close = true;
+/* 0002f942 */	this.Refresh();
+/* 0002f94a */	this.m_dgChangedCloseFlgEvent(this.m_Base, this.m_Close);
+/* 0002f97e */}
+
+bool CPartsPanel::IsClosed()
+/* 0002f986 */{
+/* 0002f986 */	return this.m_Close;
+/* 0002f992 */}
+
+void CPartsPanel::AddCaptionDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 0002f9a0 */{
+/* 0002f9a0 */	this.m_dgCaptionDragBeginEvent += DelegateObject;
+/* 0002f9ba */}
+
+void CPartsPanel::EraseCaptionDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 0002f9c2 */{
+/* 0002f9c2 */	this.m_dgCaptionDragBeginEvent -= DelegateObject;
+/* 0002f9dc */}
+
+void CPartsPanel::AddCaptionDragingEvent(DG_DragingHandler DelegateObject)
+/* 0002f9e4 */{
+/* 0002f9e4 */	this.m_dgCaptionDragingEvent += DelegateObject;
+/* 0002f9fe */}
+
+void CPartsPanel::EraseCaptionDragingEvent(DG_DragingHandler DelegateObject)
+/* 0002fa06 */{
+/* 0002fa06 */	this.m_dgCaptionDragingEvent -= DelegateObject;
+/* 0002fa20 */}
+
+void CPartsPanel::AddCaptionDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 0002fa28 */{
+/* 0002fa28 */	this.m_dgCaptionDragEndEvent += DelegateObject;
+/* 0002fa42 */}
+
+void CPartsPanel::EraseCaptionDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 0002fa4a */{
+/* 0002fa4a */	this.m_dgCaptionDragEndEvent -= DelegateObject;
+/* 0002fa64 */}
+
+void CPartsPanel::AddChangedActiveFlgEvent(DG_Panel_ChangedActiveFlgHandler DelegateObject)
+/* 0002fa6c */{
+/* 0002fa6c */	this.m_dgChangedActiveFlgEvent += DelegateObject;
+/* 0002fa86 */}
+
+void CPartsPanel::EraseChangedActiveFlgEvent(DG_Panel_ChangedActiveFlgHandler DelegateObject)
+/* 0002fa8e */{
+/* 0002fa8e */	this.m_dgChangedActiveFlgEvent -= DelegateObject;
+/* 0002faa8 */}
+
+void CPartsPanel::AddGetLastZEvent(DG_Panel_GetLastZHandler DelegateObject)
+/* 0002fab0 */{
+/* 0002fab0 */	this.m_dgGetLastZEvent += DelegateObject;
+/* 0002faca */}
+
+void CPartsPanel::EraseGetLastZEvent(DG_Panel_GetLastZHandler DelegateObject)
+/* 0002fad2 */{
+/* 0002fad2 */	this.m_dgGetLastZEvent -= DelegateObject;
+/* 0002faec */}
+
+void CPartsPanel::AddUpdateSizeEvent(DG_Panel_UpdateSizeHandler DelegateObject)
+/* 0002faf4 */{
+/* 0002faf4 */	this.m_dgUpdateSizeEvent += DelegateObject;
+/* 0002fb0e */}
+
+void CPartsPanel::EraseUpdateSizeEvent(DG_Panel_UpdateSizeHandler DelegateObject)
+/* 0002fb16 */{
+/* 0002fb16 */	this.m_dgUpdateSizeEvent -= DelegateObject;
+/* 0002fb30 */}
+
+void CPartsPanel::AddChangedCloseFlgEvent(DG_Panel_ChangedCloseFlgHandler DelegateObject)
+/* 0002fb38 */{
+/* 0002fb38 */	this.m_dgChangedCloseFlgEvent += DelegateObject;
+/* 0002fb52 */}
+
+void CPartsPanel::EraseChangedCloseFlgEvent(DG_Panel_ChangedCloseFlgHandler DelegateObject)
+/* 0002fb5a */{
+/* 0002fb5a */	this.m_dgChangedCloseFlgEvent -= DelegateObject;
+/* 0002fb74 */}
+

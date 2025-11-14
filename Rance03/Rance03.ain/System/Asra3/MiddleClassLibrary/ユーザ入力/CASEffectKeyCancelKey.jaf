@@ -1,0 +1,42 @@
+CASEffectKeyCancelKey::CASEffectKeyCancelKey()
+/* 0003ff0a */{
+/* 0003ff12 */	this.m_nKey = -1;
+/* 0003ff24 */	this.m_bFirstKeyDownCancel = false;
+/* 0003ff36 */}
+
+bool CASEffectKeyCancelKey::Init(int nKey, bool bFirstKeyDownCancel)
+/* 0003ff3e */{
+/* 0003ff3e */	this.m_nKey = nKey;
+/* 0003ff54 */	if (bFirstKeyDownCancel)
+/* 0003ff64 */	{
+/* 0003ff64 */		this.m_bFirstKeyDownCancel = AFL_IsKeyDown(nKey);
+/* 0003ff80 */	}
+/* 0003ff86 */	else
+/* 0003ff86 */	{
+/* 0003ff86 */		this.m_bFirstKeyDownCancel = false;
+/* 0003ff98 */	}
+/* 0003ff98 */	return true;
+/* 0003ffa0 */}
+
+bool CASEffectKeyCancelKey::IsKeyDown()
+/* 0003ffae */{
+/* 0003ffae */	if (AFL_IsKeyDown(this.m_nKey))
+/* 0003ffc4 */	{
+/* 0003ffc4 */		if (!this.m_bFirstKeyDownCancel)
+/* 0003ffd6 */		{
+/* 0003ffd6 */			return true;
+/* 0003ffde */		}
+/* 0003ffde */		return false;
+/* 0003ffe6 */	}
+/* 0003ffec */	else
+/* 0003ffec */	{
+/* 0003ffec */		this.m_bFirstKeyDownCancel = false;
+/* 0003fffe */	}
+/* 0003fffe */	return false;
+/* 00040006 */}
+
+int CASEffectKeyCancelKey::GetKey()
+/* 00040014 */{
+/* 00040014 */	return this.m_nKey;
+/* 00040020 */}
+

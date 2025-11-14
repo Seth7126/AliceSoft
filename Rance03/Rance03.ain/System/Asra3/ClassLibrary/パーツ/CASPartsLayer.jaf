@@ -1,0 +1,61 @@
+CASPartsLayer::CASPartsLayer()
+/* 00007758 */{
+/* 00007760 */	this.m_LayerID = -1;
+/* 00007772 */	this.m_PrevLayerID = -1;
+/* 00007784 */	this.AddTopLayer();
+/* 0000778e */}
+
+CASPartsLayer::~CASPartsLayer()
+/* 00007796 */{
+/* 00007796 */	this.Erase();
+/* 0000779e */}
+
+int CASPartsLayer::Add(int ID)
+/* 000077a6 */{
+/* 000077a6 */	if (this.m_LayerID != -1)
+/* 000077be */	{
+/* 000077be */		return 0;
+/* 000077c6 */	}
+/* 000077c6 */	this.m_PrevLayerID = AFL_Parts_GetActiveLayer();
+/* 000077d8 */	this.m_LayerID = AFL_Parts_AddLayer(ID);
+/* 000077f4 */	return this.m_LayerID;
+/* 00007800 */}
+
+int CASPartsLayer::AddTopLayer()
+/* 0000780e */{
+/* 0000780e */	if (this.m_LayerID != -1)
+/* 00007826 */	{
+/* 00007826 */		return 0;
+/* 0000782e */	}
+/* 0000782e */	this.m_PrevLayerID = AFL_Parts_GetActiveLayer();
+/* 00007840 */	this.m_LayerID = AFL_Parts_AddTopLayer();
+/* 00007852 */	return this.m_LayerID;
+/* 0000785e */}
+
+void CASPartsLayer::Erase()
+/* 0000786c */{
+/* 0000786c */	if (this.m_LayerID == -1)
+/* 00007884 */	{
+/* 00007884 */		return;
+/* 00007886 */	}
+/* 00007886 */	AFL_Parts_EraseLayer(this.m_LayerID);
+/* 00007896 */	AFL_Parts_SetActiveLayer(this.m_PrevLayerID);
+/* 000078a8 */	this.m_PrevLayerID = -1;
+/* 000078ba */	this.m_LayerID = -1;
+/* 000078cc */}
+
+int CASPartsLayer::GetID()
+/* 000078d4 */{
+/* 000078d4 */	return this.m_LayerID;
+/* 000078e0 */}
+
+int CASPartsLayer::GetIndex()
+/* 000078ee */{
+/* 000078ee */	return AFL_Parts_GetLayerIndex(this.m_LayerID);
+/* 00007900 */}
+
+void CASPartsLayer::Active()
+/* 0000790e */{
+/* 0000790e */	AFL_Parts_SetActiveLayer(this.m_LayerID);
+/* 00007920 */}
+

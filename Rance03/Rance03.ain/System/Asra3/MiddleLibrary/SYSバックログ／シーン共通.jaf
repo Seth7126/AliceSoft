@@ -1,0 +1,25 @@
+void SYS_バックログオープン通知()
+/* 0014e6ea */{
+/* 0014e6ea */	g_OpenBacklogMessage = true;
+/* 0014e6fc */	g_OpenBacklogMessageTime = system.GetTime();
+/* 0014e70e */}
+
+bool SYS_バックログオープン確認()
+/* 0014e71c */{
+/* 0014e71c */	if (!g_OpenBacklogMessage)
+/* 0014e72e */	{
+/* 0014e72e */		return false;
+/* 0014e736 */	}
+/* 0014e736 */	g_OpenBacklogMessage = false;
+/* 0014e748 */	if (Math.Abs(system.GetTime() - g_OpenBacklogMessageTime) >= 250)
+/* 0014e772 */	{
+/* 0014e772 */		return false;
+/* 0014e77a */	}
+/* 0014e77a */	return true;
+/* 0014e782 */}
+
+void SYS_バックログオープン通知クリア()
+/* 0014e796 */{
+/* 0014e796 */	g_OpenBacklogMessage = false;
+/* 0014e7a8 */}
+

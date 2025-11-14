@@ -1,0 +1,145 @@
+CActivityData::CActivityData()
+/* 000436ca */{
+/* 000436d4 */}
+
+CActivityData::~CActivityData()
+/* 000436da */{
+/* 000436da */	this.Close();
+/* 000436e4 */}
+
+bool CActivityData::Release()
+/* 000436ec */{
+/* 000436ec */	if (!this.m_HoldData)
+/* 000436fe */	{
+/* 000436fe */		return true;
+/* 00043706 */	}
+/* 00043706 */	if (!SYS_Activity_RemoveAllParts(this.m_HoldDataActivityName))
+/* 0004371e */	{
+/* 0004371e */		DIALOG_OK("パーツ全開放失敗\n");
+/* 0004372a */		return false;
+/* 00043732 */	}
+/* 00043732 */	if (!SYS_Activity_Release(this.m_HoldDataActivityName))
+/* 0004374a */	{
+/* 0004374a */		DIALOG_OK("アクティビティ削除失敗\n");
+/* 00043756 */		return false;
+/* 0004375e */	}
+/* 0004375e */	this.m_HoldData = false;
+/* 00043770 */	this.m_FileName = "";
+/* 00043784 */	this.m_HoldDataActivityName = "";
+/* 00043798 */	return true;
+/* 000437a0 */}
+
+bool CActivityData::IsHoldActivity()
+/* 000437ae */{
+/* 000437ae */	return this.m_HoldData;
+/* 000437ba */}
+
+string CActivityData::GetFileName()
+/* 000437c8 */{
+/* 000437c8 */	return this.m_FileName;
+/* 000437d4 */}
+
+string CActivityData::GetActivityName()
+/* 000437e2 */{
+/* 000437e2 */	return this.m_HoldDataActivityName;
+/* 000437ee */}
+
+bool CActivityData::Create(string FileName)
+/* 000437fc */{
+/* 000437fc */	if (!this.Release())
+/* 0004380c */	{
+/* 0004380c */		return false;
+/* 00043814 */	}
+/* 00043814 */	string CreatingActivityName = SYS_Activity_GetFreeName(FileName);
+/* 00043832 */	if (!SYS_Activity_Create(CreatingActivityName))
+/* 0004384a */	{
+/* 0004384a */		DIALOG_OK("アクティビティ作成失敗");
+/* 00043856 */		return false;
+/* 0004385e */	}
+/* 0004385e */	this.m_HoldData = true;
+/* 00043870 */	this.m_FileName = FileName;
+/* 00043888 */	this.m_HoldDataActivityName = CreatingActivityName;
+/* 000438a0 */	return true;
+/* 000438a8 */}
+
+bool CActivityData::Load(string FileName, int LayerID)
+/* 000438b6 */{
+/* 000438b6 */	if (!this.Release())
+/* 000438c6 */	{
+/* 000438c6 */		return false;
+/* 000438ce */	}
+/* 000438ce */	int PrevLayerID = AFL_Parts_SetActiveLayer(LayerID);
+/* 000438ea */	string CreatingActivityName = SYS_Activity_GetFreeName(FileName);
+/* 00043908 */	if (!SYS_Activity_ReadFile(CreatingActivityName, FileName))
+/* 0004392a */	{
+/* 0004392a */		DIALOG_OK("アクティビティ読み込み失敗");
+/* 00043936 */		return false;
+/* 0004393e */	}
+/* 0004393e */	AFL_Parts_SetActiveLayer(PrevLayerID);
+/* 00043950 */	this.m_HoldData = true;
+/* 00043962 */	this.m_FileName = FileName;
+/* 0004397a */	this.m_HoldDataActivityName = CreatingActivityName;
+/* 00043992 */	return true;
+/* 0004399a */}
+
+bool CActivityData::CloseWithWrite()
+/* 000439a8 */{
+/* 000439a8 */	if (!this.m_HoldData)
+/* 000439ba */	{
+/* 000439ba */		return true;
+/* 000439c2 */	}
+/* 000439c2 */	if (!SYS_Activity_WriteFile(this.m_HoldDataActivityName, this.m_FileName))
+/* 000439e4 */	{
+/* 000439e4 */		DIALOG_OK("アクティビティバイナリ書き出し失敗");
+/* 000439f0 */		return false;
+/* 000439f8 */	}
+/* 000439f8 */	if (!this.Close())
+/* 00043a08 */	{
+/* 00043a08 */		return false;
+/* 00043a10 */	}
+/* 00043a10 */	return true;
+/* 00043a18 */}
+
+bool CActivityData::Close()
+/* 00043a26 */{
+/* 00043a26 */	if (!this.Release())
+/* 00043a36 */	{
+/* 00043a36 */		return false;
+/* 00043a3e */	}
+/* 00043a3e */	return true;
+/* 00043a46 */}
+
+bool CActivityData::SaveEXText(ref string Data)
+/* 00043a54 */{
+/* 00043a54 */	if (!this.m_HoldData)
+/* 00043a66 */	{
+/* 00043a66 */		return true;
+/* 00043a6e */	}
+/* 00043a6e */	if (!SYS_Activity_SaveEXText(Data, this.m_HoldDataActivityName))
+/* 00043a90 */	{
+/* 00043a90 */		DIALOG_OK("コピーデータ作成失敗");
+/* 00043a9c */		return false;
+/* 00043aa4 */	}
+/* 00043aa4 */	return true;
+/* 00043aac */}
+
+bool CActivityData::LoadEXText(string FileName, string Data, int LayerID)
+/* 00043aba */{
+/* 00043aba */	if (!this.Release())
+/* 00043aca */	{
+/* 00043aca */		return false;
+/* 00043ad2 */	}
+/* 00043ad2 */	int PrevLayerID = AFL_Parts_SetActiveLayer(LayerID);
+/* 00043aee */	string CreatingActivityName = SYS_Activity_GetFreeName(FileName);
+/* 00043b0c */	if (!SYS_Activity_LoadEXText(CreatingActivityName, Data))
+/* 00043b2e */	{
+/* 00043b2e */		DIALOG_OK("コピーデータ読み込み失敗\n");
+/* 00043b3a */		return false;
+/* 00043b42 */	}
+/* 00043b42 */	AFL_Parts_SetActiveLayer(PrevLayerID);
+/* 00043b54 */	this.m_HoldData = true;
+/* 00043b66 */	this.m_FileName = FileName;
+/* 00043b7e */	this.m_HoldDataActivityName = CreatingActivityName;
+/* 00043b96 */	return true;
+/* 00043b9e */}
+

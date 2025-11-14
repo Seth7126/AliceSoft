@@ -1,0 +1,197 @@
+WorldMap::WorldMap()
+/* 0018a542 */{
+/* 0018a54a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018a570 */	this.isShownNewBranch_ = false;
+/* 0018a582 */}
+
+void WorldMap::showNewBranch(DG_GeneralCallback onFinishShowNewBranchCallback)
+/* 0018a58a */{
+/* 0018a58a */	this.onFinishShowNewBranchCallback_ = onFinishShowNewBranchCallback;
+/* 0018a5a4 */	this.innerShowNewBranch();
+/* 0018a5ac */}
+
+void WorldMap::innerShowNewBranch()
+/* 0018a5b4 */{
+/* 0018a5b4 */	int i;
+/* 0018a5c6 */	for (i = 0; i < this.branch_.Numof(); ++i)
+/* 0018a616 */	{
+/* 0018a616 */		if (g_mapChain.isNew(i))
+/* 0018a636 */		{
+/* 0018a636 */			g_mapChain.setNew(i, false);
+/* 0018a656 */			this.focusBranchIndex_ = i;
+/* 0018a66c */			int x;
+/* 0018a67e */			int y;
+/* 0018a690 */			this.branch_[i].getCenter(x, y);
+/* 0018a6bc */			this.hvScroller_.moveFocus(x, y, this.onFinishMoveFocus);
+/* 0018a6ee */			return;
+/* 0018a6f0 */		}
+/* 0018a6f0 */	}
+/* 0018a6f6 */	this.isShownNewBranch_ = true;
+/* 0018a708 */	this.onFinishShowNewBranchCallback_();
+/* 0018a728 */}
+
+void WorldMap::onFinishMoveFocus()
+/* 0018a730 */{
+/* 0018a730 */	this.branch_[this.focusBranchIndex_].showNewBranch(this.onFinishShowNewBranch);
+/* 0018a756 */}
+
+void WorldMap::onFinishShowNewBranch()
+/* 0018a75e */{
+/* 0018a75e */	this.innerShowNewBranch();
+/* 0018a766 */}
+
+void WorldMap::init(string placeId)
+/* 0018a76e */{
+/* 0018a76e */	this.currentPlaceId_ = placeId;
+/* 0018a786 */	ref MapPlace pl = getMapPlaceFromId(this.currentPlaceId_);
+/* 0018a7c8 */	this.partsBg_.init("システム／マップ", 0);
+/* 0018a7e4 */	this.hvScroller_.init(pl.getX(), pl.getY(), this.partsBg_.getWidth(), this.partsBg_.getHeight());
+/* 0018a83c */	this.partsBg_.setParent(this.hvScroller_.getPartsNumber());
+/* 0018a85c */	this.mapFrame_.init();
+/* 0018a86c */	this.initPlayerIcon();
+/* 0018a874 */	this.initCloud();
+/* 0018a87c */	this.initPlaceButton();
+/* 0018a884 */	this.initBranch();
+/* 0018a88c */	this.initParts();
+/* 0018a894 */	this.showObject(true);
+/* 0018a8a2 */}
+
+void WorldMap::initPlayerIcon()
+/* 0018a8aa */{
+/* 0018a8aa */	int type = getPlayerFromId("ランス").isJoin() ? 0 : 1;
+/* 0018a8f6 */	this.playerIcon_.init(type, this.hvScroller_.getPartsNumber(), this.currentPlaceId_);
+/* 0018a92a */}
+
+void WorldMap::initCloud()
+/* 0018a932 */{
+/* 0018a932 */	int i;
+/* 0018a944 */	for (i = 0; i < this.cloud_.Numof(); ++i)
+/* 0018a994 */	{
+/* 0018a994 */		this.cloud_[i].init(this.hvScroller_.getPartsNumber());
+/* 0018a9c0 */	}
+/* 0018a9c6 */}
+
+void WorldMap::showObject(bool val)
+/* 0018a9ce */{
+/* 0018a9ce */	this.partsBg_.setShow(val);
+/* 0018a9e8 */	this.partsLesus_.setShow(val);
+/* 0018aa02 */	this.playerIcon_.fadeIn(val);
+/* 0018aa1c */}
+
+void WorldMap::initBranch()
+/* 0018aa24 */{
+/* 0018aa24 */	this.branch_.Alloc(g_mapChain.getCount());
+/* 0018aa44 */	int i;
+/* 0018aa56 */	for (i = 0; i < this.branch_.Numof(); ++i)
+/* 0018aaa6 */	{
+/* 0018aaa6 */		MapChainInfo chain;
+/* 0018aab6 */		g_mapChain.getChain(i, chain);
+/* 0018aadc */		this.branch_[i].init(chain, this.hvScroller_.getPartsNumber());
+/* 0018ab12 */	}
+/* 0018ab1e */}
+
+void WorldMap::initPlaceButton()
+/* 0018ab26 */{
+/* 0018ab26 */	this.btnPlace_.Alloc(g_mapPlace.Numof());
+/* 0018ab46 */	int i;
+/* 0018ab58 */	for (i = 0; i < this.btnPlace_.Numof(); ++i)
+/* 0018aba8 */	{
+/* 0018aba8 */		this.btnPlace_[i].init(this.hvScroller_.getPartsNumber(), g_mapPlace[i].getId(), this.onPlaceButtonClick, i);
+/* 0018ac04 */	}
+/* 0018ac0a */}
+
+void WorldMap::onPlaceButtonClick(int index)
+/* 0018ac12 */{
+/* 0018ac12 */	this.onClickPlaceCallback_(g_mapPlace[index].getId());
+/* 0018ac4e */}
+
+void WorldMap::initParts()
+/* 0018ac56 */{
+/* 0018ac56 */	this.partsLesus_.init("システム／マップ／建物／リーザス城", 0);
+/* 0018ac72 */	this.partsLesus_.setPos(1701.0, 193.0);
+/* 0018ac8e */	this.partsLesus_.setOrigin(5);
+/* 0018aca4 */	this.partsLesus_.setParent(this.hvScroller_.getPartsNumber());
+/* 0018acc4 */}
+
+void WorldMap::setPartsShow()
+/* 0018accc */{
+/* 0018acce */}
+
+void WorldMap::setPartsPos()
+/* 0018acd4 */{
+/* 0018acd6 */}
+
+void WorldMap::update()
+/* 0018acdc */{
+/* 0018acdc */	if (this.isFollowPlayer_)
+/* 0018acec */	{
+/* 0018acec */		int x;
+/* 0018acfe */		int y;
+/* 0018ad10 */		this.playerIcon_.getCurrentPos(x, y);
+/* 0018ad30 */		this.hvScroller_.setCameraTarget(x, y);
+/* 0018ad58 */	}
+/* 0018ad58 */	if (g_mouse.getWheel() > 0)
+/* 0018ad76 */	{
+/* 0018ad76 */		openBackLog();
+/* 0018ad7c */	}
+/* 0018ad7c */}
+
+void WorldMap::setFollowPlayerIcon(bool val)
+/* 0018ad84 */{
+/* 0018ad84 */	this.isFollowPlayer_ = val;
+/* 0018ad9a */	this.hvScroller_.setCameraFollowMode(this.isFollowPlayer_);
+/* 0018adb4 */}
+
+void WorldMap::movePlayerIcon(int fx, int fy, int tx, int ty, DG_GeneralCallback onFinishMoveIconCallback)
+/* 0018adbc */{
+/* 0018adbc */	this.playerIcon_.moveTo(fx, fy, tx, ty, onFinishMoveIconCallback);
+/* 0018ae00 */}
+
+void WorldMap::moveFocus(int x, int y, DG_GeneralCallback onFinishCallback)
+/* 0018ae08 */{
+/* 0018ae08 */	this.hvScroller_.moveFocus(x, y, onFinishCallback);
+/* 0018ae3c */}
+
+void WorldMap::setOnClickPlaceCallback(DG_OnClickPlaceCallback onClickPlaceCallback)
+/* 0018ae44 */{
+/* 0018ae44 */	this.onClickPlaceCallback_ = onClickPlaceCallback;
+/* 0018ae5e */}
+
+void WorldMap::fadeIn(bool val, int time, DG_GeneralCallback onFinishCallback)
+/* 0018ae66 */{
+/* 0018ae66 */	this.hvScroller_.fadeIn(val, time, onFinishCallback);
+/* 0018ae96 */	this.fadePlaceButton(val);
+/* 0018aea8 */	this.fadeBranch(val);
+/* 0018aeba */	this.mapFrame_.fadeIn(val, NULL);
+/* 0018aed6 */}
+
+void WorldMap::fadeBranch(bool val)
+/* 0018aede */{
+/* 0018aede */	int i;
+/* 0018aef0 */	for (i = 0; i < this.branch_.Numof(); ++i)
+/* 0018af40 */	{
+/* 0018af40 */		if (this.isShownNewBranch_ || !g_mapChain.isNew(i))
+/* 0018af8a */		{
+/* 0018af8a */			this.branch_[i].fadeIn(val);
+/* 0018afb0 */		}
+/* 0018afb0 */	}
+/* 0018afb6 */}
+
+void WorldMap::fadePlaceButton(bool val)
+/* 0018afbe */{
+/* 0018afbe */	int i;
+/* 0018afd0 */	for (i = 0; i < this.btnPlace_.Numof(); ++i)
+/* 0018b020 */	{
+/* 0018b020 */		this.btnPlace_[i].fadeIn(val);
+/* 0018b046 */	}
+/* 0018b04c */}
+
+void WorldMap::setPlaceButtonClickable(bool val)
+/* 0018b054 */{
+/* 0018b054 */	int i;
+/* 0018b066 */	for (i = 0; i < this.btnPlace_.Numof(); ++i)
+/* 0018b0b6 */	{
+/* 0018b0b6 */		this.btnPlace_[i].setClickable(val);
+/* 0018b0dc */	}
+/* 0018b0e2 */}
+

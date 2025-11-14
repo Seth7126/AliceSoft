@@ -1,0 +1,38 @@
+void pass(string msg)
+/* 001e50a0 */{
+/* 001e50a2 */}
+
+void stop(string msg)
+/* 001e50ae */{
+/* 001e50b0 */}
+
+string getFunctionStackString(int excludeLatest)
+/* 001e50bc */{
+/* 001e50bc */	array@string fn;
+/* 001e50c6 */	getFunctionStackList(fn);
+/* 001e50d6 */	string result;
+/* 001e50ea */	int i;
+/* 001e50fc */	for (i = 0; i < fn.Numof() - excludeLatest; ++i)
+/* 001e5158 */	{
+/* 001e5158 */		result += ">" + fn[i];
+/* 001e5184 */	}
+/* 001e518a */	result = "…" + result.GetPart(Math.Max(0, result.Length() - 70), 70);
+/* 001e51d4 */	return result;
+/* 001e51e0 */}
+
+void getFunctionStackList(ref array@string fn)
+/* 001e51f4 */{
+/* 001e51f4 */	int i;
+/* 001e5206 */	while (true)
+/* 001e5212 */	{
+/* 001e5212 */		string r = system.GetFuncStackName(i);
+/* 001e5230 */		if (r == "")
+/* 001e5248 */		{
+/* 001e5248 */			break;
+/* 001e524e */		}
+/* 001e524e */		fn.PushBack(r);
+/* 001e5262 */		++i;
+/* 001e5272 */	}
+/* 001e5278 */	fn.Reverse();
+/* 001e5282 */}
+

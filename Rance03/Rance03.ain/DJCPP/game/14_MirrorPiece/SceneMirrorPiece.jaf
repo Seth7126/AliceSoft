@@ -1,0 +1,180 @@
+void SceneMirrorPiece::init()
+/* 001bdcaa */{
+/* 001bdcaa */	this.parent_.initAsDummy();
+/* 001bdcba */	this.parent_.setZ(8200.0);
+/* 001bdcd0 */	this.partsBg_.initAsPlaneImage(1024, 768, 50, 30, 30, 255);
+/* 001bdd04 */	this.partsBg_.setParent(this.parent_.getPartsNumber());
+/* 001bdd24 */	this.partsBg_.setZ(0.0);
+/* 001bdd3a */	this.partsBg_.setShow(true);
+/* 001bdd50 */}
+
+void SceneMirrorPiece::run()
+/* 001bdd58 */{
+/* 001bdd58 */	int index = this.getMirrorPieceIndex();
+/* 001bdd6c */	if (index != -1)
+/* 001bdd84 */	{
+/* 001bdd84 */		this.piece_ <- g_mirrorPiece[index];
+/* 001bddb0 */		this.initPartsPieces();
+/* 001bddb8 */	}
+/* 001bddb8 */	string name;
+/* 001bddcc */	switch (index)
+/* 001bdde2 */	{
+/* 001bdde2 */	case 0:
+/* 001bdde2 */		name = "システム／鏡の破片／Ａ／枠";
+/* 001bddf6 */		break;
+/* 001bddfc */	case 1:
+/* 001bddfc */		name = "システム／鏡の破片／Ｂ／枠";
+/* 001bde10 */		break;
+/* 001bde16 */	case 2:
+/* 001bde16 */		name = "システム／鏡の破片／Ｃ／枠";
+/* 001bde2a */		break;
+/* 001bde30 */	}
+/* 001bde30 */	this.partsFrame_.init(name, 0);
+/* 001bde50 */	this.partsFrame_.setParent(this.parent_.getPartsNumber());
+/* 001bde70 */	this.partsFrame_.setZ(10.0);
+/* 001bde86 */	this.partsFrame_.setShow(true);
+/* 001bde9c */	this.openPiece(this.piece_.open());
+/* 001bdeb4 */	this.parent_.setShow(true);
+/* 001bdeca */	this.parent_.runMotion(getStandardMotion(0), NULL);
+/* 001bdee8 */}
+
+int SceneMirrorPiece::getMirrorPieceIndex()
+/* 001bdef0 */{
+/* 001bdef0 */	array@int indexes;
+/* 001bdefa */	int i;
+/* 001bdf0c */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001bdf5c */	{
+/* 001bdf5c */		if (!g_mirrorPiece[i].isComplete())
+/* 001bdf80 */		{
+/* 001bdf80 */			indexes.PushBack(i);
+/* 001bdf94 */		}
+/* 001bdf94 */	}
+/* 001bdf9a */	if (indexes.Empty())
+/* 001bdfaa */	{
+/* 001bdfaa */		return -1;
+/* 001bdfb2 */	}
+/* 001bdfb2 */	return indexes[RAND(indexes.Numof()) - 1];
+/* 001bdfde */}
+
+bool SceneMirrorPiece::update()
+/* 001bdfec */{
+/* 001bdfec */	if (this.state_ == 1)
+/* 001be004 */	{
+/* 001be004 */		if (g_mouse.isClick(1) || g_mouse.isClick(0))
+/* 001be054 */		{
+/* 001be054 */			this.fadeIn(false, this.onFinishExitFadeOut);
+/* 001be06c */		}
+/* 001be06c */	}
+/* 001be06c */	return this.state_ != 2;
+/* 001be082 */}
+
+void SceneMirrorPiece::onFinishExitFadeOut()
+/* 001be090 */{
+/* 001be090 */	this.state_ = 2;
+/* 001be0a2 */}
+
+void SceneMirrorPiece::initPartsPieces()
+/* 001be0aa */{
+/* 001be0aa */	this.partsPieces_.Alloc(this.piece_.getPieceCount());
+/* 001be0ca */	int i;
+/* 001be0dc */	for (i = 0; i < this.partsPieces_.Numof(); ++i)
+/* 001be12c */	{
+/* 001be12c */		this.partsPieces_[i].init(this.piece_.getCgName(i), 0);
+/* 001be168 */		this.partsPieces_[i].setZ(100.0);
+/* 001be18a */		this.partsPieces_[i].setShow(this.piece_.isPieceOpen(i));
+/* 001be1c0 */		this.partsPieces_[i].setMultiColorValue(128, 128, 128);
+/* 001be1ee */		this.partsPieces_[i].setParent(this.parent_.getPartsNumber());
+/* 001be21a */	}
+/* 001be220 */}
+
+void SceneMirrorPiece::openPiece(int index)
+/* 001be228 */{
+/* 001be228 */	PartsMotion m;
+/* 001be238 */	m.setTime(500);
+/* 001be24e */	m.setKey(16, 255, 0, 0);
+/* 001be276 */	this.partsPieces_[index].setMultiColorValue(255, 255, 255);
+/* 001be2a4 */	this.partsPieces_[index].setShow(true);
+/* 001be2c6 */	if (this.piece_.isComplete())
+/* 001be2dc */	{
+/* 001be2dc */		g_sysSound.play(6, "効果音／鏡の破片取得");
+/* 001be2f8 */		this.partsPieces_[index].runMotion(m, this.onFinishPieceFlashShowComplete);
+/* 001be32c */	}
+/* 001be332 */	else
+/* 001be332 */	{
+/* 001be332 */		g_sysSound.play(6, "効果音／鏡の破片取得");
+/* 001be34e */		this.partsPieces_[index].runMotion(m, this.onFinishPieceFlash);
+/* 001be382 */	}
+/* 001be382 */}
+
+void SceneMirrorPiece::onFinishPieceFlashShowComplete()
+/* 001be38a */{
+/* 001be38a */	this.showPieces(false);
+/* 001be398 */	this.showCompleteImage();
+/* 001be3a0 */}
+
+void SceneMirrorPiece::showCompleteImage()
+/* 001be3a8 */{
+/* 001be3a8 */	this.partsComplete_.init(this.piece_.getCompleteCgName(), 0);
+/* 001be3ce */	this.partsComplete_.setShow(true);
+/* 001be3e4 */	this.partsComplete_.setZ(200.0);
+/* 001be3fa */	this.partsComplete_.setParent(this.parent_.getPartsNumber());
+/* 001be41a */	PartsMotion m;
+/* 001be42a */	m.setTime(1000);
+/* 001be440 */	m.setKey(16, 255, 0, 0);
+/* 001be468 */	this.partsComplete_.runMotion(m, this.onFinishComplete);
+/* 001be490 */	this.partsFrame_.setShow(false);
+/* 001be4a6 */	int i;
+/* 001be4b8 */	for (i = 0; i < this.partsPieces_.Numof(); ++i)
+/* 001be508 */	{
+/* 001be508 */		this.partsPieces_[i].setShow(false);
+/* 001be52a */	}
+/* 001be530 */	g_sysSound.play(6, "効果音／鏡の破片コンプリート");
+/* 001be54c */}
+
+void SceneMirrorPiece::showPieces(bool val)
+/* 001be554 */{
+/* 001be554 */	int i;
+/* 001be566 */	for (i = 0; i < this.partsPieces_.Numof(); ++i)
+/* 001be5b6 */	{
+/* 001be5b6 */		this.partsPieces_[i].setShow(val);
+/* 001be5dc */	}
+/* 001be5e2 */}
+
+void SceneMirrorPiece::onFinishComplete()
+/* 001be5ea */{
+/* 001be5ea */	DialogInfomation info;
+/* 001be5fa */	info.setCaption("鏡の破片");
+/* 001be610 */	info.setMessage("鏡の破片がすべてそろいました");
+/* 001be626 */	openDialog(info);
+/* 001be63c */	this.state_ = 1;
+/* 001be64e */}
+
+void SceneMirrorPiece::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001be656 */{
+/* 001be656 */	PartsMotion m;
+/* 001be666 */	m = getStandardMotion(val ? 0 : 1);
+/* 001be6a2 */	if (!val)
+/* 001be6b4 */	{
+/* 001be6b4 */		m.setTime(150);
+/* 001be6ca */	}
+/* 001be6ca */	this.parent_.runMotion(m, cb);
+/* 001be6f4 */}
+
+void SceneMirrorPiece::onFinishFadeOutToAdv()
+/* 001be6fc */{
+/* 001be6fc */	DG_GeneralCallback fn;
+/* 001be708 */	fn = this.piece_.getAdvFunctionName();
+/* 001be734 */	fn();
+/* 001be754 */	this.fadeIn(true, this.onFinishAdvFadeIn);
+/* 001be76c */}
+
+void SceneMirrorPiece::onFinishAdvFadeIn()
+/* 001be774 */{
+/* 001be774 */	this.state_ = 1;
+/* 001be786 */}
+
+void SceneMirrorPiece::onFinishPieceFlash()
+/* 001be78e */{
+/* 001be78e */	this.state_ = 1;
+/* 001be7a0 */}
+

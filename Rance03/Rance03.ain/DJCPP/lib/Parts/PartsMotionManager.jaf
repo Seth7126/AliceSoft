@@ -1,0 +1,82 @@
+void PartsMotionManager::add(PartsMotioner motioner)
+/* 001ec120 */{
+/* 001ec120 */	this.finalizeCurrentMotion(motioner.getPartsNumber());
+/* 001ec138 */	this.motionerList_.PushBack(motioner);
+/* 001ec150 */}
+
+void PartsMotionManager::update()
+/* 001ec158 */{
+/* 001ec158 */	int i;
+/* 001ec16a */	while (i < this.motionerList_.Numof())
+/* 001ec18c */	{
+/* 001ec18c */		if (!this.motionerList_[i].isMotion())
+/* 001ec1b0 */		{
+/* 001ec1b0 */			this.motionerList_.Erase(i);
+/* 001ec1c6 */		}
+/* 001ec1cc */		else
+/* 001ec1cc */		{
+/* 001ec1cc */			this.motionerList_[i].update();
+/* 001ec1e8 */			++i;
+/* 001ec1f8 */		}
+/* 001ec1f8 */	}
+/* 001ec1fe */}
+
+int PartsMotionManager::findMotionFromPartsNumber(int partsNumber)
+/* 001ec206 */{
+/* 001ec206 */	int i;
+/* 001ec218 */	for (i = 0; i < this.motionerList_.Numof(); ++i)
+/* 001ec268 */	{
+/* 001ec268 */		if (this.motionerList_[i].getPartsNumber() == partsNumber)
+/* 001ec296 */		{
+/* 001ec296 */			return i;
+/* 001ec2a2 */		}
+/* 001ec2a2 */	}
+/* 001ec2a8 */	return -1;
+/* 001ec2b0 */}
+
+void PartsMotionManager::finalizeCurrentMotion(int partsNumber)
+/* 001ec2be */{
+/* 001ec2be */	int index = this.findMotionFromPartsNumber(partsNumber);
+/* 001ec2dc */	if (index != -1)
+/* 001ec2f4 */	{
+/* 001ec2f4 */		this.motionerList_[index].finalize();
+/* 001ec310 */		this.motionerList_.Erase(index);
+/* 001ec326 */	}
+/* 001ec326 */}
+
+bool PartsMotionManager::isEmpty()
+/* 001ec32e */{
+/* 001ec32e */	return this.motionerList_.Empty();
+/* 001ec33c */}
+
+void PartsMotionManager::finalize(int partsNumber)
+/* 001ec34a */{
+/* 001ec34a */	int i;
+/* 001ec35c */	if (partsNumber == -1)
+/* 001ec374 */	{
+/* 001ec374 */		for (i = 0; i < this.motionerList_.Numof(); ++i)
+/* 001ec3c4 */		{
+/* 001ec3c4 */			this.motionerList_[i].finalize();
+/* 001ec3e0 */		}
+/* 001ec3e6 */		this.motionerList_.Free();
+/* 001ec3f0 */	}
+/* 001ec3f6 */	else
+/* 001ec3f6 */	{
+/* 001ec3f6 */		for (i = 0; i < this.motionerList_.Numof(); ++i)
+/* 001ec446 */		{
+/* 001ec446 */			if (partsNumber == this.motionerList_[i].getPartsNumber())
+/* 001ec474 */			{
+/* 001ec474 */				this.motionerList_[i].finalize();
+/* 001ec490 */				this.motionerList_.Erase(i);
+/* 001ec4a6 */				pass("finalize erase %d" % partsNumber);
+/* 001ec4c4 */				break;
+/* 001ec4ca */			}
+/* 001ec4ca */		}
+/* 001ec4d0 */	}
+/* 001ec4d0 */}
+
+bool PartsMotionManager::isMotion(int partsNumber)
+/* 001ec4d8 */{
+/* 001ec4d8 */	return this.findMotionFromPartsNumber(partsNumber) != -1;
+/* 001ec4f6 */}
+

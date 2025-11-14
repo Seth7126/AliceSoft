@@ -1,0 +1,287 @@
+CAEPropertyCheckBox::CAEPropertyCheckBox()
+/* 000614ac */{
+/* 000614b4 */	this.Init(0, NULL);
+/* 000614c8 */}
+
+CAEPropertyCheckBox::~CAEPropertyCheckBox()
+/* 000614d0 */{
+/* 000614d0 */	this.Release();
+/* 000614d8 */}
+
+void CAEPropertyCheckBox::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 000614e0 */{
+/* 000614e0 */	this.Release();
+/* 000614e8 */	if (Item === NULL)
+/* 00061500 */	{
+/* 00061500 */		return;
+/* 00061502 */	}
+/* 00061502 */	this.m_Item <- Item;
+/* 00061522 */	this.m_Panel.Init(LayoutID);
+/* 0006153c */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00061556 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 00061570 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0006158a */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 000615a4 */	this.m_Panel.AddChangedCheckBoxEvent(this.ChangedCheckBoxEvent);
+/* 000615be */	int ID = this.m_Item.GetID();
+/* 000615da */	float 太字幅;
+/* 000615ec */	float 縁取り幅;
+/* 000615fe */	int 種類;
+/* 00061610 */	int サイズ;
+/* 00061622 */	int 赤;
+/* 00061634 */	int 緑;
+/* 00061646 */	int 青;
+/* 00061658 */	int 縁取り赤;
+/* 0006166a */	int 縁取り緑;
+/* 0006167c */	int 縁取り青;
+/* 0006168e */	Ｐ＿チェックボックス＿フォント取得(ID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 000616ee */	this.m_Panel.AddTextBoxItem("幅", string(Ｐ＿チェックボックス＿ボタン幅取得(ID)), false);
+/* 00061738 */	this.m_Panel.AddTextBoxItem("高さ", string(Ｐ＿チェックボックス＿ボタン高さ取得(ID)), false);
+/* 00061782 */	this.m_Panel.AddCheckBoxItem("チェック状態", Ｐ＿チェックボックス＿チェック状態取得(ID));
+/* 000617c4 */	this.m_Panel.AddButtonItem("色", "%d,%d,%d" % Ｐ＿チェックボックス＿赤色取得(ID) % Ｐ＿チェックボックス＿緑色取得(ID) % Ｐ＿チェックボックス＿青色取得(ID));
+/* 00061844 */	this.m_Panel.AddButtonItem("フォント", "%s, サイズ[%d]" % PARTS_GetFontName(種類) % サイズ);
+/* 000618a6 */	this.m_Panel.AddTextBoxItem("文字間隔", string(Ｐ＿チェックボックス＿文字間隔取得(ID)), false);
+/* 000618f0 */	this.m_Panel.AddTextBoxItem("行間隔", string(Ｐ＿チェックボックス＿行間隔取得(ID)), false);
+/* 0006193a */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿チェックボックス＿ＣＧ名取得(ID), true);
+/* 00061982 */	this.m_Panel.AddTextBoxItem("フラット名", Ｐ＿チェックボックス＿フラット名取得(ID), true);
+/* 000619ca */	this.m_Panel.AddButtonItem("テキスト", Ｐ＿チェックボックス＿テキスト取得(ID));
+/* 00061a0c */	this.m_Panel.AddButtonItem("テキスト位置", PARTS_GetOriginPosModeName(Ｐ＿チェックボックス＿テキスト位置取得(ID)));
+/* 00061a54 */	this.m_Panel.AddCheckBoxItem("ボタンモード", Ｐ＿チェックボックス＿ボタンモード設定取得(ID));
+/* 00061a96 */	this.m_Panel.AddButtonItem("遷移情報", this.m_Item.GetDestinationFirst());
+/* 00061ad8 */}
+
+void CAEPropertyCheckBox::Release()
+/* 00061ae0 */{
+/* 00061ae0 */	this.m_dgMouseWheelEvent.Clear();
+/* 00061aec */	this.m_dgKeyDownEvent.Clear();
+/* 00061af8 */	this.m_Item <- NULL;
+/* 00061b10 */	this.m_Panel.Release();
+/* 00061b20 */}
+
+void CAEPropertyCheckBox::KeyDownEvent(int ID, int KeyID)
+/* 00061b28 */{
+/* 00061b28 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00061b5c */}
+
+void CAEPropertyCheckBox::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00061b64 */{
+/* 00061b64 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00061ba2 */}
+
+void CAEPropertyCheckBox::ChangeTextEvent(int ID)
+/* 00061baa */{
+/* 00061baa */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00061bfa */	if (Item === NULL)
+/* 00061c12 */	{
+/* 00061c12 */		return;
+/* 00061c14 */	}
+/* 00061c14 */	int PartsID = this.m_Item.GetID();
+/* 00061c30 */	if (Item.GetLabel() == "幅")
+/* 00061c4e */	{
+/* 00061c4e */		Ｐ＿チェックボックス＿ボタンサイズ設定(PartsID, Item.GetTextBoxInt(), Ｐ＿チェックボックス＿ボタン高さ取得(PartsID));
+/* 00061c7e */	}
+/* 00061c84 */	else if (Item.GetLabel() == "高さ")
+/* 00061ca2 */	{
+/* 00061ca2 */		Ｐ＿チェックボックス＿ボタンサイズ設定(PartsID, Ｐ＿チェックボックス＿ボタン幅取得(PartsID), Item.GetTextBoxInt());
+/* 00061cd2 */	}
+/* 00061cd8 */	else if (Item.GetLabel() == "ＣＧ名")
+/* 00061cf6 */	{
+/* 00061cf6 */		Ｐ＿チェックボックス＿ＣＧ名設定(PartsID, Item.GetTextBoxText());
+/* 00061d16 */	}
+/* 00061d1c */	else if (Item.GetLabel() == "フラット名")
+/* 00061d3a */	{
+/* 00061d3a */		Ｐ＿チェックボックス＿フラット名設定(PartsID, Item.GetTextBoxText());
+/* 00061d5a */	}
+/* 00061d60 */	else if (Item.GetLabel() == "文字間隔")
+/* 00061d7e */	{
+/* 00061d7e */		Ｐ＿チェックボックス＿文字間隔設定(PartsID, Item.GetTextBoxInt());
+/* 00061d9e */	}
+/* 00061da4 */	else if (Item.GetLabel() == "行間隔")
+/* 00061dc2 */	{
+/* 00061dc2 */		Ｐ＿チェックボックス＿行間隔設定(PartsID, Item.GetTextBoxInt());
+/* 00061de2 */	}
+/* 00061de2 */}
+
+void CAEPropertyCheckBox::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00061dea */{
+/* 00061dea */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00061e3a */	if (Item === NULL)
+/* 00061e52 */	{
+/* 00061e52 */		return;
+/* 00061e54 */	}
+/* 00061e54 */	int PartsID = this.m_Item.GetID();
+/* 00061e70 */	if (Item.GetLabel() == "色")
+/* 00061e8e */	{
+/* 00061e8e */		CAESelectColorDialog Form;
+/* 00061e9e */		Form.Show(ID, MouseX, MouseY, Ｐ＿チェックボックス＿赤色取得(PartsID), Ｐ＿チェックボックス＿緑色取得(PartsID), Ｐ＿チェックボックス＿青色取得(PartsID), this.ChangedColorEvent);
+/* 00061f06 */	}
+/* 00061f12 */	else if (Item.GetLabel() == "フォント")
+/* 00061f30 */	{
+/* 00061f30 */		float 太字幅;
+/* 00061f42 */		float 縁取り幅;
+/* 00061f54 */		int 種類;
+/* 00061f66 */		int サイズ;
+/* 00061f78 */		int 赤;
+/* 00061f8a */		int 緑;
+/* 00061f9c */		int 青;
+/* 00061fae */		int 縁取り赤;
+/* 00061fc0 */		int 縁取り緑;
+/* 00061fd2 */		int 縁取り青;
+/* 00061fe4 */		Ｐ＿チェックボックス＿フォント取得(PartsID, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00062044 */		CASCharSpriteProperty Font;
+/* 00062054 */		Font.SetType(種類);
+/* 0006206e */		Font.SetSize(サイズ);
+/* 00062088 */		Font.SetColor(CF_CASColor(赤, 緑, 青, 255));
+/* 000620c2 */		Font.SetBoldWeight(太字幅);
+/* 000620dc */		Font.SetEdgeWeight(縁取り幅);
+/* 000620f6 */		Font.SetEdgeColor(CF_CASColor(縁取り赤, 縁取り緑, 縁取り青, 255));
+/* 00062130 */		CAESelectFontDialog Form;
+/* 00062140 */		Form.Show(ID, MouseX, MouseY, Font, this.ChangedFontEvent);
+/* 00062186 */	}
+/* 00062198 */	else if (Item.GetLabel() == "テキスト")
+/* 000621b6 */	{
+/* 000621b6 */		CAEEditTextDialog Form;
+/* 000621c6 */		Form.Show(ID, MouseX, MouseY, Ｐ＿チェックボックス＿テキスト取得(PartsID), this.ChangedStringEvent);
+/* 00062210 */	}
+/* 0006221c */	else if (Item.GetLabel() == "テキスト位置")
+/* 0006223a */	{
+/* 0006223a */		CAESelectOriginDialog Form;
+/* 0006224a */		Form.Show(ID, MouseX, MouseY, Ｐ＿チェックボックス＿テキスト位置取得(PartsID), this.ChangedOriginTypeEvent);
+/* 00062292 */	}
+/* 0006229e */	else if (Item.GetLabel() == "遷移情報")
+/* 000622bc */	{
+/* 000622bc */		array@string DestinationList;
+/* 000622c6 */		this.m_Item.GetDestination(DestinationList);
+/* 000622e0 */		CAEEditIntentDialog Form;
+/* 000622f0 */		Form.Show(ID, "", MouseX, MouseY, DestinationList, this.m_Item.GetIntentType(), this.SelectIntentEvent);
+/* 0006235a */	}
+/* 0006235a */}
+
+void CAEPropertyCheckBox::ChangedOriginTypeEvent(int ID, int Type)
+/* 00062362 */{
+/* 00062362 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000623b2 */	if (Item === NULL)
+/* 000623ca */	{
+/* 000623ca */		return;
+/* 000623cc */	}
+/* 000623cc */	int PartsID = this.m_Item.GetID();
+/* 000623e8 */	if (Item.GetLabel() == "テキスト位置")
+/* 00062406 */	{
+/* 00062406 */		Ｐ＿チェックボックス＿テキスト位置設定(PartsID, Type);
+/* 00062420 */		Item.SetButtonText(PARTS_GetOriginPosModeName(Type));
+/* 00062440 */	}
+/* 00062440 */}
+
+void CAEPropertyCheckBox::SelectIntentEvent(int ID, ref array@string DestinationList, int IntentType)
+/* 00062448 */{
+/* 00062448 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00062498 */	if (Item === NULL)
+/* 000624b0 */	{
+/* 000624b0 */		return;
+/* 000624b2 */	}
+/* 000624b2 */	int PartsID = this.m_Item.GetID();
+/* 000624ce */	if (Item.GetLabel() == "遷移情報")
+/* 000624ec */	{
+/* 000624ec */		this.m_Item.SetDestinationList(DestinationList);
+/* 00062506 */		this.m_Item.SetIntentType(IntentType);
+/* 00062520 */		Item.SetButtonText(this.m_Item.GetDestinationFirst());
+/* 00062540 */	}
+/* 00062540 */}
+
+void CAEPropertyCheckBox::ChangedColorEvent(int ID, int Red, int Green, int Blue)
+/* 00062548 */{
+/* 00062548 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00062598 */	if (Item === NULL)
+/* 000625b0 */	{
+/* 000625b0 */		return;
+/* 000625b2 */	}
+/* 000625b2 */	int PartsID = this.m_Item.GetID();
+/* 000625ce */	if (Item.GetLabel() == "色")
+/* 000625ec */	{
+/* 000625ec */		Ｐ＿チェックボックス＿色設定(PartsID, Red, Green, Blue);
+/* 0006261a */		Item.SetButtonText("%d,%d,%d" % Red % Green % Blue);
+/* 00062666 */	}
+/* 00062666 */}
+
+void CAEPropertyCheckBox::ChangedFontEvent(int ID, ref CASCharSpriteProperty Font)
+/* 0006266e */{
+/* 0006266e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000626be */	if (Item === NULL)
+/* 000626d6 */	{
+/* 000626d6 */		return;
+/* 000626d8 */	}
+/* 000626d8 */	int PartsID = this.m_Item.GetID();
+/* 000626f4 */	CASColor Color;
+/* 00062704 */	Color = Font.GetColor();
+/* 00062728 */	CASColor EdgeColor;
+/* 00062738 */	EdgeColor = Font.GetEdgeColor();
+/* 0006275c */	if (Item.GetLabel() == "フォント")
+/* 0006277a */	{
+/* 0006277a */		Ｐ＿チェックボックス＿フォント設定(PartsID, Font.GetType(), Font.GetSize(), Color.GetR(), Color.GetG(), Color.GetB(), Font.GetBoldWeight(), EdgeColor.GetR(), EdgeColor.GetG(), EdgeColor.GetB(), Font.GetEdgeWeight());
+/* 0006282a */		Item.SetButtonText("%s, サイズ[%d]" % PARTS_GetFontName(Font.GetType()) % Font.GetSize());
+/* 00062876 */	}
+/* 00062876 */}
+
+void CAEPropertyCheckBox::ChangedStringEvent(int ID, string Text)
+/* 0006287e */{
+/* 0006287e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000628ce */	if (Item === NULL)
+/* 000628e6 */	{
+/* 000628e6 */		return;
+/* 000628e8 */	}
+/* 000628e8 */	int PartsID = this.m_Item.GetID();
+/* 00062904 */	if (Item.GetLabel() == "テキスト")
+/* 00062922 */	{
+/* 00062922 */		Ｐ＿チェックボックス＿テキスト設定(PartsID, Text);
+/* 0006293c */		Item.SetButtonText(Text);
+/* 00062956 */	}
+/* 00062956 */}
+
+void CAEPropertyCheckBox::SelecteTextEvent(int ID, string Name)
+/* 0006295e */{
+/* 0006295e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000629ae */	if (Item === NULL)
+/* 000629c6 */	{
+/* 000629c6 */		return;
+/* 000629c8 */	}
+/* 000629c8 */	Item.SetButtonText(Name);
+/* 000629e2 */}
+
+void CAEPropertyCheckBox::ChangedCheckBoxEvent(int ID, bool Check)
+/* 000629ea */{
+/* 000629ea */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00062a3a */	if (Item === NULL)
+/* 00062a52 */	{
+/* 00062a52 */		return;
+/* 00062a54 */	}
+/* 00062a54 */	int PartsID = this.m_Item.GetID();
+/* 00062a70 */	if (Item.GetLabel() == "チェック状態")
+/* 00062a8e */	{
+/* 00062a8e */		Ｐ＿チェックボックス＿チェック状態設定(PartsID, Item.GetFlg());
+/* 00062aae */		Item.SetFlg(Ｐ＿チェックボックス＿チェック状態取得(PartsID));
+/* 00062ace */	}
+/* 00062ad4 */	else if (Item.GetLabel() == "ボタンモード")
+/* 00062af2 */	{
+/* 00062af2 */		Ｐ＿チェックボックス＿ボタンモード設定(PartsID, Item.GetFlg());
+/* 00062b12 */	}
+/* 00062b12 */}
+
+void CAEPropertyCheckBox::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00062b1a */{
+/* 00062b1a */	this.m_dgKeyDownEvent += DelegateObject;
+/* 00062b34 */}
+
+void CAEPropertyCheckBox::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00062b3c */{
+/* 00062b3c */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00062b56 */}
+
+void CAEPropertyCheckBox::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00062b5e */{
+/* 00062b5e */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00062b78 */}
+
+void CAEPropertyCheckBox::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00062b80 */{
+/* 00062b80 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 00062b9a */}
+

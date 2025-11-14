@@ -1,0 +1,53 @@
+string Shop::getId()
+/* 001e211a */{
+/* 001e211a */	return this.id_;
+/* 001e2126 */}
+
+string Shop::getName()
+/* 001e2134 */{
+/* 001e2134 */	return this.name_;
+/* 001e2140 */}
+
+string Shop::getImageName()
+/* 001e214e */{
+/* 001e214e */	return this.imageName_;
+/* 001e215a */}
+
+void Shop::init(string id, string name, string imageName)
+/* 001e2168 */{
+/* 001e2168 */	this.id_ = id;
+/* 001e2180 */	this.name_ = name;
+/* 001e2198 */	this.imageName_ = imageName;
+/* 001e21b0 */}
+
+void Shop::addItem(string id)
+/* 001e21b8 */{
+/* 001e21b8 */	int index = this.itemId_.Find(0, this.itemId_.Numof(), id);
+/* 001e21f4 */	if (index < 0)
+/* 001e220c */	{
+/* 001e220c */		this.itemId_.PushBack(id);
+/* 001e2220 */	}
+/* 001e2220 */}
+
+void Shop::clear()
+/* 001e2228 */{
+/* 001e2228 */	this.itemId_.Free();
+/* 001e2232 */}
+
+void Shop::eraseItem(string id)
+/* 001e223a */{
+/* 001e223a */	int index = this.itemId_.Find(0, this.itemId_.Numof(), id);
+/* 001e2276 */	if (index < 0)
+/* 001e228e */	{
+/* 001e228e */		return;
+/* 001e2290 */	}
+/* 001e2290 */	this.itemId_.Erase(index);
+/* 001e22a6 */}
+
+void Shop::getItemIdList(ref array@string id)
+/* 001e22ae */{
+/* 001e22ae */	id.Free();
+/* 001e22b8 */	id.Alloc(this.itemId_.Numof());
+/* 001e22d8 */	id.Copy(0, this.itemId_, 0, this.itemId_.Numof());
+/* 001e230a */}
+

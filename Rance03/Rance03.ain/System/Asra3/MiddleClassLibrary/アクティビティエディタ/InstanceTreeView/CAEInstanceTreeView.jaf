@@ -1,0 +1,376 @@
+CAEInstanceTreeView::CAEInstanceTreeView()
+/* 00076824 */{
+/* 0007682c */	this.Init();
+/* 00076836 */}
+
+CAEInstanceTreeView::~CAEInstanceTreeView()
+/* 0007683e */{
+/* 0007683e */	this.Release();
+/* 00076846 */}
+
+int CAEInstanceTreeView::Init()
+/* 0007684e */{
+/* 0007684e */	this.Release();
+/* 00076856 */	this.m_MainLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 00076868 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(this.m_MainLayoutBox, 0);
+/* 0007687e */	Ｐ＿Ｚ座標設定(this.m_MainLayoutBox, 0);
+/* 00076894 */	this.m_ListLayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 000768a6 */	Ｐ＿Ｚ座標設定(this.m_ListLayoutBox, 2);
+/* 000768bc */	Ｐ＿親設定(this.m_ListLayoutBox, this.m_MainLayoutBox);
+/* 000768d6 */	this.m_VScroll = PARTS_GetFreeSystemPartsNumber();
+/* 000768e8 */	Ｐ＿Ｚ座標設定(this.m_VScroll, 4);
+/* 000768fe */	Ｐ＿親設定(this.m_VScroll, this.m_MainLayoutBox);
+/* 00076918 */	this.m_HScroll = PARTS_GetFreeSystemPartsNumber();
+/* 0007692a */	Ｐ＿Ｚ座標設定(this.m_HScroll, 4);
+/* 00076940 */	Ｐ＿親設定(this.m_HScroll, this.m_MainLayoutBox);
+/* 0007695a */	this.m_Clip = PARTS_GetFreeSystemPartsNumber();
+/* 0007696c */	Ｐ＿Ｚ座標設定(this.m_Clip, 1);
+/* 00076982 */	Ｐ＿親設定(this.m_Clip, this.m_MainLayoutBox);
+/* 0007699c */	Ｐ＿アルファクリッパー設定(this.m_ListLayoutBox, this.m_Clip);
+/* 000769b6 */	AFL_Parts_AddScrollEvent(this.m_VScroll, this.ScrollEvent);
+/* 000769d0 */	AFL_Parts_AddScrollEvent(this.m_HScroll, this.ScrollEvent);
+/* 000769ea */	AFL_Parts_AddMouseWheelEvent(this.m_Clip, this.MouseWheelEvent);
+/* 00076a04 */	AFL_Parts_AddMouseWheelEvent(this.m_VScroll, this.MouseWheelEvent);
+/* 00076a1e */	AFL_Parts_AddMouseWheelEvent(this.m_HScroll, this.MouseWheelEvent);
+/* 00076a38 */	this.SetSize(420, 256);
+/* 00076a4c */	Ｐ＿座標設定(this.m_VScroll, AFL_Parts_GetWidth(this.m_Clip, 1), 0.0);
+/* 00076a7a */	Ｐ＿座標設定(this.m_HScroll, 0.0, AFL_Parts_GetHeight(this.m_Clip, 1));
+/* 00076aa8 */	return this.m_MainLayoutBox;
+/* 00076ab4 */}
+
+void CAEInstanceTreeView::Release()
+/* 00076ac2 */{
+/* 00076ac2 */	PARTS_ReleaseWithInit(this.m_Clip);
+/* 00076ad0 */	PARTS_ReleaseWithInit(this.m_HScroll);
+/* 00076ade */	PARTS_ReleaseWithInit(this.m_VScroll);
+/* 00076aec */	PARTS_ReleaseWithInit(this.m_ListLayoutBox);
+/* 00076afa */	PARTS_ReleaseWithInit(this.m_MainLayoutBox);
+/* 00076b08 */	this.m_dgUpdateTree.Clear();
+/* 00076b14 */	this.m_dgMouseRClickEvent.Clear();
+/* 00076b20 */	this.ReleaseTextList();
+/* 00076b28 */}
+
+void CAEInstanceTreeView::SetSize(int Width, int Height)
+/* 00076b30 */{
+/* 00076b30 */	int ScrollSize = 16;
+/* 00076b42 */	int ClipWidth = Width - ScrollSize;
+/* 00076b64 */	int ClipHeight = Height - ScrollSize;
+/* 00076b86 */	Ｐ＿構築手順＿初期化(this.m_Clip, 1);
+/* 00076b9c */	Ｐ＿構築手順＿ピクセル作成(this.m_Clip, ClipWidth, ClipHeight, 1);
+/* 00076bc6 */	Ｐ＿構築手順＿色塗り(this.m_Clip, 0, 0, ClipWidth, ClipHeight, 255, 255, 255, -1, 1);
+/* 00076c14 */	Ｐ＿構築ビルド(this.m_Clip, 1);
+/* 00076c2a */	Ｐ＿縦スクロールバー＿サイズ設定(this.m_VScroll, ScrollSize, ClipHeight);
+/* 00076c4e */	Ｐ＿横スクロールバー＿サイズ設定(this.m_HScroll, ClipWidth, ScrollSize);
+/* 00076c72 */	this.UpdateScrollBar();
+/* 00076c7a */}
+
+void CAEInstanceTreeView::SetShow(bool Show)
+/* 00076c82 */{
+/* 00076c82 */	Ｐ＿表示設定(this.m_Clip, Show);
+/* 00076c9c */	Ｐ＿表示設定(this.m_ListLayoutBox, Show);
+/* 00076cb6 */	Ｐ＿表示設定(this.m_VScroll, Show);
+/* 00076cd0 */	Ｐ＿表示設定(this.m_HScroll, Show);
+/* 00076cea */}
+
+int CAEInstanceTreeView::GetLastZPos()
+/* 00076cf2 */{
+/* 00076cf2 */	int Z;
+/* 00076d04 */	Z = Math.Max(Z, PARTS_GetAbsoluteMaxZ(this.m_ListLayoutBox));
+/* 00076d34 */	Z = Math.Max(Z, PARTS_GetAbsoluteMaxZ(this.m_Clip));
+/* 00076d64 */	Z = Math.Max(Z, PARTS_GetAbsoluteMaxZ(this.m_VScroll));
+/* 00076d94 */	Z = Math.Max(Z, PARTS_GetAbsoluteMaxZ(this.m_HScroll));
+/* 00076dc4 */	return Z;
+/* 00076dd0 */}
+
+void CAEInstanceTreeView::UpdateScrollBar()
+/* 00076dde */{
+/* 00076dde */	int TreeWidth = AFL_Parts_GetWidth(this.m_ListLayoutBox, 1);
+/* 00076e00 */	int TreeHeight = AFL_Parts_GetHeight(this.m_ListLayoutBox, 1);
+/* 00076e22 */	int ClipWidth = AFL_Parts_GetWidth(this.m_Clip, 1);
+/* 00076e44 */	int ClipHeight = AFL_Parts_GetHeight(this.m_Clip, 1);
+/* 00076e66 */	Ｐ＿縦スクロールバー＿表示量設定(this.m_VScroll, ClipHeight);
+/* 00076e80 */	Ｐ＿縦スクロールバー＿全体量設定(this.m_VScroll, TreeHeight);
+/* 00076e9a */	Ｐ＿横スクロールバー＿表示量設定(this.m_HScroll, ClipWidth);
+/* 00076eb4 */	Ｐ＿横スクロールバー＿全体量設定(this.m_HScroll, TreeWidth);
+/* 00076ece */}
+
+void CAEInstanceTreeView::ScrollEvent(int ID, int ScrollSize, int Total)
+/* 00076ed6 */{
+/* 00076ed6 */	int VScrollSize = Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 00076ef2 */	int HScrollSize = Ｐ＿横スクロールバー＿スクロール位置取得(this.m_HScroll);
+/* 00076f0e */	Ｐ＿座標設定(this.m_ListLayoutBox, -HScrollSize, -VScrollSize);
+/* 00076f3a */}
+
+void CAEInstanceTreeView::MouseRClickEvent(int ID, int MouseX, int MouseY)
+/* 00076f42 */{
+/* 00076f42 */	this.m_dgMouseRClickEvent(ID, MouseX, MouseY);
+/* 00076f80 */}
+
+void CAEInstanceTreeView::CreateTree(ref CAEInstanceItemList InstanceItemList)
+/* 00076f88 */{
+/* 00076f88 */	if (InstanceItemList === NULL)
+/* 00076fa0 */	{
+/* 00076fa0 */		return;
+/* 00076fa2 */	}
+/* 00076fa2 */	int RootParts = InstanceItemList.GetRootParts();
+/* 00076fbe */	if (!Ｐ＿存在確認(RootParts))
+/* 00076fd6 */	{
+/* 00076fd6 */		return;
+/* 00076fd8 */	}
+/* 00076fd8 */	this.m_InstanceItemList <- InstanceItemList;
+/* 00076ff8 */	bool Focus = this.IsFocusNode();
+/* 0007700c */	Ｐ＿レイアウトボックス＿全解放(this.m_ListLayoutBox);
+/* 0007701c */	this.ReleaseTextList();
+/* 00077024 */	int NumofChild = Ｐ＿子数取得(RootParts);
+/* 00077040 */	int Index;
+/* 00077052 */	for (Index = 0; Index < NumofChild; ++Index)
+/* 0007709c */	{
+/* 0007709c */		int Child = Ｐ＿子取得(RootParts, Index);
+/* 000770c2 */		this.CreateNode(InstanceItemList, Child);
+/* 000770de */	}
+/* 000770e4 */	if (Focus)
+/* 000770f4 */	{
+/* 000770f4 */		Ｐ＿フォーカス設定(this.m_VScroll);
+/* 00077104 */	}
+/* 00077104 */	this.UpdateScrollBar();
+/* 0007710c */	this.ScrollByActiveItem();
+/* 00077114 */}
+
+void CAEInstanceTreeView::ScrollByActiveItem()
+/* 0007711c */{
+/* 0007711c */	ref CAEInstanceItem ActiveItem = this.m_InstanceItemList.GetActive();
+/* 00077162 */	if (ActiveItem === NULL)
+/* 0007717a */	{
+/* 0007717a */		return;
+/* 0007717c */	}
+/* 0007717c */	int i;
+/* 0007718e */	for (i = 0; i < this.m_NodeList.Numof(); ++i)
+/* 000771de */	{
+/* 000771de */		if (this.m_NodeList[i].GetItem() === ActiveItem)
+/* 00077226 */		{
+/* 00077226 */			break;
+/* 00077232 */		}
+/* 00077232 */	}
+/* 0007723e */	if (i == this.m_NodeList.Numof())
+/* 00077260 */	{
+/* 00077260 */		return;
+/* 00077262 */	}
+/* 00077262 */	AFL_View_Update(true);
+/* 0007726e */	int Offset = -Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 0007728c */	int Top = Offset + this.m_NodeList[i].GetPosY();
+/* 000772c8 */	int Bottom = Top + this.m_NodeList[i].GetHeight();
+/* 000772fc */	int ClipHeight = AFL_Parts_GetHeight(this.m_Clip, 1);
+/* 0007731e */	if (ClipHeight < Bottom)
+/* 0007733a */	{
+/* 0007733a */		Ｐ＿縦スクロールバー＿スクロール位置設定(this.m_VScroll, (-Offset + Bottom) - ClipHeight);
+/* 0007736e */	}
+/* 0007736e */	if (Top < 0)
+/* 00077386 */	{
+/* 00077386 */		Ｐ＿縦スクロールバー＿スクロール位置設定(this.m_VScroll, -Offset + Top);
+/* 000773ae */	}
+/* 000773ae */}
+
+void CAEInstanceTreeView::RefreshTree()
+/* 000773b6 */{
+/* 000773b6 */	this.m_dgUpdateTree();
+/* 000773d6 */}
+
+void CAEInstanceTreeView::CreateNode(ref CAEInstanceItemList InstanceItemList, int Parts)
+/* 000773de */{
+/* 000773de */	if (InstanceItemList === NULL)
+/* 000773f6 */	{
+/* 000773f6 */		return;
+/* 000773f8 */	}
+/* 000773f8 */	if (!Ｐ＿存在確認(Parts))
+/* 00077410 */	{
+/* 00077410 */		return;
+/* 00077412 */	}
+/* 00077412 */	ref CAEInstanceItem Item = InstanceItemList.FindInstanceByNumber(Parts);
+/* 00077462 */	if (Item === NULL)
+/* 0007747a */	{
+/* 0007747a */		return;
+/* 0007747c */	}
+/* 0007747c */	this.m_NodeList.Realloc(this.m_NodeList.Numof() + 1);
+/* 000774a4 */	this.m_NodeList[this.m_NodeList.Numof() - 1].Create(this.m_ListLayoutBox, this.m_Clip, Item, this.m_NodeList);
+/* 000774f6 */	this.m_NodeList[this.m_NodeList.Numof() - 1].AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0007752a */	this.m_NodeList[this.m_NodeList.Numof() - 1].AddRefreshTreeEvent(this.RefreshTree);
+/* 0007755e */	this.m_NodeList[this.m_NodeList.Numof() - 1].AddDropTopEvent(this.DropTopEvent);
+/* 00077592 */	this.m_NodeList[this.m_NodeList.Numof() - 1].AddDropEvent(this.DropEvent);
+/* 000775c6 */	this.m_NodeList[this.m_NodeList.Numof() - 1].AddDropBottomEvent(this.DropBottomEvent);
+/* 000775fa */	this.m_NodeList[this.m_NodeList.Numof() - 1].AddMouseRClickEvent(this.MouseRClickEvent);
+/* 0007762e */	if (!Item.IsOpen())
+/* 00077646 */	{
+/* 00077646 */		return;
+/* 00077648 */	}
+/* 00077648 */	int NumofChild = Ｐ＿子数取得(Parts);
+/* 00077664 */	int Index;
+/* 00077676 */	for (Index = 0; Index < NumofChild; ++Index)
+/* 000776c0 */	{
+/* 000776c0 */		int Child = Ｐ＿子取得(Parts, Index);
+/* 000776e6 */		this.CreateNode(InstanceItemList, Child);
+/* 00077702 */	}
+/* 00077708 */}
+
+void CAEInstanceTreeView::GetDragDropNode(int DragPanelNumber, int DropPanelNumber, ref int DragNumber, ref int DropNumber)
+/* 00077710 */{
+/* 00077710 */	DragNumber = 0;
+/* 00077724 */	DropNumber = 0;
+/* 00077738 */	ref CAEInstanceItem DragItem;
+/* 00077752 */	ref CAEInstanceItem DropItem;
+/* 00077770 */	int Index;
+/* 00077786 */	int Length = this.m_NodeList.Numof();
+/* 000777a2 */	for (Index = 0; Index < Length; ++Index)
+/* 000777ec */	{
+/* 000777ec */		if (this.m_NodeList[Index].IsExist(DragPanelNumber))
+/* 00077818 */		{
+/* 00077818 */			DragItem <- this.m_NodeList[Index].GetItem();
+/* 00077864 */			if (DropItem !== NULL)
+/* 0007787c */			{
+/* 0007787c */				break;
+/* 00077888 */			}
+/* 00077888 */			continue;
+/* 00077894 */		}
+/* 0007789a */		if (this.m_NodeList[Index].IsExist(DropPanelNumber))
+/* 000778c6 */		{
+/* 000778c6 */			DropItem <- this.m_NodeList[Index].GetItem();
+/* 00077912 */			if (DragItem !== NULL)
+/* 0007792a */			{
+/* 0007792a */				break;
+/* 0007793c */			}
+/* 0007793c */			continue;
+/* 0007794e */		}
+/* 0007794e */	}
+/* 0007795a */	if (DragItem !== NULL)
+/* 00077972 */	{
+/* 00077972 */		DragNumber = DragItem.GetID();
+/* 00077990 */	}
+/* 00077990 */	if (DropItem !== NULL)
+/* 000779a8 */	{
+/* 000779a8 */		DropNumber = DropItem.GetID();
+/* 000779c6 */	}
+/* 000779c6 */}
+
+void CAEInstanceTreeView::DropTopEvent(int ID, int DragPartsNumber, int MouseX, int MouseY)
+/* 000779ce */{
+/* 000779ce */	int DragNumber;
+/* 000779e0 */	int DropNumber;
+/* 000779f2 */	this.GetDragDropNode(DragPartsNumber, ID, DragNumber, DropNumber);
+/* 00077a1e */	if (DragNumber == 0)
+/* 00077a36 */	{
+/* 00077a36 */		return;
+/* 00077a38 */	}
+/* 00077a38 */	if (DropNumber == 0)
+/* 00077a50 */	{
+/* 00077a50 */		return;
+/* 00077a52 */	}
+/* 00077a52 */	int DragParent = Ｐ＿親設定取得(DragNumber);
+/* 00077a6e */	int DropParent = Ｐ＿親設定取得(DropNumber);
+/* 00077a8a */	bool SameParent = DragParent == DropParent;
+/* 00077aae */	int DragIndex = Ｐ＿子インデックス取得(DragParent, DragNumber);
+/* 00077ad4 */	int DropIndex = Ｐ＿子インデックス取得(DropParent, DropNumber);
+/* 00077afa */	if (!SameParent)
+/* 00077b0c */	{
+/* 00077b0c */		Ｐ＿子挿入(DropParent, DropIndex, DragNumber);
+/* 00077b30 */	}
+/* 00077b36 */	else if (SameParent && DropIndex < DragIndex)
+/* 00077b7a */	{
+/* 00077b7a */		Ｐ＿子挿入(DropParent, DropIndex, DragNumber);
+/* 00077b9e */	}
+/* 00077ba4 */	else if (SameParent && DropIndex > DragIndex)
+/* 00077be8 */	{
+/* 00077be8 */		Ｐ＿子挿入(DropParent, DropIndex - 1, DragNumber);
+/* 00077c14 */	}
+/* 00077c14 */}
+
+void CAEInstanceTreeView::DropEvent(int ID, int DragPartsNumber, int MouseX, int MouseY)
+/* 00077c1c */{
+/* 00077c1c */	int DragNumber;
+/* 00077c2e */	int DropNumber;
+/* 00077c40 */	this.GetDragDropNode(DragPartsNumber, ID, DragNumber, DropNumber);
+/* 00077c6c */	if (DragNumber == 0)
+/* 00077c84 */	{
+/* 00077c84 */		return;
+/* 00077c86 */	}
+/* 00077c86 */	if (DropNumber == 0)
+/* 00077c9e */	{
+/* 00077c9e */		return;
+/* 00077ca0 */	}
+/* 00077ca0 */	Ｐ＿親設定(DragNumber, DropNumber);
+/* 00077cba */}
+
+void CAEInstanceTreeView::DropBottomEvent(int ID, int DragPartsNumber, int MouseX, int MouseY)
+/* 00077cc2 */{
+/* 00077cc2 */	int DragNumber;
+/* 00077cd4 */	int DropNumber;
+/* 00077ce6 */	this.GetDragDropNode(DragPartsNumber, ID, DragNumber, DropNumber);
+/* 00077d12 */	if (DragNumber == 0)
+/* 00077d2a */	{
+/* 00077d2a */		return;
+/* 00077d2c */	}
+/* 00077d2c */	if (DropNumber == 0)
+/* 00077d44 */	{
+/* 00077d44 */		return;
+/* 00077d46 */	}
+/* 00077d46 */	int DragParent = Ｐ＿親設定取得(DragNumber);
+/* 00077d62 */	int DropParent = Ｐ＿親設定取得(DropNumber);
+/* 00077d7e */	bool SameParent = DragParent == DropParent;
+/* 00077da2 */	int DragIndex = Ｐ＿子インデックス取得(DragParent, DragNumber);
+/* 00077dc8 */	int DropIndex = Ｐ＿子インデックス取得(DropParent, DropNumber);
+/* 00077dee */	if (!SameParent)
+/* 00077e00 */	{
+/* 00077e00 */		Ｐ＿子挿入(DropParent, DropIndex + 1, DragNumber);
+/* 00077e2c */	}
+/* 00077e32 */	else if (SameParent && DropIndex < DragIndex)
+/* 00077e76 */	{
+/* 00077e76 */		Ｐ＿子挿入(DropParent, DropIndex + 1, DragNumber);
+/* 00077ea2 */	}
+/* 00077ea8 */	else if (SameParent && DropIndex > DragIndex)
+/* 00077eec */	{
+/* 00077eec */		Ｐ＿子挿入(DropParent, DropIndex, DragNumber);
+/* 00077f10 */	}
+/* 00077f10 */}
+
+bool CAEInstanceTreeView::IsFocusNode()
+/* 00077f18 */{
+/* 00077f18 */	int Index;
+/* 00077f2a */	for (Index = 0; Index < this.m_NodeList.Numof(); ++Index)
+/* 00077f7a */	{
+/* 00077f7a */		if (this.m_NodeList[Index].IsFocus())
+/* 00077f9c */		{
+/* 00077f9c */			return true;
+/* 00077fa4 */		}
+/* 00077fa4 */	}
+/* 00077faa */	return false;
+/* 00077fb2 */}
+
+void CAEInstanceTreeView::ReleaseTextList()
+/* 00077fc0 */{
+/* 00077fc0 */	this.m_NodeList.Free();
+/* 00077fca */}
+
+void CAEInstanceTreeView::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00077fd2 */{
+/* 00077fd2 */	int Pos = Ｐ＿縦スクロールバー＿スクロール位置取得(this.m_VScroll);
+/* 00077fee */	Ｐ＿縦スクロールバー＿スクロール位置設定(this.m_VScroll, (Pos - Forward * 36) + Back * 36);
+/* 00078030 */}
+
+void CAEInstanceTreeView::AddMouseRClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00078038 */{
+/* 00078038 */	this.m_dgMouseRClickEvent += DelegateObject;
+/* 00078052 */}
+
+void CAEInstanceTreeView::EraseMouseRClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0007805a */{
+/* 0007805a */	this.m_dgMouseRClickEvent -= DelegateObject;
+/* 00078074 */}
+
+void CAEInstanceTreeView::AddUpdateTreeEvent(DG_NotifyHandler DelegateObject)
+/* 0007807c */{
+/* 0007807c */	this.m_dgUpdateTree += DelegateObject;
+/* 00078096 */}
+
+void CAEInstanceTreeView::EraseUpdateTreeEvent(DG_NotifyHandler DelegateObject)
+/* 0007809e */{
+/* 0007809e */	this.m_dgUpdateTree -= DelegateObject;
+/* 000780b8 */}
+

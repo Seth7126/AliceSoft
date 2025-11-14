@@ -1,0 +1,99 @@
+void SceneSystemMenu::init(bool isShowAutoSkip)
+/* 001c57e6 */{
+/* 001c57e6 */	this.isShowAutoSkip_ = isShowAutoSkip;
+/* 001c57fc */	this.selected_ = -1;
+/* 001c580e */	this.partsBg_.initAsPlaneImage(1024, 768, 0, 0, 0, 255);
+/* 001c5842 */	this.partsBg_.setZ(8500.0);
+/* 001c5858 */	this.initButton();
+/* 001c5860 */	this.setButtonPos();
+/* 001c5868 */}
+
+void SceneSystemMenu::initButton()
+/* 001c5870 */{
+/* 001c5870 */	array@string n;
+/* 001c587a */	n.PushBack("枠消し");
+/* 001c588a */	n.PushBack("オート");
+/* 001c589a */	n.PushBack("スキップ");
+/* 001c58aa */	n.PushBack("バックログ");
+/* 001c58ba */	n.PushBack("バックシーン");
+/* 001c58ca */	n.PushBack("コンフィグ");
+/* 001c58da */	n.PushBack("マニュアル");
+/* 001c58ea */	n.PushBack("メニューを閉じる");
+/* 001c58fa */	int i;
+/* 001c590c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c595c */	{
+/* 001c595c */		this.btn_[i].init("システム／ボタン／幅１７０", n[i], "", true);
+/* 001c59a0 */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001c59d0 */		this.btn_[i].setZ(8550);
+/* 001c59f2 */	}
+/* 001c59f8 */}
+
+void SceneSystemMenu::setButtonPos()
+/* 001c5a00 */{
+/* 001c5a00 */	int i;
+/* 001c5a12 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c5a62 */	{
+/* 001c5a62 */		this.btn_[i].setPos(840, 197 + 71 * i);
+/* 001c5a9e */	}
+/* 001c5aa4 */}
+
+void SceneSystemMenu::fadeButton(bool val)
+/* 001c5aac */{
+/* 001c5aac */	int i;
+/* 001c5abe */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001c5b0e */	{
+/* 001c5b0e */		if (this.isShowAutoSkip_ || !this.isShowAutoSkip_ && i >= 3)
+/* 001c5b78 */		{
+/* 001c5b78 */			this.btn_[i].fadeIn(val);
+/* 001c5b9e */		}
+/* 001c5b9e */	}
+/* 001c5ba4 */}
+
+void SceneSystemMenu::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001c5bac */{
+/* 001c5bac */	this.fadeButton(val);
+/* 001c5bbe */	this.partsBg_.setShow(true);
+/* 001c5bd4 */	PartsMotion m;
+/* 001c5be4 */	if (val)
+/* 001c5bf4 */	{
+/* 001c5bf4 */		m.setAlpha(0, 160, 0);
+/* 001c5c16 */	}
+/* 001c5c1c */	else
+/* 001c5c1c */	{
+/* 001c5c1c */		m.setAlpha(160, 0, 0);
+/* 001c5c3e */	}
+/* 001c5c3e */	this.partsBg_.runMotion(m, cb);
+/* 001c5c68 */}
+
+void SceneSystemMenu::run()
+/* 001c5c70 */{
+/* 001c5c70 */	this.fadeIn(true, NULL);
+/* 001c5c80 */}
+
+bool SceneSystemMenu::update()
+/* 001c5c88 */{
+/* 001c5c88 */	if (g_mouse.isClick(1) && !this.partsBg_.isMotion())
+/* 001c5cd4 */	{
+/* 001c5cd4 */		playCancel();
+/* 001c5cda */		this.selected_ = -1;
+/* 001c5cec */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c5d04 */	}
+/* 001c5d04 */	return !this.isFinish_;
+/* 001c5d14 */}
+
+void SceneSystemMenu::onClick(int id)
+/* 001c5d22 */{
+/* 001c5d22 */	this.selected_ = id;
+/* 001c5d38 */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001c5d50 */}
+
+void SceneSystemMenu::onFinishFadeOut()
+/* 001c5d58 */{
+/* 001c5d58 */	this.isFinish_ = true;
+/* 001c5d6a */}
+
+int SceneSystemMenu::getSelected()
+/* 001c5d72 */{
+/* 001c5d72 */	return this.selected_;
+/* 001c5d7e */}
+

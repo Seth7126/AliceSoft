@@ -1,0 +1,153 @@
+void DungeonCard::init(string infoId, int openType)
+/* 001ced16 */{
+/* 001ced16 */	this.dataId_ = infoId;
+/* 001ced2e */	this.openType_ = openType;
+/* 001ced44 */	this.reset();
+/* 001ced4c */}
+
+void DungeonCard::setCardOpenCallback(DG_GeneralCallback cardOpenCallback)
+/* 001ced54 */{
+/* 001ced54 */	this.cardOpenCallback_ = cardOpenCallback;
+/* 001ced6e */}
+
+void DungeonCard::setCardChangedCallback(DG_GeneralCallback cardChangedCallback)
+/* 001ced76 */{
+/* 001ced76 */	this.cardChangedCallback_ = cardChangedCallback;
+/* 001ced90 */}
+
+void DungeonCard::initCardType()
+/* 001ced98 */{
+/* 001ced98 */	if (isDungeonCardId(this.dataId_))
+/* 001cedae */	{
+/* 001cedae */		this.cardTypeId_ = this.dataId_;
+/* 001cedc6 */	}
+/* 001cedcc */	else
+/* 001cedcc */	{
+/* 001cedcc */		this.cardTypeId_ = this.getFromRandomId(this.dataId_);
+/* 001cedec */	}
+/* 001cedec */}
+
+void DungeonCard::openCard()
+/* 001cedf4 */{
+/* 001cedf4 */	if (!this.isOpen_)
+/* 001cee06 */	{
+/* 001cee06 */		this.isOpen_ = true;
+/* 001cee18 */		this.cardOpenCallback_();
+/* 001cee38 */	}
+/* 001cee38 */}
+
+string DungeonCard::getCardTypeId()
+/* 001cee40 */{
+/* 001cee40 */	if (this.cardTypeId_ == "")
+/* 001cee58 */	{
+/* 001cee58 */		this.initCardType();
+/* 001cee60 */	}
+/* 001cee60 */	return this.cardTypeId_;
+/* 001cee6c */}
+
+string DungeonCard::getDataId()
+/* 001cee7a */{
+/* 001cee7a */	return this.dataId_;
+/* 001cee86 */}
+
+void DungeonCard::changeCardType(string typeId)
+/* 001cee94 */{
+/* 001cee94 */	if (this.cardChangeType_ == 2)
+/* 001ceeac */	{
+/* 001ceeac */		return;
+/* 001ceeae */	}
+/* 001ceeae */	this.cardTypeId_ = typeId;
+/* 001ceec6 */	this.isOpen_ = true;
+/* 001ceed8 */	this.cardChangeType_ = 1;
+/* 001ceeea */	this.cardChangedCallback_();
+/* 001cef0a */}
+
+void DungeonCard::changeCardTypePermanent(string typeId)
+/* 001cef12 */{
+/* 001cef12 */	this.cardTypeId_ = typeId;
+/* 001cef2a */	this.isOpen_ = true;
+/* 001cef3c */	this.cardChangeType_ = 2;
+/* 001cef4e */	this.cardChangedCallback_();
+/* 001cef6e */}
+
+bool DungeonCard::isOpen()
+/* 001cef76 */{
+/* 001cef76 */	return this.isOpen_;
+/* 001cef82 */}
+
+string DungeonCard::getFromRandomId(string randomId)
+/* 001cef90 */{
+/* 001cef90 */	array@string n;
+/* 001cef9a */	int i;
+/* 001cefac */	for (i = 0; i < 6; ++i)
+/* 001ceff2 */	{
+/* 001ceff2 */		string t = EX_SA2String("ランダムカードグループ", randomId, "c%d" % (i + 1), "");
+/* 001cf03c */		if (!t.Empty())
+/* 001cf050 */		{
+/* 001cf050 */			n.PushBack(t);
+/* 001cf064 */		}
+/* 001cf064 */	}
+/* 001cf06a */	return n[RAND(n.Numof()) - 1];
+/* 001cf096 */}
+
+void DungeonCard::reset()
+/* 001cf0a4 */{
+/* 001cf0a4 */	if (this.cardChangeType_ == 0 || this.cardChangeType_ == 1)
+/* 001cf0ec */	{
+/* 001cf0ec */		this.initCardType();
+/* 001cf0f4 */		this.resetOpenState();
+/* 001cf0fc */	}
+/* 001cf102 */	else
+/* 001cf102 */	{
+/* 001cf102 */		this.isOpen_ = true;
+/* 001cf114 */	}
+/* 001cf114 */}
+
+void DungeonCard::resetOpenState()
+/* 001cf11c */{
+/* 001cf11c */	switch (this.openType_)
+/* 001cf132 */	{
+/* 001cf132 */	case 0:
+/* 001cf132 */		this.isOpen_ = true;
+/* 001cf144 */		break;
+/* 001cf14a */	case 1:
+/* 001cf14a */		this.isOpen_ = false;
+/* 001cf15c */		break;
+/* 001cf162 */	case 2:
+/* 001cf162 */		this.isOpen_ = RAND(2) == 1;
+/* 001cf184 */		break;
+/* 001cf18a */	}
+/* 001cf18a */}
+
+bool isDungeonCardId(string id)
+/* 001cf192 */{
+/* 001cf192 */	int l;
+/* 001cf1a4 */	int r = g_cardInfomation.Numof() - 1;
+/* 001cf1c8 */	while (true)
+/* 001cf1d4 */	{
+/* 001cf1d4 */		int c = (l + r) / 2;
+/* 001cf1fe */		if (id < g_cardInfomation[c].getId())
+/* 001cf22c */		{
+/* 001cf22c */			r = c - 1;
+/* 001cf24a */		}
+/* 001cf250 */		else if (id > g_cardInfomation[c].getId())
+/* 001cf27e */		{
+/* 001cf27e */			l = c + 1;
+/* 001cf29c */		}
+/* 001cf2a2 */		else
+/* 001cf2a2 */		{
+/* 001cf2a2 */			return true;
+/* 001cf2aa */		}
+/* 001cf2aa */		if (l > r)
+/* 001cf2c6 */		{
+/* 001cf2c6 */			break;
+/* 001cf2cc */		}
+/* 001cf2cc */	}
+/* 001cf2d2 */	return false;
+/* 001cf2da */}
+
+int DungeonCard::getOpenType()
+/* 001cf2ee */{
+/* 001cf2ee */	return this.openType_;
+/* 001cf2fa */}
+

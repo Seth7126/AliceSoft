@@ -1,0 +1,55 @@
+void AFL_Config_SetBeginEvent(DG_NotifyHandler dgObject)
+/* 0016a294 */{
+/* 0016a294 */	g_ConfigView.SetBeginEvent(dgObject);
+/* 0016a2b0 */}
+
+void AFL_Config_SetEndEvent(DG_NotifyHandler dgObject)
+/* 0016a2be */{
+/* 0016a2be */	g_ConfigView.SetEndEvent(dgObject);
+/* 0016a2da */}
+
+void AFL_Config_SetLoadedActivityEvent(DG_PARTS_LoadedActivityHandler dgObject)
+/* 0016a2e8 */{
+/* 0016a2e8 */	g_ConfigView.SetLoadedActivityEvent(dgObject);
+/* 0016a304 */}
+
+void AFL_Config_SetReleasingActivityEvent(DG_PARTS_ReleasingActivityHandler dgObject)
+/* 0016a312 */{
+/* 0016a312 */	g_ConfigView.SetReleasingActivityEvent(dgObject);
+/* 0016a32e */}
+
+void AFL_Config_SetAsraDataForPartsEvent(DG_NotifyConfigUpdateHandler dgObject)
+/* 0016a33c */{
+/* 0016a33c */	g_ConfigView.SetAsraDataForPartsEvent(dgObject);
+/* 0016a358 */}
+
+void AFL_Config_SetPartsDataForAsraEvent(DG_NotifyConfigUpdateHandler dgObject)
+/* 0016a366 */{
+/* 0016a366 */	g_ConfigView.SetPartsDataForAsraEvent(dgObject);
+/* 0016a382 */}
+
+int AFL_GetKeyConfigMouseWheelForwardMode()
+/* 0016a390 */{
+/* 0016a390 */	return g_nKeyConfigMouseWheelForward;
+/* 0016a39c */}
+
+bool AFL_GetConfigQuickSaveConfirm()
+/* 0016a3b0 */{
+/* 0016a3b0 */	return g_ConfigQuickSaveConfirm;
+/* 0016a3bc */}
+
+bool AFL_GetConfigQuickLoadConfirm()
+/* 0016a3d0 */{
+/* 0016a3d0 */	return g_ConfigQuickLoadConfirm;
+/* 0016a3dc */}
+
+bool AFL_GetConfigSaveConfirm()
+/* 0016a3f0 */{
+/* 0016a3f0 */	return g_ConfigSaveConfirm;
+/* 0016a3fc */}
+
+bool AFL_GetConfigLoadConfirm()
+/* 0016a410 */{
+/* 0016a410 */	return g_ConfigLoadConfirm;
+/* 0016a41c */}
+

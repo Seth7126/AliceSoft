@@ -1,0 +1,60 @@
+bool AFL_Parts_SetPartsFlatAndStop(int PartsNumber, string pIFlatFileName, int State)
+/* 0016aeaa */{
+/* 0016aeaa */	if (!PartsEngine.Parts_SetPartsFlatAndStop(PartsNumber, pIFlatFileName, State))
+/* 0016aeda */	{
+/* 0016aeda */		PARTS_Warning("AFL_Parts_SetPartsFlatAndStop(パーツ番号 = %d, フラットファイル名 = \"%s\", 状態 = %d\n" % PartsNumber % pIFlatFileName % State);
+/* 0016af1c */		return false;
+/* 0016af24 */	}
+/* 0016af24 */	return true;
+/* 0016af2c */}
+
+bool AFL_Parts_StopPartsFlat(int PartsNumber, int State)
+/* 0016af40 */{
+/* 0016af40 */	return PartsEngine.Parts_StopPartsFlat(PartsNumber, State);
+/* 0016af60 */}
+
+bool AFL_Parts_StartPartsFlat(int PartsNumber, int State)
+/* 0016af74 */{
+/* 0016af74 */	return PartsEngine.Parts_StartPartsFlat(PartsNumber, State);
+/* 0016af94 */}
+
+bool AFL_Parts_IsStopPartsFlat(int PartsNumber, int State)
+/* 0016afa8 */{
+/* 0016afa8 */	return PartsEngine.Parts_IsPartsFlatStop(PartsNumber, State);
+/* 0016afc8 */}
+
+bool AFL_Parts_GoFramePartsFlat(int PartsNumber, int FrameNumber, int State)
+/* 0016afdc */{
+/* 0016afdc */	return PartsEngine.Parts_GoFramePartsFlat(PartsNumber, FrameNumber, State);
+/* 0016b006 */}
+
+void AFL_Parts_GoLabelPartsFlat(int PartsNumber, string Label, int State)
+/* 0016b01a */{
+/* 0016b01a */	PartsEngine.Parts_JumpFlatLabel(PartsNumber, Label, State);
+/* 0016b042 */}
+
+int AFL_Parts_GetPartsFlatEndFrameNumber(int PartsNumber, int State)
+/* 0016b050 */{
+/* 0016b050 */	return PartsEngine.Parts_GetPartsFlatEndFrame(PartsNumber, State);
+/* 0016b070 */}
+
+int AFL_Parts_GetPartsFlatCurrentFrameNumber(int PartsNumber, int State)
+/* 0016b084 */{
+/* 0016b084 */	return PartsEngine.Parts_GetPartsFlatCurrentFrameNumber(PartsNumber, State);
+/* 0016b0a4 */}
+
+void AFL_Parts_SetFlatUpdateSpeedRate(int PartsNumber, float Rate, int State)
+/* 0016b0b8 */{
+/* 0016b0b8 */	PartsEngine.SetFlatFPSRate(PartsNumber, Rate, State);
+/* 0016b0e0 */}
+
+float AFL_Parts_GetFlatUpdateSpeedRate(int PartsNumber, int State)
+/* 0016b0ee */{
+/* 0016b0ee */	return PartsEngine.GetFlatFPSRate(PartsNumber, State);
+/* 0016b10e */}
+
+int AFL_Parts_GetFlatFPS(int PartsNumber, int State)
+/* 0016b122 */{
+/* 0016b122 */	return PartsEngine.GetFlatFPS(PartsNumber, State);
+/* 0016b142 */}
+

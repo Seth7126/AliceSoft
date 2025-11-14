@@ -1,0 +1,10 @@
+void ＣＧモード登録(string ＣＧ名)
+/* 0015d640 */{
+/* 0015d640 */	PassRegister.RegistText(0, ＣＧ名);
+/* 0015d65c */}
+
+bool ＣＧモード確認(string ＣＧ名)
+/* 0015d66a */{
+/* 0015d66a */	return PassRegister.ExistText(0, ＣＧ名);
+/* 0015d686 */}
+

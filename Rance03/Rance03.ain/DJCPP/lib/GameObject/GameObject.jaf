@@ -1,0 +1,103 @@
+GameObject::GameObject()
+/* 001e5306 */{
+/* 001e530e */	this.isIndependent_ = false;
+/* 001e5320 */	this.stackLevel_ = 0;
+/* 001e5332 */}
+
+bool GameObject::isAlive()
+/* 001e533a */{
+/* 001e533a */	return this.updateMethod_.Numof() != 0;
+/* 001e5354 */}
+
+void GameObject::setIndependentObject(bool val)
+/* 001e5362 */{
+/* 001e5362 */	this.isIndependent_ = val;
+/* 001e5378 */}
+
+bool GameObject::isIndependentObject()
+/* 001e5380 */{
+/* 001e5380 */	return this.isIndependent_;
+/* 001e538c */}
+
+void GameObject::addSceneStackLevel()
+/* 001e539a */{
+/* 001e539a */	if (this.isIndependent_)
+/* 001e53aa */	{
+/* 001e53aa */		return;
+/* 001e53ac */	}
+/* 001e53ac */	++this.stackLevel_;
+/* 001e53bc */}
+
+void GameObject::decSceneStackLevel()
+/* 001e53c4 */{
+/* 001e53c4 */	if (this.isIndependent_)
+/* 001e53d4 */	{
+/* 001e53d4 */		return;
+/* 001e53d6 */	}
+/* 001e53d6 */	this.stackLevel_ = Math.Max(this.stackLevel_ - 1, 0);
+/* 001e5404 */}
+
+bool GameObject::isStacked()
+/* 001e540c */{
+/* 001e540c */	return this.stackLevel_ > 0;
+/* 001e5422 */}
+
+void GameObject::setId(int id)
+/* 001e5430 */{
+/* 001e5430 */	this.id_ = id;
+/* 001e5446 */}
+
+void GameObject::setUpdateMethod(DELEGATE_UPDATE_METHOD cbUpdate)
+/* 001e544e */{
+/* 001e544e */	this.updateMethod_ = cbUpdate;
+/* 001e5468 */}
+
+void GameObject::setFocusedMethod(DELEGATE_FOCUSED_METHOD cbFocused)
+/* 001e5470 */{
+/* 001e5470 */	this.focusedMethod_ = cbFocused;
+/* 001e548a */}
+
+void GameObject::setSceneStackLevel(int val)
+/* 001e5492 */{
+/* 001e5492 */	this.stackLevel_ = Math.Max(0, val);
+/* 001e54b8 */}
+
+int GameObject::getId()
+/* 001e54c0 */{
+/* 001e54c0 */	return this.id_;
+/* 001e54cc */}
+
+int GameObject::getSceneStackLevel()
+/* 001e54da */{
+/* 001e54da */	return this.stackLevel_;
+/* 001e54e6 */}
+
+bool GameObject::callUpdateMethod()
+/* 001e54f4 */{
+/* 001e54f4 */	if (this.updateMethod_.Numof() != 0)
+/* 001e5510 */	{
+/* 001e5510 */		this.updateMethod_();
+/* 001e5530 */		return true;
+/* 001e5538 */	}
+/* 001e5538 */	return false;
+/* 001e5540 */}
+
+bool GameObject::callFocuedMethod()
+/* 001e554e */{
+/* 001e554e */	if (this.focusedMethod_.Numof() != 0)
+/* 001e556a */	{
+/* 001e556a */		return this.focusedMethod_();
+/* 001e558c */	}
+/* 001e558c */	return false;
+/* 001e5594 */}
+
+void GameObject::setObjectName(string val)
+/* 001e55a2 */{
+/* 001e55a2 */	this.objectName_ = val;
+/* 001e55ba */}
+
+string GameObject::getObjectName()
+/* 001e55c2 */{
+/* 001e55c2 */	return this.objectName_;
+/* 001e55ce */}
+

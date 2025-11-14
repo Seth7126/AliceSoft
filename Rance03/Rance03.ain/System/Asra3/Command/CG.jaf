@@ -1,0 +1,33 @@
+bool Ａ＿ＣＧ存在確認(string CGName)
+/* 0015f5aa */{
+/* 0015f5aa */	return CGManager.IsExist(CGName);
+/* 0015f5c0 */}
+
+int Ａ＿ＣＧ幅取得(string CGName)
+/* 0015f5d4 */{
+/* 0015f5d4 */	int Width;
+/* 0015f5e6 */	int Height;
+/* 0015f5f8 */	int Bpp;
+/* 0015f60a */	bool ExistPixel = false;
+/* 0015f61c */	bool ExistAlpha = false;
+/* 0015f62e */	if (!CGManager.GetInfo(CGName, Width, Height, Bpp, ExistPixel, ExistAlpha))
+/* 0015f672 */	{
+/* 0015f672 */		return 0;
+/* 0015f67a */	}
+/* 0015f67a */	return Width;
+/* 0015f686 */}
+
+int Ａ＿ＣＧ高さ取得(string CGName)
+/* 0015f69a */{
+/* 0015f69a */	int Width;
+/* 0015f6ac */	int Height;
+/* 0015f6be */	int Bpp;
+/* 0015f6d0 */	bool ExistPixel = false;
+/* 0015f6e2 */	bool ExistAlpha = false;
+/* 0015f6f4 */	if (!CGManager.GetInfo(CGName, Width, Height, Bpp, ExistPixel, ExistAlpha))
+/* 0015f738 */	{
+/* 0015f738 */		return 0;
+/* 0015f740 */	}
+/* 0015f740 */	return Height;
+/* 0015f74c */}
+

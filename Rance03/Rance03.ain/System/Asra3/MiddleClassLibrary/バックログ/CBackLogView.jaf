@@ -1,0 +1,333 @@
+CBackLogView::CBackLogView()
+/* 00022bca */{
+/* 00022bd2 */	this.m_ActivityNameByGame = "";
+/* 00022be6 */	this.m_ActivityName = "";
+/* 00022bfa */	this.m_ViewLastScene = false;
+/* 00022c0c */	this.m_KeyUpWait = false;
+/* 00022c1e */}
+
+void CBackLogView::Execute()
+/* 00022c26 */{
+/* 00022c26 */	this.CreateBacklogTextList();
+/* 00022c2e */	if (this.NumofLine() <= 0)
+/* 00022c44 */	{
+/* 00022c44 */		return;
+/* 00022c46 */	}
+/* 00022c46 */	CASPartsLayer Layer;
+/* 00022c56 */	bool IsExistActivityByGame = SYS_Activity_IsExistFile(this.m_ActivityNameByGame);
+/* 00022c72 */	bool IsExistDefaultActivity = SYS_Activity_IsExistFile("Asra\\バックログ");
+/* 00022c8a */	string FileName;
+/* 00022c9e */	if (IsExistActivityByGame)
+/* 00022cae */	{
+/* 00022cae */		FileName = this.m_ActivityNameByGame;
+/* 00022cc6 */	}
+/* 00022ccc */	else if (system.IsDebugMode() && IsExistDefaultActivity)
+/* 00022d00 */	{
+/* 00022d00 */		FileName = "Asra\\バックログ";
+/* 00022d14 */	}
+/* 00022d14 */	AFL_Parts_AddWholeMouseWheelEvent(this.MouseWheelEvent);
+/* 00022d24 */	AFL_Parts_AddWholeKeyPressEvent(this.KeyPressEvent);
+/* 00022d34 */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 00022d44 */	Ｐ＿アクティビティ実行(FileName, this.LoadedActivityEvent, NULL, NULL);
+/* 00022d62 */	AFL_Parts_EraseWholeKeyUpEvent(this.KeyUpEvent);
+/* 00022d72 */	AFL_Parts_EraseWholeKeyPressEvent(this.KeyPressEvent);
+/* 00022d82 */	AFL_Parts_EraseWholeMouseWheelEvent(this.MouseWheelEvent);
+/* 00022d92 */}
+
+void CBackLogView::CreateBacklogTextList()
+/* 00022d9a */{
+/* 00022d9a */	this.m_LogTextList.Free();
+/* 00022da4 */	int NumofADVLog = AnteaterADVEngine.ADVLogList_GetNumofADVLog();
+/* 00022dba */	int i;
+/* 00022dcc */	for (i = 0; i < NumofADVLog; ++i)
+/* 00022e16 */	{
+/* 00022e16 */		this.AddBacklogText(i);
+/* 00022e28 */	}
+/* 00022e2e */}
+
+void CBackLogView::AddBacklogText(int ADVLog)
+/* 00022e36 */{
+/* 00022e36 */	int NumofVoice = AnteaterADVEngine.ADVLogList_GetNumofADVLogVoice(ADVLog);
+/* 00022e56 */	array@string VoiceNameList;
+/* 00022e60 */	int VoiceIndex;
+/* 00022e72 */	for (VoiceIndex = 0; VoiceIndex < NumofVoice; VoiceIndex++)
+/* 00022ec0 */	{
+/* 00022ec0 */		string VoiceName;
+/* 00022ed4 */		AnteaterADVEngine.ADVLogList_GetADVLogVoice(ADVLog, VoiceIndex, VoiceName);
+/* 00022efc */		VoiceNameList.PushBack(VoiceName);
+/* 00022f10 */	}
+/* 00022f16 */	int NumofText = AnteaterADVEngine.ADVLogList_GetNumofADVLogText(ADVLog);
+/* 00022f36 */	int i;
+/* 00022f48 */	for (i = 0; i < NumofText; ++i)
+/* 00022f92 */	{
+/* 00022f92 */		SBackLogUnitModel BackLogViewText;
+/* 00022fa2 */		AnteaterADVEngine.ADVLogList_GetADVLogText(ADVLog, i, BackLogViewText.m_Text);
+/* 00022fd2 */		BackLogViewText.m_VoiceNameList.Alloc(VoiceNameList.Numof());
+/* 00022ffa */		BackLogViewText.m_VoiceNameList.Copy(0, VoiceNameList, 0, VoiceNameList.Numof());
+/* 00023034 */		this.m_LogTextList.PushBack(BackLogViewText);
+/* 0002304c */	}
+/* 00023058 */	SBackLogUnitModel SeparatorData;
+/* 00023068 */	SeparatorData.m_Separator = true;
+/* 00023082 */	this.m_LogTextList.PushBack(SeparatorData);
+/* 0002309a */}
+
+int CBackLogView::NumofLine()
+/* 000230a2 */{
+/* 000230a2 */	return this.m_LogTextList.Numof();
+/* 000230b4 */}
+
+void CBackLogView::LoadedActivityEvent(string ActivityFileName, string ActivityName)
+/* 000230c2 */{
+/* 000230c2 */	this.m_ActivityName = ActivityName;
+/* 000230da */	this.InitVScrollbar(ActivityName);
+/* 000230ec */	this.InitBackButton(ActivityName);
+/* 000230fe */	this.InitLogText(ActivityName);
+/* 00023110 */	this.SetLineIndex(this.NumofLine());
+/* 00023120 */}
+
+void CBackLogView::MouseWheelEvent(int PartsNumber, int Forward, int Back)
+/* 00023128 */{
+/* 00023128 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00023148 */	{
+/* 00023148 */		return;
+/* 0002314a */	}
+/* 0002314a */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 0002316c */	int Diff = Back - Forward;
+/* 0002318e */	if (this.m_ViewLastScene && 0 < Diff)
+/* 000231ce */	{
+/* 000231ce */		AFL_Activity_End();
+/* 000231d4 */	}
+/* 000231d4 */	int Current = Ｐ＿縦スクロールバー＿スクロール位置取得(Number);
+/* 000231f0 */	Ｐ＿縦スクロールバー＿スクロール位置設定(Number, Current + Diff);
+/* 00023216 */}
+
+void CBackLogView::KeyPressEvent(int PartsNumber, int KeyCode)
+/* 0002321e */{
+/* 0002321e */	if (this.m_KeyUpWait)
+/* 0002322e */	{
+/* 0002322e */		return;
+/* 00023230 */	}
+/* 00023230 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00023250 */	{
+/* 00023250 */		return;
+/* 00023252 */	}
+/* 00023252 */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 00023274 */	int NumofView = Ｐ＿縦スクロールバー＿表示量取得(Number);
+/* 00023290 */	int Diff;
+/* 000232a2 */	if (KeyCode == 40)
+/* 000232ba */	{
+/* 000232ba */		Diff = 1;
+/* 000232cc */	}
+/* 000232d2 */	else if (KeyCode == 38)
+/* 000232ea */	{
+/* 000232ea */		Diff = -1;
+/* 000232fc */	}
+/* 00023302 */	else if (KeyCode == 34)
+/* 0002331a */	{
+/* 0002331a */		Diff = NumofView;
+/* 00023330 */	}
+/* 00023336 */	else if (KeyCode == 33)
+/* 0002334e */	{
+/* 0002334e */		Diff = -NumofView;
+/* 00023366 */	}
+/* 00023366 */	if (Diff == 0)
+/* 0002337e */	{
+/* 0002337e */		return;
+/* 00023380 */	}
+/* 00023380 */	int Current = Ｐ＿縦スクロールバー＿スクロール位置取得(Number);
+/* 0002339c */	if (this.m_ViewLastScene && 0 < Diff)
+/* 000233dc */	{
+/* 000233dc */		for (this.m_KeyUpWait = true; AFL_IsKeyDown(40) || AFL_IsKeyDown(34); )
+/* 00023436 */		{
+/* 00023436 */			AFL_View_Update(true);
+/* 00023442 */		}
+/* 00023448 */		this.m_KeyUpWait = false;
+/* 0002345a */		AFL_Activity_End();
+/* 00023460 */	}
+/* 00023460 */	Ｐ＿縦スクロールバー＿スクロール位置設定(Number, Current + Diff);
+/* 00023486 */}
+
+void CBackLogView::KeyUpEvent(int PartsNumber, int KeyCode)
+/* 0002348e */{
+/* 0002348e */	if (KeyCode == 67 && AFL_IsKeyDown(16))
+/* 000234d0 */	{
+/* 000234d0 */		this.DebugLogTextToLog();
+/* 000234d8 */		this.DebugLogTextToClipboard();
+/* 000234e0 */	}
+/* 000234e0 */}
+
+void CBackLogView::InitVScrollbar(string ActivityName)
+/* 000234e8 */{
+/* 000234e8 */	if (!this.IsExistParts(ActivityName, "SYS_縦スクロールバー"))
+/* 00023508 */	{
+/* 00023508 */		return;
+/* 0002350a */	}
+/* 0002350a */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_縦スクロールバー");
+/* 0002352c */	Ｐ＿縦スクロールバー＿全体量設定(Number, this.NumofLine());
+/* 00023544 */	Ｐ＿縦スクロールバー＿スクロール位置設定(Number, this.NumofLine());
+/* 0002355c */	AFL_Parts_AddScrollEvent(Number, this.ScrollEvent);
+/* 00023576 */	Ｐ＿フォーカス設定(Number);
+/* 00023586 */}
+
+void CBackLogView::InitBackButton(string ActivityName)
+/* 0002358e */{
+/* 0002358e */	if (!this.IsExistParts(ActivityName, "SYS_戻る"))
+/* 000235ae */	{
+/* 000235ae */		return;
+/* 000235b0 */	}
+/* 000235b0 */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_戻る");
+/* 000235d2 */	AFL_Parts_AddMouseLClickEvent(Number, this.ClickEnd);
+/* 000235ec */}
+
+void CBackLogView::InitLogText(string ActivityName)
+/* 000235f4 */{
+/* 000235f4 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00023614 */	{
+/* 00023614 */		return;
+/* 00023616 */	}
+/* 00023616 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_通常テキスト"))
+/* 00023636 */	{
+/* 00023636 */		return;
+/* 00023638 */	}
+/* 00023638 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_音声ありテキスト"))
+/* 00023658 */	{
+/* 00023658 */		return;
+/* 0002365a */	}
+/* 0002365a */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 0002367c */	int TextNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_通常テキスト");
+/* 0002369e */	int VoiceTextNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_音声ありテキスト");
+/* 000236c0 */	Ｐ＿表示設定(TextNumber, false);
+/* 000236d6 */	Ｐ＿表示設定(VoiceTextNumber, false);
+/* 000236ec */	int NumofView = Ｐ＿縦スクロールバー＿表示量取得(Number);
+/* 00023708 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_背景"))
+/* 00023728 */	{
+/* 00023728 */		return;
+/* 0002372a */	}
+/* 0002372a */	int BGNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_背景");
+/* 0002374c */	this.m_UnitList.Init(Ｐ＿Ｘ座標取得(TextNumber), Ｐ＿Ｙ座標取得(TextNumber), Ｐ＿Ｚ座標取得(BGNumber) + 10, this.m_LogTextList);
+/* 000237a0 */}
+
+bool CBackLogView::IsExistParts(string ActivityName, string PartsName)
+/* 000237a8 */{
+/* 000237a8 */	if (SYS_Activity_IsExistPartsByName(ActivityName, PartsName))
+/* 000237c8 */	{
+/* 000237c8 */		return true;
+/* 000237d0 */	}
+/* 000237d0 */	system.Output("バックログ用アクティビティデータに【%s】が存在していません。\n" % PartsName);
+/* 000237f0 */	return false;
+/* 000237f8 */}
+
+void CBackLogView::ClickEnd(int Number, int MouseX, int MouseY)
+/* 00023806 */{
+/* 00023806 */	AFL_Activity_End();
+/* 0002380c */}
+
+void CBackLogView::ScrollEvent(int Number, int ScrollPos, int Total)
+/* 00023814 */{
+/* 00023814 */	this.SetLineIndex(ScrollPos);
+/* 00023826 */}
+
+void CBackLogView::SetLineIndex(int Index)
+/* 0002382e */{
+/* 0002382e */	Index = Math.Max(0, Math.Min(this.NumofLine() - 1, Index));
+/* 0002386e */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 0002388e */	{
+/* 0002388e */		return;
+/* 00023890 */	}
+/* 00023890 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_通常テキスト"))
+/* 000238b0 */	{
+/* 000238b0 */		return;
+/* 000238b2 */	}
+/* 000238b2 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_音声ありテキスト"))
+/* 000238d2 */	{
+/* 000238d2 */		return;
+/* 000238d4 */	}
+/* 000238d4 */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 000238f6 */	int TextNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_通常テキスト");
+/* 00023918 */	int VoiceTextNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_音声ありテキスト");
+/* 0002393a */	int NumofView = Ｐ＿縦スクロールバー＿表示量取得(Number);
+/* 00023956 */	this.m_UnitList.Free();
+/* 00023966 */	int i;
+/* 00023978 */	for (i = 0; i < NumofView; ++i)
+/* 000239c2 */	{
+/* 000239c2 */		int LogIndex = Index + i;
+/* 000239e4 */		if (this.m_LogTextList.Numof() <= LogIndex)
+/* 00023a06 */		{
+/* 00023a06 */			break;
+/* 00023a0c */		}
+/* 00023a0c */		this.m_UnitList.AddUnit(this.m_LogTextList[LogIndex]);
+/* 00023a32 */	}
+/* 00023a38 */	CASCharSpriteProperty Font;
+/* 00023a48 */	CASCharSpriteProperty VoiceFont;
+/* 00023a58 */	CASCharSpriteProperty VoiceOnFont;
+/* 00023a68 */	CASCharSpriteProperty PlayVoiceFont;
+/* 00023a78 */	PARTS_GetFont(TextNumber, Font, 1);
+/* 00023a98 */	PARTS_GetFont(VoiceTextNumber, VoiceFont, 1);
+/* 00023ab8 */	PARTS_GetFont(VoiceTextNumber, VoiceOnFont, 2);
+/* 00023ad8 */	PARTS_GetFont(VoiceTextNumber, PlayVoiceFont, 3);
+/* 00023af8 */	int CharSpace = Ｐ＿テキスト字間隔取得(TextNumber, 1);
+/* 00023b1a */	int LineSpace = Ｐ＿テキスト行間隔取得(TextNumber, 1);
+/* 00023b3c */	int Width = AFL_Parts_GetWidth(TextNumber, 1);
+/* 00023b5e */	this.m_UnitList.Build(Font, VoiceFont, VoiceOnFont, PlayVoiceFont, CharSpace, LineSpace, Width);
+/* 00023bc4 */	float Rate = Ｐ＿縦スクロールバー＿スクロールレート取得(Number);
+/* 00023be0 */	this.m_ViewLastScene = 1.0 <= Rate;
+/* 00023c00 */}
+
+void CBackLogView::SetActivityName(string Name)
+/* 00023c08 */{
+/* 00023c08 */	this.m_ActivityNameByGame = Name;
+/* 00023c20 */}
+
+void CBackLogView::DebugLogTextToLog()
+/* 00023c28 */{
+/* 00023c28 */	if (!system.IsDebugMode())
+/* 00023c36 */	{
+/* 00023c36 */		return;
+/* 00023c38 */	}
+/* 00023c38 */	system.Output(this.DebugGetLogText("\n"));
+/* 00023c4e */}
+
+void CBackLogView::DebugLogTextToClipboard()
+/* 00023c56 */{
+/* 00023c56 */	if (!system.IsDebugMode())
+/* 00023c64 */	{
+/* 00023c64 */		return;
+/* 00023c66 */	}
+/* 00023c66 */	Clipboard.SetText(this.DebugGetLogText("\r\n"));
+/* 00023c7e */}
+
+string CBackLogView::DebugGetLogText(string ReturnText)
+/* 00023c86 */{
+/* 00023c86 */	if (!system.IsDebugMode())
+/* 00023c94 */	{
+/* 00023c94 */		return "";
+/* 00023c9c */	}
+/* 00023c9c */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00023cbc */	{
+/* 00023cbc */		return "";
+/* 00023cc4 */	}
+/* 00023cc4 */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 00023ce6 */	int Index = Ｐ＿縦スクロールバー＿スクロール位置取得(Number);
+/* 00023d02 */	int NumofView = Ｐ＿縦スクロールバー＿表示量取得(Number);
+/* 00023d1e */	string Log = "--------MessageBegin--------%s" % ReturnText;
+/* 00023d44 */	int i;
+/* 00023d56 */	for (i = 0; i < NumofView; ++i)
+/* 00023da0 */	{
+/* 00023da0 */		int LogIndex = Index + i;
+/* 00023dc2 */		if (this.m_LogTextList.Numof() <= LogIndex)
+/* 00023de4 */		{
+/* 00023de4 */			break;
+/* 00023dea */		}
+/* 00023dea */		if (this.m_LogTextList[LogIndex].m_Separator)
+/* 00023e0e */		{
+/* 00023e0e */			Log += ReturnText;
+/* 00023e26 */		}
+/* 00023e2c */		else
+/* 00023e2c */		{
+/* 00023e2c */			Log += this.m_LogTextList[LogIndex].m_Text + ReturnText;
+/* 00023e64 */		}
+/* 00023e64 */	}
+/* 00023e6a */	Log += "--------MessageEnd----------%s" % ReturnText;
+/* 00023e90 */	return Log;
+/* 00023e9c */}
+

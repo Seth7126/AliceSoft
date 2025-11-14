@@ -1,0 +1,67 @@
+MapPlace::MapPlace()
+/* 001d901a */{
+/* 001d9022 */	this.isAvailable_ = false;
+/* 001d9034 */}
+
+bool MapPlace::isAvailable()
+/* 001d903c */{
+/* 001d903c */	return this.isAvailable_;
+/* 001d9048 */}
+
+void MapPlace::setAvailable(bool val)
+/* 001d9056 */{
+/* 001d9056 */	this.isAvailable_ = val;
+/* 001d906c */}
+
+void MapPlace::init(string id)
+/* 001d9074 */{
+/* 001d9074 */	this.id_ = id;
+/* 001d908c */	this.loadParam();
+/* 001d9094 */}
+
+void MapPlace::loadParam()
+/* 001d909c */{
+/* 001d909c */	string key = "マップ場所";
+/* 001d90b0 */	this.x_ = EX_SA2Int(key, this.id_, "x", 0);
+/* 001d90e2 */	this.y_ = EX_SA2Int(key, this.id_, "y", 0);
+/* 001d9114 */	this.caption_ = EX_SA2String(key, this.id_, "caption", "");
+/* 001d9148 */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001d917c */	this.callbackFunction_ = EX_SA2String(key, this.id_, "callback", "");
+/* 001d91b0 */	this.musicId_ = EX_SA2String(key, this.id_, "musicId", "");
+/* 001d91e4 */}
+
+int MapPlace::getX()
+/* 001d91ec */{
+/* 001d91ec */	return this.x_;
+/* 001d91f8 */}
+
+int MapPlace::getY()
+/* 001d9206 */{
+/* 001d9206 */	return this.y_;
+/* 001d9212 */}
+
+string MapPlace::getCaption()
+/* 001d9220 */{
+/* 001d9220 */	return this.caption_;
+/* 001d922c */}
+
+string MapPlace::getId()
+/* 001d923a */{
+/* 001d923a */	return this.id_;
+/* 001d9246 */}
+
+string MapPlace::getCallbackFunction()
+/* 001d9254 */{
+/* 001d9254 */	return this.callbackFunction_;
+/* 001d9260 */}
+
+string MapPlace::getImageName()
+/* 001d926e */{
+/* 001d926e */	return this.imageName_;
+/* 001d927a */}
+
+string MapPlace::getMusicId()
+/* 001d9288 */{
+/* 001d9288 */	return this.musicId_;
+/* 001d9294 */}
+

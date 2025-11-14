@@ -1,0 +1,125 @@
+void GameSceneManager::setAdv(string funcName)
+/* 001e4a72 */{
+/* 001e4a72 */	this.nextAdvFuncName_ = funcName;
+/* 001e4a8a */	this.nextScene_ = 4;
+/* 001e4a9c */}
+
+void GameSceneManager::init(DG_InitialFunction initialFunction)
+/* 001e4aa4 */{
+/* 001e4aa4 */	this.initialFunction_ = initialFunction;
+/* 001e4abe */}
+
+void GameSceneManager::run()
+/* 001e4ac6 */{
+/* 001e4ac6 */	this.initialFunction_();
+/* 001e4ae6 */	while (true)
+/* 001e4af2 */	{
+/* 001e4af2 */		if (this.nextScene_ == 1)
+/* 001e4b0a */		{
+/* 001e4b0a */			bool isLoad = !g_saveDataManager.saveAutoSave();
+/* 001e4b2a */			this.clear();
+/* 001e4b32 */			if (isLoad)
+/* 001e4b42 */			{
+/* 001e4b42 */				g_enquiteSender.innerGameSend();
+/* 001e4b52 */			}
+/* 001e4b52 */			g_playerCommonParam.setPlaceName(getMapPlaceFromId(this.nextPlaceId_).getCaption());
+/* 001e4b8e */			this.currentPlaceId_ = this.callMap(this.nextPlaceId_, isLoad);
+/* 001e4bb8 */			this.mapCallback_ += getMapPlaceFromId(this.currentPlaceId_).getCallbackFunction();
+/* 001e4c00 */			this.nextScene_ = 3;
+/* 001e4c12 */		}
+/* 001e4c24 */		else if (this.nextScene_ == 2)
+/* 001e4c3c */		{
+/* 001e4c3c */			this.clear();
+/* 001e4c44 */			string currentDungeon = this.nextDungeonId_;
+/* 001e4c5c */			setGameMode(true);
+/* 001e4c68 */			openDungeon(currentDungeon, this.dungeonX_, this.dungeonY_);
+/* 001e4c8c */			restoreGameMode();
+/* 001e4c92 */			if (this.nextScene_ != 2)
+/* 001e4caa */			{
+/* 001e4caa */				g_playerCommonParam.setEnableExitDungeon(true);
+/* 001e4cc0 */			}
+/* 001e4cc0 */		}
+/* 001e4cc6 */		else if (this.nextScene_ == 3)
+/* 001e4cde */		{
+/* 001e4cde */			this.clear();
+/* 001e4ce6 */			g_playerCommonParam.setPlaceName(getMapPlaceFromId(this.currentPlaceId_).getCaption());
+/* 001e4d22 */			if (this.mapCallback_.Numof() == 0)
+/* 001e4d3c */			{
+/* 001e4d3c */				break;
+/* 001e4d54 */			}
+/* 001e4d54 */			this.mapCallback_();
+/* 001e4d74 */			this.mapCallback_.Clear();
+/* 001e4d80 */			if (this.nextScene_ == 0)
+/* 001e4d98 */			{
+/* 001e4d98 */				this.nextScene_ = 1;
+/* 001e4daa */				this.nextPlaceId_ = this.currentPlaceId_;
+/* 001e4dc2 */			}
+/* 001e4dc2 */		}
+/* 001e4dce */		else if (this.nextScene_ == 4)
+/* 001e4de6 */		{
+/* 001e4de6 */			this.clear();
+/* 001e4dee */			DG_AdvCallbackFunction fn;
+/* 001e4dfa */			fn = this.nextAdvFuncName_;
+/* 001e4e20 */			fn();
+/* 001e4e40 */			fn.Clear();
+/* 001e4e4c */		}
+/* 001e4e52 */		else
+/* 001e4e52 */		{
+/* 001e4e52 */			pass("次のシーンが指定されませんでした。");
+/* 001e4e5e */			this.setMap(this.currentPlaceId_);
+/* 001e4e70 */		}
+/* 001e4e70 */	}
+/* 001e4e76 */}
+
+void GameSceneManager::clear()
+/* 001e4e7e */{
+/* 001e4e7e */	this.nextScene_ = 0;
+/* 001e4e90 */}
+
+string GameSceneManager::getCurrentPlaceId()
+/* 001e4e98 */{
+/* 001e4e98 */	return this.currentPlaceId_;
+/* 001e4ea4 */}
+
+void GameSceneManager::setMap(string placeId)
+/* 001e4eb2 */{
+/* 001e4eb2 */	this.nextScene_ = 1;
+/* 001e4ec4 */	this.nextPlaceId_ = placeId;
+/* 001e4edc */}
+
+void GameSceneManager::setMapAdv(string placeId)
+/* 001e4ee4 */{
+/* 001e4ee4 */	this.nextScene_ = 3;
+/* 001e4ef6 */	this.nextPlaceId_ = placeId;
+/* 001e4f0e */	this.mapCallback_ += getMapPlaceFromId(this.currentPlaceId_).getCallbackFunction();
+/* 001e4f56 */}
+
+void GameSceneManager::setDungeon(string dungeonId, int x, int y)
+/* 001e4f5e */{
+/* 001e4f5e */	this.nextScene_ = 2;
+/* 001e4f70 */	this.nextDungeonId_ = dungeonId;
+/* 001e4f88 */	this.dungeonX_ = x;
+/* 001e4f9e */	this.dungeonY_ = y;
+/* 001e4fb4 */}
+
+string GameSceneManager::callMap(string nextPlaceId, bool isLoadAutoSave)
+/* 001e4fbc */{
+/* 001e4fbc */	setGameMode(true);
+/* 001e4fc8 */	SceneWorldMap scene;
+/* 001e4fd8 */	scene.init(nextPlaceId, isLoadAutoSave);
+/* 001e4ffc */	scene.run();
+/* 001e500c */	runScene(scene.update);
+/* 001e5024 */	restoreGameMode();
+/* 001e502a */	return scene.getPlaceIdMoveTo();
+/* 001e503c */}
+
+bool GameSceneManager::isSetNextScene()
+/* 001e504a */{
+/* 001e504a */	return this.nextScene_ != 0;
+/* 001e5060 */}
+
+void GameSceneManager::setCurrentPos(string currentPlaceId)
+/* 001e506e */{
+/* 001e506e */	this.currentPlaceId_ = currentPlaceId;
+/* 001e5086 */}
+

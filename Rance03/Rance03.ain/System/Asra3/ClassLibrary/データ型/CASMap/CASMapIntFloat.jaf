@@ -1,0 +1,131 @@
+void SASMapIntFloatPair::Set(ref int k, ref float v)
+/* 00004b5e */{
+/* 00004b5e */	this.Key = k;
+/* 00004b76 */	this.Value = v;
+/* 00004b8e */}
+
+int SASMapIntFloatPair::Compare(ref int k)
+/* 00004b96 */{
+/* 00004b96 */	if (k < this.Key)
+/* 00004bb4 */	{
+/* 00004bb4 */		return 1;
+/* 00004bbc */	}
+/* 00004bbc */	if (k > this.Key)
+/* 00004bda */	{
+/* 00004bda */		return -1;
+/* 00004be2 */	}
+/* 00004be2 */	return 0;
+/* 00004bea */}
+
+CASMapIntFloat::CASMapIntFloat()
+/* 00004bf8 */{
+/* 00004c02 */}
+
+CASMapIntFloat::~CASMapIntFloat()
+/* 00004c08 */{
+/* 00004c0a */}
+
+int CASMapIntFloat::GetNearIndex(ref int Key)
+/* 00004c10 */{
+/* 00004c10 */	if (this.m_List.Numof() == 0)
+/* 00004c2e */	{
+/* 00004c2e */		return -1;
+/* 00004c36 */	}
+/* 00004c36 */	int r = this.m_List.Numof() - 1;
+/* 00004c5a */	int l;
+/* 00004c6c */	while (l < r)
+/* 00004c88 */	{
+/* 00004c88 */		int m = r + l >> 1;
+/* 00004cb2 */		int comp = this.m_List[m].Compare(Key);
+/* 00004ce4 */		if (comp > 0)
+/* 00004cfc */		{
+/* 00004cfc */			r = m - 1;
+/* 00004d1a */		}
+/* 00004d20 */		else if (comp < 0)
+/* 00004d38 */		{
+/* 00004d38 */			l = m + 1;
+/* 00004d56 */		}
+/* 00004d5c */		else
+/* 00004d5c */		{
+/* 00004d5c */			return m;
+/* 00004d68 */		}
+/* 00004d68 */	}
+/* 00004d6e */	return l;
+/* 00004d7a */}
+
+int CASMapIntFloat::GetIndex(ref int Key)
+/* 00004d88 */{
+/* 00004d88 */	int i = this.GetNearIndex(Key);
+/* 00004da6 */	if (i == -1)
+/* 00004dbe */	{
+/* 00004dbe */		return -1;
+/* 00004dc6 */	}
+/* 00004dc6 */	if (this.m_List[i].Compare(Key) == 0)
+/* 00004dfa */	{
+/* 00004dfa */		return i;
+/* 00004e06 */	}
+/* 00004e06 */	return -1;
+/* 00004e0e */}
+
+void CASMapIntFloat::Set(int Key, float Value)
+/* 00004e1c */{
+/* 00004e1c */	SASMapIntFloatPair Pair;
+/* 00004e2c */	Pair.Key = Key;
+/* 00004e4a */	Pair.Value = Value;
+/* 00004e68 */	int i = this.GetNearIndex(Key);
+/* 00004e84 */	if (i == -1)
+/* 00004e9c */	{
+/* 00004e9c */		this.m_List.PushBack(Pair);
+/* 00004eb4 */		return;
+/* 00004eb6 */	}
+/* 00004eb6 */	int comp = this.m_List[i].Compare(Key);
+/* 00004ee6 */	int size = this.m_List.Numof();
+/* 00004f02 */	if (comp == 0)
+/* 00004f1a */	{
+/* 00004f1a */		this.m_List[i] = Pair;
+/* 00004f48 */	}
+/* 00004f4e */	else if (comp > 0)
+/* 00004f66 */	{
+/* 00004f66 */		this.m_List.Insert(i, Pair);
+/* 00004f88 */	}
+/* 00004f8e */	else if (i + 1 != size)
+/* 00004fb2 */	{
+/* 00004fb2 */		this.m_List.Insert(i + 1, Pair);
+/* 00004fdc */	}
+/* 00004fe2 */	else
+/* 00004fe2 */	{
+/* 00004fe2 */		this.m_List.PushBack(Pair);
+/* 00004ffa */	}
+/* 00004ffa */}
+
+float CASMapIntFloat::Get(int Key)
+/* 00005002 */{
+/* 00005002 */	float Default;
+/* 00005014 */	int Index = this.GetIndex(Key);
+/* 00005030 */	if (Index == -1)
+/* 00005048 */	{
+/* 00005048 */		return Default;
+/* 00005054 */	}
+/* 00005054 */	return this.m_List[Index].Value;
+/* 00005074 */}
+
+void CASMapIntFloat::Remove(int Key)
+/* 00005082 */{
+/* 00005082 */	int Index = this.GetIndex(Key);
+/* 0000509e */	if (Index == -1)
+/* 000050b6 */	{
+/* 000050b6 */		return;
+/* 000050b8 */	}
+/* 000050b8 */	this.m_List.Erase(Index);
+/* 000050ce */}
+
+bool CASMapIntFloat::IsExist(int Key)
+/* 000050d6 */{
+/* 000050d6 */	return this.GetIndex(Key) != -1;
+/* 000050f2 */}
+
+void CASMapIntFloat::Clear()
+/* 00005100 */{
+/* 00005100 */	this.m_List.Free();
+/* 0000510a */}
+

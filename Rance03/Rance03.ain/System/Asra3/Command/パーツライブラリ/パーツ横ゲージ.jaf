@@ -1,0 +1,40 @@
+void Ｐ＿横ゲージＣＧ設定(int パーツ番号, string ＣＧ名, int 状態)
+/* 001629f0 */{
+/* 001629f0 */	if (!PartsEngine.Parts_SetHGaugeCG(パーツ番号, ＣＧ名, 状態))
+/* 00162a20 */	{
+/* 00162a20 */		PARTS_Warning("Ｐ＿横ゲージＣＧ設定(パーツ番号 = %d, ＣＧ名 = %s, 状態 = %d)\n" % パーツ番号 % ＣＧ名 % 状態);
+/* 00162a62 */	}
+/* 00162a62 */}
+
+string Ｐ＿横ゲージＣＧ名取得(int パーツ番号, int 状態)
+/* 00162a70 */{
+/* 00162a70 */	string Out;
+/* 00162a84 */	PartsEngine.Parts_GetHGaugeCG(Out, パーツ番号, 状態);
+/* 00162aac */	return Out;
+/* 00162ab8 */}
+
+void Ｐ＿横ゲージ率設定(int パーツ番号, float 分子, float 分母, int 状態)
+/* 00162acc */{
+/* 00162acc */	PartsEngine.Parts_SetHGaugeRate(パーツ番号, 分子, 分母, 状態);
+/* 00162b00 */}
+
+float Ｐ＿横ゲージ分子取得(int パーツ番号, int 状態)
+/* 00162b0e */{
+/* 00162b0e */	return PartsEngine.Parts_GetHGaugeNumerator(パーツ番号, 状態);
+/* 00162b2e */}
+
+float Ｐ＿横ゲージ分母取得(int パーツ番号, int 状態)
+/* 00162b42 */{
+/* 00162b42 */	return PartsEngine.Parts_GetHGaugeDenominator(パーツ番号, 状態);
+/* 00162b62 */}
+
+void Ｐ＿横ゲージ表示範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ, int 状態)
+/* 00162b76 */{
+/* 00162b76 */	PartsEngine.Parts_SetHGaugeSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 00162bbe */}
+
+void Ｐ＿横ゲージ表示範囲取得(int パーツ番号, ref int Ｘ, ref int Ｙ, ref int 幅, ref int 高さ, int 状態)
+/* 00162bcc */{
+/* 00162bcc */	PartsEngine.GetHGaugeSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 状態);
+/* 00162c12 */}
+

@@ -1,0 +1,35 @@
+void PlayerSkillState::initAvailable(int index, string skillId)
+/* 001e0b58 */{
+/* 001e0b58 */	this.isAvailable_ = true;
+/* 001e0b6a */	this.index_ = index;
+/* 001e0b80 */	this.skillId_ = skillId;
+/* 001e0b98 */}
+
+void PlayerSkillState::initNotAvailable(int index, string skillId, int availableLevel)
+/* 001e0ba0 */{
+/* 001e0ba0 */	this.isAvailable_ = false;
+/* 001e0bb2 */	this.index_ = index;
+/* 001e0bc8 */	this.skillId_ = skillId;
+/* 001e0be0 */	this.availableLevel_ = availableLevel;
+/* 001e0bf6 */}
+
+int PlayerSkillState::getIndex()
+/* 001e0bfe */{
+/* 001e0bfe */	return this.index_;
+/* 001e0c0a */}
+
+bool PlayerSkillState::isAvailable()
+/* 001e0c18 */{
+/* 001e0c18 */	return this.isAvailable_;
+/* 001e0c24 */}
+
+string PlayerSkillState::getSkillId()
+/* 001e0c32 */{
+/* 001e0c32 */	return this.skillId_;
+/* 001e0c3e */}
+
+int PlayerSkillState::getAvailableLevel()
+/* 001e0c4c */{
+/* 001e0c4c */	return this.availableLevel_;
+/* 001e0c58 */}
+

@@ -1,0 +1,59 @@
+KeyInput::KeyInput()
+/* 001e5e8a */{
+/* 001e5e92 */	array@int key;
+/* 001e5e9c */	key.PushBack(13);
+/* 001e5eac */	key.PushBack(16);
+/* 001e5ebc */	key.PushBack(17);
+/* 001e5ecc */	key.PushBack(27);
+/* 001e5edc */	key.PushBack(32);
+/* 001e5eec */	key.PushBack(33);
+/* 001e5efc */	key.PushBack(36);
+/* 001e5f0c */	key.PushBack(37);
+/* 001e5f1c */	key.PushBack(38);
+/* 001e5f2c */	key.PushBack(39);
+/* 001e5f3c */	key.PushBack(40);
+/* 001e5f4c */	key.PushBack(65);
+/* 001e5f5c */	key.PushBack(67);
+/* 001e5f6c */	key.PushBack(83);
+/* 001e5f7c */	key.PushBack(88);
+/* 001e5f8c */	key.PushBack(90);
+/* 001e5f9c */	key.PushBack(119);
+/* 001e5fac */	key.PushBack(120);
+/* 001e5fbc */	this.monitoringKey_.Free();
+/* 001e5fc6 */	this.monitoringKey_.Alloc(key.Numof());
+/* 001e5fe6 */	this.monitoringKey_.Copy(0, key, 0, key.Numof());
+/* 001e6018 */	int num = this.monitoringKey_.Numof();
+/* 001e6034 */	this.bs_.Alloc(num);
+/* 001e604e */	this.rep_.Alloc(num);
+/* 001e6068 */}
+
+void KeyInput::update()
+/* 001e6070 */{
+/* 001e6070 */	int i;
+/* 001e6082 */	for (i = 0; i < this.monitoringKey_.Numof(); ++i)
+/* 001e60d2 */	{
+/* 001e60d2 */		this.bs_[i].update(AFL_IsKeyDown(this.monitoringKey_[i]));
+/* 001e610a */		this.rep_[i].update(AFL_IsKeyDown(this.monitoringKey_[i]));
+/* 001e6142 */	}
+/* 001e6148 */}
+
+bool KeyInput::isDown(int vKey)
+/* 001e6150 */{
+/* 001e6150 */	return this.bs_[this.indexFromVirtualKey(vKey)].isDown();
+/* 001e6176 */}
+
+bool KeyInput::isPress(int vKey)
+/* 001e6184 */{
+/* 001e6184 */	return this.bs_[this.indexFromVirtualKey(vKey)].isPress();
+/* 001e61aa */}
+
+bool KeyInput::isPressWithRepeat(int vKey)
+/* 001e61b8 */{
+/* 001e61b8 */	return this.rep_[this.indexFromVirtualKey(vKey)].isPress();
+/* 001e61de */}
+
+int KeyInput::indexFromVirtualKey(int vKey)
+/* 001e61ec */{
+/* 001e61ec */	return this.monitoringKey_.Find(0, this.monitoringKey_.Numof(), vKey);
+/* 001e621e */}
+

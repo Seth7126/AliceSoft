@@ -1,0 +1,30 @@
+void CASTimerImp::Reset()
+/* 000011d6 */{
+/* 000011d6 */	this.m_nBeginTime = system.GetTime();
+/* 000011e8 */	this.m_nCurrentTime = this.m_nBeginTime;
+/* 000011fe */}
+
+int CASTimerImp::Get()
+/* 00001206 */{
+/* 00001206 */	this.m_nCurrentTime = system.GetTime();
+/* 00001218 */	return this.m_nCurrentTime - this.m_nBeginTime;
+/* 00001230 */}
+
+void CASTimerImp::SetPassTime(int PassTime)
+/* 0000123e */{
+/* 0000123e */	this.m_nCurrentTime = system.GetTime();
+/* 00001250 */	this.m_nBeginTime = this.m_nCurrentTime - PassTime;
+/* 00001272 */}
+
+void CASTimerImp::UpdateCurrentTime()
+/* 0000127a */{
+/* 0000127a */	this.m_nCurrentTime = system.GetTime();
+/* 0000128c */}
+
+void CASTimerImp::Rebuild(int nCurrentTime)
+/* 00001294 */{
+/* 00001294 */	int nPassTime = this.m_nCurrentTime - this.m_nBeginTime;
+/* 000012b6 */	this.m_nCurrentTime = nCurrentTime;
+/* 000012cc */	this.m_nBeginTime = nCurrentTime - nPassTime;
+/* 000012ee */}
+

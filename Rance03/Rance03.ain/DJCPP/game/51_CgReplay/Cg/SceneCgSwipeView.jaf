@@ -1,0 +1,67 @@
+void SceneCgSwipeView::init(array@string imageName)
+/* 001bf8fe */{
+/* 001bf8fe */	this.isFinish_ = false;
+/* 001bf910 */	this.isShowNavi_ = false;
+/* 001bf922 */	this.view_.init(imageName);
+/* 001bf93e */	this.btnClose_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001bf966 */	this.btnClose_.setPos(839, 691);
+/* 001bf982 */	this.btnClose_.setZ(15000);
+/* 001bf998 */	this.btnClose_.setClickCallback(this.onClickCloseButton, 0);
+/* 001bf9b8 */	this.navi_.init(this.view_.getScrollPosition, this.view_.getPageCount());
+/* 001bf9ea */	this.navi_.setOnClickCallback(this.onClick);
+/* 001bfa04 */	this.posNavi_.init(imageName.Numof());
+/* 001bfa24 */}
+
+void SceneCgSwipeView::onClickCloseButton(int index)
+/* 001bfa2c */{
+/* 001bfa2c */	this.fadeOut();
+/* 001bfa34 */}
+
+void SceneCgSwipeView::fadeOut()
+/* 001bfa3c */{
+/* 001bfa3c */	if (this.isShowNavi_)
+/* 001bfa4c */	{
+/* 001bfa4c */		this.showNavi(false);
+/* 001bfa5a */	}
+/* 001bfa5a */	this.view_.fadeIn(false);
+/* 001bfa70 */	this.timer_.setTimer(250, this.onFinishFadeOut);
+/* 001bfa90 */}
+
+void SceneCgSwipeView::onFinishFadeOut()
+/* 001bfa98 */{
+/* 001bfa98 */	this.isFinish_ = true;
+/* 001bfaaa */}
+
+void SceneCgSwipeView::run()
+/* 001bfab2 */{
+/* 001bfab2 */	this.view_.fadeIn(true);
+/* 001bfac8 */}
+
+void SceneCgSwipeView::onClick(int index)
+/* 001bfad0 */{
+/* 001bfad0 */	this.view_.scroll(index == 0 ? false : true);
+/* 001bfb0a */}
+
+bool SceneCgSwipeView::update()
+/* 001bfb12 */{
+/* 001bfb12 */	if (g_mouse.isClick(1) && !this.timer_.isRunning())
+/* 001bfb5e */	{
+/* 001bfb5e */		playCancel();
+/* 001bfb64 */		this.fadeOut();
+/* 001bfb6c */	}
+/* 001bfb6c */	if (g_mouse.isClickWithNoFocus())
+/* 001bfb82 */	{
+/* 001bfb82 */		this.isShowNavi_ = !this.isShowNavi_;
+/* 001bfb9c */		this.showNavi(this.isShowNavi_);
+/* 001bfbae */	}
+/* 001bfbae */	this.posNavi_.setPos(this.view_.getScrollPosition());
+/* 001bfbce */	return !this.isFinish_;
+/* 001bfbde */}
+
+void SceneCgSwipeView::showNavi(bool val)
+/* 001bfbec */{
+/* 001bfbec */	this.navi_.fadeIn(val);
+/* 001bfc06 */	this.posNavi_.fadeIn(val, NULL);
+/* 001bfc22 */	this.btnClose_.fadeIn(val);
+/* 001bfc3c */}
+

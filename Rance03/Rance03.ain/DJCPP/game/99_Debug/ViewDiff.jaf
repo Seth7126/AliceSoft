@@ -1,0 +1,14 @@
+void debugViewDiffCGFile()
+/* 001cc746 */{
+/* 001cc746 */	int count = AFL_AFA_CG_Numof();
+/* 001cc758 */	int i;
+/* 001cc76a */	for (i = 0; i < count; ++i)
+/* 001cc7b4 */	{
+/* 001cc7b4 */		string n = AFL_AFA_CG_GetTitle(i);
+/* 001cc7d2 */		if (!ＣＧモード確認(n))
+/* 001cc7ea */		{
+/* 001cc7ea */			pass("使ってないCG:%s" % n);
+/* 001cc808 */		}
+/* 001cc808 */	}
+/* 001cc80e */}
+

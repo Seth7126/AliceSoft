@@ -1,0 +1,202 @@
+string getMinHpPlayer(ref array@string playerId)
+/* 001a4c8a */{
+/* 001a4c8a */	int i;
+/* 001a4c9c */	int index;
+/* 001a4cae */	int hp = getPlayerFromId(playerId[0]).getHp();
+/* 001a4cee */	for (i = 0; i < playerId.Numof(); ++i)
+/* 001a4d3e */	{
+/* 001a4d3e */		ref Player p = getPlayerFromId(playerId[i]);
+/* 001a4d8c */		if (hp > p.getHp())
+/* 001a4dae */		{
+/* 001a4dae */			hp = p.getHp();
+/* 001a4dca */			index = i;
+/* 001a4de0 */		}
+/* 001a4de0 */	}
+/* 001a4df2 */	return playerId[index];
+/* 001a4e0a */}
+
+string getMostDamagedPlayer(ref array@string playerId)
+/* 001a4e1e */{
+/* 001a4e1e */	int i;
+/* 001a4e30 */	int index;
+/* 001a4e42 */	float minRate = float(getPlayerFromId(playerId[0]).getHp()) / float(getPlayerFromId(playerId[0]).getMaxHp());
+/* 001a4ebc */	for (i = 1; i < playerId.Numof(); ++i)
+/* 001a4f0c */	{
+/* 001a4f0c */		ref Player p = getPlayerFromId(playerId[i]);
+/* 001a4f5a */		float rate = float(p.getHp()) / float(p.getMaxHp());
+/* 001a4f8c */		if (rate < minRate)
+/* 001a4fa8 */		{
+/* 001a4fa8 */			minRate = rate;
+/* 001a4fbe */			index = i;
+/* 001a4fd4 */		}
+/* 001a4fd4 */	}
+/* 001a4fe6 */	return playerId[index];
+/* 001a4ffe */}
+
+int getMonsterInstanceIndexMinHp(ref array@MonsterInstance instance)
+/* 001a5012 */{
+/* 001a5012 */	int minHp = instance[0].getHp();
+/* 001a5036 */	int minIndex;
+/* 001a5048 */	int i;
+/* 001a505a */	for (i = 0; i < instance.Numof(); ++i)
+/* 001a50aa */	{
+/* 001a50aa */		if (instance[i].getHp() < minHp)
+/* 001a50d8 */		{
+/* 001a50d8 */			minHp = instance[i].getHp();
+/* 001a5100 */			minIndex = i;
+/* 001a5116 */		}
+/* 001a5116 */	}
+/* 001a511c */	return minIndex;
+/* 001a5128 */}
+
+int getMonsterInstanceIndexMostDamaged(ref array@int indexes, ref array@MonsterInstance instance)
+/* 001a513c */{
+/* 001a513c */	int topDamage = instance[indexes[0]].getMaxHp() - instance[indexes[0]].getHp();
+/* 001a5192 */	int minIndex;
+/* 001a51a4 */	int i;
+/* 001a51b6 */	for (i = 1; i < indexes.Numof(); ++i)
+/* 001a5206 */	{
+/* 001a5206 */		int nd = instance[indexes[i]].getMaxHp() - instance[indexes[i]].getHp();
+/* 001a5264 */		if (topDamage < nd)
+/* 001a5280 */		{
+/* 001a5280 */			topDamage = nd;
+/* 001a5296 */			minIndex = i;
+/* 001a52ac */		}
+/* 001a52ac */	}
+/* 001a52b2 */	return indexes[minIndex];
+/* 001a52ca */}
+
+void getExceptBuffPlayerIndexes(ref array@int indexes, int sourceIndex, ref array@MonsterInstance monsterInstance, string buffId)
+/* 001a52de */{
+/* 001a52de */	int i;
+/* 001a52f0 */	while (i < indexes.Numof())
+/* 001a5312 */	{
+/* 001a5312 */		if (monsterInstance[indexes[i]].isExistBuff(buffId) || indexes[i] == sourceIndex)
+/* 001a538a */		{
+/* 001a538a */			indexes.Erase(i);
+/* 001a53a0 */		}
+/* 001a53a6 */		else
+/* 001a53a6 */		{
+/* 001a53a6 */			++i;
+/* 001a53b6 */		}
+/* 001a53b6 */	}
+/* 001a53bc */}
+
+bool isSkillSelectable(string skillId)
+/* 001a53ca */{
+/* 001a53ca */	ref Player p = getPlayerFromId(getPlayerSkillFromId(skillId).getPlayerId());
+/* 001a542e */	return p.getCoolTime(skillId) == 0 && p.getHp() > 0;
+/* 001a548a */}
+
+void getBattlePlayerViewPosition(string playerId, ref int x, ref int y)
+/* 001a549e */{
+/* 001a549e */	int min;
+/* 001a54b0 */	int max;
+/* 001a54c2 */	g_party.getPlayerSkillIndexMinMax(min, max, playerId);
+/* 001a54ec */	int left = 15 + min * 113;
+/* 001a5512 */	int right = 15 + max * 113 + 160;
+/* 001a5540 */	x = (left + right) / 2.0;
+/* 001a5570 */	y = (463 + ((min + max) / 2.0) * 14.0) - 200.0;
+/* 001a55be */}
+
+void getPlayerRandomTarget(ref array@string result, int count)
+/* 001a55cc */{
+/* 001a55cc */	array@string id;
+/* 001a55d6 */	int i;
+/* 001a55e8 */	for (i = 0; i < g_party.getCount(); ++i)
+/* 001a5638 */	{
+/* 001a5638 */		string sId = g_party.getAttackSkillId(i);
+/* 001a5660 */		string pId = getPlayerSkillFromId(sId).getPlayerId();
+/* 001a569a */		ref Player p = getPlayerFromId(pId);
+/* 001a56dc */		if (p.getHp() > 0)
+/* 001a56fa */		{
+/* 001a56fa */			id.PushBack(pId);
+/* 001a570e */		}
+/* 001a570e */	}
+/* 001a5726 */	if (id.Empty())
+/* 001a5736 */	{
+/* 001a5736 */		return;
+/* 001a5738 */	}
+/* 001a5738 */	int unique;
+/* 001a574a */	unique = 1;
+/* 001a575c */	int i;
+/* 001a576e */	for (i = 1; i < id.Numof(); ++i)
+/* 001a57be */	{
+/* 001a57be */		if (id[i] != id[i - 1])
+/* 001a57fa */		{
+/* 001a57fa */			++unique;
+/* 001a580a */		}
+/* 001a580a */	}
+/* 001a5810 */	count = Math.Min(unique, count);
+/* 001a583a */	for (i = 0; i < count; ++i)
+/* 001a5884 */	{
+/* 001a5884 */		int index = RAND(id.Numof()) - 1;
+/* 001a58ae */		result.PushBack(id[index]);
+/* 001a58ce */		string n = id[index];
+/* 001a58f2 */		while (true)
+/* 001a58fe */		{
+/* 001a58fe */			int index = id.Find(0, id.Numof(), n);
+/* 001a593a */			if (index < 0)
+/* 001a5952 */			{
+/* 001a5952 */				break;
+/* 001a5958 */			}
+/* 001a5958 */			id.Erase(index);
+/* 001a596e */		}
+/* 001a5974 */	}
+/* 001a597a */	result.Sort();
+/* 001a598a */}
+
+void getAlivePlayerList(ref array@string result)
+/* 001a5998 */{
+/* 001a5998 */	g_party.getPlayerIdList(result);
+/* 001a59b2 */	int i;
+/* 001a59c4 */	while (i < result.Numof())
+/* 001a59e6 */	{
+/* 001a59e6 */		if (getPlayerFromId(result[i]).getHp() > 0)
+/* 001a5a2c */		{
+/* 001a5a2c */			++i;
+/* 001a5a3c */		}
+/* 001a5a42 */		else
+/* 001a5a42 */		{
+/* 001a5a42 */			result.Erase(i);
+/* 001a5a58 */		}
+/* 001a5a58 */	}
+/* 001a5a64 */}
+
+void getUnOrganizedPlayer(ref array@string result)
+/* 001a5a72 */{
+/* 001a5a72 */	array@string pId;
+/* 001a5a7c */	g_party.getPlayerIdList(pId);
+/* 001a5a96 */	result.Free();
+/* 001a5aa0 */	int i;
+/* 001a5ab2 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001a5b02 */	{
+/* 001a5b02 */		string id = g_player[i].getId();
+/* 001a5b2c */		if (pId.Find(0, pId.Numof(), id) < 0)
+/* 001a5b6a */		{
+/* 001a5b6a */			ref Player p = getPlayerFromId(id);
+/* 001a5bac */			if (p.getHp() > 0 && p.isJoin())
+/* 001a5bf8 */			{
+/* 001a5bf8 */				result.PushBack(id);
+/* 001a5c0c */			}
+/* 001a5c0c */		}
+/* 001a5c0c */	}
+/* 001a5c1e */}
+
+void getExceptBuffPlayerList(ref array@string playerId, string sourceId, string buffId)
+/* 001a5c2c */{
+/* 001a5c2c */	int i;
+/* 001a5c3e */	while (i < playerId.Numof())
+/* 001a5c60 */	{
+/* 001a5c60 */		ref Player p = getPlayerFromId(playerId[i]);
+/* 001a5cae */		if (p.isExistBuff(buffId) || p.getId() == sourceId)
+/* 001a5d08 */		{
+/* 001a5d08 */			playerId.Erase(i);
+/* 001a5d1e */		}
+/* 001a5d24 */		else
+/* 001a5d24 */		{
+/* 001a5d24 */			++i;
+/* 001a5d34 */		}
+/* 001a5d34 */	}
+/* 001a5d46 */}
+

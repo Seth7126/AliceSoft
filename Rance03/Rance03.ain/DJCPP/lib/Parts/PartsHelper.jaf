@@ -1,0 +1,52 @@
+int asraPartsOriginFromPartsOriginMode(int partsOriginMode)
+/* 001ea500 */{
+/* 001ea500 */	switch (partsOriginMode)
+/* 001ea516 */	{
+/* 001ea516 */	case 7:
+/* 001ea516 */		return 1;
+/* 001ea51e */	case 8:
+/* 001ea51e */		return 2;
+/* 001ea526 */	case 9:
+/* 001ea526 */		return 3;
+/* 001ea52e */	case 4:
+/* 001ea52e */		return 4;
+/* 001ea536 */	case 5:
+/* 001ea536 */		return 5;
+/* 001ea53e */	case 6:
+/* 001ea53e */		return 6;
+/* 001ea546 */	case 1:
+/* 001ea546 */		return 7;
+/* 001ea54e */	case 2:
+/* 001ea54e */		return 8;
+/* 001ea556 */	case 3:
+/* 001ea556 */		return 9;
+/* 001ea55e */	}
+/* 001ea55e */	return 5;
+/* 001ea566 */}
+
+void buildParts(ref Parts p, string name, int x, int y, int z, int origin)
+/* 001ea57a */{
+/* 001ea57a */	p.init(name, 0);
+/* 001ea59a */	p.setPos(x, y);
+/* 001ea5c2 */	p.setZ(z == -2147483648 ? 1 : z);
+/* 001ea602 */	p.setOrigin(origin == -2147483648 ? 7 : origin);
+/* 001ea640 */}
+
+void createPartsGroup(ref Parts parent, ref array@Parts list, int parentZ)
+/* 001ea64e */{
+/* 001ea64e */	parent.initAsDummy();
+/* 001ea65e */	int i;
+/* 001ea670 */	for (i = 0; i < list.Numof(); ++i)
+/* 001ea6c0 */	{
+/* 001ea6c0 */		if (list[i].isInitialized())
+/* 001ea6e2 */		{
+/* 001ea6e2 */			if (list[i].getZ() == 1)
+/* 001ea70c */			{
+/* 001ea70c */				list[i].setZ(i + 1);
+/* 001ea73c */			}
+/* 001ea73c */			list[i].setParent(parent.getPartsNumber());
+/* 001ea768 */		}
+/* 001ea768 */	}
+/* 001ea76e */	parent.setZ(parentZ);
+/* 001ea78a */}
+

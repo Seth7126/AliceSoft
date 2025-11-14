@@ -1,0 +1,147 @@
+PartsContainer::PartsContainer()
+/* 001a69da */{
+/* 001a69e2 */	this.isShow = false;
+/* 001a69f4 */}
+
+BattleLogView::BattleLogView()
+/* 001a69fc */{
+/* 001a6a04 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a6a2a */	this.isBufferingMode_ = false;
+/* 001a6a3c */}
+
+void BattleLogView::init()
+/* 001a6a44 */{
+/* 001a6a44 */	g_battleLog.setOnAddCallback(this.onAddLog);
+/* 001a6a5e */	this.initParts();
+/* 001a6a66 */}
+
+void BattleLogView::initParts()
+/* 001a6a6e */{
+/* 001a6a6e */	this.parent_.initAsDummy();
+/* 001a6a7e */	this.parent_.setZ(2900.0);
+/* 001a6a94 */	this.parent_.setPos(20.0, 300.0);
+/* 001a6ab0 */}
+
+void BattleLogView::setPartsPos()
+/* 001a6ab8 */{
+/* 001a6ab8 */	int i;
+/* 001a6aca */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a6b1a */	{
+/* 001a6b1a */		this.parts_[i].p.setPos(0.0, -(this.parts_.Numof() - i - 1) * 20);
+/* 001a6b74 */	}
+/* 001a6b7a */}
+
+void BattleLogView::update()
+/* 001a6b82 */{
+/* 001a6b82 */	while (this.parts_.Numof() > 20)
+/* 001a6ba0 */	{
+/* 001a6ba0 */		this.parts_.PopBack();
+/* 001a6baa */	}
+/* 001a6bb0 */}
+
+void BattleLogView::onAddLog(string msg, int type)
+/* 001a6bb8 */{
+/* 001a6bb8 */	if (this.isBufferingMode_)
+/* 001a6bc8 */	{
+/* 001a6bc8 */		this.bufferMsg_.PushBack(msg);
+/* 001a6bdc */		this.bufferType_.PushBack(type);
+/* 001a6bf0 */	}
+/* 001a6bf6 */	else
+/* 001a6bf6 */	{
+/* 001a6bf6 */		this.addLog(msg, type);
+/* 001a6c12 */	}
+/* 001a6c12 */}
+
+void BattleLogView::flush()
+/* 001a6c1a */{
+/* 001a6c1a */	int i;
+/* 001a6c2c */	for (i = 0; i < this.bufferMsg_.Numof(); ++i)
+/* 001a6c7c */	{
+/* 001a6c7c */		this.addLog(this.bufferMsg_[i], this.bufferType_[i]);
+/* 001a6cb0 */	}
+/* 001a6cb6 */	this.bufferMsg_.Free();
+/* 001a6cc0 */	this.bufferType_.Free();
+/* 001a6cca */}
+
+void BattleLogView::addLog(string msg, int type)
+/* 001a6cd2 */{
+/* 001a6cd2 */	int r;
+/* 001a6ce4 */	int g;
+/* 001a6cf6 */	int b;
+/* 001a6d08 */	this.getColor(type, r, g, b);
+/* 001a6d32 */	PartsContainer c;
+/* 001a6d42 */	c.p <- new Parts;
+/* 001a6d7e */	c.p.initAsText(msg, 20, true, 256, r, g, b);
+/* 001a6dd0 */	c.p.setShow(true);
+/* 001a6dee */	c.p.setPos(-300.0, 0.0);
+/* 001a6e12 */	c.p.setParent(this.parent_.getPartsNumber());
+/* 001a6e3a */	if (this.parts_.Empty())
+/* 001a6e4a */	{
+/* 001a6e4a */		this.parts_.PushBack(c);
+/* 001a6e62 */	}
+/* 001a6e68 */	else
+/* 001a6e68 */	{
+/* 001a6e68 */		this.parts_.Insert(0, c);
+/* 001a6e86 */	}
+/* 001a6e86 */	this.moveParts();
+/* 001a6e8e */}
+
+void BattleLogView::moveParts()
+/* 001a6e96 */{
+/* 001a6e96 */	int i;
+/* 001a6ea8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a6ef8 */	{
+/* 001a6ef8 */		if (this.parts_[i].isShow)
+/* 001a6f1c */		{
+/* 001a6f1c */			PartsMotion m;
+/* 001a6f2c */			m.setMove(0, this.parts_[i].p.getY(), 0, -i * 20, 1);
+/* 001a6f88 */			m.setAlpha(this.getIndexAlpha(-this.parts_[i].p.getY() / 20.0), this.getIndexAlpha(i), 0);
+/* 001a6fe8 */			this.parts_[i].p.runMotion(m, NULL);
+/* 001a701c */		}
+/* 001a7028 */		else
+/* 001a7028 */		{
+/* 001a7028 */			this.parts_[i].isShow = true;
+/* 001a704e */			PartsMotion m;
+/* 001a705e */			m.setMove(-this.parts_[i].p.getWidth() - 100, -i * 20, 0, -i * 20, 1);
+/* 001a70d0 */			this.parts_[i].p.runMotion(m, NULL);
+/* 001a710a */		}
+/* 001a710a */	}
+/* 001a7110 */}
+
+int BattleLogView::getIndexAlpha(int index)
+/* 001a7118 */{
+/* 001a7118 */	int n = index - 4;
+/* 001a7136 */	int l = Math.Max(n, 0);
+/* 001a715c */	return Math.Max(0, 255 - l * 64);
+/* 001a7188 */}
+
+void BattleLogView::getColor(int type, ref int r, ref int g, ref int b)
+/* 001a7196 */{
+/* 001a7196 */	r = EX_IA2Int("戦闘ログカラー情報", type, "r", 0);
+/* 001a71c6 */	g = EX_IA2Int("戦闘ログカラー情報", type, "g", 0);
+/* 001a71f6 */	b = EX_IA2Int("戦闘ログカラー情報", type, "b", 0);
+/* 001a7226 */}
+
+void BattleLogView::setBufferingMode(bool val)
+/* 001a722e */{
+/* 001a722e */	this.flush();
+/* 001a7236 */	this.isBufferingMode_ = val;
+/* 001a724c */}
+
+void BattleLogView::fadeIn(bool val)
+/* 001a7254 */{
+/* 001a7254 */	this.parent_.setShow(true);
+/* 001a726a */	PartsMotion m;
+/* 001a727a */	if (val)
+/* 001a728a */	{
+/* 001a728a */		m.setAlpha(0, 255, 0);
+/* 001a72ac */		m.setMove(-300, 300, 20, 300, 1);
+/* 001a72da */	}
+/* 001a72e0 */	else
+/* 001a72e0 */	{
+/* 001a72e0 */		m.setAlpha(255, 0, 0);
+/* 001a7302 */		m.setMove(20, 300, -300, 300, 1);
+/* 001a7330 */	}
+/* 001a7330 */	this.parent_.runMotion(m, NULL);
+/* 001a7350 */}
+

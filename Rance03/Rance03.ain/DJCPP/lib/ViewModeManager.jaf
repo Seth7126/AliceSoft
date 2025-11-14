@@ -1,0 +1,25 @@
+void ViewModeManager::set(bool val)
+/* 001ee4ae */{
+/* 001ee4ae */	this.stack_.PushBack(val);
+/* 001ee4c2 */	this.innerSet(val);
+/* 001ee4d4 */}
+
+void ViewModeManager::restore()
+/* 001ee4dc */{
+/* 001ee4dc */	this.stack_.PopBack();
+/* 001ee4e6 */	if (this.stack_.Empty())
+/* 001ee4f6 */	{
+/* 001ee4f6 */		this.innerSet(true);
+/* 001ee504 */	}
+/* 001ee50a */	else
+/* 001ee50a */	{
+/* 001ee50a */		bool val = this.stack_[this.stack_.Numof() - 1];
+/* 001ee53a */		this.innerSet(val);
+/* 001ee54c */	}
+/* 001ee54c */}
+
+void ViewModeManager::innerSet(bool val)
+/* 001ee554 */{
+/* 001ee554 */	AFL_KeepPreviousView_SetMode(val);
+/* 001ee564 */}
+

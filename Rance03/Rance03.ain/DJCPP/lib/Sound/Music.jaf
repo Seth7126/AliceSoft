@@ -1,0 +1,134 @@
+Music::Music()
+/* 001ecc06 */{
+/* 001ecc0e */	this.nowPlay_ = this.lastPlay_ = "";
+/* 001ecc2e */	this.forcePlayMusic_ = "";
+/* 001ecc42 */}
+
+void Music::play(string musicId, int fadeTime, bool isContinue)
+/* 001ecc4a */{
+/* 001ecc4a */	if (this.nowPlay_ == musicId)
+/* 001ecc66 */	{
+/* 001ecc66 */		return;
+/* 001ecc68 */	}
+/* 001ecc68 */	if (this.nowPlay_ != "")
+/* 001ecc80 */	{
+/* 001ecc80 */		this.savePlayPosition(this.nowPlay_);
+/* 001ecc92 */	}
+/* 001ecc92 */	this.lastPlay_ = this.nowPlay_;
+/* 001eccaa */	this.nowPlay_ = musicId;
+/* 001eccc2 */	if (this.forcePlayMusic_ != "")
+/* 001eccda */	{
+/* 001eccda */		musicId = this.forcePlayMusic_;
+/* 001eccf2 */	}
+/* 001eccf2 */	this.innerPlay(musicId, fadeTime == -2147483648 ? 0 : fadeTime, isContinue);
+/* 001ecd3c */}
+
+void Music::fadeOut(int fadeTime)
+/* 001ecd44 */{
+/* 001ecd44 */	if (this.nowPlay_ == "")
+/* 001ecd5c */	{
+/* 001ecd5c */		return;
+/* 001ecd5e */	}
+/* 001ecd5e */	if (this.forcePlayMusic_ != "")
+/* 001ecd76 */	{
+/* 001ecd76 */		this.innerPlay(this.forcePlayMusic_, fadeTime, false);
+/* 001ecd98 */	}
+/* 001ecd9e */	else
+/* 001ecd9e */	{
+/* 001ecd9e */		this.savePlayPosition(this.nowPlay_);
+/* 001ecdb0 */		this.innerPlay("", fadeTime, false);
+/* 001ecdce */	}
+/* 001ecdce */	this.lastPlay_ = this.nowPlay_;
+/* 001ecde6 */	this.nowPlay_ = "";
+/* 001ecdfa */}
+
+void Music::savePlayPosition(string musicId)
+/* 001ece02 */{
+/* 001ece02 */	int index = this.getLastPlayedPositionIndexFromId(musicId);
+/* 001ece20 */	if (index != -1)
+/* 001ece38 */	{
+/* 001ece38 */		this.lastPlayedPos_[index].position = AFL_BGM_GetPlayPos();
+/* 001ece5e */	}
+/* 001ece64 */	else
+/* 001ece64 */	{
+/* 001ece64 */		MusicLastPlayedPosition p;
+/* 001ece74 */		p.musicId = musicId;
+/* 001ece94 */		p.position = AFL_BGM_GetPlayPos();
+/* 001eceae */		this.lastPlayedPos_.PushBack(p);
+/* 001ecec6 */	}
+/* 001ecec6 */}
+
+int Music::getLastPlayedPositionIndexFromId(string musicId)
+/* 001eced4 */{
+/* 001eced4 */	int i;
+/* 001ecee6 */	for (i = 0; i < this.lastPlayedPos_.Numof(); ++i)
+/* 001ecf36 */	{
+/* 001ecf36 */		if (this.lastPlayedPos_[i].musicId == musicId)
+/* 001ecf66 */		{
+/* 001ecf66 */			return i;
+/* 001ecf72 */		}
+/* 001ecf72 */	}
+/* 001ecf78 */	return -1;
+/* 001ecf80 */}
+
+void Music::playLastPlayedMusic()
+/* 001ecf8e */{
+/* 001ecf8e */	this.play(this.lastPlay_, -2147483648, false);
+/* 001ecfac */}
+
+string Music::getPlayingMusicId()
+/* 001ecfb4 */{
+/* 001ecfb4 */	return 再生中音楽名取得();
+/* 001ecfbc */}
+
+string Music::getLastPlayedMusicName()
+/* 001ecfca */{
+/* 001ecfca */	return this.lastPlay_;
+/* 001ecfd6 */}
+
+int Music::getLength()
+/* 001ecfe4 */{
+/* 001ecfe4 */	return AFL_BGM_GetPlayLength();
+/* 001ecfec */}
+
+int Music::getPlayingPosition()
+/* 001ecffa */{
+/* 001ecffa */	return AFL_BGM_GetPlayPos();
+/* 001ed002 */}
+
+void Music::forcePlay(string musicId)
+/* 001ed010 */{
+/* 001ed010 */	this.forcePlayMusic_ = musicId;
+/* 001ed028 */	if (musicId == "")
+/* 001ed040 */	{
+/* 001ed040 */		this.innerPlay(this.nowPlay_, 2000, false);
+/* 001ed05e */	}
+/* 001ed064 */	else
+/* 001ed064 */	{
+/* 001ed064 */		this.innerPlay(this.forcePlayMusic_, 2000, false);
+/* 001ed082 */	}
+/* 001ed082 */}
+
+void Music::innerPlay(string musicId, int time, bool isContinue)
+/* 001ed08a */{
+/* 001ed08a */	if (isContinue)
+/* 001ed09a */	{
+/* 001ed09a */		int index = this.getLastPlayedPositionIndexFromId(musicId);
+/* 001ed0b8 */		AFL_BGM_Play(musicId, 1.0, 2000);
+/* 001ed0d4 */		if (index != -1)
+/* 001ed0ec */		{
+/* 001ed0ec */			AFL_BGM_Seek(this.lastPlayedPos_[index].position);
+/* 001ed112 */		}
+/* 001ed112 */	}
+/* 001ed118 */	else
+/* 001ed118 */	{
+/* 001ed118 */		AFL_BGM_Play(musicId, 1.0, time);
+/* 001ed138 */	}
+/* 001ed138 */	this.handler_(musicId);
+/* 001ed162 */}
+
+void Music::addHandlerFunc(FuncOnMusicPlay callbackFunc)
+/* 001ed16a */{
+/* 001ed16a */	this.handler_ += callbackFunc;
+/* 001ed184 */}
+

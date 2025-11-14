@@ -1,0 +1,108 @@
+CAEPropertyCGDetection::CAEPropertyCGDetection()
+/* 000709d4 */{
+/* 000709dc */	this.Release();
+/* 000709e4 */}
+
+CAEPropertyCGDetection::~CAEPropertyCGDetection()
+/* 000709ec */{
+/* 000709ec */	this.Release();
+/* 000709f4 */}
+
+void CAEPropertyCGDetection::Init(int LayoutID, ref CAEInstanceItem Item)
+/* 000709fc */{
+/* 000709fc */	this.Release();
+/* 00070a04 */	if (Item === NULL)
+/* 00070a1c */	{
+/* 00070a1c */		return;
+/* 00070a1e */	}
+/* 00070a1e */	this.m_Item <- Item;
+/* 00070a3e */	this.m_Panel.Init(LayoutID);
+/* 00070a58 */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00070a72 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 00070a8c */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 00070aa6 */	int ID = this.m_Item.GetID();
+/* 00070ac2 */	int X;
+/* 00070ad4 */	int Y;
+/* 00070ae6 */	int Width;
+/* 00070af8 */	int Height;
+/* 00070b0a */	Ｐ＿ＣＧ判定範囲取得(ID, X, Y, Width, Height);
+/* 00070b3a */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿ＣＧ判定ＣＧ名取得(ID), true);
+/* 00070b82 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｘ", string(X), false);
+/* 00070bc6 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｙ", string(Y), false);
+/* 00070c0a */	this.m_Panel.AddTextBoxItem("表示範囲／幅", string(Width), false);
+/* 00070c4e */	this.m_Panel.AddTextBoxItem("表示範囲／高さ", string(Height), false);
+/* 00070c92 */}
+
+void CAEPropertyCGDetection::Release()
+/* 00070c9a */{
+/* 00070c9a */	this.m_dgMouseWheelEvent.Clear();
+/* 00070ca6 */	this.m_dgKeyDownEvent.Clear();
+/* 00070cb2 */	this.m_Item <- NULL;
+/* 00070cca */	this.m_Panel.Release();
+/* 00070cda */}
+
+void CAEPropertyCGDetection::KeyDownEvent(int ID, int KeyID)
+/* 00070ce2 */{
+/* 00070ce2 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00070d16 */}
+
+void CAEPropertyCGDetection::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00070d1e */{
+/* 00070d1e */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00070d5c */}
+
+void CAEPropertyCGDetection::ChangeTextEvent(int ID)
+/* 00070d64 */{
+/* 00070d64 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00070db4 */	if (Item === NULL)
+/* 00070dcc */	{
+/* 00070dcc */		return;
+/* 00070dce */	}
+/* 00070dce */	int PartsID = this.m_Item.GetID();
+/* 00070dea */	int X;
+/* 00070dfc */	int Y;
+/* 00070e0e */	int Width;
+/* 00070e20 */	int Height;
+/* 00070e32 */	Ｐ＿ＣＧ判定範囲取得(PartsID, X, Y, Width, Height);
+/* 00070e62 */	if (Item.GetLabel() == "ＣＧ名")
+/* 00070e80 */	{
+/* 00070e80 */		Ｐ＿ＣＧ判定設定(PartsID, Ｐ＿Ｘ座標取得(PartsID), Ｐ＿Ｙ座標取得(PartsID), Item.GetTextBoxText());
+/* 00070ec4 */	}
+/* 00070eca */	else if (Item.GetLabel() == "表示範囲／Ｘ")
+/* 00070ee8 */	{
+/* 00070ee8 */		Ｐ＿ＣＧ判定範囲設定(PartsID, Item.GetTextBoxInt(), Y, Width, Height);
+/* 00070f26 */	}
+/* 00070f2c */	else if (Item.GetLabel() == "表示範囲／Ｙ")
+/* 00070f4a */	{
+/* 00070f4a */		Ｐ＿ＣＧ判定範囲設定(PartsID, X, Item.GetTextBoxInt(), Width, Height);
+/* 00070f88 */	}
+/* 00070f8e */	else if (Item.GetLabel() == "表示範囲／幅")
+/* 00070fac */	{
+/* 00070fac */		Ｐ＿ＣＧ判定範囲設定(PartsID, X, Y, Item.GetTextBoxInt(), Height);
+/* 00070fea */	}
+/* 00070ff0 */	else if (Item.GetLabel() == "表示範囲／高さ")
+/* 0007100e */	{
+/* 0007100e */		Ｐ＿ＣＧ判定範囲設定(PartsID, X, Y, Width, Item.GetTextBoxInt());
+/* 0007104c */	}
+/* 0007104c */}
+
+void CAEPropertyCGDetection::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00071054 */{
+/* 00071054 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0007106e */}
+
+void CAEPropertyCGDetection::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00071076 */{
+/* 00071076 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 00071090 */}
+
+void CAEPropertyCGDetection::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00071098 */{
+/* 00071098 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 000710b2 */}
+
+void CAEPropertyCGDetection::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000710ba */{
+/* 000710ba */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 000710d4 */}
+

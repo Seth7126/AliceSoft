@@ -1,0 +1,305 @@
+void gameChangeCard(string dungeonId, int x, int y, string newCardId)
+/* 001d23a2 */{
+/* 001d23a2 */	ref Dungeon d = getDungeonFromId(dungeonId);
+/* 001d23e4 */	ref DungeonLine l = d.getDungeonLine(y);
+/* 001d2434 */	ref DungeonCard c = l.getDungeonCard(x + d.getWidth() / 2);
+/* 001d249e */	c.changeCardType(newCardId);
+/* 001d24b8 */}
+
+void gameChangeCardPermanent(string dungeonId, int x, int y, string newCardId)
+/* 001d24c6 */{
+/* 001d24c6 */	ref Dungeon d = getDungeonFromId(dungeonId);
+/* 001d2508 */	ref DungeonLine l = d.getDungeonLine(y);
+/* 001d2558 */	ref DungeonCard c = l.getDungeonCard(x + d.getWidth() / 2);
+/* 001d25c2 */	c.changeCardTypePermanent(newCardId);
+/* 001d25dc */}
+
+void gameExitPlayerFromParty(string playerId)
+/* 001d25ea */{
+/* 001d25ea */	getPlayerFromId(playerId).setJoin(false);
+/* 001d261c */	array@int eraseIndex;
+/* 001d2626 */	int i;
+/* 001d2638 */	while (i < g_party.getCount())
+/* 001d265a */	{
+/* 001d265a */		string skillId = g_party.getAttackSkillId(i);
+/* 001d2682 */		string pId = getPlayerSkillFromId(skillId).getPlayerId();
+/* 001d26bc */		if (pId == playerId)
+/* 001d26d8 */		{
+/* 001d26d8 */			g_party.erase(i);
+/* 001d26f2 */		}
+/* 001d26f8 */		else
+/* 001d26f8 */		{
+/* 001d26f8 */			++i;
+/* 001d2708 */		}
+/* 001d2708 */	}
+/* 001d2714 */}
+
+void gameCheckItemMax()
+/* 001d2722 */{
+/* 001d2722 */	int i;
+/* 001d2734 */	for (i = 0; i < g_item.Numof(); ++i)
+/* 001d2784 */	{
+/* 001d2784 */		string id = g_item[i].getId();
+/* 001d27ae */		if (g_playerCommonParam.getItemCount(id) > g_item[i].getMaxCount())
+/* 001d27ec */		{
+/* 001d27ec */			g_playerCommonParam.decItem(id);
+/* 001d2806 */			DialogInfomation info;
+/* 001d2816 */			info.setCaption("いっぱいいっぱい！");
+/* 001d282c */			info.setMessage("%sは、|もう持てないので投げ捨てた" % g_item[i].getName());
+/* 001d2866 */			info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 001d287c */			openDialog(info);
+/* 001d2892 */		}
+/* 001d2892 */	}
+/* 001d289e */}
+
+void gameGetJoinedPlayer(ref array@string p)
+/* 001d28ac */{
+/* 001d28ac */	p.Free();
+/* 001d28b6 */	int i;
+/* 001d28c8 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d2918 */	{
+/* 001d2918 */		if (g_player[i].isJoin())
+/* 001d293a */		{
+/* 001d293a */			p.PushBack(g_player[i].getId());
+/* 001d2960 */		}
+/* 001d2960 */	}
+/* 001d2966 */}
+
+void gameAddAdvSelection(int id, string advSelectionId)
+/* 001d2974 */{
+/* 001d2974 */	AdvSelectionInfo info;
+/* 001d2984 */	info.id = id;
+/* 001d29a2 */	info.advSelectionId = advSelectionId;
+/* 001d29c2 */	g_advSelectionInfo.PushBack(info);
+/* 001d29da */}
+
+int gameAdvSelection()
+/* 001d29e8 */{
+/* 001d29e8 */	array@string n;
+/* 001d29f2 */	n.Alloc(g_advSelectionInfo.Numof());
+/* 001d2a12 */	int i;
+/* 001d2a24 */	for (i = 0; i < g_advSelectionInfo.Numof(); ++i)
+/* 001d2a74 */	{
+/* 001d2a74 */		n[i] = g_advSelectionInfo[i].advSelectionId;
+/* 001d2aac */	}
+/* 001d2ab2 */	string result = openAdvSelection(n);
+/* 001d2ad2 */	int resultId = -1;
+/* 001d2ae4 */	for (i = 0; i < g_advSelectionInfo.Numof(); ++i)
+/* 001d2b34 */	{
+/* 001d2b34 */		if (g_advSelectionInfo[i].advSelectionId == result)
+/* 001d2b64 */		{
+/* 001d2b64 */			resultId = g_advSelectionInfo[i].id;
+/* 001d2b8e */		}
+/* 001d2b8e */	}
+/* 001d2b94 */	g_advSelectionInfo.Free();
+/* 001d2b9e */	return resultId;
+/* 001d2baa */}
+
+int gameAdvSelection2()
+/* 001d2bbe */{
+/* 001d2bbe */	array@string n;
+/* 001d2bc8 */	n.Alloc(g_advSelectionInfo.Numof());
+/* 001d2be8 */	int i;
+/* 001d2bfa */	for (i = 0; i < g_advSelectionInfo.Numof(); ++i)
+/* 001d2c4a */	{
+/* 001d2c4a */		n[i] = g_advSelectionInfo[i].advSelectionId;
+/* 001d2c82 */	}
+/* 001d2c88 */	string result = openAdvSelection2(n);
+/* 001d2ca8 */	int resultId = -1;
+/* 001d2cba */	for (i = 0; i < g_advSelectionInfo.Numof(); ++i)
+/* 001d2d0a */	{
+/* 001d2d0a */		if (g_advSelectionInfo[i].advSelectionId == result)
+/* 001d2d3a */		{
+/* 001d2d3a */			resultId = g_advSelectionInfo[i].id;
+/* 001d2d64 */		}
+/* 001d2d64 */	}
+/* 001d2d6a */	g_advSelectionInfo.Free();
+/* 001d2d74 */	return resultId;
+/* 001d2d80 */}
+
+void eraseNotSpecificGroupRankSkillId(ref array@string skillId, int groupRank)
+/* 001d2d94 */{
+/* 001d2d94 */	int i;
+/* 001d2da6 */	while (i < skillId.Numof())
+/* 001d2dc8 */	{
+/* 001d2dc8 */		ref PlayerSkill skill = getPlayerSkillFromId(skillId[i]);
+/* 001d2e16 */		if (skill.getGroupRank() != groupRank)
+/* 001d2e38 */		{
+/* 001d2e38 */			skillId.Erase(i);
+/* 001d2e4e */		}
+/* 001d2e54 */		else
+/* 001d2e54 */		{
+/* 001d2e54 */			++i;
+/* 001d2e64 */		}
+/* 001d2e64 */	}
+/* 001d2e76 */}
+
+string findNextSkillId(string skillId)
+/* 001d2e84 */{
+/* 001d2e84 */	ref PlayerSkill skill = getPlayerSkillFromId(skillId);
+/* 001d2ec6 */	int i;
+/* 001d2ed8 */	for (i = 0; i < g_attackSkill.Numof(); ++i)
+/* 001d2f28 */	{
+/* 001d2f28 */		if (g_attackSkill[i].getGroupId() == skill.getGroupId())
+/* 001d2f5c */		{
+/* 001d2f5c */			if (g_attackSkill[i].getGroupRank() == skill.getGroupRank() + 1)
+/* 001d2f98 */			{
+/* 001d2f98 */				return g_attackSkill[i].getId();
+/* 001d2fb6 */			}
+/* 001d2fb6 */		}
+/* 001d2fb6 */	}
+/* 001d2fbc */	return "";
+/* 001d2fc4 */}
+
+ref BadCondition getBadConditionFromId(string id)
+/* 001d2fd8 */{
+/* 001d2fd8 */	int i;
+/* 001d2fea */	for (i = 0; i < g_badCondition.Numof(); ++i)
+/* 001d303a */	{
+/* 001d303a */		if (g_badCondition[i].getId() == id)
+/* 001d3068 */		{
+/* 001d3068 */			return g_badCondition[i];
+/* 001d3084 */		}
+/* 001d3084 */	}
+/* 001d308a */	pass("そんなbadConditionないで:%s" % id);
+/* 001d30a8 */	return NULL;
+/* 001d30b0 */}
+
+string getSkillIdNextRankFromOrganizedParty(int rank)
+/* 001d30c4 */{
+/* 001d30c4 */	array@string skillId;
+/* 001d30ce */	g_party.getSkillIdList(skillId);
+/* 001d30e8 */	eraseNotSpecificGroupRankSkillId(skillId, rank);
+/* 001d3102 */	if (skillId.Empty())
+/* 001d3112 */	{
+/* 001d3112 */		return "";
+/* 001d311a */	}
+/* 001d311a */	array@string nextSkill;
+/* 001d3124 */	getAvailableNextSkillFromList(nextSkill, skillId);
+/* 001d313e */	if (nextSkill.Empty())
+/* 001d314e */	{
+/* 001d314e */		return "";
+/* 001d3156 */	}
+/* 001d3156 */	return nextSkill[RAND(nextSkill.Numof()) - 1];
+/* 001d3182 */}
+
+string getSkillIdNextRankFromJoinedPlayer(int rank)
+/* 001d3196 */{
+/* 001d3196 */	array@string skillId;
+/* 001d31a0 */	getJoinedPlayerSkill(skillId);
+/* 001d31b0 */	eraseNotSpecificGroupRankSkillId(skillId, rank);
+/* 001d31ca */	if (skillId.Empty())
+/* 001d31da */	{
+/* 001d31da */		return "";
+/* 001d31e2 */	}
+/* 001d31e2 */	array@string nextSkill;
+/* 001d31ec */	getAvailableNextSkillFromList(nextSkill, skillId);
+/* 001d3206 */	if (nextSkill.Empty())
+/* 001d3216 */	{
+/* 001d3216 */		return "";
+/* 001d321e */	}
+/* 001d321e */	return nextSkill[RAND(nextSkill.Numof()) - 1];
+/* 001d324a */}
+
+void getJoinedPlayerSkill(ref array@string skillId)
+/* 001d325e */{
+/* 001d325e */	skillId.Free();
+/* 001d3268 */	int i;
+/* 001d327a */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d32ca */	{
+/* 001d32ca */		if (g_player[i].isJoin())
+/* 001d32ec */		{
+/* 001d32ec */			int j;
+/* 001d32fe */			for (j = 0; j < 4; ++j)
+/* 001d3344 */			{
+/* 001d3344 */				string n = g_player[i].getAttackSkillId(j);
+/* 001d3378 */				if (n != "")
+/* 001d3390 */				{
+/* 001d3390 */					skillId.PushBack(n);
+/* 001d33a4 */				}
+/* 001d33a4 */			}
+/* 001d33aa */		}
+/* 001d33aa */	}
+/* 001d33b0 */}
+
+void getAvailableNextSkillFromList(ref array@string nextSkill, ref array@string source)
+/* 001d33be */{
+/* 001d33be */	int i;
+/* 001d33d0 */	for (i = 0; i < source.Numof(); ++i)
+/* 001d3420 */	{
+/* 001d3420 */		string n = findNextSkillId(source[i]);
+/* 001d344a */		if (n != "")
+/* 001d3462 */		{
+/* 001d3462 */			nextSkill.PushBack(n);
+/* 001d3476 */		}
+/* 001d3476 */	}
+/* 001d347c */}
+
+bool isCompleteMirrorPiece()
+/* 001d348a */{
+/* 001d348a */	int i;
+/* 001d349c */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001d34ec */	{
+/* 001d34ec */		if (!g_mirrorPiece[i].isComplete())
+/* 001d3510 */		{
+/* 001d3510 */			return false;
+/* 001d3518 */		}
+/* 001d3518 */	}
+/* 001d351e */	return true;
+/* 001d3526 */}
+
+void changeMapEncountProbability(int nodeCount, int noHit, int hit1, int hit2, int hit3)
+/* 001d353a */{
+/* 001d353a */	int i;
+/* 001d354c */	for (i = 0; i < g_mapEncountProbability.Numof(); ++i)
+/* 001d359c */	{
+/* 001d359c */		if (g_mapEncountProbability[i].getNodeCount() == nodeCount)
+/* 001d35ca */		{
+/* 001d35ca */			g_mapEncountProbability[i].change(noHit, hit1, hit2, hit3);
+/* 001d360e */		}
+/* 001d360e */	}
+/* 001d3614 */}
+
+int getCoolTimeFromSkillId(string skillId)
+/* 001d3622 */{
+/* 001d3622 */	ref PlayerSkill s = getPlayerSkillFromId(skillId);
+/* 001d3664 */	ref Player p = getPlayerFromId(s.getPlayerId());
+/* 001d36ac */	return p.getCoolTime(skillId);
+/* 001d36c8 */}
+
+void gameAddBattleCount()
+/* 001d36dc */{
+/* 001d36dc */	array@string playerIds;
+/* 001d36e6 */	g_party.getPlayerIdList(playerIds);
+/* 001d3700 */	int i;
+/* 001d3712 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d3762 */	{
+/* 001d3762 */		if (playerIds.Find(0, playerIds.Numof(), g_player[i].getId()) >= 0)
+/* 001d37b2 */		{
+/* 001d37b2 */			g_player[i].addTotalBattleCount();
+/* 001d37ce */			g_player[i].addConsecutiveBattleCount();
+/* 001d37ea */		}
+/* 001d37ea */	}
+/* 001d37f0 */}
+
+void gameClearConsecutiveBattleCount()
+/* 001d37fe */{
+/* 001d37fe */	array@string playerIds;
+/* 001d3808 */	g_party.getPlayerIdList(playerIds);
+/* 001d3822 */	int i;
+/* 001d3834 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 001d3884 */	{
+/* 001d3884 */		if (playerIds.Find(0, playerIds.Numof(), g_player[i].getId()) < 0)
+/* 001d38d4 */		{
+/* 001d38d4 */			g_player[i].clearConsecutiveBattleCount();
+/* 001d38f0 */		}
+/* 001d38f0 */	}
+/* 001d38f6 */}
+
+void gameSetMemo(int index, string memo)
+/* 001d3904 */{
+/* 001d3904 */	g_gameFlagMap.setString("俺のメモ", memo);
+/* 001d3924 */	int current = g_globalGameFlag.getInt("最大進行状況");
+/* 001d3946 */	g_globalGameFlag.setInt("最大進行状況", Math.Max(index, current));
+/* 001d397a */}
+

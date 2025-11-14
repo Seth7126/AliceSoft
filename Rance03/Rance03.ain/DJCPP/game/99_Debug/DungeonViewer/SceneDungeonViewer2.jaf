@@ -1,0 +1,77 @@
+void SceneDungeonViewer2::init(string dungeonId)
+/* 001c9638 */{
+/* 001c9638 */	ref Dungeon d = getDungeonFromId(dungeonId);
+/* 001c967a */	this.depth_ = d.getDepth();
+/* 001c9696 */	this.width_ = d.getWidth();
+/* 001c96b2 */	this.card_.Alloc(this.depth_ * this.width_);
+/* 001c96d8 */	this.isDrag_ = false;
+/* 001c96ea */	this.x_ = this.y_ = 0.0;
+/* 001c9706 */	int i;
+/* 001c9718 */	for (i = 0; i < this.depth_; ++i)
+/* 001c9762 */	{
+/* 001c9762 */		int j;
+/* 001c9774 */		for (j = 0; j < this.width_; ++j)
+/* 001c97be */		{
+/* 001c97be */			ref DungeonLine dl = d.getDungeonLine(i);
+/* 001c980e */			this.card_[i * this.width_ + j].init(dl.getDungeonCard(j), this.onClick, 0, d.getShadowR(), d.getShadowG(), d.getShadowB());
+/* 001c98b6 */		}
+/* 001c98ce */	}
+/* 001c98d4 */	this.updatePos();
+/* 001c98dc */}
+
+void SceneDungeonViewer2::updatePos()
+/* 001c98e4 */{
+/* 001c98e4 */	int i;
+/* 001c98f6 */	for (i = 0; i < this.depth_; ++i)
+/* 001c9940 */	{
+/* 001c9940 */		int j;
+/* 001c9952 */		for (j = 0; j < this.width_; ++j)
+/* 001c999c */		{
+/* 001c999c */			this.card_[i * this.width_ + j].setLocalPos((this.x_ + j) - this.width_ / 2, this.y_ + i);
+/* 001c9a16 */		}
+/* 001c9a1c */	}
+/* 001c9a22 */}
+
+void SceneDungeonViewer2::run()
+/* 001c9a2a */{
+/* 001c9a2c */}
+
+bool SceneDungeonViewer2::update()
+/* 001c9a32 */{
+/* 001c9a32 */	if (this.isDrag_)
+/* 001c9a42 */	{
+/* 001c9a42 */		float dx = (g_mouse.getX() - this.mouseDownX_) / 100.0;
+/* 001c9a78 */		this.x_ = this.dragStartX_ + dx;
+/* 001c9a9a */		this.updatePos();
+/* 001c9aa2 */		if (!g_mouse.isDown(0))
+/* 001c9ac0 */		{
+/* 001c9ac0 */			this.isDrag_ = false;
+/* 001c9ad2 */		}
+/* 001c9ad2 */	}
+/* 001c9ad8 */	else if (!this.isDrag_ && g_mouse.onDown(0))
+/* 001c9b1e */	{
+/* 001c9b1e */		this.isDrag_ = true;
+/* 001c9b30 */		this.dragStartX_ = this.x_;
+/* 001c9b46 */		this.mouseDownX_ = g_mouse.getX();
+/* 001c9b64 */	}
+/* 001c9b64 */	if (g_mouse.getWheel() > 0)
+/* 001c9b82 */	{
+/* 001c9b82 */		this.y_ = Math.MinF(0.0, this.y_ + 0.5);
+/* 001c9bb0 */		this.updatePos();
+/* 001c9bb8 */	}
+/* 001c9bbe */	else if (g_mouse.getWheel() < 0)
+/* 001c9bdc */	{
+/* 001c9bdc */		this.y_ = Math.MaxF(-this.depth_ + 1, this.y_ - 0.5);
+/* 001c9c1a */		this.updatePos();
+/* 001c9c22 */	}
+/* 001c9c22 */	if (g_mouse.isClick(1))
+/* 001c9c3e */	{
+/* 001c9c3e */		return false;
+/* 001c9c46 */	}
+/* 001c9c46 */	return true;
+/* 001c9c4e */}
+
+void SceneDungeonViewer2::onClick(int clickId)
+/* 001c9c5c */{
+/* 001c9c5e */}
+

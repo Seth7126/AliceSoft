@@ -1,0 +1,294 @@
+CAEPropertyPanel::CAEPropertyPanel()
+/* 00072536 */{
+/* 0007253e */	this.Init(0);
+/* 0007254c */}
+
+CAEPropertyPanel::~CAEPropertyPanel()
+/* 00072554 */{
+/* 00072554 */	this.Release();
+/* 0007255c */}
+
+void CAEPropertyPanel::Init(int LayoutID)
+/* 00072564 */{
+/* 00072564 */	this.Release();
+/* 0007256c */	this.m_LayoutID = LayoutID;
+/* 00072582 */	this.m_ToolTip.Init();
+/* 00072592 */	this.m_ToolTip.SetGetToolTipTextEvent(this.GetToolTipText);
+/* 000725ac */}
+
+void CAEPropertyPanel::Release()
+/* 000725b4 */{
+/* 000725b4 */	this.m_ToolTip.Release();
+/* 000725c4 */	this.m_dgSelectedComboBoxEvent.Clear();
+/* 000725d0 */	this.m_dgChangedCheckBoxEvent.Clear();
+/* 000725dc */	this.m_dgMouseClickEvent.Clear();
+/* 000725e8 */	this.m_dgChangeTextEvent.Clear();
+/* 000725f4 */	this.m_dgMouseWheelEvent.Clear();
+/* 00072600 */	this.m_dgKeyDownEvent.Clear();
+/* 0007260c */	this.m_ForcusItemList.Free();
+/* 00072616 */	this.m_ItemList.Free();
+/* 00072620 */	this.m_LayoutID = -1;
+/* 00072632 */}
+
+void CAEPropertyPanel::OutputError(string Text)
+/* 0007263a */{
+/* 0007263a */	system.Output("ＧＵＩエディタ警告：%s\n" % Text);
+/* 0007265a */}
+
+string CAEPropertyPanel::GetToolTipText(int Number)
+/* 00072662 */{
+/* 00072662 */	ref CAEPropertyItem Item = this.GetItem(Number);
+/* 000726a6 */	if (Item === NULL)
+/* 000726be */	{
+/* 000726be */		return "";
+/* 000726c6 */	}
+/* 000726c6 */	return Item.GetToolTipText();
+/* 000726d8 */}
+
+void CAEPropertyPanel::AddChangeFocusParts(int Number)
+/* 000726e6 */{
+/* 000726e6 */	if (Number == 0)
+/* 000726fe */	{
+/* 000726fe */		return;
+/* 00072700 */	}
+/* 00072700 */	this.m_ForcusItemList.PushBack(Number);
+/* 00072714 */	AFL_Parts_AddKeyUpEvent(Number, this.KeyUpEvent);
+/* 0007272e */}
+
+ref CAEPropertyItem CAEPropertyPanel::AddItem()
+/* 00072736 */{
+/* 00072736 */	this.m_ItemList.Realloc(this.m_ItemList.Numof() + 1);
+/* 0007275e */	this.m_ItemList[this.m_ItemList.Numof() - 1].AddKeyDownEvent(this.KeyDownEvent);
+/* 00072792 */	this.m_ItemList[this.m_ItemList.Numof() - 1].AddMouseWheelEvent(this.MouseWheelEvent);
+/* 000727c6 */	this.m_ItemList[this.m_ItemList.Numof() - 1].SetToolTip(this.m_ToolTip);
+/* 000727fa */	return this.m_ItemList[this.m_ItemList.Numof() - 1];
+/* 00072824 */}
+
+ref CAEPropertyItem CAEPropertyPanel::AddTextBoxItem(string Label, int LabelWidth, string Text, int TextBoxWidth, bool OpenIMEGainFocus)
+/* 00072832 */{
+/* 00072832 */	if (this.IsExistItem(Label))
+/* 0007284a */	{
+/* 0007284a */		this.OutputError("同じ名前の項目が存在します。\n　　%s" % Label);
+/* 0007286a */	}
+/* 0007286a */	ref CAEPropertyItem Item = this.AddItem();
+/* 000728a4 */	int ID = Item.SetTextBox(Label, LabelWidth, TextBoxWidth, OpenIMEGainFocus);
+/* 000728e8 */	Item.SetTextBoxText(Text);
+/* 00072902 */	Item.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0007291c */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, ID);
+/* 00072936 */	this.AddChangeFocusParts(Item.GetTextBoxID());
+/* 0007294e */	return Item;
+/* 0007295e */}
+
+ref CAEPropertyItem CAEPropertyPanel::AddButtonItem(string Label, int LabelWidth, string Text, int ButtonWidth, int TextPos)
+/* 0007296c */{
+/* 0007296c */	if (this.IsExistItem(Label))
+/* 00072984 */	{
+/* 00072984 */		this.OutputError("同じ名前の項目が存在します。\n　　%s" % Label);
+/* 000729a4 */	}
+/* 000729a4 */	ref CAEPropertyItem Item = this.AddItem();
+/* 000729de */	int ID = Item.SetButtonItem(Label, LabelWidth, ButtonWidth, TextPos);
+/* 00072a22 */	Item.SetButtonText(Text);
+/* 00072a3c */	Item.AddMouseClickEvent(this.MouseLClickEvent);
+/* 00072a56 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, ID);
+/* 00072a70 */	return Item;
+/* 00072a80 */}
+
+ref CAEPropertyItem CAEPropertyPanel::AddCheckBoxItem(string Label, int LabelWidth, int CheckBoxWidth, bool Flg)
+/* 00072a8e */{
+/* 00072a8e */	if (this.IsExistItem(Label))
+/* 00072aa6 */	{
+/* 00072aa6 */		this.OutputError("同じ名前の項目が存在します。\n　　%s" % Label);
+/* 00072ac6 */	}
+/* 00072ac6 */	ref CAEPropertyItem Item = this.AddItem();
+/* 00072b00 */	int ID = Item.SetCheckBoxItem(Label, LabelWidth, CheckBoxWidth);
+/* 00072b3a */	Item.SetFlg(Flg);
+/* 00072b54 */	Item.AddMouseClickEvent(this.MouseLClickEvent);
+/* 00072b6e */	Item.AddChangedCheckBoxEvent(this.ChangedCheckBoxEvent);
+/* 00072b88 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, ID);
+/* 00072ba2 */	return Item;
+/* 00072bb2 */}
+
+ref CAEPropertyItem CAEPropertyPanel::AddComboBoxItem(string Label, int LabelWidth, int ComboBoxWidth, int ComboBoxHeight, array@string List, int Index)
+/* 00072bc0 */{
+/* 00072bc0 */	if (this.IsExistItem(Label))
+/* 00072bd8 */	{
+/* 00072bd8 */		this.OutputError("同じ名前の項目が存在します。\n　　%s" % Label);
+/* 00072bf8 */	}
+/* 00072bf8 */	ref CAEPropertyItem Item = this.AddItem();
+/* 00072c32 */	int ID = Item.SetComboBoxItem(Label, LabelWidth, ComboBoxWidth, ComboBoxHeight);
+/* 00072c76 */	Item.SetComboBoxItemList(List);
+/* 00072c92 */	Item.SetComboBoxIndex(Index);
+/* 00072cac */	Item.AddMouseClickEvent(this.MouseLClickEvent);
+/* 00072cc6 */	Item.AddSelectedComboBoxEvent(this.SelectedComboBoxEvent);
+/* 00072ce0 */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, ID);
+/* 00072cfa */	return Item;
+/* 00072d0a */}
+
+ref CAEPropertyItem CAEPropertyPanel::AddLabelItem(string Label, int LabelWidth)
+/* 00072d18 */{
+/* 00072d18 */	if (this.IsExistItem(Label))
+/* 00072d30 */	{
+/* 00072d30 */		this.OutputError("同じ名前の項目が存在します。\n　　%s" % Label);
+/* 00072d50 */	}
+/* 00072d50 */	ref CAEPropertyItem Item = this.AddItem();
+/* 00072d8a */	int ID = Item.SetLabelItem(Label, LabelWidth);
+/* 00072dba */	Ｐ＿レイアウトボックス＿追加(this.m_LayoutID, ID);
+/* 00072dd4 */	return Item;
+/* 00072de4 */}
+
+bool CAEPropertyPanel::IsExistItem(string Label)
+/* 00072df2 */{
+/* 00072df2 */	return this.GetItemByLabel(Label) !== NULL;
+/* 00072e26 */}
+
+ref CAEPropertyItem CAEPropertyPanel::GetItem(int ID)
+/* 00072e34 */{
+/* 00072e34 */	int Index;
+/* 00072e46 */	for (Index = 0; Index < this.m_ItemList.Numof(); ++Index)
+/* 00072e96 */	{
+/* 00072e96 */		if (this.m_ItemList[Index].IsExistParts(ID))
+/* 00072ec2 */		{
+/* 00072ec2 */			return this.m_ItemList[Index];
+/* 00072ede */		}
+/* 00072ede */	}
+/* 00072ee4 */	return NULL;
+/* 00072eec */}
+
+ref CAEPropertyItem CAEPropertyPanel::GetItemByLabel(string Label)
+/* 00072efa */{
+/* 00072efa */	int Index;
+/* 00072f0c */	for (Index = 0; Index < this.m_ItemList.Numof(); ++Index)
+/* 00072f5c */	{
+/* 00072f5c */		if (this.m_ItemList[Index].GetLabel() == Label)
+/* 00072f8a */		{
+/* 00072f8a */			return this.m_ItemList[Index];
+/* 00072fa6 */		}
+/* 00072fa6 */	}
+/* 00072fac */	return NULL;
+/* 00072fb4 */}
+
+void CAEPropertyPanel::KeyDownEvent(int ID, int KeyID)
+/* 00072fc2 */{
+/* 00072fc2 */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00072ff6 */}
+
+void CAEPropertyPanel::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00072ffe */{
+/* 00072ffe */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0007303c */}
+
+void CAEPropertyPanel::ChangeTextEvent(int ID)
+/* 00073044 */{
+/* 00073044 */	this.m_dgChangeTextEvent(ID);
+/* 0007306e */}
+
+void CAEPropertyPanel::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 00073076 */{
+/* 00073076 */	this.m_dgMouseClickEvent(ID, MouseX, MouseY);
+/* 000730b4 */}
+
+void CAEPropertyPanel::ChangedCheckBoxEvent(int ID, bool Check)
+/* 000730bc */{
+/* 000730bc */	this.m_dgChangedCheckBoxEvent(ID, Check);
+/* 000730f0 */}
+
+void CAEPropertyPanel::SelectedComboBoxEvent(int ID, int Index)
+/* 000730f8 */{
+/* 000730f8 */	this.m_dgSelectedComboBoxEvent(ID, Index);
+/* 0007312c */}
+
+void CAEPropertyPanel::KeyUpEvent(int ID, int KeyID)
+/* 00073134 */{
+/* 00073134 */	if (KeyID != 9)
+/* 0007314c */	{
+/* 0007314c */		return;
+/* 0007314e */	}
+/* 0007314e */	if (InputString.Converts() || InputString.Inputs())
+/* 00073186 */	{
+/* 00073186 */		return;
+/* 00073188 */	}
+/* 00073188 */	int Size = this.m_ForcusItemList.Numof();
+/* 000731a4 */	int i;
+/* 000731b6 */	for (i = 0; i < Size; ++i)
+/* 00073200 */	{
+/* 00073200 */		if (ID == this.m_ForcusItemList[i])
+/* 00073228 */		{
+/* 00073228 */			break;
+/* 0007322e */		}
+/* 0007322e */	}
+/* 00073234 */	if (Size <= i)
+/* 00073250 */	{
+/* 00073250 */		return;
+/* 00073252 */	}
+/* 00073252 */	int Number = i;
+/* 00073268 */	if (!AFL_IsKeyDown(16))
+/* 0007327c */	{
+/* 0007327c */		Number = i == Size - 1 ? 0 : i + 1;
+/* 000732ca */	}
+/* 000732d0 */	else
+/* 000732d0 */	{
+/* 000732d0 */		Number = i == 0 ? Size - 1 : i - 1;
+/* 0007331e */	}
+/* 0007331e */	Ｐ＿フォーカス設定(this.m_ForcusItemList[Number]);
+/* 0007333a */}
+
+void CAEPropertyPanel::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00073342 */{
+/* 00073342 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0007335c */}
+
+void CAEPropertyPanel::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 00073364 */{
+/* 00073364 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0007337e */}
+
+void CAEPropertyPanel::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00073386 */{
+/* 00073386 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 000733a0 */}
+
+void CAEPropertyPanel::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000733a8 */{
+/* 000733a8 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 000733c2 */}
+
+void CAEPropertyPanel::AddChangeTextEvent(DG_ChangedHandler DelegateObject)
+/* 000733ca */{
+/* 000733ca */	this.m_dgChangeTextEvent += DelegateObject;
+/* 000733e4 */}
+
+void CAEPropertyPanel::EraseChangeTextEvent(DG_ChangedHandler DelegateObject)
+/* 000733ec */{
+/* 000733ec */	this.m_dgChangeTextEvent -= DelegateObject;
+/* 00073406 */}
+
+void CAEPropertyPanel::AddMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0007340e */{
+/* 0007340e */	this.m_dgMouseClickEvent += DelegateObject;
+/* 00073428 */}
+
+void CAEPropertyPanel::EraseMouseClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00073430 */{
+/* 00073430 */	this.m_dgMouseClickEvent -= DelegateObject;
+/* 0007344a */}
+
+void CAEPropertyPanel::AddChangedCheckBoxEvent(DG_ChangedFlgHandler DelegateObject)
+/* 00073452 */{
+/* 00073452 */	this.m_dgChangedCheckBoxEvent += DelegateObject;
+/* 0007346c */}
+
+void CAEPropertyPanel::EraseChangedCheckBoxEvent(DG_ChangedFlgHandler DelegateObject)
+/* 00073474 */{
+/* 00073474 */	this.m_dgChangedCheckBoxEvent -= DelegateObject;
+/* 0007348e */}
+
+void CAEPropertyPanel::AddSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 00073496 */{
+/* 00073496 */	this.m_dgSelectedComboBoxEvent += DelegateObject;
+/* 000734b0 */}
+
+void CAEPropertyPanel::EraseSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 000734b8 */{
+/* 000734b8 */	this.m_dgSelectedComboBoxEvent -= DelegateObject;
+/* 000734d2 */}
+

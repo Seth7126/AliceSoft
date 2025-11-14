@@ -1,0 +1,50 @@
+void DungeonLine::init(int dungeonWidth, int depthPos)
+/* 001cf30e */{
+/* 001cf30e */	this.card_.Alloc(dungeonWidth);
+/* 001cf328 */	this.depthPos_ = depthPos;
+/* 001cf33e */}
+
+void DungeonLine::setDungeonCard(int index, string typeId, int openType)
+/* 001cf346 */{
+/* 001cf346 */	this.card_[index].init(typeId, openType);
+/* 001cf376 */}
+
+ref DungeonCard DungeonLine::getDungeonCard(int index)
+/* 001cf37e */{
+/* 001cf37e */	if (0 <= index && index < this.card_.Numof())
+/* 001cf3d0 */	{
+/* 001cf3d0 */		return this.card_[index];
+/* 001cf3ec */	}
+/* 001cf3ec */	return NULL;
+/* 001cf3f4 */}
+
+void DungeonLine::debugOut()
+/* 001cf402 */{
+/* 001cf402 */	string n;
+/* 001cf416 */	int i;
+/* 001cf428 */	for (i = 0; i < this.card_.Numof(); ++i)
+/* 001cf478 */	{
+/* 001cf478 */		n += "[%s]" % getCardInfomationFromId(this.card_[i].getCardTypeId()).getId();
+/* 001cf4d2 */	}
+/* 001cf4de */	pass(n);
+/* 001cf4ee */}
+
+int DungeonLine::getWidth()
+/* 001cf4f6 */{
+/* 001cf4f6 */	return this.card_.Numof();
+/* 001cf508 */}
+
+int DungeonLine::getDepthPos()
+/* 001cf516 */{
+/* 001cf516 */	return this.depthPos_;
+/* 001cf522 */}
+
+void DungeonLine::reset()
+/* 001cf530 */{
+/* 001cf530 */	int i;
+/* 001cf542 */	for (i = 0; i < this.card_.Numof(); ++i)
+/* 001cf592 */	{
+/* 001cf592 */		this.card_[i].reset();
+/* 001cf5ae */	}
+/* 001cf5b4 */}
+

@@ -1,0 +1,29 @@
+void MusicInfo::init(int index)
+/* 001db544 */{
+/* 001db544 */	string key = "音楽情報";
+/* 001db558 */	this.index_ = index;
+/* 001db56e */	this.id_ = EX_A2String(key, 0, index, "");
+/* 001db5a2 */	this.isPlayed_ = false;
+/* 001db5b4 */	this.songName_ = EX_SA2String(key, this.id_, "songName", "");
+/* 001db5e8 */}
+
+int MusicInfo::getIndex()
+/* 001db5f0 */{
+/* 001db5f0 */	return this.index_;
+/* 001db5fc */}
+
+string MusicInfo::getSongName()
+/* 001db60a */{
+/* 001db60a */	return this.songName_;
+/* 001db616 */}
+
+string MusicInfo::getId()
+/* 001db624 */{
+/* 001db624 */	return this.id_;
+/* 001db630 */}
+
+bool MusicInfo::isPlayed()
+/* 001db63e */{
+/* 001db63e */	return g_playedMusic.Find(0, g_playedMusic.Numof(), this.id_) != -1;
+/* 001db67a */}
+

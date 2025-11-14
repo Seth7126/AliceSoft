@@ -1,0 +1,400 @@
+void test_Battle_DamageNumber()
+/* 001ef384 */{
+/* 001ef384 */	DamageNumber n;
+/* 001ef394 */	int p = 16;
+/* 001ef3a6 */	array@string ef;
+/* 001ef3b0 */	ef.PushBack("戦闘エフェクト／物理攻撃");
+/* 001ef3c0 */	ef.PushBack("戦闘エフェクト／魔法攻撃");
+/* 001ef3d0 */	ef.PushBack("戦闘エフェクト／爆裂攻撃");
+/* 001ef3e0 */	ef.PushBack("戦闘エフェクト／急所攻撃");
+/* 001ef3f0 */	ef.PushBack("戦闘エフェクト／性的攻撃");
+/* 001ef400 */	n.init(RAND(1000), "戦闘エフェクト/%s" % ef[(p - 16) % 5], p & 16, p & 8, p & 4, p & 3);
+/* 001ef49e */	n.setPos(512, 384, 0, 0);
+/* 001ef4c6 */	n.run(0, NULL);
+/* 001ef4de */	while (true)
+/* 001ef4ea */	{
+/* 001ef4ea */		if (g_mouse.isClick(1))
+/* 001ef506 */		{
+/* 001ef506 */			break;
+/* 001ef50c */		}
+/* 001ef50c */		if (g_mouse.isClick(0))
+/* 001ef528 */		{
+/* 001ef528 */			++p;
+/* 001ef538 */			int m = p & 3;
+/* 001ef556 */			if (m == 3)
+/* 001ef56e */			{
+/* 001ef56e */				++p;
+/* 001ef57e */			}
+/* 001ef57e */			n.init(RAND(1000), "戦闘エフェクト/%s" % ef[(p - 16) % 5], p & 16, p & 8, p & 4, p & 3);
+/* 001ef61c */			n.run(0, NULL);
+/* 001ef634 */		}
+/* 001ef634 */		g_gameObjectManager.update();
+/* 001ef644 */		g_frameManager.updateFrame();
+/* 001ef654 */	}
+/* 001ef65a */}
+
+void test_Battle_DamageNumberCallback()
+/* 001ef668 */{
+/* 001ef668 */	g_testFinishFlag = true;
+/* 001ef67a */}
+
+void test_HpBar()
+/* 001ef688 */{
+/* 001ef688 */	array@HpBar bar[2];
+/* 001ef69e */	MonsterInstance inst;
+/* 001ef6ae */	inst.init(g_monster[0].getId(), 0, 0, 0);
+/* 001ef6e8 */	bar[0].initAsPlayer(g_player[0]);
+/* 001ef712 */	bar[1].init(0, 100, false, "システム／ＨＰ／下地／敵");
+/* 001ef742 */	bar[0].setPos(100, 100);
+/* 001ef766 */	bar[1].setPos(100, 200);
+/* 001ef78a */	int i;
+/* 001ef79c */	for (i = 0; i < bar.Numof(); ++i)
+/* 001ef7ec */	{
+/* 001ef7ec */		bar[i].fadeIn(true, NULL);
+/* 001ef814 */	}
+/* 001ef81a */	while (!g_mouse.isClick(1))
+/* 001ef838 */	{
+/* 001ef838 */		if (g_mouse.isClick(0))
+/* 001ef854 */		{
+/* 001ef854 */			if (RAND(2) == 1)
+/* 001ef86e */			{
+/* 001ef86e */				int val = RAND(g_player[0].getMaxHp());
+/* 001ef898 */				g_player[0].setHp(val);
+/* 001ef8bc */			}
+/* 001ef8c2 */			else
+/* 001ef8c2 */			{
+/* 001ef8c2 */				bar[1].changeValue(RAND(100), NULL);
+/* 001ef8e8 */			}
+/* 001ef8e8 */		}
+/* 001ef8e8 */		g_gameObjectManager.update();
+/* 001ef8f8 */		g_frameManager.updateFrame();
+/* 001ef908 */	}
+/* 001ef90e */}
+
+void test_Battle_PlayerView()
+/* 001ef91c */{
+/* 001ef91c */	PlayerView v;
+/* 001ef92c */	v.init("ランス");
+/* 001ef942 */	while (!g_mouse.isClick(1))
+/* 001ef960 */	{
+/* 001ef960 */		if (g_mouse.isClick(0))
+/* 001ef97c */		{
+/* 001ef97c */			int val = RAND(100);
+/* 001ef994 */			if (RAND(2) == 1)
+/* 001ef9ae */			{
+/* 001ef9ae */				val = -val;
+/* 001ef9c6 */			}
+/* 001ef9c6 */			v.setDamage(val, "", val >= 0, 0, NULL);
+/* 001efa02 */		}
+/* 001efa02 */		if (g_keyboard.isPress(90))
+/* 001efa1e */		{
+/* 001efa1e */			if (RAND(2) == 1)
+/* 001efa38 */			{
+/* 001efa38 */				int index = RAND(g_playerBuff.Numof()) - 1;
+/* 001efa62 */				pass("%s" % g_playerBuff[index].getId());
+/* 001efa92 */				g_player[0].addBuff(g_playerBuff[index].getId());
+/* 001efac6 */			}
+/* 001efacc */			else
+/* 001efacc */			{
+/* 001efacc */				int index = RAND(g_playerBuff.Numof()) - 1;
+/* 001efaf6 */				g_player[0].eraseBuff(g_playerBuff[index].getId());
+/* 001efb2a */			}
+/* 001efb2a */		}
+/* 001efb2a */		g_gameObjectManager.update();
+/* 001efb3a */		g_frameManager.updateFrame();
+/* 001efb4a */	}
+/* 001efb50 */}
+
+void test_Battle_SkillSelectorGroup()
+/* 001efb5e */{
+/* 001efb5e */	test_Player_Init();
+/* 001efb64 */	test_Party_Organize();
+/* 001efb6a */	g_player[1].setHp(0);
+/* 001efb8a */	SkillSelectorGroup sel;
+/* 001efb9a */	sel.init();
+/* 001efbaa */	sel.fadeIn(true);
+/* 001efbc0 */	while (!g_mouse.isClick(1))
+/* 001efbde */	{
+/* 001efbde */		if (g_keyboard.isPress(90))
+/* 001efbfa */		{
+/* 001efbfa */			array@string n;
+/* 001efc04 */			sel.getSelectedIdList(n);
+/* 001efc1e */			int i;
+/* 001efc30 */			for (i = 0; i < g_player.Numof(); ++i)
+/* 001efc80 */			{
+/* 001efc80 */				g_player[i].decCoolTime();
+/* 001efc9c */			}
+/* 001efca2 */			for (i = 0; i < n.Numof(); ++i)
+/* 001efcf2 */			{
+/* 001efcf2 */				pass(n[i]);
+/* 001efd0e */				string cId = getPlayerSkillFromId(n[i]).getPlayerId();
+/* 001efd54 */				getPlayerFromId(cId).setCoolTime(n[i]);
+/* 001efd96 */			}
+/* 001efda8 */			sel.clearOrder();
+/* 001efdb8 */			sel.updateCoolTime();
+/* 001efdd2 */		}
+/* 001efdd2 */		g_gameObjectManager.update();
+/* 001efde2 */		g_frameManager.updateFrame();
+/* 001efdf2 */	}
+/* 001efdf8 */}
+
+void test_Battle_MonsterAttackView()
+/* 001efe06 */{
+/* 001efe06 */	MonsterAttackView v;
+/* 001efe16 */	Parts p;
+/* 001efe26 */	p.initAsDummy();
+/* 001efe36 */	p.setShow(true);
+/* 001efe4c */	int n;
+/* 001efe5e */	ref Monster m = g_monster[1];
+/* 001efe8c */	v.init(p.getPartsNumber());
+/* 001efeac */	v.reset(m.getAttack(n, 100), 1);
+/* 001efee2 */	while (true)
+/* 001efeee */	{
+/* 001efeee */		if (g_mouse.isClick(1))
+/* 001eff0a */		{
+/* 001eff0a */			break;
+/* 001eff10 */		}
+/* 001eff10 */		if (g_mouse.isClick(0))
+/* 001eff2c */		{
+/* 001eff2c */			n = (n + 1) % 3;
+/* 001eff52 */			v.reset(m.getAttack(n, 100), 1);
+/* 001eff88 */		}
+/* 001eff88 */		g_gameObjectManager.update();
+/* 001eff98 */		g_frameManager.updateFrame();
+/* 001effa8 */	}
+/* 001effae */}
+
+void test_Scene_Battle()
+/* 001effbc */{
+/* 001effbc */	test_Player_Init();
+/* 001effc2 */	test_Party_Organize();
+/* 001effc8 */	BattleInfomation info;
+/* 001effd8 */	int r = RAND(5);
+/* 001efff0 */	int i;
+/* 001f0002 */	for (i = 0; i < r; ++i)
+/* 001f004c */	{
+/* 001f004c */		info.addMonster(g_monster[i].getId());
+/* 001f0078 */	}
+/* 001f007e */	info.setItem("", 0);
+/* 001f009a */	string id = g_battleBackgroundInfomation[RAND(g_battleBackgroundInfomation.Numof()) - 1].getId();
+/* 001f00d8 */	info.setExtraBattleFlag(1);
+/* 001f00ee */	info.setBattleBackGroundId(id);
+/* 001f0108 */	bool isWin = openBattle2(info);
+/* 001f0124 */	pass("win:%d" % isWin);
+/* 001f0142 */}
+
+void test_Battle_Log()
+/* 001f0150 */{
+/* 001f0150 */	BattleLogView view;
+/* 001f0160 */	view.init();
+/* 001f0170 */	view.fadeIn(true);
+/* 001f0186 */	while (true)
+/* 001f0192 */	{
+/* 001f0192 */		if (g_mouse.isClick(1))
+/* 001f01ae */		{
+/* 001f01ae */			break;
+/* 001f01b4 */		}
+/* 001f01b4 */		if (g_mouse.isClick(0))
+/* 001f01d0 */		{
+/* 001f01d0 */			g_battleLog.add("テスト%d" % RAND(100), 0);
+/* 001f0200 */		}
+/* 001f0200 */		g_gameObjectManager.update();
+/* 001f0210 */		g_frameManager.updateFrame();
+/* 001f0220 */	}
+/* 001f0226 */}
+
+void test_SkillSelector()
+/* 001f0234 */{
+/* 001f0234 */	g_sel.Alloc(8);
+/* 001f024a */	int i;
+/* 001f025c */	for (i = 0; i < g_sel.Numof(); ++i)
+/* 001f02ac */	{
+/* 001f02ac */		g_sel[i].init(g_attackSkill[0].getId(), g_player[0].getId(), i, false);
+/* 001f0308 */		g_sel[i].setOnClickCallback("test_SkillSelector_Callback");
+/* 001f033c */	}
+/* 001f0342 */	for (i = 0; i < g_sel.Numof(); ++i)
+/* 001f0392 */	{
+/* 001f0392 */		g_sel[i].fadeIn(true, false);
+/* 001f03ba */	}
+/* 001f03c0 */	Parts p;
+/* 001f03d0 */	p.initAsFlat("システム／戦闘／フレーム／開始");
+/* 001f03e6 */	p.setShow(true);
+/* 001f03fc */	p.startFlat(false, 1.0);
+/* 001f0418 */	g_frameManager.updateFrame();
+/* 001f0428 */	while (true)
+/* 001f0434 */	{
+/* 001f0434 */		if (g_mouse.isClick(1))
+/* 001f0450 */		{
+/* 001f0450 */			break;
+/* 001f0456 */		}
+/* 001f0456 */		if (g_keyboard.isPress(90))
+/* 001f0472 */		{
+/* 001f0472 */			int index = RAND(8) - 1;
+/* 001f0492 */			g_sel[index].setCoolTime(RAND(10) - 1);
+/* 001f04c2 */		}
+/* 001f04c2 */		g_gameObjectManager.update();
+/* 001f04d2 */		g_frameManager.updateFrame();
+/* 001f04e2 */	}
+/* 001f04e8 */	g_sel.Free();
+/* 001f04f2 */}
+
+void test_SkillSelector_Callback(int index)
+/* 001f0500 */{
+/* 001f0500 */	pass("");
+/* 001f050c */	if (g_sel[index].getSelected() == -1)
+/* 001f0536 */	{
+/* 001f0536 */		g_sel[index].setSelected(0);
+/* 001f0558 */	}
+/* 001f055e */	else
+/* 001f055e */	{
+/* 001f055e */		g_sel[index].setSelected(-1);
+/* 001f0580 */	}
+/* 001f0580 */}
+
+void test_Battle_Background()
+/* 001f058e */{
+/* 001f058e */	BattleBackground bg;
+/* 001f059e */	bg.init("平野", "");
+/* 001f05ba */	bg.fadeIn(true);
+/* 001f05d0 */	while (true)
+/* 001f05dc */	{
+/* 001f05dc */		if (g_mouse.isClick(1))
+/* 001f05f8 */		{
+/* 001f05f8 */			break;
+/* 001f05fe */		}
+/* 001f05fe */		if (g_keyboard.isPress(90))
+/* 001f061a */		{
+/* 001f061a */			bg.fadeIn(true);
+/* 001f0630 */		}
+/* 001f0630 */		g_gameObjectManager.update();
+/* 001f0640 */		g_frameManager.updateFrame();
+/* 001f0650 */	}
+/* 001f0656 */}
+
+void test_ExLoading_MonsterAttribute()
+/* 001f0664 */{
+/* 001f0664 */	int i;
+/* 001f0676 */	for (i = 0; i < g_monsterAttribute.Numof(); ++i)
+/* 001f06c6 */	{
+/* 001f06c6 */		string n = "id[%s] name[%s] imageName[%s]" % g_monsterAttribute[i].getId() % g_monsterAttribute[i].getName() % g_monsterAttribute[i].getImageName();
+/* 001f0746 */		pass(n);
+/* 001f0756 */	}
+/* 001f075c */}
+
+void test_TreasureBoxParam()
+/* 001f076a */{
+/* 001f076a */	TreasureBoxParam p;
+/* 001f077a */	p.init("テストアイテム");
+/* 001f0790 */	p.setParam(100);
+/* 001f07a6 */	g_frameManager.updateFrame();
+/* 001f07b6 */	while (true)
+/* 001f07c2 */	{
+/* 001f07c2 */		if (g_mouse.isClick(1))
+/* 001f07de */		{
+/* 001f07de */			break;
+/* 001f07e4 */		}
+/* 001f07e4 */		if (g_mouse.isClick(0))
+/* 001f0800 */		{
+/* 001f0800 */			p.setParam(RAND(100));
+/* 001f081c */		}
+/* 001f081c */		g_gameObjectManager.update();
+/* 001f082c */		g_frameManager.updateFrame();
+/* 001f083c */	}
+/* 001f0842 */}
+
+void test_ExLoading_BattleBackGround()
+/* 001f0850 */{
+/* 001f0850 */	int i;
+/* 001f0862 */	for (i = 0; i < g_monsterAttribute.Numof(); ++i)
+/* 001f08b2 */	{
+/* 001f08b2 */		string n = "id[%s] imageName[%s] [%d,%d,%d (%d)] [%d,%d,%d]" % g_battleBackgroundInfomation[i].getId() % g_battleBackgroundInfomation[i].getImageName() % g_battleBackgroundInfomation[i].getAmbientR() % g_battleBackgroundInfomation[i].getAmbientG() % g_battleBackgroundInfomation[i].getAmbientB() % g_battleBackgroundInfomation[i].getAmbientMaxAlpha() % g_battleBackgroundInfomation[i].getUnfocusShadowR() % g_battleBackgroundInfomation[i].getUnfocusShadowG() % g_battleBackgroundInfomation[i].getUnfocusShadowB();
+/* 001f0a0a */		pass(n);
+/* 001f0a1a */	}
+/* 001f0a20 */}
+
+void test_FixedBattle_Nosu()
+/* 001f0a2e */{
+/* 001f0a2e */	test_LevelMaxAndPartyOrganize();
+/* 001f0a34 */	getMonsterFromId("ノスt3左腕").setFixedPosition(true, 1);
+/* 001f0a68 */	getMonsterFromId("ノスt3右腕").setFixedPosition(true, 1);
+/* 001f0a9c */	getMonsterFromId("ノスt3").setFixedPosition(true, 2);
+/* 001f0ad0 */	getMonsterFromId("ノスt3左腕").setPosition(758, -96, 751, 323, 908, 281);
+/* 001f0b1c */	getMonsterFromId("ノスt3右腕").setPosition(-80, 7, 201, 326, 191, 284);
+/* 001f0b68 */	getMonsterFromId("ノスt3").setPosition(-50, -50, 550, 260, 658, 222);
+/* 001f0bb4 */	BattleInfomation info;
+/* 001f0bc4 */	info.addMonster("ノスt3左腕");
+/* 001f0bda */	info.addMonster("ノスt3右腕");
+/* 001f0bf0 */	info.addMonster("ノスt3");
+/* 001f0c06 */	info.setEffectFlat("システム／戦闘／ノス戦");
+/* 001f0c1c */	openBattle2(info);
+/* 001f0c2e */}
+
+void test_FixedBattle_Sisters()
+/* 001f0c3c */{
+/* 001f0c3c */	test_LevelMaxAndPartyOrganize();
+/* 001f0c42 */	getMonsterFromId("ガーネットj").setFixedPosition(true, 0);
+/* 001f0c76 */	getMonsterFromId("サファイアj2").setFixedPosition(true, 0);
+/* 001f0caa */	getMonsterFromId("トパーズj").setFixedPosition(true, 0);
+/* 001f0cde */	getMonsterFromId("ガーネットj").setPosition(175, 52, 430, 320, 384, 256);
+/* 001f0d2a */	getMonsterFromId("サファイアj2").setPosition(574, -7, 767, 288, 845, 196);
+/* 001f0d76 */	getMonsterFromId("トパーズj").setPosition(364, -50, 576, 237, 608, 157);
+/* 001f0dc2 */	BattleInfomation info;
+/* 001f0dd2 */	info.addMonster("ガーネットj");
+/* 001f0de8 */	info.addMonster("サファイアj2");
+/* 001f0dfe */	info.addMonster("トパーズj");
+/* 001f0e14 */	openBattle2(info);
+/* 001f0e26 */}
+
+void test_FixedBattle_Jiru()
+/* 001f0e34 */{
+/* 001f0e34 */	test_LevelMaxAndPartyOrganize();
+/* 001f0e3a */	g_monsterStrengthShifter.setLocalHpRatio(0.01);
+/* 001f0e50 */	getMonsterFromId("ジル").setFixedPosition(true, 2);
+/* 001f0e84 */	getMonsterFromId("ジル").setPosition(-50, -50, 664, 342, 585, 272);
+/* 001f0ed0 */	BattleInfomation info;
+/* 001f0ee0 */	info.addMonster("ジル");
+/* 001f0ef6 */	info.setEffectFlat("システム／戦闘／ジル戦");
+/* 001f0f0c */	openBattle2(info);
+/* 001f0f1e */}
+
+void test_ExplosionEffect()
+/* 001f0f2c */{
+/* 001f0f2c */	FullScreenDeadEffect ef;
+/* 001f0f3c */	ef.init();
+/* 001f0f4c */	ef.run(NULL);
+/* 001f0f5e */	while (true)
+/* 001f0f6a */	{
+/* 001f0f6a */		if (g_mouse.isClick(1))
+/* 001f0f86 */		{
+/* 001f0f86 */			break;
+/* 001f0f8c */		}
+/* 001f0f8c */		if (ef.isFinish())
+/* 001f0fa2 */		{
+/* 001f0fa2 */			break;
+/* 001f0fa8 */		}
+/* 001f0fa8 */		g_gameObjectManager.update();
+/* 001f0fb8 */		g_frameManager.updateFrame();
+/* 001f0fc8 */	}
+/* 001f0fce */}
+
+void test_Telop()
+/* 001f0fdc */{
+/* 001f0fdc */	Parts p;
+/* 001f0fec */	p.initAsPlaneImage(600, 100, 255, 0, 0, 255);
+/* 001f1020 */	p.setPos(0.0, 300.0);
+/* 001f103c */	p.setShow(true);
+/* 001f1052 */	p.setAlpha(128.0);
+/* 001f1068 */	BattleInfoTelop telop;
+/* 001f1078 */	telop.init("テストメッセージですほげほげふがふがテストメッセージテストメッセージですほげほげふがふがですほげほげふがふが", 600, 300, 0, 400);
+/* 001f10a6 */	telop.fadeIn(true, NULL);
+/* 001f10be */	while (true)
+/* 001f10ca */	{
+/* 001f10ca */		if (g_mouse.isClick(1))
+/* 001f10e6 */		{
+/* 001f10e6 */			break;
+/* 001f10ec */		}
+/* 001f10ec */		g_gameObjectManager.update();
+/* 001f10fc */		g_frameManager.updateFrame();
+/* 001f110c */	}
+/* 001f1112 */}
+

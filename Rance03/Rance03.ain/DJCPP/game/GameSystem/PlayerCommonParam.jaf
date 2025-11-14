@@ -1,0 +1,338 @@
+PlayerCommonParam::PlayerCommonParam()
+/* 001df4d4 */{
+/* 001df4dc */	this.isEnableLevelGod_ = false;
+/* 001df4ee */	this.isEnableExitDungeon_ = false;
+/* 001df500 */	this.isEnableItem_ = true;
+/* 001df512 */	this.partyCoolTime_ = 0;
+/* 001df524 */}
+
+void PlayerCommonParam::setGold(int val)
+/* 001df52c */{
+/* 001df52c */	int old = this.gold_;
+/* 001df542 */	this.gold_ = Math.Max(0, val);
+/* 001df568 */	if (this.gold_ != old)
+/* 001df584 */	{
+/* 001df584 */		this.onChangeGold_();
+/* 001df5a4 */	}
+/* 001df5a4 */}
+
+int PlayerCommonParam::getGold()
+/* 001df5ac */{
+/* 001df5ac */	return this.gold_;
+/* 001df5b8 */}
+
+bool PlayerCommonParam::isEnableLevelGod()
+/* 001df5c6 */{
+/* 001df5c6 */	return this.isEnableLevelGod_;
+/* 001df5d2 */}
+
+bool PlayerCommonParam::isEnableExitDungeon()
+/* 001df5e0 */{
+/* 001df5e0 */	return this.isEnableExitDungeon_;
+/* 001df5ec */}
+
+void PlayerCommonParam::addItem(string itemId)
+/* 001df5fa */{
+/* 001df5fa */	ref Item item = getItemFromId(itemId);
+/* 001df63c */	if (item === NULL)
+/* 001df654 */	{
+/* 001df654 */		pass("itemId:%sは存在しません" % itemId);
+/* 001df672 */		return;
+/* 001df674 */	}
+/* 001df674 */	int index = this.getItemCountIndex(itemId);
+/* 001df692 */	int count = 1;
+/* 001df6a4 */	if (index < 0)
+/* 001df6bc */	{
+/* 001df6bc */		ItemCount ic;
+/* 001df6cc */		ic.id = itemId;
+/* 001df6ec */		ic.count = 1;
+/* 001df706 */		this.itemCount_.PushBack(ic);
+/* 001df71e */	}
+/* 001df72a */	else
+/* 001df72a */	{
+/* 001df72a */		count = ++this.itemCount_[index].count;
+/* 001df758 */	}
+/* 001df758 */	this.onAddCallback_(itemId, count);
+/* 001df78c */	this.sortItem();
+/* 001df794 */}
+
+int PlayerCommonParam::getItemCountIndex(string itemId)
+/* 001df79c */{
+/* 001df79c */	int i;
+/* 001df7ae */	for (i = 0; i < this.itemCount_.Numof(); ++i)
+/* 001df7fe */	{
+/* 001df7fe */		if (itemId == this.itemCount_[i].id)
+/* 001df82e */		{
+/* 001df82e */			return i;
+/* 001df83a */		}
+/* 001df83a */	}
+/* 001df840 */	return -1;
+/* 001df848 */}
+
+void PlayerCommonParam::useItem(string itemId)
+/* 001df856 */{
+/* 001df856 */	int index = this.getItemCountIndex(itemId);
+/* 001df874 */	if (index >= 0)
+/* 001df88c */	{
+/* 001df88c */		int count = --this.itemCount_[index].count;
+/* 001df8ba */		if (this.itemCount_[index].count == 0)
+/* 001df8e6 */		{
+/* 001df8e6 */			this.itemCount_.Erase(index);
+/* 001df8fc */		}
+/* 001df8fc */		this.onUseCallback_(itemId, count);
+/* 001df930 */	}
+/* 001df930 */}
+
+void PlayerCommonParam::decItem(string itemId)
+/* 001df938 */{
+/* 001df938 */	int index = this.getItemCountIndex(itemId);
+/* 001df956 */	if (index >= 0)
+/* 001df96e */	{
+/* 001df96e */		int count = --this.itemCount_[index].count;
+/* 001df99c */		if (this.itemCount_[index].count == 0)
+/* 001df9c8 */		{
+/* 001df9c8 */			this.itemCount_.Erase(index);
+/* 001df9de */		}
+/* 001df9de */	}
+/* 001df9de */}
+
+void PlayerCommonParam::eraseItem(string itemId)
+/* 001df9e6 */{
+/* 001df9e6 */	int index = this.getItemCountIndex(itemId);
+/* 001dfa04 */	if (index >= 0)
+/* 001dfa1c */	{
+/* 001dfa1c */		this.itemCount_.Erase(index);
+/* 001dfa32 */	}
+/* 001dfa32 */}
+
+void PlayerCommonParam::getItemList(ref array@string itemList)
+/* 001dfa3a */{
+/* 001dfa3a */	if (itemList === NULL)
+/* 001dfa52 */	{
+/* 001dfa52 */		return;
+/* 001dfa54 */	}
+/* 001dfa54 */	itemList.Alloc(this.itemCount_.Numof());
+/* 001dfa74 */	int i;
+/* 001dfa86 */	for (i = 0; i < this.itemCount_.Numof(); ++i)
+/* 001dfad6 */	{
+/* 001dfad6 */		itemList[i] = this.itemCount_[i].id;
+/* 001dfb0e */	}
+/* 001dfb14 */}
+
+void PlayerCommonParam::setOnAddItemCallback(DG_OnChangeItemCallback cb)
+/* 001dfb1c */{
+/* 001dfb1c */	this.onAddCallback_ = cb;
+/* 001dfb36 */}
+
+void PlayerCommonParam::setOnUseItemCallback(DG_OnChangeItemCallback cb)
+/* 001dfb3e */{
+/* 001dfb3e */	this.onUseCallback_ = cb;
+/* 001dfb58 */}
+
+int PlayerCommonParam::getItemCount(string id)
+/* 001dfb60 */{
+/* 001dfb60 */	int index = this.getItemCountIndex(id);
+/* 001dfb7e */	if (index < 0)
+/* 001dfb96 */	{
+/* 001dfb96 */		return 0;
+/* 001dfb9e */	}
+/* 001dfb9e */	return this.itemCount_[index].count;
+/* 001dfbbe */}
+
+void PlayerCommonParam::setOnChangeGoldCallback(DG_GeneralCallback cb)
+/* 001dfbcc */{
+/* 001dfbcc */	this.onChangeGold_ += cb;
+/* 001dfbe6 */}
+
+void PlayerCommonParam::addOnChangeBadConditionCallback(DG_GeneralCallback cb)
+/* 001dfbee */{
+/* 001dfbee */	this.onChangeBadCondition_ += cb;
+/* 001dfc08 */}
+
+void PlayerCommonParam::addOnChangeHelperCountCallback(DG_OnChangeHelperCallback cb)
+/* 001dfc10 */{
+/* 001dfc10 */	this.onChangeHelperCallback_ += cb;
+/* 001dfc2a */}
+
+void PlayerCommonParam::setPlaceName(string name)
+/* 001dfc32 */{
+/* 001dfc32 */	this.placeName_ = name;
+/* 001dfc4a */}
+
+string PlayerCommonParam::getPlaceName()
+/* 001dfc52 */{
+/* 001dfc52 */	return this.placeName_;
+/* 001dfc5e */}
+
+void PlayerCommonParam::addGold(int val)
+/* 001dfc6c */{
+/* 001dfc6c */	this.setGold(this.gold_ + val);
+/* 001dfc8a */}
+
+void PlayerCommonParam::setEnableLevelGod(bool val)
+/* 001dfc92 */{
+/* 001dfc92 */	this.isEnableLevelGod_ = val;
+/* 001dfca8 */}
+
+void PlayerCommonParam::setEnableExitDungeon(bool val)
+/* 001dfcb0 */{
+/* 001dfcb0 */	this.isEnableExitDungeon_ = val;
+/* 001dfcc6 */}
+
+void PlayerCommonParam::setEnableItem(bool val)
+/* 001dfcce */{
+/* 001dfcce */	this.isEnableItem_ = val;
+/* 001dfce4 */}
+
+bool PlayerCommonParam::isEnableItem()
+/* 001dfcec */{
+/* 001dfcec */	return this.isEnableItem_;
+/* 001dfcf8 */}
+
+void PlayerCommonParam::setPartyCoolTime(int val)
+/* 001dfd06 */{
+/* 001dfd06 */	this.partyCoolTime_ = 0;
+/* 001dfd18 */}
+
+int PlayerCommonParam::getPartyCoolTime()
+/* 001dfd20 */{
+/* 001dfd20 */	return this.partyCoolTime_;
+/* 001dfd2c */}
+
+void PlayerCommonParam::decPartyCoolTime()
+/* 001dfd3a */{
+/* 001dfd3a */	this.partyCoolTime_ = Math.Max(0, this.partyCoolTime_ - 1);
+/* 001dfd68 */}
+
+void PlayerCommonParam::sortItem()
+/* 001dfd70 */{
+/* 001dfd70 */	this.itemCount_.Sort(&sortFunctionItemCountByIndex);
+/* 001dfd80 */}
+
+int sortFunctionItemCountByIndex(ref ItemCount lhs, ref ItemCount rhs)
+/* 001dfd88 */{
+/* 001dfd88 */	ref Item iLhs = getItemFromId(lhs.id);
+/* 001dfdd2 */	ref Item iRhs = getItemFromId(rhs.id);
+/* 001dfe1c */	if (iLhs.getIndex() > iRhs.getIndex())
+/* 001dfe44 */	{
+/* 001dfe44 */		return 1;
+/* 001dfe4c */	}
+/* 001dfe4c */	if (iLhs.getIndex() < iRhs.getIndex())
+/* 001dfe74 */	{
+/* 001dfe74 */		return -1;
+/* 001dfe7c */	}
+/* 001dfe7c */	return 0;
+/* 001dfe84 */}
+
+void PlayerCommonParam::addBadCondition(string id, int turn)
+/* 001dfe98 */{
+/* 001dfe98 */	int index = this.findBadCondition(id);
+/* 001dfeb6 */	if (index < 0)
+/* 001dfece */	{
+/* 001dfece */		CurrentBadCondition bc;
+/* 001dfede */		bc.init(id, turn);
+/* 001dff02 */		this.badCondition_.PushBack(bc);
+/* 001dff1a */		this.onBeginEndBadConditionCallback_(id, true);
+/* 001dff4a */	}
+/* 001dff56 */	else
+/* 001dff56 */	{
+/* 001dff56 */		this.badCondition_[index].setTurn(turn);
+/* 001dff7c */	}
+/* 001dff7c */	this.onChangeBadCondition_();
+/* 001dff9c */}
+
+void PlayerCommonParam::decBadCondition()
+/* 001dffa4 */{
+/* 001dffa4 */	int i;
+/* 001dffb6 */	while (i < this.badCondition_.Numof())
+/* 001dffd8 */	{
+/* 001dffd8 */		this.badCondition_[i].decTurn();
+/* 001dfff4 */		if (this.badCondition_[i].getTurn() == 0)
+/* 001e001e */		{
+/* 001e001e */			this.onBeginEndBadConditionCallback_(this.badCondition_[i].getId(), false);
+/* 001e0060 */			this.badCondition_.Erase(i);
+/* 001e0076 */		}
+/* 001e007c */		else
+/* 001e007c */		{
+/* 001e007c */			++i;
+/* 001e008c */		}
+/* 001e008c */	}
+/* 001e0092 */	this.onChangeBadCondition_();
+/* 001e00b2 */}
+
+int PlayerCommonParam::findBadCondition(string id)
+/* 001e00ba */{
+/* 001e00ba */	int i;
+/* 001e00cc */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 001e011c */	{
+/* 001e011c */		if (this.badCondition_[i].getId() == id)
+/* 001e014a */		{
+/* 001e014a */			return i;
+/* 001e0156 */		}
+/* 001e0156 */	}
+/* 001e015c */	return -1;
+/* 001e0164 */}
+
+void PlayerCommonParam::getBadCondition(ref array@CurrentBadCondition current)
+/* 001e0172 */{
+/* 001e0172 */	current.Alloc(this.badCondition_.Numof());
+/* 001e0192 */	current.Copy(0, this.badCondition_, 0, this.badCondition_.Numof());
+/* 001e01c4 */}
+
+int PlayerCommonParam::getBadConditionTurn(string id)
+/* 001e01cc */{
+/* 001e01cc */	int index = this.findBadCondition(id);
+/* 001e01ea */	if (index < 0)
+/* 001e0202 */	{
+/* 001e0202 */		return 0;
+/* 001e020a */	}
+/* 001e020a */	return this.badCondition_[index].getTurn();
+/* 001e0228 */}
+
+void PlayerCommonParam::clearBadCondition()
+/* 001e0236 */{
+/* 001e0236 */	int i;
+/* 001e0248 */	for (i = 0; i < this.badCondition_.Numof(); ++i)
+/* 001e0298 */	{
+/* 001e0298 */		this.onBeginEndBadConditionCallback_(this.badCondition_[i].getId(), false);
+/* 001e02da */	}
+/* 001e02e0 */	this.badCondition_.Free();
+/* 001e02ea */	this.onChangeBadCondition_();
+/* 001e030a */}
+
+void PlayerCommonParam::setBadConditionBeginEndHandler(DG_OnBadConditionBeginEndHandler handler)
+/* 001e0312 */{
+/* 001e0312 */	this.onBeginEndBadConditionCallback_ = handler;
+/* 001e032c */}
+
+void PlayerCommonParam::setMaxHelperCount(int val)
+/* 001e0334 */{
+/* 001e0334 */	int maxOld = this.maxHelperCount_;
+/* 001e034a */	int restOld = this.helperCount_;
+/* 001e0360 */	this.maxHelperCount_ = val;
+/* 001e0376 */	++this.helperCount_;
+/* 001e0386 */	this.onChangeHelperCallback_(this.helperCount_, restOld, this.maxHelperCount_, maxOld);
+/* 001e03ce */}
+
+int PlayerCommonParam::getMaxHelperCount()
+/* 001e03d6 */{
+/* 001e03d6 */	return this.maxHelperCount_;
+/* 001e03e2 */}
+
+void PlayerCommonParam::setHelperCount(int val)
+/* 001e03f0 */{
+/* 001e03f0 */	this.helperCount_ = val;
+/* 001e0406 */}
+
+int PlayerCommonParam::getHelperCount()
+/* 001e040e */{
+/* 001e040e */	return this.helperCount_;
+/* 001e041a */}
+
+void PlayerCommonParam::decHelperCount(int val)
+/* 001e0428 */{
+/* 001e0428 */	int restOld = this.helperCount_;
+/* 001e043e */	this.helperCount_ -= val;
+/* 001e0454 */	this.onChangeHelperCallback_(this.helperCount_, restOld, this.maxHelperCount_, this.maxHelperCount_);
+/* 001e049c */}
+

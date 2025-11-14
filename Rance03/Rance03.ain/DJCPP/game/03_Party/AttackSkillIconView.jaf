@@ -1,0 +1,272 @@
+AttackSkillIconView::AttackSkillIconView()
+/* 00192146 */{
+/* 0019214e */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 0019217e */	this.isEquip_ = false;
+/* 00192190 */	this.isInitialized_ = false;
+/* 001921a2 */	this.isShow_ = false;
+/* 001921b4 */}
+
+void AttackSkillIconView::init(string skillId, int mode, int availableLevel, int coolTime)
+/* 001921bc */{
+/* 001921bc */	this.coolTime_ = coolTime;
+/* 001921d2 */	this.skillId_ = skillId;
+/* 001921ea */	this.mode_ = mode;
+/* 00192200 */	this.skill_ <- getPlayerSkillFromId(this.skillId_);
+/* 0019223c */	this.availableLevel_ = availableLevel;
+/* 00192252 */}
+
+void AttackSkillIconView::initParts()
+/* 0019225a */{
+/* 0019225a */	this.initCommonParts();
+/* 00192262 */	if (this.mode_ == 0)
+/* 0019227a */	{
+/* 0019227a */		this.initAvailable();
+/* 00192282 */	}
+/* 00192288 */	else if (this.mode_ == 1 || this.mode_ == 2)
+/* 001922d0 */	{
+/* 001922d0 */		this.initNotAvailable();
+/* 001922d8 */	}
+/* 001922d8 */	createPartsGroup(this.parent_, this.parts_, 6000);
+/* 001922f8 */	if (this.parentPartsNumber_ != 0)
+/* 00192310 */	{
+/* 00192310 */		this.parent_.setParent(this.parentPartsNumber_);
+/* 0019232a */		this.parent_.setZ(0.0);
+/* 00192340 */	}
+/* 00192340 */	this.setPartsPos();
+/* 00192348 */	this.setState(0);
+/* 00192356 */	int i;
+/* 00192368 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001923b8 */	{
+/* 001923b8 */		this.parts_[i].changeOrigin(5);
+/* 001923da */	}
+/* 001923e0 */	this.setPartsShow();
+/* 001923e8 */}
+
+void AttackSkillIconView::setPartsShow()
+/* 001923f0 */{
+/* 001923f0 */	int i;
+/* 00192402 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00192452 */	{
+/* 00192452 */		this.parts_[i].setShow(true);
+/* 00192474 */	}
+/* 0019247a */	this.parent_.setShow(true);
+/* 00192490 */	this.parts_[10].setShow(this.isEquip_);
+/* 001924b2 */	this.setRankIconShow();
+/* 001924ba */}
+
+void AttackSkillIconView::setPartsPos()
+/* 001924c2 */{
+/* 001924c2 */	this.parts_[0].setPos(0.0, 0.0);
+/* 001924e6 */	this.parts_[0].setOrigin(7);
+/* 00192504 */	this.parts_[1].setPos(58.0, 0.0);
+/* 00192528 */	this.parts_[1].setOrigin(8);
+/* 00192546 */	this.parts_[2].setPos(58.0, 47.0);
+/* 0019256a */	this.parts_[2].setOrigin(8);
+/* 00192588 */	this.parts_[5].setPos(13.0, 65.0);
+/* 001925ac */	this.parts_[5].setOrigin(7);
+/* 001925ca */	this.parts_[6].setPos(40.0, 83.0);
+/* 001925ee */	this.parts_[6].setOrigin(7);
+/* 0019260c */	this.parts_[10].setPos(58.0, 50.0);
+/* 00192630 */	this.parts_[10].setOrigin(5);
+/* 0019264e */	this.parts_[7].setPos(51.0, 67.0);
+/* 00192672 */	this.parts_[6].setOrigin(7);
+/* 00192690 */	this.parts_[3].setPos(25.0, 49.0);
+/* 001926b4 */	this.parts_[4].setPos(69.0, 54.0);
+/* 001926d8 */	this.parts_[4].setOrigin(5);
+/* 001926f6 */	this.parts_[8].setPos(80.0, 5.0);
+/* 0019271a */	this.parts_[9].setPos(98.0, 22.0);
+/* 0019273e */	this.parts_[9].setOrigin(5);
+/* 0019275c */}
+
+void AttackSkillIconView::setRankIconShow()
+/* 00192764 */{
+/* 00192766 */}
+
+void AttackSkillIconView::update()
+/* 0019276c */{
+/* 0019276c */	this.updateHover();
+/* 00192774 */	if (this.cb_.Numof() != 0)
+/* 00192790 */	{
+/* 00192790 */		int n;
+/* 001927a2 */		if (this.isHover())
+/* 001927b0 */		{
+/* 001927b0 */			n = 1;
+/* 001927c2 */			if (g_mouse.isDown(0))
+/* 001927de */			{
+/* 001927de */				n = 2;
+/* 001927f0 */			}
+/* 001927f0 */		}
+/* 001927f0 */		this.setState(n);
+/* 00192802 */		if (g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 00192822 */		{
+/* 00192822 */			this.cb_(this.skillId_);
+/* 0019284c */		}
+/* 0019284c */	}
+/* 0019284c */	if (!this.lastHover_ && this.isHover_)
+/* 00192886 */	{
+/* 00192886 */		playCursor();
+/* 0019288c */	}
+/* 0019288c */	if (this.isHover_ && g_mouse.onDown(0))
+/* 001928d0 */	{
+/* 001928d0 */		playClick();
+/* 001928d6 */	}
+/* 001928d6 */	this.lastHover_ = this.isHover_;
+/* 001928ec */}
+
+void AttackSkillIconView::updateHover()
+/* 001928f4 */{
+/* 001928f4 */	this.isHover_ = this.parts_[0].isHit(g_mouse.getX(), g_mouse.getY()) && this.viewValue_ == 0.0 && this.mode_ == 0;
+/* 0019299a */}
+
+void AttackSkillIconView::setPos(int x, int y)
+/* 001929a2 */{
+/* 001929a2 */	this.x_ = x;
+/* 001929b8 */	this.y_ = y;
+/* 001929ce */	this.parent_.setPos(this.x_, this.y_);
+/* 001929f6 */	this.info_.setPos(100, 2);
+/* 00192a12 */}
+
+void AttackSkillIconView::initAvailable()
+/* 00192a1a */{
+/* 00192a1a */	if (this.skill_ === NULL)
+/* 00192a32 */	{
+/* 00192a32 */		return;
+/* 00192a34 */	}
+/* 00192a34 */	this.parts_[1].init(this.skill_.getIconImageName(), 0);
+/* 00192a62 */	this.parts_[6].init(this.getSkillTypeIcon(), 0);
+/* 00192a88 */	this.parts_[5].init(this.getSkillAttrIcon(), 0);
+/* 00192aae */	this.parts_[2].initAsText(this.skill_.getName(), 20, true, 256, 255, 255, 255);
+/* 00192afa */	if (this.coolTime_ > 0)
+/* 00192b12 */	{
+/* 00192b12 */		this.parts_[8].init("システム／編成／クールタイム", 0);
+/* 00192b36 */		this.parts_[9].initAsNumber("システム／数字／幅２３／白フチ", NULL);
+/* 00192b5a */		this.parts_[9].setNumber(this.coolTime_);
+/* 00192b7e */	}
+/* 00192b7e */	this.parts_[7].init("システム／スキル／ランク／星%D" % this.skill_.getGroupRank(), 0);
+/* 00192bba */}
+
+void AttackSkillIconView::initCommonParts()
+/* 00192bc2 */{
+/* 00192bc2 */	this.parts_[0].init("システム／編成／スキル下地", 0);
+/* 00192be6 */	this.parts_[10].init("システム／編成／スキル装備", 0);
+/* 00192c0a */}
+
+string AttackSkillIconView::getSkillTypeIcon()
+/* 00192c12 */{
+/* 00192c12 */	return getPlayerAttackTargetTypeIconName(this.skill_);
+/* 00192c24 */}
+
+string AttackSkillIconView::getSkillAttrIcon()
+/* 00192c32 */{
+/* 00192c32 */	PlayerSkillAttribute attr;
+/* 00192c42 */	attr = getPlayerSkillAttributeFromId(this.skill_.getAttributeId());
+/* 00192c88 */	return attr.getImageName();
+/* 00192c9a */}
+
+void AttackSkillIconView::initNotAvailable()
+/* 00192ca8 */{
+/* 00192ca8 */	if (this.skill_ !== NULL)
+/* 00192cc0 */	{
+/* 00192cc0 */		this.parts_[1].init(this.skill_.getIconImageName(), 0);
+/* 00192cee */	}
+/* 00192cee */	if (this.mode_ != 2)
+/* 00192d06 */	{
+/* 00192d06 */		this.parts_[3].init("システム／編成／未修得レベル", 0);
+/* 00192d2a */		NumberPartsInfomation n;
+/* 00192d3a */		n.setSameWidth(23);
+/* 00192d50 */		n.setSpan(-3);
+/* 00192d66 */		this.parts_[4].initAsNumber("システム／数字／幅２３／白フチ", n);
+/* 00192d8e */		this.parts_[4].setNumber(this.availableLevel_);
+/* 00192db2 */	}
+/* 00192db2 */}
+
+void AttackSkillIconView::setState(int n)
+/* 00192dc0 */{
+/* 00192dc0 */	if (this.mode_ == 0)
+/* 00192dd8 */	{
+/* 00192dd8 */		this.parts_[1].setCgRange((this.parts_[1].getWidth() / 5) * n, 0, this.parts_[1].getWidth() / 5, this.parts_[1].getHeight());
+/* 00192e5a */	}
+/* 00192e60 */	else if (this.mode_ == 1 || this.mode_ == 2)
+/* 00192ea8 */	{
+/* 00192ea8 */		this.parts_[1].setCgRange((this.parts_[1].getWidth() / 5) * 4, 0, this.parts_[1].getWidth() / 5, this.parts_[1].getHeight());
+/* 00192f26 */		n = 3;
+/* 00192f38 */	}
+/* 00192f38 */	if (this.isEquip_)
+/* 00192f48 */	{
+/* 00192f48 */		n = 4;
+/* 00192f5a */	}
+/* 00192f5a */	this.parts_[0].setCgRange((this.parts_[0].getWidth() / 5) * n, 0, this.parts_[0].getWidth() / 5, this.parts_[0].getHeight());
+/* 00192fdc */	this.parts_[10].setShow(this.isEquip_);
+/* 00192ffe */}
+
+void AttackSkillIconView::setEquip(bool val)
+/* 00193006 */{
+/* 00193006 */	this.isEquip_ = val;
+/* 0019301c */}
+
+bool AttackSkillIconView::isHover()
+/* 00193024 */{
+/* 00193024 */	this.updateHover();
+/* 0019302c */	return this.isHover_;
+/* 00193038 */}
+
+void AttackSkillIconView::setZ(int z)
+/* 00193046 */{
+/* 00193046 */	this.parent_.setZ(z);
+/* 00193062 */}
+
+void AttackSkillIconView::setViewValue(float value)
+/* 0019306a */{
+/* 0019306a */	this.viewValue_ = value;
+/* 00193080 */	if (-1 <= this.viewValue_ && this.viewValue_ <= 1.0)
+/* 001930ce */	{
+/* 001930ce */		if (!this.isInitialized_)
+/* 001930e0 */		{
+/* 001930e0 */			this.isInitialized_ = true;
+/* 001930f2 */			this.initParts();
+/* 001930fa */			this.info_.init(this.mode_ == 0 ? this.skillId_ : "");
+/* 00193138 */			this.info_.setParent(this.parent_.getPartsNumber());
+/* 00193158 */			this.setPos(this.x_, this.y_);
+/* 00193174 */			this.info_.setShow(this.isShow_);
+/* 0019318e */		}
+/* 0019318e */	}
+/* 0019318e */	float v = Math.MaxF(-1.0, Math.MinF(1.0, value));
+/* 001931c4 */	this.parent_.setAlpha((1 - Math.AbsF(v)) * 255.0);
+/* 001931fe */	this.parent_.setScaling(100 - Math.AbsF(v) * 20.0);
+/* 00193238 */	this.parent_.setPos(this.x_ + v * 50.0, this.y_);
+/* 00193278 */	this.parent_.setXZRot(v * 60.0);
+/* 0019329a */	this.info_.setViewValue(value);
+/* 001932b4 */}
+
+void AttackSkillIconView::setOnClickCallback(DG_OnClickAttackSkillCallback cb)
+/* 001932bc */{
+/* 001932bc */	this.cb_ = cb;
+/* 001932d6 */}
+
+string AttackSkillIconView::getSkillId()
+/* 001932de */{
+/* 001932de */	return this.skillId_;
+/* 001932ea */}
+
+void AttackSkillIconView::setShowInformation(bool isShow)
+/* 001932f8 */{
+/* 001932f8 */	this.isShow_ = isShow;
+/* 0019330e */	this.info_.fadeIn(isShow, NULL);
+/* 0019332a */}
+
+void AttackSkillIconView::setParent(int parentPartsNumber)
+/* 00193332 */{
+/* 00193332 */	this.parentPartsNumber_ = parentPartsNumber;
+/* 00193348 */	if (this.parent_.isInitialized())
+/* 0019335e */	{
+/* 0019335e */		this.parent_.setParent(this.parentPartsNumber_);
+/* 00193378 */		this.parent_.setZ(0.0);
+/* 0019338e */	}
+/* 0019338e */}
+
+void AttackSkillIconView::fadeIn(bool val)
+/* 00193396 */{
+/* 00193396 */	this.setViewValue(0.0);
+/* 001933a4 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001933de */}
+

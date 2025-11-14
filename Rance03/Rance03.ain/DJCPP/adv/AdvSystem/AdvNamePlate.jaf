@@ -1,0 +1,76 @@
+void AdvNamePlate::show(string characterName)
+/* 00174852 */{
+/* 00174852 */	if (this.currentCharacterName_ == characterName)
+/* 0017486e */	{
+/* 0017486e */		return;
+/* 00174870 */	}
+/* 00174870 */	if (this.currentCharacterName_ != "")
+/* 00174888 */	{
+/* 00174888 */		this.hide();
+/* 00174890 */	}
+/* 00174890 */	this.currentCharacterName_ = characterName;
+/* 001748a8 */	string fileName = this.getCgName(this.currentCharacterName_);
+/* 001748c8 */	this.initParts(fileName);
+/* 001748da */	if (!skipFunction())
+/* 001748e8 */	{
+/* 001748e8 */		this.runShowMotion();
+/* 001748f0 */		RunPartsMotion();
+/* 001748f6 */	}
+/* 001748fc */	else
+/* 001748fc */	{
+/* 001748fc */		this.partsCg_.setPos(0.0, 618.0);
+/* 00174918 */		this.partsCg_.setAlpha(255.0);
+/* 0017492e */	}
+/* 0017492e */}
+
+string AdvNamePlate::getCgName(string characterName)
+/* 00174936 */{
+/* 00174936 */	return "システム／名札／" + this.currentCharacterName_;
+/* 0017494a */}
+
+void AdvNamePlate::initParts(string cgName)
+/* 00174958 */{
+/* 00174958 */	this.partsCg_.init(cgName, 0);
+/* 00174978 */	this.partsCg_.setPos(-100.0, 618.0);
+/* 00174994 */	this.partsCg_.setZ(3500.0);
+/* 001749aa */	this.partsCg_.setShow(true);
+/* 001749c0 */	this.partsCg_.setOrigin(1);
+/* 001749d6 */	Ｐ＿メッセージウィンドウ表示連動設定(this.partsCg_.getPartsNumber(), true);
+/* 001749f2 */}
+
+void AdvNamePlate::runShowMotion()
+/* 001749fa */{
+/* 001749fa */	PartsMotion m;
+/* 00174a0a */	m.setTime(100);
+/* 00174a20 */	m.setMove(-100, 618, 0, 618, 1);
+/* 00174a4e */	m.setAlpha(0, 255, 0);
+/* 00174a70 */	this.partsCg_.runMotion(m, NULL);
+/* 00174a90 */}
+
+void AdvNamePlate::hide()
+/* 00174a98 */{
+/* 00174a98 */	this.currentCharacterName_ = "";
+/* 00174aac */	this.runHideMotion();
+/* 00174ab4 */	RunPartsMotion();
+/* 00174aba */}
+
+void AdvNamePlate::runHideMotion()
+/* 00174ac2 */{
+/* 00174ac2 */	PartsMotion m;
+/* 00174ad2 */	m.setTime(50);
+/* 00174ae8 */	m.setMove(0, 618, -100, 618, 1);
+/* 00174b16 */	m.setAlpha(255, 0, 0);
+/* 00174b38 */	this.partsCg_.runMotion(m, this.onFinishHide);
+/* 00174b60 */}
+
+void AdvNamePlate::onFinishHide()
+/* 00174b68 */{
+/* 00174b68 */	this.currentCharacterName_ = "";
+/* 00174b7c */	this.partsCg_.release();
+/* 00174b8c */}
+
+bool AdvNamePlate::isShow()
+/* 00174b94 */{
+/* 00174b94 */	return this.currentCharacterName_ != "";
+/* 00174baa */}
+

@@ -1,0 +1,119 @@
+CAEPropertyVGauge::CAEPropertyVGauge()
+/* 0006dd20 */{
+/* 0006dd28 */	this.Release();
+/* 0006dd30 */}
+
+CAEPropertyVGauge::~CAEPropertyVGauge()
+/* 0006dd38 */{
+/* 0006dd38 */	this.Release();
+/* 0006dd40 */}
+
+void CAEPropertyVGauge::Init(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 0006dd48 */{
+/* 0006dd48 */	this.Release();
+/* 0006dd50 */	if (Item === NULL)
+/* 0006dd68 */	{
+/* 0006dd68 */		return;
+/* 0006dd6a */	}
+/* 0006dd6a */	this.m_Item <- Item;
+/* 0006dd8a */	this.m_PartsState = State;
+/* 0006dda0 */	this.m_Panel.Init(LayoutID);
+/* 0006ddba */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 0006ddd4 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 0006ddee */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 0006de08 */	int ID = this.m_Item.GetID();
+/* 0006de24 */	int X;
+/* 0006de36 */	int Y;
+/* 0006de48 */	int Width;
+/* 0006de5a */	int Height;
+/* 0006de6c */	Ｐ＿縦ゲージ表示範囲取得(ID, X, Y, Width, Height, this.m_PartsState);
+/* 0006dea6 */	this.m_Panel.AddTextBoxItem("ＣＧ名", Ｐ＿縦ゲージＣＧ名取得(ID, this.m_PartsState), true);
+/* 0006def8 */	this.m_Panel.AddTextBoxItem("分子", Ｐ＿縦ゲージ分子取得(ID, this.m_PartsState).String(), false);
+/* 0006df52 */	this.m_Panel.AddTextBoxItem("分母", Ｐ＿縦ゲージ分母取得(ID, this.m_PartsState).String(), false);
+/* 0006dfac */	this.m_Panel.AddTextBoxItem("表示範囲／Ｘ", string(X), false);
+/* 0006dff0 */	this.m_Panel.AddTextBoxItem("表示範囲／Ｙ", string(Y), false);
+/* 0006e034 */	this.m_Panel.AddTextBoxItem("表示範囲／幅", string(Width), false);
+/* 0006e078 */	this.m_Panel.AddTextBoxItem("表示範囲／高さ", string(Height), false);
+/* 0006e0bc */}
+
+void CAEPropertyVGauge::Release()
+/* 0006e0c4 */{
+/* 0006e0c4 */	this.m_dgMouseWheelEvent.Clear();
+/* 0006e0d0 */	this.m_dgKeyDownEvent.Clear();
+/* 0006e0dc */	this.m_Item <- NULL;
+/* 0006e0f4 */	this.m_Panel.Release();
+/* 0006e104 */}
+
+void CAEPropertyVGauge::KeyDownEvent(int ID, int KeyID)
+/* 0006e10c */{
+/* 0006e10c */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 0006e140 */}
+
+void CAEPropertyVGauge::MouseWheelEvent(int ID, int Forward, int Back)
+/* 0006e148 */{
+/* 0006e148 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 0006e186 */}
+
+void CAEPropertyVGauge::ChangeTextEvent(int ID)
+/* 0006e18e */{
+/* 0006e18e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 0006e1de */	if (Item === NULL)
+/* 0006e1f6 */	{
+/* 0006e1f6 */		return;
+/* 0006e1f8 */	}
+/* 0006e1f8 */	int PartsID = this.m_Item.GetID();
+/* 0006e214 */	int X;
+/* 0006e226 */	int Y;
+/* 0006e238 */	int Width;
+/* 0006e24a */	int Height;
+/* 0006e25c */	Ｐ＿縦ゲージ表示範囲取得(PartsID, X, Y, Width, Height, this.m_PartsState);
+/* 0006e296 */	if (Item.GetLabel() == "ＣＧ名")
+/* 0006e2b4 */	{
+/* 0006e2b4 */		Ｐ＿縦ゲージＣＧ設定(PartsID, Item.GetTextBoxText(), this.m_PartsState);
+/* 0006e2de */	}
+/* 0006e2e4 */	else if (Item.GetLabel() == "分子")
+/* 0006e302 */	{
+/* 0006e302 */		Ｐ＿縦ゲージ率設定(PartsID, Item.GetTextBoxFloat(), Ｐ＿縦ゲージ分母取得(PartsID, this.m_PartsState), this.m_PartsState);
+/* 0006e346 */	}
+/* 0006e34c */	else if (Item.GetLabel() == "分母")
+/* 0006e36a */	{
+/* 0006e36a */		Ｐ＿縦ゲージ率設定(PartsID, Ｐ＿縦ゲージ分子取得(PartsID, this.m_PartsState), Item.GetTextBoxFloat(), this.m_PartsState);
+/* 0006e3ae */	}
+/* 0006e3b4 */	else if (Item.GetLabel() == "表示範囲／Ｘ")
+/* 0006e3d2 */	{
+/* 0006e3d2 */		Ｐ＿縦ゲージ表示範囲設定(PartsID, Item.GetTextBoxInt(), Y, Width, Height, this.m_PartsState);
+/* 0006e41a */	}
+/* 0006e420 */	else if (Item.GetLabel() == "表示範囲／Ｙ")
+/* 0006e43e */	{
+/* 0006e43e */		Ｐ＿縦ゲージ表示範囲設定(PartsID, X, Item.GetTextBoxInt(), Width, Height, this.m_PartsState);
+/* 0006e486 */	}
+/* 0006e48c */	else if (Item.GetLabel() == "表示範囲／幅")
+/* 0006e4aa */	{
+/* 0006e4aa */		Ｐ＿縦ゲージ表示範囲設定(PartsID, X, Y, Item.GetTextBoxInt(), Height, this.m_PartsState);
+/* 0006e4f2 */	}
+/* 0006e4f8 */	else if (Item.GetLabel() == "表示範囲／高さ")
+/* 0006e516 */	{
+/* 0006e516 */		Ｐ＿縦ゲージ表示範囲設定(PartsID, X, Y, Width, Item.GetTextBoxInt(), this.m_PartsState);
+/* 0006e55e */	}
+/* 0006e55e */}
+
+void CAEPropertyVGauge::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006e566 */{
+/* 0006e566 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 0006e580 */}
+
+void CAEPropertyVGauge::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0006e588 */{
+/* 0006e588 */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 0006e5a2 */}
+
+void CAEPropertyVGauge::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006e5aa */{
+/* 0006e5aa */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0006e5c4 */}
+
+void CAEPropertyVGauge::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0006e5cc */{
+/* 0006e5cc */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 0006e5e6 */}
+

@@ -1,0 +1,506 @@
+int 制御／戦闘／バフ／プレイヤー(array@string playerBuffIdList, array@string monsterBuffIdList, int type)
+/* 00228646 */{
+/* 00228646 */	int i;
+/* 00228658 */	int val;
+/* 0022866a */	for (i = 0; i < playerBuffIdList.Numof(); ++i)
+/* 002286ba */	{
+/* 002286ba */		if (getPlayerBuffFromId(playerBuffIdList[i]).getType() == type)
+/* 00228704 */		{
+/* 00228704 */			string skillId = getSkillIdFromBuffId(playerBuffIdList[i]);
+/* 0022872e */			string playerId = getPlayerSkillFromId(skillId).getPlayerId();
+/* 00228768 */			float param = getPlayerSkillFromId(skillId).getParam();
+/* 002287a0 */			int power;
+/* 002287b2 */			switch (getPlayerBuffFromId(playerBuffIdList[i]).getCalcType())
+/* 002287f6 */			{
+/* 002287f6 */			case 0:
+/* 002287f6 */				power = getPlayerFromId(playerId).getStrength();
+/* 0022882e */				break;
+/* 0022883a */			case 1:
+/* 0022883a */				power = getPlayerFromId(playerId).getMind();
+/* 00228872 */				break;
+/* 00228884 */			case 2:
+/* 00228884 */				power = getPlayerFromId(playerId).getDexterity();
+/* 002288bc */				break;
+/* 002288d4 */			}
+/* 002288e6 */			float fluctuation;
+/* 002288f8 */			fluctuation = (power * param * (RAND(16) - 1)) / 100.0;
+/* 00228940 */			val += power * param + fluctuation;
+/* 00228976 */		}
+/* 00228976 */	}
+/* 00228994 */	int j;
+/* 002289a6 */	for (j = 0; j < monsterBuffIdList.Numof(); ++j)
+/* 002289f6 */	{
+/* 002289f6 */		float monsterPalam;
+/* 00228a08 */		if (type == 0)
+/* 00228a20 */		{
+/* 00228a20 */			switch (monsterBuffIdList[j])
+/* 00228a42 */			{
+/* 00228a42 */			case "物理防御上昇1":
+/* 00228a42 */				monsterPalam = 40.0;
+/* 00228a54 */				break;
+/* 00228a5a */			case "物理防御上昇2":
+/* 00228a5a */				monsterPalam = 120.0;
+/* 00228a6c */				break;
+/* 00228a72 */			case "物理防御上昇3":
+/* 00228a72 */				monsterPalam = 360.0;
+/* 00228a84 */				break;
+/* 00228a8a */			case "物理防御上昇4":
+/* 00228a8a */				monsterPalam = 1080.0;
+/* 00228a9c */				break;
+/* 00228aa2 */			case "物理防御上昇5":
+/* 00228aa2 */				monsterPalam = 1944.0;
+/* 00228ab4 */				break;
+/* 00228aba */			case "物理防御上昇6":
+/* 00228aba */				monsterPalam = 5400.0;
+/* 00228acc */				break;
+/* 00228ad2 */			}
+/* 00228ad2 */		}
+/* 00228ad8 */		else
+/* 00228ad8 */		{
+/* 00228ad8 */			switch (monsterBuffIdList[j])
+/* 00228afa */			{
+/* 00228afa */			case "魔法防御上昇1":
+/* 00228afa */				monsterPalam = 40.0;
+/* 00228b0c */				break;
+/* 00228b12 */			case "魔法防御上昇2":
+/* 00228b12 */				monsterPalam = 120.0;
+/* 00228b24 */				break;
+/* 00228b2a */			case "魔法防御上昇3":
+/* 00228b2a */				monsterPalam = 360.0;
+/* 00228b3c */				break;
+/* 00228b42 */			case "魔法防御上昇4":
+/* 00228b42 */				monsterPalam = 1080.0;
+/* 00228b54 */				break;
+/* 00228b5a */			case "魔法防御上昇5":
+/* 00228b5a */				monsterPalam = 1944.0;
+/* 00228b6c */				break;
+/* 00228b72 */			case "魔法防御上昇6":
+/* 00228b72 */				monsterPalam = 5400.0;
+/* 00228b84 */				break;
+/* 00228b8a */			}
+/* 00228b8a */		}
+/* 00228b8a */		float monsterFluctuation;
+/* 00228b9c */		monsterFluctuation = (monsterPalam * (RAND(16) - 1)) / 100.0;
+/* 00228bd2 */		val -= monsterPalam + monsterFluctuation;
+/* 00228bf6 */		pass("val ato %d" % val);
+/* 00228c14 */	}
+/* 00228c1a */	return val;
+/* 00228c26 */}
+
+int 制御／戦闘／バフ／モンスター(array@string monsterBuffIdList, array@string playerBuffIdList, int type)
+/* 00228c3a */{
+/* 00228c3a */	int j;
+/* 00228c4c */	int val;
+/* 00228c5e */	for (j = 0; j < monsterBuffIdList.Numof(); ++j)
+/* 00228cae */	{
+/* 00228cae */		float monsterPalam;
+/* 00228cc0 */		if (type == 0)
+/* 00228cd8 */		{
+/* 00228cd8 */			switch (monsterBuffIdList[j])
+/* 00228cfa */			{
+/* 00228cfa */			case "物理攻撃上昇1":
+/* 00228cfa */				monsterPalam = 35.0;
+/* 00228d0c */				break;
+/* 00228d12 */			case "物理攻撃上昇2":
+/* 00228d12 */				monsterPalam = 55.0;
+/* 00228d24 */				break;
+/* 00228d2a */			case "物理攻撃上昇3":
+/* 00228d2a */				monsterPalam = 75.0;
+/* 00228d3c */				break;
+/* 00228d42 */			case "物理攻撃上昇4":
+/* 00228d42 */				monsterPalam = 95.0;
+/* 00228d54 */				break;
+/* 00228d5a */			case "物理攻撃上昇5":
+/* 00228d5a */				monsterPalam = 125.0;
+/* 00228d6c */				break;
+/* 00228d72 */			case "物理攻撃上昇6":
+/* 00228d72 */				monsterPalam = 155.0;
+/* 00228d84 */				break;
+/* 00228d8a */			}
+/* 00228d8a */		}
+/* 00228d90 */		else
+/* 00228d90 */		{
+/* 00228d90 */			switch (monsterBuffIdList[j])
+/* 00228db2 */			{
+/* 00228db2 */			case "魔法攻撃上昇1":
+/* 00228db2 */				monsterPalam = 35.0;
+/* 00228dc4 */				break;
+/* 00228dca */			case "魔法攻撃上昇2":
+/* 00228dca */				monsterPalam = 55.0;
+/* 00228ddc */				break;
+/* 00228de2 */			case "魔法攻撃上昇3":
+/* 00228de2 */				monsterPalam = 75.0;
+/* 00228df4 */				break;
+/* 00228dfa */			case "魔法攻撃上昇4":
+/* 00228dfa */				monsterPalam = 95.0;
+/* 00228e0c */				break;
+/* 00228e12 */			case "魔法攻撃上昇5":
+/* 00228e12 */				monsterPalam = 125.0;
+/* 00228e24 */				break;
+/* 00228e2a */			case "魔法攻撃上昇6":
+/* 00228e2a */				monsterPalam = 1200.0;
+/* 00228e3c */				break;
+/* 00228e42 */			}
+/* 00228e42 */		}
+/* 00228e42 */		if (g_monsterStrengthShifter.getLocalExpRatio() == 9.0)
+/* 00228e60 */		{
+/* 00228e60 */			monsterPalam = monsterPalam * 2.0;
+/* 00228e7e */		}
+/* 00228e7e */		float monsterFluctuation;
+/* 00228e90 */		monsterFluctuation = (monsterPalam * (RAND(16) - 1)) / 100.0;
+/* 00228ec6 */		val += monsterPalam + monsterFluctuation;
+/* 00228eea */	}
+/* 00228ef0 */	int i;
+/* 00228f02 */	int playerType;
+/* 00228f14 */	if (type == 0)
+/* 00228f2c */	{
+/* 00228f2c */		type = 100;
+/* 00228f3e */	}
+/* 00228f44 */	else
+/* 00228f44 */	{
+/* 00228f44 */		type = 101;
+/* 00228f56 */	}
+/* 00228f56 */	for (i = 0; i < playerBuffIdList.Numof(); ++i)
+/* 00228fa6 */	{
+/* 00228fa6 */		if (getPlayerBuffFromId(playerBuffIdList[i]).getType() == type)
+/* 00228ff0 */		{
+/* 00228ff0 */			string skillId = getSkillIdFromBuffId(playerBuffIdList[i]);
+/* 0022901a */			string playerId = getPlayerSkillFromId(skillId).getPlayerId();
+/* 00229054 */			float param = getPlayerSkillFromId(skillId).getParam();
+/* 0022908c */			int power;
+/* 0022909e */			switch (getPlayerBuffFromId(playerBuffIdList[i]).getCalcType())
+/* 002290e2 */			{
+/* 002290e2 */			case 0:
+/* 002290e2 */				power = getPlayerFromId(playerId).getStrength();
+/* 0022911a */				break;
+/* 00229126 */			case 1:
+/* 00229126 */				power = getPlayerFromId(playerId).getMind();
+/* 0022915e */				break;
+/* 00229170 */			case 2:
+/* 00229170 */				power = getPlayerFromId(playerId).getDexterity();
+/* 002291a8 */				break;
+/* 002291c0 */			}
+/* 002291d2 */			float fluctuation;
+/* 002291e4 */			fluctuation = (power * param * (RAND(16) - 1)) / 100.0;
+/* 0022922c */			val -= power * param + fluctuation;
+/* 00229262 */		}
+/* 00229262 */	}
+/* 00229280 */	return val;
+/* 0022928c */}
+
+bool 制御／戦闘／バフ／プレイヤー／確認(string checkGroup, array@string playerBuffIdList)
+/* 002292a0 */{
+/* 002292a0 */	string skillGroup;
+/* 002292b4 */	int i;
+/* 002292c6 */	for (i = 0; i < playerBuffIdList.Numof(); ++i)
+/* 00229316 */	{
+/* 00229316 */		switch (playerBuffIdList[i])
+/* 00229338 */		{
+/* 00229338 */		case "ランスチャージ1":
+/* 00229338 */		case "ランスチャージ2":
+/* 00229338 */		case "ランスチャージ3":
+/* 00229338 */		case "ランスチャージ4":
+/* 00229338 */		case "ランスチャージ5":
+/* 00229338 */		case "ランスチャージ6":
+/* 00229338 */			skillGroup = "ランスチャージ";
+/* 0022934c */			break;
+/* 00229352 */		case "魔想1":
+/* 00229352 */		case "魔想2":
+/* 00229352 */		case "魔想3":
+/* 00229352 */		case "魔想4":
+/* 00229352 */		case "魔想5":
+/* 00229352 */		case "魔想6":
+/* 00229352 */			skillGroup = "魔想";
+/* 00229366 */			break;
+/* 0022936c */		case "斬り返し1":
+/* 0022936c */		case "斬り返し2":
+/* 0022936c */		case "斬り返し3":
+/* 0022936c */		case "斬り返し4":
+/* 0022936c */		case "斬り返し5":
+/* 0022936c */		case "斬り返し6":
+/* 0022936c */			skillGroup = "斬り返し";
+/* 00229380 */			break;
+/* 00229386 */		case "黒金砕き1":
+/* 00229386 */		case "黒金砕き2":
+/* 00229386 */		case "黒金砕き3":
+/* 00229386 */		case "黒金砕き4":
+/* 00229386 */		case "黒金砕き5":
+/* 00229386 */		case "黒金砕き6":
+/* 00229386 */			skillGroup = "黒金砕き";
+/* 0022939a */			break;
+/* 002293a0 */		case "死神無双1":
+/* 002293a0 */		case "死神無双2":
+/* 002293a0 */		case "死神無双3":
+/* 002293a0 */		case "死神無双4":
+/* 002293a0 */		case "死神無双5":
+/* 002293a0 */		case "死神無双6":
+/* 002293a0 */			skillGroup = "死神無双";
+/* 002293b4 */			break;
+/* 002293ba */		case "ハイスラスト1":
+/* 002293ba */		case "ハイスラスト2":
+/* 002293ba */		case "ハイスラスト3":
+/* 002293ba */		case "ハイスラスト4":
+/* 002293ba */		case "ハイスラスト5":
+/* 002293ba */		case "ハイスラスト6":
+/* 002293ba */			skillGroup = "ハイスラスト";
+/* 002293ce */			break;
+/* 002293d4 */		case "ハイブースト1":
+/* 002293d4 */		case "ハイブースト2":
+/* 002293d4 */		case "ハイブースト3":
+/* 002293d4 */		case "ハイブースト4":
+/* 002293d4 */		case "ハイブースト5":
+/* 002293d4 */		case "ハイブースト6":
+/* 002293d4 */			skillGroup = "ハイブースト";
+/* 002293e8 */			break;
+/* 002293ee */		case "ハイマヌーバ1":
+/* 002293ee */		case "ハイマヌーバ2":
+/* 002293ee */		case "ハイマヌーバ3":
+/* 002293ee */		case "ハイマヌーバ4":
+/* 002293ee */		case "ハイマヌーバ5":
+/* 002293ee */		case "ハイマヌーバ6":
+/* 002293ee */			skillGroup = "ハイマヌーバ";
+/* 00229402 */			break;
+/* 00229408 */		case "無現軌道1":
+/* 00229408 */		case "無現軌道2":
+/* 00229408 */		case "無現軌道3":
+/* 00229408 */		case "無現軌道4":
+/* 00229408 */		case "無現軌道5":
+/* 00229408 */		case "無現軌道6":
+/* 00229408 */			skillGroup = "無現軌道";
+/* 0022941c */			break;
+/* 00229422 */		}
+/* 00229422 */		if (checkGroup == skillGroup)
+/* 0022943e */		{
+/* 0022943e */			return true;
+/* 00229446 */		}
+/* 00229446 */	}
+/* 0022944c */	return false;
+/* 00229454 */}
+
+void 制御／戦闘／バフ／プレイヤー／ログ(string skillId, string sourceId, string targetId)
+/* 00229468 */{
+/* 00229468 */	string attribute;
+/* 0022947c */	switch (getPlayerSkillFromId(skillId).getAttributeId())
+/* 002294b4 */	{
+/* 002294b4 */	case "物理攻撃上昇":
+/* 002294b4 */		attribute = "物理攻撃";
+/* 002294c8 */		break;
+/* 002294ce */	case "物理防御上昇":
+/* 002294ce */		attribute = "物理防御";
+/* 002294e2 */		break;
+/* 002294e8 */	case "魔法攻撃上昇":
+/* 002294e8 */		attribute = "魔法攻撃";
+/* 002294fc */		break;
+/* 00229502 */	case "魔法防御上昇":
+/* 00229502 */		attribute = "魔法防御";
+/* 00229516 */		break;
+/* 0022951c */	}
+/* 0022951c */	g_battleLog.add("%sの%s！%sは%sが上昇！" % getPlayerFromId(sourceId).getShortName() % getPlayerSkillFromId(skillId).getName() % getPlayerFromId(targetId).getShortName() % attribute, 4);
+/* 002295e6 */}
+
+void 制御／戦闘／バフ／モンスター／ログ(string buffId, string sourceId, string targetId)
+/* 002295f4 */{
+/* 002295f4 */	string attribute;
+/* 00229608 */	string action;
+/* 0022961c */	action = "援護";
+/* 00229630 */	switch (buffId)
+/* 00229646 */	{
+/* 00229646 */	case "物理攻撃上昇1":
+/* 00229646 */	case "物理攻撃上昇2":
+/* 00229646 */	case "物理攻撃上昇3":
+/* 00229646 */	case "物理攻撃上昇4":
+/* 00229646 */	case "物理攻撃上昇5":
+/* 00229646 */	case "物理攻撃上昇6":
+/* 00229646 */		attribute = "物理攻撃";
+/* 0022965a */		break;
+/* 00229660 */	case "物理防御上昇1":
+/* 00229660 */	case "物理防御上昇2":
+/* 00229660 */	case "物理防御上昇3":
+/* 00229660 */	case "物理防御上昇4":
+/* 00229660 */	case "物理防御上昇5":
+/* 00229660 */	case "物理防御上昇6":
+/* 00229660 */		attribute = "物理防御";
+/* 00229674 */		break;
+/* 0022967a */	case "魔法攻撃上昇1":
+/* 0022967a */	case "魔法攻撃上昇2":
+/* 0022967a */	case "魔法攻撃上昇3":
+/* 0022967a */	case "魔法攻撃上昇4":
+/* 0022967a */	case "魔法攻撃上昇5":
+/* 0022967a */	case "魔法攻撃上昇6":
+/* 0022967a */		attribute = "魔法攻撃";
+/* 0022968e */		break;
+/* 00229694 */	case "魔法防御上昇1":
+/* 00229694 */	case "魔法防御上昇2":
+/* 00229694 */	case "魔法防御上昇3":
+/* 00229694 */	case "魔法防御上昇4":
+/* 00229694 */	case "魔法防御上昇5":
+/* 00229694 */	case "魔法防御上昇6":
+/* 00229694 */		attribute = "魔法防御";
+/* 002296a8 */		break;
+/* 002296ae */	}
+/* 002296ae */	switch (sourceId)
+/* 002296c4 */	{
+/* 002296c4 */	case "くずの悪魔群":
+/* 002296c4 */	case "くずの悪魔":
+/* 002296c4 */		action = "お世辞";
+/* 002296d8 */		break;
+/* 002296de */	case "ちょーちん":
+/* 002296de */		action = "がんばれ発光";
+/* 002296f2 */		break;
+/* 002296f8 */	case "ゴールデンハニー頭部":
+/* 002296f8 */		action = "ハニーチャージ";
+/* 0022970c */		break;
+/* 00229712 */	case "ミミミック":
+/* 00229712 */	case "ミミック":
+/* 00229712 */		action = "デススマイル";
+/* 00229726 */		break;
+/* 0022972c */	case "サファイアj2":
+/* 0022972c */	case "サファイアd":
+/* 0022972c */	case "サファイアj1":
+/* 0022972c */	case "サファイアr":
+/* 0022972c */		action = "フィジカルバリア";
+/* 00229740 */		break;
+/* 00229746 */	case "ヒトラー":
+/* 00229746 */	case "マーダー":
+/* 00229746 */		action = "聖骸詠唱";
+/* 0022975a */		break;
+/* 00229760 */	case "金魚使い":
+/* 00229760 */		action = "がんばれ号笛";
+/* 00229774 */		break;
+/* 0022977a */	case "カナリアンe2":
+/* 0022977a */	case "カナリアンe4":
+/* 0022977a */		action = "低い唸り声";
+/* 0022978e */		break;
+/* 00229794 */	case "ヘルマン工兵f":
+/* 00229794 */	case "ヘルマン工兵j":
+/* 00229794 */	case "ヘルマン工兵q":
+/* 00229794 */	case "住民":
+/* 00229794 */	case "はぐれヘルマン兵j":
+/* 00229794 */	case "はぐれヘルマン兵t":
+/* 00229794 */		action = "陣地構築";
+/* 002297a8 */		break;
+/* 002297ae */	case "ヘルマン士官f":
+/* 002297ae */	case "ヘルマン士官j":
+/* 002297ae */	case "ヘルマン士官q":
+/* 002297ae */		action = "鼓舞";
+/* 002297c2 */		break;
+/* 002297c8 */	case "ヘルマン操兵f":
+/* 002297c8 */	case "ヘルマン操兵j":
+/* 002297c8 */	case "ヘルマン操兵q":
+/* 002297c8 */		action = "愛の鞭";
+/* 002297dc */		break;
+/* 002297e2 */	case "フレッチャー":
+/* 002297e2 */		action = "封龍の構え";
+/* 002297f6 */		break;
+/* 002297fc */	case "レイラ":
+/* 002297fc */		action = "風柳の構え";
+/* 00229810 */		break;
+/* 00229816 */	case "わんわん群":
+/* 00229816 */		action = "遠吠え";
+/* 0022982a */		break;
+/* 00229830 */	case "フルパワーゴリラZII":
+/* 00229830 */	case "パワーゴリラ":
+/* 00229830 */	case "パワーゴリラZ":
+/* 00229830 */		action = "ドラミング";
+/* 00229844 */		break;
+/* 0022984a */	case "スー":
+/* 0022984a */		action = "猿飛び";
+/* 0022985e */		break;
+/* 00229864 */	case "うしドバーン":
+/* 00229864 */		action = "振りかぶり";
+/* 00229878 */		break;
+/* 0022987e */	case "シーザーh1":
+/* 0022987e */	case "シーザーh2":
+/* 0022987e */	case "シーザーh3":
+/* 0022987e */		action = "仁王立ち";
+/* 00229892 */		break;
+/* 00229898 */	case "トパーズj":
+/* 00229898 */	case "トパーズr":
+/* 00229898 */		action = "マジカルリライト";
+/* 002298ac */		break;
+/* 002298b2 */	case "カースA":
+/* 002298b2 */		action = "卑猥な身悶え";
+/* 002298c6 */		break;
+/* 002298cc */	case "古介D":
+/* 002298cc */		action = "アニマルシフト";
+/* 002298e0 */		break;
+/* 002298e6 */	case "れんれんB":
+/* 002298e6 */		action = "サイコパワー";
+/* 002298fa */		break;
+/* 00229900 */	case "トーマ":
+/* 00229900 */		action = "雄叫び";
+/* 00229914 */		break;
+/* 0022991a */	case "ミネバ":
+/* 0022991a */		action = "冷笑";
+/* 0022992e */		break;
+/* 00229934 */	case "廃課金戦士":
+/* 00229934 */	case "廃課金戦士群":
+/* 00229934 */		action = "課金ブースタ";
+/* 00229948 */		break;
+/* 0022994e */	case "人食いX68":
+/* 0022994e */		action = "満開製作";
+/* 00229962 */		break;
+/* 00229968 */	case "人食いTOWNS":
+/* 00229968 */		action = "ハイパーメディア";
+/* 0022997c */		break;
+/* 00229982 */	case "れんれんC":
+/* 00229982 */		action = "丸まり";
+/* 00229996 */		break;
+/* 0022999c */	case "大王イカマン":
+/* 0022999c */	case "大王イカマン群":
+/* 0022999c */		action = "イカ舞い踊り";
+/* 002299b0 */		break;
+/* 002299b6 */	case "ワープアー":
+/* 002299b6 */		action = "ため息";
+/* 002299ca */		break;
+/* 002299d0 */	case "コンテ":
+/* 002299d0 */		action = "位相シフト";
+/* 002299e4 */		break;
+/* 002299ea */	case "ゆみみみっく":
+/* 002299ea */		action = "わはースマイル";
+/* 002299fe */		break;
+/* 00229a04 */	case "デカントマムル":
+/* 00229a04 */		action = "デカントーン";
+/* 00229a18 */		break;
+/* 00229a1e */	case "アカナリアンt1":
+/* 00229a1e */		action = "耳障りな囀り";
+/* 00229a32 */		break;
+/* 00229a38 */	case "ワー志津香":
+/* 00229a38 */		action = "魔想";
+/* 00229a4c */		break;
+/* 00229a52 */	case "ノスt3":
+/* 00229a52 */	case "ノスt1":
+/* 00229a52 */	case "ノスt2":
+/* 00229a52 */		action = "膨張硬化";
+/* 00229a66 */		break;
+/* 00229a6c */	case "ジル":
+/* 00229a6c */		action = "オルケスタ共振";
+/* 00229a80 */		break;
+/* 00229a86 */	case "ピンキー":
+/* 00229a86 */		action = "燃え盛り";
+/* 00229a9a */		break;
+/* 00229aa0 */	case "ハニーキング":
+/* 00229aa0 */		action = "キングゲイン";
+/* 00229ab4 */		break;
+/* 00229aba */	case "ウルンセル":
+/* 00229aba */	case "ウルンセル緑":
+/* 00229aba */	case "ウルンセル青":
+/* 00229aba */		action = "うねり";
+/* 00229ace */		break;
+/* 00229ad4 */	}
+/* 00229ad4 */	g_battleLog.add("%sの%s！%sは%sが上昇！" % getMonsterFromId(sourceId).getName() % action % getMonsterFromId(targetId).getName() % attribute, 2);
+/* 00229b7c */}
+
+string getSkillIdFromBuffId(string buffId)
+/* 00229b8a */{
+/* 00229b8a */	int i;
+/* 00229b9c */	for (i = 0; i < g_attackSkill.Numof(); ++i)
+/* 00229bec */	{
+/* 00229bec */		if (buffId == g_attackSkill[i].getBuffId())
+/* 00229c1a */		{
+/* 00229c1a */			return g_attackSkill[i].getId();
+/* 00229c38 */		}
+/* 00229c38 */	}
+/* 00229c3e */	return "";
+/* 00229c46 */}
+

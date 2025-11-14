@@ -1,0 +1,126 @@
+void SGUIStringPair::Set(string First, string Second)
+/* 00052a60 */{
+/* 00052a60 */	this.m_First = First;
+/* 00052a78 */	this.m_Second = Second;
+/* 00052a90 */}
+
+CAEEditStringPairDialog::CAEEditStringPairDialog()
+/* 00052a98 */{
+/* 00052aa2 */}
+
+void CAEEditStringPairDialog::Show(int ID, int PosX, int PosY, array@SGUIStringPair List, DG_ChangedStringPairList dgChangedIntList)
+/* 00052aa8 */{
+/* 00052aa8 */	AFL_Parts_AddLayer(-1);
+/* 00052ab6 */	this.m_dgChangedIntList = dgChangedIntList;
+/* 00052ad0 */	this.m_List.Realloc(List.Numof());
+/* 00052af0 */	this.m_List.Copy(0, List, 0, List.Numof());
+/* 00052b22 */	this.m_ParentID = ID;
+/* 00052b38 */	int LayoutBox = PARTS_GetFreeSystemPartsNumber();
+/* 00052b4a */	Ｐ＿レイアウトボックス＿パディング設定(LayoutBox, 6, 6, 6, 6);
+/* 00052b72 */	Ｐ＿レイアウトボックス＿配置設定(LayoutBox, 3);
+/* 00052b88 */	this.m_Panel.Init(LayoutBox);
+/* 00052ba2 */	this.m_Panel.AddChangeTextEvent(this.ChangeTextEvent);
+/* 00052bbc */	int Index;
+/* 00052bce */	for (Index = 0; Index < List.Numof(); ++Index)
+/* 00052c1e */	{
+/* 00052c1e */		this.m_Panel.AddTextBoxItem(List[Index].m_First, 155, List[Index].m_Second, 80, false);
+/* 00052c98 */	}
+/* 00052ca4 */	int ButtonLayout = PARTS_GetFreeSystemPartsNumber();
+/* 00052cb6 */	Ｐ＿レイアウトボックス＿レイアウトタイプ設定(ButtonLayout, 2);
+/* 00052ccc */	Ｐ＿レイアウトボックス＿パディング設定(ButtonLayout, 3, 3, 3, 3);
+/* 00052cf4 */	Ｐ＿レイアウトボックス＿追加(LayoutBox, ButtonLayout);
+/* 00052d0e */	int OKButton = PARTS_GetFreeSystemPartsNumber();
+/* 00052d20 */	Ｐ＿ボタン＿テキスト設定(OKButton, "決定");
+/* 00052d36 */	Ｐ＿ボタン＿サイズ設定(OKButton, 65, 22);
+/* 00052d52 */	Ｐ＿マージン設定(OKButton, 0, 0, 3, 0);
+/* 00052d7a */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, OKButton);
+/* 00052d94 */	AFL_Parts_AddMouseLClickEvent(OKButton, this.ClickOKButtonEvent);
+/* 00052dae */	int CancelButton = PARTS_GetFreeSystemPartsNumber();
+/* 00052dc0 */	Ｐ＿ボタン＿テキスト設定(CancelButton, "キャンセル");
+/* 00052dd6 */	Ｐ＿ボタン＿サイズ設定(CancelButton, 100, 22);
+/* 00052df2 */	Ｐ＿マージン設定(CancelButton, 0, 0, 3, 0);
+/* 00052e1a */	Ｐ＿レイアウトボックス＿追加(ButtonLayout, CancelButton);
+/* 00052e34 */	AFL_Parts_AddMouseLClickEvent(CancelButton, this.ClickCancelButtonEvent);
+/* 00052e4e */	int Width = AFL_Parts_GetWidth(LayoutBox, 1);
+/* 00052e70 */	int Height = AFL_Parts_GetHeight(LayoutBox, 1);
+/* 00052e92 */	int BG = PARTS_GetFreeSystemPartsNumber();
+/* 00052ea4 */	Ｐ＿構築手順＿ピクセル作成(BG, Width, Height, 1);
+/* 00052ece */	Ｐ＿構築手順＿色塗り(BG, 0, 0, Width, Height, 200, 200, 200, -1, 1);
+/* 00052f1c */	Ｐ＿構築ビルド(BG, 1);
+/* 00052f32 */	Ｐ＿ドラッグ可能設定(BG, true);
+/* 00052f48 */	Ｐ＿親設定(LayoutBox, BG);
+/* 00052f62 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 00052fa4 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 00052fe6 */	Ｐ＿座標設定(BG, PosX, PosY);
+/* 0005300e */	AFL_Parts_AddDragEndEvent(BG, this.DragEndEvent);
+/* 00053028 */	this.m_OK = false;
+/* 0005303a */	this.m_Cancel = false;
+/* 0005304c */	PARTS_BeginInput();
+/* 00053052 */	for (; ; )
+/* 00053052 */	{
+/* 00053052 */		AFL_View_Update(true);
+/* 0005305e */		if (this.m_OK)
+/* 0005306e */		{
+/* 0005306e */			break;
+/* 00053074 */		}
+/* 00053074 */		if (this.m_Cancel)
+/* 00053084 */		{
+/* 00053084 */			dgChangedIntList(ID, List);
+/* 000530b8 */			break;
+/* 000530be */		}
+/* 000530be */	}
+/* 000530c4 */	PARTS_EndInput();
+/* 000530ca */	this.m_Panel.Release();
+/* 000530da */	PARTS_ReleaseWithInit(LayoutBox);
+/* 000530e8 */	PARTS_ReleaseWithInit(CancelButton);
+/* 000530f6 */	PARTS_ReleaseWithInit(OKButton);
+/* 00053104 */	PARTS_ReleaseWithInit(ButtonLayout);
+/* 00053112 */	PARTS_ReleaseWithInit(BG);
+/* 00053120 */	AFL_Parts_EraseLayer(-1);
+/* 0005312c */}
+
+void CAEEditStringPairDialog::ChangeTextEvent(int ID)
+/* 00053134 */{
+/* 00053134 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 00053184 */	if (Item === NULL)
+/* 0005319c */	{
+/* 0005319c */		return;
+/* 0005319e */	}
+/* 0005319e */	int Index;
+/* 000531b0 */	for (Index = 0; Index < this.m_List.Numof(); ++Index)
+/* 00053200 */	{
+/* 00053200 */		if (this.m_List[Index].m_First != Item.GetLabel())
+/* 00053236 */		{
+/* 00053236 */			continue;
+/* 0005323c */		}
+/* 0005323c */		this.m_List[Index].m_Second = Item.GetTextBoxText();
+/* 0005326e */		break;
+/* 00053274 */	}
+/* 0005327a */	this.m_dgChangedIntList(this.m_ParentID, this.m_List);
+/* 000532ae */	for (Index = 0; Index < this.m_List.Numof(); ++Index)
+/* 000532fe */	{
+/* 000532fe */		this.m_Panel.GetItemByLabel(this.m_List[Index].m_First).SetTextBoxText(this.m_List[Index].m_Second);
+/* 0005336a */	}
+/* 00053376 */}
+
+void CAEEditStringPairDialog::ClickOKButtonEvent(int ID, int MouseX, int MouseY)
+/* 0005337e */{
+/* 0005337e */	this.m_OK = true;
+/* 00053390 */}
+
+void CAEEditStringPairDialog::ClickCancelButtonEvent(int ID, int MouseX, int MouseY)
+/* 00053398 */{
+/* 00053398 */	this.m_Cancel = true;
+/* 000533aa */}
+
+void CAEEditStringPairDialog::DragEndEvent(int ID)
+/* 000533b2 */{
+/* 000533b2 */	int PosX = Ｐ＿Ｘ座標取得(ID);
+/* 000533d0 */	int PosY = Ｐ＿Ｙ座標取得(ID);
+/* 000533ee */	int Width = AFL_Parts_GetWidth(ID, 1);
+/* 00053410 */	int Height = AFL_Parts_GetHeight(ID, 1);
+/* 00053432 */	PosX = Math.Max(0, Math.Min(AFL_View_GetWidth() - Width, PosX));
+/* 00053474 */	PosY = Math.Max(0, Math.Min(AFL_View_GetHeight() - Height, PosY));
+/* 000534b6 */	Ｐ＿座標設定(ID, PosX, PosY);
+/* 000534de */}
+

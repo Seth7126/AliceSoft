@@ -1,0 +1,277 @@
+NormalButton::NormalButton()
+/* 0018277a */{
+/* 00182782 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 001827b2 */	this.state_ = 3;
+/* 001827c4 */	this.origin_ = 7;
+/* 001827d6 */	this.isEnable_ = true;
+/* 001827e8 */	this.x_ = this.y_ = this.w_ = this.h_ = 0;
+/* 00182818 */	this.z_ = 6000;
+/* 0018282a */}
+
+void NormalButton::update()
+/* 00182832 */{
+/* 00182832 */	if (this.w_ == 0)
+/* 0018284a */	{
+/* 0018284a */		return;
+/* 0018284c */	}
+/* 0018284c */	this.updateHover();
+/* 00182854 */	this.updateClick();
+/* 0018285c */	switch (this.state_)
+/* 00182872 */	{
+/* 00182872 */	case 1:
+/* 00182872 */		if (this.isHover_ && g_mouse.onDown(0))
+/* 001828b6 */		{
+/* 001828b6 */			this.runClickEffectMotion();
+/* 001828be */			if (this.sound_ != "")
+/* 001828d6 */			{
+/* 001828d6 */				g_sysSound.play(5, this.sound_);
+/* 001828f6 */			}
+/* 001828fc */			else
+/* 001828fc */			{
+/* 001828fc */				playClick();
+/* 00182902 */			}
+/* 00182902 */		}
+/* 00182902 */		if (!this.lastHover_ && this.isHover_)
+/* 0018293c */		{
+/* 0018293c */			playCursor();
+/* 00182942 */		}
+/* 00182942 */		if (this.isClick_)
+/* 00182952 */		{
+/* 00182952 */			this.clickCallback_(this.id_);
+/* 0018297c */		}
+/* 0018297c */		break;
+/* 00182982 */	case 3:
+/* 00182982 */		break;
+/* 00182988 */	}
+/* 00182988 */	this.updateChildPartsShowState();
+/* 00182990 */	this.parent_.setShow(this.isShow());
+/* 001829a8 */}
+
+void NormalButton::init(string cgBase, string text, string sound, bool isVertical)
+/* 001829b0 */{
+/* 001829b0 */	this.sound_ = sound;
+/* 001829c8 */	this.cgBase_ = cgBase;
+/* 001829e0 */	this.text_ = text;
+/* 001829f8 */	this.isVertical_ = isVertical;
+/* 00182a0e */	this.initParts();
+/* 00182a16 */	this.parts_[1].setOrigin(5);
+/* 00182a34 */	this.parts_[1].setPos(this.w_ / 2, this.h_ / 2);
+/* 00182a74 */	this.setPartsShowState();
+/* 00182a7c */	this.updateChildPartsShowState();
+/* 00182a84 */}
+
+void NormalButton::initParts()
+/* 00182a8c */{
+/* 00182a8c */	this.parts_[0].init(this.cgBase_, 0);
+/* 00182ab4 */	this.w_ = this.parts_[0].getWidth();
+/* 00182ad8 */	this.h_ = this.parts_[0].getHeight();
+/* 00182afc */	if (this.isVertical_)
+/* 00182b0c */	{
+/* 00182b0c */		this.h_ = this.h_ / 4;
+/* 00182b2a */	}
+/* 00182b30 */	else
+/* 00182b30 */	{
+/* 00182b30 */		this.w_ = this.w_ / 4;
+/* 00182b4e */	}
+/* 00182b4e */	this.parts_[1].initAsText(this.text_, 26, false, 256, 0, 0, 0);
+/* 00182b94 */	if (this.parts_[1].getWidth() > this.w_ * 0.85)
+/* 00182bd2 */	{
+/* 00182bd2 */		this.parts_[1].setXScaling((100.0 * (this.w_ * 0.85)) / this.parts_[1].getWidth());
+/* 00182c26 */	}
+/* 00182c26 */	this.parts_[2].initAsCgPlaneImage(this.cgBase_, 255, 255, 255);
+/* 00182c5a */	this.parts_[2].setCgRange(0, 0, this.w_, this.h_);
+/* 00182c92 */	this.parts_[2].setAlpha(0.0);
+/* 00182cb0 */	createPartsGroup(this.parent_, this.parts_, this.z_);
+/* 00182cd4 */}
+
+void NormalButton::setTextLeftAlign(int left)
+/* 00182cdc */{
+/* 00182cdc */	this.parts_[1].setOrigin(4);
+/* 00182cfa */	this.parts_[1].setPos(left, this.h_ / 2);
+/* 00182d32 */	this.parts_[1].setXScaling(100.0);
+/* 00182d50 */}
+
+void NormalButton::fadeIn(bool val)
+/* 00182d58 */{
+/* 00182d58 */	array@PartsMotion m[1];
+/* 00182d6e */	m[0] = getStandardMotion(val ? 0 : 1);
+/* 00182db2 */	this.fadeInCustomized(val, m);
+/* 00182dce */}
+
+void NormalButton::fadeInCustomized(bool val, ref array@PartsMotion motions)
+/* 00182dd6 */{
+/* 00182dd6 */	if (val && (this.state_ == 0 || this.state_ == 1))
+/* 00182e46 */	{
+/* 00182e46 */		return;
+/* 00182e48 */	}
+/* 00182e48 */	if (!val && (this.state_ == 2 || this.state_ == 3))
+/* 00182eba */	{
+/* 00182eba */		return;
+/* 00182ebc */	}
+/* 00182ebc */	this.state_ = val ? 0 : 2;
+/* 00182eea */	if (val)
+/* 00182efa */	{
+/* 00182efa */		this.parent_.runMotionArray(motions, this.onFinishFadeIn);
+/* 00182f20 */	}
+/* 00182f26 */	else
+/* 00182f26 */	{
+/* 00182f26 */		this.parent_.runMotionArray(motions, this.onFinishFadeOut);
+/* 00182f4c */	}
+/* 00182f4c */}
+
+void NormalButton::onFinishFadeIn()
+/* 00182f54 */{
+/* 00182f54 */	this.state_ = 1;
+/* 00182f66 */}
+
+void NormalButton::onFinishFadeOut()
+/* 00182f6e */{
+/* 00182f6e */	this.state_ = 3;
+/* 00182f80 */	this.onFinishFadeOutCallback_();
+/* 00182fa0 */}
+
+bool NormalButton::isHover()
+/* 00182fa8 */{
+/* 00182fa8 */	this.updateHover();
+/* 00182fb0 */	return this.isHover_;
+/* 00182fbc */}
+
+bool NormalButton::isShow()
+/* 00182fca */{
+/* 00182fca */	return this.state_ != 3;
+/* 00182fe0 */}
+
+bool NormalButton::isClick()
+/* 00182fee */{
+/* 00182fee */	return this.isClick_;
+/* 00182ffa */}
+
+void NormalButton::setPos(int x, int y)
+/* 00183008 */{
+/* 00183008 */	this.x_ = x;
+/* 0018301e */	this.y_ = y;
+/* 00183034 */	this.parent_.setPos(this.x_, this.y_);
+/* 0018305c */}
+
+void NormalButton::setParent(int parentPartsNumber)
+/* 00183064 */{
+/* 00183064 */	this.z_ = 1;
+/* 00183076 */	this.parent_.setPos(this.x_, this.y_);
+/* 0018309e */	this.parent_.setZ(this.z_);
+/* 001830ba */	this.parent_.setParent(parentPartsNumber);
+/* 001830d4 */}
+
+void NormalButton::setPartsShowState()
+/* 001830dc */{
+/* 001830dc */	int i;
+/* 001830ee */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0018313e */	{
+/* 0018313e */		this.parts_[i].setShow(true);
+/* 00183160 */	}
+/* 00183166 */}
+
+void NormalButton::setShow(bool val)
+/* 0018316e */{
+/* 0018316e */	this.state_ = val ? 1 : 3;
+/* 0018319c */}
+
+void NormalButton::setEnable(bool val)
+/* 001831a4 */{
+/* 001831a4 */	this.isEnable_ = val;
+/* 001831ba */}
+
+void NormalButton::setBaseZ(int baseZ)
+/* 001831c2 */{
+/* 001831c2 */	this.parent_.setZBasePos(baseZ);
+/* 001831dc */}
+
+void NormalButton::runClickEffectMotion()
+/* 001831e4 */{
+/* 001831e4 */	float per = 1.4;
+/* 001831f6 */	float moveX = (-(per - 1.0) * this.w_) / 2.0;
+/* 0018322c */	float moveY = (-(per - 1.0) * this.h_) / 2.0;
+/* 00183262 */	PartsMotion m;
+/* 00183272 */	m.setScaling(100, per * 100.0, 1);
+/* 001832a2 */	m.setMove(0, 0, moveX, moveY, 1);
+/* 001832dc */	m.setAlpha(180, 0, 0);
+/* 001832fe */	m.setTime(150);
+/* 00183314 */	this.parts_[2].setShow(true);
+/* 00183332 */	this.parts_[2].runMotion(m, NULL);
+/* 0018335a */}
+
+void NormalButton::updateHover()
+/* 00183362 */{
+/* 00183362 */	this.lastHover_ = this.isHover_;
+/* 00183378 */	this.isHover_ = this.state_ == 1 && this.isEnable_ && this.isCollide();
+/* 001833e6 */}
+
+void NormalButton::updateClick()
+/* 001833ee */{
+/* 001833ee */	this.isClick_ = g_mouse.isClickWithFocus(this.gameObjectId_);
+/* 00183414 */}
+
+void NormalButton::updateChildPartsShowState()
+/* 0018341c */{
+/* 0018341c */	int n;
+/* 0018342e */	if (this.isHover_ && !g_mouse.isDown(0))
+/* 00183474 */	{
+/* 00183474 */		n = 1;
+/* 00183486 */	}
+/* 0018348c */	else if (this.isHover_ && g_mouse.isDown(0))
+/* 001834d0 */	{
+/* 001834d0 */		n = 2;
+/* 001834e2 */	}
+/* 001834e8 */	else if (!this.isEnable_)
+/* 001834fa */	{
+/* 001834fa */		n = 3;
+/* 0018350c */	}
+/* 0018350c */	if (this.isVertical_)
+/* 0018351c */	{
+/* 0018351c */		this.parts_[0].setCgRange(0, this.h_ * n, this.w_, this.h_);
+/* 00183564 */	}
+/* 0018356a */	else
+/* 0018356a */	{
+/* 0018356a */		this.parts_[0].setCgRange(this.w_ * n, 0, this.w_, this.h_);
+/* 001835b2 */	}
+/* 001835b2 */}
+
+bool NormalButton::isEnable()
+/* 001835ba */{
+/* 001835ba */	return this.isEnable_;
+/* 001835c6 */}
+
+bool NormalButton::isCollide()
+/* 001835d4 */{
+/* 001835d4 */	return AFL_Parts_IsPointIn(this.parts_[0].getPartsNumber(), g_mouse.getX(), g_mouse.getY(), 1);
+/* 0018361a */}
+
+bool NormalButton::isMotion()
+/* 00183628 */{
+/* 00183628 */	return this.state_ == 1 || this.state_ == 3;
+/* 0018366e */}
+
+void NormalButton::setClickCallback(DG_ButtonClickCallback cb, int id)
+/* 0018367c */{
+/* 0018367c */	this.clickCallback_ = cb;
+/* 00183696 */	this.id_ = id;
+/* 001836ac */}
+
+void NormalButton::setOnFinishFadeOutCallback(DG_GeneralCallback onFinishFadeOutCallback)
+/* 001836b4 */{
+/* 001836b4 */	this.onFinishFadeOutCallback_ = onFinishFadeOutCallback;
+/* 001836ce */}
+
+void NormalButton::setZ(int z)
+/* 001836d6 */{
+/* 001836d6 */	this.z_ = z;
+/* 001836ec */	this.parent_.setZ(this.z_);
+/* 00183708 */}
+
+void NormalButton::runMotion(ref PartsMotion m)
+/* 00183710 */{
+/* 00183710 */	if (this.state_ == 1)
+/* 00183728 */	{
+/* 00183728 */		this.parent_.runMotion(m, NULL);
+/* 00183748 */	}
+/* 00183748 */}
+

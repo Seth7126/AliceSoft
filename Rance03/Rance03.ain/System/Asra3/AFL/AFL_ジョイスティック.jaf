@@ -1,0 +1,48 @@
+int AFL_Joystick_GetNumofDevice()
+/* 0016a4b6 */{
+/* 0016a4b6 */	return IbisInputEngine.Joystick_GetNumofDevice();
+/* 0016a4c2 */}
+
+bool AFL_Joystick_IsKeyDown(int DeviceNumber, int JoystickCode)
+/* 0016a4d6 */{
+/* 0016a4d6 */	return IbisInputEngine.Joystick_IsKeyDown(DeviceNumber, JoystickCode);
+/* 0016a4f6 */}
+
+int AFL_Joystick_GetButtonAssignment(int Function)
+/* 0016a50a */{
+/* 0016a50a */	if (Function < 0 || Function >= g_JoystickButtonAssignmentTable.Numof())
+/* 0016a55c */	{
+/* 0016a55c */		return -1;
+/* 0016a564 */	}
+/* 0016a564 */	if (g_JoystickButtonAssignmentTable[Function] == -1)
+/* 0016a588 */	{
+/* 0016a588 */		return SYS_GetDefaultJoystickButtonAssignment(Function);
+/* 0016a59a */	}
+/* 0016a59a */	return g_JoystickButtonAssignmentTable[Function];
+/* 0016a5b2 */}
+
+bool AFL_Joystick_SetButtonAssignment(int Function, int JoystickCode)
+/* 0016a5c6 */{
+/* 0016a5c6 */	if (Function < 0 || Function >= g_JoystickButtonAssignmentTable.Numof())
+/* 0016a618 */	{
+/* 0016a618 */		return false;
+/* 0016a620 */	}
+/* 0016a620 */	g_JoystickButtonAssignmentTable[Function] = JoystickCode;
+/* 0016a642 */	return true;
+/* 0016a64a */}
+
+bool AFL_Joystick_SetMessageKeyWaitCallback(int AssignCode, sys_btn_fnc_t Function)
+/* 0016a65e */{
+/* 0016a65e */	if (AssignCode < 0 || AssignCode >= 50 || AssignCode == 4 || AssignCode == 6)
+/* 0016a706 */	{
+/* 0016a706 */		return false;
+/* 0016a70e */	}
+/* 0016a70e */	g_InputJoypadCallbackList[AssignCode].SetCallback(Function);
+/* 0016a736 */	return true;
+/* 0016a73e */}
+
+void AFL_Joystick_InitButtonAssignment()
+/* 0016a752 */{
+/* 0016a752 */	SYS_Init_JoystickButtonAssignment();
+/* 0016a758 */}
+

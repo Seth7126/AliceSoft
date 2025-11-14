@@ -1,0 +1,49 @@
+string SYS_ToUpper(string Src)
+/* 001574e8 */{
+/* 001574e8 */	int Length = Src.Length();
+/* 001574fe */	int i;
+/* 00157510 */	for (i = 0; i < Length; ++i)
+/* 0015755a */	{
+/* 0015755a */		if (Src[i] >= 'a' && Src[i] <= 'z')
+/* 001575ba */		{
+/* 001575ba */			Src[i] = Src[i] + -32;
+/* 001575f0 */		}
+/* 001575f6 */		else if (Src[i] >= 'ａ' && Src[i] <= 'ｚ')
+/* 00157656 */		{
+/* 00157656 */			Src[i] = Src[i] + -8448;
+/* 0015768c */		}
+/* 0015768c */	}
+/* 00157692 */	return Src;
+/* 0015769e */}
+
+string SYS_ToLower(string Src)
+/* 001576b2 */{
+/* 001576b2 */	int Length = Src.Length();
+/* 001576c8 */	int i;
+/* 001576da */	for (i = 0; i < Length; ++i)
+/* 00157724 */	{
+/* 00157724 */		if (Src[i] >= 'A' && Src[i] <= 'Z')
+/* 00157784 */		{
+/* 00157784 */			Src[i] = Src[i] + ' ';
+/* 001577ba */		}
+/* 001577c0 */		else if (Src[i] >= 'Ａ' && Src[i] <= 'Ｚ')
+/* 00157820 */		{
+/* 00157820 */			Src[i] = Src[i] + 8448;
+/* 00157856 */		}
+/* 00157856 */	}
+/* 0015785c */	return Src;
+/* 00157868 */}
+
+int SYS_FindLast(string Src, string Key)
+/* 0015787c */{
+/* 0015787c */	int Result = -1;
+/* 0015788e */	int FindPos = Src.Find(Key);
+/* 001578b0 */	while (FindPos != -1)
+/* 001578c8 */	{
+/* 001578c8 */		Result += FindPos + 1;
+/* 001578e6 */		Src = Src.GetPart(FindPos + 1, Src.Length());
+/* 0015791c */		FindPos = Src.Find(Key);
+/* 0015793e */	}
+/* 00157944 */	return Result;
+/* 00157950 */}
+

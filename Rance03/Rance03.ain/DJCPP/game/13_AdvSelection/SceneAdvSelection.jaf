@@ -1,0 +1,163 @@
+SceneAdvSelection::SceneAdvSelection()
+/* 001bcbd8 */{
+/* 001bcbe0 */	this.isFinish_ = false;
+/* 001bcbf2 */}
+
+void SceneAdvSelection::init(array@string selectionButtonId)
+/* 001bcbfa */{
+/* 001bcbfa */	this.partsModeMark_[0].init("システム／オートモード", 0);
+/* 001bcc1e */	this.partsModeMark_[0].setPos(601.0, 684.0);
+/* 001bcc42 */	this.partsModeMark_[0].setZ(3450.0);
+/* 001bcc60 */	this.partsModeMark_[1].init("システム／スキップモード", 0);
+/* 001bcc84 */	this.partsModeMark_[1].setPos(663.0, 684.0);
+/* 001bcca8 */	this.partsModeMark_[1].setZ(3450.0);
+/* 001bccc6 */	this.isCastleMode_ = g_gameSceneManager.getCurrentPlaceId() == "居館";
+/* 001bccec */	this.btn_.Alloc(selectionButtonId.Numof());
+/* 001bcd0c */	int lbc = this.getFreeLayoutButtonCount(selectionButtonId);
+/* 001bcd2a */	int i;
+/* 001bcd3c */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001bcd8c */	{
+/* 001bcd8c */		this.btn_[i].init(selectionButtonId[i], i, lbc, this.isCastleMode_);
+/* 001bcddc */		this.btn_[i].setOnClickCallback(this.onClick, i);
+/* 001bce0c */	}
+/* 001bce12 */	this.initParts();
+/* 001bce1a */	this.initButtonOpenCamp();
+/* 001bce22 */}
+
+int SceneAdvSelection::getFreeLayoutButtonCount(ref array@string selectionButtonId)
+/* 001bce2a */{
+/* 001bce2a */	int i;
+/* 001bce3c */	int n;
+/* 001bce4e */	for (i = 0; i < selectionButtonId.Numof(); ++i)
+/* 001bce9e */	{
+/* 001bce9e */		switch (selectionButtonId[i])
+/* 001bcec0 */		{
+/* 001bcec0 */		case "セーブの碑へ行く":
+/* 001bcec0 */		case "ロードの碑へ行く":
+/* 001bcec0 */		case "街を出る":
+/* 001bcec0 */		case "居館一階を出る":
+/* 001bcec0 */			break;
+/* 001bcec6 */		default:
+/* 001bcec6 */			++n;
+/* 001bced6 */		}
+/* 001bced6 */	}
+/* 001bcedc */	return n;
+/* 001bcee8 */}
+
+void SceneAdvSelection::initButtonOpenCamp()
+/* 001bcef6 */{
+/* 001bcef6 */	this.btnOpenMenu_.init("システム／ボタン／メニュー", "", "", false);
+/* 001bcf1e */	this.btnOpenMenu_.setPos(950, 692);
+/* 001bcf3a */	this.btnOpenMenu_.setZ(3600);
+/* 001bcf50 */	this.btnOpenMenu_.setShow(true);
+/* 001bcf66 */	this.btnOpenMenu_.setClickCallback(this.onClickSystemMenu, 0);
+/* 001bcf86 */	this.btnOpenCamp_.init("システム／ボタン／幅１７０", "キャンプを開く", "", true);
+/* 001bcfae */	this.btnOpenCamp_.setPos(775, 692);
+/* 001bcfca */	this.btnOpenCamp_.setZ(3600);
+/* 001bcfe0 */	this.btnOpenCamp_.setShow(true);
+/* 001bcff6 */	this.btnOpenCamp_.setClickCallback(this.onClick, 999);
+/* 001bd016 */}
+
+void SceneAdvSelection::initParts()
+/* 001bd01e */{
+/* 001bd01e */	this.partsBase_.init("システム／場所移動／下地", 0);
+/* 001bd03a */	this.partsBase_.setPos(391.0, 0.0);
+/* 001bd056 */	this.partsBase_.setZ(3600.0);
+/* 001bd06c */}
+
+void SceneAdvSelection::run()
+/* 001bd074 */{
+/* 001bd074 */	string pId = g_gameSceneManager.getCurrentPlaceId();
+/* 001bd092 */	if (pId != "")
+/* 001bd0aa */	{
+/* 001bd0aa */		g_music.play(getMapPlaceFromId(pId).getMusicId(), -2147483648, false);
+/* 001bd0f2 */	}
+/* 001bd0f8 */	this.fadeIn(true);
+/* 001bd106 */}
+
+bool SceneAdvSelection::update()
+/* 001bd10e */{
+/* 001bd10e */	if (this.isFinish_)
+/* 001bd11e */	{
+/* 001bd11e */		return false;
+/* 001bd126 */	}
+/* 001bd126 */	if (g_mouse.getWheel() > 0)
+/* 001bd144 */	{
+/* 001bd144 */		openBackLog();
+/* 001bd14a */	}
+/* 001bd14a */	this.partsModeMark_[0].setShow(Ａ＿オートモード中確認());
+/* 001bd168 */	this.partsModeMark_[1].setShow(SYS_スキップモード確認());
+/* 001bd186 */	return true;
+/* 001bd18e */}
+
+void SceneAdvSelection::fadeIn(bool val)
+/* 001bd19c */{
+/* 001bd19c */	int i;
+/* 001bd1ae */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001bd1fe */	{
+/* 001bd1fe */		this.btn_[i].fadeIn(val, val ? i * 50 : 0);
+/* 001bd252 */	}
+/* 001bd258 */	this.btnOpenCamp_.fadeIn(val);
+/* 001bd272 */	this.btnOpenMenu_.fadeIn(val);
+/* 001bd28c */	this.fadeBg(val);
+/* 001bd29e */}
+
+void SceneAdvSelection::fadeBg(bool val)
+/* 001bd2a6 */{
+/* 001bd2a6 */	this.partsBase_.setShow(true);
+/* 001bd2bc */	if (val)
+/* 001bd2cc */	{
+/* 001bd2cc */		PartsMotion m;
+/* 001bd2dc */		m.setMove(1024, -50, 391, 0, 2);
+/* 001bd30a */		m.setTime(600);
+/* 001bd320 */		if (this.isCastleMode_)
+/* 001bd330 */		{
+/* 001bd330 */			m.setAlpha(0, 0, 0);
+/* 001bd352 */		}
+/* 001bd352 */		this.partsBase_.runMotion(m, NULL);
+/* 001bd372 */	}
+/* 001bd37e */	else
+/* 001bd37e */	{
+/* 001bd37e */		PartsMotion m;
+/* 001bd38e */		m.setMove(391, 0, 1024, -50, 1);
+/* 001bd3bc */		m.setTime(200);
+/* 001bd3d2 */		if (this.isCastleMode_)
+/* 001bd3e2 */		{
+/* 001bd3e2 */			m.setAlpha(0, 0, 0);
+/* 001bd404 */		}
+/* 001bd404 */		this.partsBase_.runMotion(m, this.onFinishFadeOut);
+/* 001bd42c */	}
+/* 001bd42c */}
+
+void SceneAdvSelection::onFinishFadeOut()
+/* 001bd43a */{
+/* 001bd43a */	this.isFinish_ = true;
+/* 001bd44c */}
+
+void SceneAdvSelection::onClick(int index)
+/* 001bd454 */{
+/* 001bd454 */	if (this.clickedId_ != "")
+/* 001bd46c */	{
+/* 001bd46c */		return;
+/* 001bd46e */	}
+/* 001bd46e */	if (index == 999)
+/* 001bd486 */	{
+/* 001bd486 */		this.clickedId_ = "キャンプを開く";
+/* 001bd49a */	}
+/* 001bd4a0 */	else
+/* 001bd4a0 */	{
+/* 001bd4a0 */		this.clickedId_ = this.btn_[index].getId();
+/* 001bd4ca */	}
+/* 001bd4ca */	this.fadeIn(false);
+/* 001bd4d8 */}
+
+void SceneAdvSelection::onClickSystemMenu(int index)
+/* 001bd4e0 */{
+/* 001bd4e0 */	openSystemMenu(true);
+/* 001bd4ec */}
+
+string SceneAdvSelection::getClickedId()
+/* 001bd4f4 */{
+/* 001bd4f4 */	return this.clickedId_;
+/* 001bd500 */}
+

@@ -1,0 +1,90 @@
+void TargetInfomation::setPlayerSkillId(string id)
+/* 001b381a */{
+/* 001b381a */	this.playerSkillId_ = id;
+/* 001b3832 */}
+
+string TargetInfomation::getPlayerSkillId()
+/* 001b383a */{
+/* 001b383a */	return this.playerSkillId_;
+/* 001b3846 */}
+
+int TargetInfomation::getDamage()
+/* 001b3854 */{
+/* 001b3854 */	return this.damage_;
+/* 001b3860 */}
+
+int TargetInfomation::getType()
+/* 001b386e */{
+/* 001b386e */	return this.type_;
+/* 001b387a */}
+
+string TargetInfomation::getMessage()
+/* 001b3888 */{
+/* 001b3888 */	return this.message_;
+/* 001b3894 */}
+
+void TargetInfomation::setDamage(int val)
+/* 001b38a2 */{
+/* 001b38a2 */	this.damage_ = val;
+/* 001b38b8 */}
+
+void TargetInfomation::setType(int val)
+/* 001b38c0 */{
+/* 001b38c0 */	this.type_ = val;
+/* 001b38d6 */}
+
+void TargetInfomation::setMessage(string val)
+/* 001b38de */{
+/* 001b38de */	this.message_ = val;
+/* 001b38f6 */}
+
+void TargetInfomation::setSourceId(string id)
+/* 001b38fe */{
+/* 001b38fe */	this.sourceId_ = id;
+/* 001b3916 */}
+
+void TargetInfomation::setSourceIndex(int index)
+/* 001b391e */{
+/* 001b391e */	this.sourceIndex_ = index;
+/* 001b3934 */}
+
+void TargetInfomation::setTargetId(string id)
+/* 001b393c */{
+/* 001b393c */	this.targetId_ = id;
+/* 001b3954 */}
+
+void TargetInfomation::setTargetIndex(int index)
+/* 001b395c */{
+/* 001b395c */	this.targetIndex_ = index;
+/* 001b3972 */}
+
+string TargetInfomation::getSourceId()
+/* 001b397a */{
+/* 001b397a */	return this.sourceId_;
+/* 001b3986 */}
+
+int TargetInfomation::getSourceIndex()
+/* 001b3994 */{
+/* 001b3994 */	return this.sourceIndex_;
+/* 001b39a0 */}
+
+string TargetInfomation::getTargetId()
+/* 001b39ae */{
+/* 001b39ae */	return this.targetId_;
+/* 001b39ba */}
+
+int TargetInfomation::getTargetIndex()
+/* 001b39c8 */{
+/* 001b39c8 */	return this.targetIndex_;
+/* 001b39d4 */}
+
+bool TargetInfomation::isSourcePlayer()
+/* 001b39e2 */{
+/* 001b39e2 */	return this.sourceId_ != "";
+/* 001b39f8 */}
+
+bool TargetInfomation::isTargetPlayer()
+/* 001b3a06 */{
+/* 001b3a06 */	return this.targetId_ != "";
+/* 001b3a1c */}
+

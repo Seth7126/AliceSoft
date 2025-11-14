@@ -1,0 +1,261 @@
+void test_Parts_Init()
+/* 001fc5ea */{
+/* 001fc5ea */	'CG初期化' A;
+/* 001fc5f6 */	Parts p;
+/* 001fc606 */	p.init("システム／ボタン／幅２００", 0);
+/* 001fc622 */	p.setShow(true);
+/* 001fc638 */	キー待ち(false);
+/* 001fc644 */	'プレーン初期化' A;
+/* 001fc650 */	p.initAsPlaneImage(100, 200, 64, 128, 255, 255);
+/* 001fc684 */	p.setShow(true);
+/* 001fc69a */	キー待ち(false);
+/* 001fc6a6 */	'テキスト初期化' A;
+/* 001fc6b2 */	p.initAsText("テキスト", 40, false, 0, 255, 128, 64);
+/* 001fc6ec */	p.setShow(true);
+/* 001fc702 */	キー待ち(false);
+/* 001fc70e */	'CGプレーン初期化' A;
+/* 001fc71a */	p.initAsCgPlaneImage("システム／ボタン／幅２００", 64, 128, 255);
+/* 001fc742 */	p.setShow(true);
+/* 001fc758 */	キー待ち(false);
+/* 001fc764 */	'数値初期化' A;
+/* 001fc770 */	NumberPartsInfomation n;
+/* 001fc780 */	n.setSameWidth(18);
+/* 001fc796 */	p.initAsNumber("システム／数字／幅１８／白", n);
+/* 001fc7b6 */	p.setShow(true);
+/* 001fc7cc */	p.setNumber(1234567936.0);
+/* 001fc7e2 */	キー待ち(false);
+/* 001fc7ee */}
+
+void test_Parts_Method()
+/* 001fc7fc */{
+/* 001fc7fc */	Parts base;
+/* 001fc80c */	base.initAsPlaneImage(1024, 768, 32, 32, 128, 255);
+/* 001fc840 */	base.setShow(true);
+/* 001fc856 */	base.setZ(1.0);
+/* 001fc86c */	Parts p;
+/* 001fc87c */	p.init("システム／ボタン／幅２００", 0);
+/* 001fc898 */	p.setShow(true);
+/* 001fc8ae */	p.setZ(100.0);
+/* 001fc8c4 */	'setOriginテスト' A;
+/* 001fc8d0 */	p.setPos(512.0, 384.0);
+/* 001fc8ec */	int i;
+/* 001fc8fe */	for (i = 1; i <= 9; ++i)
+/* 001fc944 */	{
+/* 001fc944 */		p.setOrigin(i);
+/* 001fc95e */		キー待ち(false);
+/* 001fc96a */	}
+/* 001fc970 */	p.setOrigin(7);
+/* 001fc986 */	p.setPos(0.0, 0.0);
+/* 001fc9a2 */	'setX/getXテスト' A;
+/* 001fc9ae */	p.setX(100.0);
+/* 001fc9c4 */	assert(p.getX() == 100.0);
+/* 001fc9f0 */	'setY/getYテスト' A;
+/* 001fc9fc */	p.setY(200.0);
+/* 001fca12 */	assert(p.getY() == 200.0);
+/* 001fca3e */	'setZ/getZテスト' A;
+/* 001fca4a */	p.setZ(300.0);
+/* 001fca60 */	assert(p.getZ() == 300);
+/* 001fca8c */	'setScaling/getScalingテスト' A;
+/* 001fca98 */	p.setPos(512.0, 384.0);
+/* 001fcab4 */	p.setOrigin(5);
+/* 001fcaca */	for (i = -1; i <= 15; ++i)
+/* 001fcb10 */	{
+/* 001fcb10 */		float s = i * 10.0;
+/* 001fcb30 */		p.setScaling(s);
+/* 001fcb4a */		assert(s == p.getScaling());
+/* 001fcb7a */		'' N(s, 0, 0);
+/* 001fcb9e */		A();
+/* 001fcba4 */	}
+/* 001fcbaa */	p.setPos(512.0, 384.0);
+/* 001fcbc6 */	p.setOrigin(5);
+/* 001fcbdc */	p.setScaling(100.0);
+/* 001fcbf2 */	'setXYRot/getXYRotテスト' A;
+/* 001fcbfe */	for (i = -1; i <= 6; ++i)
+/* 001fcc44 */	{
+/* 001fcc44 */		float s = i * 60.0;
+/* 001fcc64 */		p.setXYRot(s);
+/* 001fcc7e */		assert(s == p.getXYRot());
+/* 001fccae */		'' N(s, 0, 0);
+/* 001fccd2 */		'度' A;
+/* 001fccde */	}
+/* 001fcce4 */	p.setXYRot(0.0);
+/* 001fccfa */	'setYZRot/getYZRotテスト' A;
+/* 001fcd06 */	for (i = -1; i <= 36; ++i)
+/* 001fcd4c */	{
+/* 001fcd4c */		float s = i * 10.0;
+/* 001fcd6c */		p.setYZRot(s);
+/* 001fcd86 */		assert(s == p.getYZRot());
+/* 001fcdb6 */		'' N(s, 0, 0);
+/* 001fcdda */		'度' A;
+/* 001fcde6 */	}
+/* 001fcdec */	p.setYZRot(0.0);
+/* 001fce02 */	'setXZRot/getXZRotテスト' A;
+/* 001fce0e */	for (i = -1; i <= 36; ++i)
+/* 001fce54 */	{
+/* 001fce54 */		float s = i * 10.0;
+/* 001fce74 */		p.setXZRot(s);
+/* 001fce8e */		assert(s == p.getXZRot());
+/* 001fcebe */		'' N(s, 0, 0);
+/* 001fcee2 */		'度' A;
+/* 001fceee */	}
+/* 001fcef4 */	p.setXZRot(0.0);
+/* 001fcf0a */	'setAlpha/getAlphaテスト' A;
+/* 001fcf16 */	for (i = -1; i <= 17; ++i)
+/* 001fcf5c */	{
+/* 001fcf5c */		int n = i * 16;
+/* 001fcf7a */		p.setAlpha(n);
+/* 001fcf96 */		'アルファ' N(n, 0, 0);
+/* 001fcfb8 */		A();
+/* 001fcfbe */	}
+/* 001fcfc4 */	p.setAlpha(255.0);
+/* 001fcfda */	'setFilterTypeテスト' A;
+/* 001fcfe6 */	for (i = 0; i < 4; ++i)
+/* 001fd02c */	{
+/* 001fd02c */		p.setFilterType(i);
+/* 001fd046 */		'フィルタ' N(i, 0, 0);
+/* 001fd068 */		A();
+/* 001fd06e */	}
+/* 001fd074 */	'setParentテスト' A;
+/* 001fd080 */	Parts pp;
+/* 001fd090 */	p.setOrigin(7);
+/* 001fd0a6 */	pp.initAsDummy();
+/* 001fd0b6 */	p.setParent(pp.getPartsNumber());
+/* 001fd0d6 */	pp.setShow(true);
+/* 001fd0ec */	p.setPos(100.0, 100.0);
+/* 001fd108 */	pp.setPos(100.0, 200.0);
+/* 001fd124 */	'getScreenXYテスト1' A;
+/* 001fd130 */	assert(p.getScreenX() == 200);
+/* 001fd15c */	assert(p.getScreenY() == 300);
+/* 001fd188 */	p.setParent(0);
+/* 001fd19e */	p.setPos(0.0, 0.0);
+/* 001fd1ba */	p.setOrigin(5);
+/* 001fd1d0 */	'getScreenXYテスト2' A;
+/* 001fd1dc */	assert(p.getScreenX() == -p.getWidth() / 2);
+/* 001fd21c */	assert(p.getScreenY() == -p.getHeight() / 2);
+/* 001fd25c */	'getScreenXYテスト1' A;
+/* 001fd268 */	'setShow/isShowテスト1' A;
+/* 001fd274 */	assert(pp.isShow() == true);
+/* 001fd2a0 */	assert(p.isShow() == true);
+/* 001fd2cc */	'setShow/isShowテスト2' A;
+/* 001fd2d8 */	pp.setShow(false);
+/* 001fd2ee */	assert(pp.isShow() == false);
+/* 001fd31a */	assert(p.isShow() == true);
+/* 001fd346 */	'setShow/isShowテスト3' A;
+/* 001fd352 */	pp.setShow(true);
+/* 001fd368 */	p.setShow(false);
+/* 001fd37e */	assert(pp.isShow() == true);
+/* 001fd3aa */	assert(p.isShow() == false);
+/* 001fd3d6 */}
+
+void test_Parts_Motion()
+/* 001fd3e4 */{
+/* 001fd3e4 */	Parts num;
+/* 001fd3f4 */	NumberPartsInfomation n;
+/* 001fd404 */	n.setSameWidth(18);
+/* 001fd41a */	num.initAsNumber("システム／数字／幅１８／白", n);
+/* 001fd43a */	num.setShow(true);
+/* 001fd450 */	Parts p;
+/* 001fd460 */	p.init("システム／ボタン／幅２００", 0);
+/* 001fd47c */	p.setShow(true);
+/* 001fd492 */	p.setZ(100.0);
+/* 001fd4a8 */	p.setOrigin(7);
+/* 001fd4be */	'パーツモーション：EXロード' A;
+/* 001fd4ca */	p.runMotionFromEx("モーション／テスト／振動", NULL);
+/* 001fd4e2 */	while (!g_partsMotionManager.isEmpty())
+/* 001fd4fa */	{
+/* 001fd4fa */		g_frameManager.updateFrame();
+/* 001fd50a */	}
+/* 001fd510 */	'パーツモーション：EXロード' A;
+/* 001fd51c */	p.runMotionFromEx("モーション／テスト", NULL);
+/* 001fd534 */	while (!g_partsMotionManager.isEmpty())
+/* 001fd54c */	{
+/* 001fd54c */		g_frameManager.updateFrame();
+/* 001fd55c */	}
+/* 001fd562 */	'パーツモーション：アルファ' A;
+/* 001fd56e */	PartsMotion m;
+/* 001fd57e */	m.setTime(2000);
+/* 001fd594 */	m.setKey(2, 0, 255, 0);
+/* 001fd5bc */	m.setMove(0, 0, 1024 - p.getWidth(), 100, 0);
+/* 001fd5fc */	p.runMotion(m, NULL);
+/* 001fd61c */	while (!g_partsMotionManager.isEmpty())
+/* 001fd634 */	{
+/* 001fd634 */		g_frameManager.updateFrame();
+/* 001fd644 */	}
+/* 001fd64a */	p.setPos(512.0, 384.0);
+/* 001fd66c */	p.setOrigin(5);
+/* 001fd682 */	'パーツモーション：ROT,Chain' A;
+/* 001fd68e */	array@PartsMotion mota[3];
+/* 001fd6a4 */	int i;
+/* 001fd6b6 */	for (i = 0; i < 3; ++i)
+/* 001fd6fc */	{
+/* 001fd6fc */		mota[i].setTime(1500);
+/* 001fd71e */	}
+/* 001fd724 */	mota[0].setKey(3, 0, 360, 0);
+/* 001fd754 */	mota[1].setKey(4, 0, 90, 0);
+/* 001fd784 */	mota[1].setKey(5, 0, 360, 0);
+/* 001fd7b4 */	mota[2].setKey(4, 0, 360, 0);
+/* 001fd7e4 */	p.runMotionArray(mota, NULL);
+/* 001fd802 */	while (!g_partsMotionManager.isEmpty())
+/* 001fd81a */	{
+/* 001fd81a */		g_frameManager.updateFrame();
+/* 001fd82a */	}
+/* 001fd830 */	mota.Free();
+/* 001fd83a */	'パーツモーション：Scaling' A;
+/* 001fd846 */	PartsMotion m;
+/* 001fd856 */	m.setTime(2000);
+/* 001fd86c */	m.setKey(6, 0, 200, 1);
+/* 001fd894 */	p.runMotion(m, NULL);
+/* 001fd8b4 */	while (!g_partsMotionManager.isEmpty())
+/* 001fd8cc */	{
+/* 001fd8cc */		g_frameManager.updateFrame();
+/* 001fd8dc */	}
+/* 001fd8e2 */	array@PartsMotion ma[3];
+/* 001fd8fe */	ma[0].setMove(0, 100, 1024, 0, 1);
+/* 001fd934 */	ma[0].setKey(6, 50, 100, 0);
+/* 001fd964 */	ma[0].setKey(3, 0, 60, 0);
+/* 001fd994 */	ma[0].setKey(4, 0, 60, 0);
+/* 001fd9c4 */	ma[0].setKey(5, 0, 60, 0);
+/* 001fd9f4 */	ma[0].setTime(2000);
+/* 001fda12 */	ma[1].setKey(4, 60, 120, 0);
+/* 001fda42 */	ma[1].setKey(5, 60, 120, 0);
+/* 001fda72 */	ma[1].setTime(2000);
+/* 001fda90 */	ma[2].setMove(1024, 0, 0, 100, 1);
+/* 001fdac6 */	ma[2].setKey(6, 100, 50, 0);
+/* 001fdaf6 */	ma[2].setKey(3, 60, 0, 0);
+/* 001fdb26 */	ma[2].setKey(4, 60, 0, 0);
+/* 001fdb56 */	ma[2].setKey(5, 60, 0, 0);
+/* 001fdb86 */	ma[2].setTime(2000);
+/* 001fdba4 */	bool isExit = false;
+/* 001fdbb6 */	while (!isExit)
+/* 001fdbc8 */	{
+/* 001fdbc8 */		p.runMotionArray(ma, NULL);
+/* 001fdbe6 */		while (!g_partsMotionManager.isEmpty())
+/* 001fdbfe */		{
+/* 001fdbfe */			g_frameManager.updateFrame();
+/* 001fdc0e */			if (g_mouse.isClick(0))
+/* 001fdc2a */			{
+/* 001fdc2a */				g_partsMotionManager.finalize(-1);
+/* 001fdc40 */				キー待ち(false);
+/* 001fdc4c */			}
+/* 001fdc52 */			else if (g_mouse.isClick(1))
+/* 001fdc6e */			{
+/* 001fdc6e */				g_partsMotionManager.finalize(-1);
+/* 001fdc84 */				isExit = true;
+/* 001fdc96 */				break;
+/* 001fdc9c */			}
+/* 001fdc9c */		}
+/* 001fdca2 */	}
+/* 001fdca8 */	ma.Free();
+/* 001fdcb2 */}
+
+void test_Scene_WorldMap()
+/* 001fdcc0 */{
+/* 001fdcc0 */	debugSetMapAllChain();
+/* 001fdcc6 */	debugPlayerJoinAll();
+/* 001fdccc */	test_Party_Organize();
+/* 001fdcd2 */	SceneWorldMap wm;
+/* 001fdce2 */	wm.init(g_mapPlace[0].getId(), true);
+/* 001fdd10 */	wm.run();
+/* 001fdd20 */	runScene(wm.update);
+/* 001fdd38 */}
+

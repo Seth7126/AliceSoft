@@ -1,0 +1,92 @@
+BonusView::BonusView()
+/* 001a30ca */{
+/* 001a30d2 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a30f8 */}
+
+void BonusView::init(BattleBonus bonus, bool isBig)
+/* 001a3100 */{
+/* 001a3100 */	this.bonus_ = bonus;
+/* 001a3122 */	this.isBig_ = isBig;
+/* 001a3138 */	this.initParts();
+/* 001a3140 */}
+
+void BonusView::initParts()
+/* 001a3148 */{
+/* 001a3148 */	if (this.isBig_)
+/* 001a3158 */	{
+/* 001a3158 */		this.parts_[0].init("システム／リザルト／ボーナス下地／大", 0);
+/* 001a317c */		this.parts_[1].initAsText(this.bonus_.getName(), 30, false, 256, 43, 4, 7);
+/* 001a31c8 */		this.parts_[2].initAsNumber("システム／数字／幅１８／赤黒", NULL);
+/* 001a31ec */	}
+/* 001a31f2 */	else
+/* 001a31f2 */	{
+/* 001a31f2 */		this.parts_[0].init("システム／リザルト／ボーナス下地", 0);
+/* 001a3216 */		this.parts_[1].initAsText(this.bonus_.getName(), 20, false, 256, 150, 19, 36);
+/* 001a3262 */		this.parts_[2].initAsNumber("システム／数字／幅１３／赤", NULL);
+/* 001a3286 */	}
+/* 001a3286 */	createPartsGroup(this.parent_, this.parts_, 3560);
+/* 001a32a6 */	this.setPartsPos();
+/* 001a32ae */}
+
+void BonusView::setPartsShow()
+/* 001a32b6 */{
+/* 001a32b6 */	int i;
+/* 001a32c8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a3318 */	{
+/* 001a3318 */		this.parts_[i].setShow(true);
+/* 001a333a */	}
+/* 001a3340 */	this.parent_.setShow(true);
+/* 001a3356 */}
+
+void BonusView::setPartsPos()
+/* 001a335e */{
+/* 001a335e */	this.parts_[2].setOrigin(3);
+/* 001a337c */	this.parts_[1].setOrigin(4);
+/* 001a339a */	if (this.isBig_)
+/* 001a33aa */	{
+/* 001a33aa */		this.parts_[2].setPos(338.0, 33.0);
+/* 001a33ce */		this.parts_[1].setPos(15.0, 21.0);
+/* 001a33f2 */	}
+/* 001a33f8 */	else
+/* 001a33f8 */	{
+/* 001a33f8 */		this.parts_[2].setPos(210.0, 18.0);
+/* 001a341c */		this.parts_[1].setPos(5.0, 10.0);
+/* 001a3440 */	}
+/* 001a3440 */}
+
+void BonusView::update()
+/* 001a3448 */{
+/* 001a344a */}
+
+void BonusView::fadeIn(bool val, int delay, DG_GeneralCallback cb)
+/* 001a3450 */{
+/* 001a3450 */	this.setPartsShow();
+/* 001a3458 */	if (val)
+/* 001a3468 */	{
+/* 001a3468 */		array@PartsMotion m[2];
+/* 001a347e */		m[0].setAlpha(0, 0, 0);
+/* 001a34a8 */		m[0].setTime(delay);
+/* 001a34ca */		m[1].setAlpha(255, 255, 0);
+/* 001a34f4 */		m[1].setMove(-300, this.y_, this.x_, this.y_, 2);
+/* 001a3536 */		m[1].setTime(600);
+/* 001a3554 */		PartsMotion nm;
+/* 001a3564 */		nm.setKey(15, 0, this.bonus_.getValue(), 0);
+/* 001a3596 */		nm.setTime(400 + delay);
+/* 001a35b8 */		this.parts_[2].runMotion(nm, NULL);
+/* 001a35e0 */		this.parent_.runMotionArray(m, cb);
+/* 001a3618 */	}
+/* 001a361e */	else
+/* 001a361e */	{
+/* 001a361e */		PartsMotion m;
+/* 001a362e */		m.setAlpha(255, 0, 0);
+/* 001a3650 */		m.setMove(this.x_, this.y_, -300, this.y_, 1);
+/* 001a368a */		this.parent_.runMotion(m, cb);
+/* 001a36b4 */	}
+/* 001a36b4 */}
+
+void BonusView::setPos(int x, int y)
+/* 001a36c2 */{
+/* 001a36c2 */	this.x_ = x;
+/* 001a36d8 */	this.y_ = y;
+/* 001a36ee */}
+

@@ -1,0 +1,90 @@
+void Ａ＿メッセージウィンドウＺ座標設定(int Z)
+/* 001580ae */{
+/* 001580ae */	g_MessageWindowModelManager.SetZ(Z);
+/* 001580c8 */}
+
+void Ａ＿メッセージウィンドウ座標設定(int メッセージウィンドウ番号, int X, int Y)
+/* 001580d6 */{
+/* 001580d6 */	SYS_ASSERTE_AREA_ID(メッセージウィンドウ番号);
+/* 001580e4 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).SetX(X);
+/* 00158128 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).SetY(Y);
+/* 0015816c */}
+
+void Ａ＿メッセージウィンドウＣＧ設定(int メッセージウィンドウ番号, string ＣＧ名)
+/* 0015817a */{
+/* 0015817a */	SYS_ASSERTE_AREA_ID(メッセージウィンドウ番号);
+/* 00158188 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).SetCGName(ＣＧ名);
+/* 001581cc */}
+
+void Ａ＿メッセージウィンドウ非アクティブ乗算色設定(int メッセージウィンドウ番号, int 赤, int 緑, int 青)
+/* 001581da */{
+/* 001581da */	SYS_ASSERTE_AREA_ID(メッセージウィンドウ番号);
+/* 001581e8 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).SetInactiveMultipleColor(CF_CASColor(赤, 緑, 青, 255));
+/* 0015824c */}
+
+void メッセージエリア(int Ｍ番号, int Ｘ, int Ｙ, int Ｚ, string ＣＧ名)
+/* 0015825a */{
+/* 0015825a */	if (Ｚ != -2147483648)
+/* 00158272 */	{
+/* 00158272 */		SYS_ASSERTE_Z(Ｚ);
+/* 00158280 */	}
+/* 00158280 */	if (Ｍ番号 != 0)
+/* 00158298 */	{
+/* 00158298 */		SYS_ASSERTE_AREA_ID(Ｍ番号);
+/* 001582a6 */		SYS_メッセージエリア(Ｍ番号, Ｘ, Ｙ, Ｚ, ＣＧ名);
+/* 001582de */		return;
+/* 001582e0 */	}
+/* 001582e0 */	for (Ｍ番号 = 1; Ｍ番号 < 40; ++Ｍ番号)
+/* 00158326 */	{
+/* 00158326 */		SYS_メッセージエリア(Ｍ番号, Ｘ, Ｙ, Ｚ, ＣＧ名);
+/* 0015835e */	}
+/* 00158364 */}
+
+void Ａ＿メッセージウィンドウフラット設定(int メッセージウィンドウ番号, string フラットファイル名)
+/* 00158372 */{
+/* 00158372 */	SYS_ASSERTE_AREA_ID(メッセージウィンドウ番号);
+/* 00158380 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).SetFlatFileName(フラットファイル名);
+/* 001583c4 */}
+
+void Ａ＿メッセージウィンドウフラット待機フレーム番号設定(int メッセージウィンドウ番号, int フレーム番号)
+/* 001583d2 */{
+/* 001583d2 */	SYS_ASSERTE_AREA_ID(メッセージウィンドウ番号);
+/* 001583e0 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).m_FlatShowWaitFrameNumber = フレーム番号;
+/* 00158428 */}
+
+void Ａ＿テキストエリア範囲設定(int メッセージウィンドウ番号, int X, int Y, int Width, int Height)
+/* 00158436 */{
+/* 00158436 */	SYS_ASSERTE_AREA_ID(メッセージウィンドウ番号);
+/* 00158444 */	g_MessageWindowModelManager.GetMessageWindow(メッセージウィンドウ番号).SetTextAreaRect(CF_CASRect(X, Y, Width, Height));
+/* 001584ac */}
+
+void メッセージエリア余白(int Ｍ番号, int t, int r, int b, int l)
+/* 001584ba */{
+/* 001584ba */	if (Ｍ番号 != 0)
+/* 001584d2 */	{
+/* 001584d2 */		SYS_ASSERTE_AREA_ID(Ｍ番号);
+/* 001584e0 */		SYS_メッセージエリア余白(Ｍ番号, t, r, b, l);
+/* 00158518 */		return;
+/* 0015851a */	}
+/* 0015851a */	for (Ｍ番号 = 1; Ｍ番号 < 40; ++Ｍ番号)
+/* 00158560 */	{
+/* 00158560 */		SYS_メッセージエリア余白(Ｍ番号, t, r, b, l);
+/* 00158598 */	}
+/* 0015859e */}
+
+void メッセージエリア画面トランジション設定(int Ｍ番号, int 効果番号, int 効果時間)
+/* 001585ac */{
+/* 001585ac */	if (Ｍ番号 != 0)
+/* 001585c4 */	{
+/* 001585c4 */		SYS_ASSERTE_AREA_ID(Ｍ番号);
+/* 001585d2 */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).効果番号 = 効果番号;
+/* 0015861a */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).効果時間 = 効果時間;
+/* 00158662 */		return;
+/* 00158664 */	}
+/* 00158670 */	for (Ｍ番号 = 1; Ｍ番号 < 40; ++Ｍ番号)
+/* 001586b6 */	{
+/* 001586b6 */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).効果番号 = 効果番号;
+/* 001586fe */		g_MessageWindowModelManager.GetMessageWindow(Ｍ番号).効果時間 = 効果時間;
+/* 00158746 */	}
+/* 00158758 */}
+

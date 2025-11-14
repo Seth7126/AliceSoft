@@ -1,0 +1,103 @@
+ItemNarrowDownButton::ItemNarrowDownButton()
+/* 0017a63e */{
+/* 0017a646 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0017a66c */}
+
+void ItemNarrowDownButton::init(array@string itemIds, DG_ButtonClickCallback cb)
+/* 0017a674 */{
+/* 0017a674 */	this.initParts();
+/* 0017a67c */	array@bool val[9];
+/* 0017a692 */	val.Fill(0, val.Numof(), false);
+/* 0017a6ba */	val[0] = true;
+/* 0017a6d4 */	int i;
+/* 0017a6e6 */	for (i = 0; i < itemIds.Numof(); ++i)
+/* 0017a736 */	{
+/* 0017a736 */		int index = getItemFromId(itemIds[i]).getNarrowDownType();
+/* 0017a77a */		val[index] = true;
+/* 0017a798 */	}
+/* 0017a7a4 */	for (i = 0; i < val.Numof(); ++i)
+/* 0017a7f4 */	{
+/* 0017a7f4 */		if (val[i])
+/* 0017a810 */		{
+/* 0017a810 */			this.btn_.Realloc(this.btn_.Numof() + 1);
+/* 0017a838 */			int index = this.btn_.Numof() - 1;
+/* 0017a85c */			this.btn_[index].init("システム／ボタン／幅６０", this.getTypeText(i), "", false);
+/* 0017a89c */			this.btn_[index].setClickCallback(cb, i);
+/* 0017a8ce */			this.btn_[index].setZ(4700);
+/* 0017a8f0 */		}
+/* 0017a8f0 */	}
+/* 0017a8f6 */}
+
+string ItemNarrowDownButton::getTypeText(int type)
+/* 0017a8fe */{
+/* 0017a8fe */	switch (type)
+/* 0017a914 */	{
+/* 0017a914 */	case 0:
+/* 0017a914 */		return "全て";
+/* 0017a91c */	case 1:
+/* 0017a91c */		return "消費";
+/* 0017a924 */	case 2:
+/* 0017a924 */		return "特殊";
+/* 0017a92c */	default:
+/* 0017a92c */		return "装備%d" % (type - 2);
+/* 0017a94e */	}
+/* 0017a94e */	return "";
+/* 0017a956 */}
+
+void ItemNarrowDownButton::update()
+/* 0017a964 */{
+/* 0017a966 */}
+
+void ItemNarrowDownButton::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 0017a96c */{
+/* 0017a96c */	this.setPartsShow();
+/* 0017a974 */	PartsMotion m;
+/* 0017a984 */	if (val)
+/* 0017a994 */	{
+/* 0017a994 */		m.setMove(-200, 0, 0, 0, 1);
+/* 0017a9c2 */	}
+/* 0017a9c8 */	else
+/* 0017a9c8 */	{
+/* 0017a9c8 */		m.setMove(0, 0, -200, 0, 1);
+/* 0017a9f6 */	}
+/* 0017a9f6 */	this.parent_.runMotion(m, onFinish);
+/* 0017aa20 */	int i;
+/* 0017aa32 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 0017aa82 */	{
+/* 0017aa82 */		array@PartsMotion m[1];
+/* 0017aa98 */		int x = 20;
+/* 0017aaaa */		int y = 85 + i * 78;
+/* 0017aad0 */		if (val)
+/* 0017aae0 */		{
+/* 0017aae0 */			m[0].setMove(x - 200, y, x, y, 1);
+/* 0017ab2e */		}
+/* 0017ab34 */		else
+/* 0017ab34 */		{
+/* 0017ab34 */			m[0].setMove(x, y, x - 200, y, 1);
+/* 0017ab82 */		}
+/* 0017ab82 */		this.btn_[i].fadeInCustomized(val, m);
+/* 0017abbc */	}
+/* 0017abc2 */}
+
+void ItemNarrowDownButton::initParts()
+/* 0017abca */{
+/* 0017abca */	this.parts_[0].init("システム／アイテム／絞込み", 0);
+/* 0017abee */	createPartsGroup(this.parent_, this.parts_, 4600);
+/* 0017ac0e */	this.setPartsPos();
+/* 0017ac16 */}
+
+void ItemNarrowDownButton::setPartsShow()
+/* 0017ac1e */{
+/* 0017ac1e */	int i;
+/* 0017ac30 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0017ac80 */	{
+/* 0017ac80 */		this.parts_[i].setShow(true);
+/* 0017aca2 */	}
+/* 0017aca8 */	this.parent_.setShow(true);
+/* 0017acbe */}
+
+void ItemNarrowDownButton::setPartsPos()
+/* 0017acc6 */{
+/* 0017acc6 */	this.parts_[0].setPos(0.0, 0.0);
+/* 0017acea */}
+

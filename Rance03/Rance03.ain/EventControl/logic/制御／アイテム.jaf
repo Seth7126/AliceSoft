@@ -1,0 +1,502 @@
+void 制御／アイテム(string itemId, ref Player target)
+/* 00200b30 */{
+/* 00200b30 */	string targetId;
+/* 00200b44 */	switch (itemId)
+/* 00200b5a */	{
+/* 00200b5a */	case "カキン枠":
+/* 00200b5a */		制御／アイテム／カキン枠();
+/* 00200b60 */		break;
+/* 00200b66 */	case "世色癌1":
+/* 00200b66 */	case "世色癌2":
+/* 00200b66 */	case "世色癌3":
+/* 00200b66 */	case "世色癌4":
+/* 00200b66 */		targetId = target.getId();
+/* 00200b84 */		制御／アイテム／世色癌(itemId, targetId);
+/* 00200b9e */		break;
+/* 00200ba4 */	case "アサクヒロク1":
+/* 00200ba4 */	case "アサクヒロク2":
+/* 00200ba4 */	case "アサクヒロク3":
+/* 00200ba4 */		制御／アイテム／アサクヒロク(itemId);
+/* 00200bb4 */		break;
+/* 00200bba */	case "マヨネーズ":
+/* 00200bba */		制御／アイテム／マヨネーズ();
+/* 00200bc0 */		break;
+/* 00200bc6 */	case "バラバラ時計":
+/* 00200bc6 */	case "量産型バラバラ時計":
+/* 00200bc6 */		制御／アイテム／バラバラ時計();
+/* 00200bcc */		break;
+/* 00200bd2 */	case "専属看護婦さん":
+/* 00200bd2 */		制御／アイテム／専属看護婦さん();
+/* 00200bd8 */		break;
+/* 00200bde */	case "セーブライオン":
+/* 00200bde */		制御／アイテム／セーブライオン();
+/* 00200be4 */		break;
+/* 00200bea */	case "欠けスター":
+/* 00200bea */		targetId = target.getId();
+/* 00200c08 */		制御／アイテム／欠けスター(targetId);
+/* 00200c18 */		break;
+/* 00200c1e */	case "ひいきの種・体":
+/* 00200c1e */		targetId = target.getId();
+/* 00200c3c */		制御／アイテム／ひいきの種・体(targetId);
+/* 00200c4c */		break;
+/* 00200c52 */	case "ひいきの種・筋":
+/* 00200c52 */		targetId = target.getId();
+/* 00200c70 */		制御／アイテム／ひいきの種・筋(targetId);
+/* 00200c80 */		break;
+/* 00200c86 */	case "ひいきの種・魔":
+/* 00200c86 */		targetId = target.getId();
+/* 00200ca4 */		制御／アイテム／ひいきの種・魔(targetId);
+/* 00200cb4 */		break;
+/* 00200cba */	case "ひいきの種・技":
+/* 00200cba */		targetId = target.getId();
+/* 00200cd8 */		制御／アイテム／ひいきの種・技(targetId);
+/* 00200ce8 */		break;
+/* 00200cee */	case "珍味1":
+/* 00200cee */	case "珍味2":
+/* 00200cee */	case "珍味3":
+/* 00200cee */	case "珍味4":
+/* 00200cee */	case "珍味5":
+/* 00200cee */	case "珍味6":
+/* 00200cee */		targetId = target.getId();
+/* 00200d0c */		制御／アイテム／珍味(itemId, targetId);
+/* 00200d26 */		break;
+/* 00200d2c */	}
+/* 00200d2c */}
+
+void 制御／アイテム／カキン枠()
+/* 00200d3a */{
+/* 00200d3a */	int beforeParty;
+/* 00200d4c */	int afterParty;
+/* 00200d5e */	beforeParty = g_party.getMaxCount();
+/* 00200d7a */	afterParty = g_party.getMaxCount() + 1;
+/* 00200d9e */	g_party.setMaxCount(afterParty);
+/* 00200db8 */	DialogInfomation info;
+/* 00200dc8 */	info.setCaption("カキン枠を使った！");
+/* 00200dde */	info.setMessage("パーティスキル枠が、|なぜかひとつ増えた！|%d枠 → %d枠" % beforeParty % afterParty);
+/* 00200e18 */	info.setPictureImageName("システム／ダイアログ／写真／カキン枠");
+/* 00200e2e */	openDialog(info);
+/* 00200e44 */}
+
+void 制御／アイテム／世色癌(string itemId, string targetId)
+/* 00200e52 */{
+/* 00200e52 */	int val;
+/* 00200e64 */	int beforeHp;
+/* 00200e76 */	int afterHp;
+/* 00200e88 */	switch (itemId)
+/* 00200e9e */	{
+/* 00200e9e */	case "世色癌1":
+/* 00200e9e */		val = 200;
+/* 00200eb0 */		break;
+/* 00200eb6 */	case "世色癌2":
+/* 00200eb6 */		val = 500;
+/* 00200ec8 */		break;
+/* 00200ece */	case "世色癌3":
+/* 00200ece */		val = 1200;
+/* 00200ee0 */		break;
+/* 00200ee6 */	case "世色癌4":
+/* 00200ee6 */		val = 2700;
+/* 00200ef8 */		break;
+/* 00200efe */	}
+/* 00200efe */	string yorks;
+/* 00200f12 */	if (制御／パーティ／ゼロスリースキル確認("ミリ") || 制御／パーティ／ゼロスリースキル確認("ミル"))
+/* 00200f4e */	{
+/* 00200f4e */		int consecutive;
+/* 00200f60 */		int consecutiveMilli;
+/* 00200f72 */		int consecutiveMill;
+/* 00200f84 */		int rank;
+/* 00200f96 */		if (制御／パーティ／ゼロスリースキル確認("ミリ"))
+/* 00200fa8 */		{
+/* 00200fa8 */			consecutiveMilli = getPlayerFromId("ミリ").getConsecutiveBattleCount();
+/* 00200fdc */			pass("consecutiveMilli %d" % consecutiveMilli);
+/* 00200ffa */		}
+/* 00201006 */		else
+/* 00201006 */		{
+/* 00201006 */			consecutiveMilli = -1;
+/* 00201018 */		}
+/* 00201018 */		if (制御／パーティ／ゼロスリースキル確認("ミル"))
+/* 0020102a */		{
+/* 0020102a */			consecutiveMill = getPlayerFromId("ミル").getConsecutiveBattleCount();
+/* 0020105e */		}
+/* 0020106a */		else
+/* 0020106a */		{
+/* 0020106a */			consecutiveMill = -1;
+/* 0020107c */		}
+/* 0020107c */		if (consecutiveMilli >= consecutiveMill)
+/* 00201098 */		{
+/* 00201098 */			consecutive = consecutiveMilli;
+/* 002010ae */			yorks = "ミリのヨークス薬用法も相まって、|";
+/* 002010c2 */		}
+/* 002010c8 */		else
+/* 002010c8 */		{
+/* 002010c8 */			consecutive = consecutiveMill;
+/* 002010de */			yorks = "ミルのヨークス薬用法も相まって、|";
+/* 002010f2 */		}
+/* 002010f2 */		switch (consecutive)
+/* 00201108 */		{
+/* 00201108 */		case 0:
+/* 00201108 */			rank = 110;
+/* 0020111a */			break;
+/* 00201120 */		case 1:
+/* 00201120 */			rank = 120;
+/* 00201132 */			break;
+/* 00201138 */		case 2:
+/* 00201138 */			rank = 120;
+/* 0020114a */			break;
+/* 00201150 */		case 3:
+/* 00201150 */			rank = 130;
+/* 00201162 */			break;
+/* 00201168 */		case 4:
+/* 00201168 */			rank = 140;
+/* 0020117a */			break;
+/* 00201180 */		case 5:
+/* 00201180 */			rank = 150;
+/* 00201192 */			break;
+/* 00201198 */		case 6:
+/* 00201198 */			rank = 160;
+/* 002011aa */			break;
+/* 002011b0 */		case 7:
+/* 002011b0 */			rank = 170;
+/* 002011c2 */			break;
+/* 002011c8 */		case 8:
+/* 002011c8 */			rank = 180;
+/* 002011da */			break;
+/* 002011e0 */		case 9:
+/* 002011e0 */			rank = 190;
+/* 002011f2 */			break;
+/* 002011f8 */		default:
+/* 002011f8 */			rank = 200;
+/* 0020120a */			break;
+/* 00201210 */		}
+/* 00201210 */		pass("val1 %d" % val);
+/* 0020122e */		val = (val * rank) / 100;
+/* 00201258 */		pass("val2 %d" % val);
+/* 00201276 */	}
+/* 00201276 */	string max;
+/* 0020128a */	if (getPlayerFromId(targetId).getHp() + val >= getPlayerFromId(targetId).getMaxHp())
+/* 002012f6 */	{
+/* 002012f6 */		val = getPlayerFromId(targetId).getMaxHp() - getPlayerFromId(targetId).getHp();
+/* 0020135c */		max = "(まんたん)";
+/* 00201370 */	}
+/* 0020137c */	beforeHp = getPlayerFromId(targetId).getHp();
+/* 002013b4 */	afterHp = getPlayerFromId(targetId).getHp() + val;
+/* 002013f8 */	getPlayerFromId(targetId).setHp(getPlayerFromId(targetId).getHp() + val);
+/* 0020145e */	string caption;
+/* 00201472 */	string desc;
+/* 00201486 */	caption = getItemFromId(itemId).getName() + "を服用！";
+/* 002014c8 */	desc = yorks + getPlayerFromId(targetId).getShortName() + "はHPが%d回復した！|HP:%d → %d%s" % val % beforeHp % afterHp % max;
+/* 0020155e */	DialogInfomation info;
+/* 0020156e */	info.setCaption(caption);
+/* 00201588 */	info.setMessage(desc);
+/* 002015a2 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 002015b8 */	openDialog(info);
+/* 002015ce */}
+
+void 制御／アイテム／アサクヒロク(string itemId)
+/* 002015dc */{
+/* 002015dc */	int val;
+/* 002015ee */	int beforeHp;
+/* 00201600 */	int afterHp;
+/* 00201612 */	switch (itemId)
+/* 00201628 */	{
+/* 00201628 */	case "アサクヒロク1":
+/* 00201628 */		val = 150;
+/* 0020163a */		break;
+/* 00201640 */	case "アサクヒロク2":
+/* 00201640 */		val = 400;
+/* 00201652 */		break;
+/* 00201658 */	case "アサクヒロク3":
+/* 00201658 */		val = 1000;
+/* 0020166a */		break;
+/* 00201670 */	}
+/* 00201670 */	string yorks;
+/* 00201684 */	if (制御／パーティ／ゼロスリースキル確認("ミリ") || 制御／パーティ／ゼロスリースキル確認("ミル"))
+/* 002016c0 */	{
+/* 002016c0 */		int consecutive;
+/* 002016d2 */		int consecutiveMilli;
+/* 002016e4 */		int consecutiveMill;
+/* 002016f6 */		int rank;
+/* 00201708 */		if (制御／パーティ／ゼロスリースキル確認("ミリ"))
+/* 0020171a */		{
+/* 0020171a */			consecutiveMilli = getPlayerFromId("ミリ").getConsecutiveBattleCount();
+/* 0020174e */			pass("consecutiveMilli %d" % consecutiveMilli);
+/* 0020176c */		}
+/* 00201778 */		else
+/* 00201778 */		{
+/* 00201778 */			consecutiveMilli = -1;
+/* 0020178a */		}
+/* 0020178a */		if (制御／パーティ／ゼロスリースキル確認("ミル"))
+/* 0020179c */		{
+/* 0020179c */			consecutiveMill = getPlayerFromId("ミル").getConsecutiveBattleCount();
+/* 002017d0 */			pass("consecutiveMill %d" % consecutiveMill);
+/* 002017ee */		}
+/* 002017fa */		else
+/* 002017fa */		{
+/* 002017fa */			consecutiveMill = -1;
+/* 0020180c */		}
+/* 0020180c */		if (consecutiveMilli >= consecutiveMill)
+/* 00201828 */		{
+/* 00201828 */			consecutive = consecutiveMilli;
+/* 0020183e */			yorks = "ミリのヨークス薬用法も相まって、|";
+/* 00201852 */		}
+/* 00201858 */		else
+/* 00201858 */		{
+/* 00201858 */			consecutive = consecutiveMill;
+/* 0020186e */			yorks = "ミルのヨークス薬用法も相まって、|";
+/* 00201882 */		}
+/* 00201882 */		switch (consecutive)
+/* 00201898 */		{
+/* 00201898 */		case 0:
+/* 00201898 */			rank = 110;
+/* 002018aa */			break;
+/* 002018b0 */		case 1:
+/* 002018b0 */			rank = 120;
+/* 002018c2 */			break;
+/* 002018c8 */		case 2:
+/* 002018c8 */			rank = 120;
+/* 002018da */			break;
+/* 002018e0 */		case 3:
+/* 002018e0 */			rank = 130;
+/* 002018f2 */			break;
+/* 002018f8 */		case 4:
+/* 002018f8 */			rank = 140;
+/* 0020190a */			break;
+/* 00201910 */		case 5:
+/* 00201910 */			rank = 150;
+/* 00201922 */			break;
+/* 00201928 */		case 6:
+/* 00201928 */			rank = 160;
+/* 0020193a */			break;
+/* 00201940 */		case 7:
+/* 00201940 */			rank = 170;
+/* 00201952 */			break;
+/* 00201958 */		case 8:
+/* 00201958 */			rank = 180;
+/* 0020196a */			break;
+/* 00201970 */		case 9:
+/* 00201970 */			rank = 190;
+/* 00201982 */			break;
+/* 00201988 */		default:
+/* 00201988 */			rank = 200;
+/* 0020199a */			break;
+/* 002019a0 */		}
+/* 002019a0 */		pass("val1 %d" % val);
+/* 002019be */		val = (val * rank) / 100;
+/* 002019e8 */		pass("val2 %d" % val);
+/* 00201a06 */	}
+/* 00201a06 */	int i;
+/* 00201a18 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 00201a68 */	{
+/* 00201a68 */		if (g_player[i].isJoin() && g_player[i].getHp() != 0)
+/* 00201acc */		{
+/* 00201acc */			int afterHp;
+/* 00201ade */			afterHp = g_player[i].getHp() + val;
+/* 00201b12 */			g_player[i].setHp(afterHp);
+/* 00201b3a */		}
+/* 00201b3a */	}
+/* 00201b40 */	string caption;
+/* 00201b54 */	string desc;
+/* 00201b68 */	caption = getItemFromId(itemId).getName() + "を服用！";
+/* 00201baa */	desc = yorks + "編成されていないパーティも含め、|HPがそれぞれ%d回復した！" % val;
+/* 00201bdc */	DialogInfomation info;
+/* 00201bec */	info.setCaption(caption);
+/* 00201c06 */	info.setMessage(desc);
+/* 00201c20 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 00201c36 */	openDialog(info);
+/* 00201c4c */}
+
+void 制御／アイテム／マヨネーズ()
+/* 00201c5a */{
+/* 00201c5a */	g_playerCommonParam.clearBadCondition();
+/* 00201c6a */	DialogInfomation info;
+/* 00201c7a */	info.setCaption("マヨネーズを吸った！");
+/* 00201c90 */	info.setMessage("かかっていた状態異常が、|うその様に全て消え去った！");
+/* 00201ca6 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 00201cbc */	openDialog(info);
+/* 00201cd2 */}
+
+void 制御／アイテム／バラバラ時計()
+/* 00201ce0 */{
+/* 00201ce0 */	int i;
+/* 00201cf2 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 00201d42 */	{
+/* 00201d42 */		if (g_player[i].isJoin())
+/* 00201d64 */		{
+/* 00201d64 */			g_player[i].clearCoolTime("");
+/* 00201d86 */		}
+/* 00201d86 */	}
+/* 00201d8c */	DialogInfomation info;
+/* 00201d9c */	info.setCaption("バラバラ時計をぶち壊した！");
+/* 00201db2 */	info.setMessage("編成されていないパーティも含め、|クールタイムがリセットされた！");
+/* 00201dc8 */	info.setPictureImageName("システム／ダイアログ／写真／バラバラ時計");
+/* 00201dde */	openDialog(info);
+/* 00201df4 */}
+
+void 制御／アイテム／専属看護婦さん()
+/* 00201e02 */{
+/* 00201e02 */	int i;
+/* 00201e14 */	int max;
+/* 00201e26 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 00201e76 */	{
+/* 00201e76 */		if (g_player[i].isJoin())
+/* 00201e98 */		{
+/* 00201e98 */			max = g_player[i].getMaxHp();
+/* 00201ec0 */			g_player[i].setHp(max);
+/* 00201ee8 */			g_player[i].clearCoolTime("");
+/* 00201f0a */			g_playerCommonParam.clearBadCondition();
+/* 00201f1a */		}
+/* 00201f1a */	}
+/* 00201f20 */	DialogInfomation info;
+/* 00201f30 */	info.setCaption("専属看護婦さんが看護した！");
+/* 00201f46 */	info.setMessage("編成されていないパーティも含め、|もろもろ全快した！");
+/* 00201f5c */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 00201f72 */	openDialog(info);
+/* 00201f88 */}
+
+void 制御／アイテム／セーブライオン()
+/* 00201f96 */{
+/* 00201f96 */	DialogInfomation info;
+/* 00201fa6 */	info.setCaption("セーブライオンが吠えた！");
+/* 00201fbc */	info.setMessage("がおー");
+/* 00201fd2 */	openDialog(info);
+/* 00201fe8 */	制御／セーブ();
+/* 00201fee */}
+
+void 制御／アイテム／欠けスター(string targetId)
+/* 00201ffc */{
+/* 00201ffc */	int val;
+/* 0020200e */	int beforeMaxLevel;
+/* 00202020 */	int afterMaxLevel;
+/* 00202032 */	val = 5;
+/* 00202044 */	beforeMaxLevel = getPlayerFromId(targetId).getMaxLevel();
+/* 0020207c */	afterMaxLevel = getPlayerFromId(targetId).getMaxLevel() + val;
+/* 002020c0 */	if (afterMaxLevel > 999)
+/* 002020d8 */	{
+/* 002020d8 */		afterMaxLevel = 999;
+/* 002020ea */	}
+/* 002020ea */	getPlayerFromId(targetId).setMaxLevel(afterMaxLevel);
+/* 00202120 */	string caption;
+/* 00202134 */	string desc;
+/* 00202148 */	desc = getPlayerFromId(targetId).getShortName() + "は限界レベルを%d突破した！|限界レベル:%d → %d" % val % beforeMaxLevel % afterMaxLevel;
+/* 002021c0 */	DialogInfomation info;
+/* 002021d0 */	info.setCaption("ザ・欠けスターが不気味に輝いた！");
+/* 002021e6 */	info.setMessage(desc);
+/* 00202200 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 00202216 */	openDialog(info);
+/* 0020222c */}
+
+void 制御／アイテム／ひいきの種・体(string targetId)
+/* 0020223a */{
+/* 0020223a */	int val;
+/* 0020224c */	int beforeMaxHp;
+/* 0020225e */	int afterMaxHp;
+/* 00202270 */	val = 18;
+/* 00202282 */	beforeMaxHp = getPlayerFromId(targetId).getMaxHp();
+/* 002022ba */	afterMaxHp = getPlayerFromId(targetId).getMaxHp() + val;
+/* 002022fe */	getPlayerFromId(targetId).setMaxHp(afterMaxHp);
+/* 00202334 */	string caption;
+/* 00202348 */	string desc;
+/* 0020235c */	desc = "苦い！|" + getPlayerFromId(targetId).getShortName() + "は最大HPが%d増えた！|最大HP:%d → %d" % val % beforeMaxHp % afterMaxHp;
+/* 002023dc */	DialogInfomation info;
+/* 002023ec */	info.setCaption("ひいきの種・体を食べた！");
+/* 00202402 */	info.setMessage(desc);
+/* 0020241c */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 00202432 */	openDialog(info);
+/* 00202448 */}
+
+void 制御／アイテム／ひいきの種・筋(string targetId)
+/* 00202456 */{
+/* 00202456 */	int val;
+/* 00202468 */	int beforeStrength;
+/* 0020247a */	int afterStrength;
+/* 0020248c */	val = 3;
+/* 0020249e */	beforeStrength = getPlayerFromId(targetId).getStrength();
+/* 002024d6 */	afterStrength = getPlayerFromId(targetId).getStrength() + val;
+/* 0020251a */	getPlayerFromId(targetId).setStrength(afterStrength);
+/* 00202550 */	string caption;
+/* 00202564 */	string desc;
+/* 00202578 */	desc = "渋い！|" + getPlayerFromId(targetId).getShortName() + "は筋力が%d増えた！|筋力:%d → %d" % val % beforeStrength % afterStrength;
+/* 002025f8 */	DialogInfomation info;
+/* 00202608 */	info.setCaption("ひいきの種・筋を食べた！");
+/* 0020261e */	info.setMessage(desc);
+/* 00202638 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 0020264e */	openDialog(info);
+/* 00202664 */}
+
+void 制御／アイテム／ひいきの種・魔(string targetId)
+/* 00202672 */{
+/* 00202672 */	int val;
+/* 00202684 */	int beforeMind;
+/* 00202696 */	int afterMind;
+/* 002026a8 */	val = 3;
+/* 002026ba */	beforeMind = getPlayerFromId(targetId).getMind();
+/* 002026f2 */	afterMind = getPlayerFromId(targetId).getMind() + val;
+/* 00202736 */	getPlayerFromId(targetId).setMind(afterMind);
+/* 0020276c */	string caption;
+/* 00202780 */	string desc;
+/* 00202794 */	desc = "酸い！|" + getPlayerFromId(targetId).getShortName() + "は魔力が%d増えた！|魔力:%d → %d" % val % beforeMind % afterMind;
+/* 00202814 */	DialogInfomation info;
+/* 00202824 */	info.setCaption("ひいきの種・魔を食べた！");
+/* 0020283a */	info.setMessage(desc);
+/* 00202854 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 0020286a */	openDialog(info);
+/* 00202880 */}
+
+void 制御／アイテム／ひいきの種・技(string targetId)
+/* 0020288e */{
+/* 0020288e */	int val;
+/* 002028a0 */	int beforeDexterity;
+/* 002028b2 */	int afterDexterity;
+/* 002028c4 */	val = 3;
+/* 002028d6 */	beforeDexterity = getPlayerFromId(targetId).getDexterity();
+/* 0020290e */	afterDexterity = getPlayerFromId(targetId).getDexterity() + val;
+/* 00202952 */	getPlayerFromId(targetId).setDexterity(afterDexterity);
+/* 00202988 */	string caption;
+/* 0020299c */	string desc;
+/* 002029b0 */	desc = "辛い！|" + getPlayerFromId(targetId).getShortName() + "は技量が%d増えた！|技量:%d → %d" % val % beforeDexterity % afterDexterity;
+/* 00202a30 */	DialogInfomation info;
+/* 00202a40 */	info.setCaption("ひいきの種・技を食べた！");
+/* 00202a56 */	info.setMessage(desc);
+/* 00202a70 */	info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 00202a86 */	openDialog(info);
+/* 00202a9c */}
+
+void 制御／アイテム／珍味(string itemId, string targetId)
+/* 00202aaa */{
+/* 00202aaa */	int val;
+/* 00202abc */	int beforeExp;
+/* 00202ace */	int afterExp;
+/* 00202ae0 */	switch (itemId)
+/* 00202af6 */	{
+/* 00202af6 */	case "珍味1":
+/* 00202af6 */		val = 50;
+/* 00202b08 */		break;
+/* 00202b0e */	case "珍味2":
+/* 00202b0e */		val = 300;
+/* 00202b20 */		break;
+/* 00202b26 */	case "珍味3":
+/* 00202b26 */		val = 3000;
+/* 00202b38 */		break;
+/* 00202b3e */	case "珍味4":
+/* 00202b3e */		val = 15000;
+/* 00202b50 */		break;
+/* 00202b56 */	case "珍味5":
+/* 00202b56 */		val = 150000;
+/* 00202b68 */		break;
+/* 00202b6e */	case "珍味6":
+/* 00202b6e */		val = 500000;
+/* 00202b80 */		break;
+/* 00202b86 */	}
+/* 00202b86 */	beforeExp = getPlayerFromId(targetId).getExp();
+/* 00202bbe */	afterExp = getPlayerFromId(targetId).getExp() + val;
+/* 00202c02 */	getPlayerFromId(targetId).setExp(getPlayerFromId(targetId).getExp() + val);
+/* 00202c66 */	string caption;
+/* 00202c7a */	string desc;
+/* 00202c8e */	caption = getItemFromId(itemId).getName() + "を食べた！";
+/* 00202cd0 */	desc = getPlayerFromId(targetId).getShortName() + "は経験点が%d増えた！|EXP:%d → %d" % val % beforeExp % afterExp;
+/* 00202d48 */	DialogInfomation info;
+/* 00202d58 */	info.setCaption(caption);
+/* 00202d72 */	info.setMessage(desc);
+/* 00202d8c */	info.setPictureImageName("システム／ダイアログ／写真／珍味");
+/* 00202da2 */	openDialog(info);
+/* 00202db8 */}
+

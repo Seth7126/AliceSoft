@@ -1,0 +1,143 @@
+GameFlagMap::GameFlagMap()
+/* 001d398e */{
+/* 001d3996 */	this.isGlobalMode_ = false;
+/* 001d39a8 */}
+
+void GameFlagMap::setInt(string key, int value)
+/* 001d39b0 */{
+/* 001d39b0 */	bool isChanged = false;
+/* 001d39c2 */	int r = this.find(key);
+/* 001d39e0 */	if (r == -1)
+/* 001d39f8 */	{
+/* 001d39f8 */		pass("■フラグ追加[%s][%d]" % key % value);
+/* 001d3a28 */		KeyValuePair p;
+/* 001d3a38 */		p.key = key;
+/* 001d3a58 */		p.type = 0;
+/* 001d3a72 */		p.valueInt = value;
+/* 001d3a90 */		this.pair_.PushBack(p);
+/* 001d3aa8 */		this.pair_.SortBy(&KeyValuePair::key);
+/* 001d3ab8 */		isChanged = true;
+/* 001d3aca */	}
+/* 001d3ad6 */	else if (this.pair_[r].type == 0)
+/* 001d3b02 */	{
+/* 001d3b02 */		if (this.pair_[r].valueInt != value)
+/* 001d3b32 */		{
+/* 001d3b32 */			isChanged = true;
+/* 001d3b44 */			pass("■フラグ変更[%s][%d]->[%d]" % key % this.pair_[r].valueInt % value);
+/* 001d3b9a */			this.pair_[r].valueInt = value;
+/* 001d3bc4 */		}
+/* 001d3bc4 */	}
+/* 001d3bca */	else
+/* 001d3bca */	{
+/* 001d3bca */		pass("■フラグ無効[%s]String値に対してInt値を設定しました" % key);
+/* 001d3be8 */	}
+/* 001d3be8 */	if (isChanged && this.isGlobalMode_)
+/* 001d3c20 */	{
+/* 001d3c20 */		共有セーブ();
+/* 001d3c26 */	}
+/* 001d3c26 */}
+
+void GameFlagMap::setString(string key, string value)
+/* 001d3c2e */{
+/* 001d3c2e */	int r = this.find(key);
+/* 001d3c4c */	if (r == -1)
+/* 001d3c64 */	{
+/* 001d3c64 */		pass("■フラグ追加[%s][%s]" % key % value);
+/* 001d3c94 */		KeyValuePair p;
+/* 001d3ca4 */		p.key = key;
+/* 001d3cc4 */		p.type = 1;
+/* 001d3cde */		p.valueString = value;
+/* 001d3cfe */		this.pair_.PushBack(p);
+/* 001d3d16 */		this.pair_.SortBy(&KeyValuePair::key);
+/* 001d3d26 */	}
+/* 001d3d32 */	else if (this.pair_[r].type == 1)
+/* 001d3d5e */	{
+/* 001d3d5e */		this.pair_[r].valueString = value;
+/* 001d3d8a */	}
+/* 001d3d90 */	else
+/* 001d3d90 */	{
+/* 001d3d90 */		pass("■フラグ無効[%s]Int値に対してString値を設定しました" % key);
+/* 001d3dae */	}
+/* 001d3dae */	if (this.isGlobalMode_)
+/* 001d3dbe */	{
+/* 001d3dbe */		共有セーブ();
+/* 001d3dc4 */	}
+/* 001d3dc4 */}
+
+int GameFlagMap::getInt(string key)
+/* 001d3dcc */{
+/* 001d3dcc */	int r = this.find(key);
+/* 001d3dea */	if (r == -1)
+/* 001d3e02 */	{
+/* 001d3e02 */		return 0;
+/* 001d3e0a */	}
+/* 001d3e0a */	if (this.pair_[r].type == 1)
+/* 001d3e36 */	{
+/* 001d3e36 */		return this.pair_[r].valueString.Int();
+/* 001d3e58 */	}
+/* 001d3e58 */	return this.pair_[r].valueInt;
+/* 001d3e78 */}
+
+string GameFlagMap::getString(string key)
+/* 001d3e86 */{
+/* 001d3e86 */	int r = this.find(key);
+/* 001d3ea4 */	if (r == -1)
+/* 001d3ebc */	{
+/* 001d3ebc */		return "";
+/* 001d3ec4 */	}
+/* 001d3ec4 */	if (this.pair_[r].type == 0)
+/* 001d3ef0 */	{
+/* 001d3ef0 */		return "%d" % this.pair_[r].valueInt;
+/* 001d3f1e */	}
+/* 001d3f1e */	return this.pair_[r].valueString;
+/* 001d3f3e */}
+
+int GameFlagMap::find(string key)
+/* 001d3f4c */{
+/* 001d3f4c */	if (this.pair_.Empty())
+/* 001d3f5c */	{
+/* 001d3f5c */		return -1;
+/* 001d3f64 */	}
+/* 001d3f64 */	int h = this.pair_.Numof() - 1;
+/* 001d3f88 */	int l;
+/* 001d3f9a */	int c;
+/* 001d3fac */	while (l <= h)
+/* 001d3fc8 */	{
+/* 001d3fc8 */		c = (l + h) / 2;
+/* 001d3ff2 */		if (this.pair_[c].key == key)
+/* 001d4022 */		{
+/* 001d4022 */			return c;
+/* 001d402e */		}
+/* 001d4034 */		else if (this.pair_[c].key < key)
+/* 001d4064 */		{
+/* 001d4064 */			l = c + 1;
+/* 001d4082 */		}
+/* 001d4088 */		else
+/* 001d4088 */		{
+/* 001d4088 */			h = c - 1;
+/* 001d40a6 */		}
+/* 001d40a6 */	}
+/* 001d40ac */	return -1;
+/* 001d40b4 */}
+
+void GameFlagMap::setGlobalMode(bool val)
+/* 001d40c2 */{
+/* 001d40c2 */	this.isGlobalMode_ = val;
+/* 001d40d8 */}
+
+void GameFlagMap::addValue(string key, int value)
+/* 001d40e0 */{
+/* 001d40e0 */	int n = this.getInt(key);
+/* 001d40fe */	this.setInt(key, n + value);
+/* 001d4126 */}
+
+void GameFlagMap::getKeyList(ref array@string keys)
+/* 001d412e */{
+/* 001d412e */	keys.Free();
+/* 001d4138 */	int i;
+/* 001d414a */	for (i = 0; i < this.pair_.Numof(); ++i)
+/* 001d419a */	{
+/* 001d419a */		keys.PushBack(this.pair_[i].key);
+/* 001d41c2 */	}
+/* 001d41c8 */}
+

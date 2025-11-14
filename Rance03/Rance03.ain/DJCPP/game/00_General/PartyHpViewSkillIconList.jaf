@@ -1,0 +1,38 @@
+PartyHpViewSkillIconList::PartyHpViewSkillIconList()
+/* 00184d32 */{
+/* 00184d3a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00184d60 */}
+
+void PartyHpViewSkillIconList::init()
+/* 00184d68 */{
+/* 00184d68 */	pass("");
+/* 00184d74 */	this.skillIcons_.Alloc(g_party.getCount());
+/* 00184d94 */	int i;
+/* 00184da6 */	for (i = 0; i < this.skillIcons_.Numof(); ++i)
+/* 00184df6 */	{
+/* 00184df6 */		this.skillIcons_[i].init(i);
+/* 00184e1c */	}
+/* 00184e22 */}
+
+void PartyHpViewSkillIconList::update()
+/* 00184e2a */{
+/* 00184e2c */}
+
+void PartyHpViewSkillIconList::fadeIn(bool val)
+/* 00184e32 */{
+/* 00184e32 */	int i;
+/* 00184e44 */	for (i = 0; i < this.skillIcons_.Numof(); ++i)
+/* 00184e94 */	{
+/* 00184e94 */		this.skillIcons_[i].fadeIn(val, NULL);
+/* 00184ebc */	}
+/* 00184ec2 */}
+
+void PartyHpViewSkillIconList::updateCoolTime()
+/* 00184eca */{
+/* 00184eca */	int i;
+/* 00184edc */	for (i = 0; i < this.skillIcons_.Numof(); ++i)
+/* 00184f2c */	{
+/* 00184f2c */		this.skillIcons_[i].updateCoolTime();
+/* 00184f48 */	}
+/* 00184f4e */}
+

@@ -1,0 +1,270 @@
+AdvSelectionButton::AdvSelectionButton()
+/* 001bbaec */{
+/* 001bbaf4 */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 001bbb24 */}
+
+void AdvSelectionButton::init(string advSelectionButtonId, int buttonIndex, int maxCount, bool isCastleMode)
+/* 001bbb2c */{
+/* 001bbb2c */	this.isCastleMode_ = isCastleMode;
+/* 001bbb42 */	this.id_ = advSelectionButtonId;
+/* 001bbb5a */	this.buttonIndex_ = buttonIndex;
+/* 001bbb70 */	this.maxCount_ = maxCount;
+/* 001bbb86 */	this.initParts();
+/* 001bbb8e */}
+
+void AdvSelectionButton::setOnClickCallback(DG_OnClickAdvSelectionButtonCallback cb, int index)
+/* 001bbb96 */{
+/* 001bbb96 */	this.index_ = index;
+/* 001bbbac */	this.cb_ = cb;
+/* 001bbbc6 */}
+
+void AdvSelectionButton::initParts()
+/* 001bbbce */{
+/* 001bbbce */	ref AdvSelectionButtonInfomation info = getAdvSelectionButtonInfomationFromId(this.id_);
+/* 001bbc10 */	this.parts_[0].init("システム／場所移動／ボタン", 0);
+/* 001bbc34 */	if (info === NULL)
+/* 001bbc4c */	{
+/* 001bbc4c */		this.parts_[2].initAsText(this.id_, 22, false, 256, 255, 255, 255);
+/* 001bbc92 */	}
+/* 001bbc98 */	else
+/* 001bbc98 */	{
+/* 001bbc98 */		this.parts_[1].init(info.getImageName(), 0);
+/* 001bbcc6 */		this.parts_[2].initAsText(info.getCaption(), 22, false, 256, 255, 255, 255);
+/* 001bbd12 */	}
+/* 001bbd12 */	this.width_ = this.parts_[0].getWidth() / 4;
+/* 001bbd3e */	createPartsGroup(this.parent_, this.parts_, 3600);
+/* 001bbd5e */	this.setPartsPos();
+/* 001bbd66 */	this.setPartsShow();
+/* 001bbd6e */}
+
+void AdvSelectionButton::setButtonBaseCgRange()
+/* 001bbd76 */{
+/* 001bbd76 */	int n;
+/* 001bbd88 */	if (this.isHover_)
+/* 001bbd98 */	{
+/* 001bbd98 */		n = 1;
+/* 001bbdaa */		if (g_mouse.isDown(0))
+/* 001bbdc6 */		{
+/* 001bbdc6 */			n = 2;
+/* 001bbdd8 */		}
+/* 001bbdd8 */	}
+/* 001bbdd8 */	this.parts_[0].setCgRange(n * this.width_, 0, this.width_, this.parts_[0].getHeight());
+/* 001bbe2e */}
+
+void AdvSelectionButton::setPartsShow()
+/* 001bbe36 */{
+/* 001bbe36 */	int i;
+/* 001bbe48 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001bbe98 */	{
+/* 001bbe98 */		this.parts_[i].setShow(true);
+/* 001bbeba */	}
+/* 001bbec0 */}
+
+void AdvSelectionButton::setPartsPos()
+/* 001bbec8 */{
+/* 001bbec8 */	this.parts_[1].setPos(61.0, 10.0);
+/* 001bbeec */	this.parts_[1].setOrigin(8);
+/* 001bbf0a */	this.parts_[2].setPos(this.width_ / 2, 125.0);
+/* 001bbf3c */	this.parts_[2].setOrigin(8);
+/* 001bbf5a */	int x;
+/* 001bbf6c */	int y;
+/* 001bbf7e */	this.getButtonPos(x, y);
+/* 001bbf96 */	this.parent_.setPos(x, y);
+/* 001bbfbe */}
+
+void AdvSelectionButton::getButtonPos(ref int x, ref int y)
+/* 001bbfc6 */{
+/* 001bbfc6 */	switch (this.id_)
+/* 001bbfdc */	{
+/* 001bbfdc */	case "セーブの碑へ行く":
+/* 001bbfdc */		x = 556;
+/* 001bbff0 */		y = 530;
+/* 001bc004 */		return;
+/* 001bc006 */	case "ロードの碑へ行く":
+/* 001bc006 */		x = 716;
+/* 001bc01a */		y = 510;
+/* 001bc02e */		return;
+/* 001bc030 */	case "街を出る":
+/* 001bc030 */		x = 876;
+/* 001bc044 */		y = 490;
+/* 001bc058 */		return;
+/* 001bc05a */	case "居館一階を出る":
+/* 001bc05a */		x = 876;
+/* 001bc06e */		y = 490;
+/* 001bc082 */		return;
+/* 001bc084 */	}
+/* 001bc084 */	if (this.isCastleMode_)
+/* 001bc094 */	{
+/* 001bc094 */		int span = 20;
+/* 001bc0a6 */		int width = 150;
+/* 001bc0b8 */		int w = width * 4 + span * 3;
+/* 001bc0ea */		int left = 512 - w / 2;
+/* 001bc110 */		int i;
+/* 001bc122 */		for (i = 0; i < this.maxCount_; ++i)
+/* 001bc16c */		{
+/* 001bc16c */			x = left + (this.buttonIndex_ % 4) * (width + span);
+/* 001bc1b0 */			y = 100 + (this.buttonIndex_ / 4) * 200;
+/* 001bc1e0 */		}
+/* 001bc1e6 */	}
+/* 001bc1ec */	else
+/* 001bc1ec */	{
+/* 001bc1ec */		switch (this.maxCount_)
+/* 001bc202 */		{
+/* 001bc202 */		case 1:
+/* 001bc202 */			x = 674;
+/* 001bc216 */			y = 165;
+/* 001bc22a */			break;
+/* 001bc230 */		case 2:
+/* 001bc230 */			x = 594 + this.buttonIndex_ * 160;
+/* 001bc258 */			y = 175 + this.buttonIndex_ * -20;
+/* 001bc280 */			break;
+/* 001bc286 */		case 3:
+/* 001bc286 */			x = 514 + this.buttonIndex_ * 160;
+/* 001bc2ae */			y = 185 + this.buttonIndex_ * -20;
+/* 001bc2d6 */			break;
+/* 001bc2dc */		case 4:
+/* 001bc2dc */			switch (this.buttonIndex_)
+/* 001bc2f2 */			{
+/* 001bc2f2 */			case 0:
+/* 001bc2f2 */				x = 554;
+/* 001bc306 */				y = 90;
+/* 001bc31a */				break;
+/* 001bc320 */			case 1:
+/* 001bc320 */				x = 714;
+/* 001bc334 */				y = 70;
+/* 001bc348 */				break;
+/* 001bc34e */			case 2:
+/* 001bc34e */				x = 634;
+/* 001bc362 */				y = 280;
+/* 001bc376 */				break;
+/* 001bc37c */			case 3:
+/* 001bc37c */				x = 794;
+/* 001bc390 */				y = 260;
+/* 001bc3a4 */				break;
+/* 001bc3aa */			}
+/* 001bc3aa */			break;
+/* 001bc3b0 */		case 5:
+/* 001bc3b0 */		default:
+/* 001bc3b0 */			switch (this.buttonIndex_)
+/* 001bc3c6 */			{
+/* 001bc3c6 */			case 0:
+/* 001bc3c6 */				x = 514;
+/* 001bc3da */				y = 90;
+/* 001bc3ee */				break;
+/* 001bc3f4 */			case 1:
+/* 001bc3f4 */				x = 674;
+/* 001bc408 */				y = 70;
+/* 001bc41c */				break;
+/* 001bc422 */			case 2:
+/* 001bc422 */				x = 834;
+/* 001bc436 */				y = 50;
+/* 001bc44a */				break;
+/* 001bc450 */			case 3:
+/* 001bc450 */				x = 594;
+/* 001bc464 */				y = 280;
+/* 001bc478 */				break;
+/* 001bc47e */			case 4:
+/* 001bc47e */				x = 754;
+/* 001bc492 */				y = 260;
+/* 001bc4a6 */				break;
+/* 001bc4ac */			case 5:
+/* 001bc4ac */				x = 0;
+/* 001bc4c0 */				y = 0;
+/* 001bc4d4 */				break;
+/* 001bc4da */			case 6:
+/* 001bc4da */				x = 200;
+/* 001bc4ee */				y = 0;
+/* 001bc502 */				break;
+/* 001bc508 */			case 7:
+/* 001bc508 */				x = 400;
+/* 001bc51c */				y = 0;
+/* 001bc530 */				break;
+/* 001bc536 */			}
+/* 001bc536 */			break;
+/* 001bc53c */		}
+/* 001bc53c */	}
+/* 001bc53c */}
+
+void AdvSelectionButton::update()
+/* 001bc544 */{
+/* 001bc544 */	this.updateHover();
+/* 001bc54c */	this.setButtonBaseCgRange();
+/* 001bc554 */	if (g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 001bc574 */	{
+/* 001bc574 */		this.cb_(this.index_);
+/* 001bc59e */	}
+/* 001bc59e */	if (!this.lastHover_ && this.isHover_)
+/* 001bc5d8 */	{
+/* 001bc5d8 */		playCursor();
+/* 001bc5de */	}
+/* 001bc5de */	if (this.isHover_ && g_mouse.onDown(0))
+/* 001bc622 */	{
+/* 001bc622 */		playClick();
+/* 001bc628 */	}
+/* 001bc628 */	this.lastHover_ = this.isHover_;
+/* 001bc63e */}
+
+void AdvSelectionButton::updateHover()
+/* 001bc646 */{
+/* 001bc646 */	this.isHover_ = this.parent_.isShow() && !this.parent_.isMotion() && this.parts_[0].isHit(g_mouse.getX(), g_mouse.getY());
+/* 001bc6ea */}
+
+void AdvSelectionButton::setPos(int x, int y)
+/* 001bc6f2 */{
+/* 001bc6f2 */	this.parent_.setPos(x, y);
+/* 001bc71a */}
+
+void AdvSelectionButton::fadeIn(bool val, int delay)
+/* 001bc722 */{
+/* 001bc722 */	this.parent_.setShow(true);
+/* 001bc738 */	if (val)
+/* 001bc748 */	{
+/* 001bc748 */		array@PartsMotion m[2];
+/* 001bc75e */		m[0].setAlpha(0, 0, 0);
+/* 001bc788 */		m[0].setTime(delay);
+/* 001bc7aa */		m[1].setAlpha(0, 255, 0);
+/* 001bc7d4 */		m[1].setKey(5, -80, 0, 7);
+/* 001bc804 */		m[1].setTime(300);
+/* 001bc822 */		this.parts_[0].runMotionArray(m, NULL);
+/* 001bc848 */		m.Free();
+/* 001bc852 */		array@PartsMotion m[2];
+/* 001bc868 */		m[0].setTime(delay + 200);
+/* 001bc892 */		m[0].setAlpha(0, 0, 0);
+/* 001bc8bc */		m[1].setAlpha(0, 255, 0);
+/* 001bc8e6 */		m[1].setKey(5, -80, 0, 7);
+/* 001bc916 */		m[1].setTime(400);
+/* 001bc934 */		this.parts_[1].runMotionArray(m, NULL);
+/* 001bc95a */		m.Free();
+/* 001bc964 */		array@PartsMotion m[2];
+/* 001bc97a */		m[0].setTime(delay + 400);
+/* 001bc9a4 */		m[0].setAlpha(0, 0, 0);
+/* 001bc9ce */		m[1].setTime(150);
+/* 001bc9ec */		m[1].setAlpha(0, 255, 0);
+/* 001bca16 */		this.parts_[2].runMotionArray(m, NULL);
+/* 001bca3c */		m.Free();
+/* 001bca46 */		array@PartsMotion m[2];
+/* 001bca5c */		int x;
+/* 001bca6e */		int y;
+/* 001bca80 */		this.getButtonPos(x, y);
+/* 001bca98 */		m[0].setTime(delay);
+/* 001bcaba */		m[1].setMove(x, y - 100, x, y, 1);
+/* 001bcb08 */		m[1].setTime(400);
+/* 001bcb26 */		this.parent_.runMotionArray(m, NULL);
+/* 001bcb4e */	}
+/* 001bcb54 */	else
+/* 001bcb54 */	{
+/* 001bcb54 */		this.parent_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001bcb8e */	}
+/* 001bcb8e */}
+
+bool AdvSelectionButton::isHover()
+/* 001bcb96 */{
+/* 001bcb96 */	this.updateHover();
+/* 001bcb9e */	return this.isHover_;
+/* 001bcbaa */}
+
+string AdvSelectionButton::getId()
+/* 001bcbb8 */{
+/* 001bcbb8 */	return this.id_;
+/* 001bcbc4 */}
+

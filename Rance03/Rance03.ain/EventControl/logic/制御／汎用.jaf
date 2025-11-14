@@ -1,0 +1,813 @@
+void 制御／寝る(bool boss)
+/* 0022b944 */{
+/* 0022b944 */	int i;
+/* 0022b956 */	int max;
+/* 0022b968 */	bool helper = false;
+/* 0022b97a */	if (g_playerCommonParam.getMaxHelperCount() != 0)
+/* 0022b998 */	{
+/* 0022b998 */		helper = true;
+/* 0022b9aa */	}
+/* 0022b9aa */	for (i = 0; i < g_player.Numof(); ++i)
+/* 0022b9fa */	{
+/* 0022b9fa */		if (g_player[i].isJoin())
+/* 0022ba1c */		{
+/* 0022ba1c */			max = g_player[i].getMaxHp();
+/* 0022ba44 */			g_player[i].setHp(max);
+/* 0022ba6c */			g_player[i].clearCoolTime("");
+/* 0022ba8e */		}
+/* 0022ba8e */	}
+/* 0022ba94 */	g_playerCommonParam.clearBadCondition();
+/* 0022baa4 */	if (helper)
+/* 0022bab4 */	{
+/* 0022bab4 */		g_playerCommonParam.setHelperCount(g_playerCommonParam.getMaxHelperCount());
+/* 0022bad4 */	}
+/* 0022bad4 */	if (!boss)
+/* 0022bae6 */	{
+/* 0022bae6 */		if (制御／文字列フラグ確認("レンチ") == "羅刹")
+/* 0022bb00 */		{
+/* 0022bb00 */			制御／文字列フラグ設定("レンチ", "修羅", 0);
+/* 0022bb18 */		}
+/* 0022bb1e */		else
+/* 0022bb1e */		{
+/* 0022bb1e */			制御／文字列フラグ設定("レンチ", "羅刹", 0);
+/* 0022bb36 */		}
+/* 0022bb36 */		int inn;
+/* 0022bb48 */		inn = 制御／数値フラグ確認("宿泊数");
+/* 0022bb60 */		inn++;
+/* 0022bb74 */		制御／数値フラグ設定("宿泊数", inn);
+/* 0022bb8a */		DialogInfomation info;
+/* 0022bb9a */		info.setCaption("HPが全快した！");
+/* 0022bbb0 */		if (helper)
+/* 0022bbc0 */		{
+/* 0022bbc0 */			info.setMessage("ハッスルもあわせて全快！|クールタイムもリセットされ、|各種状態異常も消えた！");
+/* 0022bbd6 */		}
+/* 0022bbdc */		else
+/* 0022bbdc */		{
+/* 0022bbdc */			info.setMessage("クールタイムもリセットされ、|各種状態異常も消えた！");
+/* 0022bbf2 */		}
+/* 0022bbf2 */		info.setPictureImageName("システム／ダイアログ／写真／回復");
+/* 0022bc08 */		openDialog(info);
+/* 0022bc1e */	}
+/* 0022bc1e */}
+
+void 制御／選択肢(int number, string label)
+/* 0022bc32 */{
+/* 0022bc32 */	gameAddAdvSelection(number, label);
+/* 0022bc4c */	return;
+/* 0022bc4e */}
+
+int 制御／選択肢番号(bool town)
+/* 0022bc5c */{
+/* 0022bc5c */	int i;
+/* 0022bc6e */	if (town)
+/* 0022bc7e */	{
+/* 0022bc7e */		i = gameAdvSelection();
+/* 0022bc90 */	}
+/* 0022bc96 */	else
+/* 0022bc96 */	{
+/* 0022bc96 */		i = gameAdvSelection2();
+/* 0022bca8 */	}
+/* 0022bca8 */	return i;
+/* 0022bcb4 */}
+
+int 制御／所持金確認()
+/* 0022bcc8 */{
+/* 0022bcc8 */	int gold;
+/* 0022bcda */	gold = g_playerCommonParam.getGold();
+/* 0022bcf6 */	return gold;
+/* 0022bd02 */}
+
+void 制御／所持金増減(int gold)
+/* 0022bd16 */{
+/* 0022bd16 */	g_playerCommonParam.addGold(gold);
+/* 0022bd30 */	string caption;
+/* 0022bd44 */	DialogInfomation info;
+/* 0022bd54 */	if (gold >= 0)
+/* 0022bd6c */	{
+/* 0022bd6c */		caption = "%dGOLDを獲得！" % gold;
+/* 0022bd92 */		info.setCaption(caption);
+/* 0022bdac */		info.setMessage("しゃりんしゃりん");
+/* 0022bdc2 */		info.setPictureImageName("システム／ダイアログ／写真／金増加");
+/* 0022bdd8 */	}
+/* 0022bdde */	else
+/* 0022bdde */	{
+/* 0022bdde */		int showGold;
+/* 0022bdf0 */		showGold = gold * -1;
+/* 0022be0e */		caption = "%dGOLDを手放した！" % showGold;
+/* 0022be34 */		info.setCaption(caption);
+/* 0022be4e */		info.setMessage("しゃりんしゃりん……");
+/* 0022be64 */		info.setPictureImageName("システム／ダイアログ／写真／金減少");
+/* 0022be7a */	}
+/* 0022be7a */	openDialog(info);
+/* 0022be90 */}
+
+void 制御／数値フラグ設定(string name, int val)
+/* 0022be9e */{
+/* 0022be9e */	g_gameFlagMap.setInt(name, val);
+/* 0022bec2 */}
+
+int 制御／数値フラグ確認(string name)
+/* 0022bed0 */{
+/* 0022bed0 */	int i;
+/* 0022bee2 */	i = g_gameFlagMap.getInt(name);
+/* 0022bf08 */	return i;
+/* 0022bf14 */}
+
+void 制御／文字列フラグ設定(string name, string val, int score)
+/* 0022bf28 */{
+/* 0022bf28 */	if (name == "俺のメモ")
+/* 0022bf40 */	{
+/* 0022bf40 */		gameSetMemo(score, val);
+/* 0022bf5a */	}
+/* 0022bf60 */	else
+/* 0022bf60 */	{
+/* 0022bf60 */		g_gameFlagMap.setString(name, val);
+/* 0022bf84 */	}
+/* 0022bf84 */}
+
+string 制御／文字列フラグ確認(string name)
+/* 0022bf92 */{
+/* 0022bf92 */	string s;
+/* 0022bfa6 */	s = g_gameFlagMap.getString(name);
+/* 0022bfce */	return s;
+/* 0022bfda */}
+
+void 制御／セーブ()
+/* 0022bfee */{
+/* 0022bfee */	openSave();
+/* 0022bff4 */}
+
+void 制御／ロード()
+/* 0022c002 */{
+/* 0022c002 */	openLoad();
+/* 0022c008 */}
+
+void 制御／マップ／経路追加(string id1, string id2, bool isNew)
+/* 0022c016 */{
+/* 0022c016 */	g_mapChain.addChain(id1, id2, isNew);
+/* 0022c044 */}
+
+void 制御／マップ／経路削除(string id1, string id2)
+/* 0022c052 */{
+/* 0022c052 */	g_mapChain.eraseChain(id1, id2);
+/* 0022c076 */}
+
+int 制御／レベル確認(string playerId)
+/* 0022c084 */{
+/* 0022c084 */	int level;
+/* 0022c096 */	level = getPlayerFromId(playerId).getLevel();
+/* 0022c0ce */	return level;
+/* 0022c0da */}
+
+void 制御／レベル設定(string playerId, int level)
+/* 0022c0ee */{
+/* 0022c0ee */	int i;
+/* 0022c100 */	for (i = 0; i < level; ++i)
+/* 0022c14a */	{
+/* 0022c14a */		int next;
+/* 0022c15c */		next = getPlayerFromId(playerId).getNextExp();
+/* 0022c194 */		getPlayerFromId(playerId).setExp(next);
+/* 0022c1ca */		getPlayerFromId(playerId).levelUp();
+/* 0022c1f8 */	}
+/* 0022c210 */	int max;
+/* 0022c222 */	max = getPlayerFromId(playerId).getMaxHp();
+/* 0022c25a */	getPlayerFromId(playerId).setHp(max);
+/* 0022c292 */}
+
+void 制御／ゼロスリースキル設定(string playerId)
+/* 0022c2a0 */{
+/* 0022c2a0 */	getPlayerFromId(playerId).setZeroThreeSkillOpened(true);
+/* 0022c2d2 */	string caption;
+/* 0022c2e6 */	string desc;
+/* 0022c2fa */	string image;
+/* 0022c30e */	ZeroThreeSkill z;
+/* 0022c31e */	z = getZeroThreeSkillFromId(getPlayerFromId(playerId).getZeroThreeSkillId());
+/* 0022c380 */	caption = z.getName() + "を会得！";
+/* 0022c3a6 */	desc = "キャンプのパーティ編成で、|" + getPlayerFromId(playerId).getShortName() + "の、|ゼロスリースキルが確認できます";
+/* 0022c3f0 */	image = "システム／ダイアログ／写真／" + getPlayerFromId(playerId).getShortName();
+/* 0022c432 */	DialogInfomation info;
+/* 0022c442 */	info.setCaption(caption);
+/* 0022c45c */	info.setMessage(desc);
+/* 0022c476 */	info.setPictureImageName(image);
+/* 0022c490 */	openDialog(info);
+/* 0022c4a6 */}
+
+void 制御／パーティ／プレイヤー設定(string id, bool show)
+/* 0022c4b4 */{
+/* 0022c4b4 */	getPlayerFromId(id).setJoin(true);
+/* 0022c4e6 */	int max;
+/* 0022c4f8 */	max = getPlayerFromId(id).getMaxHp();
+/* 0022c530 */	getPlayerFromId(id).setHp(max);
+/* 0022c568 */	制御／パーティ／攻撃スキル設定(id, 1);
+/* 0022c57e */	if (show)
+/* 0022c58e */	{
+/* 0022c58e */		string caption;
+/* 0022c5a2 */		string image;
+/* 0022c5b6 */		caption = getPlayerFromId(id).getShortName() + "が参加！";
+/* 0022c5f8 */		image = "システム／ダイアログ／写真／" + getPlayerFromId(id).getShortName();
+/* 0022c63a */		DialogInfomation info;
+/* 0022c64a */		info.setCaption(caption);
+/* 0022c664 */		info.setMessage("キャンプのパーティ編成で、|バトルスキルが確認できます");
+/* 0022c67a */		info.setPictureImageName(image);
+/* 0022c694 */		openDialog(info);
+/* 0022c6aa */	}
+/* 0022c6aa */}
+
+void 制御／パーティ／プレイヤー削除(string id, bool show)
+/* 0022c6ca */{
+/* 0022c6ca */	gameExitPlayerFromParty(id);
+/* 0022c6da */	int i;
+/* 0022c6ec */	int alive;
+/* 0022c6fe */	for (i = 0; i < g_player.Numof(); ++i)
+/* 0022c74e */	{
+/* 0022c74e */		if (g_player[i].isJoin() && g_player[i].getHp() != 0)
+/* 0022c7b2 */		{
+/* 0022c7b2 */			alive = 1;
+/* 0022c7c4 */			break;
+/* 0022c7ca */		}
+/* 0022c7ca */	}
+/* 0022c7d0 */	int j;
+/* 0022c7e2 */	if (!alive)
+/* 0022c7f4 */	{
+/* 0022c7f4 */		for (j = 0; j < g_player.Numof(); ++j)
+/* 0022c844 */		{
+/* 0022c844 */			if (g_player[j].isJoin())
+/* 0022c866 */			{
+/* 0022c866 */				g_player[j].setHp(1);
+/* 0022c88a */				break;
+/* 0022c890 */			}
+/* 0022c890 */		}
+/* 0022c896 */	}
+/* 0022c896 */	if (g_party.empty())
+/* 0022c8ac */	{
+/* 0022c8ac */		int k;
+/* 0022c8be */		for (k = 0; k < g_player.Numof(); ++k)
+/* 0022c90e */		{
+/* 0022c90e */			if (g_player[k].isJoin())
+/* 0022c930 */			{
+/* 0022c930 */				string pId = g_player[k].getId();
+/* 0022c95a */				制御／パーティ／攻撃スキル設定(pId, 4);
+/* 0022c970 */			}
+/* 0022c970 */		}
+/* 0022c976 */	}
+/* 0022c976 */	if (show)
+/* 0022c986 */	{
+/* 0022c986 */		string caption;
+/* 0022c99a */		string image;
+/* 0022c9ae */		caption = getPlayerFromId(id).getShortName() + "が離脱！";
+/* 0022c9f0 */		DialogInfomation info;
+/* 0022ca00 */		info.setCaption(caption);
+/* 0022ca1a */		info.setMessage("戦闘に参加していた場合は、|そのぶんのバトルスキルが空きます");
+/* 0022ca30 */		info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 0022ca46 */		openDialog(info);
+/* 0022ca5c */	}
+/* 0022ca5c */}
+
+bool 制御／パーティ／攻撃スキル確認／テロップ(string playerId, string groupId)
+/* 0022ca76 */{
+/* 0022ca76 */	array@string skills;
+/* 0022ca80 */	g_party.getSkillIdList(skills);
+/* 0022ca9a */	int i;
+/* 0022caac */	for (i = 0; i < skills.Numof(); ++i)
+/* 0022cafc */	{
+/* 0022cafc */		if (getPlayerFromId(playerId).getCoolTime(skills[i]) == 0 && getPlayerSkillFromId(skills[i]).getGroupId() == groupId)
+/* 0022cbae */		{
+/* 0022cbae */			return true;
+/* 0022cbb6 */		}
+/* 0022cbb6 */	}
+/* 0022cbc8 */	return false;
+/* 0022cbd0 */}
+
+void 制御／パーティ／攻撃スキル設定(string playerId, int num)
+/* 0022cbe4 */{
+/* 0022cbe4 */	int i;
+/* 0022cbf6 */	for (i = 0; i < num; ++i)
+/* 0022cc40 */	{
+/* 0022cc40 */		string s = getPlayerFromId(playerId).getAttackSkillId(i);
+/* 0022cc84 */		if (s != "")
+/* 0022cc9c */		{
+/* 0022cc9c */			g_party.add(s);
+/* 0022ccb8 */		}
+/* 0022ccb8 */	}
+/* 0022ccc4 */}
+
+void 制御／パーティ／クールタイム削除(string playerId)
+/* 0022ccd2 */{
+/* 0022ccd2 */	getPlayerFromId(playerId).clearCoolTime("");
+/* 0022cd04 */}
+
+bool 制御／パーティ／プレイヤー確認(string id)
+/* 0022cd12 */{
+/* 0022cd12 */	if (getPlayerFromId(id).isJoin())
+/* 0022cd44 */	{
+/* 0022cd44 */		return true;
+/* 0022cd4c */	}
+/* 0022cd4c */	return false;
+/* 0022cd54 */}
+
+bool 制御／パーティ／プレイヤー確認／戦闘(string id)
+/* 0022cd68 */{
+/* 0022cd68 */	array@string players;
+/* 0022cd72 */	g_party.getPlayerIdList(players);
+/* 0022cd8c */	if (players.Find(0, players.Numof(), id) >= 0 && getPlayerFromId(id).getHp() != 0)
+/* 0022ce1c */	{
+/* 0022ce1c */		return true;
+/* 0022ce24 */	}
+/* 0022ce24 */	return false;
+/* 0022ce2c */}
+
+bool 制御／パーティ／ゼロスリースキル確認(string id)
+/* 0022ce40 */{
+/* 0022ce40 */	array@string players;
+/* 0022ce4a */	g_party.getPlayerIdList(players);
+/* 0022ce64 */	if (players.Find(0, players.Numof(), id) >= 0 && getPlayerFromId(id).isZeroThreeSkillOpened() && getPlayerFromId(id).getHp() != 0)
+/* 0022cf3e */	{
+/* 0022cf3e */		return true;
+/* 0022cf46 */	}
+/* 0022cf46 */	return false;
+/* 0022cf4e */}
+
+bool 制御／パーティ／ゼロスリースキル確認／地平線(string id)
+/* 0022cf62 */{
+/* 0022cf62 */	if (getPlayerFromId(id).isZeroThreeSkillOpened())
+/* 0022cf94 */	{
+/* 0022cf94 */		return true;
+/* 0022cf9c */	}
+/* 0022cf9c */	return false;
+/* 0022cfa4 */}
+
+void 制御／シーン設定／マップ(string id)
+/* 0022cfb8 */{
+/* 0022cfb8 */	g_gameSceneManager.setMap(id);
+/* 0022cfd2 */}
+
+void 制御／シーン設定／ダンジョン(string id, int x, int y)
+/* 0022cfe0 */{
+/* 0022cfe0 */	g_gameSceneManager.setDungeon(id, x, y);
+/* 0022d00e */}
+
+void 制御／シーン設定／ＡＤＶ(string name)
+/* 0022d01c */{
+/* 0022d01c */	g_gameSceneManager.setAdv(name);
+/* 0022d036 */}
+
+void 制御／アイテム設定(string id)
+/* 0022d044 */{
+/* 0022d044 */	g_playerCommonParam.addItem(id);
+/* 0022d05e */	string caption;
+/* 0022d072 */	string desc;
+/* 0022d086 */	caption = getItemFromId(id).getName() + "を獲得！";
+/* 0022d0c8 */	desc = getItemFromId(id).getDesc();
+/* 0022d102 */	DialogInfomation info;
+/* 0022d112 */	info.setCaption(caption);
+/* 0022d12c */	info.setMessage(desc);
+/* 0022d146 */	info.setItemId(id);
+/* 0022d160 */	openDialog(info);
+/* 0022d176 */}
+
+void 制御／アイテム削除(string id, int count, bool show)
+/* 0022d184 */{
+/* 0022d184 */	int max;
+/* 0022d196 */	max = g_playerCommonParam.getItemCount(id);
+/* 0022d1bc */	if (count > max)
+/* 0022d1d8 */	{
+/* 0022d1d8 */		count = max;
+/* 0022d1ee */	}
+/* 0022d1ee */	int i;
+/* 0022d200 */	for (i = 0; i < count; ++i)
+/* 0022d24a */	{
+/* 0022d24a */		g_playerCommonParam.decItem(id);
+/* 0022d264 */	}
+/* 0022d26a */	if (show)
+/* 0022d27a */	{
+/* 0022d27a */		string caption;
+/* 0022d28e */		string desc;
+/* 0022d2a2 */		caption = getItemFromId(id).getName() + "を手放した！";
+/* 0022d2e4 */		DialogInfomation info;
+/* 0022d2f4 */		info.setCaption(caption);
+/* 0022d30e */		info.setMessage("もう必要なくなったな");
+/* 0022d324 */		info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 0022d33a */		openDialog(info);
+/* 0022d350 */	}
+/* 0022d350 */}
+
+int 制御／アイテム確認(string id)
+/* 0022d36a */{
+/* 0022d36a */	int value;
+/* 0022d37c */	value = g_playerCommonParam.getItemCount(id);
+/* 0022d3a2 */	return value;
+/* 0022d3ae */}
+
+void 制御／カード設定(string dungeonId, int x, int y, string newCardId)
+/* 0022d3c2 */{
+/* 0022d3c2 */	gameChangeCardPermanent(dungeonId, x, y, newCardId);
+/* 0022d3f0 */}
+
+void 制御／ＨＰ回復／最大(string playerId)
+/* 0022d3fe */{
+/* 0022d3fe */	int max;
+/* 0022d410 */	max = getPlayerFromId(playerId).getMaxHp();
+/* 0022d448 */	getPlayerFromId(playerId).setHp(max);
+/* 0022d480 */}
+
+bool 制御／ＨＰ減少確認()
+/* 0022d48e */{
+/* 0022d48e */	int i;
+/* 0022d4a0 */	int max;
+/* 0022d4b2 */	for (i = 0; i < g_player.Numof(); ++i)
+/* 0022d502 */	{
+/* 0022d502 */		if (g_player[i].isJoin() && g_player[i].getMaxHp() != g_player[i].getHp())
+/* 0022d57c */		{
+/* 0022d57c */			return true;
+/* 0022d584 */		}
+/* 0022d584 */	}
+/* 0022d58a */	return false;
+/* 0022d592 */}
+
+void 制御／ウィリス設定(bool val)
+/* 0022d5a6 */{
+/* 0022d5a6 */	g_playerCommonParam.setEnableLevelGod(val);
+/* 0022d5c0 */}
+
+void 制御／帰り木設定(bool val)
+/* 0022d5ce */{
+/* 0022d5ce */	g_playerCommonParam.setEnableExitDungeon(val);
+/* 0022d5e8 */}
+
+void 制御／アイテム使用設定(bool val)
+/* 0022d5f6 */{
+/* 0022d5f6 */	g_playerCommonParam.setEnableItem(val);
+/* 0022d610 */}
+
+int 制御／必要経験値確認(int nextLevel)
+/* 0022d61e */{
+/* 0022d61e */	int val;
+/* 0022d630 */	switch (nextLevel)
+/* 0022d646 */	{
+/* 0022d646 */	case 1:
+/* 0022d646 */	case 2:
+/* 0022d646 */	case 3:
+/* 0022d646 */	case 4:
+/* 0022d646 */	case 5:
+/* 0022d646 */	case 6:
+/* 0022d646 */	case 7:
+/* 0022d646 */	case 8:
+/* 0022d646 */	case 9:
+/* 0022d646 */	case 10:
+/* 0022d646 */		val = 20;
+/* 0022d658 */		break;
+/* 0022d65e */	case 11:
+/* 0022d65e */		val = 20;
+/* 0022d670 */		break;
+/* 0022d676 */	case 12:
+/* 0022d676 */		val = 35;
+/* 0022d688 */		break;
+/* 0022d68e */	case 13:
+/* 0022d68e */		val = 95;
+/* 0022d6a0 */		break;
+/* 0022d6a6 */	case 14:
+/* 0022d6a6 */		val = 150;
+/* 0022d6b8 */		break;
+/* 0022d6be */	case 15:
+/* 0022d6be */		val = 195;
+/* 0022d6d0 */		break;
+/* 0022d6d6 */	case 16:
+/* 0022d6d6 */		val = 240;
+/* 0022d6e8 */		break;
+/* 0022d6ee */	case 17:
+/* 0022d6ee */		val = 285;
+/* 0022d700 */		break;
+/* 0022d706 */	case 18:
+/* 0022d706 */		val = 450;
+/* 0022d718 */		break;
+/* 0022d71e */	case 19:
+/* 0022d71e */		val = 585;
+/* 0022d730 */		break;
+/* 0022d736 */	case 20:
+/* 0022d736 */		val = 720;
+/* 0022d748 */		break;
+/* 0022d74e */	case 21:
+/* 0022d74e */		val = 855;
+/* 0022d760 */		break;
+/* 0022d766 */	case 22:
+/* 0022d766 */		val = 1350;
+/* 0022d778 */		break;
+/* 0022d77e */	case 23:
+/* 0022d77e */		val = 1755;
+/* 0022d790 */		break;
+/* 0022d796 */	case 24:
+/* 0022d796 */		val = 2160;
+/* 0022d7a8 */		break;
+/* 0022d7ae */	case 25:
+/* 0022d7ae */		val = 2565;
+/* 0022d7c0 */		break;
+/* 0022d7c6 */	case 26:
+/* 0022d7c6 */		val = 4050;
+/* 0022d7d8 */		break;
+/* 0022d7de */	case 27:
+/* 0022d7de */		val = 5265;
+/* 0022d7f0 */		break;
+/* 0022d7f6 */	case 28:
+/* 0022d7f6 */		val = 6480;
+/* 0022d808 */		break;
+/* 0022d80e */	case 29:
+/* 0022d80e */		val = 6075;
+/* 0022d820 */		break;
+/* 0022d826 */	case 30:
+/* 0022d826 */		val = 12150;
+/* 0022d838 */		break;
+/* 0022d83e */	case 31:
+/* 0022d83e */		val = 15795;
+/* 0022d850 */		break;
+/* 0022d856 */	case 32:
+/* 0022d856 */		val = 19440;
+/* 0022d868 */		break;
+/* 0022d86e */	case 33:
+/* 0022d86e */		val = 23085;
+/* 0022d880 */		break;
+/* 0022d886 */	case 34:
+/* 0022d886 */		val = 36450;
+/* 0022d898 */		break;
+/* 0022d89e */	case 35:
+/* 0022d89e */		val = 47385;
+/* 0022d8b0 */		break;
+/* 0022d8b6 */	case 36:
+/* 0022d8b6 */		val = 58320;
+/* 0022d8c8 */		break;
+/* 0022d8ce */	case 37:
+/* 0022d8ce */		val = 69255;
+/* 0022d8e0 */		break;
+/* 0022d8e6 */	case 38:
+/* 0022d8e6 */		val = 109350;
+/* 0022d8f8 */		break;
+/* 0022d8fe */	case 39:
+/* 0022d8fe */		val = 142155;
+/* 0022d910 */		break;
+/* 0022d916 */	case 40:
+/* 0022d916 */		val = 174960;
+/* 0022d928 */		break;
+/* 0022d92e */	case 41:
+/* 0022d92e */		val = 207765;
+/* 0022d940 */		break;
+/* 0022d946 */	case 42:
+/* 0022d946 */		val = 328050;
+/* 0022d958 */		break;
+/* 0022d95e */	case 43:
+/* 0022d95e */		val = 426465;
+/* 0022d970 */		break;
+/* 0022d976 */	case 44:
+/* 0022d976 */		val = 524880;
+/* 0022d988 */		break;
+/* 0022d98e */	case 45:
+/* 0022d98e */		val = 623295;
+/* 0022d9a0 */		break;
+/* 0022d9a6 */	case 46:
+/* 0022d9a6 */		val = 984150;
+/* 0022d9b8 */		break;
+/* 0022d9be */	case 47:
+/* 0022d9be */		val = 1279395;
+/* 0022d9d0 */		break;
+/* 0022d9d6 */	case 48:
+/* 0022d9d6 */		val = 1574640;
+/* 0022d9e8 */		break;
+/* 0022d9ee */	case 49:
+/* 0022d9ee */		val = 1869885;
+/* 0022da00 */		break;
+/* 0022da06 */	case 50:
+/* 0022da06 */		val = 2952450;
+/* 0022da18 */		break;
+/* 0022da1e */	case 51:
+/* 0022da1e */		val = 3247695;
+/* 0022da30 */		break;
+/* 0022da36 */	case 52:
+/* 0022da36 */		val = 3542940;
+/* 0022da48 */		break;
+/* 0022da4e */	case 53:
+/* 0022da4e */		val = 3838185;
+/* 0022da60 */		break;
+/* 0022da66 */	case 54:
+/* 0022da66 */		val = 4133430;
+/* 0022da78 */		break;
+/* 0022da7e */	case 55:
+/* 0022da7e */		val = 4428675;
+/* 0022da90 */		break;
+/* 0022da96 */	case 56:
+/* 0022da96 */		val = 4723920;
+/* 0022daa8 */		break;
+/* 0022daae */	case 57:
+/* 0022daae */		val = 5019165;
+/* 0022dac0 */		break;
+/* 0022dac6 */	case 58:
+/* 0022dac6 */		val = 5314410;
+/* 0022dad8 */		break;
+/* 0022dade */	case 59:
+/* 0022dade */		val = 5609655;
+/* 0022daf0 */		break;
+/* 0022daf6 */	default:
+/* 0022daf6 */		val = 5904900;
+/* 0022db08 */		break;
+/* 0022db0e */	}
+/* 0022db0e */	return val;
+/* 0022db1a */}
+
+void 制御／買物(string shopId, string shopName)
+/* 0022db2e */{
+/* 0022db2e */	g_shop[0].addItem("世色癌1");
+/* 0022db4c */	g_shop[0].addItem("アサクヒロク1");
+/* 0022db6a */	g_shop[0].addItem("オート");
+/* 0022db88 */	g_shop[0].addItem("ランス斬り2");
+/* 0022dba6 */	g_shop[0].addItem("炎の矢2");
+/* 0022dbc4 */	g_shop[0].addItem("忍び斬り2");
+/* 0022dbe2 */	g_shop[0].addItem("金的パンチ2");
+/* 0022dc00 */	g_shop[1].addItem("マヨネーズ");
+/* 0022dc1e */	g_shop[1].addItem("カッパーマトック");
+/* 0022dc3c */	g_shop[2].addItem("スカウトキー");
+/* 0022dc5a */	g_shop[2].addItem("ピッキングドリル");
+/* 0022dc78 */	g_shop[3].addItem("量産型バラバラ時計");
+/* 0022dc96 */	g_shop[3].addItem("養殖セーブライオン");
+/* 0022dcb4 */	if (EV("ＥＶ／解放軍司令部／カスタム／初回", -2147483648))
+/* 0022dccc */	{
+/* 0022dccc */		g_shop[0].addItem("ランスアタック2");
+/* 0022dcea */		g_shop[0].addItem("襲う2");
+/* 0022dd08 */		g_shop[0].addItem("ヒーリング2");
+/* 0022dd26 */		g_shop[0].addItem("石の壁2");
+/* 0022dd44 */		g_shop[0].addItem("手裏剣打ち2");
+/* 0022dd62 */		g_shop[0].addItem("分身の術2");
+/* 0022dd80 */		g_shop[0].addItem("火丼の術2");
+/* 0022dd9e */		g_shop[0].addItem("1回切り2");
+/* 0022ddbc */		g_shop[0].addItem("連続切り2");
+/* 0022ddda */		g_shop[0].addItem("蝶のように2");
+/* 0022ddf8 */		g_shop[0].addItem("クレイルシェル2");
+/* 0022de16 */		g_shop[0].addItem("金的キック2");
+/* 0022de34 */		g_shop[0].addItem("寝る2");
+/* 0022de52 */	}
+/* 0022de52 */	if (EV("ＥＶ／ラジール屋敷／司令官室／Ｈ後", -2147483648))
+/* 0022de6a */	{
+/* 0022de6a */		g_shop[0].addItem("世色癌2");
+/* 0022de88 */		g_shop[0].addItem("アサクヒロク2");
+/* 0022dea6 */		g_shop[0].addItem("ランス斬り3");
+/* 0022dec4 */		g_shop[0].addItem("ランスアタック3");
+/* 0022dee2 */		g_shop[0].addItem("襲う3");
+/* 0022df00 */		g_shop[0].addItem("炎の矢3");
+/* 0022df1e */		g_shop[0].addItem("ヒーリング3");
+/* 0022df3c */		g_shop[0].addItem("石の壁3");
+/* 0022df5a */		g_shop[0].addItem("忍び斬り3");
+/* 0022df78 */		g_shop[0].addItem("手裏剣打ち3");
+/* 0022df96 */		g_shop[0].addItem("分身の術3");
+/* 0022dfb4 */		g_shop[0].addItem("火丼の術3");
+/* 0022dfd2 */		g_shop[0].addItem("薙ぎ払い3");
+/* 0022dff0 */		g_shop[0].addItem("デビルアロー3");
+/* 0022e00e */		g_shop[0].addItem("陣地構築3");
+/* 0022e02c */		g_shop[0].addItem("おやつ3");
+/* 0022e04a */		g_shop[0].addItem("局地地震3");
+/* 0022e068 */		g_shop[0].addItem("マジカルバリア3");
+/* 0022e086 */		g_shop[0].addItem("両刀斬り3");
+/* 0022e0a4 */		g_shop[0].addItem("ムードメイク3");
+/* 0022e0c2 */		g_shop[0].addItem("1回切り3");
+/* 0022e0e0 */		g_shop[0].addItem("連続切り3");
+/* 0022e0fe */		g_shop[0].addItem("蝶のように3");
+/* 0022e11c */		g_shop[0].addItem("ハックスラッシュ3");
+/* 0022e13a */		g_shop[0].addItem("ひらり3");
+/* 0022e158 */		g_shop[0].addItem("金的パンチ3");
+/* 0022e176 */		g_shop[0].addItem("クレイルシェル3");
+/* 0022e194 */		g_shop[0].addItem("金的キック3");
+/* 0022e1b2 */		g_shop[0].addItem("寝る3");
+/* 0022e1d0 */	}
+/* 0022e1d0 */	if (EV("ＥＶ／宿屋／入る／セル", -2147483648))
+/* 0022e1e8 */	{
+/* 0022e1e8 */		g_shop[0].addItem("ランス斬り4");
+/* 0022e206 */		g_shop[0].addItem("ランスアタック4");
+/* 0022e224 */		g_shop[0].addItem("襲う4");
+/* 0022e242 */		g_shop[0].addItem("ランスチャージ4");
+/* 0022e260 */		g_shop[0].addItem("炎の矢4");
+/* 0022e27e */		g_shop[0].addItem("ヒーリング4");
+/* 0022e29c */		g_shop[0].addItem("石の壁4");
+/* 0022e2ba */		g_shop[0].addItem("F.レーザー4");
+/* 0022e2d8 */		g_shop[0].addItem("忍び斬り4");
+/* 0022e2f6 */		g_shop[0].addItem("手裏剣打ち4");
+/* 0022e314 */		g_shop[0].addItem("分身の術4");
+/* 0022e332 */		g_shop[0].addItem("火丼の術4");
+/* 0022e350 */		g_shop[0].addItem("薙ぎ払い4");
+/* 0022e36e */		g_shop[0].addItem("デビルアロー4");
+/* 0022e38c */		g_shop[0].addItem("デビルビーム4");
+/* 0022e3aa */		g_shop[0].addItem("色仕掛け4");
+/* 0022e3c8 */		g_shop[0].addItem("陣地構築4");
+/* 0022e3e6 */		g_shop[0].addItem("おやつ4");
+/* 0022e404 */		g_shop[0].addItem("迫撃水4");
+/* 0022e422 */		g_shop[0].addItem("局地地震4");
+/* 0022e440 */		g_shop[0].addItem("マジカルバリア4");
+/* 0022e45e */		g_shop[0].addItem("白色破壊光線4");
+/* 0022e47c */		g_shop[0].addItem("魔想4");
+/* 0022e49a */		g_shop[0].addItem("両刀斬り4");
+/* 0022e4b8 */		g_shop[0].addItem("ムードメイク4");
+/* 0022e4d6 */		g_shop[0].addItem("ラブテクニカル4");
+/* 0022e4f4 */		g_shop[0].addItem("千人斬り4");
+/* 0022e512 */		g_shop[0].addItem("健常者潰し4");
+/* 0022e530 */		g_shop[0].addItem("回復の雨4");
+/* 0022e54e */		g_shop[0].addItem("悔悛の錠4");
+/* 0022e56c */		g_shop[0].addItem("斧ブーメラン4");
+/* 0022e58a */		g_shop[0].addItem("大切断4");
+/* 0022e5a8 */		g_shop[0].addItem("背後からスー4");
+/* 0022e5c6 */		g_shop[0].addItem("ハックスラッシュ4");
+/* 0022e5e4 */		g_shop[0].addItem("ひらり4");
+/* 0022e602 */		g_shop[0].addItem("Nシステマ4");
+/* 0022e620 */		g_shop[0].addItem("チャクラム投げ4");
+/* 0022e63e */		g_shop[0].addItem("1回切り4");
+/* 0022e65c */		g_shop[0].addItem("連続切り4");
+/* 0022e67a */		g_shop[0].addItem("蝶のように4");
+/* 0022e698 */		g_shop[0].addItem("金的パンチ4");
+/* 0022e6b6 */		g_shop[0].addItem("クレイルシェル4");
+/* 0022e6d4 */		g_shop[0].addItem("金的キック4");
+/* 0022e6f2 */		g_shop[0].addItem("寝る4");
+/* 0022e710 */	}
+/* 0022e710 */	if (EV("ＥＶ／都市／サウス／入る／初回", -2147483648))
+/* 0022e728 */	{
+/* 0022e728 */		g_shop[0].addItem("世色癌3");
+/* 0022e746 */		g_shop[0].addItem("アサクヒロク3");
+/* 0022e764 */		g_shop[0].addItem("ランス斬り5");
+/* 0022e782 */		g_shop[0].addItem("炎の矢5");
+/* 0022e7a0 */		g_shop[0].addItem("忍び斬り5");
+/* 0022e7be */		g_shop[0].addItem("薙ぎ払い5");
+/* 0022e7dc */	}
+/* 0022e7dc */	if (EV("ＥＶ／居館／一階／入口／初回", -2147483648))
+/* 0022e7f4 */	{
+/* 0022e7f4 */		g_shop[0].addItem("ランスアタック5");
+/* 0022e812 */		g_shop[0].addItem("襲う5");
+/* 0022e830 */		g_shop[0].addItem("ランスチャージ5");
+/* 0022e84e */		g_shop[0].addItem("ヒーリング5");
+/* 0022e86c */		g_shop[0].addItem("石の壁5");
+/* 0022e88a */		g_shop[0].addItem("F.レーザー5");
+/* 0022e8a8 */		g_shop[0].addItem("王女様の鞭5");
+/* 0022e8c6 */		g_shop[0].addItem("リーザスの雷竜5");
+/* 0022e8e4 */		g_shop[0].addItem("おしおき5");
+/* 0022e902 */		g_shop[0].addItem("大号令5");
+/* 0022e920 */		g_shop[0].addItem("串刺し5");
+/* 0022e93e */		g_shop[0].addItem("ヒーリングm5");
+/* 0022e95c */		g_shop[0].addItem("神聖分解波5");
+/* 0022e97a */		g_shop[0].addItem("マリス七変化5");
+/* 0022e998 */		g_shop[0].addItem("手裏剣打ち5");
+/* 0022e9b6 */		g_shop[0].addItem("分身の術5");
+/* 0022e9d4 */		g_shop[0].addItem("火丼の術5");
+/* 0022e9f2 */		g_shop[0].addItem("デビルアロー5");
+/* 0022ea10 */		g_shop[0].addItem("デビルビーム5");
+/* 0022ea2e */		g_shop[0].addItem("色仕掛け5");
+/* 0022ea4c */		g_shop[0].addItem("陣地構築5");
+/* 0022ea6a */		g_shop[0].addItem("おやつ5");
+/* 0022ea88 */		g_shop[0].addItem("迫撃水5");
+/* 0022eaa6 */		g_shop[0].addItem("局地地震5");
+/* 0022eac4 */		g_shop[0].addItem("マジカルバリア5");
+/* 0022eae2 */		g_shop[0].addItem("白色破壊光線5");
+/* 0022eb00 */		g_shop[0].addItem("魔想5");
+/* 0022eb1e */		g_shop[0].addItem("両刀斬り5");
+/* 0022eb3c */		g_shop[0].addItem("ムードメイク5");
+/* 0022eb5a */		g_shop[0].addItem("ラブテクニカル5");
+/* 0022eb78 */		g_shop[0].addItem("千人斬り5");
+/* 0022eb96 */		g_shop[0].addItem("幻獣アタック3");
+/* 0022ebb4 */		g_shop[0].addItem("幻獣アタック4");
+/* 0022ebd2 */		g_shop[0].addItem("幻獣アタック5");
+/* 0022ebf0 */		g_shop[0].addItem("幻獣トス3");
+/* 0022ec0e */		g_shop[0].addItem("幻獣トス4");
+/* 0022ec2c */		g_shop[0].addItem("幻獣トス5");
+/* 0022ec4a */		g_shop[0].addItem("らぶてくにかる3");
+/* 0022ec68 */		g_shop[0].addItem("らぶてくにかる4");
+/* 0022ec86 */		g_shop[0].addItem("らぶてくにかる5");
+/* 0022eca4 */		g_shop[0].addItem("ミルアタック3");
+/* 0022ecc2 */		g_shop[0].addItem("ミルアタック4");
+/* 0022ece0 */		g_shop[0].addItem("ミルアタック5");
+/* 0022ecfe */		g_shop[0].addItem("健常者潰し5");
+/* 0022ed1c */		g_shop[0].addItem("回復の雨5");
+/* 0022ed3a */		g_shop[0].addItem("悔悛の錠5");
+/* 0022ed58 */		g_shop[0].addItem("キョウダイン5");
+/* 0022ed76 */		g_shop[0].addItem("斧ブーメラン5");
+/* 0022ed94 */		g_shop[0].addItem("大切断5");
+/* 0022edb2 */		g_shop[0].addItem("背後からスー5");
+/* 0022edd0 */		g_shop[0].addItem("先手0三歩5");
+/* 0022edee */		g_shop[0].addItem("ハックスラッシュ5");
+/* 0022ee0c */		g_shop[0].addItem("ひらり5");
+/* 0022ee2a */		g_shop[0].addItem("Nシステマ5");
+/* 0022ee48 */		g_shop[0].addItem("チャクラム投げ5");
+/* 0022ee66 */		g_shop[0].addItem("斬り返し5");
+/* 0022ee84 */		g_shop[0].addItem("黒金砕き5");
+/* 0022eea2 */		g_shop[0].addItem("槍攻撃5");
+/* 0022eec0 */		g_shop[0].addItem("即ブロ5");
+/* 0022eede */		g_shop[0].addItem("手加減攻撃5");
+/* 0022eefc */		g_shop[0].addItem("剣攻撃5");
+/* 0022ef1a */		g_shop[0].addItem("ジバ流朧突き5");
+/* 0022ef38 */		g_shop[0].addItem("スカルピアッサ5");
+/* 0022ef56 */		g_shop[0].addItem("無現軌道5");
+/* 0022ef74 */		g_shop[0].addItem("アンコク5");
+/* 0022ef92 */		g_shop[0].addItem("軟体凍結5");
+/* 0022efb0 */		g_shop[0].addItem("死爆5");
+/* 0022efce */		g_shop[0].addItem("ヒキコモリオン5");
+/* 0022efec */		g_shop[0].addItem("1回切り5");
+/* 0022f00a */		g_shop[0].addItem("連続切り5");
+/* 0022f028 */		g_shop[0].addItem("蝶のように5");
+/* 0022f046 */		g_shop[0].addItem("心頭滅却5");
+/* 0022f064 */		g_shop[0].addItem("金的パンチ5");
+/* 0022f082 */		g_shop[0].addItem("クレイルシェル5");
+/* 0022f0a0 */		g_shop[0].addItem("金的キック5");
+/* 0022f0be */		g_shop[0].addItem("寝る5");
+/* 0022f0dc */	}
+/* 0022f0dc */	openShop(shopId, shopName);
+/* 0022f0f6 */}
+

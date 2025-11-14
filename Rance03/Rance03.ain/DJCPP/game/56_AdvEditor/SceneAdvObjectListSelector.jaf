@@ -1,0 +1,238 @@
+void SceneAdvObjectListSelector::init(int mode, string current)
+/* 001c703e */{
+/* 001c703e */	this.selected_ = -1;
+/* 001c7050 */	this.mode_ = mode;
+/* 001c7066 */	this.result_ = 0;
+/* 001c7078 */	this.isFinish_ = false;
+/* 001c708a */	this.initTargetObjectList();
+/* 001c7092 */	this.pageCount_ = (this.cgNameList_.Numof() + 19) / 20;
+/* 001c70be */	this.base_.init(this.pageCount_, "システム／シーンエディタ／下地", false);
+/* 001c70e4 */	this.initSelectButton();
+/* 001c70ec */	this.initSysButton();
+/* 001c70f4 */	pass(current);
+/* 001c7104 */	int i;
+/* 001c7116 */	for (i = 0; i < this.cgNameList_.Numof(); ++i)
+/* 001c7166 */	{
+/* 001c7166 */		if (current == this.cgNameList_[i])
+/* 001c718e */		{
+/* 001c718e */			this.selected_ = i;
+/* 001c71a4 */			this.updateThumbnail(this.selected_);
+/* 001c71b6 */			break;
+/* 001c71bc */		}
+/* 001c71bc */	}
+/* 001c71c2 */	this.setDetailButtonState();
+/* 001c71ca */}
+
+void SceneAdvObjectListSelector::initSysButton()
+/* 001c71d2 */{
+/* 001c71d2 */	this.btnSys_[0].init("システム／ボタン／幅１７０", "詳細", "", true);
+/* 001c7202 */	this.btnSys_[0].setPos(739, 541);
+/* 001c7226 */	this.btnSys_[0].setClickCallback(this.onClickSysButton, 0);
+/* 001c724e */	this.btnSys_[1].init("システム／ボタン／幅１７０", "選択", "", true);
+/* 001c727e */	this.btnSys_[1].setPos(654, 691);
+/* 001c72a2 */	this.btnSys_[1].setClickCallback(this.onClickSysButton, 1);
+/* 001c72ca */	this.btnSys_[2].init("システム／ボタン／幅１７０", "キャンセル", "", true);
+/* 001c72fa */	this.btnSys_[2].setPos(839, 691);
+/* 001c731e */	this.btnSys_[2].setClickCallback(this.onClickSysButton, 2);
+/* 001c7346 */}
+
+void SceneAdvObjectListSelector::initSelectButton()
+/* 001c734e */{
+/* 001c734e */	this.btnSelect_.Alloc(this.cgNameList_.Numof());
+/* 001c736e */	int i;
+/* 001c7380 */	for (i = 0; i < this.cgNameList_.Numof(); ++i)
+/* 001c73d0 */	{
+/* 001c73d0 */		this.btnSelect_[i].init("システム／ボタン／幅２８２", this.captionList_[i], "", true);
+/* 001c7414 */		int g = i / 20;
+/* 001c7432 */		int x = (i % 20) / 10;
+/* 001c7458 */		int y = i % 20 % 10;
+/* 001c747e */		this.btnSelect_[i].setPos(81 + x * 300 + g * 1024, 128 + y * 56);
+/* 001c74e2 */		this.btnSelect_[i].setParent(this.base_.getPartsNumber());
+/* 001c750e */		this.btnSelect_[i].setZ(4500);
+/* 001c7530 */		this.btnSelect_[i].setClickCallback(this.onClick, i);
+/* 001c7560 */	}
+/* 001c7566 */}
+
+void SceneAdvObjectListSelector::initTargetObjectList()
+/* 001c756e */{
+/* 001c756e */	switch (this.mode_)
+/* 001c7584 */	{
+/* 001c7584 */	case 2:
+/* 001c7584 */		this.prefix_ = "背景／";
+/* 001c7598 */		break;
+/* 001c759e */	case 0:
+/* 001c759e */		this.prefix_ = "trim_立ち絵／";
+/* 001c75b2 */		break;
+/* 001c75b8 */	case 1:
+/* 001c75b8 */		this.prefix_ = "trim_立ち絵背／";
+/* 001c75cc */		break;
+/* 001c75d2 */	case 3:
+/* 001c75d2 */		this.prefix_ = "システム／名札／";
+/* 001c75e6 */		break;
+/* 001c75ec */	}
+/* 001c75ec */	this.getCgList(this.cgNameList_, this.captionList_, this.prefix_);
+/* 001c7612 */}
+
+void SceneAdvObjectListSelector::onClickSysButton(int id)
+/* 001c761a */{
+/* 001c761a */	if (id == 0)
+/* 001c7632 */	{
+/* 001c7632 */		openStandViewer(this.prefix_ + this.cgNameList_[this.selected_]);
+/* 001c765a */	}
+/* 001c7660 */	else if (id == 1)
+/* 001c7678 */	{
+/* 001c7678 */		this.result_ = 0;
+/* 001c768a */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c76a2 */	}
+/* 001c76a8 */	else
+/* 001c76a8 */	{
+/* 001c76a8 */		this.result_ = 1;
+/* 001c76ba */		this.selected_ = -1;
+/* 001c76cc */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c76e4 */	}
+/* 001c76e4 */}
+
+void SceneAdvObjectListSelector::onFinishFadeOut()
+/* 001c76ec */{
+/* 001c76ec */	this.isFinish_ = true;
+/* 001c76fe */}
+
+void SceneAdvObjectListSelector::onClick(int index)
+/* 001c7706 */{
+/* 001c7706 */	this.selected_ = index;
+/* 001c771c */	if (this.selected_ == 0)
+/* 001c7734 */	{
+/* 001c7734 */		this.parts_.release();
+/* 001c7744 */	}
+/* 001c774a */	else
+/* 001c774a */	{
+/* 001c774a */		this.updateThumbnail(index);
+/* 001c775c */	}
+/* 001c775c */	this.setDetailButtonState();
+/* 001c7764 */}
+
+void SceneAdvObjectListSelector::updateThumbnail(int index)
+/* 001c776c */{
+/* 001c776c */	this.parts_.init(this.prefix_ + this.cgNameList_[index], 0);
+/* 001c77a4 */	this.parts_.setZ(4500.0);
+/* 001c77ba */	this.parts_.setShow(true);
+/* 001c77d0 */	this.parts_.setPos(824.0, 384.0);
+/* 001c77ec */	this.parts_.setOrigin(5);
+/* 001c7802 */	if (this.mode_ == 3)
+/* 001c781a */	{
+/* 001c781a */		this.parts_.setScaling(100.0);
+/* 001c7830 */	}
+/* 001c7836 */	else if (this.mode_ == 2)
+/* 001c784e */	{
+/* 001c784e */		this.parts_.setScaling(30.0);
+/* 001c7864 */	}
+/* 001c786a */	else
+/* 001c786a */	{
+/* 001c786a */		this.parts_.setScaling(40.0);
+/* 001c7880 */	}
+/* 001c7880 */}
+
+void SceneAdvObjectListSelector::setDetailButtonState()
+/* 001c7888 */{
+/* 001c7888 */	this.btnSys_[0].setEnable(this.selected_ > 0);
+/* 001c78b4 */}
+
+string SceneAdvObjectListSelector::getSelected()
+/* 001c78bc */{
+/* 001c78bc */	if (this.selected_ > 0)
+/* 001c78d4 */	{
+/* 001c78d4 */		return this.cgNameList_[this.selected_];
+/* 001c78ec */	}
+/* 001c78ec */	return "";
+/* 001c78f4 */}
+
+void SceneAdvObjectListSelector::getCgList(ref array@string cgName, ref array@string captions, string prefix)
+/* 001c7902 */{
+/* 001c7902 */	cgName.Free();
+/* 001c790c */	captions.Free();
+/* 001c7916 */	cgName.PushBack("");
+/* 001c7926 */	captions.PushBack("なし");
+/* 001c7936 */	string key;
+/* 001c794a */	switch (this.mode_)
+/* 001c7960 */	{
+/* 001c7960 */	case 0:
+/* 001c7960 */		key = "ＡＤＶエディタ立ち絵情報";
+/* 001c7974 */		break;
+/* 001c797a */	case 1:
+/* 001c797a */		key = "ＡＤＶエディタ立ち絵背情報";
+/* 001c798e */		break;
+/* 001c7994 */	case 2:
+/* 001c7994 */		key = "ＡＤＶエディタ背景情報";
+/* 001c79a8 */		break;
+/* 001c79ae */	case 3:
+/* 001c79ae */		key = "ＡＤＶエディタ名札情報";
+/* 001c79c2 */		break;
+/* 001c79c8 */	}
+/* 001c79c8 */	int count = EX_Height(key);
+/* 001c79e4 */	int i;
+/* 001c79f6 */	for (i = 0; i < count; ++i)
+/* 001c7a40 */	{
+/* 001c7a40 */		string n = EX_RA2String(key, i, "cgName", "");
+/* 001c7a74 */		if (ＣＧモード確認(n))
+/* 001c7a8a */		{
+/* 001c7a8a */			cgName.PushBack(this.erasePrefix(n, prefix));
+/* 001c7ab0 */			captions.PushBack(EX_RA2String(key, i, "name", ""));
+/* 001c7ae0 */		}
+/* 001c7ae0 */	}
+/* 001c7ae6 */}
+
+string SceneAdvObjectListSelector::erasePrefix(string target, string prefix)
+/* 001c7aee */{
+/* 001c7aee */	return target.GetPart(prefix.Length(), target.Length() - prefix.Length());
+/* 001c7b1c */}
+
+void SceneAdvObjectListSelector::fadeButton(bool val)
+/* 001c7b2a */{
+/* 001c7b2c */}
+
+void SceneAdvObjectListSelector::run()
+/* 001c7b32 */{
+/* 001c7b32 */	this.fadeIn(true, NULL);
+/* 001c7b42 */}
+
+void SceneAdvObjectListSelector::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001c7b4a */{
+/* 001c7b4a */	this.base_.fadeIn(val, NULL);
+/* 001c7b66 */	int i;
+/* 001c7b78 */	for (i = 0; i < this.btnSelect_.Numof(); ++i)
+/* 001c7bc8 */	{
+/* 001c7bc8 */		this.btnSelect_[i].fadeIn(val);
+/* 001c7bee */	}
+/* 001c7bf4 */	for (i = 0; i < this.btnSys_.Numof(); ++i)
+/* 001c7c44 */	{
+/* 001c7c44 */		if (i == 0)
+/* 001c7c5c */		{
+/* 001c7c5c */			if (this.mode_ == 0)
+/* 001c7c74 */			{
+/* 001c7c74 */				this.btnSys_[i].fadeIn(val);
+/* 001c7c9a */			}
+/* 001c7c9a */		}
+/* 001c7ca0 */		else
+/* 001c7ca0 */		{
+/* 001c7ca0 */			this.btnSys_[i].fadeIn(val);
+/* 001c7cc6 */		}
+/* 001c7cc6 */	}
+/* 001c7ccc */	this.parts_.runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001c7d06 */	this.cbTimer_.setTimer(300, cb);
+/* 001c7d28 */}
+
+bool SceneAdvObjectListSelector::update()
+/* 001c7d30 */{
+/* 001c7d30 */	if (!this.cbTimer_.isRunning() && g_mouse.isClick(1))
+/* 001c7d7c */	{
+/* 001c7d7c */		playCancel();
+/* 001c7d82 */		this.fadeIn(false, this.onFinishFadeOut);
+/* 001c7d9a */	}
+/* 001c7d9a */	return !this.isFinish_;
+/* 001c7daa */}
+
+int SceneAdvObjectListSelector::getResult()
+/* 001c7db8 */{
+/* 001c7db8 */	return this.result_;
+/* 001c7dc4 */}
+

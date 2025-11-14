@@ -1,0 +1,115 @@
+void test_ExLoading_Item()
+/* 001f8d72 */{
+/* 001f8d72 */	int i;
+/* 001f8d84 */	for (i = 0; i < g_item.Numof(); ++i)
+/* 001f8dd4 */	{
+/* 001f8dd4 */		string n = "id:%s name:%s desc:%s type:%d targetType:%d price:%d iconImageName:%s, skillId:%s" % g_item[i].getId() % g_item[i].getName() % g_item[i].getDesc() % g_item[i].getType() % g_item[i].getTargetType() % g_item[i].getPrice() % g_item[i].getIconImageName() % g_item[i].getSkillId();
+/* 001f8f08 */		pass(n);
+/* 001f8f18 */	}
+/* 001f8f1e */}
+
+void test_Item_View()
+/* 001f8f2c */{
+/* 001f8f2c */	test_Player_CommonParam();
+/* 001f8f32 */	array@ItemView view;
+/* 001f8f3c */	view.Alloc(g_item.Numof());
+/* 001f8f5c */	int i;
+/* 001f8f6e */	for (i = 0; i < view.Numof(); ++i)
+/* 001f8fbe */	{
+/* 001f8fbe */		view[i].init(g_item[i].getId(), true);
+/* 001f8ffc */		view[i].setPos(100, 10 + 160 * i, true);
+/* 001f903e */		view[i].setOnClickCallback("test_Item_Callback", i);
+/* 001f907c */		view[i].fadeIn(true, i * 50);
+/* 001f90b0 */	}
+/* 001f90b6 */	while (true)
+/* 001f90c2 */	{
+/* 001f90c2 */		if (g_mouse.isClick(1))
+/* 001f90de */		{
+/* 001f90de */			break;
+/* 001f90e4 */		}
+/* 001f90e4 */		if (g_mouse.isClick(0))
+/* 7fffffffffffffff */		{
+/* 7fffffffffffffff */		}
+/* 001f9100 */		g_gameObjectManager.update();
+/* 001f9110 */		g_frameManager.updateFrame();
+/* 001f9120 */	}
+/* 001f9126 */}
+
+void test_Item_Callback(int id)
+/* 001f9134 */{
+/* 001f9134 */	pass("clicked: %d" % id);
+/* 001f9152 */}
+
+void test_ExLoading_Shop()
+/* 001f9160 */{
+/* 001f9160 */	int i;
+/* 001f9172 */	for (i = 0; i < g_shop.Numof(); ++i)
+/* 001f91c2 */	{
+/* 001f91c2 */		string n = "id:%s name:%s imageName:%s" % g_shop[i].getId() % g_shop[i].getName() % g_shop[i].getImageName();
+/* 001f9242 */		pass(n);
+/* 001f9252 */	}
+/* 001f9258 */}
+
+void test_Item_ListView()
+/* 001f9266 */{
+/* 001f9266 */	array@string item[10];
+/* 001f927c */	int i;
+/* 001f928e */	for (i = 0; i < item.Numof(); ++i)
+/* 001f92de */	{
+/* 001f92de */		item[i] = g_item[i % g_item.Numof()].getId();
+/* 001f9326 */	}
+/* 001f932c */	ItemListView list;
+/* 001f933c */	list.init(item, true);
+/* 001f935c */	list.fadeIn(true, NULL);
+/* 001f9374 */	while (true)
+/* 001f9380 */	{
+/* 001f9380 */		if (g_mouse.isClick(1))
+/* 001f939c */		{
+/* 001f939c */			break;
+/* 001f93a2 */		}
+/* 001f93a2 */		g_gameObjectManager.update();
+/* 001f93b2 */		g_frameManager.updateFrame();
+/* 001f93c2 */	}
+/* 001f93c8 */}
+
+void test_Scene_Shop()
+/* 001f93d6 */{
+/* 001f93d6 */	debugPlayerJoinAll();
+/* 001f93dc */	test_Party_Organize();
+/* 001f93e2 */	ＥＶ／武器屋／ラジール／入る／汎用();
+/* 001f93e8 */	g_playerCommonParam.setGold(9999999);
+/* 001f93fe */	int i;
+/* 001f9410 */	for (i = 0; i < g_item.Numof(); ++i)
+/* 001f9460 */	{
+/* 001f9460 */		g_shop[0].addItem(g_item[i].getId());
+/* 001f9494 */	}
+/* 001f949a */	openShop(g_shop[0].getId(), "仮ショップ名");
+/* 001f94be */}
+
+void test_Scene_Item()
+/* 001f94cc */{
+/* 001f94cc */	openItem();
+/* 001f94d2 */}
+
+void test_Item_NarrowDownButtons()
+/* 001f94e0 */{
+/* 001f94e0 */	ItemNarrowDownButton btn;
+/* 001f94f0 */	array@string n;
+/* 001f94fa */	int i;
+/* 001f950c */	for (i = 0; i < g_item.Numof(); ++i)
+/* 001f955c */	{
+/* 001f955c */		n.PushBack(g_item[i].getId());
+/* 001f9582 */	}
+/* 001f9588 */	btn.init(n, NULL);
+/* 001f95a6 */	btn.fadeIn(true, NULL);
+/* 001f95be */	while (true)
+/* 001f95ca */	{
+/* 001f95ca */		if (g_mouse.isClick(1))
+/* 001f95e6 */		{
+/* 001f95e6 */			break;
+/* 001f95ec */		}
+/* 001f95ec */		g_gameObjectManager.update();
+/* 001f95fc */		g_frameManager.updateFrame();
+/* 001f960c */	}
+/* 001f9612 */}
+

@@ -1,0 +1,57 @@
+void Ｓ＿セーブ()
+/* 0015d386 */{
+/* 0015d386 */	Ａ＿サウンド状態保存(false);
+/* 0015d392 */	CSampleSaveView SampleSaveView;
+/* 0015d3a2 */	SampleSaveView.Run();
+/* 0015d3b2 */	Ａ＿サウンド状態復帰();
+/* 0015d3b8 */}
+
+void Ｓ＿ロード()
+/* 0015d3c6 */{
+/* 0015d3c6 */	Ａ＿サウンド状態保存(false);
+/* 0015d3d2 */	CSampleLoadView SampleLoadView;
+/* 0015d3e2 */	SampleLoadView.Run();
+/* 0015d3f2 */	Ａ＿サウンド状態復帰();
+/* 0015d3f8 */}
+
+void Ｓ＿簡易セーブ()
+/* 0015d406 */{
+/* 0015d406 */	if (AFL_GetConfigQuickSaveConfirm())
+/* 7fffffffffffffff */	{
+/* 7fffffffffffffff */	}
+/* 0015d412 */	SYS_セーブ実行(-1, _ゲーム時間, "");
+/* 0015d430 */}
+
+void Ｓ＿簡易ロード()
+/* 0015d43e */{
+/* 0015d43e */	if (AFL_GetConfigQuickSaveConfirm())
+/* 7fffffffffffffff */	{
+/* 7fffffffffffffff */	}
+/* 0015d44a */	if (!system.ExistSaveFile(SYS_セーブファイル名(-1)))
+/* 0015d464 */	{
+/* 0015d464 */		return;
+/* 0015d466 */	}
+/* 0015d466 */	CASTimer Timer;
+/* 0015d476 */	Timer.Reset();
+/* 0015d486 */	while (Timer.Get() < 300)
+/* 0015d4a4 */	{
+/* 0015d4a4 */		AFL_View_Update(true);
+/* 0015d4b0 */	}
+/* 0015d4b6 */	SYS_ロード実行(-1);
+/* 0015d4c2 */}
+
+bool クイックセーブファイル存在確認()
+/* 0015d4d0 */{
+/* 0015d4d0 */	return g_bExistQuickSaveFile;
+/* 0015d4dc */}
+
+void 共有セーブ()
+/* 0015d4f0 */{
+/* 0015d4f0 */	SYS_共有セーブ();
+/* 0015d4f8 */}
+
+void ゲーム時間(string ゲーム時間文字列)
+/* 0015d506 */{
+/* 0015d506 */	_ゲーム時間 = ゲーム時間文字列;
+/* 0015d51e */}
+

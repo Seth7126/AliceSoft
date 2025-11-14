@@ -1,0 +1,123 @@
+CAEPropertyConstruction::CAEPropertyConstruction()
+/* 00071e90 */{
+/* 00071e98 */	this.Release();
+/* 00071ea0 */}
+
+CAEPropertyConstruction::~CAEPropertyConstruction()
+/* 00071ea8 */{
+/* 00071ea8 */	this.Release();
+/* 00071eb0 */}
+
+void CAEPropertyConstruction::Init(int LayoutID, ref CAEInstanceItem Item, int State)
+/* 00071eb8 */{
+/* 00071eb8 */	this.Release();
+/* 00071ec0 */	if (Item === NULL)
+/* 00071ed8 */	{
+/* 00071ed8 */		return;
+/* 00071eda */	}
+/* 00071eda */	this.m_Item <- Item;
+/* 00071efa */	this.m_PartsState = State;
+/* 00071f10 */	this.m_Panel.Init(LayoutID);
+/* 00071f2a */	this.m_Panel.AddKeyDownEvent(this.KeyDownEvent);
+/* 00071f44 */	this.m_Panel.AddMouseWheelEvent(this.MouseWheelEvent);
+/* 00071f5e */	this.m_Panel.AddMouseClickEvent(this.MouseLClickEvent);
+/* 00071f78 */	int ID = this.m_Item.GetID();
+/* 00071f94 */	this.m_Panel.AddButtonItem("構築手順", "編集");
+/* 00071fcc */}
+
+void CAEPropertyConstruction::Release()
+/* 00071fd4 */{
+/* 00071fd4 */	this.m_dgMouseWheelEvent.Clear();
+/* 00071fe0 */	this.m_dgKeyDownEvent.Clear();
+/* 00071fec */	this.m_Item <- NULL;
+/* 00072004 */	this.m_Panel.Release();
+/* 00072014 */}
+
+void CAEPropertyConstruction::KeyDownEvent(int ID, int KeyID)
+/* 0007201c */{
+/* 0007201c */	this.m_dgKeyDownEvent(ID, KeyID);
+/* 00072050 */}
+
+void CAEPropertyConstruction::MouseWheelEvent(int ID, int Forward, int Back)
+/* 00072058 */{
+/* 00072058 */	this.m_dgMouseWheelEvent(ID, Forward, Back);
+/* 00072096 */}
+
+void CAEPropertyConstruction::MouseLClickEvent(int ID, int MouseX, int MouseY)
+/* 0007209e */{
+/* 0007209e */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000720ee */	if (Item === NULL)
+/* 00072106 */	{
+/* 00072106 */		return;
+/* 00072108 */	}
+/* 00072108 */	int PartsID = this.m_Item.GetID();
+/* 00072124 */	if (Item.GetLabel() == "構築手順")
+/* 00072142 */	{
+/* 00072142 */		int NumofProcess = AFL_Parts_NumofConstructProcess(PartsID, this.m_PartsState);
+/* 00072168 */		int Index;
+/* 0007217a */		array@CASConstructionProcess List;
+/* 00072184 */		for (Index = 0; Index < NumofProcess; ++Index)
+/* 000721ce */		{
+/* 000721ce */			CASConstructionProcess Process;
+/* 000721de */			AFL_Parts_GetConstructProcess(PartsID, Index, Process, this.m_PartsState);
+/* 0007220c */			List.PushBack(Process);
+/* 00072224 */		}
+/* 00072230 */		CAEEditConstructionDialog Form;
+/* 00072240 */		Form.Show(ID, MouseX, MouseY, List, this.ChangedListEvent);
+/* 00072292 */	}
+/* 00072292 */}
+
+void CAEPropertyConstruction::ChangedListEvent(int ID, ref array@CASConstructionProcess List)
+/* 0007229a */{
+/* 0007229a */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000722ea */	if (Item === NULL)
+/* 00072302 */	{
+/* 00072302 */		return;
+/* 00072304 */	}
+/* 00072304 */	int PartsID = this.m_Item.GetID();
+/* 00072320 */	if (Item.GetLabel() == "構築手順")
+/* 0007233e */	{
+/* 0007233e */		this.Build(PartsID, List);
+/* 0007235a */	}
+/* 0007235a */}
+
+void CAEPropertyConstruction::SelecteTextEvent(int ID, string Name)
+/* 00072362 */{
+/* 00072362 */	ref CAEPropertyItem Item = this.m_Panel.GetItem(ID);
+/* 000723b2 */	if (Item === NULL)
+/* 000723ca */	{
+/* 000723ca */		return;
+/* 000723cc */	}
+/* 000723cc */}
+
+void CAEPropertyConstruction::Build(int PartsNumber, ref array@CASConstructionProcess List)
+/* 000723d4 */{
+/* 000723d4 */	Ｐ＿構築手順＿初期化(PartsNumber, this.m_PartsState);
+/* 000723ee */	int Index;
+/* 00072400 */	for (Index = 0; Index < List.Numof(); ++Index)
+/* 00072450 */	{
+/* 00072450 */		AFL_Parts_AddConstructProcess(PartsNumber, List[Index], this.m_PartsState);
+/* 00072480 */	}
+/* 00072486 */	Ｐ＿構築ビルド(PartsNumber, this.m_PartsState);
+/* 000724a0 */}
+
+void CAEPropertyConstruction::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000724a8 */{
+/* 000724a8 */	this.m_dgKeyDownEvent += DelegateObject;
+/* 000724c2 */}
+
+void CAEPropertyConstruction::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000724ca */{
+/* 000724ca */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 000724e4 */}
+
+void CAEPropertyConstruction::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 000724ec */{
+/* 000724ec */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 00072506 */}
+
+void CAEPropertyConstruction::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 0007250e */{
+/* 0007250e */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 00072528 */}
+

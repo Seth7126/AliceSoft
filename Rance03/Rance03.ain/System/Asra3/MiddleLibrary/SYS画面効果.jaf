@@ -1,0 +1,298 @@
+void SYS_画面更新(int 効果番号, int 効果時間, int デフォルト効果番号, int デフォルト効果時間, bool FirstKeyDownCancel)
+/* 0014d5be */{
+/* 0014d5be */	if (効果番号 < 0)
+/* 0014d5d6 */	{
+/* 0014d5d6 */		効果番号 = デフォルト効果番号;
+/* 0014d5ec */	}
+/* 0014d5ec */	if (効果時間 < 0)
+/* 0014d604 */	{
+/* 0014d604 */		効果時間 = デフォルト効果時間;
+/* 0014d61a */	}
+/* 0014d61a */	if (効果番号 == 0 || 効果時間 <= 0)
+/* 0014d662 */	{
+/* 0014d662 */		AFL_View_Update(true);
+/* 0014d66e */		return;
+/* 0014d670 */	}
+/* 0014d670 */	SYS_効果番号チェック(効果番号);
+/* 0014d67e */	if (SYS_全文スキップ中確認())
+/* 0014d68a */	{
+/* 0014d68a */		AFL_View_Update(true);
+/* 0014d696 */		return;
+/* 0014d698 */	}
+/* 0014d698 */	if (SYS_スキップ中確認())
+/* 0014d6a4 */	{
+/* 0014d6a4 */		AFL_View_Update(true);
+/* 0014d6b0 */		return;
+/* 0014d6b2 */	}
+/* 0014d6b2 */	ChipmunkSpriteEngine.TRANS_Begin(効果番号);
+/* 0014d6c8 */	CASEffectKeyCancelChecker ASEffectKeyCancelChecker;
+/* 0014d6d8 */	ASEffectKeyCancelChecker.Init(FirstKeyDownCancel);
+/* 0014d6f4 */	CASTimer Timer;
+/* 0014d704 */	Timer.Reset();
+/* 0014d714 */	for (; ; )
+/* 0014d714 */	{
+/* 0014d714 */		int nTime = Timer.Get();
+/* 0014d730 */		if (nTime >= 効果時間)
+/* 0014d74c */		{
+/* 0014d74c */			break;
+/* 0014d752 */		}
+/* 0014d752 */		if (SYS_全文スキップ中確認())
+/* 0014d75e */		{
+/* 0014d75e */			break;
+/* 0014d764 */		}
+/* 0014d764 */		if (SYS_スキップ中確認())
+/* 0014d770 */		{
+/* 0014d770 */			break;
+/* 0014d776 */		}
+/* 0014d776 */		if (ASEffectKeyCancelChecker.IsCancel())
+/* 0014d78c */		{
+/* 0014d78c */			if (ASEffectKeyCancelChecker.IsClickCanceled())
+/* 0014d7a2 */			{
+/* 0014d7a2 */				SYS_ReleaseModeByClickCancel();
+/* 0014d7a8 */			}
+/* 0014d7a8 */			break;
+/* 0014d7ae */		}
+/* 0014d7ae */		float fRate = float(nTime) / float(効果時間);
+/* 0014d7d4 */		SYS_View_Update(false, true, fRate);
+/* 0014d7f0 */	}
+/* 0014d7f6 */	ChipmunkSpriteEngine.TRANS_End();
+/* 0014d802 */	AFL_View_Update(true);
+/* 0014d80e */}
+
+void SYS_効果番号チェック(ref int 効果番号)
+/* 0014d81c */{
+/* 0014d81c */	switch (効果番号)
+/* 0014d834 */	{
+/* 0014d834 */	case 1:
+/* 0014d834 */	case 6:
+/* 0014d834 */	case 7:
+/* 0014d834 */	case 8:
+/* 0014d834 */	case 9:
+/* 0014d834 */	case 12:
+/* 0014d834 */	case 13:
+/* 0014d834 */	case 14:
+/* 0014d834 */	case 15:
+/* 0014d834 */	case 16:
+/* 0014d834 */	case 17:
+/* 0014d834 */	case 20:
+/* 0014d834 */	case 21:
+/* 0014d834 */	case 22:
+/* 0014d834 */	case 23:
+/* 0014d834 */	case 24:
+/* 0014d834 */	case 25:
+/* 0014d834 */	case 26:
+/* 0014d834 */	case 28:
+/* 0014d834 */	case 29:
+/* 0014d834 */	case 31:
+/* 0014d834 */	case 34:
+/* 0014d834 */	case 35:
+/* 0014d834 */	case 36:
+/* 0014d834 */	case 37:
+/* 0014d834 */	case 39:
+/* 0014d834 */	case 40:
+/* 0014d834 */	case 41:
+/* 0014d834 */	case 43:
+/* 0014d834 */	case 44:
+/* 0014d834 */	case 45:
+/* 0014d834 */	case 46:
+/* 0014d834 */	case 47:
+/* 0014d834 */	case 48:
+/* 0014d834 */	case 49:
+/* 0014d834 */	case 50:
+/* 0014d834 */	case 51:
+/* 0014d834 */	case 54:
+/* 0014d834 */	case 55:
+/* 0014d834 */	case 56:
+/* 0014d834 */	case 57:
+/* 0014d834 */	case 58:
+/* 0014d834 */	case 59:
+/* 0014d834 */	case 60:
+/* 0014d834 */		break;
+/* 0014d83a */	default:
+/* 0014d83a */		system.Output("未実装の画面エフェクトです【 %d 】\n" % 効果番号);
+/* 0014d85c */		効果番号 = 1;
+/* 0014d870 */	}
+/* 0014d870 */}
+
+void SYS_View_Update(bool 未読既読スキップ, bool Transition, float TransitionRate)
+/* 0014d87e */{
+/* 0014d87e */	if (!Transition)
+/* 0014d890 */	{
+/* 0014d890 */		SYS_メッセージモード更新();
+/* 0014d896 */	}
+/* 0014d896 */	g_BGM.UpdateReserve();
+/* 0014d8a6 */	int i;
+/* 0014d8b8 */	for (i = 0; i < 3; ++i)
+/* 0014d8fe */	{
+/* 0014d8fe */		g_LoopSE[i].UpdateReserve();
+/* 0014d91a */	}
+/* 0014d920 */	g_SE.UpdateReserve();
+/* 0014d930 */	g_BGMVolumeCapManager.UpdateBGMFade();
+/* 0014d940 */	g_SoundVolumeCapManager.UpdateSound();
+/* 0014d950 */	ChipmunkSpriteEngine.SYSTEM_SetReadMessageSkipping(SYS_スキップ中確認() || SYS_全文スキップ中確認());
+/* 0014d986 */	if (system.IsDebugMode())
+/* 0014d992 */	{
+/* 0014d992 */		ChipmunkSpriteEngine.SYSTEM_SetConfigFrameSkipAllWhileMessageSkip(g_FrameSkipAll);
+/* 0014d9a6 */		int MouseX = -1;
+/* 0014d9b8 */		int MouseY = -1;
+/* 0014d9ca */		AFL_Mouse_GetPos(MouseX, MouseY);
+/* 0014d9e2 */		bool IsShowLeft = MouseX >= AFL_View_GetWidth() / 2;
+/* 0014da0a */		g_DebugFPS.Update(IsShowLeft, 0);
+/* 0014da2a */		g_DebugMemorySize.Update(IsShowLeft, g_DebugFPS.GetBottom());
+/* 0014da54 */		if (!Transition)
+/* 0014da66 */		{
+/* 0014da66 */			g_DebugFillRate.Update(IsShowLeft, g_DebugMemorySize.GetBottom());
+/* 0014da90 */			g_DebugVoicePlaying.SetPlay(SYS_IsPlayVoice());
+/* 0014daa6 */			g_DebugVoicePlaying.Update(0, 0);
+/* 0014dac2 */			g_DebugGimicSEPlaying.SetPlay(SYS_IsPlayGimicSE());
+/* 0014dad8 */			g_DebugGimicSEPlaying.Update(0, g_DebugVoicePlaying.GetBottom());
+/* 0014dafe */			g_DebugBackVoicePlaying.SetPlay(SYS_IsPlayBackVoice());
+/* 0014db14 */			g_DebugBackVoicePlaying.Update(0, g_DebugGimicSEPlaying.GetBottom());
+/* 0014db3a */			g_DebugVideoMemorySize.Update(IsShowLeft, g_DebugFillRate.GetBottom());
+/* 0014db64 */		}
+/* 0014db64 */	}
+/* 0014db64 */	SealEngine.SetMagSpeed(未読既読スキップ && (全文スキップ中確認() || 既読スキップ中確認()) ? 3 : 1);
+/* 0014dbd8 */	MarmotModelEngine.Update();
+/* 0014dbe4 */	PARTS_Update(未読既読スキップ);
+/* 0014dbf4 */	SYS_PlayTime_Update();
+/* 0014dbfa */	if (Transition)
+/* 0014dc0a */	{
+/* 0014dc0a */		ChipmunkSpriteEngine.TRANS_Update(TransitionRate);
+/* 0014dc20 */	}
+/* 0014dc26 */	else
+/* 0014dc26 */	{
+/* 0014dc26 */		ChipmunkSpriteEngine.Update();
+/* 0014dc32 */	}
+/* 0014dc32 */	SystemService.UpdateView();
+/* 0014dc3e */	if (!Transition)
+/* 0014dc50 */	{
+/* 0014dc50 */		ChipmunkSpriteEngine.KeepPreviousView();
+/* 0014dc5c */	}
+/* 0014dc5c */	ChipmunkSpriteEngine.Sleep();
+/* 0014dc66 */	AFL_MouseWheel_ClearCount();
+/* 0014dc6c */	system.Peek();
+/* 0014dc72 */	PARTS_UpdateMessage();
+/* 0014dc78 */	SYS_ProcessSystemMessage();
+/* 0014dc7e */	SYS_PostCallUpdateView();
+/* 0014dc84 */	IbisInputEngine.Joystick_ClearCaptureFlag();
+/* 0014dc8e */}
+
+void SYS_全画面色(int Ｒ, int Ｇ, int Ｂ)
+/* 0014dc9c */{
+/* 0014dc9c */	if (Ｒ != -2147483648 && Ｇ != -2147483648 && Ｂ != -2147483648)
+/* 0014dd14 */	{
+/* 0014dd14 */		g_ColorLayerSprite.Create();
+/* 0014dd24 */		Ｐ＿構築手順＿初期化(g_ColorLayerSprite.GetPartsNumber(), 1);
+/* 0014dd40 */		Ｐ＿構築手順＿作成(g_ColorLayerSprite.GetPartsNumber(), AFL_View_GetWidth(), AFL_View_GetHeight(), 1);
+/* 0014dd68 */		Ｐ＿構築手順＿色塗り(g_ColorLayerSprite.GetPartsNumber(), 0, 0, AFL_View_GetWidth(), AFL_View_GetHeight(), Ｒ, Ｇ, Ｂ, 255, 1);
+/* 0014ddc0 */		Ｐ＿構築ビルド(g_ColorLayerSprite.GetPartsNumber(), 1);
+/* 0014dddc */		g_ColorLayerSprite.SetPos(0, 0);
+/* 0014ddf8 */		g_ColorLayerSprite.SetZ(0);
+/* 0014de0e */		g_ColorLayerSprite.SetShow(true);
+/* 0014de24 */		Ｐ＿親設定(g_ColorLayerSprite.GetPartsNumber(), PARTS_GetSystemOverlayLayer());
+/* 0014de40 */	}
+/* 0014de46 */	else
+/* 0014de46 */	{
+/* 0014de46 */		g_ColorLayerSprite.Release();
+/* 0014de56 */	}
+/* 0014de56 */}
+
+void SYS_画面揺らし(int nQuakeWidth, int nQuakeHeight, int nTotalTime)
+/* 0014de64 */{
+/* 0014de64 */	CASEffectKeyCancelChecker ASEffectKeyCancelChecker;
+/* 0014de74 */	ASEffectKeyCancelChecker.Init(true);
+/* 0014de8c */	int _nBeginTime = system.GetTime();
+/* 0014de9e */	for (; ; )
+/* 0014de9e */	{
+/* 0014de9e */		int _nTime = system.GetTime() - _nBeginTime;
+/* 0014debc */		if (_nTime >= nTotalTime)
+/* 0014ded8 */		{
+/* 0014ded8 */			break;
+/* 0014dede */		}
+/* 0014dede */		if (ASEffectKeyCancelChecker.IsCancel())
+/* 0014def4 */		{
+/* 0014def4 */			if (ASEffectKeyCancelChecker.IsClickCanceled())
+/* 0014df0a */			{
+/* 0014df0a */				SYS_ReleaseModeByClickCancel();
+/* 0014df10 */			}
+/* 0014df10 */			break;
+/* 0014df16 */		}
+/* 0014df16 */		if (SYS_全文スキップ中確認())
+/* 0014df22 */		{
+/* 0014df22 */			break;
+/* 0014df28 */		}
+/* 0014df28 */		if (SYS_スキップ中確認())
+/* 0014df34 */		{
+/* 0014df34 */			break;
+/* 0014df3a */		}
+/* 0014df3a */		float _fMag = 1.0 - float(_nTime) / float(nTotalTime);
+/* 0014df6c */		int _nX;
+/* 0014df7e */		if (nQuakeWidth == 0)
+/* 0014df96 */		{
+/* 0014df96 */			_nX = 0;
+/* 0014dfa8 */		}
+/* 0014dfae */		else
+/* 0014dfae */		{
+/* 0014dfae */			_nX = (Math.Rand() % nQuakeWidth - nQuakeWidth / 2) * _fMag;
+/* 0014dff8 */		}
+/* 0014dff8 */		int _nY;
+/* 0014e00a */		if (nQuakeHeight == 0)
+/* 0014e022 */		{
+/* 0014e022 */			_nY = 0;
+/* 0014e034 */		}
+/* 0014e03a */		else
+/* 0014e03a */		{
+/* 0014e03a */			_nY = (Math.Rand() % nQuakeHeight - nQuakeHeight / 2) * _fMag;
+/* 0014e084 */		}
+/* 0014e084 */		ChipmunkSpriteEngine.VIEW_SetOffsetPos(_nX, _nY);
+/* 0014e0a2 */		AFL_View_Update(true);
+/* 0014e0ae */	}
+/* 0014e0b4 */	ChipmunkSpriteEngine.VIEW_SetOffsetPos(0, 0);
+/* 0014e0ca */	AFL_View_Update(true);
+/* 0014e0d6 */}
+
+void SYS_画面揺らし終了待ち(int nQuakeWidth, int nQuakeHeight, int nTotalTime)
+/* 0014e0e4 */{
+/* 0014e0e4 */	CASEffectKeyCancelChecker ASEffectKeyCancelChecker;
+/* 0014e0f4 */	ASEffectKeyCancelChecker.Init(true);
+/* 0014e10c */	int _nBeginTime = system.GetTime();
+/* 0014e11e */	for (; ; )
+/* 0014e11e */	{
+/* 0014e11e */		int _nTime = system.GetTime() - _nBeginTime;
+/* 0014e13c */		if (_nTime >= nTotalTime)
+/* 0014e158 */		{
+/* 0014e158 */			break;
+/* 0014e15e */		}
+/* 0014e15e */		float _fMag = 1.0 - float(_nTime) / float(nTotalTime);
+/* 0014e190 */		int _nX;
+/* 0014e1a2 */		if (nQuakeWidth == 0)
+/* 0014e1ba */		{
+/* 0014e1ba */			_nX = 0;
+/* 0014e1cc */		}
+/* 0014e1d2 */		else
+/* 0014e1d2 */		{
+/* 0014e1d2 */			_nX = (Math.Rand() % nQuakeWidth - nQuakeWidth / 2) * _fMag;
+/* 0014e21c */		}
+/* 0014e21c */		int _nY;
+/* 0014e22e */		if (nQuakeHeight == 0)
+/* 0014e246 */		{
+/* 0014e246 */			_nY = 0;
+/* 0014e258 */		}
+/* 0014e25e */		else
+/* 0014e25e */		{
+/* 0014e25e */			_nY = (Math.Rand() % nQuakeHeight - nQuakeHeight / 2) * _fMag;
+/* 0014e2a8 */		}
+/* 0014e2a8 */		ChipmunkSpriteEngine.VIEW_SetOffsetPos(_nX, _nY);
+/* 0014e2c6 */		AFL_View_Update(true);
+/* 0014e2d2 */	}
+/* 0014e2d8 */	ChipmunkSpriteEngine.VIEW_SetOffsetPos(0, 0);
+/* 0014e2ee */	AFL_View_Update(true);
+/* 0014e2fa */}
+
+void SYS_文字表示後画面揺らしクリア()
+/* 0014e308 */{
+/* 0014e308 */	_文字表示後画面揺らし横 = 0;
+/* 0014e31a */	_文字表示後画面揺らし縦 = 0;
+/* 0014e32c */	_文字表示後画面揺らし時 = 0;
+/* 0014e33e */}
+

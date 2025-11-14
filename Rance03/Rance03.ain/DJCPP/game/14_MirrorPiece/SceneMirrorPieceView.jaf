@@ -1,0 +1,93 @@
+void SceneMirrorPieceView::init()
+/* 001be7ae */{
+/* 001be7ae */	this.isFinish_ = false;
+/* 001be7c0 */	this.pageCount_ = g_mirrorPiece.Numof();
+/* 001be7dc */	int i;
+/* 001be7ee */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001be83e */	{
+/* 001be83e */		g_mirrorPiece[i].setShownAtViewer(true);
+/* 001be860 */	}
+/* 001be866 */	this.parts_.Alloc(this.pageCount_);
+/* 001be880 */	this.scrollBase_.init(this.pageCount_, "システム／鏡の破片／下地", true);
+/* 001be8a6 */	this.initMirrorPiece();
+/* 001be8ae */	this.initButton();
+/* 001be8b6 */}
+
+void SceneMirrorPieceView::initMirrorPiece()
+/* 001be8be */{
+/* 001be8be */	int i;
+/* 001be8d0 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001be920 */	{
+/* 001be920 */		this.parts_[i].initAsUserStructure();
+/* 001be93c */		int pn = this.parts_[i].getPartsNumber();
+/* 001be964 */		Ｐ＿構築手順＿ＣＧ設定(pn, g_mirrorPiece[i].getBgCgName(), 1);
+/* 001be996 */		int j;
+/* 001be9a8 */		for (j = 0; j < 10; ++j)
+/* 001be9ee */		{
+/* 001be9ee */			if (g_mirrorPiece[i].isPieceOpen(j))
+/* 001bea1a */			{
+/* 001bea1a */				Ｐ＿構築手順＿ＣＧ部分アルファブレンド(pn, g_mirrorPiece[i].getCgName(j), 0, 0, 0, 0, 1024, 768, 1);
+/* 001bea7a */			}
+/* 001bea7a */		}
+/* 001bea80 */		Ｐ＿構築ビルド(pn, 1);
+/* 001bea96 */		this.parts_[i].setShow(true);
+/* 001beab8 */		this.parts_[i].setZ(6000.0);
+/* 001beada */		this.parts_[i].setPos(1024 * i, 0.0);
+/* 001beb10 */		this.parts_[i].setParent(this.scrollBase_.getPartsNumber());
+/* 001beb3c */	}
+/* 001beb42 */}
+
+void SceneMirrorPieceView::initButton()
+/* 001beb4a */{
+/* 001beb4a */	this.btnExit_.init("システム／ボタン／幅１７０", "閉じる", "", true);
+/* 001beb72 */	this.btnExit_.setPos(839, 691);
+/* 001beb8e */	this.btnExit_.setClickCallback(this.onClickButtonExit, 0);
+/* 001bebae */}
+
+void SceneMirrorPieceView::onClickButtonExit(int index)
+/* 001bebb6 */{
+/* 001bebb6 */	this.fadeIn(false);
+/* 001bebc4 */}
+
+void SceneMirrorPieceView::run()
+/* 001bebcc */{
+/* 001bebcc */	this.fadeIn(true);
+/* 001bebda */}
+
+void SceneMirrorPieceView::fadeIn(bool val)
+/* 001bebe2 */{
+/* 001bebe2 */	this.btnExit_.fadeIn(val);
+/* 001bebfc */	this.scrollBase_.fadeIn(val, NULL);
+/* 001bec18 */	int i;
+/* 001bec2a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001bec7a */	{
+/* 001bec7a */		this.parts_[i].runMotion(getStandardMotion(val ? 0 : 1), NULL);
+/* 001becc0 */	}
+/* 001becc6 */	if (!val)
+/* 001becd8 */	{
+/* 001becd8 */		this.timerCb_.setTimer(300, this.onFinish);
+/* 001becf8 */	}
+/* 001becf8 */}
+
+void SceneMirrorPieceView::onFinish()
+/* 001bed00 */{
+/* 001bed00 */	this.isFinish_ = true;
+/* 001bed12 */}
+
+bool SceneMirrorPieceView::update()
+/* 001bed1a */{
+/* 001bed1a */	if (g_mouse.isClick(1))
+/* 001bed36 */	{
+/* 001bed36 */		playCancel();
+/* 001bed3c */		this.fadeIn(false);
+/* 001bed4a */	}
+/* 001bed4a */	return !this.isFinish_;
+/* 001bed5a */}
+
+void SceneMirrorPieceView::onClickThumbnailButton(int index)
+/* 001bed68 */{
+/* 001bed68 */	array@string n;
+/* 001bed72 */	g_cgList[index].getShownCgList(n);
+/* 001bed98 */	openCgSwipeView(n);
+/* 001beda8 */}
+

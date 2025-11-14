@@ -1,0 +1,148 @@
+bool testSkipFunc()
+/* 001ffbc2 */{
+/* 001ffbc2 */	return g_keyboard.isDown(17);
+/* 001ffbda */}
+
+void test_kasokudo()
+/* 001ffbee */{
+/* 001ffbee */	float nowSpeed;
+/* 001ffc00 */	float nowTime;
+/* 001ffc12 */	float dt = 10.0;
+/* 001ffc24 */	float pos;
+/* 001ffc36 */	float pps = 300.0;
+/* 001ffc48 */	int i;
+/* 001ffc5a */	for (i = 0; i < 100; ++i)
+/* 001ffca0 */	{
+/* 001ffca0 */		float dtSpeed = nowSpeed + pps * (dt / 1000.0);
+/* 001ffcd6 */		float henni = getHenni(nowSpeed, dtSpeed, dt / 1000.0);
+/* 001ffd0e */		pos += henni;
+/* 001ffd24 */		pass("%f %f %f %f" % dtSpeed % nowSpeed % henni % pos);
+/* 001ffd78 */		nowSpeed = dtSpeed;
+/* 001ffd8e */	}
+/* 001ffd94 */}
+
+float getHenni(float v0, float v, float t)
+/* 001ffda2 */{
+/* 001ffda2 */	float a = (v - v0) / t;
+/* 001ffdd0 */	return v0 * t + 0.5 * a * (t * t);
+/* 001ffe14 */}
+
+void test_Allocation()
+/* 001ffe28 */{
+/* 001ffe28 */	array@TestAllocationObject a[5];
+/* 001ffe3e */	pass("alloc");
+/* 001ffe4a */	a.Alloc(2);
+/* 001ffe60 */	pass("alloc_edn");
+/* 001ffe6c */	int i;
+/* 001ffe7e */	for (i = 0; i < a.Numof(); ++i)
+/* 7fffffffffffffff */	{
+/* 7fffffffffffffff */	}
+/* 001ffed4 */}
+
+TestAllocationObject::TestAllocationObject()
+/* 001ffee2 */{
+/* 001ffeea */	pass("constructed %d" % debugTestAllocationObjectCount);
+/* 001fff08 */	++debugTestAllocationObjectCount;
+/* 001fff18 */}
+
+TestAllocationObject::~TestAllocationObject()
+/* 001fff20 */{
+/* 001fff20 */	pass("destructed%d" % debugTestAllocationObjectCount);
+/* 001fff3e */	--debugTestAllocationObjectCount;
+/* 001fff4e */}
+
+void test_Permitation()
+/* 001fff56 */{
+/* 001fff56 */	array@int n;
+/* 001fff60 */	array@int m;
+/* 001fff6a */	m.PushBack(0);
+/* 001fff7a */	m.PushBack(1);
+/* 001fff8a */	m.PushBack(2);
+/* 001fff9a */	m.PushBack(3);
+/* 001fffaa */	m.PushBack(4);
+/* 001fffba */	m.PushBack(5);
+/* 001fffca */	m.PushBack(6);
+/* 001fffda */	m.PushBack(7);
+/* 001fffea */	array@Permutation result;
+/* 001ffff4 */	pass("%d" % result.Numof());
+/* 00200018 */}
+
+void test_IsDungeonCardId()
+/* 00200026 */{
+/* 00200026 */	int i;
+/* 00200038 */	for (i = 0; i < g_cardInfomation.Numof(); ++i)
+/* 00200088 */	{
+/* 00200088 */		string id = g_cardInfomation[i].getId();
+/* 002000b2 */		pass("%s %d" % id % isDungeonCardId(id));
+/* 002000e8 */	}
+/* 002000ee */	pass("%d" % isDungeonCardId("bs_"));
+/* 0020010e */	pass("%d" % isDungeonCardId("baaa"));
+/* 0020012e */	pass("%d" % isDungeonCardId("__"));
+/* 0020014e */	pass("%d" % isDungeonCardId("asss"));
+/* 0020016e */}
+
+void test_LotterySystem()
+/* 0020017c */{
+/* 0020017c */	LotterySystem l;
+/* 0020018c */	l.addIntKey(1, 1000);
+/* 002001a8 */	l.addIntKey(2, 30);
+/* 002001c4 */	l.addIntKey(3, 40);
+/* 002001e0 */	l.addIntKey(4, 10);
+/* 002001fc */	array@int n[4];
+/* 00200212 */	int i;
+/* 00200224 */	for (i = 0; i < 100000; ++i)
+/* 0020026a */	{
+/* 0020026a */		int r = l.drawInt(false);
+/* 0020028c */		++n[r - 1];
+/* 002002b0 */	}
+/* 002002b6 */	for (i = 0; i < n.Numof(); ++i)
+/* 00200306 */	{
+/* 00200306 */		pass("%d:%d" % (i + 1) % n[i]);
+/* 0020034a */	}
+/* 00200350 */}
+
+void test_IndexRoundRobin()
+/* 0020035e */{
+/* 0020035e */	IndexRoundRobin r;
+/* 0020036e */	r.init(6);
+/* 00200384 */	int i;
+/* 00200396 */	for (i = 0; i < 100; ++i)
+/* 002003dc */	{
+/* 002003dc */		pass("%d" % r.get());
+/* 00200400 */	}
+/* 00200406 */}
+
+void test_FindUsedCgResources()
+/* 00200414 */{
+/* 00200414 */	int count = AFL_AFA_CG_Numof();
+/* 00200426 */	AFL_LogViewer_OpenViewer();
+/* 0020042c */	int i;
+/* 0020043e */	for (i = 0; i < count; ++i)
+/* 00200488 */	{
+/* 00200488 */		string cg = AFL_AFA_CG_GetTitle(i);
+/* 002004a6 */		if (ＣＧモード確認(cg))
+/* 002004bc */		{
+/* 002004bc */			AFL_LogViewer_AddText("%s\n" % cg);
+/* 002004da */		}
+/* 002004da */	}
+/* 002004e0 */}
+
+void test_FindUsedMusicResources()
+/* 002004ee */{
+/* 002004ee */	int count = AFL_AFA_Sound_Numof();
+/* 00200500 */	AFL_LogViewer_OpenViewer();
+/* 00200506 */	int i;
+/* 00200518 */	for (i = 0; i < count; ++i)
+/* 00200562 */	{
+/* 00200562 */		string title = AFL_AFA_Sound_GetTitle(i);
+/* 00200580 */		if (g_playedMusic.Find(0, g_playedMusic.Numof(), title) >= 0)
+/* 002005be */		{
+/* 002005be */			AFL_LogViewer_AddText("%s\n" % title);
+/* 002005dc */		}
+/* 002005dc */	}
+/* 002005e2 */}
+
+void test_OutputPermutation()
+/* 002005f0 */{
+/* 002005f2 */}
+

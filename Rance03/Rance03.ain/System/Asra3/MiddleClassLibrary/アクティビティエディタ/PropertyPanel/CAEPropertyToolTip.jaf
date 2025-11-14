@@ -1,0 +1,108 @@
+CAEPropertyToolTip::CAEPropertyToolTip()
+/* 000761a8 */{
+/* 000761b2 */}
+
+CAEPropertyToolTip::~CAEPropertyToolTip()
+/* 000761b8 */{
+/* 000761b8 */	this.Release();
+/* 000761c0 */}
+
+void CAEPropertyToolTip::Init()
+/* 000761c8 */{
+/* 000761c8 */	this.Release();
+/* 000761d0 */	this.m_ToolTip = PARTS_GetFreeSystemPartsNumber();
+/* 000761e2 */	Ｐ＿Ｚ座標設定(this.m_ToolTip, 32767);
+/* 000761f8 */	Ｐ＿オンカーソル透過設定(this.m_ToolTip, true);
+/* 0007620e */}
+
+void CAEPropertyToolTip::Release()
+/* 00076216 */{
+/* 00076216 */	this.m_dgGetToolTipTextEvent.Clear();
+/* 00076222 */	PARTS_ReleaseWithInit(this.m_ToolTip);
+/* 00076230 */	this.m_LastEnterParts = 0;
+/* 00076242 */	this.m_Text = "";
+/* 00076256 */}
+
+void CAEPropertyToolTip::AddParts(int Number)
+/* 0007625e */{
+/* 0007625e */	AFL_Parts_AddMouseEnterEvent(Number, this.MouseEnterEvent);
+/* 00076278 */	AFL_Parts_AddMouseLeaveEvent(Number, this.MouseLeaveEvent);
+/* 00076292 */}
+
+void CAEPropertyToolTip::SetGetToolTipTextEvent(DG_GetToolTipTextHandler dgObject)
+/* 0007629a */{
+/* 0007629a */	this.m_dgGetToolTipTextEvent.Clear();
+/* 000762a6 */	this.m_dgGetToolTipTextEvent += dgObject;
+/* 000762c0 */}
+
+void CAEPropertyToolTip::MouseEnterEvent(int ID, int MouseX, int MouseY)
+/* 000762c8 */{
+/* 000762c8 */	this.m_LastEnterParts = ID;
+/* 000762de */	AFL_Parts_AddBeginUpdateEvent(this.UpdateFrameEvent);
+/* 000762ee */}
+
+void CAEPropertyToolTip::MouseLeaveEvent(int ID, int MouseX, int MouseY)
+/* 000762f6 */{
+/* 000762f6 */	if (this.m_LastEnterParts != ID)
+/* 00076312 */	{
+/* 00076312 */		return;
+/* 00076314 */	}
+/* 00076314 */	this.m_LastEnterParts = 0;
+/* 00076326 */	this.m_Text = "";
+/* 0007633a */	Ｐ＿表示設定(this.m_ToolTip, false);
+/* 00076350 */	AFL_Parts_EraseBeginUpdateEvent(this.UpdateFrameEvent);
+/* 00076360 */}
+
+void CAEPropertyToolTip::UpdateFrameEvent(int PassedTime)
+/* 00076368 */{
+/* 00076368 */	this.UpdateToolTipText(this.m_LastEnterParts);
+/* 0007637a */}
+
+void CAEPropertyToolTip::UpdateToolTipText(int ID)
+/* 00076382 */{
+/* 00076382 */	if (ID == 0)
+/* 0007639a */	{
+/* 0007639a */		return;
+/* 0007639c */	}
+/* 0007639c */	string Text = this.m_dgGetToolTipTextEvent(ID);
+/* 000763d4 */	if (Text.Empty())
+/* 000763e6 */	{
+/* 000763e6 */		Ｐ＿表示設定(this.m_ToolTip, false);
+/* 000763fc */		return;
+/* 000763fe */	}
+/* 000763fe */	if (this.m_Text == Text)
+/* 0007641a */	{
+/* 0007641a */		return;
+/* 0007641c */	}
+/* 0007641c */	this.m_Text = Text;
+/* 00076434 */	int FontSize = 16;
+/* 00076446 */	CASCharSpriteProperty Font;
+/* 00076456 */	Font.SetType(0);
+/* 0007646c */	Font.SetSize(FontSize);
+/* 00076486 */	Font.SetColor(CF_CASColor(0, 0, 0, 255));
+/* 000764b4 */	Font.SetBoldWeight(0.0);
+/* 000764ca */	Font.SetEdgeWeight(0.0);
+/* 000764e0 */	Font.SetEdgeColor(CF_CASColor(0, 0, 0, 255));
+/* 0007650e */	int ToolTipWidth;
+/* 00076520 */	int ToolTipHeight;
+/* 00076532 */	PARTS_TextParts_CalcSize(Font, Text, ToolTipWidth, ToolTipHeight, 0, 0);
+/* 00076568 */	int BGWidth = ToolTipWidth + FontSize * 2;
+/* 00076592 */	int BGHeight = ToolTipHeight + FontSize;
+/* 000765b4 */	Ｐ＿構築手順＿ピクセル作成(this.m_ToolTip, BGWidth, BGHeight, 1);
+/* 000765de */	Ｐ＿構築手順＿色塗り(this.m_ToolTip, 0, 0, BGWidth, BGHeight, 255, 255, 255, -1, 1);
+/* 0007662c */	Ｐ＿構築手順＿テキストブレンド(this.m_ToolTip, FontSize, FontSize / 2, Text, Font, 0, 0, 1);
+/* 00076682 */	Ｐ＿構築手順＿矩形(this.m_ToolTip, 1, 1, BGWidth - 2, BGHeight - 2, 0, 0, 0, 1);
+/* 000766da */	Ｐ＿構築ビルド(this.m_ToolTip, 1);
+/* 000766f0 */	Ｐ＿表示設定(this.m_ToolTip, true);
+/* 00076706 */	int BaseX = PARTS_GetAbsoluteX(ID);
+/* 00076724 */	int BaseY = PARTS_GetAbsoluteY(ID);
+/* 00076742 */	int ToolTipX = BaseX;
+/* 00076758 */	int ToolTipY = BaseY - (BGHeight + FontSize);
+/* 00076786 */	int ViewWidth = AFL_View_GetWidth();
+/* 00076798 */	if (ViewWidth <= ToolTipX + BGWidth)
+/* 000767c0 */	{
+/* 000767c0 */		ToolTipX -= (ToolTipX + BGWidth) - ViewWidth;
+/* 000767ee */	}
+/* 000767ee */	Ｐ＿座標設定(this.m_ToolTip, ToolTipX, ToolTipY);
+/* 00076816 */}
+

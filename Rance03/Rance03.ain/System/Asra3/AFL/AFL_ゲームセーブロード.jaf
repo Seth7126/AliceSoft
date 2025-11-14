@@ -1,0 +1,100 @@
+bool AFL_GameSave_IsExistFile(int SaveNumber)
+/* 00170e3e */{
+/* 00170e3e */	return SYS_セーブファイル存在(SaveNumber);
+/* 00170e50 */}
+
+bool AFL_GameSave_GetFileInfo(int SaveNumber, ref int Year, ref int Month, ref int Day, ref int Week, ref int Hour, ref int Min, ref int Sec, ref string TimeInGameText, ref string UserComment, ref int PlayMinuteTime)
+/* 00170e64 */{
+/* 00170e64 */	セーブ２_t Info;
+/* 00170e74 */	if (!SYS_追加ロード(SaveNumber, Info))
+/* 00170e96 */	{
+/* 00170e96 */		return false;
+/* 00170e9e */	}
+/* 00170e9e */	Year = Info.sys年;
+/* 00170ebe */	Month = Info.sys月;
+/* 00170ede */	Day = Info.sys日;
+/* 00170efe */	Week = Info.sys曜;
+/* 00170f1e */	Hour = Info.sys時;
+/* 00170f3e */	Min = Info.sys分;
+/* 00170f5e */	Sec = Info.sys秒;
+/* 00170f7e */	TimeInGameText = Info.ゲーム時間文字列;
+/* 00170f9e */	UserComment = Info.コメント;
+/* 00170fbe */	PlayMinuteTime = Info.PlayMinuteTime;
+/* 00170fde */	return true;
+/* 00170fe6 */}
+
+int AFL_GameSave_GetLatestSaveNumber()
+/* 00170ffa */{
+/* 00170ffa */	return SYS_最終セーブ番号取得();
+/* 00171002 */}
+
+bool AFL_GameSave_Save(int SaveNumber, string UserComment)
+/* 00171016 */{
+/* 00171016 */	SYS_最終セーブ番号更新(SaveNumber);
+/* 00171026 */	return SYS_セーブ実行(SaveNumber, _ゲーム時間, UserComment);
+/* 0017104c */}
+
+void AFL_GameSave_Load(int SaveNumber)
+/* 00171060 */{
+/* 00171060 */	SYS_ロード実行(SaveNumber);
+/* 00171070 */}
+
+bool AFL_GameSave_SaveThumbnail(int SaveNumber, int ThumbnailWidth)
+/* 0017107e */{
+/* 0017107e */	PARTS_Update(false);
+/* 0017108a */	string SaveFileName = system.GetSaveFolderName() + "\\" + AFL_GameSave_GetThumbnailFileName(SaveNumber);
+/* 001710b8 */	if (!PartsEngine.SaveThumbnail(SaveFileName, ThumbnailWidth))
+/* 001710de */	{
+/* 001710de */		system.Output("サムネイル画像の保存に失敗しました\n");
+/* 001710ec */	}
+/* 001710ec */	return true;
+/* 001710f4 */}
+
+bool AFL_GameSave_Copy(int DestSaveNumber, int SrcSaveNumber)
+/* 00171108 */{
+/* 00171108 */	if (!SYS_セーブファイルコピー(DestSaveNumber, SrcSaveNumber))
+/* 0017112a */	{
+/* 0017112a */		return false;
+/* 00171132 */	}
+/* 00171132 */	if (AFL_GameSave_IsExistThumbnail(SrcSaveNumber))
+/* 00171148 */	{
+/* 00171148 */		if (!AFL_GameSave_CopyThumbnail(DestSaveNumber, SrcSaveNumber))
+/* 0017116a */		{
+/* 0017116a */			return false;
+/* 00171172 */		}
+/* 00171172 */	}
+/* 00171172 */	return true;
+/* 0017117a */}
+
+void AFL_GameSave_Delete(int SaveNumber)
+/* 0017118e */{
+/* 0017118e */	SYS_セーブファイル削除(SaveNumber);
+/* 0017119e */	system.DeleteSaveFile(SYS_GameSave_GetThumbnailFileName(SaveNumber));
+/* 001711b6 */}
+
+bool AFL_GameSave_CopyThumbnail(int DestSaveNumber, int SrcSaveNumber)
+/* 001711c4 */{
+/* 001711c4 */	if (!AFL_GameSave_IsExistThumbnail(SrcSaveNumber))
+/* 001711dc */	{
+/* 001711dc */		return false;
+/* 001711e4 */	}
+/* 001711e4 */	string DestFileName = SYS_GameSave_GetThumbnailFileName(DestSaveNumber);
+/* 00171202 */	string SrcFileName = SYS_GameSave_GetThumbnailFileName(SrcSaveNumber);
+/* 00171220 */	if (system.CopySaveFile(DestFileName, SrcFileName) == 0)
+/* 00171248 */	{
+/* 00171248 */		return false;
+/* 00171250 */	}
+/* 00171250 */	return true;
+/* 00171258 */}
+
+string AFL_GameSave_GetThumbnailFileName(int SaveNumber)
+/* 0017126c */{
+/* 0017126c */	return SYS_GameSave_GetThumbnailFileName(SaveNumber);
+/* 0017127e */}
+
+bool AFL_GameSave_IsExistThumbnail(int SaveNumber)
+/* 00171292 */{
+/* 00171292 */	string SaveFileName = SYS_GameSave_GetThumbnailFileName(SaveNumber);
+/* 001712b0 */	return system.ExistSaveFile(SaveFileName);
+/* 001712c4 */}
+

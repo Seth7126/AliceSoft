@@ -1,0 +1,5 @@
+bool AFL_IsKeyDown(int KeyCode)
+/* 00169a88 */{
+/* 00169a88 */	return IbisInputEngine.Key_IsDown(KeyCode);
+/* 00169a9e */}
+

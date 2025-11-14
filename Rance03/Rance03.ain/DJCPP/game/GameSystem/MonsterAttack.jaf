@@ -1,0 +1,53 @@
+void MonsterAttack::init(string monsterId, int index)
+/* 001d9fa8 */{
+/* 001d9fa8 */	string key = "モンスター情報";
+/* 001d9fbc */	int n = index + 1;
+/* 001d9fda */	this.attribute_ = EX_SA2String(key, monsterId, "attr%d" % n, "");
+/* 001da020 */	this.targetType_ = EX_SA2Int(key, monsterId, "targetType%d" % n, 0);
+/* 001da064 */	this.param_ = EX_SA2Int(key, monsterId, "param%d" % n, 0);
+/* 001da0a8 */	this.buffId_ = EX_SA2String(key, monsterId, "buffId%d" % n, "");
+/* 001da0ee */	this.flatName_ = EX_SA2String(key, monsterId, "flatName%d" % n, "");
+/* 001da134 */}
+
+string MonsterAttack::getAttributeId()
+/* 001da13c */{
+/* 001da13c */	return this.attribute_;
+/* 001da148 */}
+
+int MonsterAttack::getParam()
+/* 001da156 */{
+/* 001da156 */	return this.param_ * g_monsterStrengthShifter.getAtkRatio();
+/* 001da17c */}
+
+void MonsterAttack::initAsMultiMode(int exIndex, int atkIndex)
+/* 001da18a */{
+/* 001da18a */	string key = "モンスターマルチ攻撃情報";
+/* 001da19e */	this.hpPercent_ = EX_RA2Int(key, exIndex, "hpPercent", 0);
+/* 001da1d0 */	int n = atkIndex + 1;
+/* 001da1ee */	this.attribute_ = EX_RA2String(key, exIndex, "attr%d" % n, "");
+/* 001da234 */	this.targetType_ = EX_RA2Int(key, exIndex, "targetType%d" % n, 0);
+/* 001da278 */	this.param_ = EX_RA2Int(key, exIndex, "param%d" % n, 0);
+/* 001da2bc */	this.buffId_ = EX_RA2String(key, exIndex, "buffId%d" % n, "");
+/* 001da302 */	this.flatName_ = EX_RA2String(key, exIndex, "flatName%d" % n, "");
+/* 001da348 */}
+
+int MonsterAttack::getTargetType()
+/* 001da350 */{
+/* 001da350 */	return this.targetType_;
+/* 001da35c */}
+
+string MonsterAttack::getBuffId()
+/* 001da36a */{
+/* 001da36a */	return this.buffId_;
+/* 001da376 */}
+
+int MonsterAttack::getHpPercent()
+/* 001da384 */{
+/* 001da384 */	return this.hpPercent_;
+/* 001da390 */}
+
+string MonsterAttack::getFlatName()
+/* 001da39e */{
+/* 001da39e */	return this.flatName_;
+/* 001da3aa */}
+

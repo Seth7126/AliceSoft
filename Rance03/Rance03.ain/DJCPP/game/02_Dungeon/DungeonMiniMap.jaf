@@ -1,0 +1,123 @@
+DungeonMiniMap::DungeonMiniMap()
+/* 0018e436 */{
+/* 0018e43e */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 0018e464 */	this.viewDepth_ = 10;
+/* 0018e476 */}
+
+void DungeonMiniMap::init(string dungeonId)
+/* 0018e47e */{
+/* 0018e47e */	this.dungeonId_ = dungeonId;
+/* 0018e496 */	ref Dungeon d = getDungeonFromId(this.dungeonId_);
+/* 0018e4d8 */	this.parts_[0].init("ダンジョン／ミニマップ／下地", 0);
+/* 0018e4fc */	this.parts_[0].setPos(787.0, 221.0);
+/* 0018e520 */	this.parts_[1].initAsUserStructure();
+/* 0018e538 */	int pn = this.parts_[1].getPartsNumber();
+/* 0018e55c */	int depth = Math.Max(this.viewDepth_, d.getDepth()) + this.viewDepth_;
+/* 0018e598 */	if (depth * 13 > 2048)
+/* 0018e5b8 */	{
+/* 0018e5b8 */		pass("でかすぎるのでMinimapを生成しません");
+/* 0018e5c4 */		return;
+/* 0018e5c6 */	}
+/* 0018e5c6 */	Ｐ＿構築手順＿作成(pn, d.getWidth() * 13, depth * 13, 1);
+/* 0018e606 */	Ｐ＿構築手順＿色塗り(pn, 0, 0, d.getWidth() * 13, depth * 13, 0, 0, 0, 0, 1);
+/* 0018e66a */	int i;
+/* 0018e67c */	for (i = 0; i < depth; ++i)
+/* 0018e6c6 */	{
+/* 0018e6c6 */		ref DungeonLine ln = d.getDungeonLine(i);
+/* 0018e716 */		int j;
+/* 0018e728 */		for (j = 0; j < d.getWidth(); ++j)
+/* 0018e778 */		{
+/* 0018e778 */			ref DungeonCard dc = ln.getDungeonCard(j);
+/* 0018e7c8 */			CardInfomation info;
+/* 0018e7d8 */			info = getCardInfomationFromId(dc.getCardTypeId());
+/* 0018e81e */			if (info.isClickable())
+/* 0018e834 */			{
+/* 0018e834 */				if (info.getMinimapIconImageName().Empty())
+/* 0018e84c */				{
+/* 0018e84c */					Ｐ＿構築手順＿色塗り(pn, j * 13, (depth - i - 1) * 13, 12, 12, 255, 255, 255, 255, 1);
+/* 0018e8be */				}
+/* 0018e8c4 */				else
+/* 0018e8c4 */				{
+/* 0018e8c4 */					Ｐ＿構築手順＿ＣＧ部分コピー(pn, info.getMinimapIconImageName(), j * 13, (depth - i - 1) * 13, 0, 0, 12, 12, 1);
+/* 0018e93a */				}
+/* 0018e93a */			}
+/* 0018e93a */		}
+/* 0018e958 */		if (i % d.getDepth() == 0)
+/* 0018e982 */		{
+/* 0018e982 */			Ｐ＿構築手順＿色塗り(pn, 0, (depth - i) * 13 - 2, d.getWidth() * 13, 2, 255, 0, 0, 255, 1);
+/* 0018e9fa */		}
+/* 0018e9fa */	}
+/* 0018ea0c */	Ｐ＿構築ビルド(pn, 1);
+/* 0018ea22 */	this.initParts();
+/* 0018ea2a */	this.parts_[1].setOrigin(2);
+/* 0018ea48 */	this.parts_[2].init("ダンジョン／ミニマップ／アルファ", 0);
+/* 0018ea6c */	this.parts_[2].setPos(791.0, 233.0);
+/* 0018ea90 */	this.parts_[1].setAlphaClipperParts(this.parts_[2].getPartsNumber());
+/* 0018eac0 */	this.parts_[3].init("ダンジョン／ミニマップ／カレント", 0);
+/* 0018eae4 */	this.parts_[3].setPos(877.0, 382.0);
+/* 0018eb08 */	createPartsGroup(this.parent_, this.parts_, 1950);
+/* 0018eb28 */	this.setPartsShow();
+/* 0018eb30 */	this.parts_[2].setShow(false);
+/* 0018eb4e */}
+
+void DungeonMiniMap::initParts()
+/* 0018eb56 */{
+/* 0018eb58 */}
+
+void DungeonMiniMap::setPlayerPos(int x, int y)
+/* 0018eb5e */{
+/* 0018eb5e */	int depth = getDungeonFromId(this.dungeonId_).getDepth();
+/* 0018eb96 */	int fromY = (this.y_ % depth) * 13;
+/* 0018ebc0 */	int toY = (y % depth) * 13;
+/* 0018ebea */	int baseX = 898;
+/* 0018ebfc */	int baseY = 396;
+/* 0018ec0e */	if (toY < fromY)
+/* 0018ec2a */	{
+/* 0018ec2a */		array@PartsMotion m[2];
+/* 0018ec40 */		m[0].setMove(baseX - this.x_ * 13, baseY + fromY, baseX - x * 13, baseY + depth * 13, 1);
+/* 0018ecce */		m[1].setTime(0);
+/* 0018ecec */		m[1].setMove(baseX - x * 13, baseY + toY, baseX - x * 13, baseY + toY, 1);
+/* 0018ed72 */		this.parts_[1].runMotionArray(m, NULL);
+/* 0018eda2 */	}
+/* 0018eda8 */	else
+/* 0018eda8 */	{
+/* 0018eda8 */		PartsMotion m;
+/* 0018edb8 */		m.setMove(baseX - this.x_ * 13, baseY + fromY, baseX - x * 13, baseY + toY, 1);
+/* 0018ee36 */		this.parts_[1].runMotion(m, NULL);
+/* 0018ee5e */	}
+/* 0018ee64 */	this.x_ = x;
+/* 0018ee7a */	this.y_ = y;
+/* 0018ee90 */}
+
+void DungeonMiniMap::setPartsShow()
+/* 0018ee98 */{
+/* 0018ee98 */	int i;
+/* 0018eeaa */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 0018eefa */	{
+/* 0018eefa */		this.parts_[i].setShow(true);
+/* 0018ef1c */	}
+/* 0018ef22 */}
+
+void DungeonMiniMap::setPartsPos()
+/* 0018ef2a */{
+/* 0018ef2c */}
+
+void DungeonMiniMap::update()
+/* 0018ef32 */{
+/* 0018ef34 */}
+
+void DungeonMiniMap::fadeIn(bool val)
+/* 0018ef3a */{
+/* 0018ef3a */	PartsMotion m;
+/* 0018ef4a */	if (val)
+/* 0018ef5a */	{
+/* 0018ef5a */		m.setAlpha(0, 255, 0);
+/* 0018ef7c */	}
+/* 0018ef82 */	else
+/* 0018ef82 */	{
+/* 0018ef82 */		m.setAlpha(255, 0, 0);
+/* 0018efa4 */	}
+/* 0018efa4 */	this.parent_.setShow(true);
+/* 0018efba */	this.parent_.runMotion(m, NULL);
+/* 0018efda */}
+

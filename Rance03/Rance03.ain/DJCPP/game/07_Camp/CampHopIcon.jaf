@@ -1,0 +1,170 @@
+CampHopIcon::CampHopIcon()
+/* 001b6876 */{
+/* 001b687e */	this.gameObjectId_ = g_gameObjectManager.addFocusObject(this.update, this.isHover);
+/* 001b68ae */	this.bounceCount_ = 3;
+/* 001b68c0 */	this.x_ = 435.0;
+/* 001b68d2 */}
+
+void CampHopIcon::init(string cgName)
+/* 001b68da */{
+/* 001b68da */	this.cgName_ = cgName;
+/* 001b68f2 */	this.initParts();
+/* 001b68fa */}
+
+void CampHopIcon::initParts()
+/* 001b6902 */{
+/* 001b6902 */	this.parts_[0].init(this.cgName_, 0);
+/* 001b692a */	this.parts_[0].setHitTestAsPixel(true);
+/* 001b6948 */	this.parts_[0].setOrigin(2);
+/* 001b6966 */	createPartsGroup(this.parent_, this.parts_, 4300);
+/* 001b6986 */	this.setPartsShow();
+/* 001b698e */}
+
+void CampHopIcon::setPartsShow()
+/* 001b6996 */{
+/* 001b6996 */	int i;
+/* 001b69a8 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001b69f8 */	{
+/* 001b69f8 */		this.parts_[i].setShow(true);
+/* 001b6a1a */	}
+/* 001b6a20 */	this.parent_.setShow(true);
+/* 001b6a36 */}
+
+void CampHopIcon::setPartsPos()
+/* 001b6a3e */{
+/* 001b6a40 */}
+
+void CampHopIcon::update()
+/* 001b6a46 */{
+/* 001b6a46 */	if (g_mouse.isClickWithFocus(this.gameObjectId_))
+/* 001b6a66 */	{
+/* 001b6a66 */		g_sysSound.play(5, "効果音／キャラクリック");
+/* 001b6a82 */		if (this.onClick_.Numof() == 0)
+/* 001b6a9c */		{
+/* 001b6a9c */			int r = RAND(2) == 1 ? -1 : 1;
+/* 001b6ad4 */			this.vx_ = r * 1.5;
+/* 001b6af8 */			this.bounceCount_ = 3;
+/* 001b6b0a */			if (this.y_ >= this.maxY_)
+/* 001b6b26 */			{
+/* 001b6b26 */				this.y_ = this.maxY_ - 1.0;
+/* 001b6b44 */			}
+/* 001b6b44 */			this.vy_ = -10.0;
+/* 001b6b56 */		}
+/* 001b6b5c */		else
+/* 001b6b5c */		{
+/* 001b6b5c */			this.onClick_();
+/* 001b6b7c */		}
+/* 001b6b7c */	}
+/* 001b6b7c */	float dt = this.timer_.getTime() - this.lastTime_;
+/* 001b6ba6 */	if (dt < 10.0)
+/* 001b6bbe */	{
+/* 001b6bbe */		return;
+/* 001b6bc0 */	}
+/* 001b6bc0 */	if (dt > 80.0)
+/* 001b6bd8 */	{
+/* 001b6bd8 */		dt = 10.0;
+/* 001b6bea */	}
+/* 001b6bea */	this.lastTime_ = this.timer_.getTime();
+/* 001b6c06 */	if (this.bounceCount_ > 0)
+/* 001b6c1e */	{
+/* 001b6c1e */		this.vy_ += dt * 0.04;
+/* 001b6c3c */	}
+/* 001b6c3c */	if (this.y_ >= this.maxY_ && 26 <= this.x_ && this.x_ <= 780.0)
+/* 001b6cbe */	{
+/* 001b6cbe */		if (this.bounceCount_ > 0)
+/* 001b6cd6 */		{
+/* 001b6cd6 */			this.vy_ = -this.vy_ * 0.5;
+/* 001b6cf6 */			--this.bounceCount_;
+/* 001b6d06 */		}
+/* 001b6d06 */		this.y_ = this.maxY_;
+/* 001b6d1c */	}
+/* 001b6d1c */	if (this.bounceCount_ == 0)
+/* 001b6d34 */	{
+/* 001b6d34 */		this.vy_ = 0.0;
+/* 001b6d46 */		this.vx_ = 0.0;
+/* 001b6d58 */	}
+/* 001b6d58 */	this.y_ += this.vy_;
+/* 001b6d6e */	this.x_ += this.vx_;
+/* 001b6d84 */	if (this.maxY_ == 1500.0)
+/* 001b6d9c */	{
+/* 001b6d9c */		float r = this.fadeTimer_.getTime() / 150.0;
+/* 001b6dc2 */		this.parent_.setAlpha(getMotionValue(0, 255.0, 0.0, r));
+/* 001b6df4 */	}
+/* 001b6df4 */	if (this.isBlink_)
+/* 001b6e04 */	{
+/* 001b6e04 */		int t = 1500;
+/* 001b6e16 */		float v = float(t - this.blink_.getTime() % t) / float(t);
+/* 001b6e5a */		this.parts_[0].setAddColorValue(v * 200.0, v * 200.0, v * 100.0);
+/* 001b6eae */	}
+/* 001b6eae */	this.parent_.setPos(this.x_, this.y_);
+/* 001b6ed2 */}
+
+bool CampHopIcon::isHover()
+/* 001b6eda */{
+/* 001b6eda */	return this.parts_[0].isHit(g_mouse.getX(), g_mouse.getY());
+/* 001b6f14 */}
+
+void CampHopIcon::run()
+/* 001b6f22 */{
+/* 001b6f22 */	this.timer_.reset();
+/* 001b6f32 */}
+
+void CampHopIcon::setIconPosition(int pos)
+/* 001b6f3a */{
+/* 001b6f3a */	switch (pos)
+/* 001b6f50 */	{
+/* 001b6f50 */	case 0:
+/* 001b6f50 */		this.x_ = 168.0;
+/* 001b6f62 */		this.maxY_ = 473.0;
+/* 001b6f74 */		break;
+/* 001b6f7a */	case 1:
+/* 001b6f7a */		this.x_ = 283.0;
+/* 001b6f8c */		this.maxY_ = 513.0;
+/* 001b6f9e */		this.parent_.setZ(4320.0);
+/* 001b6fb4 */		break;
+/* 001b6fba */	case 2:
+/* 001b6fba */		this.x_ = 531.0;
+/* 001b6fcc */		this.maxY_ = 513.0;
+/* 001b6fde */		this.parent_.setZ(4320.0);
+/* 001b6ff4 */		break;
+/* 001b6ffa */	case 3:
+/* 001b6ffa */		this.x_ = 641.0;
+/* 001b700c */		this.maxY_ = 473.0;
+/* 001b701e */		break;
+/* 001b7024 */	default:
+/* 001b7024 */		this.x_ = 168 + RAND(323);
+/* 001b7046 */		if (this.x_ > 329.0)
+/* 001b705e */		{
+/* 001b705e */			this.x_ += 150.0;
+/* 001b7070 */		}
+/* 001b7070 */		this.maxY_ = 493.0;
+/* 001b7082 */		break;
+/* 001b7088 */	}
+/* 001b7088 */	this.y_ = -RAND(200);
+/* 001b70a4 */}
+
+void CampHopIcon::fall()
+/* 001b70ac */{
+/* 001b70ac */	this.bounceCount_ = 3;
+/* 001b70be */	this.fadeTimer_.reset();
+/* 001b70ce */	this.maxY_ = 1500.0;
+/* 001b70e0 */}
+
+void CampHopIcon::setOnClickCallback(DG_GeneralCallback cb)
+/* 001b70e8 */{
+/* 001b70e8 */	this.onClick_ = cb;
+/* 001b7102 */	int n;
+/* 001b7114 */	int i;
+/* 001b7126 */	for (i = 0; i < g_mirrorPiece.Numof(); ++i)
+/* 001b7176 */	{
+/* 001b7176 */		if (g_mirrorPiece[i].isShownAtViewer())
+/* 001b7198 */		{
+/* 001b7198 */			++n;
+/* 001b71a8 */		}
+/* 001b71a8 */	}
+/* 001b71ae */	if (n != 3)
+/* 001b71c6 */	{
+/* 001b71c6 */		this.isBlink_ = true;
+/* 001b71d8 */	}
+/* 001b71d8 */}
+

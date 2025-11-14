@@ -1,0 +1,48 @@
+CVolumeCap::CVolumeCap()
+/* 0003e73c */{
+/* 0003e744 */	this.m_CapVolume = 0.6;
+/* 0003e756 */	this.m_FadeOutTime = 100;
+/* 0003e768 */	this.m_WaitForFadeInTime = 1000;
+/* 0003e77a */	this.m_FadeInTime = 450;
+/* 0003e78c */}
+
+void CVolumeCap::Set(float CapVolume, int FadeOutTime, int WaitForFadeInTime, int FadeInTime)
+/* 0003e794 */{
+/* 0003e794 */	if (CapVolume >= 0.0)
+/* 0003e7ac */	{
+/* 0003e7ac */		this.m_CapVolume = CapVolume;
+/* 0003e7c2 */	}
+/* 0003e7c2 */	if (FadeOutTime >= 0)
+/* 0003e7da */	{
+/* 0003e7da */		this.m_FadeOutTime = FadeOutTime;
+/* 0003e7f0 */	}
+/* 0003e7f0 */	if (WaitForFadeInTime >= 0)
+/* 0003e808 */	{
+/* 0003e808 */		this.m_WaitForFadeInTime = WaitForFadeInTime;
+/* 0003e81e */	}
+/* 0003e81e */	if (FadeInTime >= 0)
+/* 0003e836 */	{
+/* 0003e836 */		this.m_FadeInTime = FadeInTime;
+/* 0003e84c */	}
+/* 0003e84c */}
+
+float CVolumeCap::GetCapVolume()
+/* 0003e854 */{
+/* 0003e854 */	return this.m_CapVolume;
+/* 0003e860 */}
+
+int CVolumeCap::GetFadeOutTime()
+/* 0003e86e */{
+/* 0003e86e */	return this.m_FadeOutTime;
+/* 0003e87a */}
+
+int CVolumeCap::GetWaitForFadeInTime()
+/* 0003e888 */{
+/* 0003e888 */	return this.m_WaitForFadeInTime;
+/* 0003e894 */}
+
+int CVolumeCap::GetFadeInTime()
+/* 0003e8a2 */{
+/* 0003e8a2 */	return this.m_FadeInTime;
+/* 0003e8ae */}
+

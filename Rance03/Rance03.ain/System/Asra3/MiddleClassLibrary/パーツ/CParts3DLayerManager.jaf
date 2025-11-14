@@ -1,0 +1,116 @@
+CParts3DLayerManager::CParts3DLayerManager()
+/* 0002c95e */{
+/* 0002c966 */	this.Release();
+/* 0002c96e */}
+
+CParts3DLayerManager::~CParts3DLayerManager()
+/* 0002c976 */{
+/* 0002c976 */	this.Release();
+/* 0002c97e */}
+
+void CParts3DLayerManager::Release()
+/* 0002c986 */{
+/* 0002c986 */	this.m_SuspendList.Free();
+/* 0002c990 */	this.m_List.Free();
+/* 0002c99a */}
+
+void CParts3DLayerManager::Add(int Number)
+/* 0002c9a2 */{
+/* 0002c9a2 */	this.Remove(Number);
+/* 0002c9b4 */	this.m_List.PushBack(Number);
+/* 0002c9c8 */	this.m_SuspendList.Free();
+/* 0002c9d2 */}
+
+void CParts3DLayerManager::Remove(int Number)
+/* 0002c9da */{
+/* 0002c9da */	int Index = this.m_List.Find(0, this.m_List.Numof(), Number);
+/* 0002ca16 */	if (Index == -1)
+/* 0002ca2e */	{
+/* 0002ca2e */		return;
+/* 0002ca30 */	}
+/* 0002ca30 */	this.m_List.Erase(Index);
+/* 0002ca46 */	this.m_SuspendList.Free();
+/* 0002ca50 */}
+
+void CParts3DLayerManager::SetShow(bool Show)
+/* 0002ca58 */{
+/* 0002ca58 */	int i;
+/* 0002ca6a */	for (i = 0; i < this.Numof(); ++i)
+/* 0002cab2 */	{
+/* 0002cab2 */		int Number = this.Get(i);
+/* 0002cad0 */		if (!Ｐ＿存在確認(Number))
+/* 0002cae8 */		{
+/* 0002cae8 */			continue;
+/* 0002caee */		}
+/* 0002caee */		Ｐ＿表示設定(Number, Show);
+/* 0002cb08 */	}
+/* 0002cb0e */}
+
+void CParts3DLayerManager::SuspendShowState()
+/* 0002cb16 */{
+/* 0002cb16 */	if (this.IsSuspendShowState())
+/* 0002cb24 */	{
+/* 0002cb24 */		return;
+/* 0002cb26 */	}
+/* 0002cb26 */	int i;
+/* 0002cb38 */	for (i = 0; i < this.Numof(); ++i)
+/* 0002cb80 */	{
+/* 0002cb80 */		int Number = this.Get(i);
+/* 0002cb9e */		if (!Ｐ＿存在確認(Number))
+/* 0002cbb6 */		{
+/* 0002cbb6 */			continue;
+/* 0002cbbc */		}
+/* 0002cbbc */		this.m_SuspendList.PushBack(Ｐ＿表示設定取得(Number) ? 1 : 0);
+/* 0002cbee */	}
+/* 0002cbf4 */}
+
+void CParts3DLayerManager::ResumeShowState()
+/* 0002cbfc */{
+/* 0002cbfc */	if (!this.IsSuspendShowState())
+/* 0002cc0c */	{
+/* 0002cc0c */		return;
+/* 0002cc0e */	}
+/* 0002cc0e */	int i;
+/* 0002cc20 */	for (i = 0; i < this.Numof(); ++i)
+/* 0002cc68 */	{
+/* 0002cc68 */		int Number = this.Get(i);
+/* 0002cc86 */		if (!Ｐ＿存在確認(Number))
+/* 0002cc9e */		{
+/* 0002cc9e */			continue;
+/* 0002cca4 */		}
+/* 0002cca4 */		Ｐ＿表示設定(Number, this.m_SuspendList[i] == 1);
+/* 0002ccd4 */	}
+/* 0002ccda */	this.m_SuspendList.Free();
+/* 0002cce4 */}
+
+bool CParts3DLayerManager::IsSuspendShowState()
+/* 0002ccec */{
+/* 0002ccec */	if (this.Numof() == 0)
+/* 0002cd02 */	{
+/* 0002cd02 */		return false;
+/* 0002cd0a */	}
+/* 0002cd0a */	if (this.Numof() != this.m_SuspendList.Numof())
+/* 0002cd2a */	{
+/* 0002cd2a */		return false;
+/* 0002cd32 */	}
+/* 0002cd32 */	return true;
+/* 0002cd3a */}
+
+int CParts3DLayerManager::Numof()
+/* 0002cd48 */{
+/* 0002cd48 */	return this.m_List.Numof();
+/* 0002cd5a */}
+
+int CParts3DLayerManager::Get(int Index)
+/* 0002cd68 */{
+/* 0002cd68 */	if (Index < 0)
+/* 0002cd80 */	{
+/* 0002cd80 */		return -1;
+/* 0002cd88 */	}
+/* 0002cd88 */	if (this.Numof() <= Index)
+/* 0002cda2 */	{
+/* 0002cda2 */		return -1;
+/* 0002cdaa */	}
+/* 0002cdaa */	return this.m_List[Index];
+/* 0002cdc2 */}
+

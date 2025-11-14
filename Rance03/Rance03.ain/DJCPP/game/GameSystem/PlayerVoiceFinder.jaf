@@ -1,0 +1,72 @@
+void PlayerVoiceFinder::init(string playerId)
+/* 001e0c6c */{
+/* 001e0c6c */	this.playerId_ = playerId;
+/* 001e0c84 */	this.loadFromEx();
+/* 001e0c8c */	this.initRoundRobin();
+/* 001e0c94 */}
+
+void PlayerVoiceFinder::loadFromEx()
+/* 001e0c9c */{
+/* 001e0c9c */	string key = "システムボイス情報";
+/* 001e0cb0 */	int count = EX_Height(key);
+/* 001e0ccc */	int i;
+/* 001e0cde */	for (i = 0; i < count; ++i)
+/* 001e0d28 */	{
+/* 001e0d28 */		string id = EX_RA2String(key, i, "playerId", "");
+/* 001e0d5c */		if (id == this.playerId_)
+/* 001e0d78 */		{
+/* 001e0d78 */			VoiceNumberText n;
+/* 001e0d88 */			n.number = EX_RA2Int(key, i, "voice", 0);
+/* 001e0dc2 */			n.text = EX_RA2String(key, i, "text", "");
+/* 001e0dfe */			n.hastleOk = EX_RA2Int(key, i, "hastleOk", 0);
+/* 001e0e38 */			int type = EX_RA2Int(key, i, "type", 0);
+/* 001e0e6a */			this.typeGroup_[type].numberText.PushBack(n);
+/* 001e0e96 */		}
+/* 001e0e96 */	}
+/* 001e0ea2 */}
+
+void PlayerVoiceFinder::initRoundRobin()
+/* 001e0eaa */{
+/* 001e0eaa */	int i;
+/* 001e0ebc */	for (i = 0; i < this.roundRobin_.Numof(); ++i)
+/* 001e0f0c */	{
+/* 001e0f0c */		this.roundRobin_[i].init(this.typeGroup_[i].numberText.Numof());
+/* 001e0f4c */	}
+/* 001e0f52 */}
+
+int PlayerVoiceFinder::getFromType(int type, ref string text)
+/* 001e0f5a */{
+/* 001e0f5a */	if (type <= 6)
+/* 001e0f72 */	{
+/* 001e0f72 */		int index = this.roundRobin_[type].get();
+/* 001e0f9a */		if (text !== NULL)
+/* 001e0fb2 */		{
+/* 001e0fb2 */			text = this.typeGroup_[type].numberText[index].text;
+/* 001e0ff2 */		}
+/* 001e0ff2 */		return this.typeGroup_[type].numberText[index].number;
+/* 001e1026 */	}
+/* 001e1026 */	return -1;
+/* 001e102e */}
+
+int PlayerVoiceFinder::getFromText(string text)
+/* 001e103c */{
+/* 001e103c */	int i;
+/* 001e104e */	for (i = 7; i < this.typeGroup_.Numof(); ++i)
+/* 001e109e */	{
+/* 001e109e */		int j;
+/* 001e10b0 */		for (j = 0; j < this.typeGroup_[i].numberText.Numof(); ++j)
+/* 001e1114 */		{
+/* 001e1114 */			if (this.typeGroup_[i].numberText[j].text == text)
+/* 001e1158 */			{
+/* 001e1158 */				return this.typeGroup_[i].numberText[j].number;
+/* 001e118c */			}
+/* 001e118c */		}
+/* 001e1192 */	}
+/* 001e1198 */	return -1;
+/* 001e11a0 */}
+
+string PlayerVoiceFinder::getId()
+/* 001e11ae */{
+/* 001e11ae */	return this.playerId_;
+/* 001e11ba */}
+

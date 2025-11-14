@@ -1,0 +1,26 @@
+void Ｐ＿矩形判定設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ)
+/* 00162e5c */{
+/* 00162e5c */	PartsEngine.SetComponentPos(パーツ番号, Ｘ, Ｙ);
+/* 00162e88 */	PartsEngine.Parts_SetPartsRectangleDetectionSize(パーツ番号, 幅, 高さ, 1);
+/* 00162eb8 */}
+
+void Ｐ＿矩形判定ポイント設定(int パーツ番号, int Ｘ１, int Ｙ１, int Ｘ２, int Ｙ２, int Ｘ３, int Ｙ３, int Ｘ４, int Ｙ４)
+/* 00162ec6 */{
+/* 00162ec6 */	PartsEngine.SetRectangleDetectionPoint(パーツ番号, Ｘ１, Ｙ１, Ｘ２, Ｙ２, Ｘ３, Ｙ３, Ｘ４, Ｙ４, 1);
+/* 00162f30 */}
+
+void Ｐ＿矩形判定ポイント取得(int パーツ番号, ref int Ｘ１, ref int Ｙ１, ref int Ｘ２, ref int Ｙ２, ref int Ｘ３, ref int Ｙ３, ref int Ｘ４, ref int Ｙ４)
+/* 00162f3e */{
+/* 00162f3e */	PartsEngine.GetRectangleDetectionPoint(パーツ番号, Ｘ１, Ｙ１, Ｘ２, Ｙ２, Ｘ３, Ｙ３, Ｘ４, Ｙ４, 1);
+/* 00162fa8 */}
+
+void Ｐ＿矩形判定範囲設定(int パーツ番号, int Ｘ, int Ｙ, int 幅, int 高さ)
+/* 00162fb6 */{
+/* 00162fb6 */	PartsEngine.Parts_SetPartsRectangleDetectionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 1);
+/* 00162ffa */}
+
+void Ｐ＿矩形判定範囲取得(int パーツ番号, ref int Ｘ, ref int Ｙ, ref int 幅, ref int 高さ)
+/* 00163008 */{
+/* 00163008 */	PartsEngine.GetRectangleDetectionSurfaceArea(パーツ番号, Ｘ, Ｙ, 幅, 高さ, 1);
+/* 0016304a */}
+

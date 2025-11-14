@@ -1,0 +1,1325 @@
+CAS3DLayer::CAS3DLayer()
+/* 0000aa5c */{
+/* 0000aa66 */}
+
+CAS3DLayer::~CAS3DLayer()
+/* 0000aa6c */{
+/* 0000aa6c */	this.Release();
+/* 0000aa74 */}
+
+bool CAS3DLayer::Create()
+/* 0000aa7c */{
+/* 0000aa7c */	this.Release();
+/* 0000aa84 */	this.m_3DLayerParts.Create();
+/* 0000aa94 */	if (!this.m_3DLayerParts.Create3DLayerPluginID(1))
+/* 0000aab2 */	{
+/* 0000aab2 */		system.Error("プラグインの作成に失敗しました");
+/* 0000aac0 */		return false;
+/* 0000aac8 */	}
+/* 0000aac8 */	PARTS_SetWantSaveBackScene(this.m_3DLayerParts.GetPartsNumber(), false);
+/* 0000aae4 */	CAS3DSetting Setting;
+/* 0000aaf4 */	Setting.Load();
+/* 0000ab06 */	this.SetRenderMode(Setting.GetRenderMode());
+/* 0000ab20 */	this.SetDrawOption(1, Setting.GetLightingMode());
+/* 0000ab40 */	this.SetOptionAntiAliasing(Setting.GetAntiAliasingMode());
+/* 0000ab5a */	this.SetShadowMode(Setting.GetShadowMode());
+/* 0000ab74 */	this.SetShadowMapResolutionLevel(Setting.GetShadowMapResolutionLevel());
+/* 0000ab8e */	this.SetBloomMode(Setting.GetBloomMode());
+/* 0000aba8 */	this.SetGlareMode(Setting.GetGlareMode());
+/* 0000abc2 */	this.SetFogMode(Setting.GetFogMode());
+/* 0000abdc */	this.SetSpecularMode(Setting.GetSpecularMode());
+/* 0000abf6 */	this.SetLightMapMode(Setting.GetLightMapMode());
+/* 0000ac10 */	this.SetSoftFogEdgeMode(Setting.GetSoftFogEdgeMode());
+/* 0000ac2a */	this.SetSSAOMode(Setting.GetSSAOMode());
+/* 0000ac44 */	this.SetBumpMode(Setting.GetBumpMode());
+/* 0000ac5e */	this.SetTextureResolutionLevel(Setting.GetTextureResolutionLevel());
+/* 0000ac78 */	this.SetTextureFilterMode(Setting.GetTextureFilterMode());
+/* 0000ac92 */	this.SetDrawOption(0, Setting.GetEdge());
+/* 0000acb2 */	this.SetDrawOption(2, Setting.GetDOFMode());
+/* 0000acd2 */	this.SetShadowMapType(0);
+/* 0000ace2 */	this.SetShadowMapLightDir(0.0, -1.0, 0.0);
+/* 0000acfe */	this.SetShadowBias(0, 0.01);
+/* 0000ad14 */	this.SetUseLightScattering(true);
+/* 0000ad24 */	return true;
+/* 0000ad2c */}
+
+void CAS3DLayer::Release()
+/* 0000ad3a */{
+/* 0000ad3a */	this.m_3DLayerParts.Release();
+/* 0000ad4a */}
+
+int CAS3DLayer::GetPluginNumber()
+/* 0000ad52 */{
+/* 0000ad52 */	return this.m_3DLayerParts.Get3DLayerPluginID(1);
+/* 0000ad6a */}
+
+bool CAS3DLayer::SetZ(int Z)
+/* 0000ad78 */{
+/* 0000ad78 */	this.m_3DLayerParts.SetZ(Z);
+/* 0000ad92 */	return true;
+/* 0000ad9a */}
+
+int CAS3DLayer::CreateInstance()
+/* 0000ada8 */{
+/* 0000ada8 */	int nInstance = SealEngine.CreateInstance(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000add4 */	if (nInstance == -1)
+/* 0000adec */	{
+/* 0000adec */		system.Error("インスタンスの作成に失敗しました");
+/* 0000adfa */	}
+/* 0000adfa */	return nInstance;
+/* 0000ae06 */}
+
+bool CAS3DLayer::ReleaseInstance(int nInstance)
+/* 0000ae14 */{
+/* 0000ae14 */	if (!SealEngine.ReleaseInstance(this.m_3DLayerParts.Get3DLayerPluginID(1), nInstance))
+/* 0000ae46 */	{
+/* 0000ae46 */		system.Error("インスタンスの解放に失敗しました");
+/* 0000ae54 */		return false;
+/* 0000ae5c */	}
+/* 0000ae5c */	return true;
+/* 0000ae64 */}
+
+void CAS3DLayer::SetCameraPos(float fX, float fY, float fZ)
+/* 0000ae72 */{
+/* 0000ae72 */	if (!SealEngine.SetCameraPos(this.m_3DLayerParts.Get3DLayerPluginID(1), fX, fY, fZ))
+/* 0000aeb8 */	{
+/* 0000aeb8 */		system.Error("カメラ位置の設定に失敗しました");
+/* 0000aec6 */	}
+/* 0000aec6 */}
+
+void CAS3DLayer::SetCameraAngle(float fAngle)
+/* 0000aece */{
+/* 0000aece */	if (!SealEngine.SetCameraAngle(this.m_3DLayerParts.Get3DLayerPluginID(1), fAngle))
+/* 0000af00 */	{
+/* 0000af00 */		system.Error("カメラ角度の設定に失敗しました");
+/* 0000af0e */	}
+/* 0000af0e */}
+
+void CAS3DLayer::SetCameraAngleP(float fAngleP)
+/* 0000af16 */{
+/* 0000af16 */	if (!SealEngine.SetCameraAngleP(this.m_3DLayerParts.Get3DLayerPluginID(1), fAngleP))
+/* 0000af48 */	{
+/* 0000af48 */		system.Error("カメラ角度の設定に失敗しました");
+/* 0000af56 */	}
+/* 0000af56 */}
+
+void CAS3DLayer::SetCameraAngleB(float fAngleB)
+/* 0000af5e */{
+/* 0000af5e */	if (!SealEngine.SetCameraAngleB(this.m_3DLayerParts.Get3DLayerPluginID(1), fAngleB))
+/* 0000af90 */	{
+/* 0000af90 */		system.Error("カメラ角度の設定に失敗しました");
+/* 0000af9e */	}
+/* 0000af9e */}
+
+bool CAS3DLayer::GetCameraPos(ref float X, ref float Y, ref float Z)
+/* 0000afa6 */{
+/* 0000afa6 */	return SealEngine.GetCameraPos(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z);
+/* 0000afe6 */}
+
+bool CAS3DLayer::GetCameraAngle(ref float Angle)
+/* 0000aff4 */{
+/* 0000aff4 */	return SealEngine.GetCameraAngle(this.m_3DLayerParts.Get3DLayerPluginID(1), Angle);
+/* 0000b020 */}
+
+bool CAS3DLayer::GetCameraAngleP(ref float AngleP)
+/* 0000b02e */{
+/* 0000b02e */	return SealEngine.GetCameraAngleP(this.m_3DLayerParts.Get3DLayerPluginID(1), AngleP);
+/* 0000b05a */}
+
+bool CAS3DLayer::GetCameraAngleB(ref float AngleB)
+/* 0000b068 */{
+/* 0000b068 */	return SealEngine.GetCameraAngleB(this.m_3DLayerParts.Get3DLayerPluginID(1), AngleB);
+/* 0000b094 */}
+
+bool CAS3DLayer::GetCameraXVector(ref float X, ref float Y, ref float Z)
+/* 0000b0a2 */{
+/* 0000b0a2 */	return SealEngine.GetCameraXVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z);
+/* 0000b0e2 */}
+
+bool CAS3DLayer::GetCameraYVector(ref float X, ref float Y, ref float Z)
+/* 0000b0f0 */{
+/* 0000b0f0 */	return SealEngine.GetCameraYVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z);
+/* 0000b130 */}
+
+bool CAS3DLayer::GetCameraZVector(ref float X, ref float Y, ref float Z)
+/* 0000b13e */{
+/* 0000b13e */	return SealEngine.GetCameraZVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z);
+/* 0000b17e */}
+
+bool CAS3DLayer::SetDrawDOF(bool DrawDOF)
+/* 0000b18c */{
+/* 0000b18c */	return SealEngine.SetDrawDOF(this.m_3DLayerParts.Get3DLayerPluginID(1), DrawDOF);
+/* 0000b1b8 */}
+
+bool CAS3DLayer::SetDOF_L(float DOF_L)
+/* 0000b1c6 */{
+/* 0000b1c6 */	return SealEngine.SetDOF_L(this.m_3DLayerParts.Get3DLayerPluginID(1), DOF_L);
+/* 0000b1f2 */}
+
+bool CAS3DLayer::SetDOF_F(float DOF_F)
+/* 0000b200 */{
+/* 0000b200 */	return SealEngine.SetDOF_F(this.m_3DLayerParts.Get3DLayerPluginID(1), DOF_F);
+/* 0000b22c */}
+
+bool CAS3DLayer::SetDOF_f(float DOF_f)
+/* 0000b23a */{
+/* 0000b23a */	return SealEngine.SetDOF_f(this.m_3DLayerParts.Get3DLayerPluginID(1), DOF_f);
+/* 0000b266 */}
+
+bool CAS3DLayer::IsDrawDOF()
+/* 0000b274 */{
+/* 0000b274 */	bool DrawDOF = false;
+/* 0000b286 */	if (!SealEngine.GetDrawDOF(this.m_3DLayerParts.Get3DLayerPluginID(1), DrawDOF))
+/* 0000b2b6 */	{
+/* 0000b2b6 */		return false;
+/* 0000b2be */	}
+/* 0000b2be */	return DrawDOF;
+/* 0000b2ca */}
+
+float CAS3DLayer::GetDOF_L()
+/* 0000b2d8 */{
+/* 0000b2d8 */	float DOF_L;
+/* 0000b2ea */	if (!SealEngine.GetDOF_L(this.m_3DLayerParts.Get3DLayerPluginID(1), DOF_L))
+/* 0000b31a */	{
+/* 0000b31a */		return 0.0;
+/* 0000b322 */	}
+/* 0000b322 */	return DOF_L;
+/* 0000b32e */}
+
+float CAS3DLayer::GetDOF_F()
+/* 0000b33c */{
+/* 0000b33c */	float DOF_F;
+/* 0000b34e */	if (!SealEngine.GetDOF_F(this.m_3DLayerParts.Get3DLayerPluginID(1), DOF_F))
+/* 0000b37e */	{
+/* 0000b37e */		return 0.0;
+/* 0000b386 */	}
+/* 0000b386 */	return DOF_F;
+/* 0000b392 */}
+
+float CAS3DLayer::GetDOF_f()
+/* 0000b3a0 */{
+/* 0000b3a0 */	float DOF_f;
+/* 0000b3b2 */	if (!SealEngine.GetDOF_f(this.m_3DLayerParts.Get3DLayerPluginID(1), DOF_f))
+/* 0000b3e2 */	{
+/* 0000b3e2 */		return 0.0;
+/* 0000b3ea */	}
+/* 0000b3ea */	return DOF_f;
+/* 0000b3f6 */}
+
+bool CAS3DLayer::SetShadowLightVector(float X, float Y, float Z)
+/* 0000b404 */{
+/* 0000b404 */	return SealEngine.SetShadowLightVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z);
+/* 0000b444 */}
+
+float CAS3DLayer::GetShadowLightVectorX()
+/* 0000b452 */{
+/* 0000b452 */	float X;
+/* 0000b464 */	float Y;
+/* 0000b476 */	float Z;
+/* 0000b488 */	if (!SealEngine.GetShadowLightVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z))
+/* 0000b4c8 */	{
+/* 0000b4c8 */		return 0.0;
+/* 0000b4d0 */	}
+/* 0000b4d0 */	return X;
+/* 0000b4dc */}
+
+float CAS3DLayer::GetShadowLightVectorY()
+/* 0000b4ea */{
+/* 0000b4ea */	float X;
+/* 0000b4fc */	float Y;
+/* 0000b50e */	float Z;
+/* 0000b520 */	if (!SealEngine.GetShadowLightVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z))
+/* 0000b560 */	{
+/* 0000b560 */		return 0.0;
+/* 0000b568 */	}
+/* 0000b568 */	return Y;
+/* 0000b574 */}
+
+float CAS3DLayer::GetShadowLightVectorZ()
+/* 0000b582 */{
+/* 0000b582 */	float X;
+/* 0000b594 */	float Y;
+/* 0000b5a6 */	float Z;
+/* 0000b5b8 */	if (!SealEngine.GetShadowLightVector(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z))
+/* 0000b5f8 */	{
+/* 0000b5f8 */		return 0.0;
+/* 0000b600 */	}
+/* 0000b600 */	return Z;
+/* 0000b60c */}
+
+bool CAS3DLayer::SetShadowRate(float Rate)
+/* 0000b61a */{
+/* 0000b61a */	return SealEngine.SetShadowRate(this.m_3DLayerParts.Get3DLayerPluginID(1), Rate);
+/* 0000b646 */}
+
+float CAS3DLayer::GetShadowRate()
+/* 0000b654 */{
+/* 0000b654 */	return SealEngine.GetShadowRate(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000b676 */}
+
+float CAS3DLayer::GetShadowBias(int nNum)
+/* 0000b684 */{
+/* 0000b684 */	return SealEngine.GetShadowBias(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000b6b0 */}
+
+float CAS3DLayer::GetShadowTargetDistance(int nNum)
+/* 0000b6be */{
+/* 0000b6be */	return SealEngine.GetShadowTargetDistance(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000b6ea */}
+
+bool CAS3DLayer::SetShadowMapType(int nType)
+/* 0000b6f8 */{
+/* 0000b6f8 */	if (!SealEngine.SetShadowMapType(this.m_3DLayerParts.Get3DLayerPluginID(1), nType))
+/* 0000b72a */	{
+/* 0000b72a */		return false;
+/* 0000b732 */	}
+/* 0000b732 */	return true;
+/* 0000b73a */}
+
+bool CAS3DLayer::SetShadowMapLightLookPos(float fX, float fY, float fZ)
+/* 0000b748 */{
+/* 0000b748 */	if (!SealEngine.SetShadowMapLightLookPos(this.m_3DLayerParts.Get3DLayerPluginID(1), fX, fY, fZ))
+/* 0000b78e */	{
+/* 0000b78e */		system.Error("シャドウマップライト位置の設定に失敗しました");
+/* 0000b79c */		return false;
+/* 0000b7a4 */	}
+/* 0000b7a4 */	return true;
+/* 0000b7ac */}
+
+bool CAS3DLayer::SetShadowMapLightDir(float fX, float fY, float fZ)
+/* 0000b7ba */{
+/* 0000b7ba */	if (!SealEngine.SetShadowMapLightDir(this.m_3DLayerParts.Get3DLayerPluginID(1), fX, fY, fZ))
+/* 0000b800 */	{
+/* 0000b800 */		system.Error("シャドウマップライト方向の設定に失敗しました");
+/* 0000b80e */		return false;
+/* 0000b816 */	}
+/* 0000b816 */	return true;
+/* 0000b81e */}
+
+bool CAS3DLayer::SetShadowBox(float fX, float fY, float fZ, float fSizeX, float fSizeY, float fSizeZ)
+/* 0000b82c */{
+/* 0000b82c */	if (!SealEngine.SetShadowBox(this.m_3DLayerParts.Get3DLayerPluginID(1), fX, fY, fZ, fSizeX, fSizeY, fSizeZ))
+/* 0000b890 */	{
+/* 0000b890 */		return false;
+/* 0000b898 */	}
+/* 0000b898 */	return true;
+/* 0000b8a0 */}
+
+bool CAS3DLayer::SetShadowBias(int nNum, float fShadowBias)
+/* 0000b8ae */{
+/* 0000b8ae */	if (!SealEngine.SetShadowBias(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fShadowBias))
+/* 0000b8ea */	{
+/* 0000b8ea */		system.Error("シャドウマップのバイアスの設定に失敗しました");
+/* 0000b8f8 */		return false;
+/* 0000b900 */	}
+/* 0000b900 */	return true;
+/* 0000b908 */}
+
+bool CAS3DLayer::SetShadowSlopeBias(float fShadowSlopeBias)
+/* 0000b916 */{
+/* 0000b916 */	if (!SealEngine.SetShadowSlopeBias(this.m_3DLayerParts.Get3DLayerPluginID(1), fShadowSlopeBias))
+/* 0000b948 */	{
+/* 0000b948 */		system.Error("シャドウマップのスロープバイアスの設定に失敗しました");
+/* 0000b956 */		return false;
+/* 0000b95e */	}
+/* 0000b95e */	return true;
+/* 0000b966 */}
+
+bool CAS3DLayer::SetShadowFilterMag(float fShadowFilterMag)
+/* 0000b974 */{
+/* 0000b974 */	if (!SealEngine.SetShadowFilterMag(this.m_3DLayerParts.Get3DLayerPluginID(1), fShadowFilterMag))
+/* 0000b9a6 */	{
+/* 0000b9a6 */		system.Error("シャドウマップのフィルター倍率の設定に失敗しました");
+/* 0000b9b4 */		return false;
+/* 0000b9bc */	}
+/* 0000b9bc */	return true;
+/* 0000b9c4 */}
+
+bool CAS3DLayer::SetShadowTargetDistance(int nNum, float fDistance)
+/* 0000b9d2 */{
+/* 0000b9d2 */	if (!SealEngine.SetShadowTargetDistance(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fDistance))
+/* 0000ba0e */	{
+/* 0000ba0e */		return false;
+/* 0000ba16 */	}
+/* 0000ba16 */	return true;
+/* 0000ba1e */}
+
+bool CAS3DLayer::SetShadowMapResolutionLevel(int nLevel)
+/* 0000ba2c */{
+/* 0000ba2c */	if (!SealEngine.SetShadowMapResolutionLevel(this.m_3DLayerParts.Get3DLayerPluginID(1), nLevel))
+/* 0000ba5e */	{
+/* 0000ba5e */		return false;
+/* 0000ba66 */	}
+/* 0000ba66 */	return true;
+/* 0000ba6e */}
+
+int CAS3DLayer::GetShadowMapResolutionLevel()
+/* 0000ba7c */{
+/* 0000ba7c */	return SealEngine.GetShadowMapResolutionLevel(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000ba9e */}
+
+float CAS3DLayer::GetShadowSplitDepth(int nNum)
+/* 0000baac */{
+/* 0000baac */	return SealEngine.GetShadowSplitDepth(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000bad8 */}
+
+bool CAS3DLayer::SetShadowSplitDepth(int nNum, float fDepth)
+/* 0000bae6 */{
+/* 0000bae6 */	return SealEngine.SetShadowSplitDepth(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fDepth);
+/* 0000bb1c */}
+
+bool CAS3DLayer::SetFogNear(float fNear)
+/* 0000bb2a */{
+/* 0000bb2a */	if (!SealEngine.SetFogNear(this.m_3DLayerParts.Get3DLayerPluginID(1), fNear))
+/* 0000bb5c */	{
+/* 0000bb5c */		return false;
+/* 0000bb64 */	}
+/* 0000bb64 */	return true;
+/* 0000bb6c */}
+
+bool CAS3DLayer::SetFogFar(float fFar)
+/* 0000bb7a */{
+/* 0000bb7a */	if (!SealEngine.SetFogFar(this.m_3DLayerParts.Get3DLayerPluginID(1), fFar))
+/* 0000bbac */	{
+/* 0000bbac */		return false;
+/* 0000bbb4 */	}
+/* 0000bbb4 */	return true;
+/* 0000bbbc */}
+
+bool CAS3DLayer::SetFogColor(float fR, float fG, float fB)
+/* 0000bbca */{
+/* 0000bbca */	if (!SealEngine.SetFogColor(this.m_3DLayerParts.Get3DLayerPluginID(1), fR, fG, fB))
+/* 0000bc10 */	{
+/* 0000bc10 */		return false;
+/* 0000bc18 */	}
+/* 0000bc18 */	return true;
+/* 0000bc20 */}
+
+int CAS3DLayer::GetFogType()
+/* 0000bc2e */{
+/* 0000bc2e */	return SealEngine.GetFogType(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000bc50 */}
+
+float CAS3DLayer::GetFogNear()
+/* 0000bc5e */{
+/* 0000bc5e */	return SealEngine.GetFogNear(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000bc80 */}
+
+float CAS3DLayer::GetFogFar()
+/* 0000bc8e */{
+/* 0000bc8e */	return SealEngine.GetFogFar(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000bcb0 */}
+
+void CAS3DLayer::GetFogColor(ref float pfR, ref float pfG, ref float pfB)
+/* 0000bcbe */{
+/* 0000bcbe */	SealEngine.GetFogColor(this.m_3DLayerParts.Get3DLayerPluginID(1), pfR, pfG, pfB);
+/* 0000bcfc */}
+
+bool CAS3DLayer::SetSoftFogEdgeLength(float SoftFogEdgeLength)
+/* 0000bd04 */{
+/* 0000bd04 */	return SealEngine.SetSoftFogEdgeLength(this.m_3DLayerParts.Get3DLayerPluginID(1), SoftFogEdgeLength);
+/* 0000bd30 */}
+
+float CAS3DLayer::GetSoftFogEdgeLength()
+/* 0000bd3e */{
+/* 0000bd3e */	return SealEngine.GetSoftFogEdgeLength(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000bd60 */}
+
+bool CAS3DLayer::SetEdgeLength(float EdgeLength)
+/* 0000bd6e */{
+/* 0000bd6e */	return SealEngine.SetEdgeLength(this.m_3DLayerParts.Get3DLayerPluginID(1), EdgeLength);
+/* 0000bd9a */}
+
+float CAS3DLayer::GetEdgeLength()
+/* 0000bda8 */{
+/* 0000bda8 */	return SealEngine.GetEdgeLength(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000bdca */}
+
+bool CAS3DLayer::SetEdgeReductionRate(float EdgeReductionRate)
+/* 0000bdd8 */{
+/* 0000bdd8 */	return SealEngine.SetEdgeReductionRate(this.m_3DLayerParts.Get3DLayerPluginID(1), EdgeReductionRate);
+/* 0000be04 */}
+
+float CAS3DLayer::GetEdgeReductionRate()
+/* 0000be12 */{
+/* 0000be12 */	return SealEngine.GetEdgeReductionRate(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000be34 */}
+
+bool CAS3DLayer::SetEdgeColor(float ColorR, float ColorG, float ColorB)
+/* 0000be42 */{
+/* 0000be42 */	return SealEngine.SetEdgeColor(this.m_3DLayerParts.Get3DLayerPluginID(1), ColorR, ColorG, ColorB);
+/* 0000be82 */}
+
+bool CAS3DLayer::GetEdgeColor(ref float ColorR, ref float ColorG, ref float ColorB)
+/* 0000be90 */{
+/* 0000be90 */	return SealEngine.GetEdgeColor(this.m_3DLayerParts.Get3DLayerPluginID(1), ColorR, ColorG, ColorB);
+/* 0000bed0 */}
+
+bool CAS3DLayer::SetDrawTextureFog(bool bDraw)
+/* 0000bede */{
+/* 0000bede */	if (!SealEngine.SetDrawTextureFog(this.m_3DLayerParts.Get3DLayerPluginID(1), bDraw))
+/* 0000bf10 */	{
+/* 0000bf10 */		return false;
+/* 0000bf18 */	}
+/* 0000bf18 */	return true;
+/* 0000bf20 */}
+
+bool CAS3DLayer::GetDrawTextureFog()
+/* 0000bf2e */{
+/* 0000bf2e */	return SealEngine.GetDrawTextureFog(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000bf50 */}
+
+bool CAS3DLayer::SetOptionAntiAliasing(int nFlag)
+/* 0000bf5e */{
+/* 0000bf5e */	if (!SystemService.SetAntiAliasingMode(nFlag))
+/* 0000bf7a */	{
+/* 0000bf7a */		system.Error("アンチエイリアシング設定に失敗しました");
+/* 0000bf88 */		return false;
+/* 0000bf90 */	}
+/* 0000bf90 */	return true;
+/* 0000bf98 */}
+
+bool CAS3DLayer::SetViewport(int nX, int nY, int nWidth, int nHeight)
+/* 0000bfa6 */{
+/* 0000bfa6 */	if (!SealEngine.SetViewport(this.m_3DLayerParts.Get3DLayerPluginID(1), nX, nY, nWidth, nHeight))
+/* 0000bff6 */	{
+/* 0000bff6 */		system.Error("ビューポートの設定に失敗しました");
+/* 0000c004 */		return false;
+/* 0000c00c */	}
+/* 0000c00c */	return true;
+/* 0000c014 */}
+
+bool CAS3DLayer::SetProjection(float fWidth, float fHeight, float fNear, float fFar, float fDeg)
+/* 0000c022 */{
+/* 0000c022 */	if (!SealEngine.SetProjection(this.m_3DLayerParts.Get3DLayerPluginID(1), fWidth, fHeight, fNear, fFar, fDeg))
+/* 0000c07c */	{
+/* 0000c07c */		system.Error("プロジェクションの設定に失敗しました");
+/* 0000c08a */		return false;
+/* 0000c092 */	}
+/* 0000c092 */	return true;
+/* 0000c09a */}
+
+bool CAS3DLayer::SetParallelProjection(float Width, float Height, float Near, float Far, float Mag)
+/* 0000c0a8 */{
+/* 0000c0a8 */	float Degree = -Mag;
+/* 0000c0c0 */	if (!SealEngine.SetProjection(this.m_3DLayerParts.Get3DLayerPluginID(1), Width, Height, Near, Far, Degree))
+/* 0000c11a */	{
+/* 0000c11a */		return false;
+/* 0000c122 */	}
+/* 0000c122 */	return true;
+/* 0000c12a */}
+
+float CAS3DLayer::GetBrightness()
+/* 0000c138 */{
+/* 0000c138 */	return SealEngine.GetBrightness(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c15a */}
+
+void CAS3DLayer::SetBrightness(float fBrightness)
+/* 0000c168 */{
+/* 0000c168 */	if (!SealEngine.SetBrightness(this.m_3DLayerParts.Get3DLayerPluginID(1), fBrightness))
+/* 0000c19a */	{
+/* 0000c19a */		system.Error("輝度設定に失敗しました");
+/* 0000c1a8 */	}
+/* 0000c1a8 */}
+
+int CAS3DLayer::GetShaderDebugMode()
+/* 0000c1b0 */{
+/* 0000c1b0 */	return SealEngine.GetShaderDebugMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c1d2 */}
+
+bool CAS3DLayer::SetDebugMode(int DebugModeType, int Mode)
+/* 0000c1e0 */{
+/* 0000c1e0 */	return SealEngine.SetDebugMode(this.m_3DLayerParts.Get3DLayerPluginID(1), DebugModeType, Mode);
+/* 0000c216 */}
+
+int CAS3DLayer::GetDebugMode(int DebugModeType)
+/* 0000c224 */{
+/* 0000c224 */	return SealEngine.GetDebugMode(this.m_3DLayerParts.Get3DLayerPluginID(1), DebugModeType);
+/* 0000c250 */}
+
+int CAS3DLayer::GetTextureFilterMode()
+/* 0000c25e */{
+/* 0000c25e */	return SealEngine.GetTextureFilterMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c280 */}
+
+bool CAS3DLayer::SetRenderMode(int nMode)
+/* 0000c28e */{
+/* 0000c28e */	if (!SealEngine.SetRenderMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode))
+/* 0000c2c0 */	{
+/* 0000c2c0 */		system.Error("レンダーモードの設定に失敗しました");
+/* 0000c2ce */	}
+/* 0000c2ce */	return true;
+/* 0000c2d6 */}
+
+bool CAS3DLayer::SetDrawOption(int DrawOption, int Param)
+/* 0000c2e4 */{
+/* 0000c2e4 */	return SealEngine.SetDrawOption(this.m_3DLayerParts.Get3DLayerPluginID(1), DrawOption, Param);
+/* 0000c31a */}
+
+int CAS3DLayer::GetDrawOption(int DrawOption)
+/* 0000c328 */{
+/* 0000c328 */	return SealEngine.GetDrawOption(this.m_3DLayerParts.Get3DLayerPluginID(1), DrawOption);
+/* 0000c354 */}
+
+bool CAS3DLayer::SetShadowMode(int nMode)
+/* 0000c362 */{
+/* 0000c362 */	if (!SealEngine.SetShadowMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode))
+/* 0000c394 */	{
+/* 0000c394 */		system.Error("シャドウモードの設定に失敗しました");
+/* 0000c3a2 */	}
+/* 0000c3a2 */	return true;
+/* 0000c3aa */}
+
+bool CAS3DLayer::SetBumpMode(int nMode)
+/* 0000c3b8 */{
+/* 0000c3b8 */	if (!SealEngine.SetBumpMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode))
+/* 0000c3ea */	{
+/* 0000c3ea */		system.Error("バンプマッピングモードの設定に失敗しました");
+/* 0000c3f8 */	}
+/* 0000c3f8 */	return true;
+/* 0000c400 */}
+
+bool CAS3DLayer::SetFogMode(int nMode)
+/* 0000c40e */{
+/* 0000c40e */	return SealEngine.SetFogMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c43a */}
+
+bool CAS3DLayer::SetSpecularMode(int nMode)
+/* 0000c448 */{
+/* 0000c448 */	return SealEngine.SetSpecularMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c474 */}
+
+bool CAS3DLayer::SetLightMapMode(int nMode)
+/* 0000c482 */{
+/* 0000c482 */	return SealEngine.SetLightMapMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c4ae */}
+
+bool CAS3DLayer::SetSoftFogEdgeMode(int nMode)
+/* 0000c4bc */{
+/* 0000c4bc */	return SealEngine.SetSoftFogEdgeMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c4e8 */}
+
+bool CAS3DLayer::SetSSAOMode(int nMode)
+/* 0000c4f6 */{
+/* 0000c4f6 */	return SealEngine.SetSSAOMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c522 */}
+
+bool CAS3DLayer::SetShaderDebugMode(int nMode)
+/* 0000c530 */{
+/* 0000c530 */	return SealEngine.SetShaderDebugMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c55c */}
+
+int CAS3DLayer::GetTextureResolutionLevel()
+/* 0000c56a */{
+/* 0000c56a */	return SealEngine.GetTextureResolutionLevel(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c58c */}
+
+bool CAS3DLayer::SetTextureResolutionLevel(int nLevel)
+/* 0000c59a */{
+/* 0000c59a */	if (!SealEngine.SetTextureResolutionLevel(this.m_3DLayerParts.Get3DLayerPluginID(1), nLevel))
+/* 0000c5cc */	{
+/* 0000c5cc */		return false;
+/* 0000c5d4 */	}
+/* 0000c5d4 */	return true;
+/* 0000c5dc */}
+
+bool CAS3DLayer::SetTextureFilterMode(int nMode)
+/* 0000c5ea */{
+/* 0000c5ea */	if (!SealEngine.SetTextureFilterMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode))
+/* 0000c61c */	{
+/* 0000c61c */		system.Error("テクスチャフィルタモードの設定に失敗しました");
+/* 0000c62a */	}
+/* 0000c62a */	return true;
+/* 0000c632 */}
+
+int CAS3DLayer::GetRenderMode()
+/* 0000c640 */{
+/* 0000c640 */	return SealEngine.GetRenderMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c662 */}
+
+int CAS3DLayer::GetShadowMode()
+/* 0000c670 */{
+/* 0000c670 */	return SealEngine.GetShadowMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c692 */}
+
+int CAS3DLayer::GetBumpMode()
+/* 0000c6a0 */{
+/* 0000c6a0 */	return SealEngine.GetBumpMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c6c2 */}
+
+int CAS3DLayer::GetFogMode()
+/* 0000c6d0 */{
+/* 0000c6d0 */	return SealEngine.GetFogMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c6f2 */}
+
+int CAS3DLayer::GetSpecularMode()
+/* 0000c700 */{
+/* 0000c700 */	return SealEngine.GetSpecularMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c722 */}
+
+int CAS3DLayer::GetLightMapMode()
+/* 0000c730 */{
+/* 0000c730 */	return SealEngine.GetLightMapMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c752 */}
+
+int CAS3DLayer::GetSoftFogEdgeMode()
+/* 0000c760 */{
+/* 0000c760 */	return SealEngine.GetSoftFogEdgeMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c782 */}
+
+int CAS3DLayer::GetSSAOMode()
+/* 0000c790 */{
+/* 0000c790 */	return SealEngine.GetSSAOMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c7b2 */}
+
+bool CAS3DLayer::GetUsePower2Texture()
+/* 0000c7c0 */{
+/* 0000c7c0 */	return SealEngine.GetUsePower2Texture(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c7e2 */}
+
+bool CAS3DLayer::SetUsePower2Texture(bool bUse)
+/* 0000c7f0 */{
+/* 0000c7f0 */	return SealEngine.SetUsePower2Texture(this.m_3DLayerParts.Get3DLayerPluginID(1), bUse);
+/* 0000c81c */}
+
+bool CAS3DLayer::GetGlobalAmbient(ref float fR, ref float fG, ref float fB)
+/* 0000c82a */{
+/* 0000c82a */	if (!SealEngine.GetGlobalAmbient(this.m_3DLayerParts.Get3DLayerPluginID(1), fR, fG, fB))
+/* 0000c870 */	{
+/* 0000c870 */		return false;
+/* 0000c878 */	}
+/* 0000c878 */	return true;
+/* 0000c880 */}
+
+bool CAS3DLayer::SetGlobalAmbient(float fR, float fG, float fB)
+/* 0000c88e */{
+/* 0000c88e */	if (!SealEngine.SetGlobalAmbient(this.m_3DLayerParts.Get3DLayerPluginID(1), fR, fG, fB))
+/* 0000c8d4 */	{
+/* 0000c8d4 */		return false;
+/* 0000c8dc */	}
+/* 0000c8dc */	return true;
+/* 0000c8e4 */}
+
+int CAS3DLayer::GetBloomMode()
+/* 0000c8f2 */{
+/* 0000c8f2 */	return SealEngine.GetBloomMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c914 */}
+
+bool CAS3DLayer::SetBloomMode(int nMode)
+/* 0000c922 */{
+/* 0000c922 */	return SealEngine.SetBloomMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c94e */}
+
+int CAS3DLayer::GetGlareMode()
+/* 0000c95c */{
+/* 0000c95c */	return SealEngine.GetGlareMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c97e */}
+
+bool CAS3DLayer::SetGlareMode(int nMode)
+/* 0000c98c */{
+/* 0000c98c */	return SealEngine.SetGlareMode(this.m_3DLayerParts.Get3DLayerPluginID(1), nMode);
+/* 0000c9b8 */}
+
+float CAS3DLayer::GetPostEffectFilterY()
+/* 0000c9c6 */{
+/* 0000c9c6 */	return SealEngine.GetPostEffectFilterY(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000c9e8 */}
+
+float CAS3DLayer::GetPostEffectFilterCb()
+/* 0000c9f6 */{
+/* 0000c9f6 */	return SealEngine.GetPostEffectFilterCb(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000ca18 */}
+
+float CAS3DLayer::GetPostEffectFilterCr()
+/* 0000ca26 */{
+/* 0000ca26 */	return SealEngine.GetPostEffectFilterCr(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000ca48 */}
+
+bool CAS3DLayer::SetPostEffectFilterY(float fY)
+/* 0000ca56 */{
+/* 0000ca56 */	return SealEngine.SetPostEffectFilterY(this.m_3DLayerParts.Get3DLayerPluginID(1), fY);
+/* 0000ca82 */}
+
+bool CAS3DLayer::SetPostEffectFilterCb(float fCb)
+/* 0000ca90 */{
+/* 0000ca90 */	return SealEngine.SetPostEffectFilterCb(this.m_3DLayerParts.Get3DLayerPluginID(1), fCb);
+/* 0000cabc */}
+
+bool CAS3DLayer::SetPostEffectFilterCr(float fCr)
+/* 0000caca */{
+/* 0000caca */	return SealEngine.SetPostEffectFilterCr(this.m_3DLayerParts.Get3DLayerPluginID(1), fCr);
+/* 0000caf6 */}
+
+bool CAS3DLayer::GetBackCGName(int nNum, ref string pICGName)
+/* 0000cb04 */{
+/* 0000cb04 */	return SealEngine.GetBackCGName(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, pICGName);
+/* 0000cb3a */}
+
+int CAS3DLayer::GetBackCGNum(int nNum)
+/* 0000cb48 */{
+/* 0000cb48 */	return SealEngine.GetBackCGNum(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000cb74 */}
+
+float CAS3DLayer::GetBackCGBlendRate(int nNum)
+/* 0000cb82 */{
+/* 0000cb82 */	return SealEngine.GetBackCGBlendRate(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000cbae */}
+
+float CAS3DLayer::GetBackCGDestPosX(int nNum)
+/* 0000cbbc */{
+/* 0000cbbc */	return SealEngine.GetBackCGDestPosX(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000cbe8 */}
+
+float CAS3DLayer::GetBackCGDestPosY(int nNum)
+/* 0000cbf6 */{
+/* 0000cbf6 */	return SealEngine.GetBackCGDestPosY(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000cc22 */}
+
+float CAS3DLayer::GetBackCGMag(int nNum)
+/* 0000cc30 */{
+/* 0000cc30 */	return SealEngine.GetBackCGMag(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000cc5c */}
+
+float CAS3DLayer::GetBackCGQuakeMag(int nNum)
+/* 0000cc6a */{
+/* 0000cc6a */	return SealEngine.GetBackCGQuakeMag(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000cc96 */}
+
+bool CAS3DLayer::GetBackCGShow(int nNum)
+/* 0000cca4 */{
+/* 0000cca4 */	return SealEngine.GetBackCGShow(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum);
+/* 0000ccd0 */}
+
+bool CAS3DLayer::SetBackCGName(int nNum, string pICGName)
+/* 0000ccde */{
+/* 0000ccde */	return SealEngine.SetBackCGName(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, pICGName);
+/* 0000cd14 */}
+
+bool CAS3DLayer::SetBackCGNum(int nNum, int nCGNum)
+/* 0000cd22 */{
+/* 0000cd22 */	return SealEngine.SetBackCGNum(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, nCGNum);
+/* 0000cd58 */}
+
+bool CAS3DLayer::SetBackCGBlendRate(int nNum, float fBlendRate)
+/* 0000cd66 */{
+/* 0000cd66 */	return SealEngine.SetBackCGBlendRate(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fBlendRate);
+/* 0000cd9c */}
+
+bool CAS3DLayer::SetBackCGDestPos(int nNum, float fX, float fY)
+/* 0000cdaa */{
+/* 0000cdaa */	return SealEngine.SetBackCGDestPos(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fX, fY);
+/* 0000cdea */}
+
+bool CAS3DLayer::SetBackCGMag(int nNum, float fMag)
+/* 0000cdf8 */{
+/* 0000cdf8 */	return SealEngine.SetBackCGMag(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fMag);
+/* 0000ce2e */}
+
+bool CAS3DLayer::SetBackCGQuakeMag(int nNum, float fQuakeMag)
+/* 0000ce3c */{
+/* 0000ce3c */	return SealEngine.SetBackCGQuakeMag(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, fQuakeMag);
+/* 0000ce72 */}
+
+bool CAS3DLayer::SetBackCGShow(int nNum, bool bShow)
+/* 0000ce80 */{
+/* 0000ce80 */	return SealEngine.SetBackCGShow(this.m_3DLayerParts.Get3DLayerPluginID(1), nNum, bShow);
+/* 0000ceb6 */}
+
+float CAS3DLayer::GetGlareBrightnessParam(int nIndex)
+/* 0000cec4 */{
+/* 0000cec4 */	return SealEngine.GetGlareBrightnessParam(this.m_3DLayerParts.Get3DLayerPluginID(1), nIndex);
+/* 0000cef0 */}
+
+bool CAS3DLayer::SetGlareBrightnessParam(int nIndex, float fParam)
+/* 0000cefe */{
+/* 0000cefe */	return SealEngine.SetGlareBrightnessParam(this.m_3DLayerParts.Get3DLayerPluginID(1), nIndex, fParam);
+/* 0000cf34 */}
+
+bool CAS3DLayer::ResetLightParam()
+/* 0000cf42 */{
+/* 0000cf42 */	return SealEngine.ResetLightParam(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000cf64 */}
+
+bool CAS3DLayer::SetLightParam(int Type, float Value)
+/* 0000cf72 */{
+/* 0000cf72 */	return SealEngine.SetLightParam(this.m_3DLayerParts.Get3DLayerPluginID(1), Type, Value);
+/* 0000cfa8 */}
+
+float CAS3DLayer::GetLightParam(int Type)
+/* 0000cfb6 */{
+/* 0000cfb6 */	return SealEngine.GetLightParam(this.m_3DLayerParts.Get3DLayerPluginID(1), Type);
+/* 0000cfe2 */}
+
+void CAS3DLayer::SetHemisphereLightVector(float X, float Y, float Z)
+/* 0000cff0 */{
+/* 0000cff0 */	this.SetLightParam(8, X);
+/* 0000d00a */	this.SetLightParam(9, Y);
+/* 0000d024 */	this.SetLightParam(10, Z);
+/* 0000d03e */}
+
+void CAS3DLayer::SetHemisphereLightSkyColor(float ColorR, float ColorG, float ColorB)
+/* 0000d046 */{
+/* 0000d046 */	this.SetLightParam(11, ColorR);
+/* 0000d060 */	this.SetLightParam(12, ColorG);
+/* 0000d07a */	this.SetLightParam(13, ColorB);
+/* 0000d094 */}
+
+void CAS3DLayer::SetHemisphereLightMiddleColor(float ColorR, float ColorG, float ColorB)
+/* 0000d09c */{
+/* 0000d09c */	this.SetLightParam(14, ColorR);
+/* 0000d0b6 */	this.SetLightParam(15, ColorG);
+/* 0000d0d0 */	this.SetLightParam(16, ColorB);
+/* 0000d0ea */}
+
+void CAS3DLayer::SetHemisphereLightGroundColor(float ColorR, float ColorG, float ColorB)
+/* 0000d0f2 */{
+/* 0000d0f2 */	this.SetLightParam(17, ColorR);
+/* 0000d10c */	this.SetLightParam(18, ColorG);
+/* 0000d126 */	this.SetLightParam(19, ColorB);
+/* 0000d140 */}
+
+float CAS3DLayer::GetHemisphereLightVectorX()
+/* 0000d148 */{
+/* 0000d148 */	return this.GetLightParam(8);
+/* 0000d158 */}
+
+float CAS3DLayer::GetHemisphereLightVectorY()
+/* 0000d166 */{
+/* 0000d166 */	return this.GetLightParam(9);
+/* 0000d176 */}
+
+float CAS3DLayer::GetHemisphereLightVectorZ()
+/* 0000d184 */{
+/* 0000d184 */	return this.GetLightParam(10);
+/* 0000d194 */}
+
+float CAS3DLayer::GetHemisphereLightSkyColorR()
+/* 0000d1a2 */{
+/* 0000d1a2 */	return this.GetLightParam(11);
+/* 0000d1b2 */}
+
+float CAS3DLayer::GetHemisphereLightSkyColorG()
+/* 0000d1c0 */{
+/* 0000d1c0 */	return this.GetLightParam(12);
+/* 0000d1d0 */}
+
+float CAS3DLayer::GetHemisphereLightSkyColorB()
+/* 0000d1de */{
+/* 0000d1de */	return this.GetLightParam(13);
+/* 0000d1ee */}
+
+float CAS3DLayer::GetHemisphereLightMiddleColorR()
+/* 0000d1fc */{
+/* 0000d1fc */	return this.GetLightParam(14);
+/* 0000d20c */}
+
+float CAS3DLayer::GetHemisphereLightMiddleColorG()
+/* 0000d21a */{
+/* 0000d21a */	return this.GetLightParam(15);
+/* 0000d22a */}
+
+float CAS3DLayer::GetHemisphereLightMiddleColorB()
+/* 0000d238 */{
+/* 0000d238 */	return this.GetLightParam(16);
+/* 0000d248 */}
+
+float CAS3DLayer::GetHemisphereLightGroundColorR()
+/* 0000d256 */{
+/* 0000d256 */	return this.GetLightParam(17);
+/* 0000d266 */}
+
+float CAS3DLayer::GetHemisphereLightGroundColorG()
+/* 0000d274 */{
+/* 0000d274 */	return this.GetLightParam(18);
+/* 0000d284 */}
+
+float CAS3DLayer::GetHemisphereLightGroundColorB()
+/* 0000d292 */{
+/* 0000d292 */	return this.GetLightParam(19);
+/* 0000d2a2 */}
+
+bool CAS3DLayer::SetUseLightScattering(bool Use)
+/* 0000d2b0 */{
+/* 0000d2b0 */	int Type = Use ? 1 : 0;
+/* 0000d2de */	if (!SealEngine.SetFogType(this.m_3DLayerParts.Get3DLayerPluginID(1), Type))
+/* 0000d310 */	{
+/* 0000d310 */		return false;
+/* 0000d318 */	}
+/* 0000d318 */	return true;
+/* 0000d320 */}
+
+bool CAS3DLayer::GetUseLightScattering()
+/* 0000d32e */{
+/* 0000d32e */	return SealEngine.GetFogType(this.m_3DLayerParts.Get3DLayerPluginID(1)) != 0;
+/* 0000d35a */}
+
+void CAS3DLayer::SetLightScatteringLightVector(float X, float Y, float Z)
+/* 0000d368 */{
+/* 0000d368 */	this.SetLightParam(24, X);
+/* 0000d382 */	this.SetLightParam(25, Y);
+/* 0000d39c */	this.SetLightParam(26, Z);
+/* 0000d3b6 */}
+
+void CAS3DLayer::SetLightScatteringLightColor(float ColorR, float ColorG, float ColorB)
+/* 0000d3be */{
+/* 0000d3be */	this.SetLightParam(27, ColorR);
+/* 0000d3d8 */	this.SetLightParam(28, ColorG);
+/* 0000d3f2 */	this.SetLightParam(29, ColorB);
+/* 0000d40c */}
+
+void CAS3DLayer::SetLightScatteringSunColor(float ColorR, float ColorG, float ColorB)
+/* 0000d414 */{
+/* 0000d414 */	this.SetLightParam(30, ColorR);
+/* 0000d42e */	this.SetLightParam(31, ColorG);
+/* 0000d448 */	this.SetLightParam(32, ColorB);
+/* 0000d462 */}
+
+void CAS3DLayer::SetLightScatteringBetaR(float BetaR)
+/* 0000d46a */{
+/* 0000d46a */	this.SetLightParam(20, BetaR);
+/* 0000d484 */}
+
+void CAS3DLayer::SetLightScatteringBetaM(float BetaM)
+/* 0000d48c */{
+/* 0000d48c */	this.SetLightParam(21, BetaM);
+/* 0000d4a6 */}
+
+void CAS3DLayer::SetLightScatteringG(float G)
+/* 0000d4ae */{
+/* 0000d4ae */	this.SetLightParam(22, G);
+/* 0000d4c8 */}
+
+void CAS3DLayer::SetLightScatteringDistance(float Distance)
+/* 0000d4d0 */{
+/* 0000d4d0 */	this.SetLightParam(23, Distance);
+/* 0000d4ea */}
+
+float CAS3DLayer::GetLightScatteringLightVectorX()
+/* 0000d4f2 */{
+/* 0000d4f2 */	return this.GetLightParam(24);
+/* 0000d502 */}
+
+float CAS3DLayer::GetLightScatteringLightVectorY()
+/* 0000d510 */{
+/* 0000d510 */	return this.GetLightParam(25);
+/* 0000d520 */}
+
+float CAS3DLayer::GetLightScatteringLightVectorZ()
+/* 0000d52e */{
+/* 0000d52e */	return this.GetLightParam(26);
+/* 0000d53e */}
+
+float CAS3DLayer::GetLightScatteringLightColorR()
+/* 0000d54c */{
+/* 0000d54c */	return this.GetLightParam(27);
+/* 0000d55c */}
+
+float CAS3DLayer::GetLightScatteringLightColorG()
+/* 0000d56a */{
+/* 0000d56a */	return this.GetLightParam(28);
+/* 0000d57a */}
+
+float CAS3DLayer::GetLightScatteringLightColorB()
+/* 0000d588 */{
+/* 0000d588 */	return this.GetLightParam(29);
+/* 0000d598 */}
+
+float CAS3DLayer::GetLightScatteringSunColorR()
+/* 0000d5a6 */{
+/* 0000d5a6 */	return this.GetLightParam(30);
+/* 0000d5b6 */}
+
+float CAS3DLayer::GetLightScatteringSunColorG()
+/* 0000d5c4 */{
+/* 0000d5c4 */	return this.GetLightParam(31);
+/* 0000d5d4 */}
+
+float CAS3DLayer::GetLightScatteringSunColorB()
+/* 0000d5e2 */{
+/* 0000d5e2 */	return this.GetLightParam(32);
+/* 0000d5f2 */}
+
+float CAS3DLayer::GetLightScatteringBetaR()
+/* 0000d600 */{
+/* 0000d600 */	return this.GetLightParam(20);
+/* 0000d610 */}
+
+float CAS3DLayer::GetLightScatteringBetaM()
+/* 0000d61e */{
+/* 0000d61e */	return this.GetLightParam(21);
+/* 0000d62e */}
+
+float CAS3DLayer::GetLightScatteringG()
+/* 0000d63c */{
+/* 0000d63c */	return this.GetLightParam(22);
+/* 0000d64c */}
+
+float CAS3DLayer::GetLightScatteringDistance()
+/* 0000d65a */{
+/* 0000d65a */	return this.GetLightParam(23);
+/* 0000d66a */}
+
+void CAS3DLayer::SetToneMappingExposureBias(float ExposureBias)
+/* 0000d678 */{
+/* 0000d678 */	this.SetLightParam(0, ExposureBias);
+/* 0000d692 */}
+
+void CAS3DLayer::SetToneMappingWhitePoint(float WhitePoint)
+/* 0000d69a */{
+/* 0000d69a */	this.SetLightParam(1, WhitePoint);
+/* 0000d6b4 */}
+
+void CAS3DLayer::SetToneMappingShoulderStrength(float ShoulderStrength)
+/* 0000d6bc */{
+/* 0000d6bc */	this.SetLightParam(2, ShoulderStrength);
+/* 0000d6d6 */}
+
+void CAS3DLayer::SetToneMappingLinearStrength(float LinearStrength)
+/* 0000d6de */{
+/* 0000d6de */	this.SetLightParam(3, LinearStrength);
+/* 0000d6f8 */}
+
+void CAS3DLayer::SetToneMappingLinearAngle(float LinearAngle)
+/* 0000d700 */{
+/* 0000d700 */	this.SetLightParam(4, LinearAngle);
+/* 0000d71a */}
+
+void CAS3DLayer::SetToneMappingToeStrength(float ToeStrength)
+/* 0000d722 */{
+/* 0000d722 */	this.SetLightParam(5, ToeStrength);
+/* 0000d73c */}
+
+void CAS3DLayer::SetToneMappingToeNumerator(float ToeNumerator)
+/* 0000d744 */{
+/* 0000d744 */	this.SetLightParam(6, ToeNumerator);
+/* 0000d75e */}
+
+void CAS3DLayer::SetToneMappingToeDenominator(float ToeDenominator)
+/* 0000d766 */{
+/* 0000d766 */	this.SetLightParam(7, ToeDenominator);
+/* 0000d780 */}
+
+float CAS3DLayer::GetToneMappingExposureBias()
+/* 0000d788 */{
+/* 0000d788 */	return this.GetLightParam(0);
+/* 0000d798 */}
+
+float CAS3DLayer::GetToneMappingWhitePoint()
+/* 0000d7a6 */{
+/* 0000d7a6 */	return this.GetLightParam(1);
+/* 0000d7b6 */}
+
+float CAS3DLayer::GetToneMappingShoulderStrength()
+/* 0000d7c4 */{
+/* 0000d7c4 */	return this.GetLightParam(2);
+/* 0000d7d4 */}
+
+float CAS3DLayer::GetToneMappingLinearStrength()
+/* 0000d7e2 */{
+/* 0000d7e2 */	return this.GetLightParam(3);
+/* 0000d7f2 */}
+
+float CAS3DLayer::GetToneMappingLinearAngle()
+/* 0000d800 */{
+/* 0000d800 */	return this.GetLightParam(4);
+/* 0000d810 */}
+
+float CAS3DLayer::GetToneMappingToeStrength()
+/* 0000d81e */{
+/* 0000d81e */	return this.GetLightParam(5);
+/* 0000d82e */}
+
+float CAS3DLayer::GetToneMappingToeNumerator()
+/* 0000d83c */{
+/* 0000d83c */	return this.GetLightParam(6);
+/* 0000d84c */}
+
+float CAS3DLayer::GetToneMappingToeDenominator()
+/* 0000d85a */{
+/* 0000d85a */	return this.GetLightParam(7);
+/* 0000d86a */}
+
+float CAS3DLayer::GetSSAOParam(int nType)
+/* 0000d878 */{
+/* 0000d878 */	return SealEngine.GetSSAOParam(this.m_3DLayerParts.Get3DLayerPluginID(1), nType);
+/* 0000d8a4 */}
+
+bool CAS3DLayer::SetSSAOParam(int nType, float fParam)
+/* 0000d8b2 */{
+/* 0000d8b2 */	return SealEngine.SetSSAOParam(this.m_3DLayerParts.Get3DLayerPluginID(1), nType, fParam);
+/* 0000d8e8 */}
+
+void CAS3DLayer::SetSSAONumofRound(float NumofRound)
+/* 0000d8f6 */{
+/* 0000d8f6 */	this.SetSSAOParam(4, NumofRound);
+/* 0000d910 */}
+
+void CAS3DLayer::SetSSAOMinLength(float MinLength)
+/* 0000d918 */{
+/* 0000d918 */	this.SetSSAOParam(5, MinLength);
+/* 0000d932 */}
+
+void CAS3DLayer::SetSSAOMaxLength(float MaxLength)
+/* 0000d93a */{
+/* 0000d93a */	this.SetSSAOParam(6, MaxLength);
+/* 0000d954 */}
+
+void CAS3DLayer::SetSSAOMinDistance(float MinDistance)
+/* 0000d95c */{
+/* 0000d95c */	this.SetSSAOParam(7, MinDistance);
+/* 0000d976 */}
+
+void CAS3DLayer::SetSSAOMaxDistance(float MaxDistance)
+/* 0000d97e */{
+/* 0000d97e */	this.SetSSAOParam(8, MaxDistance);
+/* 0000d998 */}
+
+void CAS3DLayer::SetSSAOColor(float ColorR, float ColorG, float ColorB)
+/* 0000d9a0 */{
+/* 0000d9a0 */	this.SetSSAOParam(0, ColorR);
+/* 0000d9ba */	this.SetSSAOParam(1, ColorG);
+/* 0000d9d4 */	this.SetSSAOParam(2, ColorB);
+/* 0000d9ee */}
+
+void CAS3DLayer::SetSSAOAlpha(float Alpha)
+/* 0000d9f6 */{
+/* 0000d9f6 */	this.SetSSAOParam(3, Alpha);
+/* 0000da10 */}
+
+float CAS3DLayer::GetSSAONumofRound()
+/* 0000da18 */{
+/* 0000da18 */	return this.GetSSAOParam(4);
+/* 0000da28 */}
+
+float CAS3DLayer::GetSSAOMinLength()
+/* 0000da36 */{
+/* 0000da36 */	return this.GetSSAOParam(5);
+/* 0000da46 */}
+
+float CAS3DLayer::GetSSAOMaxLength()
+/* 0000da54 */{
+/* 0000da54 */	return this.GetSSAOParam(6);
+/* 0000da64 */}
+
+float CAS3DLayer::GetSSAOMinDistance()
+/* 0000da72 */{
+/* 0000da72 */	return this.GetSSAOParam(7);
+/* 0000da82 */}
+
+float CAS3DLayer::GetSSAOMaxDistance()
+/* 0000da90 */{
+/* 0000da90 */	return this.GetSSAOParam(8);
+/* 0000daa0 */}
+
+float CAS3DLayer::GetSSAOColorR()
+/* 0000daae */{
+/* 0000daae */	return this.GetSSAOParam(0);
+/* 0000dabe */}
+
+float CAS3DLayer::GetSSAOColorG()
+/* 0000dacc */{
+/* 0000dacc */	return this.GetSSAOParam(1);
+/* 0000dadc */}
+
+float CAS3DLayer::GetSSAOColorB()
+/* 0000daea */{
+/* 0000daea */	return this.GetSSAOParam(2);
+/* 0000dafa */}
+
+float CAS3DLayer::GetSSAOAlpha()
+/* 0000db08 */{
+/* 0000db08 */	return this.GetSSAOParam(3);
+/* 0000db18 */}
+
+bool CAS3DLayer::IsLoading()
+/* 0000db26 */{
+/* 0000db26 */	return SealEngine.IsLoading(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000db48 */}
+
+void CAS3DLayer::SetThreadLoadingMode(bool Mode)
+/* 0000db56 */{
+/* 0000db56 */	SealEngine.SetThreadLoadingMode(this.m_3DLayerParts.Get3DLayerPluginID(1), Mode);
+/* 0000db82 */}
+
+bool CAS3DLayer::IsThreadLoadingMode()
+/* 0000db8a */{
+/* 0000db8a */	return SealEngine.IsThreadLoadingMode(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000dbac */}
+
+bool CAS3DLayer::Calc2DDetectionHeight(float X, float Z, ref float Height)
+/* 0000dbba */{
+/* 0000dbba */	return SealEngine.Calc2DDetectionHeight(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Z, Height);
+/* 0000dbfa */}
+
+bool CAS3DLayer::Calc2DDetection(float X0, float Y0, float Z0, float X1, float Y1, float Z1, float Radius, ref float X2, ref float Y2, ref float Z2)
+/* 0000dc08 */{
+/* 0000dc08 */	return SealEngine.Calc2DDetection(this.m_3DLayerParts.Get3DLayerPluginID(1), X0, Y0, Z0, X1, Y1, Z1, Radius, X2, Y2, Z2);
+/* 0000dc8e */}
+
+bool CAS3DLayer::Calc2DDetectionIntersectEyeVector(int ViewX, int ViewY, ref float X, ref float Y, ref float Z)
+/* 0000dc9c */{
+/* 0000dc9c */	return SealEngine.Calc2DDetectionIntersectEyeVector(this.m_3DLayerParts.Get3DLayerPluginID(1), ViewX, ViewY, X, Y, Z);
+/* 0000dcf0 */}
+
+bool CAS3DLayer::FindPath(float StartX, float StartY, float StartZ, float GoalX, float GoalY, float GoalZ)
+/* 0000dcfe */{
+/* 0000dcfe */	return SealEngine.FindPath(this.m_3DLayerParts.Get3DLayerPluginID(1), StartX, StartY, StartZ, GoalX, GoalY, GoalZ);
+/* 0000dd5c */}
+
+bool CAS3DLayer::GetPathLine(ref array@float pIXArray, ref array@float pIYArray, ref array@float pIZArray)
+/* 0000dd6a */{
+/* 0000dd6a */	return SealEngine.GetPathLine(this.m_3DLayerParts.Get3DLayerPluginID(1), pIXArray, pIYArray, pIZArray);
+/* 0000ddaa */}
+
+bool CAS3DLayer::GetOptimizedPathLine(ref array@float pIXArray, ref array@float pIYArray, ref array@float pIZArray)
+/* 0000ddb8 */{
+/* 0000ddb8 */	return SealEngine.GetOptimizedPathLine(this.m_3DLayerParts.Get3DLayerPluginID(1), pIXArray, pIYArray, pIZArray);
+/* 0000ddf8 */}
+
+bool CAS3DLayer::TransformPosToViewPos(float X, float Y, float Z, ref int ViewX, ref int ViewY)
+/* 0000de06 */{
+/* 0000de06 */	return SealEngine.TransformPosToViewPos(this.m_3DLayerParts.Get3DLayerPluginID(1), X, Y, Z, ViewX, ViewY);
+/* 0000de5a */}
+
+bool CAS3DLayer::ClearCache()
+/* 0000de68 */{
+/* 0000de68 */	return SealEngine.ClearCache(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000de8a */}
+
+bool CAS3DLayer::Suspend()
+/* 0000de98 */{
+/* 0000de98 */	return SealEngine.Suspend(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000deba */}
+
+bool CAS3DLayer::IsSuspend()
+/* 0000dec8 */{
+/* 0000dec8 */	return SealEngine.IsSuspend(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000deea */}
+
+bool CAS3DLayer::Resume()
+/* 0000def8 */{
+/* 0000def8 */	if (!SealEngine.Resume(this.m_3DLayerParts.Get3DLayerPluginID(1)))
+/* 0000df20 */	{
+/* 0000df20 */		return false;
+/* 0000df28 */	}
+/* 0000df28 */	SealEngine.SetThreadLoadingMode(this.m_3DLayerParts.Get3DLayerPluginID(1), false);
+/* 0000df50 */	int BeginTime = system.GetTime();
+/* 0000df62 */	this.m_3DLayerParts.SetShow(false);
+/* 0000df78 */	for (; ; )
+/* 0000df78 */	{
+/* 0000df78 */		AFL_View_Update(true);
+/* 0000df84 */		if (!this.IsLoading())
+/* 0000df94 */		{
+/* 0000df94 */			break;
+/* 0000df9a */		}
+/* 0000df9a */	}
+/* 0000dfa0 */	this.m_3DLayerParts.SetShow(true);
+/* 0000dfb6 */	SealEngine.SetThreadLoadingMode(this.m_3DLayerParts.Get3DLayerPluginID(1), true);
+/* 0000dfde */	return true;
+/* 0000dfe6 */}
+
+bool CAS3DLayer::DrawToMainSurface()
+/* 0000dff4 */{
+/* 0000dff4 */	return SealEngine.DrawToMainSurface(this.m_3DLayerParts.Get3DLayerPluginID(1));
+/* 0000e016 */}
+

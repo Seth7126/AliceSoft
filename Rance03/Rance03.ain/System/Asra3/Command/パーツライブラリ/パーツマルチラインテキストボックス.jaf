@@ -1,0 +1,159 @@
+void Ｐ＿マルチラインテキストボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 0016764c */{
+/* 0016764c */	PartsEngine.SetMultiTextBoxSize(パーツ番号, 幅, 高さ);
+/* 00167674 */}
+
+void Ｐ＿マルチラインテキストボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, int 縁取り赤, int 縁取り緑, int 縁取り青, float 縁取り幅)
+/* 00167682 */{
+/* 00167682 */	PartsEngine.SetMultiTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 001676fa */}
+
+void Ｐ＿マルチラインテキストボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青, ref float 縁取り幅)
+/* 00167708 */{
+/* 00167708 */	PartsEngine.GetMultiTextBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 00167780 */}
+
+void Ｐ＿マルチラインテキストボックス＿読み取り専用設定(int パーツ番号, bool 読み取り)
+/* 0016778e */{
+/* 0016778e */	PartsEngine.SetMultiTextBoxReadOnly(パーツ番号, 読み取り);
+/* 001677ac */}
+
+bool Ｐ＿マルチラインテキストボックス＿読み取り専用確認(int パーツ番号)
+/* 001677ba */{
+/* 001677ba */	return PartsEngine.IsMultiTextBoxReadOnly(パーツ番号);
+/* 001677d0 */}
+
+void Ｐ＿マルチラインテキストボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 001677e4 */{
+/* 001677e4 */	PartsEngine.SetMultiTextBoxText(パーツ番号, テキスト);
+/* 00167802 */}
+
+string Ｐ＿マルチラインテキストボックス＿テキスト取得(int パーツ番号)
+/* 00167810 */{
+/* 00167810 */	string Text;
+/* 00167824 */	PartsEngine.GetMultiTextBoxText(パーツ番号, Text);
+/* 00167842 */	return Text;
+/* 0016784e */}
+
+void Ｐ＿マルチラインテキストボックス＿最大文字数設定(int パーツ番号, int 最大文字数)
+/* 00167862 */{
+/* 00167862 */	PartsEngine.SetMultiTextBoxMaxTextLength(パーツ番号, 最大文字数);
+/* 00167880 */}
+
+int Ｐ＿マルチラインテキストボックス＿最大文字数取得(int パーツ番号)
+/* 0016788e */{
+/* 0016788e */	return PartsEngine.GetMultiTextBoxMaxTextLength(パーツ番号);
+/* 001678a4 */}
+
+void Ｐ＿マルチラインテキストボックス＿背景色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 001678b8 */{
+/* 001678b8 */	PartsEngine.SetMultiTextBoxBGColor(パーツ番号, 赤, 緑, 青);
+/* 001678ea */}
+
+int Ｐ＿マルチラインテキストボックス＿背景色赤取得(int パーツ番号)
+/* 001678f8 */{
+/* 001678f8 */	return PartsEngine.GetMultiTextBoxBGR(パーツ番号);
+/* 0016790e */}
+
+int Ｐ＿マルチラインテキストボックス＿背景色緑取得(int パーツ番号)
+/* 00167922 */{
+/* 00167922 */	return PartsEngine.GetMultiTextBoxBGG(パーツ番号);
+/* 00167938 */}
+
+int Ｐ＿マルチラインテキストボックス＿背景色青取得(int パーツ番号)
+/* 0016794c */{
+/* 0016794c */	return PartsEngine.GetMultiTextBoxBGB(パーツ番号);
+/* 00167962 */}
+
+void Ｐ＿マルチラインテキストボックス＿読み取り専用背景色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00167976 */{
+/* 00167976 */	PartsEngine.SetMultiTextBoxReadOnlyBGColor(パーツ番号, 赤, 緑, 青);
+/* 001679a8 */}
+
+int Ｐ＿マルチラインテキストボックス＿読み取り専用背景色赤取得(int パーツ番号)
+/* 001679b6 */{
+/* 001679b6 */	return PartsEngine.GetMultiTextBoxReadOnlyBGR(パーツ番号);
+/* 001679cc */}
+
+int Ｐ＿マルチラインテキストボックス＿読み取り専用背景色緑取得(int パーツ番号)
+/* 001679e0 */{
+/* 001679e0 */	return PartsEngine.GetMultiTextBoxReadOnlyBGG(パーツ番号);
+/* 001679f6 */}
+
+int Ｐ＿マルチラインテキストボックス＿読み取り専用背景色青取得(int パーツ番号)
+/* 00167a0a */{
+/* 00167a0a */	return PartsEngine.GetMultiTextBoxReadOnlyBGB(パーツ番号);
+/* 00167a20 */}
+
+void Ｐ＿マルチラインテキストボックス＿枠色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00167a34 */{
+/* 00167a34 */	PartsEngine.SetMultiTextBoxFrameColor(パーツ番号, 赤, 緑, 青);
+/* 00167a66 */}
+
+int Ｐ＿マルチラインテキストボックス＿枠色赤取得(int パーツ番号)
+/* 00167a74 */{
+/* 00167a74 */	return PartsEngine.GetMultiTextBoxFrameR(パーツ番号);
+/* 00167a8a */}
+
+int Ｐ＿マルチラインテキストボックス＿枠色緑取得(int パーツ番号)
+/* 00167a9e */{
+/* 00167a9e */	return PartsEngine.GetMultiTextBoxFrameG(パーツ番号);
+/* 00167ab4 */}
+
+int Ｐ＿マルチラインテキストボックス＿枠色青取得(int パーツ番号)
+/* 00167ac8 */{
+/* 00167ac8 */	return PartsEngine.GetMultiTextBoxFrameB(パーツ番号);
+/* 00167ade */}
+
+void Ｐ＿マルチラインテキストボックス＿選択色設定(int パーツ番号, int 赤, int 緑, int 青)
+/* 00167af2 */{
+/* 00167af2 */	PartsEngine.SetMultiTextBoxSelectColor(パーツ番号, 赤, 緑, 青);
+/* 00167b24 */}
+
+int Ｐ＿マルチラインテキストボックス＿選択色赤取得(int パーツ番号)
+/* 00167b32 */{
+/* 00167b32 */	return PartsEngine.GetMultiTextBoxSelectR(パーツ番号);
+/* 00167b48 */}
+
+int Ｐ＿マルチラインテキストボックス＿選択色緑取得(int パーツ番号)
+/* 00167b5c */{
+/* 00167b5c */	return PartsEngine.GetMultiTextBoxSelectG(パーツ番号);
+/* 00167b72 */}
+
+int Ｐ＿マルチラインテキストボックス＿選択色青取得(int パーツ番号)
+/* 00167b86 */{
+/* 00167b86 */	return PartsEngine.GetMultiTextBoxSelectB(パーツ番号);
+/* 00167b9c */}
+
+void Ｐ＿マルチラインテキストボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 00167bb0 */{
+/* 00167bb0 */	PartsEngine.SetMultiTextBoxCGName(パーツ番号, ＣＧ名);
+/* 00167bce */}
+
+string Ｐ＿マルチラインテキストボックス＿ＣＧ名取得(int パーツ番号)
+/* 00167bdc */{
+/* 00167bdc */	string Name;
+/* 00167bf0 */	PartsEngine.GetMultiTextBoxCGName(パーツ番号, Name);
+/* 00167c0e */	return Name;
+/* 00167c1a */}
+
+void Ｐ＿マルチラインテキストボックス＿文字間隔設定(int パーツ番号, int 間隔)
+/* 00167c2e */{
+/* 00167c2e */	PartsEngine.SetMultiTextBoxCharSpace(パーツ番号, 間隔);
+/* 00167c4c */}
+
+int Ｐ＿マルチラインテキストボックス＿文字間隔取得(int パーツ番号)
+/* 00167c5a */{
+/* 00167c5a */	return PartsEngine.GetMultiTextBoxCharSpace(パーツ番号);
+/* 00167c70 */}
+
+void Ｐ＿マルチラインテキストボックス＿行間隔設定(int パーツ番号, int 間隔)
+/* 00167c84 */{
+/* 00167c84 */	PartsEngine.SetMultiTextBoxLineSpace(パーツ番号, 間隔);
+/* 00167ca2 */}
+
+int Ｐ＿マルチラインテキストボックス＿行間隔取得(int パーツ番号)
+/* 00167cb0 */{
+/* 00167cb0 */	return PartsEngine.GetMultiTextBoxLineSpace(パーツ番号);
+/* 00167cc6 */}
+

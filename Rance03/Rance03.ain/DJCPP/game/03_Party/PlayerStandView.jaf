@@ -1,0 +1,135 @@
+PlayerStandView::PlayerStandView()
+/* 00194f0e */{
+/* 00194f16 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00194f3c */	this.isInitialized_ = false;
+/* 00194f4e */}
+
+void PlayerStandView::init(string playerId)
+/* 00194f56 */{
+/* 00194f56 */	this.playerId_ = playerId;
+/* 00194f6e */}
+
+void PlayerStandView::initParts(string playerId)
+/* 00194f76 */{
+/* 00194f76 */	string cg = "trim_システム／立ち絵／%s" % getPlayerFromId(playerId).getShortName();
+/* 00194fbe */	if (getPlayerFromId(this.playerId_).getHp() > 0)
+/* 00194ff8 */	{
+/* 00194ff8 */		this.parts_[0].init(cg, 0);
+/* 00195020 */	}
+/* 00195026 */	else
+/* 00195026 */	{
+/* 00195026 */		this.parts_[0].initAsCgPlaneImage(cg, 160, 32, 32);
+/* 0019505a */	}
+/* 0019505a */	this.parts_[0].setOrigin(2);
+/* 00195078 */	createPartsGroup(this.parent_, this.parts_, 4100);
+/* 00195098 */	this.setPartsShow();
+/* 001950a0 */	this.setPartsPos();
+/* 001950a8 */}
+
+void PlayerStandView::setPartsShow()
+/* 001950b0 */{
+/* 001950b0 */	int i;
+/* 001950c2 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 00195112 */	{
+/* 00195112 */		this.parts_[i].setShow(true);
+/* 00195134 */	}
+/* 0019513a */	this.parent_.setShow(true);
+/* 00195150 */}
+
+void PlayerStandView::setPartsPos()
+/* 00195158 */{
+/* 00195158 */	if (-4 <= this.virtualPos_ && this.virtualPos_ <= 4.0)
+/* 001951a6 */	{
+/* 001951a6 */		this.parent_.setPos(this.gx_, this.gy_);
+/* 001951ce */		this.parent_.setShow(true);
+/* 001951e4 */		float xPos;
+/* 001951f6 */		float yPos;
+/* 00195208 */		float scaling;
+/* 0019521a */		float alpha;
+/* 0019522c */		convertVirtualPartyPositionToXY(this.virtualPos_, xPos, yPos, scaling, alpha);
+/* 0019525c */		this.parts_[0].setScaling(scaling);
+/* 0019527e */		this.parts_[0].setPos(xPos, yPos);
+/* 001952aa */		this.parts_[0].setMultiColorValue(alpha, alpha, alpha);
+/* 001952e6 */	}
+/* 001952ec */	else
+/* 001952ec */	{
+/* 001952ec */		this.parent_.setShow(false);
+/* 00195302 */	}
+/* 00195302 */	this.parent_.setZ((22 - Math.AbsF(this.virtualPos_)) + 4100.0);
+/* 0019533c */}
+
+void convertVirtualPartyPositionToXY(float virtualPos, ref float xPos, ref float yPos, ref float scaling, ref float alpha)
+/* 00195344 */{
+/* 00195344 */	float v = virtualPos / 4.0;
+/* 00195362 */	float rad = ((-v + 1.0) / 2.0) * 180.0;
+/* 00195392 */	if (-0.25 < v && v < 0.25)
+/* 001953da */	{
+/* 001953da */		alpha = 255 - Math.AbsF(v * 4.0) * 128.0;
+/* 0019541a */	}
+/* 00195420 */	else
+/* 00195420 */	{
+/* 00195420 */		alpha = 170 - Math.AbsF(v) * 170.0;
+/* 00195458 */	}
+/* 00195458 */	xPos = 500 * Math.Cos(rad);
+/* 00195488 */	yPos = 400 * Math.Sin(rad);
+/* 001954b8 */	scaling = Math.Sin(rad) * 60.0 + 40.0;
+/* 001954ea */}
+
+void PlayerStandView::update()
+/* 001954f8 */{
+/* 001954fa */}
+
+int PlayerStandView::getIndex()
+/* 00195500 */{
+/* 00195500 */	return this.currentIndex_;
+/* 0019550c */}
+
+void PlayerStandView::setVirtualPos(float virtualPos)
+/* 0019551a */{
+/* 0019551a */	this.virtualPos_ = virtualPos;
+/* 00195530 */	if (-4 <= this.virtualPos_ && this.virtualPos_ <= 4.0)
+/* 0019557e */	{
+/* 0019557e */		if (!this.isInitialized_)
+/* 00195590 */		{
+/* 00195590 */			this.initParts(this.playerId_);
+/* 001955a2 */			this.isInitialized_ = true;
+/* 001955b4 */		}
+/* 001955b4 */	}
+/* 001955b4 */	this.setPartsPos();
+/* 001955bc */}
+
+void PlayerStandView::setGroupPos(int x, int y, bool isImmediate)
+/* 001955c4 */{
+/* 001955c4 */	if (isImmediate)
+/* 001955d4 */	{
+/* 001955d4 */		this.gx_ = x;
+/* 001955ea */		this.gy_ = y;
+/* 00195600 */		this.parent_.setPos(this.gx_, this.gy_);
+/* 00195628 */	}
+/* 0019562e */	else
+/* 0019562e */	{
+/* 0019562e */		PartsMotion m;
+/* 0019563e */		m.setMove(this.gx_, this.gy_, x, y, 1);
+/* 0019567c */		this.parent_.runMotion(m, NULL);
+/* 0019569c */		this.gx_ = x;
+/* 001956b2 */		this.gy_ = y;
+/* 001956c8 */	}
+/* 001956c8 */}
+
+void PlayerStandView::fadeIn(bool val)
+/* 001956d6 */{
+/* 001956d6 */	PartsMotion m;
+/* 001956e6 */	if (val)
+/* 001956f6 */	{
+/* 001956f6 */		m.setKey(5, 60, 0, 3);
+/* 0019571e */		m.setAlpha(0, 255, 0);
+/* 00195740 */		m.setTime(250);
+/* 00195756 */	}
+/* 0019575c */	else
+/* 0019575c */	{
+/* 0019575c */		m.setAlpha(255, 0, 0);
+/* 0019577e */		m.setTime(150);
+/* 00195794 */	}
+/* 00195794 */	this.parts_[0].runMotion(m, NULL);
+/* 001957bc */}
+

@@ -1,0 +1,35 @@
+void PlayerSkillAttribute::init(string id)
+/* 001e08fc */{
+/* 001e08fc */	string key = "プレイヤー攻撃属性情報";
+/* 001e0910 */	this.id_ = id;
+/* 001e0928 */	this.name_ = EX_SA2String(key, this.id_, "name", "");
+/* 001e095c */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001e0990 */	this.attackKind_ = EX_SA2Int(key, this.id_, "type", 0);
+/* 001e09c2 */	this.flatName_ = EX_SA2String(key, this.id_, "flatName", "");
+/* 001e09f6 */}
+
+string PlayerSkillAttribute::getId()
+/* 001e09fe */{
+/* 001e09fe */	return this.id_;
+/* 001e0a0a */}
+
+string PlayerSkillAttribute::getName()
+/* 001e0a18 */{
+/* 001e0a18 */	return this.name_;
+/* 001e0a24 */}
+
+int PlayerSkillAttribute::getAttackKind()
+/* 001e0a32 */{
+/* 001e0a32 */	return this.attackKind_;
+/* 001e0a3e */}
+
+string PlayerSkillAttribute::getImageName()
+/* 001e0a4c */{
+/* 001e0a4c */	return this.imageName_;
+/* 001e0a58 */}
+
+string PlayerSkillAttribute::getFlatName()
+/* 001e0a66 */{
+/* 001e0a66 */	return this.flatName_;
+/* 001e0a72 */}
+

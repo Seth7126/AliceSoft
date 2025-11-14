@@ -1,0 +1,64 @@
+void Ｐ＿コンボボックス＿サイズ設定(int パーツ番号, int 幅, int 高さ)
+/* 00167328 */{
+/* 00167328 */	PartsEngine.SetComboBoxSize(パーツ番号, 幅, 高さ);
+/* 00167350 */}
+
+void Ｐ＿コンボボックス＿マージン設定(int パーツ番号, int 幅, int 高さ)
+/* 0016735e */{
+/* 0016735e */	PartsEngine.SetComboBoxTextMargin(パーツ番号, 幅, 高さ);
+/* 00167386 */}
+
+int Ｐ＿コンボボックス＿マージン幅取得(int パーツ番号)
+/* 00167394 */{
+/* 00167394 */	return PartsEngine.GetComboBoxTextWidthMargin(パーツ番号);
+/* 001673aa */}
+
+int Ｐ＿コンボボックス＿マージン高さ取得(int パーツ番号)
+/* 001673be */{
+/* 001673be */	return PartsEngine.GetComboBoxTextHeightMargin(パーツ番号);
+/* 001673d4 */}
+
+void Ｐ＿コンボボックス＿ＣＧ名設定(int パーツ番号, string ＣＧ名)
+/* 001673e8 */{
+/* 001673e8 */	PartsEngine.SetComboBoxCGName(パーツ番号, ＣＧ名);
+/* 00167406 */}
+
+string Ｐ＿コンボボックス＿ＣＧ名取得(int パーツ番号)
+/* 00167414 */{
+/* 00167414 */	string Name;
+/* 00167428 */	PartsEngine.GetComboBoxCGName(パーツ番号, Name);
+/* 00167446 */	return Name;
+/* 00167452 */}
+
+void Ｐ＿コンボボックス＿テキスト設定(int パーツ番号, string テキスト)
+/* 00167466 */{
+/* 00167466 */	PartsEngine.SetComboBoxText(パーツ番号, テキスト);
+/* 00167484 */}
+
+string Ｐ＿コンボボックス＿テキスト取得(int パーツ番号)
+/* 00167492 */{
+/* 00167492 */	string Text;
+/* 001674a6 */	PartsEngine.GetComboBoxText(パーツ番号, Text);
+/* 001674c4 */	return Text;
+/* 001674d0 */}
+
+void Ｐ＿コンボボックス＿フォント設定(int パーツ番号, int 種類, int サイズ, int 赤, int 緑, int 青, float 太字幅, int 縁取り赤, int 縁取り緑, int 縁取り青, float 縁取り幅)
+/* 001674e4 */{
+/* 001674e4 */	PartsEngine.SetComboBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 0016755c */}
+
+void Ｐ＿コンボボックス＿フォント取得(int パーツ番号, ref int 種類, ref int サイズ, ref int 赤, ref int 緑, ref int 青, ref float 太字幅, ref int 縁取り赤, ref int 縁取り緑, ref int 縁取り青, ref float 縁取り幅)
+/* 0016756a */{
+/* 0016756a */	PartsEngine.GetComboBoxFontProperty(パーツ番号, 種類, サイズ, 赤, 緑, 青, 太字幅, 縁取り赤, 縁取り緑, 縁取り青, 縁取り幅);
+/* 001675e2 */}
+
+void Ｐ＿コンボボックス＿文字間隔設定(int パーツ番号, int 間隔)
+/* 001675f0 */{
+/* 001675f0 */	PartsEngine.SetComboBoxCharSpace(パーツ番号, 間隔);
+/* 0016760e */}
+
+int Ｐ＿コンボボックス＿文字間隔取得(int パーツ番号)
+/* 0016761c */{
+/* 0016761c */	return PartsEngine.GetComboBoxCharSpace(パーツ番号);
+/* 00167632 */}
+

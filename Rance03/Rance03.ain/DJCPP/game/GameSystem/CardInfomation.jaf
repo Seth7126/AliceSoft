@@ -1,0 +1,83 @@
+void CardInfomation::init(string id)
+/* 001cdafe */{
+/* 001cdafe */	this.id_ = id;
+/* 001cdb16 */	this.loadParam();
+/* 001cdb1e */}
+
+void CardInfomation::loadParam()
+/* 001cdb26 */{
+/* 001cdb26 */	string key = "カード情報";
+/* 001cdb3a */	this.caption_ = EX_SA2String(key, this.id_, "caption", "");
+/* 001cdb6e */	this.imageName_ = EX_SA2String(key, this.id_, "imageName", "");
+/* 001cdba2 */	this.eventCallback_ = EX_SA2String(key, this.id_, "eventCallback", "");
+/* 001cdbd6 */	this.fadeOutType_ = EX_SA2Int(key, this.id_, "fadeOutType", 0);
+/* 001cdc08 */	this.changeType_ = EX_SA2Int(key, this.id_, "changeType", 0);
+/* 001cdc3a */	this.clickableJudgeCallback_ = EX_SA2String(key, this.id_, "clickableJudgeCallback", "");
+/* 001cdc6e */	this.minimapIconImageName_ = EX_SA2String(key, this.id_, "minimapIconImageName", "");
+/* 001cdca2 */	this.bgImageName_ = EX_SA2String(key, this.id_, "bgImageName", "カード／裏");
+/* 001cdcd6 */	if (this.bgImageName_ == "")
+/* 001cdcee */	{
+/* 001cdcee */		this.bgImageName_ = "カード／裏";
+/* 001cdd02 */	}
+/* 001cdd02 */}
+
+string CardInfomation::getId()
+/* 001cdd0a */{
+/* 001cdd0a */	return this.id_;
+/* 001cdd16 */}
+
+string CardInfomation::getCaption()
+/* 001cdd24 */{
+/* 001cdd24 */	return this.caption_;
+/* 001cdd30 */}
+
+string CardInfomation::getImageName()
+/* 001cdd3e */{
+/* 001cdd3e */	return this.imageName_;
+/* 001cdd4a */}
+
+string CardInfomation::getEventCallback()
+/* 001cdd58 */{
+/* 001cdd58 */	return this.eventCallback_;
+/* 001cdd64 */}
+
+string CardInfomation::getClickableJudgeCallback()
+/* 001cdd72 */{
+/* 001cdd72 */	return this.clickableJudgeCallback_;
+/* 001cdd7e */}
+
+bool CardInfomation::isClickable()
+/* 001cdd8c */{
+/* 001cdd8c */	if (this.clickableJudgeCallback_ == "通行可")
+/* 001cdda4 */	{
+/* 001cdda4 */		return true;
+/* 001cddac */	}
+/* 001cddac */	if (this.clickableJudgeCallback_ == "通行不可")
+/* 001cddc4 */	{
+/* 001cddc4 */		return false;
+/* 001cddcc */	}
+/* 001cddcc */	DG_CardClickableCallback fn;
+/* 001cddd8 */	fn += this.clickableJudgeCallback_;
+/* 001cddfe */	return fn();
+/* 001cde20 */}
+
+int CardInfomation::getFadeOutType()
+/* 001cde2e */{
+/* 001cde2e */	return this.fadeOutType_;
+/* 001cde3a */}
+
+int CardInfomation::getChangeType()
+/* 001cde48 */{
+/* 001cde48 */	return this.changeType_;
+/* 001cde54 */}
+
+string CardInfomation::getMinimapIconImageName()
+/* 001cde62 */{
+/* 001cde62 */	return this.minimapIconImageName_;
+/* 001cde6e */}
+
+string CardInfomation::getBgImageName()
+/* 001cde7c */{
+/* 001cde7c */	return this.bgImageName_;
+/* 001cde88 */}
+

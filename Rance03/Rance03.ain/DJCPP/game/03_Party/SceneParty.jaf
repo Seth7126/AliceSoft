@@ -1,0 +1,274 @@
+void SceneParty::init(bool isShowBg)
+/* 00196fd2 */{
+/* 00196fd2 */	this.isFinish_ = false;
+/* 00196fe4 */	this.isShowBg_ = isShowBg;
+/* 00196ffa */	gameGetJoinedPlayer(this.playerList_);
+/* 0019700a */	this.initButtons();
+/* 00197012 */	this.initSkillButton();
+/* 0019701a */	this.stand_.init();
+/* 0019702a */	this.bg_.init(this.isShowBg_);
+/* 00197044 */	this.status_.init(this.playerList_);
+/* 00197060 */	this.changeCenter(int(g_common_isWithOutSkillInformation));
+/* 00197076 */}
+
+void SceneParty::onClickToggleInformation(int index)
+/* 0019707e */{
+/* 0019707e */	g_common_isWithOutSkillInformation = !int(g_common_isWithOutSkillInformation);
+/* 0019709a */	this.changeCenter(int(g_common_isWithOutSkillInformation));
+/* 001970b0 */}
+
+void SceneParty::changeCenter(bool isWithOutInfomation)
+/* 001970b8 */{
+/* 001970b8 */	this.bg_.changeCenter(isWithOutInfomation);
+/* 001970d2 */	this.stand_.changeCenter(isWithOutInfomation);
+/* 001970ec */	this.changeCenterSkillIcon(isWithOutInfomation);
+/* 001970fe */	this.status_.changeCenter(isWithOutInfomation);
+/* 00197118 */	this.changeCenterPlayerLRButton(isWithOutInfomation);
+/* 0019712a */}
+
+void SceneParty::changeCenterSkillIcon(bool isWithOutInfomation)
+/* 00197132 */{
+/* 00197132 */	int i;
+/* 00197144 */	for (i = 0; i < this.skillIcon_.Numof(); ++i)
+/* 00197194 */	{
+/* 00197194 */		this.skillIcon_[i].changeCenter(isWithOutInfomation);
+/* 001971ba */	}
+/* 001971c0 */}
+
+void SceneParty::initButtons()
+/* 001971c8 */{
+/* 001971c8 */	this.btnLR_[0].init("システム／ページ送り／前へ", "", "", false);
+/* 001971f8 */	this.btnLR_[1].init("システム／ページ送り／次へ", "", "", false);
+/* 00197228 */	this.btnLR_[0].setClickCallback(this.onClickStandGroupMoveButton, 0);
+/* 00197250 */	this.btnLR_[1].setClickCallback(this.onClickStandGroupMoveButton, 1);
+/* 00197278 */	int offset = int(g_common_isWithOutSkillInformation) ? 0 : 100;
+/* 001972a8 */	this.btnLR_[0].setPos(420 + offset, 434);
+/* 001972d8 */	this.btnLR_[1].setPos(800 + offset, 434);
+/* 00197308 */	if (this.isShowBg_)
+/* 00197318 */	{
+/* 00197318 */		this.btnExit_.init("システム／ボタン／幅１７０", "戻る", "", true);
+/* 00197340 */	}
+/* 00197346 */	else
+/* 00197346 */	{
+/* 00197346 */		this.btnExit_.init("システム／ボタン／幅１７０", "キャンプに戻る", "", true);
+/* 0019736e */	}
+/* 0019736e */	this.btnExit_.setPos(840, 494);
+/* 0019738a */	this.btnToggleInfo_.init("システム／スキル説明ボタン", "", "", false);
+/* 001973b2 */	this.btnToggleInfo_.setPos(958, 434);
+/* 001973ce */	this.btnToggleInfo_.setClickCallback(this.onClickToggleInformation, 0);
+/* 001973ee */}
+
+void SceneParty::changeCenterPlayerLRButton(bool isWithOutInfomation)
+/* 001973f6 */{
+/* 001973f6 */	int i;
+/* 00197408 */	for (i = 0; i < this.btnLR_.Numof(); ++i)
+/* 00197458 */	{
+/* 00197458 */		PartsMotion m;
+/* 00197468 */		int x = 420 + i * 380;
+/* 0019748e */		if (isWithOutInfomation)
+/* 0019749e */		{
+/* 0019749e */			m.setMove(x + 100, 434, x, 434, 1);
+/* 001974dc */		}
+/* 001974e2 */		else
+/* 001974e2 */		{
+/* 001974e2 */			m.setMove(x, 434, x + 100, 434, 1);
+/* 00197520 */		}
+/* 00197520 */		this.btnLR_[i].runMotion(m);
+/* 00197546 */	}
+/* 00197552 */}
+
+void SceneParty::fadeButton(bool val)
+/* 0019755a */{
+/* 0019755a */	this.fadeButtonLR(val);
+/* 0019756c */	this.fadeSkillIcon(val);
+/* 0019757e */	this.btnExit_.fadeIn(val);
+/* 00197598 */	this.btnToggleInfo_.fadeIn(val);
+/* 001975b2 */}
+
+void SceneParty::fadeSkillIcon(bool val)
+/* 001975ba */{
+/* 001975ba */	int i;
+/* 001975cc */	for (i = 0; i < this.skillIcon_.Numof(); ++i)
+/* 0019761c */	{
+/* 0019761c */		this.skillIcon_[i].fadeIn(val, NULL);
+/* 00197644 */	}
+/* 0019764a */}
+
+void SceneParty::fadeButtonLR(bool val)
+/* 00197652 */{
+/* 00197652 */	int i;
+/* 00197664 */	for (i = 0; i < this.btnLR_.Numof(); ++i)
+/* 001976b4 */	{
+/* 001976b4 */		this.btnLR_[i].fadeIn(val);
+/* 001976da */	}
+/* 001976e0 */}
+
+void SceneParty::onClickStandGroupMoveButton(int index)
+/* 001976e8 */{
+/* 001976e8 */	this.setNextPlayer(index != 0);
+/* 00197704 */}
+
+void SceneParty::run()
+/* 0019770c */{
+/* 0019770c */	this.selector_.init(this.onClickSkillSelector);
+/* 00197726 */	this.fadeObject(true);
+/* 00197734 */}
+
+bool SceneParty::update()
+/* 0019773c */{
+/* 0019773c */	if (!this.timerCb_.isRunning() && (g_mouse.isClick(1) || this.btnExit_.isClick()))
+/* 001977b6 */	{
+/* 001977b6 */		if (g_mouse.isClick(1))
+/* 001977d2 */		{
+/* 001977d2 */			playCancel();
+/* 001977d8 */		}
+/* 001977d8 */		if (g_party.empty())
+/* 001977ee */		{
+/* 001977ee */			this.showWarningNoPartyMembers();
+/* 001977f6 */		}
+/* 001977fc */		else if (this.isNoAlivePlayers())
+/* 0019780a */		{
+/* 0019780a */			this.showWarningNoAlivePlayers();
+/* 00197812 */		}
+/* 00197818 */		else
+/* 00197818 */		{
+/* 00197818 */			this.fadeObject(false);
+/* 00197826 */		}
+/* 00197826 */	}
+/* 00197826 */	int i;
+/* 00197838 */	for (i = 0; i < this.skillIcon_.Numof(); ++i)
+/* 00197888 */	{
+/* 00197888 */		this.skillIcon_[i].setFloatingPosition(this.stand_.getFloatingPosition());
+/* 001978b4 */	}
+/* 001978ba */	this.status_.setFloatingPosition(this.stand_.getFloatingPosition());
+/* 001978da */	return !this.isFinish_;
+/* 001978ea */}
+
+bool SceneParty::isNoAlivePlayers()
+/* 001978f8 */{
+/* 001978f8 */	array@string pIds;
+/* 00197902 */	g_party.getPlayerIdList(pIds);
+/* 0019791c */	int i;
+/* 0019792e */	for (i = 0; i < pIds.Numof(); ++i)
+/* 0019797e */	{
+/* 0019797e */		if (getPlayerFromId(pIds[i]).getHp() > 0)
+/* 001979c4 */		{
+/* 001979c4 */			return false;
+/* 001979cc */		}
+/* 001979cc */	}
+/* 001979d8 */	return true;
+/* 001979e0 */}
+
+void SceneParty::fadeObject(bool val)
+/* 001979ee */{
+/* 001979ee */	this.status_.fadeIn(val);
+/* 00197a08 */	this.bg_.fadeIn(val);
+/* 00197a22 */	this.selector_.fadeIn(val);
+/* 00197a3c */	this.fadeButton(val);
+/* 00197a4e */	this.stand_.fadeIn(val);
+/* 00197a68 */	if (!val)
+/* 00197a7a */	{
+/* 00197a7a */		this.timerCb_.setTimer(250, this.onFinishFadeOut);
+/* 00197a9a */	}
+/* 00197a9a */}
+
+void SceneParty::onFinishFadeOut()
+/* 00197aa2 */{
+/* 00197aa2 */	this.isFinish_ = true;
+/* 00197ab4 */}
+
+void SceneParty::initSkillButton()
+/* 00197abc */{
+/* 00197abc */	array@string pId;
+/* 00197ac6 */	gameGetJoinedPlayer(pId);
+/* 00197ad6 */	int i;
+/* 00197ae8 */	for (i = 0; i < this.skillIcon_.Numof(); ++i)
+/* 00197b38 */	{
+/* 00197b38 */		this.skillIcon_[i].init(pId, i);
+/* 00197b6a */		this.skillIcon_[i].setClickCallback(this.onClickSkillButton);
+/* 00197b90 */	}
+/* 00197b96 */	array@string skills;
+/* 00197ba0 */	g_party.getSkillIdList(skills);
+/* 00197bba */	for (i = 0; i < skills.Numof(); ++i)
+/* 00197c0a */	{
+/* 00197c0a */		this.setEquiped(skills[i], true);
+/* 00197c2e */	}
+/* 00197c34 */}
+
+void SceneParty::onClickSkillButton(string skillId)
+/* 00197c3c */{
+/* 00197c3c */	string s = skillId;
+/* 00197c54 */	if (!g_party.isExist(s))
+/* 00197c76 */	{
+/* 00197c76 */		string pId = getPlayerSkillFromId(s).getPlayerId();
+/* 00197cb0 */		if (g_party.add(s))
+/* 00197cd0 */		{
+/* 00197cd0 */			g_sysSound.play(6, "効果音／スキル装備");
+/* 00197cec */			int skillIndex = g_party.getIndexFromId(s);
+/* 00197d12 */			this.setEquiped(skillId, true);
+/* 00197d2a */			this.selector_.add(skillIndex, s);
+/* 00197d4e */		}
+/* 00197d4e */	}
+/* 00197d5a */	else
+/* 00197d5a */	{
+/* 00197d5a */		int skillIndex = g_party.getIndexFromId(s);
+/* 00197d80 */		if (skillIndex != -1)
+/* 00197d98 */		{
+/* 00197d98 */			g_sysSound.play(6, "効果音／キャンセル");
+/* 00197db4 */			g_party.erase(skillIndex);
+/* 00197dce */			this.setEquiped(skillId, false);
+/* 00197de6 */			this.selector_.erase(skillIndex);
+/* 00197e00 */		}
+/* 00197e00 */	}
+/* 00197e00 */}
+
+void SceneParty::setEquiped(string skillId, bool val)
+/* 00197e08 */{
+/* 00197e08 */	int i;
+/* 00197e1a */	for (i = 0; i < this.skillIcon_.Numof(); ++i)
+/* 00197e6a */	{
+/* 00197e6a */		this.skillIcon_[i].setEquiped(skillId, val);
+/* 00197e9a */	}
+/* 00197ea0 */}
+
+void SceneParty::onClickSkillSelector(int index)
+/* 00197ea8 */{
+/* 00197ea8 */	string id = g_party.getAttackSkillId(index);
+/* 00197ed0 */	g_party.erase(index);
+/* 00197eea */	this.selector_.erase(index);
+/* 00197f04 */	g_sysSound.play(6, "効果音／キャンセル");
+/* 00197f20 */	this.setEquiped(id, false);
+/* 00197f38 */}
+
+void SceneParty::showWarningNoAlivePlayers()
+/* 00197f40 */{
+/* 00197f40 */	DialogInfomation info;
+/* 00197f50 */	info.setCaption("戦闘に参加していません");
+/* 00197f66 */	info.setMessage("使用可能なバトルスキルを、|最低1つはセットしてください");
+/* 00197f7c */	info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 00197f92 */	openDialog(info);
+/* 00197fa8 */}
+
+void SceneParty::showWarningNoPartyMembers()
+/* 00197fb0 */{
+/* 00197fb0 */	DialogInfomation info;
+/* 00197fc0 */	info.setCaption("戦闘に参加していません");
+/* 00197fd6 */	info.setMessage("使用可能なバトルスキルを、|最低1つはセットしてください");
+/* 00197fec */	info.setPictureImageName("システム／ダイアログ／写真／情報");
+/* 00198002 */	openDialog(info);
+/* 00198018 */}
+
+void SceneParty::setNextPlayer(bool val)
+/* 00198020 */{
+/* 00198020 */	float current = this.stand_.getFloatingPosition();
+/* 0019803c */	float last = current;
+/* 00198052 */	current += val ? 1 : -1;
+/* 00198082 */	current = roundOff(current);
+/* 001980a0 */	current = Math.MaxF(0.0, Math.MinF(this.playerList_.Numof() - 1, current));
+/* 001980ea */	if (last == current)
+/* 00198106 */	{
+/* 00198106 */		return;
+/* 00198108 */	}
+/* 00198108 */	this.stand_.setPos(current);
+/* 00198124 */}
+

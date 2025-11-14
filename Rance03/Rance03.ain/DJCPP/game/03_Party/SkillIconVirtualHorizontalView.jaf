@@ -1,0 +1,149 @@
+SkillIconVirtualHorizontalView::SkillIconVirtualHorizontalView()
+/* 00198132 */{
+/* 0019813a */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 00198160 */}
+
+void SkillIconVirtualHorizontalView::init(array@string playerIds, int index)
+/* 00198168 */{
+/* 00198168 */	this.parent_.initAsDummy();
+/* 00198178 */	this.parent_.setShow(true);
+/* 0019818e */	this.parent_.setZ(6000.0);
+/* 001981a4 */	this.index_ = index;
+/* 001981ba */	this.icons_.Alloc(playerIds.Numof());
+/* 001981da */	int i;
+/* 001981ec */	for (i = 0; i < this.icons_.Numof(); ++i)
+/* 0019823c */	{
+/* 0019823c */		string skillId = getPlayerFromId(playerIds[i]).getAttackSkillId(this.index_);
+/* 0019828c */		if (skillId != "")
+/* 001982a4 */		{
+/* 001982a4 */			this.icons_[i].init(skillId, 0, 0, getCoolTimeFromSkillId(skillId));
+/* 001982e6 */		}
+/* 001982ec */		else
+/* 001982ec */		{
+/* 001982ec */			int openLevel;
+/* 001982fe */			this.getAvailableLevelPlayerNewSkill(playerIds[i], this.index_, skillId, openLevel);
+/* 00198338 */			if (openLevel != -1)
+/* 00198350 */			{
+/* 00198350 */				this.icons_[i].init(skillId, 1, openLevel, 0);
+/* 0019838c */			}
+/* 00198392 */			else
+/* 00198392 */			{
+/* 00198392 */				this.icons_[i].init(skillId, 2, openLevel, 0);
+/* 001983ce */			}
+/* 001983ce */		}
+/* 001983ce */		this.icons_[i].setOnClickCallback(this.onClick);
+/* 001983f4 */		this.icons_[i].setParent(this.parent_.getPartsNumber());
+/* 00198420 */	}
+/* 0019842c */	this.setIconPos();
+/* 00198434 */}
+
+void SkillIconVirtualHorizontalView::update()
+/* 0019843c */{
+/* 0019843c */	int i;
+/* 0019844e */	for (i = 0; i < this.icons_.Numof(); ++i)
+/* 0019849e */	{
+/* 0019849e */		int n;
+/* 001984b0 */		if (this.icons_[i].isHover())
+/* 001984d2 */		{
+/* 001984d2 */			n = 1;
+/* 001984e4 */		}
+/* 001984e4 */	}
+/* 001984ea */}
+
+void SkillIconVirtualHorizontalView::fadeIn(bool val, unknown_delegate onFinish)
+/* 001984f2 */{
+/* 001984f2 */	int x = this.isWithOutInfomation_ ? 0 : -145;
+/* 00198520 */	if (val)
+/* 00198530 */	{
+/* 00198530 */		array@PartsMotion m[2];
+/* 00198546 */		m[0].setTime((3 - this.index_) * 50);
+/* 00198578 */		m[0].setAlpha(0, 0, 0);
+/* 001985a2 */		m[1].setMove(x - 150, -495, x - 0, 0, 1);
+/* 001985f0 */		m[1].setAlpha(0, 255, 0);
+/* 0019861a */		m[1].setTime(300);
+/* 00198638 */		this.parent_.runMotionArray(m, NULL);
+/* 00198660 */	}
+/* 00198666 */	else
+/* 00198666 */	{
+/* 00198666 */		PartsMotion m;
+/* 00198676 */		m.setMove(x, 0, x - 500, 0, 1);
+/* 001986b4 */		m.setAlpha(255, 0, 0);
+/* 001986d6 */		m.setTime(150);
+/* 001986ec */		this.parent_.runMotion(m, NULL);
+/* 0019870c */	}
+/* 0019870c */}
+
+void SkillIconVirtualHorizontalView::setClickCallback(DG_OnClickSkillIcon cb)
+/* 0019871a */{
+/* 0019871a */	this.onClickCallback_ = cb;
+/* 00198734 */}
+
+void SkillIconVirtualHorizontalView::setFloatingPosition(float val)
+/* 0019873c */{
+/* 0019873c */	int i;
+/* 0019874e */	for (i = 0; i < this.icons_.Numof(); ++i)
+/* 0019879e */	{
+/* 0019879e */		this.icons_[i].setViewValue(val - i);
+/* 001987d2 */	}
+/* 001987d8 */}
+
+void SkillIconVirtualHorizontalView::onClick(string skillId)
+/* 001987e0 */{
+/* 001987e0 */	this.onClickCallback_(skillId);
+/* 0019880a */}
+
+void SkillIconVirtualHorizontalView::getAvailableLevelPlayerNewSkill(string playerId, int index, ref string skillId, ref int openLevel)
+/* 00198812 */{
+/* 00198812 */	int i;
+/* 00198824 */	for (i = 0; i < g_playerSkillOpenLevel.Numof(); ++i)
+/* 00198874 */	{
+/* 00198874 */		if (g_playerSkillOpenLevel[i].getPlayerId() == playerId && g_playerSkillOpenLevel[i].getIndex() == index)
+/* 001988e8 */		{
+/* 001988e8 */			skillId = g_playerSkillOpenLevel[i].getSkillId();
+/* 00198912 */			openLevel = g_playerSkillOpenLevel[i].getOpenLevel();
+/* 0019893c */			return;
+/* 0019893e */		}
+/* 0019893e */	}
+/* 00198944 */}
+
+void SkillIconVirtualHorizontalView::setEquiped(string skillId, bool val)
+/* 0019894c */{
+/* 0019894c */	int i;
+/* 0019895e */	for (i = 0; i < this.icons_.Numof(); ++i)
+/* 001989ae */	{
+/* 001989ae */		if (this.icons_[i].getSkillId() == skillId)
+/* 001989dc */		{
+/* 001989dc */			this.icons_[i].setEquip(val);
+/* 00198a02 */		}
+/* 00198a02 */	}
+/* 00198a08 */}
+
+void SkillIconVirtualHorizontalView::changeCenter(bool isWithOutInfomation)
+/* 00198a10 */{
+/* 00198a10 */	this.isWithOutInfomation_ = isWithOutInfomation;
+/* 00198a26 */	PartsMotion m;
+/* 00198a36 */	if (this.isWithOutInfomation_)
+/* 00198a46 */	{
+/* 00198a46 */		m.setMove(-145, 0, 0, 0, 1);
+/* 00198a74 */	}
+/* 00198a7a */	else
+/* 00198a7a */	{
+/* 00198a7a */		m.setMove(0, 0, -145, 0, 1);
+/* 00198aa8 */	}
+/* 00198aa8 */	this.parent_.runMotion(m, NULL);
+/* 00198ac8 */	int i;
+/* 00198ada */	for (i = 0; i < this.icons_.Numof(); ++i)
+/* 00198b2a */	{
+/* 00198b2a */		this.icons_[i].setShowInformation(!isWithOutInfomation);
+/* 00198b54 */	}
+/* 00198b5a */}
+
+void SkillIconVirtualHorizontalView::setIconPos()
+/* 00198b62 */{
+/* 00198b62 */	int i;
+/* 00198b74 */	for (i = 0; i < this.icons_.Numof(); ++i)
+/* 00198bc4 */	{
+/* 00198bc4 */		this.icons_[i].setPos(167 + this.index_ * 34, 8 + this.index_ * 115);
+/* 00198c14 */	}
+/* 00198c1a */}
+

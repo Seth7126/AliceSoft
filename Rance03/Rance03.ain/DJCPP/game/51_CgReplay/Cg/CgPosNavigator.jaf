@@ -1,0 +1,78 @@
+CgPosNavigator::CgPosNavigator()
+/* 001bedb6 */{
+/* 001bedbe */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001bede4 */}
+
+void CgPosNavigator::init(int count)
+/* 001bedec */{
+/* 001bedec */	this.count_ = count;
+/* 001bee02 */	this.initParts();
+/* 001bee0a */}
+
+void CgPosNavigator::update()
+/* 001bee12 */{
+/* 001bee14 */}
+
+void CgPosNavigator::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 001bee1a */{
+/* 001bee1a */	this.setPartsShow();
+/* 001bee22 */	this.parent_.runMotion(getStandardMotion(val ? 0 : 1), onFinish);
+/* 001bee66 */}
+
+void CgPosNavigator::initParts()
+/* 001bee6e */{
+/* 001bee6e */	this.parts_.Alloc(this.count_ + 1);
+/* 001bee90 */	this.onIndex_ = this.count_;
+/* 001beea6 */	int i;
+/* 001beeb8 */	for (i = 0; i < this.count_; ++i)
+/* 001bef02 */	{
+/* 001bef02 */		this.parts_[i].init("システム／ページ／消灯", 0);
+/* 001bef2a */		this.parts_[i].setOrigin(2);
+/* 001bef4c */	}
+/* 001bef52 */	this.parts_[this.onIndex_].init("システム／ページ／点灯", 0);
+/* 001bef7a */	this.parts_[this.onIndex_].setOrigin(2);
+/* 001bef9c */	createPartsGroup(this.parent_, this.parts_, 15000);
+/* 001befbc */	this.setPartsPos();
+/* 001befc4 */}
+
+void CgPosNavigator::setPartsShow()
+/* 001befcc */{
+/* 001befcc */	int i;
+/* 001befde */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001bf02e */	{
+/* 001bf02e */		this.parts_[i].setShow(true);
+/* 001bf050 */	}
+/* 001bf056 */	this.parent_.setShow(true);
+/* 001bf06c */}
+
+void CgPosNavigator::setPartsPos()
+/* 001bf074 */{
+/* 001bf074 */	int maxWidth = 480;
+/* 001bf086 */	this.span_ = 20;
+/* 001bf098 */	if (maxWidth < this.span_ * this.count_)
+/* 001bf0c0 */	{
+/* 001bf0c0 */		this.span_ = maxWidth / this.count_;
+/* 001bf0e2 */	}
+/* 001bf0e2 */	int w = this.span_ * this.count_;
+/* 001bf104 */	this.left_ = 512 - w / 2;
+/* 001bf12a */	int i;
+/* 001bf13c */	for (i = 0; i < this.count_; ++i)
+/* 001bf186 */	{
+/* 001bf186 */		this.parts_[i].setPos(this.left_ + i * this.span_, 750.0);
+/* 001bf1cc */	}
+/* 001bf1d2 */}
+
+void CgPosNavigator::setPos(float pos)
+/* 001bf1da */{
+/* 001bf1da */	float p = roundOff(pos);
+/* 001bf1f8 */	if (Math.AbsF(p - pos) < 0.1)
+/* 001bf226 */	{
+/* 001bf226 */		this.parts_[this.onIndex_].setAlpha(255.0);
+/* 001bf248 */	}
+/* 001bf24e */	else
+/* 001bf24e */	{
+/* 001bf24e */		this.parts_[this.onIndex_].setAlpha(128.0);
+/* 001bf270 */	}
+/* 001bf270 */	this.parts_[this.onIndex_].setPos(this.left_ + pos * this.span_, 750.0);
+/* 001bf2bc */}
+

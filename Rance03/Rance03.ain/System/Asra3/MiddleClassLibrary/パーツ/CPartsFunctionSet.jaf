@@ -1,0 +1,476 @@
+CPartsFunctionSet::CPartsFunctionSet()
+/* 0002871c */{
+/* 00028724 */	this.Release();
+/* 0002872c */}
+
+CPartsFunctionSet::~CPartsFunctionSet()
+/* 00028734 */{
+/* 00028734 */	this.Release();
+/* 0002873c */}
+
+void CPartsFunctionSet::Release()
+/* 00028744 */{
+/* 00028744 */	this.m_dgFixedEvent.Clear();
+/* 00028750 */	this.m_dgChangedFlgEvent.Clear();
+/* 0002875c */	this.m_dgChangedEvent.Clear();
+/* 00028768 */	this.m_dgSelectedEvent.Clear();
+/* 00028774 */	this.m_dgDeletedEvent.Clear();
+/* 00028780 */	this.m_dgCreatedEvent.Clear();
+/* 0002878c */	this.m_dgScrollEvent.Clear();
+/* 00028798 */	this.m_dgLostFocusEvent.Clear();
+/* 000287a4 */	this.m_dgFocusEvent.Clear();
+/* 000287b0 */	this.m_dgDropLeaveEvent.Clear();
+/* 000287bc */	this.m_dgDroppedEvent.Clear();
+/* 000287c8 */	this.m_dgDropOnEvent.Clear();
+/* 000287d4 */	this.m_dgDropEnterEvent.Clear();
+/* 000287e0 */	this.m_dgDragEndEvent.Clear();
+/* 000287ec */	this.m_dgDragingEvent.Clear();
+/* 000287f8 */	this.m_dgDragBeginEvent.Clear();
+/* 00028804 */	this.m_dgKeyUpEvent.Clear();
+/* 00028810 */	this.m_dgKeyPressEvent.Clear();
+/* 0002881c */	this.m_dgKeyDownEvent.Clear();
+/* 00028828 */	this.m_dgKeyTriggerEvent.Clear();
+/* 00028834 */	this.m_dgMouseOnEvent.Clear();
+/* 00028840 */	this.m_dgMouseMClickEvent.Clear();
+/* 0002884c */	this.m_dgMouseRClickEvent.Clear();
+/* 00028858 */	this.m_dgMouseLClickEvent.Clear();
+/* 00028864 */	this.m_dgMouseWheelEvent.Clear();
+/* 00028870 */	this.m_dgMouseLeaveEvent.Clear();
+/* 0002887c */	this.m_dgMouseMoveEvent.Clear();
+/* 00028888 */	this.m_dgMouseEnterEvent.Clear();
+/* 00028894 */	this.m_PartsNumber = 0;
+/* 000288a6 */	this.m_Use = false;
+/* 000288b8 */}
+
+void CPartsFunctionSet::Init(int PartsNumber)
+/* 000288c0 */{
+/* 000288c0 */	this.m_PartsNumber = PartsNumber;
+/* 000288d6 */	this.m_Use = true;
+/* 000288e8 */}
+
+bool CPartsFunctionSet::IsUse()
+/* 000288f0 */{
+/* 000288f0 */	return this.m_Use;
+/* 000288fc */}
+
+void CPartsFunctionSet::CallFunctionMouseEnter(int MouseX, int MouseY)
+/* 0002890a */{
+/* 0002890a */	this.m_dgMouseEnterEvent(this.m_PartsNumber, MouseX, MouseY);
+/* 00028948 */}
+
+void CPartsFunctionSet::CallFunctionMouseMove(int MouseX, int MouseY)
+/* 00028950 */{
+/* 00028950 */	this.m_dgMouseMoveEvent(this.m_PartsNumber, MouseX, MouseY);
+/* 0002898e */}
+
+void CPartsFunctionSet::CallFunctionMouseLeave(int MouseX, int MouseY)
+/* 00028996 */{
+/* 00028996 */	this.m_dgMouseLeaveEvent(this.m_PartsNumber, MouseX, MouseY);
+/* 000289d4 */}
+
+void CPartsFunctionSet::CallFunctionMouseWheel(int Forward, int Back)
+/* 000289dc */{
+/* 000289dc */	this.m_dgMouseWheelEvent(this.m_PartsNumber, Forward, Back);
+/* 00028a1a */}
+
+void CPartsFunctionSet::CallFunctionMouseClick(int MouseX, int MouseY, int KeyCode)
+/* 00028a22 */{
+/* 00028a22 */	if (KeyCode == 1)
+/* 00028a3a */	{
+/* 00028a3a */		this.m_dgMouseLClickEvent(this.m_PartsNumber, MouseX, MouseY);
+/* 00028a78 */	}
+/* 00028a7e */	else if (KeyCode == 2)
+/* 00028a96 */	{
+/* 00028a96 */		this.m_dgMouseRClickEvent(this.m_PartsNumber, MouseX, MouseY);
+/* 00028ad4 */	}
+/* 00028ada */	else if (KeyCode == 4)
+/* 00028af2 */	{
+/* 00028af2 */		this.m_dgMouseMClickEvent(this.m_PartsNumber, MouseX, MouseY);
+/* 00028b30 */	}
+/* 00028b30 */}
+
+void CPartsFunctionSet::CallFunctionMouseOnCursor(int MouseX, int MouseY, int Time)
+/* 00028b38 */{
+/* 00028b38 */	this.m_dgMouseOnEvent(this.m_PartsNumber, MouseX, MouseY, Time);
+/* 00028b80 */}
+
+void CPartsFunctionSet::CallFunctionKeyTrigger(int KeyCode)
+/* 00028b88 */{
+/* 00028b88 */	this.m_dgKeyTriggerEvent(this.m_PartsNumber, KeyCode);
+/* 00028bbc */}
+
+void CPartsFunctionSet::CallFunctionKeyDown(int KeyCode)
+/* 00028bc4 */{
+/* 00028bc4 */	this.m_dgKeyDownEvent(this.m_PartsNumber, KeyCode);
+/* 00028bf8 */}
+
+void CPartsFunctionSet::CallFunctionKeyPress(int KeyCode)
+/* 00028c00 */{
+/* 00028c00 */	this.m_dgKeyPressEvent(this.m_PartsNumber, KeyCode);
+/* 00028c34 */}
+
+void CPartsFunctionSet::CallFunctionKeyUp(int KeyCode)
+/* 00028c3c */{
+/* 00028c3c */	this.m_dgKeyUpEvent(this.m_PartsNumber, KeyCode);
+/* 00028c70 */}
+
+void CPartsFunctionSet::CallFunctionDragBegin()
+/* 00028c78 */{
+/* 00028c78 */	this.m_dgDragBeginEvent(this.m_PartsNumber);
+/* 00028ca2 */}
+
+void CPartsFunctionSet::CallFunctionDraging(int BeginMouseX, int BeginMouseY, int MouseX, int MouseY)
+/* 00028caa */{
+/* 00028caa */	this.m_dgDragingEvent(this.m_PartsNumber, BeginMouseX, BeginMouseY, MouseX, MouseY);
+/* 00028cfc */}
+
+void CPartsFunctionSet::CallFunctionDragEnd()
+/* 00028d04 */{
+/* 00028d04 */	this.m_dgDragEndEvent(this.m_PartsNumber);
+/* 00028d2e */}
+
+void CPartsFunctionSet::CallFunctionDropEnter(int DragPartsNumber)
+/* 00028d36 */{
+/* 00028d36 */	this.m_dgDropEnterEvent(this.m_PartsNumber, DragPartsNumber);
+/* 00028d6a */}
+
+void CPartsFunctionSet::CallFunctionDropOn(int DragPartsNumber, int MouseX, int MouseY)
+/* 00028d72 */{
+/* 00028d72 */	this.m_dgDropOnEvent(this.m_PartsNumber, DragPartsNumber, MouseX, MouseY);
+/* 00028dba */}
+
+void CPartsFunctionSet::CallFunctionDropped(int DragPartsNumber, int MouseX, int MouseY)
+/* 00028dc2 */{
+/* 00028dc2 */	this.m_dgDroppedEvent(this.m_PartsNumber, DragPartsNumber, MouseX, MouseY);
+/* 00028e0a */}
+
+void CPartsFunctionSet::CallFunctionDropLeave(int DragPartsNumber)
+/* 00028e12 */{
+/* 00028e12 */	this.m_dgDropLeaveEvent(this.m_PartsNumber, DragPartsNumber);
+/* 00028e46 */}
+
+void CPartsFunctionSet::CallFunctionFocus()
+/* 00028e4e */{
+/* 00028e4e */	this.m_dgFocusEvent(this.m_PartsNumber);
+/* 00028e78 */}
+
+void CPartsFunctionSet::CallFunctionLostFocus()
+/* 00028e80 */{
+/* 00028e80 */	this.m_dgLostFocusEvent(this.m_PartsNumber);
+/* 00028eaa */}
+
+void CPartsFunctionSet::CallFunctionScroll(int ScrollPos, int Total)
+/* 00028eb2 */{
+/* 00028eb2 */	this.m_dgScrollEvent(this.m_PartsNumber, ScrollPos, Total);
+/* 00028ef0 */}
+
+void CPartsFunctionSet::CallFunctionCreated()
+/* 00028ef8 */{
+/* 00028ef8 */	this.m_dgCreatedEvent(this.m_PartsNumber);
+/* 00028f22 */}
+
+void CPartsFunctionSet::CallFunctionDeleted()
+/* 00028f2a */{
+/* 00028f2a */	this.m_dgDeletedEvent(this.m_PartsNumber);
+/* 00028f54 */}
+
+void CPartsFunctionSet::CallFunctionSelected(int Selected)
+/* 00028f5c */{
+/* 00028f5c */	this.m_dgSelectedEvent(this.m_PartsNumber, Selected);
+/* 00028f90 */}
+
+void CPartsFunctionSet::CallFunctionChanged()
+/* 00028f98 */{
+/* 00028f98 */	this.m_dgChangedEvent(this.m_PartsNumber);
+/* 00028fc2 */}
+
+void CPartsFunctionSet::CallFunctionChangedFlg(bool Check)
+/* 00028fca */{
+/* 00028fca */	this.m_dgChangedFlgEvent(this.m_PartsNumber, Check);
+/* 00028ffe */}
+
+void CPartsFunctionSet::CallFunctionFixed()
+/* 00029006 */{
+/* 00029006 */	this.m_dgFixedEvent(this.m_PartsNumber);
+/* 00029030 */}
+
+void CPartsFunctionSet::AddMouseEnterEvent(DG_MouseEnterHandler DelegateObject)
+/* 00029038 */{
+/* 00029038 */	this.m_dgMouseEnterEvent += DelegateObject;
+/* 00029052 */}
+
+void CPartsFunctionSet::EraseMouseEnterEvent(DG_MouseEnterHandler DelegateObject)
+/* 0002905a */{
+/* 0002905a */	this.m_dgMouseEnterEvent -= DelegateObject;
+/* 00029074 */}
+
+void CPartsFunctionSet::AddMouseMoveEvent(DG_MouseMoveHandler DelegateObject)
+/* 0002907c */{
+/* 0002907c */	this.m_dgMouseMoveEvent += DelegateObject;
+/* 00029096 */}
+
+void CPartsFunctionSet::EraseMouseMoveEvent(DG_MouseMoveHandler DelegateObject)
+/* 0002909e */{
+/* 0002909e */	this.m_dgMouseMoveEvent -= DelegateObject;
+/* 000290b8 */}
+
+void CPartsFunctionSet::AddMouseLeaveEvent(DG_MouseLeaveHandler DelegateObject)
+/* 000290c0 */{
+/* 000290c0 */	this.m_dgMouseLeaveEvent += DelegateObject;
+/* 000290da */}
+
+void CPartsFunctionSet::EraseMouseLeaveEvent(DG_MouseLeaveHandler DelegateObject)
+/* 000290e2 */{
+/* 000290e2 */	this.m_dgMouseLeaveEvent -= DelegateObject;
+/* 000290fc */}
+
+void CPartsFunctionSet::AddMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00029104 */{
+/* 00029104 */	this.m_dgMouseWheelEvent += DelegateObject;
+/* 0002911e */}
+
+void CPartsFunctionSet::EraseMouseWheelEvent(DG_MouseWheelHandler DelegateObject)
+/* 00029126 */{
+/* 00029126 */	this.m_dgMouseWheelEvent -= DelegateObject;
+/* 00029140 */}
+
+void CPartsFunctionSet::AddMouseLClickEvent(DG_MouseClickHandler DelegateObject)
+/* 00029148 */{
+/* 00029148 */	this.m_dgMouseLClickEvent += DelegateObject;
+/* 00029162 */}
+
+void CPartsFunctionSet::EraseMouseLClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0002916a */{
+/* 0002916a */	this.m_dgMouseLClickEvent -= DelegateObject;
+/* 00029184 */}
+
+void CPartsFunctionSet::AddMouseRClickEvent(DG_MouseClickHandler DelegateObject)
+/* 0002918c */{
+/* 0002918c */	this.m_dgMouseRClickEvent += DelegateObject;
+/* 000291a6 */}
+
+void CPartsFunctionSet::EraseMouseRClickEvent(DG_MouseClickHandler DelegateObject)
+/* 000291ae */{
+/* 000291ae */	this.m_dgMouseRClickEvent -= DelegateObject;
+/* 000291c8 */}
+
+void CPartsFunctionSet::AddMouseMClickEvent(DG_MouseClickHandler DelegateObject)
+/* 000291d0 */{
+/* 000291d0 */	this.m_dgMouseMClickEvent += DelegateObject;
+/* 000291ea */}
+
+void CPartsFunctionSet::EraseMouseMClickEvent(DG_MouseClickHandler DelegateObject)
+/* 000291f2 */{
+/* 000291f2 */	this.m_dgMouseMClickEvent -= DelegateObject;
+/* 0002920c */}
+
+void CPartsFunctionSet::AddMouseOnEvent(DG_MouseOnHandler DelegateObject)
+/* 00029214 */{
+/* 00029214 */	this.m_dgMouseOnEvent += DelegateObject;
+/* 0002922e */}
+
+void CPartsFunctionSet::EraseMouseOnEvent(DG_MouseOnHandler DelegateObject)
+/* 00029236 */{
+/* 00029236 */	this.m_dgMouseOnEvent -= DelegateObject;
+/* 00029250 */}
+
+void CPartsFunctionSet::AddKeyTriggerEvent(DG_KeyTriggerHandler DelegateObject)
+/* 00029258 */{
+/* 00029258 */	this.m_dgKeyTriggerEvent += DelegateObject;
+/* 00029272 */}
+
+void CPartsFunctionSet::EraseKeyTriggerEvent(DG_KeyTriggerHandler DelegateObject)
+/* 0002927a */{
+/* 0002927a */	this.m_dgKeyTriggerEvent -= DelegateObject;
+/* 00029294 */}
+
+void CPartsFunctionSet::AddKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 0002929c */{
+/* 0002929c */	this.m_dgKeyDownEvent += DelegateObject;
+/* 000292b6 */}
+
+void CPartsFunctionSet::EraseKeyDownEvent(DG_KeyDownHandler DelegateObject)
+/* 000292be */{
+/* 000292be */	this.m_dgKeyDownEvent -= DelegateObject;
+/* 000292d8 */}
+
+void CPartsFunctionSet::AddKeyPressEvent(DG_KeyPressHandler DelegateObject)
+/* 000292e0 */{
+/* 000292e0 */	this.m_dgKeyPressEvent += DelegateObject;
+/* 000292fa */}
+
+void CPartsFunctionSet::EraseKeyPressEvent(DG_KeyPressHandler DelegateObject)
+/* 00029302 */{
+/* 00029302 */	this.m_dgKeyPressEvent -= DelegateObject;
+/* 0002931c */}
+
+void CPartsFunctionSet::AddKeyUpEvent(DG_KeyUpHandler DelegateObject)
+/* 00029324 */{
+/* 00029324 */	this.m_dgKeyUpEvent += DelegateObject;
+/* 0002933e */}
+
+void CPartsFunctionSet::EraseKeyUpEvent(DG_KeyUpHandler DelegateObject)
+/* 00029346 */{
+/* 00029346 */	this.m_dgKeyUpEvent -= DelegateObject;
+/* 00029360 */}
+
+void CPartsFunctionSet::AddDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 00029368 */{
+/* 00029368 */	this.m_dgDragBeginEvent += DelegateObject;
+/* 00029382 */}
+
+void CPartsFunctionSet::EraseDragBeginEvent(DG_DragBeginHandler DelegateObject)
+/* 0002938a */{
+/* 0002938a */	this.m_dgDragBeginEvent -= DelegateObject;
+/* 000293a4 */}
+
+void CPartsFunctionSet::AddDragingEvent(DG_DragingHandler DelegateObject)
+/* 000293ac */{
+/* 000293ac */	this.m_dgDragingEvent += DelegateObject;
+/* 000293c6 */}
+
+void CPartsFunctionSet::EraseDragingEvent(DG_DragingHandler DelegateObject)
+/* 000293ce */{
+/* 000293ce */	this.m_dgDragingEvent -= DelegateObject;
+/* 000293e8 */}
+
+void CPartsFunctionSet::AddDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 000293f0 */{
+/* 000293f0 */	this.m_dgDragEndEvent += DelegateObject;
+/* 0002940a */}
+
+void CPartsFunctionSet::EraseDragEndEvent(DG_DragEndHandler DelegateObject)
+/* 00029412 */{
+/* 00029412 */	this.m_dgDragEndEvent -= DelegateObject;
+/* 0002942c */}
+
+void CPartsFunctionSet::AddDropEnterEvent(DG_DropEnterHandler DelegateObject)
+/* 00029434 */{
+/* 00029434 */	this.m_dgDropEnterEvent += DelegateObject;
+/* 0002944e */}
+
+void CPartsFunctionSet::EraseDropEnterEvent(DG_DropEnterHandler DelegateObject)
+/* 00029456 */{
+/* 00029456 */	this.m_dgDropEnterEvent -= DelegateObject;
+/* 00029470 */}
+
+void CPartsFunctionSet::AddDropOnEvent(DG_DropOnHandler DelegateObject)
+/* 00029478 */{
+/* 00029478 */	this.m_dgDropOnEvent += DelegateObject;
+/* 00029492 */}
+
+void CPartsFunctionSet::EraseDropOnEvent(DG_DropOnHandler DelegateObject)
+/* 0002949a */{
+/* 0002949a */	this.m_dgDropOnEvent -= DelegateObject;
+/* 000294b4 */}
+
+void CPartsFunctionSet::AddDroppedEvent(DG_DroppedHandler DelegateObject)
+/* 000294bc */{
+/* 000294bc */	this.m_dgDroppedEvent += DelegateObject;
+/* 000294d6 */}
+
+void CPartsFunctionSet::EraseDroppedEvent(DG_DroppedHandler DelegateObject)
+/* 000294de */{
+/* 000294de */	this.m_dgDroppedEvent -= DelegateObject;
+/* 000294f8 */}
+
+void CPartsFunctionSet::AddDropLeaveEvent(DG_DropLeaveHandler DelegateObject)
+/* 00029500 */{
+/* 00029500 */	this.m_dgDropLeaveEvent += DelegateObject;
+/* 0002951a */}
+
+void CPartsFunctionSet::EraseDropLeaveEvent(DG_DropLeaveHandler DelegateObject)
+/* 00029522 */{
+/* 00029522 */	this.m_dgDropLeaveEvent -= DelegateObject;
+/* 0002953c */}
+
+void CPartsFunctionSet::AddFocusEvent(DG_FocusHandler DelegateObject)
+/* 00029544 */{
+/* 00029544 */	this.m_dgFocusEvent += DelegateObject;
+/* 0002955e */}
+
+void CPartsFunctionSet::EraseFocusEvent(DG_FocusHandler DelegateObject)
+/* 00029566 */{
+/* 00029566 */	this.m_dgFocusEvent -= DelegateObject;
+/* 00029580 */}
+
+void CPartsFunctionSet::AddLostFocusEvent(DG_LostFocusHandler DelegateObject)
+/* 00029588 */{
+/* 00029588 */	this.m_dgLostFocusEvent += DelegateObject;
+/* 000295a2 */}
+
+void CPartsFunctionSet::EraseLostFocusEvent(DG_LostFocusHandler DelegateObject)
+/* 000295aa */{
+/* 000295aa */	this.m_dgLostFocusEvent -= DelegateObject;
+/* 000295c4 */}
+
+void CPartsFunctionSet::AddScrollEvent(DG_ScrollHandler DelegateObject)
+/* 000295cc */{
+/* 000295cc */	this.m_dgScrollEvent += DelegateObject;
+/* 000295e6 */}
+
+void CPartsFunctionSet::EraseScrollEvent(DG_ScrollHandler DelegateObject)
+/* 000295ee */{
+/* 000295ee */	this.m_dgScrollEvent -= DelegateObject;
+/* 00029608 */}
+
+void CPartsFunctionSet::AddCreatedEvent(DG_CreatedHandler DelegateObject)
+/* 00029610 */{
+/* 00029610 */	this.m_dgCreatedEvent += DelegateObject;
+/* 0002962a */}
+
+void CPartsFunctionSet::EraseCreatedEvent(DG_CreatedHandler DelegateObject)
+/* 00029632 */{
+/* 00029632 */	this.m_dgCreatedEvent -= DelegateObject;
+/* 0002964c */}
+
+void CPartsFunctionSet::AddDeletedEvent(DG_DeletedHandler DelegateObject)
+/* 00029654 */{
+/* 00029654 */	this.m_dgDeletedEvent += DelegateObject;
+/* 0002966e */}
+
+void CPartsFunctionSet::EraseDeletedEvent(DG_DeletedHandler DelegateObject)
+/* 00029676 */{
+/* 00029676 */	this.m_dgDeletedEvent -= DelegateObject;
+/* 00029690 */}
+
+void CPartsFunctionSet::AddSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 00029698 */{
+/* 00029698 */	this.m_dgSelectedEvent += DelegateObject;
+/* 000296b2 */}
+
+void CPartsFunctionSet::EraseSelectedEvent(DG_SelectedHandler DelegateObject)
+/* 000296ba */{
+/* 000296ba */	this.m_dgSelectedEvent -= DelegateObject;
+/* 000296d4 */}
+
+void CPartsFunctionSet::AddChangedEvent(DG_ChangedHandler DelegateObject)
+/* 000296dc */{
+/* 000296dc */	this.m_dgChangedEvent += DelegateObject;
+/* 000296f6 */}
+
+void CPartsFunctionSet::EraseChangedEvent(DG_ChangedHandler DelegateObject)
+/* 000296fe */{
+/* 000296fe */	this.m_dgChangedEvent -= DelegateObject;
+/* 00029718 */}
+
+void CPartsFunctionSet::AddChangedFlgEvent(DG_ChangedFlgHandler DelegateObject)
+/* 00029720 */{
+/* 00029720 */	this.m_dgChangedFlgEvent += DelegateObject;
+/* 0002973a */}
+
+void CPartsFunctionSet::EraseChangedFlgEvent(DG_ChangedFlgHandler DelegateObject)
+/* 00029742 */{
+/* 00029742 */	this.m_dgChangedFlgEvent -= DelegateObject;
+/* 0002975c */}
+
+void CPartsFunctionSet::AddFixedEvent(DG_FixedHandler DelegateObject)
+/* 00029764 */{
+/* 00029764 */	this.m_dgFixedEvent += DelegateObject;
+/* 0002977e */}
+
+void CPartsFunctionSet::EraseFixedEvent(DG_FixedHandler DelegateObject)
+/* 00029786 */{
+/* 00029786 */	this.m_dgFixedEvent -= DelegateObject;
+/* 000297a0 */}
+

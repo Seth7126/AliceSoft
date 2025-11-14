@@ -1,0 +1,167 @@
+void initConfigSetting()
+/* 001e4180 */{
+/* 001e4180 */	AFL_Config_SetLoadedActivityEvent("onLoadConfigActivity");
+/* 001e419e */	AFL_Config_SetReleasingActivityEvent("onReleaseConfigActivity");
+/* 001e41bc */	AFL_Config_SetAsraDataForPartsEvent("onConfigBeginUpdateEvent");
+/* 001e41da */	AFL_Config_SetPartsDataForAsraEvent("onConfigEndUpdateEvent");
+/* 001e41f8 */}
+
+void onLoadConfigActivity(string fileName, string name)
+/* 001e4206 */{
+/* 001e4206 */	setCursorClickSoundToActivity(name);
+/* 001e4216 */	addResetButtonEvent(name, "SYS_男性音声ボタン", "onClickMaleVolumeResetButton");
+/* 001e4244 */	addResetButtonEvent(name, "SYS_女性音声ボタン", "onClickFemaleVolumeResetButton");
+/* 001e4272 */	addResetButtonEvent(name, "SYS_ゲーム速度ボタン", "onClickGameSpeedResetButton");
+/* 001e42a0 */}
+
+void setCursorClickSoundToActivity(string name)
+/* 001e42ae */{
+/* 001e42ae */	int count = AFL_Activity_NumofParts(name);
+/* 001e42ca */	int i;
+/* 001e42dc */	for (i = 0; i < count; ++i)
+/* 001e4326 */	{
+/* 001e4326 */		string partsName;
+/* 001e433a */		int partsNumber;
+/* 001e434c */		AFL_Activity_GetParts(i, name, partsName, partsNumber);
+/* 001e437a */		if (PARTS_GetComponentType(partsNumber, 1) == 0 || PARTS_GetComponentType(partsNumber, 1) == 1)
+/* 001e43da */		{
+/* 001e43da */			Ｐ＿オンカーソル効果音設定(partsNumber, "効果音／カーソル");
+/* 001e43f0 */			Ｐ＿クリック効果音設定(partsNumber, "効果音／クリック");
+/* 001e4406 */		}
+/* 001e4406 */	}
+/* 001e440c */}
+
+void addResetButtonEvent(string activity, string partsName, DG_MouseClickHandler cb)
+/* 001e441a */{
+/* 001e441a */	int pn = AFL_Activity_GetPartsNumber(activity, partsName);
+/* 001e4440 */	if (pn != 0)
+/* 001e4458 */	{
+/* 001e4458 */		AFL_Parts_AddMouseLClickEvent(pn, cb);
+/* 001e4474 */	}
+/* 001e4474 */}
+
+void onReleaseConfigActivity(string fileName, string name)
+/* 001e4482 */{
+/* 001e4484 */}
+
+void onConfigBeginUpdateEvent(int time, string activityName)
+/* 001e4490 */{
+/* 001e4490 */	setConfigSlider(activityName, "SYS_ゲーム速度スライダ", &getGameSpeedRate);
+/* 001e44b6 */	setConfigSlider(activityName, "SYS_男性音声スライダ", &getMaleVoiceVolume);
+/* 001e44dc */	setConfigSlider(activityName, "SYS_女性音声スライダ", &getFemaleVoiceVolume);
+/* 001e4502 */	setConfigCheckbox(activityName, "SYS_男性音声消音", &getMaleVoiceMute);
+/* 001e4528 */	setConfigCheckbox(activityName, "SYS_女性音声消音", &getFemaleVoiceMute);
+/* 001e454e */}
+
+void onConfigEndUpdateEvent(int time, string activityName)
+/* 001e455c */{
+/* 001e455c */	setConfigParamFromSliderValue(activityName, "SYS_ゲーム速度スライダ", "setGameSpeedRate");
+/* 001e458a */	setConfigParamFromSliderValue(activityName, "SYS_男性音声スライダ", "setMaleVoiceVolume");
+/* 001e45b8 */	setConfigParamFromSliderValue(activityName, "SYS_女性音声スライダ", "setFemaleVoiceVolume");
+/* 001e45e6 */	setConfigParamFromCheckboxValue(activityName, "SYS_男性音声消音", &setMaleVoiceMute);
+/* 001e460c */	setConfigParamFromCheckboxValue(activityName, "SYS_女性音声消音", &setFemaleVoiceMute);
+/* 001e4632 */}
+
+void setConfigSlider(string activity, string partsName, DG_GetConfigSliderParamFunc func)
+/* 001e4640 */{
+/* 001e4640 */	int pn = AFL_Activity_GetPartsNumber(activity, partsName);
+/* 001e4666 */	if (pn != 0)
+/* 001e467e */	{
+/* 001e467e */		Ｐ＿横スクロールバー＿スクロールレート設定(pn, func());
+/* 001e46ae */	}
+/* 001e46ae */}
+
+void setConfigCheckbox(string activity, string partsName, DG_GetConfigCheckboxFunc func)
+/* 001e46bc */{
+/* 001e46bc */	int pn = AFL_Activity_GetPartsNumber(activity, partsName);
+/* 001e46e2 */	if (pn != 0)
+/* 001e46fa */	{
+/* 001e46fa */		Ｐ＿チェックボックス＿チェック状態設定(pn, func());
+/* 001e472a */	}
+/* 001e472a */}
+
+void setConfigParamFromSliderValue(string activity, string partsName, DG_SetConfigSliderParamFunc func)
+/* 001e4738 */{
+/* 001e4738 */	int pn = AFL_Activity_GetPartsNumber(activity, partsName);
+/* 001e475e */	if (pn != 0)
+/* 001e4776 */	{
+/* 001e4776 */		float rate = Ｐ＿横スクロールバー＿スクロールレート取得(pn);
+/* 001e4792 */		func(rate);
+/* 001e47bc */	}
+/* 001e47bc */}
+
+void setConfigParamFromCheckboxValue(string activity, string partsName, DG_SetConfigCheckboxParamFunc func)
+/* 001e47ca */{
+/* 001e47ca */	int pn = AFL_Activity_GetPartsNumber(activity, partsName);
+/* 001e47f0 */	if (pn != 0)
+/* 001e4808 */	{
+/* 001e4808 */		bool val = Ｐ＿チェックボックス＿チェック状態取得(pn);
+/* 001e4824 */		func(val);
+/* 001e484e */	}
+/* 001e484e */}
+
+void setGameSpeedRate(float rate)
+/* 001e485c */{
+/* 001e485c */	g_common_configTimerScaling = rate * 1.5 + 1.0;
+/* 001e4882 */}
+
+void setMaleVoiceVolume(float rate)
+/* 001e4890 */{
+/* 001e4890 */	AFL_Config_SetVolume(6, rate * 100.0);
+/* 001e48b0 */}
+
+void setFemaleVoiceVolume(float rate)
+/* 001e48be */{
+/* 001e48be */	AFL_Config_SetVolume(7, rate * 100.0);
+/* 001e48de */}
+
+void setMaleVoiceMute(bool val)
+/* 001e48ec */{
+/* 001e48ec */	AFL_Config_SetMute(6, val);
+/* 001e4902 */}
+
+void setFemaleVoiceMute(bool val)
+/* 001e4910 */{
+/* 001e4910 */	AFL_Config_SetMute(7, val);
+/* 001e4926 */}
+
+float getGameSpeedRate()
+/* 001e4934 */{
+/* 001e4934 */	return (g_common_configTimerScaling - 1.0) / 1.5;
+/* 001e4950 */}
+
+float getMaleVoiceVolume()
+/* 001e4964 */{
+/* 001e4964 */	return AFL_Config_GetVolume(6) / 100.0;
+/* 001e497c */}
+
+float getFemaleVoiceVolume()
+/* 001e4990 */{
+/* 001e4990 */	return AFL_Config_GetVolume(7) / 100.0;
+/* 001e49a8 */}
+
+bool getMaleVoiceMute()
+/* 001e49bc */{
+/* 001e49bc */	return AFL_Config_GetMute(6);
+/* 001e49ca */}
+
+bool getFemaleVoiceMute()
+/* 001e49de */{
+/* 001e49de */	return AFL_Config_GetMute(7);
+/* 001e49ec */}
+
+void onClickMaleVolumeResetButton(int pn, int x, int y)
+/* 001e4a00 */{
+/* 001e4a00 */	AFL_Config_SetVolume(6, AFL_Config_GetDefaultVolume(6));
+/* 001e4a18 */}
+
+void onClickFemaleVolumeResetButton(int pn, int x, int y)
+/* 001e4a26 */{
+/* 001e4a26 */	AFL_Config_SetVolume(7, AFL_Config_GetDefaultVolume(7));
+/* 001e4a3e */}
+
+void onClickGameSpeedResetButton(int pn, int x, int y)
+/* 001e4a4c */{
+/* 001e4a4c */	g_common_configTimerScaling = 1.0;
+/* 001e4a5e */}
+

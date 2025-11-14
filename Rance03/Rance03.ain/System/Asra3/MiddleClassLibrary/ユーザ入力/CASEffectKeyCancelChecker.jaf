@@ -1,0 +1,74 @@
+CASEffectKeyCancelChecker::CASEffectKeyCancelChecker()
+/* 00040034 */{
+/* 0004003e */}
+
+bool CASEffectKeyCancelChecker::Init(bool FirstKeyDownCancel)
+/* 00040044 */{
+/* 00040044 */	this.m_KeyList.Alloc(14);
+/* 0004005a */	if (SYS_IsClickModeCancel())
+/* 00040066 */	{
+/* 00040066 */		FirstKeyDownCancel = false;
+/* 00040078 */	}
+/* 00040078 */	this.m_KeyList[0].Init(1, FirstKeyDownCancel);
+/* 000400a2 */	this.m_KeyList[1].Init(2, false);
+/* 000400c8 */	this.m_KeyList[2].Init(4, false);
+/* 000400ee */	this.m_KeyList[3].Init(13, FirstKeyDownCancel);
+/* 00040118 */	this.m_KeyList[4].Init(27, false);
+/* 0004013e */	this.m_KeyList[5].Init(32, false);
+/* 00040164 */	this.m_KeyList[6].Init(65, false);
+/* 0004018a */	this.m_KeyList[7].Init(83, false);
+/* 000401b0 */	this.m_KeyList[8].Init(90, false);
+/* 000401d6 */	this.m_KeyList[9].Init(33, false);
+/* 000401fc */	this.m_KeyList[10].Init(8, false);
+/* 00040222 */	this.m_KeyList[11].Init(36, false);
+/* 00040248 */	this.m_KeyList[12].Init(38, FirstKeyDownCancel);
+/* 00040272 */	this.m_KeyList[13].Init(40, FirstKeyDownCancel);
+/* 0004029c */	this.m_ClickCanceled = false;
+/* 000402ae */	return true;
+/* 000402b6 */}
+
+bool CASEffectKeyCancelChecker::IsCancel()
+/* 000402c4 */{
+/* 000402c4 */	if (!Ａ＿オートモード中確認())
+/* 000402d2 */	{
+/* 000402d2 */		if (SYS_ホイールバック確認())
+/* 000402de */		{
+/* 000402de */			this.m_ClickCanceled = false;
+/* 000402f0 */			return true;
+/* 000402f8 */		}
+/* 000402f8 */	}
+/* 000402f8 */	if (SYS_ホイールフォア即確認())
+/* 00040304 */	{
+/* 00040304 */		SYS_バックログオープン通知();
+/* 0004030a */		this.m_ClickCanceled = false;
+/* 0004031c */		return true;
+/* 00040324 */	}
+/* 00040324 */	int n;
+/* 00040336 */	for (n = 0; n < this.m_KeyList.Numof(); n++)
+/* 0004038a */	{
+/* 0004038a */		if (this.m_KeyList[n].IsKeyDown())
+/* 000403ac */		{
+/* 000403ac */			if (this.m_KeyList[n].GetKey() == 1 || this.m_KeyList[n].GetKey() == 13 || this.m_KeyList[n].GetKey() == 40)
+/* 0004045a */			{
+/* 0004045a */				this.m_ClickCanceled = true;
+/* 0004046c */			}
+/* 00040472 */			else if (this.m_KeyList[n].GetKey() == 38)
+/* 0004049c */			{
+/* 0004049c */				SYS_バックログオープン通知();
+/* 000404a2 */				this.m_ClickCanceled = false;
+/* 000404b4 */			}
+/* 000404ba */			else
+/* 000404ba */			{
+/* 000404ba */				this.m_ClickCanceled = false;
+/* 000404cc */			}
+/* 000404cc */			return true;
+/* 000404d4 */		}
+/* 000404d4 */	}
+/* 000404da */	return false;
+/* 000404e2 */}
+
+bool CASEffectKeyCancelChecker::IsClickCanceled()
+/* 000404f0 */{
+/* 000404f0 */	return this.m_ClickCanceled;
+/* 000404fc */}
+

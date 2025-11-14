@@ -1,0 +1,18 @@
+void AdvStaffroll::show(string flatBaseName)
+/* 00174f6c */{
+/* 00174f6c */	this.flatBaseName_ = flatBaseName;
+/* 00174f84 */	this.partsShow_.initAsFlat("スタッフロール/エンディング／%s／開始" % this.flatBaseName_);
+/* 00174fac */	this.partsShow_.setShow(true);
+/* 00174fc2 */	this.partsShow_.setZ(3400.0);
+/* 00174fd8 */	this.partsShow_.startFlat(false, 1.0);
+/* 00174ff4 */}
+
+void AdvStaffroll::hide()
+/* 00174ffc */{
+/* 00174ffc */	this.partsShow_.release();
+/* 0017500c */	this.partsHide_.initAsFlat("スタッフロール/エンディング／%s／終了" % this.flatBaseName_);
+/* 00175034 */	this.partsHide_.setShow(true);
+/* 0017504a */	this.partsHide_.setZ(3400.0);
+/* 00175060 */	this.partsHide_.startFlat(false, 1.0);
+/* 0017507c */}
+

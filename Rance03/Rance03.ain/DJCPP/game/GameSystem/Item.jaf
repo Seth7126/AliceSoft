@@ -1,0 +1,102 @@
+void Item::init(int index)
+/* 001d719e */{
+/* 001d719e */	string key = "アイテム情報";
+/* 001d71b2 */	this.index_ = index;
+/* 001d71c8 */	this.id_ = EX_RA2String(key, index, "id", "");
+/* 001d71fc */	this.name_ = EX_RA2String(key, index, "name", "");
+/* 001d7230 */	this.desc_ = EX_RA2String(key, index, "desc", "");
+/* 001d7264 */	this.type_ = EX_RA2Int(key, index, "type", 0);
+/* 001d7296 */	this.targetType_ = EX_RA2Int(key, index, "targetType", 0);
+/* 001d72c8 */	this.price_ = EX_RA2Int(key, index, "price", 0);
+/* 001d72fa */	this.iconImageName_ = EX_RA2String(key, index, "iconImageName", "");
+/* 001d732e */	this.labelImageName_ = EX_RA2String(key, index, "iconLabelName", "");
+/* 001d7362 */	this.skillId_ = EX_RA2String(key, index, "skillId", "");
+/* 001d7396 */	this.priceFunction_ = EX_RA2String(key, index, "priceFunction", "");
+/* 001d73ca */	this.maxCount_ = EX_RA2Int(key, index, "maxCount", 99);
+/* 001d73fc */}
+
+int Item::getMaxCount()
+/* 001d7404 */{
+/* 001d7404 */	return this.maxCount_;
+/* 001d7410 */}
+
+string Item::getId()
+/* 001d741e */{
+/* 001d741e */	return this.id_;
+/* 001d742a */}
+
+string Item::getName()
+/* 001d7438 */{
+/* 001d7438 */	return this.name_;
+/* 001d7444 */}
+
+string Item::getDesc()
+/* 001d7452 */{
+/* 001d7452 */	return this.desc_;
+/* 001d745e */}
+
+int Item::getType()
+/* 001d746c */{
+/* 001d746c */	return this.type_;
+/* 001d7478 */}
+
+int Item::getPrice()
+/* 001d7486 */{
+/* 001d7486 */	return this.price_;
+/* 001d7492 */}
+
+int Item::getShopPrice()
+/* 001d74a0 */{
+/* 001d74a0 */	int c = g_playerCommonParam.getItemCount(this.id_);
+/* 001d74c6 */	if (this.priceFunction_ != "")
+/* 001d74de */	{
+/* 001d74de */		DG_PriceFunction fn;
+/* 001d74ea */		fn = this.priceFunction_;
+/* 001d7510 */		return fn(this, c);
+/* 001d753e */		fn.Clear();
+/* 001d754a */	}
+/* 001d754a */	return this.price_;
+/* 001d7556 */}
+
+string Item::getSkillId()
+/* 001d7564 */{
+/* 001d7564 */	return this.skillId_;
+/* 001d7570 */}
+
+int Item::getTargetType()
+/* 001d757e */{
+/* 001d757e */	return this.targetType_;
+/* 001d758a */}
+
+string Item::getIconImageName()
+/* 001d7598 */{
+/* 001d7598 */	return this.iconImageName_;
+/* 001d75a4 */}
+
+int Item::getIndex()
+/* 001d75b2 */{
+/* 001d75b2 */	return this.index_;
+/* 001d75be */}
+
+int Item::getNarrowDownType()
+/* 001d75cc */{
+/* 001d75cc */	switch (this.type_)
+/* 001d75e2 */	{
+/* 001d75e2 */	case 0:
+/* 001d75e2 */		return 2 + getPlayerSkillFromId(this.skillId_).getGroupRank();
+/* 001d7618 */		break;
+/* 001d7624 */	case 1:
+/* 001d7624 */		return 1;
+/* 001d762c */		break;
+/* 001d7638 */	case 2:
+/* 001d7638 */		return 2;
+/* 001d7640 */		break;
+/* 001d764c */	}
+/* 001d7652 */	return -1;
+/* 001d765a */}
+
+string Item::getLabelImageName()
+/* 001d7668 */{
+/* 001d7668 */	return this.labelImageName_;
+/* 001d7674 */}
+

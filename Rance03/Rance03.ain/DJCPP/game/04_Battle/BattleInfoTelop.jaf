@@ -1,0 +1,165 @@
+BattleInfoTelop::BattleInfoTelop()
+/* 001a5d5a */{
+/* 001a5d62 */	this.gameObjectId_ = g_gameObjectManager.addObject(this.update);
+/* 001a5d88 */	this.parent_.initAsDummy();
+/* 001a5d98 */	this.parent_.setZ(2630.0);
+/* 001a5dae */}
+
+void BattleInfoTelop::init(string msg, int sx, int sy, int ex, int ey)
+/* 001a5db6 */{
+/* 001a5db6 */	this.msg_ = msg;
+/* 001a5dce */	this.sx_ = sx;
+/* 001a5de6 */	this.sy_ = sy;
+/* 001a5dfe */	this.ex_ = ex;
+/* 001a5e16 */	this.ey_ = ey;
+/* 001a5e2e */	this.parts_.Free();
+/* 001a5e38 */	this.vPos_.Free();
+/* 001a5e42 */	this.viewLength_ = getDest(this.sx_, this.sy_, this.ex_, this.ey_);
+/* 001a5e84 */	this.vTextLength_ = this.getTextWidth() / this.viewLength_;
+/* 001a5eaa */	int count = int(1.0 / this.vTextLength_) + 2;
+/* 001a5ed2 */	this.parts_.Alloc(count);
+/* 001a5eec */	this.vPos_.Alloc(count);
+/* 001a5f06 */	int i;
+/* 001a5f18 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a5f68 */	{
+/* 001a5f68 */		this.parts_[i].initAsText(this.msg_, 26, false, 256, 180, 64, 64);
+/* 001a5fb2 */	}
+/* 001a5fb8 */	this.setRot();
+/* 001a5fc0 */	this.setParent();
+/* 001a5fc8 */	for (i = 0; i < this.vPos_.Numof(); ++i)
+/* 001a6018 */	{
+/* 001a6018 */		this.vPos_[i] = 0.2 + this.vTextLength_ * (i - 1);
+/* 001a6058 */	}
+/* 001a605e */	this.t_.reset();
+/* 001a606e */	this.updatePos(true);
+/* 001a607c */}
+
+void BattleInfoTelop::update()
+/* 001a6084 */{
+/* 001a6084 */	this.updatePos(false);
+/* 001a6092 */}
+
+void BattleInfoTelop::setParent()
+/* 001a609a */{
+/* 001a609a */	int i;
+/* 001a60ac */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a60fc */	{
+/* 001a60fc */		this.parts_[i].setParent(this.parent_.getPartsNumber());
+/* 001a6128 */	}
+/* 001a612e */}
+
+int BattleInfoTelop::getTextWidth()
+/* 001a6136 */{
+/* 001a6136 */	Parts p;
+/* 001a6146 */	p.initAsText(this.msg_, 26, false, 256, 180, 64, 64);
+/* 001a6184 */	return p.getWidth();
+/* 001a6196 */}
+
+void BattleInfoTelop::setRot()
+/* 001a61a4 */{
+/* 001a61a4 */	this.rot_ = calcAngle(this.sx_ - this.ex_, this.sy_ - this.ey_);
+/* 001a61e2 */	int i;
+/* 001a61f4 */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a6244 */	{
+/* 001a6244 */		this.parts_[i].setXYRot(this.rot_);
+/* 001a626a */	}
+/* 001a6270 */}
+
+void BattleInfoTelop::fadeIn(bool val, DG_GeneralCallback onFinish)
+/* 001a6278 */{
+/* 001a6278 */	this.updateViewState();
+/* 001a6280 */	this.parent_.setShow(true);
+/* 001a6296 */	PartsMotion m;
+/* 001a62a6 */	if (val)
+/* 001a62b6 */	{
+/* 001a62b6 */		m.setMove(0, 40, 0, 0, 1);
+/* 001a62e4 */		m.setAlpha(0, 255, 0);
+/* 001a6306 */	}
+/* 001a630c */	else
+/* 001a630c */	{
+/* 001a630c */		m.setMove(0, 0, 0, 40, 1);
+/* 001a633a */		m.setAlpha(255, 0, 0);
+/* 001a635c */	}
+/* 001a635c */	this.parent_.runMotion(m, onFinish);
+/* 001a6386 */}
+
+void BattleInfoTelop::updatePos(bool isForceUpdate)
+/* 001a638e */{
+/* 001a638e */	if (!isForceUpdate && this.t_.getTime() < 10)
+/* 001a63d6 */	{
+/* 001a63d6 */		return;
+/* 001a63d8 */	}
+/* 001a63d8 */	this.updateVirtualPosition();
+/* 001a63e0 */	this.updateViewState();
+/* 001a63e8 */	this.setPartsPos();
+/* 001a63f0 */	this.t_.reset();
+/* 001a6400 */}
+
+void BattleInfoTelop::updateViewState()
+/* 001a6408 */{
+/* 001a6408 */	int i;
+/* 001a641a */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a646a */	{
+/* 001a646a */		if (this.vPos_[i] > 1.0)
+/* 001a648e */		{
+/* 001a648e */			this.parts_[i].setShow(false);
+/* 001a64b0 */		}
+/* 001a64b6 */		else if (this.vPos_[i] + this.vTextLength_ > 1.0)
+/* 001a64e6 */		{
+/* 001a64e6 */			this.parts_[i].setShow(true);
+/* 001a6508 */			float r = (1.0 - this.vPos_[i]) / this.vTextLength_;
+/* 001a653e */			int w = r * this.parts_[i].getWidth();
+/* 001a6576 */			if (w == 0)
+/* 001a658e */			{
+/* 001a658e */				this.parts_[i].setShow(false);
+/* 001a65b0 */			}
+/* 001a65b6 */			else
+/* 001a65b6 */			{
+/* 001a65b6 */				this.parts_[i].setShow(true);
+/* 001a65d8 */			}
+/* 001a65d8 */			this.parts_[i].setCgRange(0, 0, w, this.parts_[i].getHeight());
+/* 001a6626 */		}
+/* 001a662c */		else
+/* 001a662c */		{
+/* 001a662c */			this.parts_[i].setShow(true);
+/* 001a664e */			this.parts_[i].setCgRange(0, 0, this.parts_[i].getWidth(), this.parts_[i].getHeight());
+/* 001a66ae */		}
+/* 001a66ae */	}
+/* 001a66b4 */}
+
+void BattleInfoTelop::updateVirtualPosition()
+/* 001a66bc */{
+/* 001a66bc */	float t = this.t_.getTime();
+/* 001a66da */	int i;
+/* 001a66ec */	for (i = 0; i < this.vPos_.Numof(); ++i)
+/* 001a673c */	{
+/* 001a673c */		this.vPos_[i] -= t / 25000.0;
+/* 001a6766 */		if (this.vPos_[i] < -this.vTextLength_)
+/* 001a6790 */		{
+/* 001a6790 */			this.vPos_[i] = this.getMaxPosition() + this.vTextLength_;
+/* 001a67bc */		}
+/* 001a67bc */	}
+/* 001a67c2 */}
+
+void BattleInfoTelop::setPartsPos()
+/* 001a67ca */{
+/* 001a67ca */	int i;
+/* 001a67dc */	for (i = 0; i < this.parts_.Numof(); ++i)
+/* 001a682c */	{
+/* 001a682c */		float x = this.ex_ + Math.Cos(this.rot_) * this.vPos_[i] * this.viewLength_;
+/* 001a687c */		float y = this.ey_ + Math.Sin(this.rot_) * this.vPos_[i] * this.viewLength_;
+/* 001a68cc */		this.parts_[i].setPos(x, y);
+/* 001a68fc */	}
+/* 001a6902 */}
+
+float BattleInfoTelop::getMaxPosition()
+/* 001a690a */{
+/* 001a690a */	float max = -1.0;
+/* 001a691c */	int i;
+/* 001a692e */	for (i = 0; i < this.vPos_.Numof(); ++i)
+/* 001a697e */	{
+/* 001a697e */		max = Math.MaxF(this.vPos_[i], max);
+/* 001a69b4 */	}
+/* 001a69ba */	return max;
+/* 001a69c6 */}
+

@@ -1,0 +1,73 @@
+void 字枠(int Ｍ番号, int 動作, int 効果番号, int 効果時間)
+/* 0015a1ec */{
+/* 0015a1ec */	if (Ｍ番号 != 0)
+/* 0015a204 */	{
+/* 0015a204 */		SYS_ASSERTE_AREA_ID(Ｍ番号);
+/* 0015a212 */	}
+/* 0015a212 */	CMessageWindowModel a;
+/* 0015a222 */	if (Ｍ番号 == 0)
+/* 0015a23a */	{
+/* 0015a23a */		a = g_MessageWindowModelManager.GetMessageWindow(g_MessageWindowStatusManager.GetActiveMessageWindowNumber());
+/* 0015a28e */	}
+/* 0015a29a */	else
+/* 0015a29a */	{
+/* 0015a29a */		a = g_MessageWindowModelManager.GetMessageWindow(Ｍ番号);
+/* 0015a2e8 */	}
+/* 0015a2ee */	字枠セット(Ｍ番号, 動作);
+/* 0015a308 */	SYS_画面更新(効果番号, 効果時間, a.効果番号, a.効果時間, false);
+/* 0015a34c */}
+
+void 字枠セット(int Ｍ番号, int 動作)
+/* 0015a35a */{
+/* 0015a35a */	SYS_字枠セット(Ｍ番号, 動作);
+/* 0015a374 */}
+
+void メッセージウィンドウ非表示()
+/* 0015a382 */{
+/* 0015a382 */	SYS_メッセージウィンドウ非表示();
+/* 0015a388 */}
+
+void Ａ＿メッセージ置換設定(string 元テキスト, string 後テキスト)
+/* 0015a396 */{
+/* 0015a396 */	int i;
+/* 0015a3a8 */	for (i = 0; i < g_ReplacePair.Numof(); ++i)
+/* 0015a3f8 */	{
+/* 0015a3f8 */		if (g_ReplacePair[i].GetSrc() == 元テキスト)
+/* 0015a426 */		{
+/* 0015a426 */			break;
+/* 0015a42c */		}
+/* 0015a42c */	}
+/* 0015a432 */	if (i == g_ReplacePair.Numof())
+/* 0015a454 */	{
+/* 0015a454 */		g_ReplacePair.Realloc(i + 1);
+/* 0015a476 */	}
+/* 0015a476 */	g_ReplacePair[i].SetPair(元テキスト, 後テキスト);
+/* 0015a4a6 */}
+
+void Ａ＿メッセージ置換解除(string 元テキスト)
+/* 0015a4b4 */{
+/* 0015a4b4 */	int i;
+/* 0015a4c6 */	for (i = 0; i < g_ReplacePair.Numof(); ++i)
+/* 0015a516 */	{
+/* 0015a516 */		if (g_ReplacePair[i].GetSrc() != 元テキスト)
+/* 0015a544 */		{
+/* 0015a544 */			continue;
+/* 0015a54a */		}
+/* 0015a54a */		g_ReplacePair.Erase(i);
+/* 0015a560 */		return;
+/* 0015a562 */	}
+/* 0015a568 */}
+
+bool Ａ＿メッセージ置換確認(string 元テキスト)
+/* 0015a576 */{
+/* 0015a576 */	int i;
+/* 0015a588 */	for (i = 0; i < g_ReplacePair.Numof(); ++i)
+/* 0015a5d8 */	{
+/* 0015a5d8 */		if (g_ReplacePair[i].GetSrc() == 元テキスト)
+/* 0015a606 */		{
+/* 0015a606 */			return true;
+/* 0015a60e */		}
+/* 0015a60e */	}
+/* 0015a614 */	return false;
+/* 0015a61c */}
+

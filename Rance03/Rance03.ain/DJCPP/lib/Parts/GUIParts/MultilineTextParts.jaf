@@ -1,0 +1,48 @@
+void MultilineTextParts::setMax(int val)
+/* 001e6e52 */{
+/* 001e6e52 */	Ｐ＿マルチラインテキストボックス＿最大文字数設定(this.partsNumber_, val);
+/* 001e6e6c */}
+
+bool MultilineTextParts::init(string activityName, string partsName)
+/* 001e6e74 */{
+/* 001e6e74 */	this.release();
+/* 001e6e7c */	this.activityName_ = activityName;
+/* 001e6e94 */	this.partsName_ = partsName;
+/* 001e6eac */	this.partsNumber_ = AFL_Activity_GetPartsNumber(this.activityName_, partsName);
+/* 001e6ed2 */	if (this.partsNumber_ != 0)
+/* 001e6eea */	{
+/* 001e6eea */		AFL_Parts_AddChangedEvent(this.partsNumber_, this.onChange);
+/* 001e6f04 */		return true;
+/* 001e6f0c */	}
+/* 001e6f0c */	return false;
+/* 001e6f14 */}
+
+void MultilineTextParts::release()
+/* 001e6f22 */{
+/* 001e6f22 */	if (this.partsNumber_ != 0)
+/* 7fffffffffffffff */	{
+/* 7fffffffffffffff */	}
+/* 001e6f3a */	this.partsNumber_ = 0;
+/* 001e6f4c */}
+
+void MultilineTextParts::addOnChangeTextCallback(DG_GeneralCallback cb)
+/* 001e6f54 */{
+/* 001e6f54 */	this.cb_ = cb;
+/* 001e6f6e */}
+
+void MultilineTextParts::onChange(int pn)
+/* 001e6f76 */{
+/* 001e6f76 */	pass("onChange");
+/* 001e6f82 */	this.cb_();
+/* 001e6fa2 */}
+
+void MultilineTextParts::setText(string text)
+/* 001e6faa */{
+/* 001e6faa */	Ｐ＿マルチラインテキストボックス＿テキスト設定(this.partsNumber_, text);
+/* 001e6fc4 */}
+
+string MultilineTextParts::getText()
+/* 001e6fcc */{
+/* 001e6fcc */	return Ｐ＿マルチラインテキストボックス＿テキスト取得(this.partsNumber_);
+/* 001e6fde */}
+

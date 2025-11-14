@@ -1,0 +1,91 @@
+void SceneTitle::init()
+/* 001b9726 */{
+/* 001b9726 */	this.selected_ = -1;
+/* 001b9738 */	this.partsBg_.init("イベント／アリス／メインメニュー", 0);
+/* 001b9754 */	this.initButton();
+/* 001b975c */	this.setButtonPos();
+/* 001b9764 */}
+
+void SceneTitle::initButton()
+/* 001b976c */{
+/* 001b976c */	array@string n;
+/* 001b9776 */	n.PushBack("ゲーム開始");
+/* 001b9786 */	n.PushBack("ロード");
+/* 001b9796 */	n.PushBack("オートセーブをロード");
+/* 001b97a6 */	n.PushBack("マニュアル");
+/* 001b97b6 */	n.PushBack("ＣＧ");
+/* 001b97c6 */	n.PushBack("回想");
+/* 001b97d6 */	n.PushBack("音楽");
+/* 001b97e6 */	n.PushBack("コンフィグ");
+/* 001b97f6 */	n.PushBack("アンケート");
+/* 001b9806 */	n.PushBack("アリスの館");
+/* 001b9816 */	n.PushBack("シーンエディタ");
+/* 001b9826 */	n.PushBack("終了");
+/* 001b9836 */	int i;
+/* 001b9848 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b9898 */	{
+/* 001b9898 */		this.btn_[i].init("システム／ボタン／幅２８２", n[i], "", true);
+/* 001b98dc */		this.btn_[i].setClickCallback(this.onClick, i);
+/* 001b990c */	}
+/* 001b9912 */	this.btn_[2].setEnable(g_common_latestAutoSaveIndex != -1);
+/* 001b993e */}
+
+void SceneTitle::setButtonPos()
+/* 001b9946 */{
+/* 001b9946 */	int i;
+/* 001b9958 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b99a8 */	{
+/* 001b99a8 */		this.btn_[i].setPos(81 + (i % 3) * 292, 500 + (i / 3) * 56);
+/* 001b9a08 */	}
+/* 001b9a0e */}
+
+void SceneTitle::fadeButton(bool val)
+/* 001b9a16 */{
+/* 001b9a16 */	int i;
+/* 001b9a28 */	for (i = 0; i < this.btn_.Numof(); ++i)
+/* 001b9a78 */	{
+/* 001b9a78 */		this.btn_[i].fadeIn(val);
+/* 001b9a9e */	}
+/* 001b9aa4 */}
+
+void SceneTitle::fadeIn(bool val, DG_GeneralCallback cb)
+/* 001b9aac */{
+/* 001b9aac */	this.fadeButton(val);
+/* 001b9abe */	this.partsBg_.setShow(true);
+/* 001b9ad4 */	this.partsBg_.runMotion(getStandardMotion(val ? 0 : 1), cb);
+/* 001b9b18 */	if (val)
+/* 001b9b28 */	{
+/* 001b9b28 */		g_music.play("音楽／ＡＤＶ／アリスのテーマ", -2147483648, false);
+/* 001b9b4a */	}
+/* 001b9b50 */	else
+/* 001b9b50 */	{
+/* 001b9b50 */		g_music.play("", 500, false);
+/* 001b9b72 */	}
+/* 001b9b72 */}
+
+void SceneTitle::run()
+/* 001b9b7a */{
+/* 001b9b7a */	this.fadeIn(true, NULL);
+/* 001b9b8a */}
+
+bool SceneTitle::update()
+/* 001b9b92 */{
+/* 001b9b92 */	return !this.isFinish_;
+/* 001b9ba2 */}
+
+void SceneTitle::onClick(int id)
+/* 001b9bb0 */{
+/* 001b9bb0 */	this.selected_ = id;
+/* 001b9bc6 */	this.fadeIn(false, this.onFinishFadeOut);
+/* 001b9bde */}
+
+void SceneTitle::onFinishFadeOut()
+/* 001b9be6 */{
+/* 001b9be6 */	this.isFinish_ = true;
+/* 001b9bf8 */}
+
+int SceneTitle::getSelected()
+/* 001b9c00 */{
+/* 001b9c00 */	return this.selected_;
+/* 001b9c0c */}
+

@@ -1,0 +1,459 @@
+CBackSceneView::CBackSceneView()
+/* 00024dfa */{
+/* 00024e02 */	this.m_ActivityNameByGame = "";
+/* 00024e16 */	this.m_ActivityName = "";
+/* 00024e2a */	this.m_KeyUpWait = false;
+/* 00024e3c */	this.m_ViewLastScene = false;
+/* 00024e4e */}
+
+void CBackSceneView::RunActivity()
+/* 00024e56 */{
+/* 00024e56 */	bool IsExistActivityByGame = SYS_Activity_IsExistFile(this.m_ActivityNameByGame);
+/* 00024e72 */	bool IsExistDefaultActivity = SYS_Activity_IsExistFile("Asra\\バックシーン");
+/* 00024e8a */	string FileName;
+/* 00024e9e */	if (IsExistActivityByGame)
+/* 00024eae */	{
+/* 00024eae */		FileName = this.m_ActivityNameByGame;
+/* 00024ec6 */	}
+/* 00024ecc */	else if (system.IsDebugMode() && IsExistDefaultActivity)
+/* 00024f00 */	{
+/* 00024f00 */		FileName = "Asra\\バックシーン";
+/* 00024f14 */	}
+/* 00024f14 */	AFL_Parts_AddWholeMouseWheelEvent(this.MouseWheelEvent);
+/* 00024f24 */	AFL_Parts_AddWholeKeyPressEvent(this.KeyPressEvent);
+/* 00024f34 */	AFL_Parts_AddWholeKeyUpEvent(this.KeyUpEvent);
+/* 00024f44 */	Ｐ＿アクティビティ実行(FileName, this.LoadedActivityEvent, NULL, NULL);
+/* 00024f62 */	AFL_Parts_EraseWholeKeyUpEvent(this.KeyUpEvent);
+/* 00024f72 */	AFL_Parts_EraseWholeKeyPressEvent(this.KeyPressEvent);
+/* 00024f82 */	AFL_Parts_EraseWholeMouseWheelEvent(this.MouseWheelEvent);
+/* 00024f92 */}
+
+void CBackSceneView::LoadedActivityEvent(string ActivityFileName, string ActivityName)
+/* 00024f9a */{
+/* 00024f9a */	this.m_ActivityName = ActivityName;
+/* 00024fb2 */	this.InitVScrollbar(ActivityName);
+/* 00024fc4 */	this.InitBackButton(ActivityName);
+/* 00024fd6 */	this.InitHideButton(ActivityName);
+/* 00024fe8 */	this.InitVoiceButton(ActivityName);
+/* 00024ffa */	this.InitNextButton(ActivityName);
+/* 0002500c */	this.InitPrevButton(ActivityName);
+/* 0002501e */	this.InitDenominatorText(ActivityName);
+/* 00025030 */	this.InitNumeratorText(ActivityName);
+/* 00025042 */}
+
+void CBackSceneView::MouseWheelEvent(int PartsNumber, int Forward, int Back)
+/* 0002504a */{
+/* 0002504a */	if (!this.IsShowRootParts())
+/* 0002505a */	{
+/* 0002505a */		return;
+/* 0002505c */	}
+/* 0002505c */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 0002507c */	{
+/* 0002507c */		return;
+/* 0002507e */	}
+/* 0002507e */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 000250a0 */	int Diff = Back - Forward;
+/* 000250c2 */	if (this.m_ViewLastScene && 0 < Diff)
+/* 00025102 */	{
+/* 00025102 */		AFL_Activity_End();
+/* 00025108 */	}
+/* 00025108 */	int Current = Ｐ＿縦スクロールバー＿スクロール位置取得(Number);
+/* 00025124 */	Ｐ＿縦スクロールバー＿スクロール位置設定(Number, Current + Diff);
+/* 0002514a */}
+
+void CBackSceneView::KeyPressEvent(int PartsNumber, int KeyCode)
+/* 00025152 */{
+/* 00025152 */	if (this.m_KeyUpWait)
+/* 00025162 */	{
+/* 00025162 */		return;
+/* 00025164 */	}
+/* 00025164 */	if (!this.IsShowRootParts())
+/* 00025174 */	{
+/* 00025174 */		return;
+/* 00025176 */	}
+/* 00025176 */	if (!this.IsExistParts(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00025196 */	{
+/* 00025196 */		return;
+/* 00025198 */	}
+/* 00025198 */	int Number = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 000251ba */	int Diff;
+/* 000251cc */	if (KeyCode == 40)
+/* 000251e4 */	{
+/* 000251e4 */		Diff = 1;
+/* 000251f6 */	}
+/* 000251fc */	else if (KeyCode == 38)
+/* 00025214 */	{
+/* 00025214 */		Diff = -1;
+/* 00025226 */	}
+/* 0002522c */	else if (KeyCode == 35)
+/* 00025244 */	{
+/* 00025244 */		Diff = 1;
+/* 00025256 */	}
+/* 0002525c */	else if (KeyCode == 36)
+/* 00025274 */	{
+/* 00025274 */		Diff = -1;
+/* 00025286 */	}
+/* 0002528c */	else if (KeyCode == 34)
+/* 000252a4 */	{
+/* 000252a4 */		Diff = 1;
+/* 000252b6 */	}
+/* 000252bc */	else if (KeyCode == 33)
+/* 000252d4 */	{
+/* 000252d4 */		Diff = -1;
+/* 000252e6 */	}
+/* 000252e6 */	int Current = Ｐ＿縦スクロールバー＿スクロール位置取得(Number);
+/* 00025302 */	if (this.m_ViewLastScene && 0 < Diff)
+/* 00025342 */	{
+/* 00025342 */		for (this.m_KeyUpWait = true; AFL_IsKeyDown(40) || AFL_IsKeyDown(35) || AFL_IsKeyDown(34); )
+/* 000253c6 */		{
+/* 000253c6 */			AFL_View_Update(true);
+/* 000253d2 */		}
+/* 000253d8 */		this.m_KeyUpWait = false;
+/* 000253ea */		AFL_Activity_End();
+/* 000253f0 */	}
+/* 000253f0 */	Ｐ＿縦スクロールバー＿スクロール位置設定(Number, Current + Diff);
+/* 00025416 */	if (KeyCode == 32 || KeyCode == 90)
+/* 0002545e */	{
+/* 0002545e */		this.HideWindow();
+/* 00025466 */	}
+/* 00025466 */}
+
+void CBackSceneView::KeyUpEvent(int PartsNumber, int KeyCode)
+/* 0002546e */{
+/* 0002546e */	if (KeyCode == 67 && AFL_IsKeyDown(16))
+/* 000254b0 */	{
+/* 000254b0 */		this.m_ADVScene.m_MessageWindowData.m_MessageTextModel.DebugOutputMessageText();
+/* 000254d0 */		this.m_ADVScene.m_MessageWindowData.m_MessageTextModel.DebugMessageTextToClipboard();
+/* 000254f0 */	}
+/* 000254f6 */	else if (KeyCode == 8)
+/* 0002550e */	{
+/* 0002550e */		Ｓ＿ボイスリプレイ();
+/* 00025514 */	}
+/* 00025514 */}
+
+void CBackSceneView::InitVScrollbar(string ActivityName)
+/* 0002551c */{
+/* 0002551c */	if (!this.IsExistParts(ActivityName, "SYS_縦スクロールバー"))
+/* 0002553c */	{
+/* 0002553c */		return;
+/* 0002553e */	}
+/* 0002553e */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_縦スクロールバー");
+/* 00025560 */	Ｐ＿縦スクロールバー＿全体量設定(Number, SYS_GetNumofADVScene());
+/* 00025576 */	Ｐ＿縦スクロールバー＿スクロール位置設定(Number, SYS_GetNumofADVScene());
+/* 0002558c */	Ｐ＿縦スクロールバー＿表示量設定(Number, 1);
+/* 000255a2 */	AFL_Parts_AddScrollEvent(Number, this.ScrollEvent);
+/* 000255bc */	Ｐ＿フォーカス設定(Number);
+/* 000255cc */}
+
+void CBackSceneView::InitBackButton(string ActivityName)
+/* 000255d4 */{
+/* 000255d4 */	if (!this.IsExistParts(ActivityName, "SYS_戻るボタン"))
+/* 000255f4 */	{
+/* 000255f4 */		return;
+/* 000255f6 */	}
+/* 000255f6 */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_戻るボタン");
+/* 00025618 */	AFL_Parts_AddMouseLClickEvent(Number, this.ClickEnd);
+/* 00025632 */}
+
+void CBackSceneView::InitHideButton(string ActivityName)
+/* 0002563a */{
+/* 0002563a */	if (!this.IsExistParts(ActivityName, "SYS_窓消ボタン"))
+/* 0002565a */	{
+/* 0002565a */		return;
+/* 0002565c */	}
+/* 0002565c */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_窓消ボタン");
+/* 0002567e */	AFL_Parts_AddMouseLClickEvent(Number, this.ClickHideWindow);
+/* 00025698 */}
+
+void CBackSceneView::InitVoiceButton(string ActivityName)
+/* 000256a0 */{
+/* 000256a0 */	if (!this.IsExistParts(ActivityName, "SYS_音声ボタン"))
+/* 000256c0 */	{
+/* 000256c0 */		return;
+/* 000256c2 */	}
+/* 000256c2 */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_音声ボタン");
+/* 000256e4 */	AFL_Parts_AddMouseLClickEvent(Number, this.ClickPlayVoice);
+/* 000256fe */}
+
+void CBackSceneView::InitNextButton(string ActivityName)
+/* 00025706 */{
+/* 00025706 */	if (!this.IsExistParts(ActivityName, "SYS_次ボタン"))
+/* 00025726 */	{
+/* 00025726 */		return;
+/* 00025728 */	}
+/* 00025728 */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_次ボタン");
+/* 0002574a */	AFL_Parts_AddKeyPressEvent(Number, this.PressNextButton);
+/* 00025764 */}
+
+void CBackSceneView::InitPrevButton(string ActivityName)
+/* 0002576c */{
+/* 0002576c */	if (!this.IsExistParts(ActivityName, "SYS_前ボタン"))
+/* 0002578c */	{
+/* 0002578c */		return;
+/* 0002578e */	}
+/* 0002578e */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_前ボタン");
+/* 000257b0 */	AFL_Parts_AddKeyPressEvent(Number, this.PressPrevButton);
+/* 000257ca */}
+
+void CBackSceneView::InitDenominatorText(string ActivityName)
+/* 000257d2 */{
+/* 000257d2 */	if (!this.IsExistParts(ActivityName, "SYS_ページ分母テキスト"))
+/* 000257f2 */	{
+/* 000257f2 */		return;
+/* 000257f4 */	}
+/* 000257f4 */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_ページ分母テキスト");
+/* 00025816 */	Ｐ＿テキスト設定(Number, "%d" % SYS_GetNumofADVScene(), 1);
+/* 00025840 */}
+
+void CBackSceneView::InitNumeratorText(string ActivityName)
+/* 00025848 */{
+/* 00025848 */	if (!this.IsExistParts(ActivityName, "SYS_ページ分子テキスト"))
+/* 00025868 */	{
+/* 00025868 */		return;
+/* 0002586a */	}
+/* 0002586a */	int Number = SYS_Activity_GetPartsNumber(ActivityName, "SYS_ページ分子テキスト");
+/* 0002588c */}
+
+bool CBackSceneView::IsExistParts(string ActivityName, string PartsName)
+/* 00025894 */{
+/* 00025894 */	if (SYS_Activity_IsExistPartsByName(ActivityName, PartsName))
+/* 000258b4 */	{
+/* 000258b4 */		return true;
+/* 000258bc */	}
+/* 000258bc */	system.Output("バックシーン用アクティビティデータに【%s】が存在していません。\n" % PartsName);
+/* 000258dc */	return false;
+/* 000258e4 */}
+
+void CBackSceneView::Execute()
+/* 000258f2 */{
+/* 000258f2 */	if (SYS_GetNumofADVScene() <= 0)
+/* 00025906 */	{
+/* 00025906 */		return;
+/* 00025908 */	}
+/* 00025908 */	ADVSoundData SoundData;
+/* 00025918 */	SYS_SaveAdvSoundData(SoundData);
+/* 00025928 */	string 最終音声名 = _g_最終音声名;
+/* 00025940 */	bool PrevMessageSkipPermission = SYS_IsMessageSkipPermission();
+/* 00025952 */	SYS_SetMessageSkipPermission(false);
+/* 0002595e */	array@int ShowedLayer;
+/* 00025968 */	this.HideAllFrontScene(ShowedLayer);
+/* 0002597a */	AFL_Parts_AddTopLayer();
+/* 00025982 */	SYS_StopVoiceBySkipMessage();
+/* 00025988 */	SYS_StopSE();
+/* 0002598e */	this.RunActivity();
+/* 00025996 */	PARTS_ClearBackScene();
+/* 0002599c */	SYS_StopVoiceBySkipMessage();
+/* 000259a2 */	SYS_StopSE();
+/* 000259a8 */	SYS_SetMessageSkipPermission(PrevMessageSkipPermission);
+/* 000259b8 */	SYS_バックログオープン通知クリア();
+/* 000259be */	AFL_Parts_EraseLayer(-1);
+/* 000259ca */	this.ShowAllFrontScene(ShowedLayer);
+/* 000259dc */	SYS_LoadAdvSoundData(SoundData);
+/* 000259ec */	_g_最終音声名 = 最終音声名;
+/* 00025a04 */}
+
+void CBackSceneView::HideMessageWindow()
+/* 00025a0c */{
+/* 00025a0c */	ref array@int TextList = this.m_ADVScene.m_MessageWindowData.m_MessageTextPartsNumberList;
+/* 00025a42 */	int i;
+/* 00025a54 */	for (i = 0; i < TextList.Numof(); ++i)
+/* 00025aa4 */	{
+/* 00025aa4 */		PARTS_SetShowForBackScene(TextList[i], false);
+/* 00025ac6 */	}
+/* 00025acc */	SYS_メッセージウィンドウ非表示();
+/* 00025ad2 */	for (i = 0; i < TextList.Numof(); ++i)
+/* 00025b22 */	{
+/* 00025b22 */		PARTS_SetShowForBackScene(TextList[i], true);
+/* 00025b44 */	}
+/* 00025b4a */}
+
+void CBackSceneView::HideAllFrontScene(ref array@int ShowedLayer)
+/* 00025b52 */{
+/* 00025b52 */	if (ShowedLayer === NULL)
+/* 00025b6a */	{
+/* 00025b6a */		return;
+/* 00025b6c */	}
+/* 00025b6c */	ShowedLayer.Free();
+/* 00025b76 */	int i;
+/* 00025b88 */	for (i = 0; i < AFL_Parts_NumofLayer(); ++i)
+/* 00025bce */	{
+/* 00025bce */		int Layer = AFL_Parts_GetLayerID(i);
+/* 00025bea */		if (!Ｐ＿表示設定取得(Layer))
+/* 00025c02 */		{
+/* 00025c02 */			continue;
+/* 00025c08 */		}
+/* 00025c08 */		Ｐ＿表示設定(Layer, false);
+/* 00025c1e */		ShowedLayer.PushBack(Layer);
+/* 00025c32 */	}
+/* 00025c38 */}
+
+void CBackSceneView::ShowAllFrontScene(ref array@int ShowedLayer)
+/* 00025c40 */{
+/* 00025c40 */	if (ShowedLayer === NULL)
+/* 00025c58 */	{
+/* 00025c58 */		return;
+/* 00025c5a */	}
+/* 00025c5a */	int i;
+/* 00025c6c */	for (i = 0; i < ShowedLayer.Numof(); ++i)
+/* 00025cbc */	{
+/* 00025cbc */		Ｐ＿表示設定(ShowedLayer[i], true);
+/* 00025cde */	}
+/* 00025ce4 */}
+
+void CBackSceneView::PressPrevButton(int Number, int KeyCode)
+/* 00025cec */{
+/* 00025cec */	if (KeyCode != 1)
+/* 00025d04 */	{
+/* 00025d04 */		return;
+/* 00025d06 */	}
+/* 00025d06 */	if (!SYS_Activity_IsExistPartsByName(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00025d24 */	{
+/* 00025d24 */		return;
+/* 00025d26 */	}
+/* 00025d26 */	int VBarNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 00025d48 */	int Value = Ｐ＿縦スクロールバー＿ボタンクリック移動量取得(VBarNumber);
+/* 00025d64 */	int CurrentPos = Ｐ＿縦スクロールバー＿スクロール位置取得(VBarNumber);
+/* 00025d80 */	CurrentPos -= Value;
+/* 00025d96 */	Ｐ＿縦スクロールバー＿スクロール位置設定(VBarNumber, CurrentPos);
+/* 00025db0 */}
+
+void CBackSceneView::PressNextButton(int Number, int KeyCode)
+/* 00025db8 */{
+/* 00025db8 */	if (KeyCode != 1)
+/* 00025dd0 */	{
+/* 00025dd0 */		return;
+/* 00025dd2 */	}
+/* 00025dd2 */	if (!SYS_Activity_IsExistPartsByName(this.m_ActivityName, "SYS_縦スクロールバー"))
+/* 00025df0 */	{
+/* 00025df0 */		return;
+/* 00025df2 */	}
+/* 00025df2 */	int VBarNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 00025e14 */	int Value = Ｐ＿縦スクロールバー＿ボタンクリック移動量取得(VBarNumber);
+/* 00025e30 */	int CurrentPos = Ｐ＿縦スクロールバー＿スクロール位置取得(VBarNumber);
+/* 00025e4c */	CurrentPos += Value;
+/* 00025e62 */	Ｐ＿縦スクロールバー＿スクロール位置設定(VBarNumber, CurrentPos);
+/* 00025e7c */}
+
+void CBackSceneView::ClickPlayVoice(int Number, int MouseX, int MouseY)
+/* 00025e84 */{
+/* 00025e84 */	SYS_StopVoice();
+/* 00025e8a */	Ｓ＿ボイスリプレイ();
+/* 00025e90 */}
+
+void CBackSceneView::ClickEnd(int Number, int MouseX, int MouseY)
+/* 00025e98 */{
+/* 00025e98 */	AFL_Activity_End();
+/* 00025e9e */}
+
+void CBackSceneView::ClickHideWindow(int Number, int MouseX, int MouseY)
+/* 00025ea6 */{
+/* 00025ea6 */	this.HideWindow();
+/* 00025eae */}
+
+void CBackSceneView::HideWindow()
+/* 00025eb6 */{
+/* 00025eb6 */	this.SetShowRootParts(false);
+/* 00025ec4 */	ref array@int TextList = this.m_ADVScene.m_MessageWindowData.m_MessageTextPartsNumberList;
+/* 00025efa */	int i;
+/* 00025f0c */	for (i = 0; i < TextList.Numof(); ++i)
+/* 00025f5c */	{
+/* 00025f5c */		PARTS_SetShowForBackScene(TextList[i], false);
+/* 00025f7e */	}
+/* 00025f84 */	SYS_メッセージウィンドウ非表示();
+/* 00025f8a */	for (i = 0; i < TextList.Numof(); ++i)
+/* 00025fda */	{
+/* 00025fda */		PARTS_SetShowForBackScene(TextList[i], true);
+/* 00025ffc */	}
+/* 00026002 */	this.SetShowRootParts(true);
+/* 00026010 */	int VBarNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_縦スクロールバー");
+/* 00026032 */	Ｐ＿フォーカス設定(VBarNumber);
+/* 00026042 */}
+
+void CBackSceneView::ScrollEvent(int Number, int ScrollPos, int Total)
+/* 0002604a */{
+/* 0002604a */	this.SetSceneIndex(ScrollPos);
+/* 0002605c */}
+
+void CBackSceneView::SetSceneIndex(int Index)
+/* 00026064 */{
+/* 00026064 */	Index = Math.Max(0, Math.Min(SYS_GetNumofADVScene() - 1, Index));
+/* 000260a2 */	if (!SYS_Activity_IsExistPartsByName(this.m_ActivityName, "SYS_ページ分子テキスト"))
+/* 000260c0 */	{
+/* 000260c0 */		return;
+/* 000260c2 */	}
+/* 000260c2 */	int NumeratorNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "SYS_ページ分子テキスト");
+/* 000260e4 */	Ｐ＿テキスト設定(NumeratorNumber, "%d" % (Index + 1), 1);
+/* 0002611a */	if (SYS_GetADVScene(Index, this.m_ADVScene))
+/* 0002613a */	{
+/* 0002613a */		SYS_LoadAdvSceneData(this.m_ADVScene);
+/* 0002614a */		Ｓ＿ボイスリプレイ();
+/* 00026150 */		PARTS_LoadBackScene(this.m_ADVScene.m_PartsEngineData);
+/* 0002616a */	}
+/* 0002616a */	this.UpdateBackSceneMessageWindow();
+/* 00026172 */	this.m_ViewLastScene = SYS_GetNumofADVScene() - 1 <= Index;
+/* 0002619a */}
+
+void CBackSceneView::UpdateBackSceneMessageWindow()
+/* 000261a2 */{
+/* 000261a2 */	ref array@int TextList = this.m_ADVScene.m_MessageWindowData.m_MessageTextPartsNumberList;
+/* 000261d8 */	ref array@CASColor FontList = this.m_ADVScene.m_MessageWindowData.m_MessageTextFontColorList;
+/* 0002620e */	ref array@int WindowList = this.m_ADVScene.m_MessageWindowData.m_MessageWindowPartsNumberList;
+/* 00026244 */	int Red;
+/* 00026256 */	int Green;
+/* 00026268 */	int Blue;
+/* 0002627a */	bool IsExistBackSceneTextColor = AFL_Config_ChangesBackSceneTextColor();
+/* 0002628c */	if (IsExistBackSceneTextColor)
+/* 0002629c */	{
+/* 0002629c */		AFL_Config_GetBackSceneTextColor(AFL_Config_GetBackSceneTextColorIndex(), Red, Green, Blue);
+/* 000262c0 */	}
+/* 000262c0 */	int i;
+/* 000262d2 */	int Numof = Math.Min(TextList.Numof(), FontList.Numof());
+/* 00026308 */	for (i = 0; i < Numof; ++i)
+/* 00026352 */	{
+/* 00026352 */		int FontR = FontList[i].GetR();
+/* 0002637a */		int FontG = FontList[i].GetG();
+/* 000263a2 */		int FontBlue = FontList[i].GetB();
+/* 000263ca */		if (IsExistBackSceneTextColor)
+/* 000263da */		{
+/* 000263da */			FontR = Red;
+/* 000263f0 */			FontG = Green;
+/* 00026406 */			FontBlue = Blue;
+/* 0002641c */		}
+/* 0002641c */		PARTS_SetFontColorForBackScene(TextList[i], FontR, FontG, FontBlue, 1);
+/* 0002645c */	}
+/* 00026462 */	for (i = 0; i < WindowList.Numof(); ++i)
+/* 000264b2 */	{
+/* 000264b2 */		PARTS_SetAlphaForBackScene(WindowList[i], AFL_Config_GetMessageWindowAlpha());
+/* 000264d4 */		int Red;
+/* 000264e6 */		int Green;
+/* 000264f8 */		int Blue;
+/* 0002650a */		AFL_Config_GetMessageWindowMulColor(Red, Green, Blue);
+/* 00026528 */		PARTS_SetMulColorForBackScene(WindowList[i], Red, Green, Blue);
+/* 00026562 */	}
+/* 00026568 */}
+
+void CBackSceneView::SetShowRootParts(bool Show)
+/* 00026570 */{
+/* 00026570 */	if (!SYS_Activity_IsExistPartsByName(this.m_ActivityName, "ルートパーツ"))
+/* 0002658e */	{
+/* 0002658e */		return;
+/* 00026590 */	}
+/* 00026590 */	int RootPartsNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "ルートパーツ");
+/* 000265b2 */	Ｐ＿表示設定(RootPartsNumber, Show);
+/* 000265cc */}
+
+bool CBackSceneView::IsShowRootParts()
+/* 000265d4 */{
+/* 000265d4 */	if (!SYS_Activity_IsExistPartsByName(this.m_ActivityName, "ルートパーツ"))
+/* 000265f2 */	{
+/* 000265f2 */		return false;
+/* 000265fa */	}
+/* 000265fa */	int RootPartsNumber = SYS_Activity_GetPartsNumber(this.m_ActivityName, "ルートパーツ");
+/* 0002661c */	return Ｐ＿表示設定取得(RootPartsNumber);
+/* 0002662e */}
+
+void CBackSceneView::SetActivityName(string Name)
+/* 0002663c */{
+/* 0002663c */	this.m_ActivityNameByGame = Name;
+/* 00026654 */}
+

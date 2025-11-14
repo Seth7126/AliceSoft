@@ -1,0 +1,141 @@
+float CASMatrix::det2x2(float a1, float a2, float b1, float b2)
+/* 0000e02a */{
+/* 0000e02a */	return a1 * b2 - b1 * a2;
+/* 0000e05a */}
+
+float CASMatrix::det3x3(float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3)
+/* 0000e068 */{
+/* 0000e068 */	return (a1 * this.det2x2(b2, b3, c2, c3) - b1 * this.det2x2(a2, a3, c2, c3)) + c1 * this.det2x2(a2, a3, b2, b3);
+/* 0000e122 */}
+
+void CASMatrix::Set(float a11, float a12, float a13, float a14, float a21, float a22, float a23, float a24, float a31, float a32, float a33, float a34, float a41, float a42, float a43, float a44)
+/* 0000e130 */{
+/* 0000e130 */	this.m[0][0] = a11;
+/* 0000e156 */	this.m[0][1] = a12;
+/* 0000e17c */	this.m[0][2] = a13;
+/* 0000e1a2 */	this.m[0][3] = a14;
+/* 0000e1c8 */	this.m[1][0] = a21;
+/* 0000e1ee */	this.m[1][1] = a22;
+/* 0000e214 */	this.m[1][2] = a23;
+/* 0000e23a */	this.m[1][3] = a24;
+/* 0000e260 */	this.m[2][0] = a31;
+/* 0000e286 */	this.m[2][1] = a32;
+/* 0000e2ac */	this.m[2][2] = a33;
+/* 0000e2d2 */	this.m[2][3] = a34;
+/* 0000e2f8 */	this.m[3][0] = a41;
+/* 0000e31e */	this.m[3][1] = a42;
+/* 0000e344 */	this.m[3][2] = a43;
+/* 0000e36a */	this.m[3][3] = a44;
+/* 0000e390 */}
+
+void CASMatrix::Identity()
+/* 0000e398 */{
+/* 0000e398 */	this.m[0][0] = 1.0;
+/* 0000e3ba */	this.m[0][1] = 0.0;
+/* 0000e3dc */	this.m[0][2] = 0.0;
+/* 0000e3fe */	this.m[0][3] = 0.0;
+/* 0000e420 */	this.m[1][0] = 0.0;
+/* 0000e442 */	this.m[1][1] = 1.0;
+/* 0000e464 */	this.m[1][2] = 0.0;
+/* 0000e486 */	this.m[1][3] = 0.0;
+/* 0000e4a8 */	this.m[2][0] = 0.0;
+/* 0000e4ca */	this.m[2][1] = 0.0;
+/* 0000e4ec */	this.m[2][2] = 1.0;
+/* 0000e50e */	this.m[2][3] = 0.0;
+/* 0000e530 */	this.m[3][0] = 0.0;
+/* 0000e552 */	this.m[3][1] = 0.0;
+/* 0000e574 */	this.m[3][2] = 0.0;
+/* 0000e596 */	this.m[3][3] = 1.0;
+/* 0000e5b8 */}
+
+void CASMatrix::SetMove(float fX, float fY, float fZ)
+/* 0000e5c0 */{
+/* 0000e5c0 */	this.Set(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, fX, fY, fZ, 1.0);
+/* 0000e634 */}
+
+void CASMatrix::SetScale(float fX, float fY, float fZ)
+/* 0000e63c */{
+/* 0000e63c */	this.Set(fX, 0.0, 0.0, 0.0, 0.0, fY, 0.0, 0.0, 0.0, 0.0, fZ, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 0000e6b0 */}
+
+void CASMatrix::SetRotH(float fAngle)
+/* 0000e6b8 */{
+/* 0000e6b8 */	float fCos = Math.Cos(fAngle);
+/* 0000e6d8 */	float fSin = Math.Sin(fAngle);
+/* 0000e6f8 */	this.Set(fCos, 0.0, -fSin, 0.0, 0.0, 1.0, 0.0, 0.0, fSin, 0.0, fCos, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 0000e772 */}
+
+void CASMatrix::SetRotP(float fAngle)
+/* 0000e77a */{
+/* 0000e77a */	float fCos = Math.Cos(fAngle);
+/* 0000e79a */	float fSin = Math.Sin(fAngle);
+/* 0000e7ba */	this.Set(1.0, 0.0, 0.0, 0.0, 0.0, fCos, fSin, 0.0, 0.0, -fSin, fCos, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 0000e834 */}
+
+void CASMatrix::SetRotB(float fAngle)
+/* 0000e83c */{
+/* 0000e83c */	float fCos = Math.Cos(fAngle);
+/* 0000e85c */	float fSin = Math.Sin(fAngle);
+/* 0000e87c */	this.Set(fCos, fSin, 0.0, 0.0, -fSin, fCos, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+/* 0000e8f6 */}
+
+void CASMatrix::MulMatrix(CASMatrix a)
+/* 0000e8fe */{
+/* 0000e8fe */	CASMatrix b;
+/* 0000e90e */	b = this;
+/* 0000e92a */	this.m[0][0] = b.m[0][0] * a.m[0][0] + b.m[0][1] * a.m[1][0] + b.m[0][2] * a.m[2][0] + b.m[0][3] * a.m[3][0];
+/* 0000ea64 */	this.m[0][1] = b.m[0][0] * a.m[0][1] + b.m[0][1] * a.m[1][1] + b.m[0][2] * a.m[2][1] + b.m[0][3] * a.m[3][1];
+/* 0000eb9e */	this.m[0][2] = b.m[0][0] * a.m[0][2] + b.m[0][1] * a.m[1][2] + b.m[0][2] * a.m[2][2] + b.m[0][3] * a.m[3][2];
+/* 0000ecd8 */	this.m[0][3] = b.m[0][0] * a.m[0][3] + b.m[0][1] * a.m[1][3] + b.m[0][2] * a.m[2][3] + b.m[0][3] * a.m[3][3];
+/* 0000ee12 */	this.m[1][0] = b.m[1][0] * a.m[0][0] + b.m[1][1] * a.m[1][0] + b.m[1][2] * a.m[2][0] + b.m[1][3] * a.m[3][0];
+/* 0000ef4c */	this.m[1][1] = b.m[1][0] * a.m[0][1] + b.m[1][1] * a.m[1][1] + b.m[1][2] * a.m[2][1] + b.m[1][3] * a.m[3][1];
+/* 0000f086 */	this.m[1][2] = b.m[1][0] * a.m[0][2] + b.m[1][1] * a.m[1][2] + b.m[1][2] * a.m[2][2] + b.m[1][3] * a.m[3][2];
+/* 0000f1c0 */	this.m[1][3] = b.m[1][0] * a.m[0][3] + b.m[1][1] * a.m[1][3] + b.m[1][2] * a.m[2][3] + b.m[1][3] * a.m[3][3];
+/* 0000f2fa */	this.m[2][0] = b.m[2][0] * a.m[0][0] + b.m[2][1] * a.m[1][0] + b.m[2][2] * a.m[2][0] + b.m[2][3] * a.m[3][0];
+/* 0000f434 */	this.m[2][1] = b.m[2][0] * a.m[0][1] + b.m[2][1] * a.m[1][1] + b.m[2][2] * a.m[2][1] + b.m[2][3] * a.m[3][1];
+/* 0000f56e */	this.m[2][2] = b.m[2][0] * a.m[0][2] + b.m[2][1] * a.m[1][2] + b.m[2][2] * a.m[2][2] + b.m[2][3] * a.m[3][2];
+/* 0000f6a8 */	this.m[2][3] = b.m[2][0] * a.m[0][3] + b.m[2][1] * a.m[1][3] + b.m[2][2] * a.m[2][3] + b.m[2][3] * a.m[3][3];
+/* 0000f7e2 */	this.m[3][0] = b.m[3][0] * a.m[0][0] + b.m[3][1] * a.m[1][0] + b.m[3][2] * a.m[2][0] + b.m[3][3] * a.m[3][0];
+/* 0000f91c */	this.m[3][1] = b.m[3][0] * a.m[0][1] + b.m[3][1] * a.m[1][1] + b.m[3][2] * a.m[2][1] + b.m[3][3] * a.m[3][1];
+/* 0000fa56 */	this.m[3][2] = b.m[3][0] * a.m[0][2] + b.m[3][1] * a.m[1][2] + b.m[3][2] * a.m[2][2] + b.m[3][3] * a.m[3][2];
+/* 0000fb90 */	this.m[3][3] = b.m[3][0] * a.m[0][3] + b.m[3][1] * a.m[1][3] + b.m[3][2] * a.m[2][3] + b.m[3][3] * a.m[3][3];
+/* 0000fcca */}
+
+void CASMatrix::GetInverse(ref CASMatrix Result)
+/* 0000fcd2 */{
+/* 0000fcd2 */	float a11 = this.det3x3(this.m[1][1], this.m[2][1], this.m[3][1], this.m[1][2], this.m[2][2], this.m[3][2], this.m[1][3], this.m[2][3], this.m[3][3]);
+/* 0000fdd0 */	float a21 = -this.det3x3(this.m[1][0], this.m[2][0], this.m[3][0], this.m[1][2], this.m[2][2], this.m[3][2], this.m[1][3], this.m[2][3], this.m[3][3]);
+/* 0000fed0 */	float a31 = this.det3x3(this.m[1][0], this.m[2][0], this.m[3][0], this.m[1][1], this.m[2][1], this.m[3][1], this.m[1][3], this.m[2][3], this.m[3][3]);
+/* 0000ffce */	float a41 = -this.det3x3(this.m[1][0], this.m[2][0], this.m[3][0], this.m[1][1], this.m[2][1], this.m[3][1], this.m[1][2], this.m[2][2], this.m[3][2]);
+/* 000100ce */	float a12 = -this.det3x3(this.m[0][1], this.m[2][1], this.m[3][1], this.m[0][2], this.m[2][2], this.m[3][2], this.m[0][3], this.m[2][3], this.m[3][3]);
+/* 000101ce */	float a22 = this.det3x3(this.m[0][0], this.m[2][0], this.m[3][0], this.m[0][2], this.m[2][2], this.m[3][2], this.m[0][3], this.m[2][3], this.m[3][3]);
+/* 000102cc */	float a32 = -this.det3x3(this.m[0][0], this.m[2][0], this.m[3][0], this.m[0][1], this.m[2][1], this.m[3][1], this.m[0][3], this.m[2][3], this.m[3][3]);
+/* 000103cc */	float a42 = this.det3x3(this.m[0][0], this.m[2][0], this.m[3][0], this.m[0][1], this.m[2][1], this.m[3][1], this.m[0][2], this.m[2][2], this.m[3][2]);
+/* 000104ca */	float a13 = this.det3x3(this.m[0][1], this.m[1][1], this.m[3][1], this.m[0][2], this.m[1][2], this.m[3][2], this.m[0][3], this.m[1][3], this.m[3][3]);
+/* 000105c8 */	float a23 = -this.det3x3(this.m[0][0], this.m[1][0], this.m[3][0], this.m[0][2], this.m[1][2], this.m[3][2], this.m[0][3], this.m[1][3], this.m[3][3]);
+/* 000106c8 */	float a33 = this.det3x3(this.m[0][0], this.m[1][0], this.m[3][0], this.m[0][1], this.m[1][1], this.m[3][1], this.m[0][3], this.m[1][3], this.m[3][3]);
+/* 000107c6 */	float a43 = -this.det3x3(this.m[0][0], this.m[1][0], this.m[3][0], this.m[0][1], this.m[1][1], this.m[3][1], this.m[0][2], this.m[1][2], this.m[3][2]);
+/* 000108c6 */	float a14 = -this.det3x3(this.m[0][1], this.m[1][1], this.m[2][1], this.m[0][2], this.m[1][2], this.m[2][2], this.m[0][3], this.m[1][3], this.m[2][3]);
+/* 000109c6 */	float a24 = this.det3x3(this.m[0][0], this.m[1][0], this.m[2][0], this.m[0][2], this.m[1][2], this.m[2][2], this.m[0][3], this.m[1][3], this.m[2][3]);
+/* 00010ac4 */	float a34 = -this.det3x3(this.m[0][0], this.m[1][0], this.m[2][0], this.m[0][1], this.m[1][1], this.m[2][1], this.m[0][3], this.m[1][3], this.m[2][3]);
+/* 00010bc4 */	float a44 = this.det3x3(this.m[0][0], this.m[1][0], this.m[2][0], this.m[0][1], this.m[1][1], this.m[2][1], this.m[0][2], this.m[1][2], this.m[2][2]);
+/* 00010cc2 */	float det = this.m[0][0] * a11 + this.m[0][1] * a21 + this.m[0][2] * a31 + this.m[0][3] * a41;
+/* 00010d6c */	float oodet = 1 / det;
+/* 00010d90 */	Result.m[0][0] = a11 * oodet;
+/* 00010dca */	Result.m[1][0] = a21 * oodet;
+/* 00010e04 */	Result.m[2][0] = a31 * oodet;
+/* 00010e3e */	Result.m[3][0] = a41 * oodet;
+/* 00010e78 */	Result.m[0][1] = a12 * oodet;
+/* 00010eb2 */	Result.m[1][1] = a22 * oodet;
+/* 00010eec */	Result.m[2][1] = a32 * oodet;
+/* 00010f26 */	Result.m[3][1] = a42 * oodet;
+/* 00010f60 */	Result.m[0][2] = a13 * oodet;
+/* 00010f9a */	Result.m[1][2] = a23 * oodet;
+/* 00010fd4 */	Result.m[2][2] = a33 * oodet;
+/* 0001100e */	Result.m[3][2] = a43 * oodet;
+/* 00011048 */	Result.m[0][3] = a14 * oodet;
+/* 00011082 */	Result.m[1][3] = a24 * oodet;
+/* 000110bc */	Result.m[2][3] = a34 * oodet;
+/* 000110f6 */	Result.m[3][3] = a44 * oodet;
+/* 00011130 */}
+

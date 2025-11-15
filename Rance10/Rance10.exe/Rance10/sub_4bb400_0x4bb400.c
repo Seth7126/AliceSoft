@@ -1,0 +1,32 @@
+// 函数: sub_4bb400
+// 地址: 0x4bb400
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t esi = arg1[1]
+int32_t eax
+int32_t edx_2
+edx_2:eax = muls.dp.d(0x51eb851f, esi - *arg1)
+int32_t edx_3 = edx_2 s>> 5
+int32_t ecx_2 = (edx_3 u>> 0x1f) + edx_3
+
+if (ecx_2 u> arg2)
+    int32_t eax_2 = (arg2 - ecx_2) * 0x64 + esi
+    arg1[1] = eax_2
+    return eax_2
+
+if (ecx_2 u< arg2)
+    int32_t var_10_2 = arg2
+    int32_t var_14_1 = sub_4bb4a0(arg1, arg2 - ecx_2)
+    int32_t eax_5
+    int32_t edx_4
+    edx_4:eax_5 = muls.dp.d(0x51eb851f, arg1[1] - *arg1)
+    int32_t edx_5 = edx_4 s>> 5
+    sub_4bb620(arg1[1], arg2 - ((edx_5 u>> 0x1f) + edx_5))
+    int32_t eax_6
+    int32_t edx_8
+    edx_8:eax_6 = muls.dp.d(0x51eb851f, arg1[1] - *arg1)
+    int32_t edx_9 = edx_8 s>> 5
+    eax = (arg2 - ((edx_9 u>> 0x1f) + edx_9)) * 0x64
+    arg1[1] += eax
+
+return eax

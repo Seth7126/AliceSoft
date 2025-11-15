@@ -1,0 +1,8 @@
+// 函数: __unwindfunclet$?_Copy@?$_Func_impl@U?$_Callable_obj@V<lambda_c2a4c42ce7638e0e06d94297c6d38726>@@$0A@@std@@V?$allocator@V?$_Func_class@XU_Nil@std@@U12@U12@U12@U12@U12@U12@@std@@@2@XU_Nil@2@U42@U42@U42@U42@U42@U42@@std@@UAEPAV?$_Func_base@XU_Nil@std@@U12@U12@U12@U12@U12@U12@@2@PAX@Z$0
+// 地址: 0x72b930
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t var_4 = *(arg1 + 8)
+int32_t result = *(arg1 - 0x18)
+int32_t result_1 = result
+return result

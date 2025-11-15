@@ -1,0 +1,5 @@
+// 函数: __unwindfunclet$?_Makeloc@_Locimp@locale@std@@CAPAV123@ABV_Locinfo@3@HPAV123@PBV23@@Z$3
+// 地址: 0x7492ad
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+return operator new(*(arg1 - 0x18))

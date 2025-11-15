@@ -1,0 +1,9 @@
+// 函数: sub_6e3da3
+// 地址: 0x6e3da3
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t var_8 = arg1[3]
+*arg1 = &std::collate<char>::`vftable'{for `std::locale::facet'}
+int32_t result = _free(var_8)
+*arg1 = &std::_Facet_base::`vftable'
+return result

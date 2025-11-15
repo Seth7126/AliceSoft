@@ -1,0 +1,83 @@
+// 函数: sub_4b4080
+// 地址: 0x4b4080
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t var_8 = 0xffffffff
+int32_t (* var_c)(void* arg1) = sub_731fe0
+TEB* fsbase
+struct _EXCEPTION_REGISTRATION_RECORD* ExceptionList = fsbase->NtTib.ExceptionList
+int32_t __saved_ebp
+int32_t eax_2 = __security_cookie ^ &__saved_ebp
+int32_t var_84 = eax_2
+fsbase->NtTib.ExceptionList = &ExceptionList
+void** var_7c = arg2
+int32_t var_78 = arg3
+int32_t var_18 = 0xf
+int32_t var_1c = 0
+char var_2c = 0
+sub_403490(&var_2c, 0x761ab8, 0x11)
+int32_t var_8_1 = 0
+var_8_1.b = 1
+char var_44
+sub_4abfc0(&var_7c, sub_417810(arg1 + 4, &var_2c, &var_44, arg1 + 4, *(arg1 + 8)))
+int32_t var_30
+
+if (var_30 u>= 0x10)
+    sub_403160(var_44.d, var_30 + 1, 1)
+
+int32_t var_8_2 = 0xffffffff
+int32_t var_30_1 = 0xf
+int32_t var_34 = 0
+var_44 = 0
+
+if (var_18 u>= 0x10)
+    sub_403160(var_2c.d, var_18 + 1, 1)
+
+int32_t var_18_1 = 0xf
+int32_t var_1c_1 = 0
+var_2c = 0
+sub_403490(&var_2c, 0x761a70, 0x15)
+int32_t var_8_3 = 2
+var_8_3.b = 3
+sub_4abfc0(&var_7c, 
+    sub_4b0f20(arg1 + 0xc, &var_2c, &var_44, arg1 + 0xc, *(arg1 + 0x10), *(arg1 + 0x14), 
+        *(arg1 + 0x18)))
+
+if (var_30_1 u>= 0x10)
+    sub_403160(var_44.d, var_30_1 + 1, 1)
+
+int32_t var_8_4 = 0xffffffff
+int32_t var_30_2 = 0xf
+int32_t var_34_1 = 0
+var_44 = 0
+
+if (var_18_1 u>= 0x10)
+    sub_403160(var_2c.d, var_18_1 + 1, 1)
+
+int32_t var_48 = 0xf
+int32_t var_4c = 0
+char var_5c = 0
+sub_403490(&var_5c, 0x761a88, 0x29)
+int32_t var_8_5 = 4
+var_8_5.b = 5
+char var_74
+sub_4abfc0(&var_7c, 
+    sub_4b0f20(arg1 + 0x1c, &var_5c, &var_74, arg1 + 0x1c, *(arg1 + 0x20), *(arg1 + 0x24), 
+        *(arg1 + 0x28)))
+int32_t var_60
+
+if (var_60 u>= 0x10)
+    sub_403160(var_74.d, var_60 + 1, 1)
+
+int32_t var_60_1 = 0xf
+int32_t var_64 = 0
+var_74 = 0
+
+if (var_48 u>= 0x10)
+    sub_403160(var_5c.d, var_48 + 1, 1)
+
+int32_t result
+result.b = 1
+fsbase->NtTib.ExceptionList = ExceptionList
+@__security_check_cookie@4(eax_2 ^ &__saved_ebp)
+return result

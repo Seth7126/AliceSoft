@@ -1,0 +1,11 @@
+// 函数: sub_731109
+// 地址: 0x731109
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t result = *(arg1 - 0x90) & 4
+
+if (result == 0)
+    return result
+
+*(arg1 - 0x90) &= 0xfffffffb
+return sub_403320(arg1 - 0x58) __tailcall

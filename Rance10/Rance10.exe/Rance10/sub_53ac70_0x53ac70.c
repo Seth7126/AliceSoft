@@ -1,0 +1,34 @@
+// 函数: sub_53ac70
+// 地址: 0x53ac70
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t var_10 = arg1
+struct partsengine::CPartsList::VTable** eax = sub_4f14d0(data_7fcba4 + 0x128)
+
+if (eax != 0)
+    int32_t eax_1 = eax[2]
+    struct common::SuicideRefCounter<class IInterface>::partsengine::CGUIComponent::VTable** vFunc_0
+    
+    if (arg1 s< eax_1 || eax[1] + eax_1 s<= arg1)
+        vFunc_0 = nullptr
+    label_53acb9:
+        
+        if (vFunc_0 != 0)
+            goto label_53acbd
+    else
+        vFunc_0 = eax[3][arg1 - eax_1].vFunc_0
+        
+        if (vFunc_0 == 0)
+            int32_t var_10_1 = arg1
+            vFunc_0 = sub_526580(eax)
+            goto label_53acb9
+        
+    label_53acbd:
+        
+        if (arg2 s>= 0)
+            void* ecx_7 = vFunc_0[0x1c]
+            
+            if ((*(ecx_7 + 0xc4) - *(ecx_7 + 0xc0)) s>> 2 s> arg2)
+                return *(*(ecx_7 + 0xc0) + (arg2 << 2))
+
+return 0

@@ -1,0 +1,26 @@
+// 函数: sub_58a5a0
+// 地址: 0x58a5a0
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t edx = arg1[1]
+int32_t* result = *arg1
+
+if (result == edx)
+    result.b = arg2
+    arg1[4].b = result.b
+    return result
+
+int32_t ebx
+ebx.b = arg2
+
+do
+    void* ecx = *result
+    
+    if (ecx != 0)
+        *(ecx + 0x80) = ebx.b
+    
+    result = &result[1]
+while (result != edx)
+
+arg1[4].b = ebx.b
+return result

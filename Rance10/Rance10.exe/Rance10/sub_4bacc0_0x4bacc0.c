@@ -1,0 +1,70 @@
+// 函数: sub_4bacc0
+// 地址: 0x4bacc0
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+sub_4ba070(arg3)
+*arg3 = (*arg5 - *arg2) * arg4 + *arg2
+arg3[1] = (arg5[1] f- arg2[1]) * arg4 + arg2[1]
+arg3[2] = (arg5[2] f- arg2[2]) * arg4 + arg2[2]
+arg3[3] = (arg5[3] f- arg2[3]) * arg4 + arg2[3]
+arg3[4] = (arg5[4] f- arg2[4]) * arg4 + arg2[4]
+arg3[5] = (arg5[5] f- arg2[5]) * arg4 + arg2[5]
+arg3[6] = (arg5[6] f- arg2[6]) * arg4 + arg2[6]
+uint128_t xmm1 = zx.o(arg2[7])
+float xmm0_29 = _mm_cvtepi32_ps(zx.o(arg5[7]))
+float xmm1_1 = _mm_cvtepi32_ps(xmm1)
+arg3[7] = int.d((xmm0_29 - xmm1_1) * arg4 + xmm1_1)
+uint128_t xmm1_2 = zx.o(arg2[8])
+float xmm0_34 = _mm_cvtepi32_ps(zx.o(arg5[8]))
+float xmm1_3 = _mm_cvtepi32_ps(xmm1_2)
+arg3[8] = int.d((xmm0_34 - xmm1_3) * arg4 + xmm1_3)
+uint128_t xmm1_4 = zx.o(arg2[9])
+float xmm0_39 = _mm_cvtepi32_ps(zx.o(arg5[9]))
+float xmm1_5 = _mm_cvtepi32_ps(xmm1_4)
+arg3[9] = int.d((xmm0_39 - xmm1_5) * arg4 + xmm1_5)
+uint128_t xmm1_6 = zx.o(arg2[0xa])
+float xmm0_44 = _mm_cvtepi32_ps(zx.o(arg5[0xa]))
+float xmm1_7 = _mm_cvtepi32_ps(xmm1_6)
+arg3[0xa] = int.d((xmm0_44 - xmm1_7) * arg4 + xmm1_7)
+uint128_t xmm1_8 = zx.o(arg2[0xb])
+float xmm0_49 = _mm_cvtepi32_ps(zx.o(arg5[0xb]))
+float xmm1_9 = _mm_cvtepi32_ps(xmm1_8)
+arg3[0xb] = int.d((xmm0_49 - xmm1_9) * arg4 + xmm1_9)
+uint128_t xmm1_10 = zx.o(arg2[0xc])
+float xmm0_54 = _mm_cvtepi32_ps(zx.o(arg5[0xc]))
+float xmm1_11 = _mm_cvtepi32_ps(xmm1_10)
+arg3[0xc] = int.d((xmm0_54 - xmm1_11) * arg4 + xmm1_11)
+uint128_t xmm1_12 = zx.o(arg2[0x10])
+float xmm0_59 = _mm_cvtepi32_ps(zx.o(arg5[0x10]))
+float xmm1_13 = _mm_cvtepi32_ps(xmm1_12)
+arg3[0x10] = int.d((xmm0_59 - xmm1_13) * arg4 + xmm1_13)
+uint128_t xmm1_14 = zx.o(arg2[0x11])
+float xmm0_64 = _mm_cvtepi32_ps(zx.o(arg5[0x11]))
+float xmm1_15 = _mm_cvtepi32_ps(xmm1_14)
+arg3[0x11] = int.d((xmm0_64 - xmm1_15) * arg4 + xmm1_15)
+uint128_t xmm1_16 = zx.o(arg2[0x12])
+float xmm0_69 = _mm_cvtepi32_ps(zx.o(arg5[0x12]))
+float xmm1_17 = _mm_cvtepi32_ps(xmm1_16)
+arg3[0x12] = int.d((xmm0_69 - xmm1_17) * arg4 + xmm1_17)
+uint128_t xmm1_18 = zx.o(arg2[0x13])
+float xmm0_74 = _mm_cvtepi32_ps(zx.o(arg5[0x13]))
+float xmm1_19 = _mm_cvtepi32_ps(xmm1_18)
+arg3[0x13] = int.d((xmm0_74 - xmm1_19) * arg4 + xmm1_19)
+uint128_t xmm1_20 = zx.o(arg2[0x14])
+float xmm0_79 = _mm_cvtepi32_ps(zx.o(arg5[0x14]))
+float xmm1_21 = _mm_cvtepi32_ps(xmm1_20)
+arg3[0x14] = int.d((xmm0_79 - xmm1_21) * arg4 + xmm1_21)
+uint128_t xmm1_22 = zx.o(arg2[0x15])
+float xmm0_84 = _mm_cvtepi32_ps(zx.o(arg5[0x15]))
+float xmm1_23 = _mm_cvtepi32_ps(xmm1_22)
+arg3[0x15] = int.d((xmm0_84 - xmm1_23) * arg4 + xmm1_23)
+uint128_t xmm1_24 = zx.o(arg2[0x18])
+float xmm0_89 = _mm_cvtepi32_ps(zx.o(arg5[0x18]))
+float xmm1_25 = _mm_cvtepi32_ps(xmm1_24)
+arg3[0x18] = int.d((xmm0_89 - xmm1_25) * arg4 + xmm1_25)
+arg3[0xd] = arg2[0xd]
+arg3[0xe] = arg2[0xe]
+arg3[0xf] = arg2[0xf]
+arg3[0x16] = arg2[0x16]
+arg3[0x17] = arg2[0x17]
+return arg3

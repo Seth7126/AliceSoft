@@ -1,0 +1,33 @@
+// 函数: sub_41cb60
+// 地址: 0x41cb60
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t var_8 = 0xffffffff
+int32_t (* var_c)(void* arg1) =
+    __ehhandler$??1?$__crt_win32_buffer@DU__crt_win32_buffer_internal_dynamic_resizing@@@@QAE@XZ
+TEB* fsbase
+struct _EXCEPTION_REGISTRATION_RECORD* ExceptionList = fsbase->NtTib.ExceptionList
+int32_t __saved_ebp
+int32_t var_18 = __security_cookie ^ &__saved_ebp
+fsbase->NtTib.ExceptionList = &ExceptionList
+int32_t var_8_1 = 0
+int32_t* ecx = arg1[5]
+*arg1 =
+    &dpvariable::CController::`vftable'{for `common::SuicideRefCounter<class IJaffaDebugPlugin>'}
+
+if (ecx != 0)
+    (**ecx)(1)
+    arg1[5] = 0
+
+int32_t* ecx_1 = arg1[4]
+
+if (ecx_1 != 0)
+    (**ecx_1)(1)
+    arg1[4] = 0
+
+if ((arg2 & 1) != 0)
+    int32_t var_1c_1 = 0x18
+    operator new(arg1)
+
+fsbase->NtTib.ExceptionList = ExceptionList
+return arg1

@@ -1,0 +1,12 @@
+// 函数: __unwindfunclet$?GetBitSet@SchedulerBase@details@Concurrency@@QAE?AVQuickBitSet@23@PBVlocation@3@@Z$0
+// 地址: 0x74a01b
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t result = *(arg1 - 0x10) & 1
+
+if (result == 0)
+    return result
+
+*(arg1 - 0x10) &= 0xfffffffe
+*(arg1 + 8)
+return sub_6d7903() __tailcall

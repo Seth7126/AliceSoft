@@ -1,0 +1,194 @@
+// 函数: __control87
+// 地址: 0x71e1ab
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int16_t x87status
+int16_t temp0
+temp0, x87status = __fnstcw_memmem16(arg2)
+int32_t ecx = 0
+
+if ((temp0.b & 1) != 0)
+    ecx = 0x10
+
+if ((temp0.b & 4) != 0)
+    ecx |= 8
+
+if ((temp0.b & 8) != 0)
+    ecx |= 4
+
+if ((temp0.b & 0x10) != 0)
+    ecx |= 2
+
+if ((temp0.b & 0x20) != 0)
+    ecx |= 1
+
+if ((temp0.b & 2) != 0)
+    ecx |= 0x80000
+
+uint32_t esi = zx.d(temp0)
+int32_t edi
+int32_t var_20 = edi
+int32_t edx_1 = esi & 0xc00
+
+if (edx_1 != 0)
+    if (edx_1 == 0x400)
+        ecx |= 0x100
+    else if (edx_1 == 0x800)
+        ecx |= 0x200
+    else if (edx_1 == 0xc00)
+        ecx |= 0x300
+
+int32_t esi_1 = esi & 0x300
+
+if (esi_1 == 0)
+    ecx |= 0x20000
+else if (esi_1 == 0x200)
+    ecx |= 0x10000
+
+if ((0x1000 & temp0) != 0)
+    ecx |= 0x40000
+
+int32_t esi_5 = (not.d(arg4) & ecx) | (arg3 & arg4)
+
+if (esi_5 != ecx)
+    int16_t x87control
+    int16_t x87status_1
+    x87control, x87status_1 = __fldcw_memmem16(__hw_cw(esi_5))
+    int16_t x87status_2
+    int16_t temp0_1
+    temp0_1, x87status_2 = __fnstcw_memmem16(x87control)
+    esi_5 = 0
+    
+    if ((temp0_1.b & 1) != 0)
+        esi_5 = 0x10
+    
+    if ((temp0_1.b & 4) != 0)
+        esi_5 |= 8
+    
+    if ((temp0_1.b & 8) != 0)
+        esi_5 |= 4
+    
+    if ((temp0_1.b & 0x10) != 0)
+        esi_5 |= 2
+    
+    if ((temp0_1.b & 0x20) != 0)
+        esi_5 |= 1
+    
+    if ((temp0_1.b & 2) != 0)
+        esi_5 |= 0x80000
+    
+    uint32_t edx_2 = zx.d(temp0_1)
+    int32_t ecx_3 = edx_2 & 0xc00
+    
+    if (ecx_3 != 0)
+        if (ecx_3 == 0x400)
+            esi_5 |= 0x100
+        else if (ecx_3 == 0x800)
+            esi_5 |= 0x200
+        else if (ecx_3 == 0xc00)
+            esi_5 |= 0x300
+    
+    int32_t edx_3 = edx_2 & 0x300
+    
+    if (edx_3 == 0)
+        esi_5 |= 0x20000
+    else if (edx_3 == 0x200)
+        esi_5 |= 0x10000
+    
+    if ((0x1000 & temp0_1) != 0)
+        esi_5 |= 0x40000
+
+if (data_7fc25c s< 1)
+    return esi_5
+
+int32_t edi_2 = arg4 & 0x308031f
+int32_t ecx_4 = 0
+
+if (arg1.b s< 0)
+    ecx_4 = 0x10
+
+if ((arg1 & 0x200) != 0)
+    ecx_4 |= 8
+
+if ((arg1 & 0x400) != 0)
+    ecx_4 |= 4
+
+if ((arg1 & 0x800) != 0)
+    ecx_4 |= 2
+
+if ((0x1000 & arg1) != 0)
+    ecx_4 |= 1
+
+if ((arg1 & 0x100) != 0)
+    ecx_4 |= 0x80000
+
+int32_t edx_5 = arg1 & 0x6000
+
+if (edx_5 != 0)
+    if (edx_5 == 0x2000)
+        ecx_4 |= 0x100
+    else if (edx_5 == 0x4000)
+        ecx_4 |= 0x200
+    else if (edx_5 == 0x6000)
+        ecx_4 |= 0x300
+
+int32_t eax_5 = arg1 & 0x8040
+
+if (eax_5 == 0x40)
+    ecx_4 |= 0x2000000
+else if (eax_5 == 0x8000)
+    ecx_4 |= 0x3000000
+else if (eax_5 == 0x8040)
+    ecx_4 |= 0x1000000
+
+int32_t eax_12 = (not.d(edi_2) & ecx_4) | (edi_2 & arg3)
+
+if (eax_12 != ecx_4)
+    struct _EXCEPTION_REGISTRATION_RECORD** eax_13 = ___hw_cw_sse2(eax_12)
+    struct _EXCEPTION_REGISTRATION_RECORD** var_10_1 = eax_13
+    int32_t mxcsr = ___set_fpsr_sse2(eax_13)
+    ecx_4 = 0
+    
+    if (mxcsr.b s< 0)
+        ecx_4 = 0x10
+    
+    if ((mxcsr & 0x200) != 0)
+        ecx_4 |= 8
+    
+    if ((mxcsr & 0x400) != 0)
+        ecx_4 |= 4
+    
+    if ((mxcsr & 0x800) != 0)
+        ecx_4 |= 2
+    
+    if ((mxcsr & 0x1000) != 0)
+        ecx_4 |= 1
+    
+    if ((mxcsr & 0x100) != 0)
+        ecx_4 |= 0x80000
+    
+    int32_t edx_7 = mxcsr & 0x6000
+    
+    if (edx_7 != 0)
+        if (edx_7 == 0x2000)
+            ecx_4 |= 0x100
+        else if (edx_7 == 0x4000)
+            ecx_4 |= 0x200
+        else if (edx_7 == 0x6000)
+            ecx_4 |= 0x300
+    
+    int32_t eax_15 = mxcsr & 0x8040
+    
+    if (eax_15 == 0x40)
+        ecx_4 |= 0x2000000
+    else if (eax_15 == 0x8000)
+        ecx_4 |= 0x3000000
+    else if (eax_15 == 0x8040)
+        ecx_4 |= 0x1000000
+
+int32_t ecx_5 = ecx_4 | esi_5
+
+if (((ecx_4 ^ esi_5) & 0x8031f) == 0)
+    return ecx_5
+
+return ecx_5 | 0x80000000

@@ -1,0 +1,9 @@
+// 函数: sub_6298d0
+// 地址: 0x6298d0
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+if (sub_629c10(arg1 - 0x20, arg2) != 0 && *(*(*(arg1 + 0x18) + 0x2c) + arg2 * 0x70 + 0x34) == 0xb
+        && arg2 u< *(arg1 - 0xc) u>> 2)
+    return *(arg1 - 0x10) + (arg2 << 2)
+
+return 0

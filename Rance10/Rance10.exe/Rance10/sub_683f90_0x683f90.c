@@ -1,0 +1,232 @@
+// 函数: sub_683f90
+// 地址: 0x683f90
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+void* var_11c
+int32_t var_c = __security_cookie ^ &var_11c
+int32_t ebx
+int32_t var_120 = ebx
+int32_t esi
+int32_t var_124 = esi
+void* edi
+void* var_128 = edi
+var_11c = arg1
+int32_t var_12c = sub_6845d0(arg1)
+sub_684700(arg1 + 4)
+int32_t* ebx_3 = *(arg1 + 4) + 4
+int32_t* ecx_2 = *ebx_3
+
+if (ecx_2 != 0)
+    (*(*ecx_2 + 8))(ecx_2)
+    *ebx_3 = 0
+
+int32_t eax_3 = *arg2
+int32_t var_118
+int32_t* var_130 = &var_118
+int32_t* var_134 = arg2
+var_118 = 0
+int32_t var_114 = 0
+int32_t var_110 = 0
+int32_t var_10c
+__builtin_memcpy(&var_10c, 
+    "\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00", 
+    0x19)
+int32_t eax_4
+
+if ((*(eax_3 + 0x50))(var_134, var_130, ebx_3) s>= 0)
+    int32_t* ebx_6 = *(arg1 + 4) + 0xc
+    int32_t* ecx_5 = *ebx_6
+    
+    if (ecx_5 != 0)
+        (*(*ecx_5 + 8))(ecx_5)
+        *ebx_6 = 0
+    
+    int32_t eax_6 = *arg2
+    var_124 = 0
+    int32_t var_120_1 = 0
+    __builtin_memcpy(&var_11c, 
+        "\x01\x00\x00\x00\x05\x00\x00\x00\x06\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x"
+    "00\x01\x00\x00\x00\x00", 
+        0x1d)
+    
+    if ((*(eax_6 + 0x50))(arg2, &var_124, ebx_6) s>= 0)
+        int32_t* ebx_8 = *(arg1 + 4) + 0x14
+        int32_t* ecx_6 = *ebx_8
+        
+        if (ecx_6 != 0)
+            (*(*ecx_6 + 8))(ecx_6)
+            *ebx_8 = 0
+        
+        int32_t eax_8 = *arg2
+        var_124 = 0
+        int32_t var_120_2 = 0
+        __builtin_memcpy(&var_11c, 
+            "\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x00\x"
+        "00\x00\x01\x00\x00\x00\x00", 
+            0x1d)
+        
+        if ((*(eax_8 + 0x50))(arg2, &var_124, ebx_8) s>= 0)
+            int32_t* ebx_10 = *(arg1 + 4) + 0x1c
+            int32_t* ecx_7 = *ebx_10
+            
+            if (ecx_7 != 0)
+                (*(*ecx_7 + 8))(ecx_7)
+                *ebx_10 = 0
+            
+            int32_t eax_10 = *arg2
+            var_124 = 0
+            int32_t var_120_3 = 0
+            __builtin_memcpy(&var_11c, 
+                "\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x01\x"
+            "00\x00\x00\x01\x00\x00\x00\x00", 
+                0x1d)
+            
+            if ((*(eax_10 + 0x50))(arg2, &var_124, ebx_10) s>= 0)
+                int32_t* ebx_12 = *(arg1 + 4) + 0x24
+                int32_t* ecx_8 = *ebx_12
+                
+                if (ecx_8 != 0)
+                    (*(*ecx_8 + 8))(ecx_8)
+                    *ebx_12 = 0
+                
+                int32_t eax_12 = *arg2
+                var_124 = 0
+                int32_t var_120_4 = 0
+                __builtin_memcpy(&var_11c, 
+                    "\x01\x00\x00\x00\x0a\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x00\x"
+                "01\x00\x00\x00\x01\x00\x00\x00\x00", 
+                    0x1d)
+                
+                if ((*(eax_12 + 0x50))(arg2, &var_124, ebx_12) s>= 0)
+                    int32_t* ebx_14 = *(arg1 + 4) + 0x2c
+                    int32_t* ecx_9 = *ebx_14
+                    
+                    if (ecx_9 != 0)
+                        (*(*ecx_9 + 8))(ecx_9)
+                        *ebx_14 = 0
+                    
+                    int32_t eax_14 = *arg2
+                    var_124 = 0
+                    int32_t var_120_5 = 0
+                    __builtin_memcpy(&var_11c, 
+                        "\x01\x00\x00\x00\x01\x00\x00\x00\x03\x00\x00\x00\x01\x00\x00\x00\x02\x00\x00\x"
+                    "00\x01\x00\x00\x00\x01\x00\x00\x00\x00", 
+                        0x1d)
+                    
+                    if ((*(eax_14 + 0x50))(arg2, &var_124, ebx_14) s>= 0)
+                        int32_t* edi_4 = *(arg1 + 4) + 0x34
+                        int32_t* ecx_10 = *edi_4
+                        
+                        if (ecx_10 != 0)
+                            (*(*ecx_10 + 8))(ecx_10)
+                            *edi_4 = 0
+                        
+                        int32_t eax_16 = *arg2
+                        var_124 = 0
+                        int32_t var_120_6 = 0
+                        __builtin_memcpy(&var_11c, 
+                            "\x01\x00\x00\x00\x06\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x02\x00\x"
+                        "00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x00", 
+                            0x1d)
+                        int32_t ecx_11
+                        eax_4, ecx_11 = (*(eax_16 + 0x50))(arg2, &var_124, edi_4)
+                        
+                        if (eax_4 s>= 0)
+                            void* edi_5 = var_128
+                            int32_t var_138_13 = ecx_11
+                            sub_684700(edi_5 + 0x10)
+                            
+                            if (sub_683de0(*(edi_5 + 0x10), 0, 1, arg2).b != 0
+                                    && sub_683de0(*(edi_5 + 0x10) + 8, 1, 1, arg2).b != 0)
+                                int32_t* ebx_16 = *(edi_5 + 0x10) + 0x14
+                                int32_t* ecx_16 = *ebx_16
+                                
+                                if (ecx_16 != 0)
+                                    (*(*ecx_16 + 8))(ecx_16)
+                                    *ebx_16 = 0
+                                
+                                int32_t eax_18 = *arg2
+                                var_124 = 0
+                                int32_t var_120_7 = 0
+                                __builtin_memcpy(&var_11c, 
+                                    "\x01\x00\x00\x00\x02\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x"
+                                "02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x0f", 
+                                    0x1d)
+                                
+                                if ((*(eax_18 + 0x50))(arg2, &var_124, ebx_16) s>= 0)
+                                    int32_t* ebx_18 = *(edi_5 + 0x10) + 0x1c
+                                    int32_t* ecx_17 = *ebx_18
+                                    
+                                    if (ecx_17 != 0)
+                                        (*(*ecx_17 + 8))(ecx_17)
+                                        *ebx_18 = 0
+                                    
+                                    int32_t eax_20 = *arg2
+                                    var_124 = 0
+                                    int32_t var_120_8 = 0
+                                    __builtin_memcpy(&var_11c, 
+                                        "\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x"
+                                    "00\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x0f", 
+                                        0x1d)
+                                    
+                                    if ((*(eax_20 + 0x50))(arg2, &var_124, ebx_18) s>= 0)
+                                        int32_t* ebx_20 = *(edi_5 + 0x10) + 0x24
+                                        int32_t* ecx_18 = *ebx_20
+                                        
+                                        if (ecx_18 != 0)
+                                            (*(*ecx_18 + 8))(ecx_18)
+                                            *ebx_20 = 0
+                                        
+                                        int32_t eax_22 = *arg2
+                                        var_124 = 0
+                                        int32_t var_120_9 = 0
+                                        __builtin_memcpy(&var_11c, 
+                                            "\x01\x00\x00\x00\x0a\x00\x00\x00\x02\x00\x00\x00\x01\x00\x"
+                                        "00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00\x00\x
+                                                0f", 
+                                            0x1d)
+                                        
+                                        if ((*(eax_22 + 0x50))(arg2, &var_124, ebx_20) s>= 0)
+                                            int32_t* ebx_22 = *(edi_5 + 0x10) + 0x2c
+                                            int32_t* ecx_19 = *ebx_22
+                                            
+                                            if (ecx_19 != 0)
+                                                (*(*ecx_19 + 8))(ecx_19)
+                                                *ebx_22 = 0
+                                            
+                                            int32_t eax_24 = *arg2
+                                            var_124 = 0
+                                            int32_t var_120_10 = 0
+                                            __builtin_memcpy(&var_11c, 
+                                                "\x01\x00\x00\x00\x01\x00\x00\x00\x03\x00\x00\x00\x01\x"
+                                            "00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01\x00\x00"
+                                            "00\x0f", 
+                                                0x1d)
+                                            
+                                            if ((*(eax_24 + 0x50))(arg2, &var_124, ebx_22) s>= 0)
+                                                int32_t* edi_7 = *(edi_5 + 0x10) + 0x34
+                                                int32_t* ecx_20 = *edi_7
+                                                
+                                                if (ecx_20 != 0)
+                                                    (*(*ecx_20 + 8))(ecx_20)
+                                                    *edi_7 = 0
+                                                
+                                                int32_t eax_26 = *arg2
+                                                var_124 = 0
+                                                int32_t var_120_11 = 0
+                                                __builtin_memcpy(&var_11c, 
+                                                    "\x01\x00\x00\x00\x06\x00\x00\x00\x01\x00\x00\x00\x"
+                                                "01\x00\x00\x00\x02\x00\x00\x00\x01\x00\x00\x00\x01"
+                                                "00\x00\x00\x0f", 
+                                                    0x1d)
+                                                int32_t eax_27
+                                                eax_27.b =
+                                                    (*(eax_26 + 0x50))(arg2, &var_124, edi_7) s>= 0
+                                                int32_t var_24
+                                                @__security_check_cookie@4(var_24 ^ &var_134)
+                                                return eax_27
+
+eax_4.b = 0
+int32_t var_18
+@__security_check_cookie@4(var_18 ^ &var_128)
+return eax_4

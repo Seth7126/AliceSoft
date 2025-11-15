@@ -1,0 +1,31 @@
+// 函数: sub_6ce920
+// 地址: 0x6ce920
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+_memset(arg1, 0, 0x58)
+*arg1 = 0x58
+arg1[1] = 0
+arg1[2] = 0
+arg1[3] = &arg1[0x57]
+arg1[4] = 0
+arg1[5] = 0
+arg1[6] = 1
+arg1[7] = &arg1[0x16]
+arg1[8] = 0x104
+arg1[9] = 0
+arg1[0xa] = 0
+arg1[0xb] = 0
+arg1[0xc] = 0
+arg1[0xd] = 0x8002e
+arg1[0xe] = 0
+arg1[0xf] = 0
+arg1[0x10] = 0
+arg1[0x11] = sub_6ce8f0
+arg1[0x12] = 0
+arg1[0x13] = 0
+arg1[0x14] = 0
+arg1[0x15] = 0
+_memset(&arg1[0x16], 0, 0x104)
+_memset(&arg1[0x57], 0, 0x400)
+arg1[0x157] = 0
+return arg1

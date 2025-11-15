@@ -1,0 +1,7 @@
+// 函数: sub_49a6fb
+// 地址: 0x49a6fb
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+sub_403160(*(arg1 - 0x18), *(arg1 + 8), 0x30)
+sub_70021b(nullptr, nullptr)
+noreturn

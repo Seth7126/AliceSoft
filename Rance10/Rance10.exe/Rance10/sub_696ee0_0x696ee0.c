@@ -1,0 +1,24 @@
+// 函数: sub_696ee0
+// 地址: 0x696ee0
+// 来自: E:\torrent\AliceSoft\ランス１０\Rance10.exe
+
+int32_t ecx
+int32_t var_4 = ecx
+char* edx = std::_Syserror_map(arg2)
+*(arg1 + 0x14) = 0xf
+*(arg1 + 0x10) = 0
+*arg1 = 0
+
+if (*edx == 0)
+    sub_403490(arg1, edx, nullptr)
+    return arg1
+
+char* ecx_3 = edx
+char* eax
+
+do
+    eax.b = *ecx_3
+    ecx_3 = &ecx_3[1]
+while (eax.b != 0)
+sub_403490(arg1, edx, ecx_3 - &ecx_3[1])
+return arg1

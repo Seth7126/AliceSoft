@@ -1,2 +1,0 @@
-bool IsInstalledGame(string pIGameName);
-int GetInstallMediaType(void);

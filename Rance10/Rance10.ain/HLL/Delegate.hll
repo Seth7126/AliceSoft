@@ -1,7 +1,0 @@
-void Set(ref delegate self, hll_func Func);
-void Add(ref delegate self, hll_func Func);
-int Numof(ref delegate self);
-bool Empty(ref delegate self);
-bool Exist(ref delegate self, hll_func Func);
-void Erase(ref delegate self, hll_func Func);
-void Clear(ref delegate self);

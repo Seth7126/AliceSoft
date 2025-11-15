@@ -1,1 +1,0 @@
-bool GetFontWidth(string Text, ref int Width, int nType, int nSize, int nR, int nG, int nB, float fBoldWeight, float fEdgeWeight, int nEdgeR, int nEdgeG, int nEdgeB);

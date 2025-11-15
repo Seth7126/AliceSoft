@@ -1,2 +1,0 @@
-void SetText(string Text);
-string GetText(void);

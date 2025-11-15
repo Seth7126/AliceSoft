@@ -1,7 +1,0 @@
-0x0047113A:	
-; pass
-; ARG  0: msg : string
-; RETURN: void
-FUNC 29245
-0x00471140:		RETURN
-0x00471142:	ENDFUNC pass

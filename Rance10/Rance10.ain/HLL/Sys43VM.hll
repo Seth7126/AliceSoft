@@ -1,7 +1,0 @@
-bool GetFunctionNameList(ref array<?> FunctionNameList);
-bool BeginProfiler(void);
-bool EndProfiler(void);
-bool WriteGroupSaveComment(string KeyName, string FileName, string Log);
-bool ReadGroupSaveComment(string KeyName, string FileName, ref string Log);
-int GetActualNumofPage(void);
-int GetActualMemorySize(void);

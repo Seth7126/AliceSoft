@@ -1,4 +1,0 @@
-void SetFlag(int nMsgNum);
-int GetFlag(int nMsgNum);
-void SetAdvFlag(string ADVName, int Version, int Step);
-int GetAdvFlag(string ADVName, int Version, int Step);

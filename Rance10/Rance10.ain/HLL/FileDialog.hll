@@ -1,3 +1,0 @@
-bool OpenLoadDialog(ref string LoadFileName, string TitleName, string FolderName, array<?> FilterTitleList, array<?> FilterExtendList);
-bool OpenSaveDialog(ref string SaveFileName, string TitleName, string FolderName, array<?> FilterTitleList, array<?> FilterExtendList);
-bool OpenSelectFolderDialog(string DisplayText, string TitleText, ref string FolderName);

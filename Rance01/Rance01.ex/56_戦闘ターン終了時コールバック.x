@@ -1,1 +1,0 @@
-string 戦闘ターン終了時コールバック = "battleTurnEndCallback";
